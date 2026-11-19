@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZinPlay — Free Original HTML5 Browser Games</title>
-  <meta name="description" content="Play free, fast-loading original HTML5 browser games directly on desktop and mobile. Explore puzzle, physics, strategy, and mystery games with zero downloads." />
+  <title>ZinPlay — 28 Free Original HTML5 Browser Games</title>
+  <meta name="description" content="Play 28 free, fast-loading original HTML5 browser games on mobile and desktop. Puzzle, physics, ASMR, strategy, and mystery games with zero downloads." />
   <link rel="stylesheet" href="/assets/css/style.css" />
 </head>
 <body>
@@ -15,170 +15,315 @@
       <a href="/" class="brand">
         <span class="brand-accent">Zin</span>Play<span class="brand-ext">.io</span>
       </a>
-      <nav class="nav-links" aria-label="Main Navigation">
+      <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
+        <a href="#games" class="nav-highlight">All 28 Games</a>
         <a href="#about-engine">About</a>
         <a href="#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
         <a href="/contact/">Contact</a>
-        <a href="#games" class="nav-highlight">All Games</a>
       </nav>
     </div>
   </header>
 
   <main class="container">
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
-      <div class="hero-pill">⚡ Instant HTML5 Browser Games Suite</div>
+      <div class="hero-pill">⚡ 28 Original HTML5 Browser Games</div>
       <h1>ZinPlay - Free Online Games!</h1>
-      <p>Enjoy fast, handcrafted browser games built with pure HTML5 Canvas and Web Audio. Play instantly on desktop or mobile with zero installs and zero accounts.</p>
+      <p>Fast, handcrafted browser games built with pure HTML5 Canvas, physics, and Web Audio. Play instantly on phone or desktop with zero downloads.</p>
 
       <div class="hero-banner">
-        <p class="hero-banner-title">Original Puzzle, Physics &amp; Strategy Worlds</p>
-        <p class="hero-banner-sub">Sub-second loading &bull; 100% client-side &bull; Saved locally on your device</p>
+        <p class="hero-banner-title">Puzzle, Physics, ASMR &amp; Strategy Worlds</p>
+        <p class="hero-banner-sub">Instant loading &bull; Mobile-first controls &bull; 100% browser-based</p>
       </div>
 
-      <a href="#games" class="btn-primary">Explore All Games ↓</a>
+      <a href="#games" class="btn-primary">Explore All 28 Games ↓</a>
     </section>
 
-    <!-- Feature Cards -->
-    <section class="grid-3" aria-label="Platform Highlights">
+    <!-- 4 Feature Cards (Balanced 2x2) -->
+    <section class="grid-2" aria-label="Platform Highlights">
       <div class="card">
-        <div class="icon-box">🔒</div>
+        <div class="card-top"><div class="icon-box">🔒</div></div>
         <h3>100% Local Privacy</h3>
         <p>No accounts, no cloud tracking. Your high scores and unlocked levels stay strictly inside your browser storage.</p>
       </div>
       <div class="card">
-        <div class="icon-box">⚡</div>
+        <div class="card-top"><div class="icon-box">⚡</div></div>
         <h3>Instant 60 FPS Engine</h3>
         <p>Hardware-accelerated HTML5 Canvas and Web Audio deliver smooth gameplay without heavy downloads or lag.</p>
       </div>
       <div class="card">
-        <div class="icon-box">📱</div>
-        <h3>Zero App Installations</h3>
-        <p>Runs natively across Android Chrome, iOS Safari, and desktop browsers without taking up device storage.</p>
+        <div class="card-top"><div class="icon-box">📱</div></div>
+        <h3>Built for Mobile &amp; Desktop</h3>
+        <p>Touch-friendly layouts run smoothly on Android Chrome, iOS Safari, and desktop browsers without taking up storage.</p>
       </div>
       <div class="card">
-        <div class="icon-box">🎧</div>
+        <div class="card-top"><div class="icon-box">🎧</div></div>
         <h3>Interactive Soundscapes</h3>
-        <p>Built-in procedural audio and responsive sound effects enhance puzzles, musical paths, and tactile mechanics.</p>
+        <p>Procedural Web Audio and tactile ASMR sound effects bring musical puzzles, peeling, and lockpicking to life.</p>
       </div>
     </section>
 
-    <!-- Editorial Content (SEO & AdSense Value) -->
-    <section id="about-engine" class="section-block">
-      <article class="card editorial-card">
-        <h2>Reimagining Casual Gaming: The Zero-Install HTML5 Web</h2>
-        <p>For years, playing creative indie games meant downloading bulky installers, waiting through updates, or dealing with intrusive mobile app permissions. Modern web browsers have changed that completely.</p>
-        <p>With native HTML5 Canvas rendering, lightweight physics simulation, and the Web Audio API, ZinPlay runs original puzzle, strategy, and mystery games directly inside your tab—delivering console-smooth responsiveness with a single click.</p>
+    <!-- All 28 Games Section -->
+    <h2 id="games" class="section-heading">All Games Library</h2>
+    <p class="games-count">Browse all 28 dedicated game pages by category</p>
+
+    <div class="filter-bar" role="group" aria-label="Game Categories">
+      <button class="filter-btn active" data-filter="all" type="button">All (28)</button>
+      <button class="filter-btn" data-filter="puzzle" type="button">Puzzle (8)</button>
+      <button class="filter-btn" data-filter="physics" type="button">Physics (7)</button>
+      <button class="filter-btn" data-filter="asmr" type="button">ASMR &amp; Zen (6)</button>
+      <button class="filter-btn" data-filter="strategy" type="button">Strategy &amp; Mystery (7)</button>
+    </div>
+
+    <section class="grid-3" id="gamesGrid" aria-label="All 28 Games">
+
+      <!-- PUZZLE (8) -->
+      <article class="card card-interactive" data-category="puzzle">
+        <div class="card-top"><div class="icon-box">🎵</div><span class="cat-tag">Puzzle</span></div>
+        <h3>One-Line Symphony</h3>
+        <p>Connect glowing nodes in one continuous line to play a complete, calming musical melody.</p>
+        <a href="/games/one-line-symphony/" class="card-link">Play Game →</a>
       </article>
 
-      <div class="grid-2">
-        <div class="card">
-          <h3>🎵 Musical &amp; Optical Puzzles</h3>
-          <p>Challenge your spatial intuition with continuous one-line melodies and dark-mode laser refraction puzzles designed for calm, focused play sessions.</p>
-        </div>
-        <div class="card">
-          <h3>⏱️ High-Stakes Strategy</h3>
-          <p>Test your decision-making under pressure by decoding technical defusal manuals or routing airport baggage tracks before the clock runs out.</p>
-        </div>
-        <div class="card">
-          <h3>⚖️ Real-Time Physics Mechanics</h3>
-          <p>Experiment with gravity, weight distribution, and balance using custom 2D rigid-body simulations that make every attempt unpredictable and fun.</p>
-        </div>
-        <div class="card">
-          <h3>🖥️ Retro Narrative Mysteries</h3>
-          <p>Step inside simulated classic desktops, inspect hidden notes and offline logs, and piece together clues at your own pace.</p>
-        </div>
-      </div>
-
-      <article class="card editorial-card">
-        <h2>🔒 Architectural Philosophy: Why 100% Client-Side Matters</h2>
-        <p>Every game on ZinPlay is engineered as a lightweight static web application. Instead of relying on slow external game servers, all rendering, physics, and audio synthesis happen right on your device.</p>
-        <ul>
-          <li><strong>Instant Load Times:</strong> Minimal file sizes mean games open in under a second even on mobile connections.</li>
-          <li><strong>Dedicated Game Pages:</strong> Each title lives on its own clean URL with full instructions, controls, and pro tips.</li>
-          <li><strong>Battery-Friendly Performance:</strong> Optimized frame loops keep gameplay crisp without draining your phone or laptop battery.</li>
-        </ul>
+      <article class="card card-interactive" data-category="puzzle">
+        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Prism &amp; Lasers</h3>
+        <p>Rotate mirrors and split laser beams through optical prisms in a sleek dark-mode grid.</p>
+        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
       </article>
-    </section>
 
-    <!-- FAQ Accordion -->
-    <section id="faq" class="card faq-card">
-      <h2>Frequently Asked Questions</h2>
+      <article class="card card-interactive" data-category="puzzle">
+        <div class="card-top"><div class="icon-box">🕸️</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Tension &amp; Strings</h3>
+        <p>Drag connected nodes until zero elastic lines overlap and every glowing string turns green.</p>
+        <a href="/games/tension-strings/" class="card-link">Play Game →</a>
+      </article>
 
-      <details class="faq-item">
-        <summary>Are all browser games on ZinPlay completely free?</summary>
-        <div class="faq-answer">Yes. Every game on ZinPlay is 100% free to play with no paywalls, locked levels, or required subscriptions.</div>
-      </details>
+      <article class="card card-interactive" data-category="puzzle">
+        <div class="card-top"><div class="icon-box">🪢</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Tangle Master</h3>
+        <p>Untie colorful knotted ropes by moving pin ends one by one across increasingly complex stages.</p>
+        <a href="/games/tangle-master/" class="card-link">Play Game →</a>
+      </article>
 
-      <details class="faq-item">
-        <summary>Do I need to create an account or download an app?</summary>
-        <div class="faq-answer">No downloads or sign-ups are needed. Just pick any game below and start playing directly inside your browser.</div>
-      </details>
+      <article class="card card-interactive" data-category="puzzle">
+        <div class="card-top"><div class="icon-box">🔦</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Shadow Perspective</h3>
+        <p>Rotate abstract 3D objects in front of a spotlight until their wall shadow reveals a hidden shape.</p>
+        <a href="/games/shadow-perspective/" class="card-link">Play Game →</a>
+      </article>
 
-      <details class="faq-item">
-        <summary>How is my game progress saved?</summary>
-        <div class="faq-answer">Your unlocked levels and best scores are saved automatically in your browser's local storage on your own device.</div>
-      </details>
+      <article class="card card-interactive" data-category="puzzle">
+        <div class="card-top"><div class="icon-box">📄</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Fold &amp; Reveal</h3>
+        <p>Fold scrambled paper sheets from the right edges like origami to line up hidden messages and art.</p>
+        <a href="/games/fold-reveal/" class="card-link">Play Game →</a>
+      </article>
 
-      <details class="faq-item">
-        <summary>Do these games work on smartphones and tablets?</summary>
-        <div class="faq-answer">Yes. All ZinPlay titles are built with responsive layouts and touch-friendly controls for both mobile screens and desktop mice.</div>
-      </details>
+      <article class="card card-interactive" data-category="puzzle">
+        <div class="card-top"><div class="icon-box">🔧</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Un-Builder</h3>
+        <p>Disassemble retro radios, cameras, and engines step by step in the exact logical reverse order.</p>
+        <a href="/games/un-builder/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="puzzle">
+        <div class="card-top"><div class="icon-box">🔍</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Infinite Zoom Hidden Object</h3>
+        <p>Scroll endlessly deeper into nested illustrated worlds to track down three hidden artifacts.</p>
+        <a href="/games/infinite-zoom/" class="card-link">Play Game →</a>
+      </article>
+
+      <!-- PHYSICS (7) -->
+      <article class="card card-interactive" data-category="physics">
+        <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
+        <h3>Gravity Stone Stacker</h3>
+        <p>Stack irregular geometric stones into a balanced tower and keep it standing for five full seconds.</p>
+        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="physics">
+        <div class="card-top"><div class="icon-box">🧨</div><span class="cat-tag">Physics</span></div>
+        <h3>Controlled Demolition</h3>
+        <p>Place timed dynamite on load-bearing pillars to collapse a tower straight inward without hitting neighbors.</p>
+        <a href="/games/controlled-demolition/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="physics">
+        <div class="card-top"><div class="icon-box">🚢</div><span class="cat-tag">Physics</span></div>
+        <h3>Cargo Wave Balancer</h3>
+        <p>Drop and balance shipping containers on a swaying cargo vessel riding dynamic ocean waves.</p>
+        <a href="/games/cargo-balancer/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="physics">
+        <div class="card-top"><div class="icon-box">🛍️</div><span class="cat-tag">Physics</span></div>
+        <h3>Grocery Bagging Physics</h3>
+        <p>Pack eggs, watermelons, chips, and cacti into one paper bag without crushing or tearing anything.</p>
+        <a href="/games/grocery-bagging/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="physics">
+        <div class="card-top"><div class="icon-box">⚙️</div><span class="cat-tag">Physics</span></div>
+        <h3>Rube Goldberg Sandbox</h3>
+        <p>Arrange ramps, springs, fans, and magnets to trigger a wild chain reaction that guides the ball home.</p>
+        <a href="/games/rube-goldberg/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="physics">
+        <div class="card-top"><div class="icon-box">🁣</div><span class="cat-tag">Physics</span></div>
+        <h3>Infinite Domino Builder</h3>
+        <p>Draw custom domino trails with ramps and loops, then topple the first piece to watch the cascade.</p>
+        <a href="/games/domino-builder/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="physics">
+        <div class="card-top"><div class="icon-box">🧪</div><span class="cat-tag">Physics</span></div>
+        <h3>Oobleck Maze</h3>
+        <p>Glide a heavy ball through non-Newtonian fluid—move slowly to flow smoothly, or rush and get stuck solid.</p>
+        <a href="/games/oobleck-maze/" class="card-link">Play Game →</a>
+      </article>
+
+      <!-- ASMR & ZEN (6) -->
+      <article class="card card-interactive" data-category="asmr">
+        <div class="card-top"><div class="icon-box">💦</div><span class="cat-tag">ASMR</span></div>
+        <h3>ASMR PowerWash</h3>
+        <p>Blast away thick mud and rust from muddy rugs, old coins, and cars to reveal a spotless shine.</p>
+        <a href="/games/powerwash-asmr/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="asmr">
+        <div class="card-top"><div class="icon-box">🕰️</div><span class="cat-tag">ASMR</span></div>
+        <h3>Antique Restorer</h3>
+        <p>Scrub rust, polish brass, and fit gears back into vintage pocket watches and gramophones.</p>
+        <a href="/games/antique-restorer/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="asmr">
+        <div class="card-top"><div class="icon-box">🏷️</div><span class="cat-tag">ASMR</span></div>
+        <h3>The Perfect Peel</h3>
+        <p>Peel sticky price tags and protective films at the exact speed and angle without tearing them.</p>
+        <a href="/games/perfect-peel/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="asmr">
+        <div class="card-top"><div class="icon-box">🎟️</div><span class="cat-tag">ASMR</span></div>
+        <h3>The Perfect Tear</h3>
+        <p>Tear vintage tickets, receipts, and stamps cleanly along perforated lines at a crisp 45-degree rhythm.</p>
+        <a href="/games/perfect-tear/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="asmr">
+        <div class="card-top"><div class="icon-box">🧼</div><span class="cat-tag">ASMR</span></div>
+        <h3>Oddly Satisfying Slicer</h3>
+        <p>Slice soft soap bars, kinetic sand, and jelly into even pieces with realistic physics and soothing audio.</p>
+        <a href="/games/satisfying-slicer/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="asmr">
+        <div class="card-top"><div class="icon-box">🔐</div><span class="cat-tag">Zen</span></div>
+        <h3>The Zen Lockpicker</h3>
+        <p>Slowly turn a dark minimalist safe dial and listen closely for subtle metallic clicks to crack the lock.</p>
+        <a href="/games/zen-lockpicker/" class="card-link">Play Game →</a>
+      </article>
+
+      <!-- STRATEGY & MYSTERY (7) -->
+      <article class="card card-interactive" data-category="strategy">
+        <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
+        <h3>Manual Bomb Defusal</h3>
+        <p>Check the live technical manual against the ticking clock, decode serial rules, and cut the right wire.</p>
+        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="strategy">
+        <div class="card-top"><div class="icon-box">🧳</div><span class="cat-tag">Strategy</span></div>
+        <h3>Baggage Routing Chaos</h3>
+        <p>Flip conveyor belt switches in real time to send color-coded suitcases to the matching airport gates.</p>
+        <a href="/games/baggage-chaos/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="strategy">
+        <div class="card-top"><div class="icon-box">🗺️</div><span class="cat-tag">Strategy</span></div>
+        <h3>Heist Blueprint Planner</h3>
+        <p>Draw synchronized routes on a museum blueprint while paused, then hit Execute to dodge every laser.</p>
+        <a href="/games/heist-planner/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="strategy">
+        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
+        <h3>Blackout Grid Operator</h3>
+        <p>Balance solar, wind, and backup power plants across a 24-hour cycle to hold city frequency at 50 Hz.</p>
+        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="strategy">
+        <div class="card-top"><div class="icon-box">🖥️</div><span class="cat-tag">Mystery</span></div>
+        <h3>OS Sleuth</h3>
+        <p>Explore a retro Windows 98 desktop, inspect emails and hidden zip files, and solve a disappearance.</p>
+        <a href="/games/os-sleuth/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="strategy">
+        <div class="card-top"><div class="icon-box">👁️</div><span class="cat-tag">Mystery</span></div>
+        <h3>Micro-Expression Polygraph</h3>
+        <p>Watch a suspect's face closely during questioning and catch split-second eye twitches to expose lies.</p>
+        <a href="/games/micro-polygraph/" class="card-link">Play Game →</a>
+      </article>
+
+      <article class="card card-interactive" data-category="strategy">
+        <div class="card-top"><div class="icon-box">🌍</div><span class="cat-tag">Mystery</span></div>
+        <h3>OSINT Geo-Sleuth</h3>
+        <p>Zoom into photo clues—wall outlets, reflections, and cafe menus—to pinpoint the exact location on a map.</p>
+        <a href="/games/geo-sleuth/" class="card-link">Play Game →</a>
+      </article>
+
     </section>
 
     <!-- Safe AdSense Placement -->
     <div class="ad-slot" aria-label="Advertisement">
       <span class="ad-label">Advertisement</span>
-      <!-- AdSense code will be placed here after approval -->
+      <!-- AdSense code goes here after approval -->
     </div>
 
-    <!-- All Games Grid -->
-    <h2 id="games" class="section-heading">All Games</h2>
-
-    <section class="grid-3" aria-label="Game Library">
-      <article class="card card-interactive">
-        <div class="icon-box">🎵</div>
-        <h3>One-Line Symphony</h3>
-        <p>Connect glowing nodes in one unbroken path. Each node plays a calming musical note to complete a full melody.</p>
-        <a href="/games/one-line-symphony/" class="card-link">Play Game →</a>
+    <!-- Editorial Content (SEO & AdSense) -->
+    <section id="about-engine" class="section-block">
+      <article class="card editorial-card">
+        <h2>Reimagining Casual Gaming: The Zero-Install HTML5 Web</h2>
+        <p>Modern browsers now have the rendering speed and audio precision to run creative puzzle, physics, and strategy games directly inside a tab—without bulky downloads, account sign-ups, or intrusive mobile permissions.</p>
+        <p>Every game on ZinPlay is built as an independent, lightweight static page so you can jump straight into gameplay on any smartphone or computer in under a second.</p>
       </article>
 
-      <article class="card card-interactive">
-        <div class="icon-box">💎</div>
-        <h3>Prism &amp; Lasers</h3>
-        <p>Place mirrors and optical prisms in a sleek dark-mode grid to split, blend, and guide laser beams to every target.</p>
-        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
+      <article class="card editorial-card">
+        <h2>🔒 Why 100% Client-Side Architecture Matters</h2>
+        <ul>
+          <li><strong>Dedicated Game URLs:</strong> Each of our 28 titles runs on its own focused page with clear controls, rules, and tips.</li>
+          <li><strong>Private Local Storage:</strong> Progress and best scores stay on your own device without third-party tracking accounts.</li>
+          <li><strong>Mobile-First Performance:</strong> Responsive touch controls and optimized Canvas loops keep frame rates smooth and battery drain low.</li>
+        </ul>
       </article>
+    </section>
 
-      <article class="card card-interactive">
-        <div class="icon-box">💣</div>
-        <h3>Manual Bomb Defusal</h3>
-        <p>Beat the countdown by reading the live technical manual, checking serial rules, and cutting the exact right wire.</p>
-        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
-      </article>
+    <!-- FAQ -->
+    <section id="faq" class="card faq-card">
+      <h2>Frequently Asked Questions</h2>
 
-      <article class="card card-interactive">
-        <div class="icon-box">🧳</div>
-        <h3>Baggage Routing Chaos</h3>
-        <p>Flip conveyor belt switches in real time to send color-coded suitcases to the matching airport departure gates.</p>
-        <a href="/games/baggage-chaos/" class="card-link">Play Game →</a>
-      </article>
+      <details class="faq-item">
+        <summary>Are all 28 games on ZinPlay completely free?</summary>
+        <div class="faq-answer">Yes. Every game in our library is 100% free to play in your browser with no paywalls or subscriptions.</div>
+      </details>
 
-      <article class="card card-interactive">
-        <div class="icon-box">🪨</div>
-        <h3>Gravity Stone Stacker</h3>
-        <p>Stack irregular geometric stones into a balanced tower and keep it standing steady for five full seconds.</p>
-        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
-      </article>
+      <details class="faq-item">
+        <summary>Do these games work smoothly on smartphones?</summary>
+        <div class="faq-answer">Yes. The hub and game stages are designed mobile-first with touch controls and responsive layouts for Android and iOS browsers.</div>
+      </details>
 
-      <article class="card card-interactive">
-        <div class="icon-box">🖥️</div>
-        <h3>OS Sleuth</h3>
-        <p>Explore a mysterious retro desktop, inspect offline emails and hidden folders, and uncover the owner's secret.</p>
-        <a href="/games/os-sleuth/" class="card-link">Play Game →</a>
-      </article>
+      <details class="faq-item">
+        <summary>Do I need to install an app or sign up?</summary>
+        <div class="faq-answer">No downloads or registration required. Just tap any game card above to start playing immediately.</div>
+      </details>
     </section>
 
   </main>
@@ -191,24 +336,26 @@
           <a href="/" class="brand">
             <span class="brand-accent">Zin</span>Play<span class="brand-ext">.io</span>
           </a>
-          <p class="footer-desc">Your independent hub for lightweight, privacy-first HTML5 puzzle, physics, and strategy browser games.</p>
+          <p class="footer-desc">Your independent hub for lightweight, privacy-first HTML5 puzzle, physics, ASMR, and strategy browser games.</p>
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
 
         <div class="footer-col">
-          <h4>Popular Games</h4>
+          <h4>Top Puzzles</h4>
           <ul>
             <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
             <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
-            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
+            <li><a href="/games/tangle-master/">Tangle Master</a></li>
           </ul>
         </div>
 
         <div class="footer-col">
-          <h4>More Games</h4>
+          <h4>Top Strategy</h4>
           <ul>
-            <li><a href="/games/stone-stacker/">Gravity Stone Stacker</a></li>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
             <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
           </ul>
         </div>
@@ -226,10 +373,45 @@
 
       <div class="footer-bottom">
         <span>&copy; 2026 ZinPlay. Independent HTML5 browser games.</span>
-        <span>Built for instant play on desktop &amp; mobile.</span>
+        <span>Built for instant play on mobile &amp; desktop.</span>
       </div>
     </div>
   </footer>
+
+  <script>
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById("menuBtn");
+    const navMenu = document.getElementById("navMenu");
+    if (menuBtn && navMenu) {
+      menuBtn.addEventListener("click", () => {
+        const isOpen = navMenu.classList.toggle("open");
+        menuBtn.setAttribute("aria-expanded", isOpen);
+        menuBtn.textContent = isOpen ? "✕" : "☰";
+      });
+      navMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          navMenu.classList.remove("open");
+          menuBtn.setAttribute("aria-expanded", "false");
+          menuBtn.textContent = "☰";
+        });
+      });
+    }
+
+    // Category Filter
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const gameCards = document.querySelectorAll("#gamesGrid .card-interactive");
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const filter = btn.getAttribute("data-filter");
+        gameCards.forEach((card) => {
+          const match = filter === "all" || card.getAttribute("data-category") === filter;
+          card.classList.toggle("hidden", !match);
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>
