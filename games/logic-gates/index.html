@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minimalist Logic Gates — 500 Digital Circuit Levels | ZinPlay</title>
+  <meta name="description" content="Play 500 free digital logic puzzles in Minimalist Logic Gates. Snap AND, OR, NOT, XOR, NAND, and NOR gates into glowing circuit boards to satisfy every signal test." />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <style>
+    .game-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .back-link {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .game-title-wrap h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .game-title-wrap p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Top Circuit HUD */
+    .hud-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      background: #070c18;
+      color: #e2e8f0;
+      border-bottom: 1px solid #17233b;
+      font-size: 0.84rem;
+      font-weight: 700;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .hud-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .chapter-sub {
+      font-size: 0.72rem;
+      color: #38bdf8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hud-pills {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .hud-pill {
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #bae6fd;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-family: monospace;
+    }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
+    }
+
+    /* Live Signal Test Vector Switcher Bar */
+    .tests-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 12px;
+      background: #0c1426;
+      border-bottom: 1px solid #1b2a47;
+      flex-wrap: wrap;
+    }
+    .test-tab-btn {
+      min-height: 34px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1.5px solid #263859;
+      background: #121e36;
+      color: #94a3b8;
+      font-size: 0.76rem;
+      font-weight: 800;
+      font-family: monospace;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.14s ease;
+    }
+    .test-tab-btn.active {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.2);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.26);
+    }
+    .test-badge {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 900;
+    }
+    .test-badge.pass {
+      background: #16a34a;
+      color: #ffffff;
+    }
+    .test-badge.fail {
+      background: #7f1d1d;
+      color: #fecaca;
+    }
+
+    /* PCB Canvas Stage */
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      height: 390px;
+      background: radial-gradient(circle at 50% 45%, #101b33 0%, #070b15 100%);
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    @media (min-width: 640px) {
+      .canvas-container {
+        height: 430px;
+      }
+    }
+    #logicCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+
+    /* Selected Gate Truth Rule Banner */
+    .gate-rule-bar {
+      text-align: center;
+      padding: 7px 12px;
+      background: #09101f;
+      border-top: 1px solid #17233b;
+      font-size: 0.76rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .gate-rule-bar strong {
+      color: #38bdf8;
+      font-family: monospace;
+    }
+
+    /* Gate Components Tray */
+    .gate-tray {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 12px;
+      background: #0d1629;
+      border-top: 1px solid #1b2a47;
+      flex-wrap: wrap;
+    }
+    .gate-tool-btn {
+      min-width: 64px;
+      min-height: 46px;
+      padding: 6px 11px;
+      border-radius: 11px;
+      border: 1.5px solid #263859;
+      background: #142038;
+      color: #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease;
+    }
+    .gate-tool-btn:active {
+      transform: scale(0.96);
+    }
+    .gate-tool-btn.active {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.22);
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.28);
+    }
+    .gate-tool-btn.hint-glow {
+      border-color: #facc15;
+      box-shadow: 0 0 16px rgba(250, 204, 21, 0.5);
+    }
+    .gt-code {
+      font-family: monospace;
+      font-size: 0.86rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+    .gt-arity {
+      font-size: 0.6rem;
+      color: #7dd3fc;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .status-toast {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(7, 12, 24, 0.95);
+      border: 1px solid rgba(250, 204, 21, 0.68);
+      color: #fef08a;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      max-width: 92%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .status-toast.show {
+      opacity: 1;
+    }
+
+    .win-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 10, 22, 0.8);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .win-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .win-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 18px;
+      padding: 24px 20px;
+      text-align: center;
+      max-width: 325px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    }
+    .win-card h2 {
+      font-size: 1.32rem;
+      margin-bottom: 6px;
+    }
+    .win-card p {
+      font-size: 0.88rem;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .controls-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .level-nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--surface-soft);
+      border-top: 1px solid var(--border);
+    }
+    .level-picker-trigger {
+      flex: 1;
+      max-width: 220px;
+      min-height: 38px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 0.86rem;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    /* Level Picker Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-box {
+      background: var(--surface);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 84vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-head h3 { font-size: 1rem; font-weight: 800; }
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .chapter-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 10px 14px;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+    .chapter-tab {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .chapter-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+    .jump-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .jump-input {
+      flex: 1;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    .levels-grid {
+      padding: 14px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 520px) {
+      .levels-grid { grid-template-columns: repeat(10, 1fr); }
+    }
+    .lvl-cell {
+      height: 38px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .lvl-cell.solved {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #166534;
+    }
+    .lvl-cell.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand">
+        <span class="brand-accent">Zin</span>Play<span class="brand-ext">.io</span>
+      </a>
+      <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
+        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#about-engine">About</a>
+        <a href="/#faq">FAQ</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="game-header-bar">
+      <a href="/#games" class="back-link">← Back to All Games</a>
+      <span class="cat-tag">500 Circuits &bull; Digital Logic</span>
+    </div>
+
+    <div class="game-title-wrap" style="margin-bottom: 16px;">
+      <h1>Minimalist Logic Gates</h1>
+      <p>Snap AND, OR, NOT, XOR, NAND, and NOR gates into empty sockets so the circuit produces the exact target output across every test case.</p>
+    </div>
+
+    <!-- Game Stage -->
+    <section class="game-wrapper" aria-label="Minimalist Logic Gates Puzzle">
+      <div class="hud-strip">
+        <div class="hud-left">
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Basic Gates</span>
+          <span id="levelTitle">Circuit #1 / 500</span>
+        </div>
+        <div class="hud-pills">
+          <span class="hud-pill" id="testsPill">Tests: 0 / 2</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Solved: 0 / 500</span>
+        </div>
+      </div>
+
+      <!-- Live Input Vector Test Tabs -->
+      <div id="testTabsBar" class="tests-strip" role="tablist" aria-label="Circuit Test Cases"></div>
+
+      <!-- Glowing PCB Canvas -->
+      <div class="canvas-container">
+        <canvas id="logicCanvas"></canvas>
+        <div id="statusToast" class="status-toast"></div>
+
+        <!-- Circuit Verified Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div style="font-size:2.3rem; margin-bottom:6px;">⚡</div>
+            <h2 id="winHeading">Circuit Verified!</h2>
+            <p id="winText">All logic outputs matched across every test case.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Circuit →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Truth Rule Line -->
+      <div id="gateRuleBar" class="gate-rule-bar">
+        <strong>AND</strong>: Outputs 1 only when BOTH inputs are 1.
+      </div>
+
+      <!-- Gate Components Tray -->
+      <div id="gateTray" class="gate-tray" role="group" aria-label="Logic Gates"></div>
+
+      <div class="game-controls-bar">
+        <div class="controls-group">
+          <button id="resetBtn" class="btn-outline" type="button">↺ Clear Board</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Circuit Hint</button>
+        </div>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+      </div>
+
+      <div class="level-nav-bar">
+        <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Circuit 1 / 500 ▾</button>
+        <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
+      </div>
+    </section>
+
+    <!-- Safe AdSense Placement -->
+    <div class="ad-slot" aria-label="Advertisement">
+      <span class="ad-label">Advertisement</span>
+    </div>
+
+    <!-- Editorial Guide -->
+    <section class="section-block">
+      <article class="card editorial-card">
+        <h2>How to Play Minimalist Logic Gates (500 Circuits)</h2>
+        <p>Minimalist Logic Gates transforms real computer-science Boolean algebra into a sleek, visual dark-mode puzzle across 500 escalating circuit boards. Glowing cyan traces carry a <strong>HIGH (1)</strong> signal, while dark slate wires carry a <strong>LOW (0)</strong> signal. Fill each dashed socket with the right gate so every output LED matches its target across all signal test cases simultaneously.</p>
+        <ul>
+          <li><strong>Tap to Place or Cycle:</strong> Select any gate in the tray below and tap a matching dashed socket (<code>2-IN</code> for binary gates, <code>1-IN</code> for <code>NOT</code> / <code>PASS</code>). Tap an already-placed socket with the same gate to remove it, or tap with a new gate to swap instantly.</li>
+          <li><strong>Inspect Every Test Vector:</strong> Tap the <strong>Test 1 / Test 2 / Test 3 / Test 4</strong> pills above the board to switch live input combinations and trace signals through your circuit. A circuit is solved the instant every test pill turns green (<code>✓</code>)!</li>
+          <li><strong>Master All 6 Logic Gates:</strong> Start with <code>AND</code>, <code>OR</code>, and <code>NOT</code> in Chapter 1, unlock <code>XOR</code> (outputs 1 when inputs differ) in Chapter 2, <code>NAND</code> in Chapter 3, and <code>NOR</code> in Chapters 4–5. Any logically equivalent gate combination that passes all tests wins!</li>
+        </ul>
+      </article>
+
+      <div class="card faq-card">
+        <h2>Game FAQ</h2>
+        <details class="faq-item">
+          <summary>Why do some circuits accept more than one gate arrangement?</summary>
+          <div class="faq-answer">Just like real digital chip design, Boolean circuits can often be simplified or built in equivalent ways. As long as your completed circuit matches the target outputs across every single Test Case, it passes!</div>
+        </details>
+        <details class="faq-item">
+          <summary>What is the difference between NOT and PASS on a 1-input socket?</summary>
+          <div class="faq-answer"><code>NOT</code> is an inverter—it flips <code>1 → 0</code> and <code>0 → 1</code>. <code>PASS</code> is a direct buffer wire that keeps the signal unchanged (<code>1 → 1</code>, <code>0 → 0</code>).</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- More Games -->
+    <h2 class="section-heading">More Games to Try</h2>
+    <section class="grid-3">
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
+        <h3>Blackout Grid Operator</h3>
+        <p>Balance solar, wind, batteries, and turbines to keep city grid frequency locked at 50 Hz.</p>
+        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Prism &amp; Lasers</h3>
+        <p>Place mirrors and split laser beams through prisms across 500 dark-mode optical puzzles.</p>
+        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">⚗️</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Color Alchemy Lab</h3>
+        <p>Blend artist paint pigments inside an animated glass flask across 500 color formulas.</p>
+        <a href="/games/color-alchemy/" class="card-link">Play Game →</a>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- Circuit Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Circuit">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Choose Logic Circuit (1 – 500)</h3>
+        <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
+      </div>
+      <div id="chapterTabs" class="chapter-tabs"></div>
+      <div class="jump-row">
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to circuit (1-500)..." />
+        <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
+      </div>
+      <div id="levelsGrid" class="levels-grid"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="/" class="brand">
+            <span class="brand-accent">Zin</span>Play<span class="brand-ext">.io</span>
+          </a>
+          <p class="footer-desc">Your independent hub for lightweight, privacy-first HTML5 puzzle, physics, ASMR, and strategy browser games.</p>
+          <p class="footer-contact">Contact: hello@zinplay.io</p>
+        </div>
+        <div class="footer-col">
+          <h4>Top Puzzles</h4>
+          <ul>
+            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
+            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
+            <li><a href="/games/logic-gates/">Minimalist Logic Gates</a></li>
+            <li><a href="/games/color-alchemy/">Color Alchemy Lab</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Top Strategy</h4>
+          <ul>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
+            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Explore &amp; Legal</h4>
+          <ul>
+            <li><a href="/about/">About Us</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 ZinPlay. Independent HTML5 browser games.</span>
+        <span>Built for instant play on mobile &amp; desktop.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile Header Menu
+    const menuBtn = document.getElementById("menuBtn");
+    const navMenu = document.getElementById("navMenu");
+    if (menuBtn && navMenu) {
+      menuBtn.addEventListener("click", () => {
+        const isOpen = navMenu.classList.toggle("open");
+        menuBtn.setAttribute("aria-expanded", isOpen);
+        menuBtn.textContent = isOpen ? "✕" : "☰";
+      });
+    }
+
+    // ==============================================
+    // LOGIC GATE DEFINITIONS & CIRCUIT TEMPLATES
+    // ==============================================
+    const TOTAL_LEVELS = 500;
+    const WORLD_W = 460;
+    const WORLD_H = 380;
+
+    const CHAPTERS = [
+      { title: "Chapter 1 • Basic Gates (AND / OR / NOT)", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Exclusive Logic (+ XOR)", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Inverted Gates (+ NAND)", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Full Gate Library (+ NOR)", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Silicon Architect", range: "401–500", start: 401, end: 500 }
+    ];
+
+    const GATES = {
+      AND:  { key: "AND",  arity: 2, color: "#38bdf8", rule: "Outputs 1 ONLY when both inputs are 1.",       fn: (a, b) => (a & b) },
+      OR:   { key: "OR",   arity: 2, color: "#a855f7", rule: "Outputs 1 when AT LEAST ONE input is 1.",      fn: (a, b) => (a | b) },
+      XOR:  { key: "XOR",  arity: 2, color: "#f59e0b", rule: "Outputs 1 ONLY when the two inputs DIFFER.",   fn: (a, b) => (a ^ b) },
+      NAND: { key: "NAND", arity: 2, color: "#f43f5e", rule: "Opposite of AND: outputs 0 only if both = 1.", fn: (a, b) => (a & b) ? 0 : 1 },
+      NOR:  { key: "NOR",  arity: 2, color: "#14b8a6", rule: "Opposite of OR: outputs 1 only if both = 0.",  fn: (a, b) => (a | b) ? 0 : 1 },
+      NOT:  { key: "NOT",  arity: 1, color: "#ec4899", rule: "Inverter (1-IN): flips 0 → 1 and 1 → 0.",      fn: (a) => (a ? 0 : 1) },
+      PASS: { key: "PASS", arity: 1, color: "#64748b", rule: "Direct Wire (1-IN): passes signal unchanged.", fn: (a) => a }
+    };
+
+    // Clean, Zero-Overlap PCB Schematic Topologies (Evaluated left-to-right)
+    const TOPOLOGIES = {
+      single2: {
+        inputs: [
+          { id: "A", x: 52, y: 132 },
+          { id: "B", x: 52, y: 248 }
+        ],
+        gates: [
+          { id: "G1", x: 230, y: 190, inIds: ["A", "B"], arity: 2 }
+        ],
+        outputs: [
+          { id: "Q1", x: 404, y: 190, src: "G1" }
+        ]
+      },
+      invertAnd: {
+        inputs: [
+          { id: "A", x: 48, y: 128 },
+          { id: "B", x: 48, y: 252 }
+        ],
+        gates: [
+          { id: "G1", x: 162, y: 128, inIds: ["A"], arity: 1 },
+          { id: "G2", x: 292, y: 190, inIds: ["G1", "B"], arity: 2 }
+        ],
+        outputs: [
+          { id: "Q1", x: 410, y: 190, src: "G2" }
+        ]
+      },
+      cascade3in: {
+        inputs: [
+          { id: "A", x: 48, y: 92 },
+          { id: "B", x: 48, y: 190 },
+          { id: "C", x: 48, y: 288 }
+        ],
+        gates: [
+          { id: "G1", x: 170, y: 140, inIds: ["A", "B"], arity: 2 },
+          { id: "G2", x: 294, y: 214, inIds: ["G1", "C"], arity: 2 }
+        ],
+        outputs: [
+          { id: "Q1", x: 410, y: 214, src: "G2" }
+        ]
+      },
+      dualOut2: {
+        inputs: [
+          { id: "A", x: 48, y: 94 },
+          { id: "B", x: 48, y: 190 },
+          { id: "C", x: 48, y: 286 }
+        ],
+        gates: [
+          { id: "G1", x: 224, y: 132, inIds: ["A", "B"], arity: 2 },
+          { id: "G2", x: 224, y: 248, inIds: ["B", "C"], arity: 2 }
+        ],
+        outputs: [
+          { id: "Q1", x: 406, y: 132, src: "G1" },
+          { id: "Q2", x: 406, y: 248, src: "G2" }
+        ]
+      },
+      funnel3: {
+        inputs: [
+          { id: "A", x: 46, y: 84 },
+          { id: "B", x: 46, y: 190 },
+          { id: "C", x: 46, y: 296 }
+        ],
+        gates: [
+          { id: "G1", x: 168, y: 124, inIds: ["A", "B"], arity: 2 },
+          { id: "G2", x: 168, y: 256, inIds: ["B", "C"], arity: 2 },
+          { id: "G3", x: 296, y: 190, inIds: ["G1", "G2"], arity: 2 }
+        ],
+        outputs: [
+          { id: "Q1", x: 412, y: 190, src: "G3" }
+        ]
+      },
+      invFunnel3: {
+        inputs: [
+          { id: "A", x: 46, y: 88 },
+          { id: "B", x: 46, y: 190 },
+          { id: "C", x: 46, y: 292 }
+        ],
+        gates: [
+          { id: "G1", x: 164, y: 130, inIds: ["A", "B"], arity: 2 },
+          { id: "G2", x: 164, y: 268, inIds: ["C"], arity: 1 },
+          { id: "G3", x: 294, y: 196, inIds: ["G1", "G2"], arity: 2 }
+        ],
+        outputs: [
+          { id: "Q1", x: 412, y: 196, src: "G3" }
+        ]
+      },
+      quadTree4: {
+        inputs: [
+          { id: "A", x: 44, y: 64 },
+          { id: "B", x: 44, y: 148 },
+          { id: "C", x: 44, y: 232 },
+          { id: "D", x: 44, y: 316 }
+        ],
+        gates: [
+          { id: "G1", x: 160, y: 106, inIds: ["A", "B"], arity: 2 },
+          { id: "G2", x: 160, y: 274, inIds: ["C", "D"], arity: 2 },
+          { id: "G3", x: 290, y: 138, inIds: ["G1", "C"], arity: 2 },
+          { id: "G4", x: 290, y: 248, inIds: ["G1", "G2"], arity: 2 }
+        ],
+        outputs: [
+          { id: "Q1", x: 412, y: 138, src: "G3" },
+          { id: "Q2", x: 412, y: 248, src: "G4" }
+        ]
+      },
+      bus5: {
+        inputs: [
+          { id: "A", x: 42, y: 64 },
+          { id: "B", x: 42, y: 148 },
+          { id: "C", x: 42, y: 232 },
+          { id: "D", x: 42, y: 316 }
+        ],
+        gates: [
+          { id: "G1", x: 142, y: 106, inIds: ["A", "B"], arity: 2 },
+          { id: "G2", x: 142, y: 274, inIds: ["C", "D"], arity: 2 },
+          { id: "G3", x: 242, y: 190, inIds: ["B", "C"], arity: 2 },
+          { id: "G4", x: 326, y: 122, inIds: ["G1", "G3"], arity: 2 },
+          { id: "G5", x: 326, y: 258, inIds: ["G3", "G2"], arity: 2 }
+        ],
+        outputs: [
+          { id: "Q1", x: 418, y: 122, src: "G4" },
+          { id: "Q2", x: 418, y: 258, src: "G5" }
+        ]
+      },
+      architect6: {
+        inputs: [
+          { id: "A", x: 40, y: 62 },
+          { id: "B", x: 40, y: 146 },
+          { id: "C", x: 40, y: 234 },
+          { id: "D", x: 40, y: 318 }
+        ],
+        gates: [
+          { id: "G1", x: 132, y: 104, inIds: ["A", "B"], arity: 2 },
+          { id: "G2", x: 132, y: 190, inIds: ["B"], arity: 1 },
+          { id: "G3", x: 132, y: 276, inIds: ["C", "D"], arity: 2 },
+          { id: "G4", x: 234, y: 144, inIds: ["G1", "G2"], arity: 2 },
+          { id: "G5", x: 234, y: 244, inIds: ["G2", "G3"], arity: 2 },
+          { id: "G6", x: 330, y: 190, inIds: ["G4", "G5"], arity: 2 }
+        ],
+        outputs: [
+          { id: "Q1", x: 420, y: 120, src: "G4" },
+          { id: "Q2", x: 420, y: 190, src: "G6" }
+        ]
+      }
+    };
+
+    function mulberry32(seed) {
+      let a = seed >>> 0;
+      return function () {
+        a = (a + 0x6D2B79F5) >>> 0;
+        let t = Math.imul(a ^ (a >>> 15), a | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function shuffle(arr, rng) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // Evaluate a circuit given gate assignments & an input map ({ A: 0|1, B: 0|1, ... })
+    function evaluateCircuit(topo, gateMap, inputVals) {
+      const vals = { ...inputVals };
+      for (const g of topo.gates) {
+        const typeKey = gateMap[g.id];
+        if (!typeKey) {
+          vals[g.id] = null;
+          continue;
+        }
+        const inVals = g.inIds.map((id) => vals[id]);
+        if (inVals.some((v) => v === null || v === undefined)) {
+          vals[g.id] = null;
+          continue;
+        }
+        vals[g.id] = GATES[typeKey].fn(inVals[0], inVals[1]);
+      }
+      const outs = {};
+      for (const o of topo.outputs) {
+        outs[o.id] = vals[o.src];
+      }
+      return { vals, outs };
+    }
+
+    // Curated First 5 Intro Circuits for Smooth Hands-On Onboarding
+    const INTRO_LEVELS = {
+      1: {
+        topoKey: "single2",
+        unlocked: ["AND", "OR"],
+        solution: { G1: "AND" },
+        fixedIds: [],
+        vectors: [{ A: 1, B: 0 }, { A: 1, B: 1 }]
+      },
+      2: {
+        topoKey: "single2",
+        unlocked: ["AND", "OR"],
+        solution: { G1: "OR" },
+        fixedIds: [],
+        vectors: [{ A: 0, B: 0 }, { A: 1, B: 0 }]
+      },
+      3: {
+        topoKey: "invertAnd",
+        unlocked: ["AND", "OR", "NOT", "PASS"],
+        solution: { G1: "NOT", G2: "AND" },
+        fixedIds: [],
+        vectors: [{ A: 0, B: 1 }, { A: 1, B: 1 }, { A: 0, B: 0 }]
+      },
+      4: {
+        topoKey: "cascade3in",
+        unlocked: ["AND", "OR", "NOT", "PASS"],
+        solution: { G1: "OR", G2: "AND" },
+        fixedIds: [],
+        vectors: [{ A: 1, B: 0, C: 1 }, { A: 0, B: 0, C: 1 }, { A: 1, B: 0, C: 0 }]
+      },
+      5: {
+        topoKey: "dualOut2",
+        unlocked: ["AND", "OR", "NOT", "PASS"],
+        solution: { G1: "AND", G2: "OR" },
+        fixedIds: [],
+        vectors: [{ A: 1, B: 0, C: 1 }, { A: 1, B: 1, C: 0 }, { A: 0, B: 0, C: 0 }]
+      }
+    };
+
+    function buildCircuitLevel(levelNum) {
+      if (INTRO_LEVELS[levelNum]) {
+        const spec = INTRO_LEVELS[levelNum];
+        const topo = TOPOLOGIES[spec.topoKey];
+        const tests = spec.vectors.map((inp) => ({
+          inputs: inp,
+          expected: evaluateCircuit(topo, spec.solution, inp).outs
+        }));
+        return {
+          levelNum,
+          topo,
+          unlocked: spec.unlocked,
+          solution: spec.solution,
+          fixedSet: new Set(spec.fixedIds),
+          tests
+        };
+      }
+
+      const rng = mulberry32(levelNum * 112909 + 51507);
+
+      let unlocked2, unlocked1, topoPool, testCount, fixedCount;
+      if (levelNum <= 100) {
+        unlocked2 = ["AND", "OR"];
+        unlocked1 = ["NOT", "PASS"];
+        topoPool = levelNum <= 45
+          ? ["invertAnd", "cascade3in", "dualOut2"]
+          : ["cascade3in", "dualOut2", "funnel3", "invFunnel3"];
+        testCount = 3;
+        fixedCount = 0;
+      } else if (levelNum <= 200) {
+        unlocked2 = ["AND", "OR", "XOR"];
+        unlocked1 = ["NOT", "PASS"];
+        topoPool = ["cascade3in", "dualOut2", "funnel3", "invFunnel3", "quadTree4"];
+        testCount = 3;
+        fixedCount = levelNum > 160 ? 1 : 0;
+      } else if (levelNum <= 300) {
+        unlocked2 = ["AND", "OR", "XOR", "NAND"];
+        unlocked1 = ["NOT", "PASS"];
+        topoPool = ["funnel3", "invFunnel3", "quadTree4", "bus5"];
+        testCount = 3;
+        fixedCount = 1;
+      } else if (levelNum <= 400) {
+        unlocked2 = ["AND", "OR", "XOR", "NAND", "NOR"];
+        unlocked1 = ["NOT", "PASS"];
+        topoPool = ["quadTree4", "bus5", "architect6"];
+        testCount = levelNum > 350 ? 4 : 3;
+        fixedCount = 1;
+      } else {
+        unlocked2 = ["AND", "OR", "XOR", "NAND", "NOR"];
+        unlocked1 = ["NOT", "PASS"];
+        topoPool = ["bus5", "architect6"];
+        testCount = 4;
+        fixedCount = levelNum > 450 ? 0 : 1;
+      }
+
+      const topoKey = topoPool[Math.floor(rng() * topoPool.length)];
+      const topo = TOPOLOGIES[topoKey];
+      const hasUnary = topo.gates.some((g) => g.arity === 1);
+      const unlocked = hasUnary ? [...unlocked2, ...unlocked1] : [...unlocked2];
+
+      // Assign deterministic ground-truth gates (favoring chapter-newest gates for flavor!)
+      const solution = {};
+      topo.gates.forEach((g, idx) => {
+        if (g.arity === 1) {
+          solution[g.id] = rng() < 0.72 ? "NOT" : "PASS";
+        } else {
+          // Ensure newest unlocked gate appears regularly in its chapter
+          if (idx === 0 && levelNum > 100 && rng() < 0.6) {
+            solution[g.id] = unlocked2[unlocked2.length - 1];
+          } else {
+            solution[g.id] = unlocked2[Math.floor(rng() * unlocked2.length)];
+          }
+        }
+      });
+
+      // Optionally lock 1 gate as a fixed schematic reference chip
+      const fixedSet = new Set();
+      if (fixedCount > 0 && topo.gates.length >= 4) {
+        const pickFixed = topo.gates[Math.floor(rng() * topo.gates.length)];
+        fixedSet.add(pickFixed.id);
+      }
+
+      // Generate all possible input vectors and pick the most informative `testCount` subset
+      const nIn = topo.inputs.length;
+      const allVecs = [];
+      for (let mask = 0; mask < (1 << nIn); mask++) {
+        const inp = {};
+        topo.inputs.forEach((pin, idx) => {
+          inp[pin.id] = (mask >> idx) & 1;
+        });
+        const evalRes = evaluateCircuit(topo, solution, inp);
+        const outSig = topo.outputs.map((o) => evalRes.outs[o.id]).join("");
+        allVecs.push({ inputs: inp, expected: evalRes.outs, outSig });
+      }
+
+      // Greedily pick diverse vectors spanning different output signatures & input patterns
+      const shuffledVecs = shuffle(allVecs, rng);
+      const chosen = [];
+      const seenSigs = new Set();
+
+      // Pass 1: maximize distinct output states (mix of 0s and 1s!)
+      for (const v of shuffledVecs) {
+        if (chosen.length >= testCount) break;
+        if (!seenSigs.has(v.outSig)) {
+          seenSigs.add(v.outSig);
+          chosen.push(v);
+        }
+      }
+      // Pass 2: fill remaining test slots with distinct input vectors
+      for (const v of shuffledVecs) {
+        if (chosen.length >= testCount) break;
+        if (!chosen.includes(v)) chosen.push(v);
+      }
+
+      return {
+        levelNum,
+        topo,
+        unlocked,
+        solution,
+        fixedSet,
+        tests: chosen.map((c) => ({ inputs: c.inputs, expected: c.expected }))
+      };
+    }
+
+    const levelCache = new Map();
+    function getLevel(num) {
+      if (!levelCache.has(num)) {
+        levelCache.set(num, buildCircuitLevel(num));
+      }
+      return levelCache.get(num);
+    }
+
+    function getChapter(num) {
+      return CHAPTERS.find((c) => num >= c.start && num <= c.end) || CHAPTERS[0];
+    }
+
+    // ==============================================
+    // ELECTRONIC RELAY & SYNTH WEB AUDIO ENGINE
+    // ==============================================
+    let audioCtx = null;
+    let soundOn = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    }
+
+    function playTone(freq, dur, type = "sine", vol = 0.1) {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + dur + 0.02);
+    }
+
+    function sfxSnapGate(passedMore) {
+      playTone(390, 0.05, "triangle", 0.1);
+      if (passedMore) {
+        setTimeout(() => playTone(659.25, 0.16, "sine", 0.11), 45);
+      }
+    }
+    function sfxClearGate() { playTone(240, 0.055, "sine", 0.08); }
+    function sfxSwitchTest() { playTone(520, 0.04, "sine", 0.06); }
+    function sfxCircuitWin() {
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.34, "sine", 0.12), i * 80);
+      });
+    }
+
+    // ==============================================
+    // GAME STATE, INTERACTION & EVALUATION
+    // ==============================================
+    const canvas = document.getElementById("logicCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const chapterLabel = document.getElementById("chapterLabel");
+    const levelTitle = document.getElementById("levelTitle");
+    const testsPill = document.getElementById("testsPill");
+    const solvedCounter = document.getElementById("solvedCounter");
+    const testTabsBar = document.getElementById("testTabsBar");
+    const gateRuleBar = document.getElementById("gateRuleBar");
+    const gateTray = document.getElementById("gateTray");
+    const statusToast = document.getElementById("statusToast");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
+    const soundBtn = document.getElementById("soundBtn");
+    const openPickerBtn = document.getElementById("openPickerBtn");
+
+    let solvedSet = new Set();
+    let currentLevelNum = 1;
+    try {
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_logic_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_logic_500_last") || "1", 10);
+      if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
+    } catch (e) {}
+
+    let level = null;
+    let placedGates = {}; // { G1: "AND", ... }
+    let selectedTool = "AND";
+    let activeTestIdx = 0;
+    let testResults = []; // [{ vals, outs, passed }]
+    let levelWon = false;
+    let hintSocketId = null;
+    let hintGateKey = null;
+    let sparks = [];
+    let toastTimer = null;
+
+    function showToast(msg, ms = 2400) {
+      statusToast.textContent = msg;
+      statusToast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
+    }
+
+    function renderTestTabs() {
+      testTabsBar.innerHTML = "";
+      testResults.forEach((res, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "test-tab-btn" + (idx === activeTestIdx ? " active" : "");
+        btn.innerHTML = `<span>Test ${idx + 1}</span><span class="test-badge ${res.passed ? "pass" : "fail"}">${res.passed ? "✓" : "✕"}</span>`;
+        btn.addEventListener("click", () => {
+          initAudio();
+          activeTestIdx = idx;
+          sfxSwitchTest();
+          renderTestTabs();
+        });
+        testTabsBar.appendChild(btn);
+      });
+    }
+
+    function renderGateTray() {
+      gateTray.innerHTML = "";
+      level.unlocked.forEach((key) => {
+        const g = GATES[key];
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "gate-tool-btn"
+          + (selectedTool === key ? " active" : "")
+          + (hintGateKey === key ? " hint-glow" : "");
+        btn.innerHTML = `
+          <span class="gt-code" style="color:${g.color}">${g.key}</span>
+          <span class="gt-arity">${g.arity}-IN</span>
+        `;
+        btn.addEventListener("click", () => {
+          initAudio();
+          selectedTool = key;
+          updateRuleBar();
+          renderGateTray();
+        });
+        gateTray.appendChild(btn);
+      });
+      updateRuleBar();
+    }
+
+    function updateRuleBar() {
+      const g = GATES[selectedTool] || GATES.AND;
+      gateRuleBar.innerHTML = `<strong style="color:${g.color}">${g.key}</strong>: ${g.rule}`;
+    }
+
+    function evaluateAllTests(playSfx = false, prevPassedCount = 0) {
+      testResults = level.tests.map((tc) => {
+        const ev = evaluateCircuit(level.topo, placedGates, tc.inputs);
+        const passed = level.topo.outputs.every((o) => ev.outs[o.id] === tc.expected[o.id]);
+        return { vals: ev.vals, outs: ev.outs, expected: tc.expected, passed };
+      });
+
+      const passedCount = testResults.filter((r) => r.passed).length;
+
+      // Auto-focus first failing test if active test just passed (super helpful!)
+      if (playSfx && passedCount < testResults.length && testResults[activeTestIdx].passed) {
+        const nextFail = testResults.findIndex((r) => !r.passed);
+        if (nextFail !== -1) activeTestIdx = nextFail;
+      }
+
+      if (playSfx) {
+        sfxSnapGate(passedCount > prevPassedCount);
+      }
+
+      updateHUD();
+
+      if (passedCount === testResults.length && !levelWon) {
+        levelWon = true;
+        hintSocketId = null;
+        hintGateKey = null;
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_logic_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+        updateHUD();
+        sfxCircuitWin();
+
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winHeading.textContent = isLast ? "All 500 Circuits Verified!" : `Circuit #${currentLevelNum} Verified!`;
+        winText.textContent = `Passed all ${testResults.length} signal tests with clean logic.`;
+        nextLevelBtn.textContent = isLast ? "Replay Circuit #1" : `Next Circuit (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 520);
+      }
+    }
+
+    function updateHUD() {
+      const chap = getChapter(currentLevelNum);
+      chapterLabel.textContent = chap.title;
+      levelTitle.textContent = `Circuit #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      const passedCount = testResults.filter((r) => r.passed).length;
+      testsPill.textContent = `Tests: ${passedCount} / ${level.tests.length}`;
+      solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Circuit ${currentLevelNum} / 500 ▾`;
+      renderTestTabs();
+      renderGateTray();
+    }
+
+    function loadLevel(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      level = getLevel(currentLevelNum);
+
+      placedGates = {};
+      level.topo.gates.forEach((g) => {
+        if (level.fixedSet.has(g.id)) {
+          placedGates[g.id] = level.solution[g.id];
+        }
+      });
+
+      selectedTool = level.unlocked[0];
+      activeTestIdx = 0;
+      levelWon = false;
+      hintSocketId = null;
+      hintGateKey = null;
+      sparks = [];
+
+      winOverlay.classList.remove("show");
+      statusToast.classList.remove("show");
+
+      try {
+        localStorage.setItem("zinplay_logic_500_last", String(currentLevelNum));
+      } catch (e) {}
+
+      evaluateAllTests(false, 0);
+    }
+
+    // Viewport Helpers
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function getViewport() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offsetX = (rect.width - WORLD_W * scale) / 2;
+      const offsetY = (rect.height - WORLD_H * scale) / 2;
+      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
+    }
+
+    // Tap/Click Socket Placement
+    canvas.addEventListener("pointerdown", (e) => {
+      if (levelWon) return;
+      initAudio();
+
+      const rect = canvas.getBoundingClientRect();
+      const vp = getViewport();
+      const wx = (e.clientX - rect.left - vp.offsetX) / vp.scale;
+      const wy = (e.clientY - rect.top - vp.offsetY) / vp.scale;
+
+      let hitGate = null;
+      let bestDist = 40;
+      for (const g of level.topo.gates) {
+        const d = Math.hypot(wx - g.x, wy - g.y);
+        if (d < bestDist) {
+          bestDist = d;
+          hitGate = g;
+        }
+      }
+      if (!hitGate) return;
+
+      if (level.fixedSet.has(hitGate.id)) {
+        showToast(`Fixed ${placedGates[hitGate.id]} chip — solve around it!`, 1800);
+        return;
+      }
+
+      const prevPassed = testResults.filter((r) => r.passed).length;
+      const current = placedGates[hitGate.id];
+      const toolDef = GATES[selectedTool];
+
+      let nextType = null;
+      if (toolDef.arity === hitGate.arity) {
+        // Place selected gate, or clear if tapping same gate again
+        nextType = current === selectedTool ? null : selectedTool;
+      } else {
+        // Frictionless auto-smart fallback when arity differs!
+        if (hitGate.arity === 1) {
+          nextType = current === "NOT" ? "PASS" : (current === "PASS" ? null : "NOT");
+          if (nextType) selectedTool = nextType;
+        } else {
+          // Pick first 2-in gate
+          const twoGates = level.unlocked.filter((k) => GATES[k].arity === 2);
+          const idx = twoGates.indexOf(current);
+          nextType = idx === -1 ? twoGates[0] : (idx + 1 < twoGates.length ? twoGates[idx + 1] : null);
+          if (nextType) selectedTool = nextType;
+        }
+      }
+
+      if (nextType) {
+        placedGates[hitGate.id] = nextType;
+        sparks.push({ x: hitGate.x, y: hitGate.y, r: 16, alpha: 0.9, color: GATES[nextType].color });
+      } else {
+        delete placedGates[hitGate.id];
+        sfxClearGate();
+      }
+
+      if (hintSocketId === hitGate.id && nextType === hintGateKey) {
+        hintSocketId = null;
+        hintGateKey = null;
+      }
+
+      evaluateAllTests(!!nextType, prevPassed);
+    });
+
+    // Smart Hint Button
+    document.getElementById("hintBtn").addEventListener("click", () => {
+      if (levelWon) return;
+      initAudio();
+
+      let targetGate = null;
+      for (const g of level.topo.gates) {
+        if (level.fixedSet.has(g.id)) continue;
+        if (placedGates[g.id] !== level.solution[g.id]) {
+          targetGate = g;
+          break;
+        }
+      }
+
+      if (targetGate) {
+        const rightKey = level.solution[targetGate.id];
+        hintSocketId = targetGate.id;
+        hintGateKey = rightKey;
+        selectedTool = rightKey;
+        renderGateTray();
+        showToast(`💡 Place ${rightKey} into the glowing golden socket!`, 2800);
+      }
+    });
+
+    // Utility & Navigation Buttons
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      if (levelWon) { loadLevel(currentLevelNum); return; }
+      initAudio();
+      placedGates = {};
+      level.topo.gates.forEach((g) => {
+        if (level.fixedSet.has(g.id)) placedGates[g.id] = level.solution[g.id];
+      });
+      hintSocketId = null;
+      hintGateKey = null;
+      sfxClearGate();
+      evaluateAllTests(false, 0);
+    });
+
+    soundBtn.addEventListener("click", () => {
+      soundOn = !soundOn;
+      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+    });
+    nextLevelBtn.addEventListener("click", () => {
+      loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
+    });
+    document.getElementById("prevLvlBtn").addEventListener("click", () => {
+      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
+    });
+    document.getElementById("nextLvlBtn").addEventListener("click", () => {
+      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
+    });
+
+    // Circuit Picker Modal
+    const pickerModal = document.getElementById("pickerModal");
+    const chapterTabsEl = document.getElementById("chapterTabs");
+    const levelsGridEl = document.getElementById("levelsGrid");
+    const jumpInput = document.getElementById("jumpInput");
+    let activeChapterIdx = 0;
+
+    function renderPicker() {
+      chapterTabsEl.innerHTML = "";
+      CHAPTERS.forEach((chap, idx) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chapter-tab" + (idx === activeChapterIdx ? " active" : "");
+        b.textContent = chap.range;
+        b.addEventListener("click", () => {
+          activeChapterIdx = idx;
+          renderPicker();
+        });
+        chapterTabsEl.appendChild(b);
+      });
+
+      const chap = CHAPTERS[activeChapterIdx];
+      levelsGridEl.innerHTML = "";
+      for (let n = chap.start; n <= chap.end; n++) {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "lvl-cell";
+        if (solvedSet.has(n)) cell.classList.add("solved");
+        if (n === currentLevelNum) cell.classList.add("active");
+        cell.textContent = n;
+        cell.addEventListener("click", () => {
+          loadLevel(n);
+          pickerModal.classList.remove("open");
+        });
+        levelsGridEl.appendChild(cell);
+      }
+    }
+
+    openPickerBtn.addEventListener("click", () => {
+      activeChapterIdx = Math.floor((currentLevelNum - 1) / 100);
+      jumpInput.value = "";
+      renderPicker();
+      pickerModal.classList.add("open");
+    });
+    document.getElementById("closePickerBtn").addEventListener("click", () => {
+      pickerModal.classList.remove("open");
+    });
+    pickerModal.addEventListener("click", (e) => {
+      if (e.target === pickerModal) pickerModal.classList.remove("open");
+    });
+    document.getElementById("jumpBtn").addEventListener("click", () => {
+      const val = parseInt(jumpInput.value, 10);
+      if (val >= 1 && val <= TOTAL_LEVELS) {
+        loadLevel(val);
+        pickerModal.classList.remove("open");
+      }
+    });
+
+    // ==============================================
+    // GLOWING PCB SCHEMATIC & ELECTRON PULSE RENDERER
+    // ==============================================
+    function drawSignalWire(x1, y1, x2, y2, val, time) {
+      const mx = (x1 + x2) * 0.5;
+      ctx.save();
+      ctx.lineCap = "round";
+
+      if (val === 1) {
+        // Active HIGH neon cyan signal trace
+        ctx.strokeStyle = "#22d3ee";
+        ctx.shadowColor = "#22d3ee";
+        ctx.shadowBlur = 12;
+        ctx.lineWidth = 3.8;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo(mx, y1, mx, y2, x2, y2);
+        ctx.stroke();
+
+        // Crisp bright core
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "#e0f2fe";
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+
+        // Flowing electron energy dot along cubic bezier
+        const t = (time * 0.00095) % 1;
+        const u = 1 - t;
+        const px = u*u*u*x1 + 3*u*u*t*mx + 3*u*t*t*mx + t*t*t*x2;
+        const py = u*u*u*y1 + 3*u*u*t*y1 + 3*u*t*t*y2 + t*t*t*y2;
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(px, py, 3, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (val === 0) {
+        // Active LOW steel trace
+        ctx.strokeStyle = "#334155";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo(mx, y1, mx, y2, x2, y2);
+        ctx.stroke();
+      } else {
+        // Unconnected / Floating dashed wire
+        ctx.strokeStyle = "rgba(100, 116, 139, 0.35)";
+        ctx.lineWidth = 2.2;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo(mx, y1, mx, y2, x2, y2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      ctx.restore();
+    }
+
+    function drawGateSymbol(g, placedKey, outVal, isFixed, isHint, time) {
+      const x = g.x, y = g.y;
+      const w = 52, h = 40;
+      const hw = w / 2, hh = h / 2;
+
+      ctx.save();
+      ctx.translate(x, y);
+
+      if (!placedKey) {
+        // Empty Dashed Socket Ready for Placement
+        const pulse = 0.55 + 0.45 * Math.sin(time * 0.008);
+        ctx.fillStyle = isHint ? `rgba(250, 204, 21, ${pulse * 0.22})` : "rgba(15, 23, 42, 0.85)";
+        ctx.strokeStyle = isHint ? "#facc15" : "rgba(56, 189, 248, 0.55)";
+        if (isHint) {
+          ctx.shadowColor = "#facc15";
+          ctx.shadowBlur = 16;
+        }
+        ctx.lineWidth = isHint ? 2.8 : 2;
+        ctx.setLineDash([5, 4]);
+        ctx.beginPath();
+        ctx.roundRect(-hw, -hh, w, h, 10);
+        ctx.fill();
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.shadowBlur = 0;
+
+        ctx.fillStyle = isHint ? "#fef08a" : "#7dd3fc";
+        ctx.font = "900 14px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("?", 0, -4);
+
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "800 8.5px sans-serif";
+        ctx.fillText(`${g.arity}-IN`, 0, 11);
+        ctx.restore();
+        return;
+      }
+
+      const def = GATES[placedKey];
+      const activeHigh = outVal === 1;
+
+      if (isHint) {
+        ctx.strokeStyle = "#facc15";
+        ctx.shadowColor = "#facc15";
+        ctx.shadowBlur = 16;
+        ctx.lineWidth = 2.6;
+        ctx.beginPath();
+        ctx.roundRect(-hw - 5, -hh - 5, w + 10, h + 10, 13);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      // Draw Iconic Gate Silhouette
+      ctx.fillStyle = activeHigh ? "#132a46" : "#0e1729";
+      ctx.strokeStyle = isFixed ? "#94a3b8" : def.color;
+      ctx.shadowColor = activeHigh ? def.color : "transparent";
+      ctx.shadowBlur = activeHigh ? 14 : 0;
+      ctx.lineWidth = 2.4;
+
+      ctx.beginPath();
+      if (placedKey === "AND" || placedKey === "NAND") {
+        // Classic D-shape
+        ctx.moveTo(-hw, -hh);
+        ctx.lineTo(0, -hh);
+        ctx.arc(0, 0, hh, -Math.PI / 2, Math.PI / 2);
+        ctx.lineTo(-hw, hh);
+        ctx.closePath();
+      } else if (placedKey === "OR" || placedKey === "NOR" || placedKey === "XOR") {
+        // Classic curved shield
+        ctx.moveTo(-hw, -hh);
+        ctx.quadraticCurveTo(4, -hh, hw, 0);
+        ctx.quadraticCurveTo(4, hh, -hw, hh);
+        ctx.quadraticCurveTo(-hw + 11, 0, -hw, -hh);
+        ctx.closePath();
+      } else if (placedKey === "NOT") {
+        // Inverter triangle
+        ctx.moveTo(-hw + 4, -hh + 2);
+        ctx.lineTo(hw - 4, 0);
+        ctx.lineTo(-hw + 4, hh - 2);
+        ctx.closePath();
+      } else {
+        // PASS direct buffer hexagon
+        ctx.moveTo(-hw + 6, -hh + 4);
+        ctx.lineTo(hw - 8, -hh + 4);
+        ctx.lineTo(hw + 2, 0);
+        ctx.lineTo(hw - 8, hh - 4);
+        ctx.lineTo(-hw + 6, hh - 4);
+        ctx.closePath();
+      }
+      ctx.fill();
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Extra arc for XOR
+      if (placedKey === "XOR") {
+        ctx.strokeStyle = def.color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-hw - 5, -hh + 2);
+        ctx.quadraticCurveTo(-hw + 6, 0, -hw - 5, hh - 2);
+        ctx.stroke();
+      }
+
+      // Inversion bubble on output tip for NOT / NAND / NOR
+      if (placedKey === "NOT" || placedKey === "NAND" || placedKey === "NOR") {
+        ctx.fillStyle = activeHigh ? "#22d3ee" : "#0e1729";
+        ctx.strokeStyle = isFixed ? "#94a3b8" : def.color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(hw + 3, 0, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      // Crisp Gate Label inside body
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 10.5px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const labelX = placedKey === "NOT" ? -6 : (placedKey === "XOR" || placedKey === "OR" || placedKey === "NOR" ? -3 : -2);
+      ctx.fillText(placedKey, labelX, 1);
+
+      // Tiny lock dot if Fixed Reference Gate
+      if (isFixed) {
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "800 8px sans-serif";
+        ctx.fillText("LOCK", 0, -hh - 7);
+      }
+
+      ctx.restore();
+    }
+
+    function drawScene(time) {
+      const vp = getViewport();
+      ctx.clearRect(0, 0, vp.w, vp.h);
+
+      ctx.save();
+      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.scale(vp.scale, vp.scale);
+
+      // 1. Subtle PCB Blueprint Dot Grid
+      ctx.fillStyle = "rgba(56, 189, 248, 0.12)";
+      for (let x = 20; x < WORLD_W; x += 24) {
+        for (let y = 20; y < WORLD_H; y += 24) {
+          ctx.fillRect(x, y, 1.4, 1.4);
+        }
+      }
+
+      const curRes = testResults[activeTestIdx] || { vals: {}, outs: {}, expected: {} };
+      const nodeCoords = {};
+      level.topo.inputs.forEach((p) => { nodeCoords[p.id] = { x: p.x + 18, y: p.y }; });
+      level.topo.gates.forEach((g) => { nodeCoords[g.id] = { x: g.x + 28, y: g.y }; });
+
+      // 2. Draw Connecting Signal Wires (Inputs/Gates -> Gates -> Outputs)
+      for (const g of level.topo.gates) {
+        g.inIds.forEach((srcId, i) => {
+          const srcPos = nodeCoords[srcId];
+          const destX = g.x - 26;
+          const destY = g.arity === 1 ? g.y : (i === 0 ? g.y - 10 : g.y + 10);
+          drawSignalWire(srcPos.x, srcPos.y, destX, destY, curRes.vals[srcId], time);
+        });
+      }
+
+      for (const o of level.topo.outputs) {
+        const srcPos = nodeCoords[o.src];
+        drawSignalWire(srcPos.x, srcPos.y, o.x - 22, o.y, curRes.outs[o.id], time);
+      }
+
+      // 3. Draw Input Pins (Left Column)
+      for (const pin of level.topo.inputs) {
+        const val = curRes.vals[pin.id];
+        const isHigh = val === 1;
+
+        ctx.save();
+        ctx.fillStyle = isHigh ? "#083344" : "#0f172a";
+        ctx.strokeStyle = isHigh ? "#22d3ee" : "#475569";
+        ctx.shadowColor = isHigh ? "#22d3ee" : "transparent";
+        ctx.shadowBlur = isHigh ? 14 : 0;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.roundRect(pin.x - 18, pin.y - 18, 36, 36, 9);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = isHigh ? "#e0f2fe" : "#94a3b8";
+        ctx.font = "900 15px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(String(val), pin.x, pin.y + 1);
+
+        ctx.fillStyle = "#64748b";
+        ctx.font = "800 9px sans-serif";
+        ctx.fillText(pin.id, pin.x, pin.y - 25);
+        ctx.restore();
+      }
+
+      // 4. Draw Gate Sockets & Placed Logic Gates
+      for (const g of level.topo.gates) {
+        drawGateSymbol(
+          g,
+          placedGates[g.id] || null,
+          curRes.vals[g.id],
+          level.fixedSet.has(g.id),
+          hintSocketId === g.id,
+          time
+        );
+      }
+
+      // 5. Draw Target Output LEDs (Right Column)
+      for (const o of level.topo.outputs) {
+        const liveVal = curRes.outs[o.id];
+        const expVal = curRes.expected[o.id];
+        const matched = liveVal === expVal;
+
+        ctx.save();
+        // Outer LED Ring
+        ctx.fillStyle = liveVal === 1 ? "#064e3b" : "#0f172a";
+        ctx.strokeStyle = matched ? "#22c55e" : (liveVal === null ? "#475569" : "#ef4444");
+        ctx.shadowColor = matched ? "#22c55e" : (liveVal === null ? "transparent" : "#ef4444");
+        ctx.shadowBlur = matched ? 16 : 8;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(o.x, o.y, 21, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = liveVal === 1 ? "#86efac" : (liveVal === 0 ? "#cbd5e1" : "#64748b");
+        ctx.font = "900 15px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(liveVal === null ? "–" : String(liveVal), o.x, o.y + 1);
+
+        // Required Target Pill Directly Beneath LED
+        const badgeColor = matched ? "#16a34a" : "#991b1b";
+        ctx.fillStyle = badgeColor;
+        ctx.beginPath();
+        ctx.roundRect(o.x - 24, o.y + 26, 48, 17, 5);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "800 9.5px monospace";
+        ctx.fillText(`GOAL:${expVal}`, o.x, o.y + 35);
+
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "800 9px sans-serif";
+        ctx.fillText(o.id, o.x, o.y - 28);
+        ctx.restore();
+      }
+
+      // 6. Placement Sparks
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.r += 1.6;
+        s.alpha *= 0.89;
+        ctx.strokeStyle = s.color;
+        ctx.globalAlpha = s.alpha;
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.restore();
+      requestAnimationFrame(drawScene);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    loadLevel(currentLevelNum);
+    requestAnimationFrame(drawScene);
+  </script>
+
+</body>
+</html>
