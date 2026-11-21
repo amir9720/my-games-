@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heist Blueprint Planner — 500 Stealth Strategy Levels | ZinPlay</title>
+  <meta name="description" content="Play 500 free stealth strategy levels in Heist Blueprint Planner. Plot routes and timed waits on an architectural museum blueprint to slip past lasers, CCTV cameras, and guards." />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <style>
+    .game-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .back-link {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .game-title-wrap h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .game-title-wrap p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Top Blueprint HUD */
+    .hud-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      background: #061021;
+      color: #e2e8f0;
+      border-bottom: 1px solid #162a4a;
+      font-size: 0.84rem;
+      font-weight: 700;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .hud-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .chapter-sub {
+      font-size: 0.72rem;
+      color: #7dd3fc;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hud-pills {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .hud-pill {
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #bae6fd;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-family: monospace;
+    }
+    .hud-pill.loot-pill {
+      background: rgba(250, 204, 21, 0.16);
+      border-color: rgba(250, 204, 21, 0.42);
+      color: #fef08a;
+    }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
+    }
+
+    /* Timeline / Beat Status Strip */
+    .timeline-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: #0b1b34;
+      border-bottom: 1px solid #1a335c;
+      color: #cbd5e1;
+      font-size: 0.76rem;
+      font-weight: 800;
+      flex-wrap: wrap;
+    }
+    .mode-badge {
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .mode-plan {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid #38bdf8;
+      color: #e0f2fe;
+    }
+    .mode-run {
+      background: rgba(34, 197, 94, 0.22);
+      border: 1px solid #22c55e;
+      color: #dcfce7;
+    }
+    .mode-alert {
+      background: rgba(239, 68, 68, 0.24);
+      border: 1px solid #ef4444;
+      color: #fecaca;
+    }
+    .beat-readout {
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: #7dd3fc;
+    }
+
+    /* Architectural Blueprint Canvas Stage */
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-height: 495px;
+      background: radial-gradient(circle at 50% 45%, #0e2446 0%, #061224 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #heistCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+      cursor: pointer;
+    }
+
+    /* Planning Action Dock */
+    .plan-dock {
+      display: grid;
+      grid-template-columns: 1fr 1.65fr 0.9fr;
+      gap: 8px;
+      padding: 12px 14px;
+      background: #08152b;
+      border-top: 1px solid #162a4a;
+    }
+    .dock-btn {
+      min-height: 46px;
+      border-radius: 12px;
+      border: 1.5px solid #1e3a66;
+      background: #102445;
+      color: #e2e8f0;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: transform 0.08s ease, opacity 0.15s ease;
+    }
+    .dock-btn:active {
+      transform: scale(0.97);
+    }
+    .dock-btn:disabled {
+      opacity: 0.42;
+      cursor: default;
+    }
+    .dock-btn.exec-main {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      border-color: #6ee7b7;
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+      font-size: 0.92rem;
+      letter-spacing: 0.03em;
+    }
+    .dock-btn.exec-stop {
+      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+      border-color: #fca5a5;
+      color: #ffffff;
+    }
+
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #060e1d;
+      border-top: 1px solid #132542;
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+
+    .status-toast {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(6, 16, 33, 0.95);
+      border: 1px solid rgba(250, 204, 21, 0.68);
+      color: #fef08a;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      max-width: 92%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .status-toast.show {
+      opacity: 1;
+    }
+
+    .stage-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 11, 24, 0.82);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.24s ease;
+    }
+    .stage-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .overlay-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 18px;
+      padding: 24px 20px;
+      text-align: center;
+      max-width: 330px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    }
+    .overlay-card h2 {
+      font-size: 1.32rem;
+      margin-bottom: 6px;
+    }
+    .overlay-card p {
+      font-size: 0.88rem;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .controls-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .btn-outline.active-toggle {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+    .level-nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--surface-soft);
+      border-top: 1px solid var(--border);
+    }
+    .level-picker-trigger {
+      flex: 1;
+      max-width: 220px;
+      min-height: 38px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 0.86rem;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    /* Level Picker Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-box {
+      background: var(--surface);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 84vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-head h3 { font-size: 1rem; font-weight: 800; }
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .chapter-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 10px 14px;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+    .chapter-tab {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .chapter-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+    .jump-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .jump-input {
+      flex: 1;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    .levels-grid {
+      padding: 14px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 520px) {
+      .levels-grid { grid-template-columns: repeat(10, 1fr); }
+    }
+    .lvl-cell {
+      height: 38px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .lvl-cell.solved {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #166534;
+    }
+    .lvl-cell.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand">
+        <span class="brand-accent">Zin</span>Play<span class="brand-ext">.io</span>
+      </a>
+      <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
+        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#about-engine">About</a>
+        <a href="/#faq">FAQ</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="game-header-bar">
+      <a href="/#games" class="back-link">← Back to All Games</a>
+      <span class="cat-tag">500 Heists &bull; Stealth Strategy</span>
+    </div>
+
+    <div class="game-title-wrap" style="margin-bottom: 16px;">
+      <h1>Heist Blueprint Planner</h1>
+      <p>Plot your step-by-step route and timed waits on the museum blueprint, grab every artifact, and hit Execute to slip past security.</p>
+    </div>
+
+    <!-- Game Stage -->
+    <section class="game-wrapper" aria-label="Heist Blueprint Planner Game">
+      <div class="hud-strip">
+        <div class="hud-left">
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Gallery Entry</span>
+          <span id="levelTitle">Heist #1 / 500</span>
+        </div>
+        <div class="hud-pills">
+          <span class="hud-pill loot-pill" id="lootPill">💎 Loot: 0 / 1</span>
+          <span class="hud-pill" id="budgetPill">Moves: 0 / 24</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Cleared: 0 / 500</span>
+        </div>
+      </div>
+
+      <!-- Beat Synchronization Telemetry -->
+      <div class="timeline-strip">
+        <span id="modeBadge" class="mode-badge mode-plan">✎ BLUEPRINT PLAN</span>
+        <span id="beatReadout" class="beat-readout">Previewing Beat t = 0</span>
+      </div>
+
+      <!-- Blueprint Canvas -->
+      <div class="canvas-container">
+        <canvas id="heistCanvas"></canvas>
+        <div id="statusToast" class="status-toast"></div>
+
+        <!-- Success / Alarm Overlay -->
+        <div id="stageOverlay" class="stage-overlay">
+          <div class="overlay-card">
+            <div id="ovIcon" style="font-size:2.3rem; margin-bottom:6px;">💎</div>
+            <h2 id="ovHeading">Clean Getaway!</h2>
+            <p id="ovText">You ghosted past every laser and camera without a trace.</p>
+            <button id="ovActionBtn" class="btn-primary" type="button">Next Heist →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Planning & Execution Dock -->
+      <div class="plan-dock">
+        <button id="waitBtn" class="dock-btn" type="button">⏱ WAIT (+1)</button>
+        <button id="execBtn" class="dock-btn exec-main" type="button">▶ EXECUTE HEIST</button>
+        <button id="undoBtn" class="dock-btn" type="button">← UNDO</button>
+      </div>
+
+      <div class="legend-strip">
+        <span>👆 Tap/Drag Adjacent Tiles</span>
+        <span>🔴 Pulsing Laser</span>
+        <span>📹 Rotating CCTV</span>
+        <span>👮 Patrol + Flashlight</span>
+        <span>🚪 Grab All Loot → Exit</span>
+      </div>
+
+      <div class="game-controls-bar">
+        <div class="controls-group">
+          <button id="clearBtn" class="btn-outline" type="button">✕ Clear Plan</button>
+          <button id="peekBtn" class="btn-outline" type="button">👁 Peek t+1</button>
+          <button id="speedBtn" class="btn-outline" type="button">⚡ 2x</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Next Step</button>
+        </div>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+      </div>
+
+      <div class="level-nav-bar">
+        <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Heist 1 / 500 ▾</button>
+        <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
+      </div>
+    </section>
+
+    <!-- Safe AdSense Placement -->
+    <div class="ad-slot" aria-label="Advertisement">
+      <span class="ad-label">Advertisement</span>
+    </div>
+
+    <!-- Editorial Guide -->
+    <section class="section-block">
+      <article class="card editorial-card">
+        <h2>How to Play Heist Blueprint Planner (500 Heists)</h2>
+        <p>Heist Blueprint Planner blends architectural stealth planning with crisp turn-by-turn timing across 500 verified museum blueprints. Every single heist plays out in two thrilling phases: first plot your entire escape route beat-by-beat on the live blueprint, then press <strong>▶ EXECUTE HEIST</strong> to watch your plan unfold in real time.</p>
+        <ul>
+          <li><strong>Live Beat Preview While Planning:</strong> As you tap or drag onto adjacent floor tiles, the blueprint advances its security preview to your exact planned beat (<code>t</code>). Toggle <strong>👁 Peek t+1</strong> anytime to see where lasers, cameras, and guards will be on the <em>next</em> beat before you step!</li>
+          <li><strong>Master the Tactical Wait (⏱ WAIT +1):</strong> Tap the thief's current tile—or press <strong>⏱ WAIT (+1)</strong>—to hold your position for one beat while a red laser blinks off, a CCTV cone rotates past, or a patrolling guard turns the corner.</li>
+          <li><strong>Fast Blueprint Iteration:</strong> If an alarm trips during execution, your plotted route stays on the board when you tap <strong>Edit Plan</strong>. Simply undo a step or two, slip in a timed wait, and execute again until you nail a ghost getaway!</li>
+        </ul>
+      </article>
+
+      <div class="card faq-card">
+        <h2>Game FAQ</h2>
+        <details class="faq-item">
+          <summary>Are all 500 museum blueprints guaranteed to have a valid stealth route?</summary>
+          <div class="faq-answer">Yes! Every blueprint from Heist #1 to #500 is mathematically verified with a Space-Time Breadth-First Search solver that accounts for pulsing lasers, sweeping cameras, and moving guard flashlights.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What happens if I walk directly through a patrolling guard?</summary>
+          <div class="faq-answer">Guards detect you if you step into their flashlight beam, land on their tile, or try to swap places with them head-on in a narrow hallway. Duck into an alcove or wait one beat to pass behind their back!</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- More Games -->
+    <h2 class="section-heading">More Games to Try</h2>
+    <section class="grid-3">
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
+        <h3>Blackout Grid Operator</h3>
+        <p>Balance solar, wind, batteries, and turbines to keep city grid frequency locked at 50 Hz.</p>
+        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
+        <h3>Manual Bomb Defusal</h3>
+        <p>Decode the live technical manual against the ticking clock and cut the exact right wire.</p>
+        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Prism &amp; Lasers</h3>
+        <p>Place mirrors and split laser beams through prisms across 500 dark-mode optical puzzles.</p>
+        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- Heist Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Heist">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Choose Museum Blueprint (1 – 500)</h3>
+        <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
+      </div>
+      <div id="chapterTabs" class="chapter-tabs"></div>
+      <div class="jump-row">
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to heist (1-500)..." />
+        <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
+      </div>
+      <div id="levelsGrid" class="levels-grid"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="/" class="brand">
+            <span class="brand-accent">Zin</span>Play<span class="brand-ext">.io</span>
+          </a>
+          <p class="footer-desc">Your independent hub for lightweight, privacy-first HTML5 puzzle, physics, ASMR, and strategy browser games.</p>
+          <p class="footer-contact">Contact: hello@zinplay.io</p>
+        </div>
+        <div class="footer-col">
+          <h4>Top Puzzles</h4>
+          <ul>
+            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
+            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
+            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
+            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Top Strategy</h4>
+          <ul>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
+            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Explore &amp; Legal</h4>
+          <ul>
+            <li><a href="/about/">About Us</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 ZinPlay. Independent HTML5 browser games.</span>
+        <span>Built for instant play on mobile &amp; desktop.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile Header Menu
+    const menuBtn = document.getElementById("menuBtn");
+    const navMenu = document.getElementById("navMenu");
+    if (menuBtn && navMenu) {
+      menuBtn.addEventListener("click", () => {
+        const isOpen = navMenu.classList.toggle("open");
+        menuBtn.setAttribute("aria-expanded", isOpen);
+        menuBtn.textContent = isOpen ? "✕" : "☰";
+      });
+    }
+
+    // ==============================================
+    // SECURITY SIMULATION & SPACE-TIME BFS ENGINE
+    // ==============================================
+    const TOTAL_LEVELS = 500;
+    const CYCLE_LCM = 8; // All lasers (4), cameras (4), and guards (4 or 8) divide 8!
+
+    // Directions: 0=Right, 1=Down, 2=Left, 3=Up
+    const DR = [0, 1, 0, -1];
+    const DC = [1, 0, -1, 0];
+
+    const CHAPTERS = [
+      { title: "Chapter 1 • Gallery Entry", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Laser Vaults", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Night Patrol", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Twin Heist", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Grand Louvre Vault", range: "401–500", start: 401, end: 500 }
+    ];
+
+    function mulberry32(seed) {
+      let a = seed >>> 0;
+      return function () {
+        a = (a + 0x6D2B79F5) >>> 0;
+        let t = Math.imul(a ^ (a >>> 15), a | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function shuffle(arr, rng) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function isLaserOn(laser, t) {
+      return ((t + laser.phase) % laser.period) < laser.onBeats;
+    }
+
+    function getCameraDir(cam, t) {
+      return cam.dirs[(t + cam.phase) % cam.dirs.length];
+    }
+
+    function getCameraConeCells(level, cam, t) {
+      const dir = getCameraDir(cam, t);
+      const cells = [];
+      for (let step = 1; step <= cam.range; step++) {
+        const nr = cam.r + DR[dir] * step;
+        const nc = cam.c + DC[dir] * step;
+        if (nr < 0 || nr >= level.size || nc < 0 || nc >= level.size) break;
+        if (level.walls[nr][nc]) break;
+        cells.push({ r: nr, c: nc });
+      }
+      return cells;
+    }
+
+    function getGuardState(level, guard, t) {
+      const L = guard.path.length;
+      const idx = t % L;
+      const nxtIdx = (t + 1) % L;
+      const pos = guard.path[idx];
+      const nxt = guard.path[nxtIdx];
+      let dir = 0;
+      if (nxt.c > pos.c) dir = 0;
+      else if (nxt.r > pos.r) dir = 1;
+      else if (nxt.c < pos.c) dir = 2;
+      else if (nxt.r < pos.r) dir = 3;
+
+      const fr = pos.r + DR[dir];
+      const fc = pos.c + DC[dir];
+      const flash = (fr >= 0 && fr < level.size && fc >= 0 && fc < level.size && !level.walls[fr][fc])
+        ? { r: fr, c: fc }
+        : null;
+      return { r: pos.r, c: pos.c, dir, flash };
+    }
+
+    // Unified detection check used by BOTH Space-Time BFS and Live Execution
+    function getHazardAt(level, r, c, t) {
+      // 1. Lasers
+      for (const lz of level.lasers) {
+        if (isLaserOn(lz, t)) {
+          for (const cell of lz.cells) {
+            if (cell.r === r && cell.c === c) return { type: "laser", obj: lz };
+          }
+        }
+      }
+      // 2. CCTV Cameras
+      for (const cam of level.cameras) {
+        const cone = getCameraConeCells(level, cam, t);
+        for (const cell of cone) {
+          if (cell.r === r && cell.c === c) return { type: "camera", obj: cam };
+        }
+      }
+      // 3. Patrolling Guards + Flashlight
+      for (const g of level.guards) {
+        const gs = getGuardState(level, g, t);
+        if (gs.r === r && gs.c === c) return { type: "guard", obj: g };
+        if (gs.flash && gs.flash.r === r && gs.flash.c === c) return { type: "guard", obj: g };
+      }
+      return null;
+    }
+
+    function isGuardHeadOnSwap(level, r0, c0, r1, c1, t) {
+      if (t <= 0) return false;
+      for (const g of level.guards) {
+        const L = g.path.length;
+        const pPrev = g.path[(t - 1) % L];
+        const pCurr = g.path[t % L];
+        if (pPrev.r === r1 && pPrev.c === c1 && pCurr.r === r0 && pCurr.c === c0) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Exact Space-Time BFS Solver (guarantees 100% solvability + optimal path for Hint)
+    function solveHeistBFS(level, maxDepth = 46) {
+      const N = level.size;
+      const targetMask = (1 << level.loots.length) - 1;
+
+      const collectMask = (r, c, mask) => {
+        let m = mask;
+        for (let i = 0; i < level.loots.length; i++) {
+          if (level.loots[i].r === r && level.loots[i].c === c) m |= (1 << i);
+        }
+        return m;
+      };
+
+      const startMask = collectMask(level.start.r, level.start.c, 0);
+      if (getHazardAt(level, level.start.r, level.start.c, 0)) return null;
+
+      // Visited key: (r, c, mask, t % CYCLE_LCM)
+      const visited = new Set();
+      const makeKey = (r, c, mask, t) => `${r},${c},${mask},${t % CYCLE_LCM}`;
+      visited.add(makeKey(level.start.r, level.start.c, startMask, 0));
+
+      const queue = [{ r: level.start.r, c: level.start.c, mask: startMask, t: 0, parent: null }];
+      let head = 0;
+      const moves5 = [[0, 1], [1, 0], [0, -1], [-1, 0], [0, 0]]; // 4 dirs + WAIT
+
+      while (head < queue.length) {
+        const cur = queue[head++];
+        if (cur.mask === targetMask && cur.r === level.exit.r && cur.c === level.exit.c) {
+          // Reconstruct optimal path
+          const path = [];
+          let node = cur;
+          while (node) {
+            path.push({ r: node.r, c: node.c });
+            node = node.parent;
+          }
+          return path.reverse();
+        }
+        if (cur.t >= maxDepth) continue;
+
+        const nt = cur.t + 1;
+        for (const [dr, dc] of moves5) {
+          const nr = cur.r + dr;
+          const nc = cur.c + dc;
+          if (nr < 0 || nr >= N || nc < 0 || nc >= N) continue;
+          if (level.walls[nr][nc]) continue;
+          if (getHazardAt(level, nr, nc, nt)) continue;
+          if (isGuardHeadOnSwap(level, cur.r, cur.c, nr, nc, nt)) continue;
+
+          const nMask = collectMask(nr, nc, cur.mask);
+          const k = makeKey(nr, nc, nMask, nt);
+          if (!visited.has(k)) {
+            visited.add(k);
+            queue.push({ r: nr, c: nc, mask: nMask, t: nt, parent: cur });
+          }
+        }
+      }
+      return null;
+    }
+
+    // Simple static shortest distance (ignoring hazards) to ensure blueprint has real tactical depth
+    function staticMinSteps(level) {
+      const temp = { ...level, lasers: [], cameras: [], guards: [] };
+      const p = solveHeistBFS(temp, 40);
+      return p ? p.length - 1 : 999;
+    }
+
+    // ==============================================
+    // DETERMINISTIC 500-HEIST MUSEUM GENERATOR
+    // ==============================================
+    function buildHeistLevel(levelNum) {
+      const size = levelNum <= 100 ? 6 : (levelNum <= 300 ? 7 : (levelNum <= 420 ? 8 : 9));
+      const lootCount = levelNum >= 301 ? 2 : 1;
+
+      let laserGoal, camGoal, guardGoal, wallDensity, cushion;
+      if (levelNum <= 40) {
+        laserGoal = 2; camGoal = 0; guardGoal = 0; wallDensity = 0.20; cushion = 10;
+      } else if (levelNum <= 100) {
+        laserGoal = 2; camGoal = 1; guardGoal = 0; wallDensity = 0.22; cushion = 9;
+      } else if (levelNum <= 200) {
+        laserGoal = 3; camGoal = 2; guardGoal = 0; wallDensity = 0.22; cushion = 8;
+      } else if (levelNum <= 300) {
+        laserGoal = 2; camGoal = 2; guardGoal = 1; wallDensity = 0.21; cushion = 8;
+      } else if (levelNum <= 400) {
+        laserGoal = 3; camGoal = 2; guardGoal = levelNum > 350 ? 2 : 1; wallDensity = 0.20; cushion = 7;
+      } else {
+        laserGoal = 3; camGoal = 3; guardGoal = 2; wallDensity = 0.19; cushion = 5;
+      }
+
+      const key = (r, c) => `${r},${c}`;
+
+      for (let attempt = 0; attempt < 45; attempt++) {
+        const rng = mulberry32(levelNum * 91453 + attempt * 65537 + 13379);
+        const walls = Array.from({ length: size }, () => Array(size).fill(false));
+
+        // Pick Start & Exit on opposite museum sides
+        const corners = [
+          [{ r: size - 1, c: 0 }, { r: 0, c: size - 1 }],
+          [{ r: 0, c: 0 }, { r: size - 1, c: size - 1 }],
+          [{ r: size - 1, c: size - 1 }, { r: 0, c: 0 }],
+          [{ r: 0, c: size - 1 }, { r: size - 1, c: 0 }]
+        ];
+        const [start, exit] = corners[(levelNum + attempt) % 4];
+
+        // Pick 1 or 2 Loot Vault pedestals spaced well away from Start & Exit
+        const loots = [];
+        const lootIcons = ["💎", "👑"];
+        const openForLoot = [];
+        for (let r = 0; r < size; r++) {
+          for (let c = 0; c < size; c++) {
+            const ds = Math.abs(r - start.r) + Math.abs(c - start.c);
+            const de = Math.abs(r - exit.r) + Math.abs(c - exit.c);
+            if (ds >= 3 && de >= 3) openForLoot.push({ r, c });
+          }
+        }
+        const shuffledLoot = shuffle(openForLoot, rng);
+        for (const cand of shuffledLoot) {
+          if (loots.length >= lootCount) break;
+          if (loots.some((l) => Math.abs(l.r - cand.r) + Math.abs(l.c - cand.c) < 3)) continue;
+          loots.push({ r: cand.r, c: cand.c, icon: lootIcons[loots.length] });
+        }
+        if (loots.length < lootCount) continue;
+
+        const reserved = new Set([key(start.r, start.c), key(exit.r, exit.c)]);
+        loots.forEach((l) => reserved.add(key(l.r, l.c)));
+
+        // Place architectural display walls & pillars
+        const wallTarget = Math.floor(size * size * wallDensity);
+        const wallCands = [];
+        for (let r = 0; r < size; r++) {
+          for (let c = 0; c < size; c++) {
+            if (!reserved.has(key(r, c))) wallCands.push({ r, c });
+          }
+        }
+        const shuffledWalls = shuffle(wallCands, rng);
+        let wallsPlaced = 0;
+        for (const wc of shuffledWalls) {
+          if (wallsPlaced >= wallTarget) break;
+          walls[wc.r][wc.c] = true;
+          wallsPlaced++;
+        }
+
+        // Quick static connectivity check before placing hazards
+        const baseLvl = { size, walls, start, exit, loots, lasers: [], cameras: [], guards: [] };
+        const baseSteps = staticMinSteps(baseLvl);
+        if (baseSteps > 30) continue;
+
+        // Gather all wall cells (for mounting cameras) and open cells (for lasers & guards)
+        const wallCells = [];
+        const openCells = [];
+        for (let r = 0; r < size; r++) {
+          for (let c = 0; c < size; c++) {
+            if (walls[r][c]) wallCells.push({ r, c });
+            else if (!reserved.has(key(r, c))) openCells.push({ r, c });
+          }
+        }
+
+        // 1. Place Pulsing Laser Beams (length 2–3 open cells, period 4: 2 ON, 2 OFF)
+        const lasers = [];
+        const usedLaserCells = new Set();
+        const shuffledOpen = shuffle(openCells, rng);
+        for (const oc of shuffledOpen) {
+          if (lasers.length >= laserGoal) break;
+          const horiz = rng() < 0.5;
+          const dr = horiz ? 0 : 1;
+          const dc = horiz ? 1 : 0;
+          const beamLen = 2 + (rng() < 0.55 ? 1 : 0);
+          const cells = [];
+          let ok = true;
+          for (let k = 0; k < beamLen; k++) {
+            const nr = oc.r + dr * k;
+            const nc = oc.c + dc * k;
+            if (nr >= size || nc >= size || walls[nr][nc] || reserved.has(key(nr, nc)) || usedLaserCells.has(key(nr, nc))) {
+              ok = false; break;
+            }
+            cells.push({ r: nr, c: nc });
+          }
+          if (ok && cells.length >= 2) {
+            cells.forEach((c) => usedLaserCells.add(key(c.r, c.c)));
+            lasers.push({
+              cells,
+              horiz,
+              period: 4,
+              onBeats: 2,
+              phase: Math.floor(rng() * 4)
+            });
+          }
+        }
+
+        // 2. Place Rotating CCTV Cameras mounted on interior wall pillars
+        const cameras = [];
+        const shuffledWallCells = shuffle(wallCells, rng);
+        for (const wc of shuffledWallCells) {
+          if (cameras.length >= camGoal) break;
+          // Check which directions look onto at least 2 open non-start cells
+          const validDirs = [];
+          for (let d = 0; d < 4; d++) {
+            const r1 = wc.r + DR[d], c1 = wc.c + DC[d];
+            if (r1 >= 0 && r1 < size && c1 >= 0 && c1 < size && !walls[r1][c1]) {
+              // Ensure camera never blinds the Start tile
+              let hitsStart = false;
+              for (let st = 1; st <= 2; st++) {
+                const rr = wc.r + DR[d] * st, cc = wc.c + DC[d] * st;
+                if (rr < 0 || rr >= size || cc < 0 || cc >= size || walls[rr][cc]) break;
+                if (rr === start.r && cc === start.c) hitsStart = true;
+              }
+              if (!hitsStart) validDirs.push(d);
+            }
+          }
+          if (validDirs.length < 2) continue;
+
+          // Build 4-beat sweeping cycle (either full 4-way spin or 2-way sweep)
+          let dirs;
+          if (validDirs.length === 4) {
+            dirs = rng() < 0.5 ? [0, 1, 2, 3] : [0, 3, 2, 1];
+          } else {
+            const dA = validDirs[0];
+            const dB = validDirs[1];
+            dirs = [dA, dA, dB, dB];
+          }
+          cameras.push({
+            r: wc.r,
+            c: wc.c,
+            dirs,
+            range: size >= 8 ? 3 : 2,
+            phase: Math.floor(rng() * 4)
+          });
+        }
+
+        // 3. Place Patrolling Guards (3-tile back-and-forth [A,B,C,B] period 4, or 2x2 loop period 4)
+        const guards = [];
+        const guardStarts = shuffle(openCells, rng);
+        for (const gs of guardStarts) {
+          if (guards.length >= guardGoal) break;
+          // Avoid overlapping start or existing guards
+          if (Math.abs(gs.r - start.r) + Math.abs(gs.c - start.c) <= 2) continue;
+          if (guards.some((g) => Math.abs(g.path[0].r - gs.r) + Math.abs(g.path[0].c - gs.c) < 3)) continue;
+
+          let patrol = null;
+          const dirOrder = shuffle([0, 1, 2, 3], rng);
+          for (const d of dirOrder) {
+            const p0 = { r: gs.r, c: gs.c };
+            const p1 = { r: gs.r + DR[d], c: gs.c + DC[d] };
+            const p2 = { r: gs.r + DR[d] * 2, c: gs.c + DC[d] * 2 };
+            if (p2.r < 0 || p2.r >= size || p2.c < 0 || p2.c >= size) continue;
+            if (walls[p1.r][p1.c] || walls[p2.r][p2.c]) continue;
+            // Ensure guard never touches Start tile
+            if ((p1.r === start.r && p1.c === start.c) || (p2.r === start.r && p2.c === start.c)) continue;
+            patrol = [p0, p1, p2, p1];
+            break;
+          }
+
+          if (patrol) {
+            // Check flashlight never hits start at any beat
+            const testGuard = { path: patrol };
+            const testLvl = { size, walls };
+            let touchesStart = false;
+            for (let bt = 0; bt < 4; bt++) {
+              const st = getGuardState(testLvl, testGuard, bt);
+              if ((st.r === start.r && st.c === start.c) || (st.flash && st.flash.r === start.r && st.flash.c === start.c)) {
+                touchesStart = true;
+              }
+            }
+            if (!touchesStart) guards.push(testGuard);
+          }
+        }
+
+        if (lasers.length < Math.max(1, laserGoal - 1)) continue;
+        if (camGoal > 0 && cameras.length === 0) continue;
+        if (guardGoal > 0 && guards.length === 0) continue;
+
+        const candidate = {
+          levelNum,
+          size,
+          walls,
+          start,
+          exit,
+          loots,
+          lasers,
+          cameras,
+          guards
+        };
+
+        const solution = solveHeistBFS(candidate, 42);
+        if (!solution) continue;
+
+        const optBeats = solution.length - 1;
+        // Require a satisfying multi-step blueprint
+        if (optBeats < size + 2) continue;
+
+        candidate.solution = solution;
+        candidate.parBeats = optBeats;
+        candidate.maxBeats = optBeats + cushion;
+        return candidate;
+      }
+
+      // Guaranteed 100% Solvable Deterministic Fallback Blueprint
+      const fSize = 6;
+      const fWalls = Array.from({ length: fSize }, () => Array(fSize).fill(false));
+      fWalls[1][2] = true; fWalls[2][2] = true; fWalls[4][3] = true; fWalls[3][3] = true;
+      const fb = {
+        levelNum,
+        size: fSize,
+        walls: fWalls,
+        start: { r: 5, c: 0 },
+        exit: { r: 0, c: 5 },
+        loots: [{ r: 1, c: 4, icon: "💎" }],
+        lasers: [
+          { cells: [{ r: 3, c: 0 }, { r: 3, c: 1 }], horiz: true, period: 4, onBeats: 2, phase: 0 },
+          { cells: [{ r: 2, c: 4 }, { r: 2, c: 5 }], horiz: true, period: 4, onBeats: 2, phase: 2 }
+        ],
+        cameras: [{ r: 1, c: 2, dirs: [0, 0, 1, 1], range: 2, phase: 1 }],
+        guards: []
+      };
+      fb.solution = solveHeistBFS(fb, 36);
+      fb.parBeats = fb.solution.length - 1;
+      fb.maxBeats = fb.parBeats + 10;
+      return fb;
+    }
+
+    const levelCache = new Map();
+    function getLevel(num) {
+      if (!levelCache.has(num)) {
+        levelCache.set(num, buildHeistLevel(num));
+      }
+      return levelCache.get(num);
+    }
+
+    function getChapter(num) {
+      return CHAPTERS.find((c) => num >= c.start && num <= c.end) || CHAPTERS[0];
+    }
+
+    // ==============================================
+    // STEALTH WEB AUDIO ENGINE (BEEPS, STEPS, ALARM)
+    // ==============================================
+    let audioCtx = null;
+    let soundOn = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    }
+
+    function playTone(freq, dur, type = "sine", vol = 0.1) {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+      g.gain.setValueAtTime(vol, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + dur + 0.02);
+    }
+
+    function sfxPlot() { playTone(560, 0.045, "triangle", 0.08); }
+    function sfxWait() { playTone(380, 0.06, "sine", 0.08); }
+    function sfxUndo() { playTone(300, 0.05, "triangle", 0.07); }
+    function sfxStep() { playTone(260, 0.04, "triangle", 0.07); }
+    function sfxLoot() {
+      playTone(880, 0.12, "sine", 0.13);
+      setTimeout(() => playTone(1318.5, 0.22, "sine", 0.13), 75);
+    }
+    function sfxAlarm() {
+      [780, 520, 780, 520].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.13, "sawtooth", 0.14), i * 115);
+      });
+    }
+    function sfxSuccess() {
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.28, "sine", 0.13), i * 80);
+      });
+    }
+
+    // ==============================================
+    // GAME STATE, BLUEPRINT INPUT & EXECUTION LOOP
+    // ==============================================
+    const canvas = document.getElementById("heistCanvas");
+    const ctx = canvas.getContext("2d");
+    const chapterLabel = document.getElementById("chapterLabel");
+    const levelTitle = document.getElementById("levelTitle");
+    const lootPill = document.getElementById("lootPill");
+    const budgetPill = document.getElementById("budgetPill");
+    const solvedCounter = document.getElementById("solvedCounter");
+    const modeBadge = document.getElementById("modeBadge");
+    const beatReadout = document.getElementById("beatReadout");
+    const waitBtn = document.getElementById("waitBtn");
+    const execBtn = document.getElementById("execBtn");
+    const undoBtn = document.getElementById("undoBtn");
+    const peekBtn = document.getElementById("peekBtn");
+    const speedBtn = document.getElementById("speedBtn");
+    const soundBtn = document.getElementById("soundBtn");
+    const statusToast = document.getElementById("statusToast");
+    const stageOverlay = document.getElementById("stageOverlay");
+    const ovIcon = document.getElementById("ovIcon");
+    const ovHeading = document.getElementById("ovHeading");
+    const ovText = document.getElementById("ovText");
+    const ovActionBtn = document.getElementById("ovActionBtn");
+    const openPickerBtn = document.getElementById("openPickerBtn");
+
+    let solvedSet = new Set();
+    let currentLevelNum = 1;
+    try {
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_heist_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_heist_500_last") || "1", 10);
+      if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
+    } catch (e) {}
+
+    let level = null;
+    let plan = []; // [{ r, c }, ...] where plan[0] = start
+    let mode = "plan"; // plan | running | won | caught
+    let peekNext = false;
+    let speedMult = 1;
+
+    // Execution Playback State
+    let runBeat = 0;        // integer beat currently transitioning FROM
+    let runFrac = 0;        // 0..1 interpolation to runBeat + 1
+    let runCollected = new Set();
+    let caughtAt = null;    // { r, c, reason }
+    let hintStepFlash = null; // { r, c, alpha }
+    let isPointerDown = false;
+    let pointerDraggedTile = false;
+    let toastTimer = null;
+
+    function showToast(msg, ms = 2400) {
+      statusToast.textContent = msg;
+      statusToast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
+    }
+
+    function getPlannedLootSet() {
+      const s = new Set();
+      for (const step of plan) {
+        level.loots.forEach((l, idx) => {
+          if (l.r === step.r && l.c === step.c) s.add(idx);
+        });
+      }
+      return s;
+    }
+
+    function getPreviewBeat() {
+      if (mode === "running") return runBeat;
+      if (mode === "caught") return runBeat;
+      return (plan.length - 1) + (peekNext ? 1 : 0);
+    }
+
+    function updateHUD() {
+      const chap = getChapter(currentLevelNum);
+      chapterLabel.textContent = chap.title;
+      levelTitle.textContent = `Heist #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      solvedCounter.textContent = `Cleared: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Heist ${currentLevelNum} / 500 ▾`;
+
+      const movesUsed = plan.length - 1;
+      budgetPill.textContent = `Moves: ${movesUsed} / ${level.maxBeats}`;
+
+      const lootCountNow = mode === "running" || mode === "won" || mode === "caught"
+        ? runCollected.size
+        : getPlannedLootSet().size;
+      lootPill.textContent = `💎 Loot: ${lootCountNow} / ${level.loots.length}`;
+
+      if (mode === "plan") {
+        modeBadge.textContent = peekNext ? "👁 PEEKING NEXT BEAT" : "✎ BLUEPRINT PLAN";
+        modeBadge.className = "mode-badge mode-plan";
+        const b = getPreviewBeat();
+        beatReadout.textContent = `Security Preview: Beat t = ${b}`;
+        execBtn.textContent = "▶ EXECUTE HEIST";
+        execBtn.className = "dock-btn exec-main";
+        execBtn.disabled = plan.length < 2;
+        waitBtn.disabled = movesUsed >= level.maxBeats;
+        undoBtn.disabled = plan.length <= 1;
+      } else if (mode === "running") {
+        modeBadge.textContent = "▶ EXECUTING HEIST";
+        modeBadge.className = "mode-badge mode-run";
+        beatReadout.textContent = `Live Execution: Beat t = ${runBeat} / ${movesUsed}`;
+        execBtn.textContent = "■ ABORT & EDIT";
+        execBtn.className = "dock-btn exec-stop";
+        execBtn.disabled = false;
+        waitBtn.disabled = true;
+        undoBtn.disabled = true;
+      } else if (mode === "caught") {
+        modeBadge.textContent = "🚨 ALARM TRIGGERED";
+        modeBadge.className = "mode-badge mode-alert";
+        beatReadout.textContent = `Detected at Beat t = ${runBeat}`;
+        execBtn.disabled = true;
+        waitBtn.disabled = true;
+        undoBtn.disabled = true;
+      } else {
+        modeBadge.textContent = "✓ HEIST COMPLETE";
+        modeBadge.className = "mode-badge mode-run";
+        beatReadout.textContent = `Ghost Getaway in ${movesUsed} Beats!`;
+        execBtn.disabled = true;
+        waitBtn.disabled = true;
+        undoBtn.disabled = true;
+      }
+
+      peekBtn.classList.toggle("active-toggle", peekNext && mode === "plan");
+    }
+
+    function loadLevel(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      level = getLevel(currentLevelNum);
+      plan = [{ r: level.start.r, c: level.start.c }];
+      mode = "plan";
+      peekNext = false;
+      runBeat = 0;
+      runFrac = 0;
+      runCollected = new Set();
+      caughtAt = null;
+      hintStepFlash = null;
+
+      stageOverlay.classList.remove("show");
+      statusToast.classList.remove("show");
+
+      try {
+        localStorage.setItem("zinplay_heist_500_last", String(currentLevelNum));
+      } catch (e) {}
+
+      updateHUD();
+    }
+
+    function appendPlanStep(r, c, isWait = false) {
+      if (mode !== "plan") return false;
+      if (plan.length - 1 >= level.maxBeats) {
+        showToast(`Move budget reached (${level.maxBeats})! Undo or Execute your plan.`, 2100);
+        return false;
+      }
+      if (level.walls[r][c]) return false;
+
+      const tip = plan[plan.length - 1];
+      const dist = Math.abs(r - tip.r) + Math.abs(c - tip.c);
+      if (!isWait && dist !== 1) return false;
+
+      plan.push({ r, c });
+      if (isWait) sfxWait();
+      else sfxPlot();
+
+      // Friendly cue if player completes full path to Exit with all loot
+      const lootDone = getPlannedLootSet().size === level.loots.length;
+      if (lootDone && r === level.exit.r && c === level.exit.c) {
+        showToast("Route reaches Exit with all loot! Tap ▶ EXECUTE HEIST!", 2400);
+      }
+
+      updateHUD();
+      return true;
+    }
+
+    function undoPlanStep() {
+      if (mode !== "plan" || plan.length <= 1) return;
+      plan.pop();
+      sfxUndo();
+      updateHUD();
+    }
+
+    function startExecution() {
+      if (mode !== "plan" || plan.length < 2) return;
+      initAudio();
+      mode = "running";
+      peekNext = false;
+      runBeat = 0;
+      runFrac = 0;
+      runCollected = new Set();
+      caughtAt = null;
+      statusToast.classList.remove("show");
+
+      // Collect loot if starting on loot (never happens normally, defensive)
+      level.loots.forEach((l, idx) => {
+        if (l.r === plan[0].r && l.c === plan[0].c) runCollected.add(idx);
+      });
+
+      sfxStep();
+      updateHUD();
+    }
+
+    function abortToPlan() {
+      mode = "plan";
+      caughtAt = null;
+      stageOverlay.classList.remove("show");
+      updateHUD();
+    }
+
+    function triggerCaught(r, c, reason) {
+      mode = "caught";
+      caughtAt = { r, c, reason };
+      sfxAlarm();
+      updateHUD();
+
+      ovIcon.textContent = "🚨";
+      ovHeading.textContent = "Alarm Triggered!";
+      ovText.textContent = reason;
+      ovActionBtn.textContent = "✎ Edit Blueprint & Retry";
+      setTimeout(() => stageOverlay.classList.add("show"), 420);
+    }
+
+    function triggerHeistWin() {
+      mode = "won";
+      sfxSuccess();
+      solvedSet.add(currentLevelNum);
+      try {
+        localStorage.setItem("zinplay_heist_500_solved", JSON.stringify([...solvedSet]));
+      } catch (e) {}
+      updateHUD();
+
+      const movesUsed = plan.length - 1;
+      const isLast = currentLevelNum === TOTAL_LEVELS;
+      ovIcon.textContent = "💎";
+      ovHeading.textContent = isLast ? "All 500 Heists Mastered!" : `Heist #${currentLevelNum} Cleared!`;
+      ovText.textContent = `Clean getaway in ${movesUsed} beats (Optimal Par: ${level.parBeats}).`;
+      ovActionBtn.textContent = isLast ? "Replay Heist #1" : `Next Blueprint (#${currentLevelNum + 1}) →`;
+      setTimeout(() => stageOverlay.classList.add("show"), 360);
+    }
+
+    // Viewport & Grid Geometry
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function getGridMetrics() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const pad = 16;
+      const boardPx = Math.min(rect.width, rect.height) - pad * 2;
+      const cellPx = boardPx / level.size;
+      const ox = (rect.width - boardPx) / 2;
+      const oy = (rect.height - boardPx) / 2;
+      return { w: rect.width, h: rect.height, cellPx, ox, oy, boardPx };
+    }
+
+    function clientToCell(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const m = getGridMetrics();
+      const c = Math.floor((clientX - rect.left - m.ox) / m.cellPx);
+      const r = Math.floor((clientY - rect.top - m.oy) / m.cellPx);
+      if (r < 0 || r >= level.size || c < 0 || c >= level.size) return null;
+      return { r, c };
+    }
+
+    // Pointer Interaction (Tap OR Drag-to-Plot Blueprint Route)
+    canvas.addEventListener("pointerdown", (e) => {
+      if (mode !== "plan") return;
+      initAudio();
+      const cell = clientToCell(e.clientX, e.clientY);
+      if (!cell) return;
+
+      isPointerDown = true;
+      pointerDraggedTile = false;
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+
+      const tip = plan[plan.length - 1];
+      const prev = plan.length >= 2 ? plan[plan.length - 2] : null;
+
+      if (cell.r === tip.r && cell.c === tip.c) {
+        // Wait if player taps current tip without dragging away
+        return;
+      }
+      if (prev && cell.r === prev.r && cell.c === prev.c) {
+        undoPlanStep();
+        pointerDraggedTile = true;
+        return;
+      }
+      if (Math.abs(cell.r - tip.r) + Math.abs(cell.c - tip.c) === 1 && !level.walls[cell.r][cell.c]) {
+        appendPlanStep(cell.r, cell.c, false);
+        pointerDraggedTile = true;
+      } else if (!level.walls[cell.r][cell.c]) {
+        showToast("Tap or drag onto a tile directly next to your current position!", 1900);
+      }
+    });
+
+    canvas.addEventListener("pointermove", (e) => {
+      if (!isPointerDown || mode !== "plan") return;
+      const cell = clientToCell(e.clientX, e.clientY);
+      if (!cell) return;
+
+      const tip = plan[plan.length - 1];
+      if (cell.r === tip.r && cell.c === tip.c) return;
+
+      const prev = plan.length >= 2 ? plan[plan.length - 2] : null;
+      if (prev && cell.r === prev.r && cell.c === prev.c) {
+        undoPlanStep();
+        pointerDraggedTile = true;
+        return;
+      }
+
+      if (Math.abs(cell.r - tip.r) + Math.abs(cell.c - tip.c) === 1 && !level.walls[cell.r][cell.c]) {
+        appendPlanStep(cell.r, cell.c, false);
+        pointerDraggedTile = true;
+      }
+    });
+
+    canvas.addEventListener("pointerup", (e) => {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      if (mode === "plan" && !pointerDraggedTile) {
+        const cell = clientToCell(e.clientX, e.clientY);
+        const tip = plan[plan.length - 1];
+        if (cell && cell.r === tip.r && cell.c === tip.c) {
+          appendPlanStep(tip.r, tip.c, true);
+          showToast("Added 1-beat ⏱ WAIT at this spot!", 1400);
+        }
+      }
+    });
+    canvas.addEventListener("pointercancel", () => { isPointerDown = false; });
+
+    // Dock & Utility Buttons
+    waitBtn.addEventListener("click", () => {
+      if (mode !== "plan") return;
+      initAudio();
+      const tip = plan[plan.length - 1];
+      appendPlanStep(tip.r, tip.c, true);
+    });
+    undoBtn.addEventListener("click", () => {
+      initAudio();
+      undoPlanStep();
+    });
+    execBtn.addEventListener("click", () => {
+      if (mode === "plan") startExecution();
+      else if (mode === "running") abortToPlan();
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      plan = [{ r: level.start.r, c: level.start.c }];
+      abortToPlan();
+    });
+
+    peekBtn.addEventListener("click", () => {
+      if (mode !== "plan") return;
+      peekNext = !peekNext;
+      updateHUD();
+    });
+
+    speedBtn.addEventListener("click", () => {
+      speedMult = speedMult === 1 ? 2 : 1;
+      speedBtn.classList.toggle("active-toggle", speedMult > 1);
+      speedBtn.textContent = speedMult > 1 ? "⚡ 2x ON" : "⚡ 2x";
+    });
+
+    // Smart Next-Step Hint Button (Uses verified Space-Time BFS solution!)
+    document.getElementById("hintBtn").addEventListener("click", () => {
+      if (mode !== "plan") abortToPlan();
+      initAudio();
+
+      // Check how much of current plan matches the verified solution prefix
+      let matchLen = 0;
+      for (let i = 0; i < Math.min(plan.length, level.solution.length); i++) {
+        if (plan[i].r === level.solution[i].r && plan[i].c === level.solution[i].c) {
+          matchLen++;
+        } else {
+          break;
+        }
+      }
+
+      if (matchLen < plan.length) {
+        // Trim back to last matching optimal beat so hint keeps player on a guaranteed winning track
+        plan = plan.slice(0, Math.max(1, matchLen));
+      }
+
+      if (plan.length < level.solution.length) {
+        const nextPt = level.solution[plan.length];
+        const prevPt = plan[plan.length - 1];
+        const isWait = nextPt.r === prevPt.r && nextPt.c === prevPt.c;
+        plan.push({ r: nextPt.r, c: nextPt.c });
+        hintStepFlash = { r: nextPt.r, c: nextPt.c, alpha: 1.0 };
+        if (isWait) {
+          sfxWait();
+          showToast("💡 Hint: WAIT 1 beat here to let security pass!", 2100);
+        } else {
+          sfxPlot();
+          showToast("💡 Hint: Plotted next safe stealth step!", 1700);
+        }
+        updateHUD();
+      } else {
+        showToast("Your blueprint is complete — tap ▶ EXECUTE HEIST!", 2200);
+      }
+    });
+
+    soundBtn.addEventListener("click", () => {
+      soundOn = !soundOn;
+      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+    });
+
+    ovActionBtn.addEventListener("click", () => {
+      if (mode === "won") {
+        loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
+      } else {
+        abortToPlan();
+      }
+    });
+
+    document.getElementById("prevLvlBtn").addEventListener("click", () => {
+      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
+    });
+    document.getElementById("nextLvlBtn").addEventListener("click", () => {
+      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
+    });
+
+    // Picker Modal
+    const pickerModal = document.getElementById("pickerModal");
+    const chapterTabsEl = document.getElementById("chapterTabs");
+    const levelsGridEl = document.getElementById("levelsGrid");
+    const jumpInput = document.getElementById("jumpInput");
+    let activeChapterIdx = 0;
+
+    function renderPicker() {
+      chapterTabsEl.innerHTML = "";
+      CHAPTERS.forEach((chap, idx) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chapter-tab" + (idx === activeChapterIdx ? " active" : "");
+        b.textContent = chap.range;
+        b.addEventListener("click", () => {
+          activeChapterIdx = idx;
+          renderPicker();
+        });
+        chapterTabsEl.appendChild(b);
+      });
+
+      const chap = CHAPTERS[activeChapterIdx];
+      levelsGridEl.innerHTML = "";
+      for (let n = chap.start; n <= chap.end; n++) {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "lvl-cell";
+        if (solvedSet.has(n)) cell.classList.add("solved");
+        if (n === currentLevelNum) cell.classList.add("active");
+        cell.textContent = n;
+        cell.addEventListener("click", () => {
+          loadLevel(n);
+          pickerModal.classList.remove("open");
+        });
+        levelsGridEl.appendChild(cell);
+      }
+    }
+
+    openPickerBtn.addEventListener("click", () => {
+      activeChapterIdx = Math.floor((currentLevelNum - 1) / 100);
+      jumpInput.value = "";
+      renderPicker();
+      pickerModal.classList.add("open");
+    });
+    document.getElementById("closePickerBtn").addEventListener("click", () => {
+      pickerModal.classList.remove("open");
+    });
+    pickerModal.addEventListener("click", (e) => {
+      if (e.target === pickerModal) pickerModal.classList.remove("open");
+    });
+    document.getElementById("jumpBtn").addEventListener("click", () => {
+      const val = parseInt(jumpInput.value, 10);
+      if (val >= 1 && val <= TOTAL_LEVELS) {
+        loadLevel(val);
+        pickerModal.classList.remove("open");
+      }
+    });
+
+    // ==============================================
+    // REAL-TIME EXECUTION STEP & BLUEPRINT RENDERER
+    // ==============================================
+    function updateExecution(dt) {
+      if (mode !== "running") return;
+
+      const beatDuration = 0.36 / speedMult;
+      runFrac += dt / beatDuration;
+
+      if (runFrac >= 1) {
+        runFrac = 0;
+        const prevPt = plan[runBeat];
+        runBeat++;
+        const curPt = plan[runBeat];
+
+        // 1. Check head-on guard swap
+        if (isGuardHeadOnSwap(level, prevPt.r, prevPt.c, curPt.r, curPt.c, runBeat)) {
+          triggerCaught(curPt.r, curPt.c, `Ran straight into a patrolling guard at Beat ${runBeat}!`);
+          return;
+        }
+
+        // 2. Check hazard detection at arrival beat
+        const haz = getHazardAt(level, curPt.r, curPt.c, runBeat);
+        if (haz) {
+          const msg = haz.type === "laser"
+            ? `Tripped a red laser grid at Beat ${runBeat}! Insert a ⏱ WAIT or reroute.`
+            : (haz.type === "camera"
+              ? `Spotted by a sweeping CCTV camera at Beat ${runBeat}!`
+              : `Caught by a night patrol guard at Beat ${runBeat}!`);
+          triggerCaught(curPt.r, curPt.c, msg);
+          return;
+        }
+
+        // 3. Collect Loot if stepped onto artifact tile
+        let pickedNewLoot = false;
+        level.loots.forEach((l, idx) => {
+          if (l.r === curPt.r && l.c === curPt.c && !runCollected.has(idx)) {
+            runCollected.add(idx);
+            pickedNewLoot = true;
+          }
+        });
+        if (pickedNewLoot) sfxLoot();
+        else sfxStep();
+
+        updateHUD();
+
+        // 4. Check immediate victory at Exit with all loot
+        if (runCollected.size === level.loots.length && curPt.r === level.exit.r && curPt.c === level.exit.c) {
+          triggerHeistWin();
+          return;
+        }
+
+        // 5. Reached end of plotted plan without escaping
+        if (runBeat >= plan.length - 1) {
+          const missing = level.loots.length - runCollected.size;
+          const msg = missing > 0
+            ? `Plan ended with ${missing} artifact${missing > 1 ? "s" : ""} still left in the vault!`
+            : "You grabbed the loot, but your route didn't reach the green Exit door!";
+          mode = "plan";
+          updateHUD();
+          showToast(msg, 3200);
+        }
+      }
+    }
+
+    function drawBlueprint(now) {
+      const m = getGridMetrics();
+      const N = level.size;
+      const cs = m.cellPx;
+      ctx.clearRect(0, 0, m.w, m.h);
+
+      const cxOf = (c) => m.ox + (c + 0.5) * cs;
+      const cyOf = (r) => m.oy + (r + 0.5) * cs;
+      const visBeat = mode === "running" ? Math.min(plan.length - 1, runBeat + (runFrac > 0.5 ? 1 : 0)) : getPreviewBeat();
+
+      // 1. Blueprint Floor Grid & Subtle Architectural Measurement Ticks
+      for (let r = 0; r < N; r++) {
+        for (let c = 0; c < N; c++) {
+          const x = m.ox + c * cs;
+          const y = m.oy + r * cs;
+          ctx.fillStyle = (r + c) % 2 === 0 ? "rgba(56, 189, 248, 0.035)" : "rgba(56, 189, 248, 0.065)";
+          ctx.fillRect(x, y, cs, cs);
+          ctx.strokeStyle = "rgba(125, 211, 252, 0.14)";
+          ctx.lineWidth = 1;
+          ctx.strokeRect(x, y, cs, cs);
+        }
+      }
+
+      // Outer blueprint frame
+      ctx.strokeStyle = "rgba(125, 211, 252, 0.45)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(m.ox, m.oy, m.boardPx, m.boardPx);
+
+      // 2. Architectural Museum Walls & Display Cases
+      for (let r = 0; r < N; r++) {
+        for (let c = 0; c < N; c++) {
+          if (!level.walls[r][c]) continue;
+          const x = m.ox + c * cs + 2;
+          const y = m.oy + r * cs + 2;
+          const s = cs - 4;
+          ctx.fillStyle = "#162f59";
+          ctx.strokeStyle = "#60a5fa";
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.roundRect(x, y, s, s, 5);
+          ctx.fill();
+          ctx.stroke();
+
+          // Architectural diagonal crosshatch lines
+          ctx.strokeStyle = "rgba(147, 197, 253, 0.2)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(x + 4, y + s - 4); ctx.lineTo(x + s - 4, y + 4);
+          ctx.moveTo(x + 4, y + s * 0.5); ctx.lineTo(x + s * 0.5, y + 4);
+          ctx.moveTo(x + s * 0.5, y + s - 4); ctx.lineTo(x + s - 4, y + s * 0.5);
+          ctx.stroke();
+        }
+      }
+
+      // 3. Start Entry Pad & Extraction Exit Pad
+      {
+        const sx = m.ox + level.start.c * cs + 4;
+        const sy = m.oy + level.start.r * cs + 4;
+        ctx.fillStyle = "rgba(56, 189, 248, 0.18)";
+        ctx.strokeStyle = "#38bdf8";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(sx, sy, cs - 8, cs - 8, 7);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#bae6fd";
+        ctx.font = `900 ${Math.max(9, Math.round(cs * 0.19))}px monospace`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("IN", cxOf(level.start.c), cyOf(level.start.r));
+
+        const ex = m.ox + level.exit.c * cs + 4;
+        const ey = m.oy + level.exit.r * cs + 4;
+        const allLootReady = (mode === "plan" ? getPlannedLootSet().size : runCollected.size) === level.loots.length;
+        ctx.fillStyle = allLootReady ? "rgba(34, 197, 94, 0.28)" : "rgba(34, 197, 94, 0.12)";
+        ctx.strokeStyle = allLootReady ? "#4ade80" : "#15803d";
+        ctx.lineWidth = allLootReady ? 2.6 : 1.8;
+        ctx.beginPath();
+        ctx.roundRect(ex, ey, cs - 8, cs - 8, 7);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = allLootReady ? "#dcfce7" : "#86efac";
+        ctx.fillText("EXIT", cxOf(level.exit.c), cyOf(level.exit.r));
+      }
+
+      // 4. CCTV Camera Vision Cones (Rendered at visBeat)
+      for (const cam of level.cameras) {
+        const cone = getCameraConeCells(level, cam, visBeat);
+        for (const cell of cone) {
+          ctx.fillStyle = "rgba(250, 204, 21, 0.24)";
+          ctx.fillRect(m.ox + cell.c * cs + 2, m.oy + cell.r * cs + 2, cs - 4, cs - 4);
+          ctx.strokeStyle = "rgba(250, 204, 21, 0.55)";
+          ctx.lineWidth = 1.4;
+          ctx.strokeRect(m.ox + cell.c * cs + 3, m.oy + cell.r * cs + 3, cs - 6, cs - 6);
+        }
+
+        // Camera housing icon on its wall pillar
+        const camX = cxOf(cam.c);
+        const camY = cyOf(cam.r);
+        const dir = getCameraDir(cam, visBeat);
+        ctx.save();
+        ctx.translate(camX, camY);
+        ctx.rotate(dir * (Math.PI / 2));
+        ctx.fillStyle = "#facc15";
+        ctx.beginPath();
+        ctx.arc(0, 0, cs * 0.2, 0, Math.PI * 2);
+        ctx.fill();
+        // Lens barrel pointing in look direction
+        ctx.fillStyle = "#0f172a";
+        ctx.fillRect(2, -4, cs * 0.22, 8);
+        ctx.fillStyle = "#ef4444";
+        ctx.beginPath();
+        ctx.arc(cs * 0.18, 0, 2.6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // 5. Pulsing Laser Grids
+      for (const lz of level.lasers) {
+        const onNow = isLaserOn(lz, visBeat);
+        const onNext = isLaserOn(lz, visBeat + 1);
+        const first = lz.cells[0];
+        const last = lz.cells[lz.cells.length - 1];
+        const x1 = cxOf(first.c) - (lz.horiz ? cs * 0.42 : 0);
+        const y1 = cyOf(first.r) - (lz.horiz ? 0 : cs * 0.42);
+        const x2 = cxOf(last.c) + (lz.horiz ? cs * 0.42 : 0);
+        const y2 = cyOf(last.r) + (lz.horiz ? 0 : cs * 0.42);
+
+        if (onNow) {
+          // Danger glow across laser tiles
+          for (const c of lz.cells) {
+            ctx.fillStyle = "rgba(239, 68, 68, 0.16)";
+            ctx.fillRect(m.ox + c.c * cs + 2, m.oy + c.r * cs + 2, cs - 4, cs - 4);
+          }
+          ctx.save();
+          ctx.strokeStyle = "#ef4444";
+          ctx.shadowColor = "#ef4444";
+          ctx.shadowBlur = 14;
+          ctx.lineWidth = 4.5;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = "#fecaca";
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+          ctx.restore();
+        } else {
+          // Off beam (subtle dashed line; pulses slightly amber if turning ON next beat!)
+          ctx.save();
+          ctx.strokeStyle = onNext ? "rgba(251, 146, 60, 0.55)" : "rgba(148, 163, 184, 0.25)";
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4, 5]);
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Laser emitter nodes on ends
+        ctx.fillStyle = onNow ? "#ef4444" : (onNext ? "#f59e0b" : "#475569");
+        ctx.beginPath();
+        ctx.arc(x1, y1, 4.2, 0, Math.PI * 2);
+        ctx.arc(x2, y2, 4.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 6. Patrolling Guards & Flashlight Tiles
+      for (const g of level.guards) {
+        // Subtle patrol track dashed line
+        ctx.save();
+        ctx.strokeStyle = "rgba(248, 113, 113, 0.25)";
+        ctx.lineWidth = 1.6;
+        ctx.setLineDash([3, 4]);
+        ctx.beginPath();
+        g.path.forEach((pt, idx) => {
+          const px = cxOf(pt.c), py = cyOf(pt.r);
+          if (idx === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
+        ctx.restore();
+
+        const gs = getGuardState(level, g, visBeat);
+        let gx = cxOf(gs.c);
+        let gy = cyOf(gs.r);
+        if (mode === "running" && runBeat < plan.length - 1) {
+          const g0 = getGuardState(level, g, runBeat);
+          const g1 = getGuardState(level, g, runBeat + 1);
+          gx = cxOf(g0.c + (g1.c - g0.c) * runFrac);
+          gy = cyOf(g0.r + (g1.r - g0.r) * runFrac);
+        }
+
+        // Flashlight danger cell
+        if (gs.flash) {
+          ctx.fillStyle = "rgba(251, 146, 60, 0.25)";
+          ctx.fillRect(m.ox + gs.flash.c * cs + 2, m.oy + gs.flash.r * cs + 2, cs - 4, cs - 4);
+          ctx.strokeStyle = "rgba(251, 146, 60, 0.65)";
+          ctx.lineWidth = 1.6;
+          ctx.strokeRect(m.ox + gs.flash.c * cs + 3, m.oy + gs.flash.r * cs + 3, cs - 6, cs - 6);
+        }
+
+        // Guard body icon
+        ctx.save();
+        ctx.fillStyle = "#dc2626";
+        ctx.strokeStyle = "#fecaca";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(gx, gy, cs * 0.28, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.font = `${Math.max(13, Math.round(cs * 0.38))}px sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("👮", gx, gy + 1);
+        ctx.restore();
+      }
+
+      // 7. Vault Loot Artifacts
+      const collectedNow = mode === "plan" ? new Set() : runCollected;
+      const plannedLoot = getPlannedLootSet();
+      level.loots.forEach((l, idx) => {
+        if (collectedNow.has(idx)) return;
+        const lx = cxOf(l.c);
+        const ly = cyOf(l.r);
+        const isPlanned = mode === "plan" && plannedLoot.has(idx);
+        const pulse = 1 + Math.sin(now * 0.006 + idx) * 0.08;
+
+        ctx.save();
+        ctx.strokeStyle = isPlanned ? "#4ade80" : "#facc15";
+        ctx.shadowColor = isPlanned ? "#4ade80" : "#facc15";
+        ctx.shadowBlur = 12;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(lx, ly, cs * 0.3 * pulse, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.font = `${Math.max(16, Math.round(cs * 0.44))}px sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(l.icon, lx, ly + 1);
+        ctx.restore();
+      });
+
+      // 8. Plotted Blueprint Route Line & Wait Badges
+      if (plan.length >= 2) {
+        ctx.save();
+        ctx.strokeStyle = mode === "caught" ? "#ef4444" : "#38bdf8";
+        ctx.shadowColor = mode === "caught" ? "#ef4444" : "#38bdf8";
+        ctx.shadowBlur = 10;
+        ctx.lineWidth = 3.5;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.setLineDash([7, 5]);
+        ctx.beginPath();
+        plan.forEach((pt, idx) => {
+          const px = cxOf(pt.c), py = cyOf(pt.r);
+          if (idx === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Count consecutive waits at tiles to draw crisp "⏱2" badges
+        const waitsAt = new Map();
+        for (let i = 1; i < plan.length; i++) {
+          if (plan[i].r === plan[i - 1].r && plan[i].c === plan[i - 1].c) {
+            const k = `${plan[i].r},${plan[i].c}`;
+            waitsAt.set(k, (waitsAt.get(k) || 0) + 1);
+          } else {
+            // Waypoint node dot
+            ctx.fillStyle = "#e0f2fe";
+            ctx.beginPath();
+            ctx.arc(cxOf(plan[i].c), cyOf(plan[i].r), 3.2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        ctx.shadowBlur = 0;
+        waitsAt.forEach((cnt, k) => {
+          const [wr, wc] = k.split(",").map(Number);
+          const wx = cxOf(wc) + cs * 0.24;
+          const wy = cyOf(wr) - cs * 0.24;
+          ctx.fillStyle = "#f59e0b";
+          ctx.beginPath();
+          ctx.arc(wx, wy, 9.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#0f172a";
+          ctx.font = "900 9.5px monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(`W${cnt}`, wx, wy + 0.5);
+        });
+        ctx.restore();
+      }
+
+      // 9. Hint Flash Ring
+      if (hintStepFlash && hintStepFlash.alpha > 0.04) {
+        hintStepFlash.alpha *= 0.93;
+        ctx.save();
+        ctx.strokeStyle = `rgba(250, 204, 21, ${hintStepFlash.alpha})`;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(cxOf(hintStepFlash.c), cyOf(hintStepFlash.r), cs * 0.42, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 10. Thief Agent Marker (Tip of plan in Planning mode, animated during Execution!)
+      let thiefX, thiefY;
+      if (mode === "running" && runBeat < plan.length - 1) {
+        const p0 = plan[runBeat];
+        const p1 = plan[runBeat + 1];
+        thiefX = cxOf(p0.c + (p1.c - p0.c) * runFrac);
+        thiefY = cyOf(p0.r + (p1.r - p0.r) * runFrac);
+      } else if (mode === "caught" && caughtAt) {
+        thiefX = cxOf(caughtAt.c);
+        thiefY = cyOf(caughtAt.r);
+      } else {
+        const tip = plan[plan.length - 1];
+        thiefX = cxOf(tip.c);
+        thiefY = cyOf(tip.r);
+      }
+
+      ctx.save();
+      const pulseR = cs * 0.31 + (mode === "plan" ? Math.sin(now * 0.008) * 2.5 : 0);
+      ctx.fillStyle = mode === "caught" ? "#ef4444" : "#0ea5e9";
+      ctx.strokeStyle = "#ffffff";
+      ctx.shadowColor = mode === "caught" ? "#ef4444" : "#38bdf8";
+      ctx.shadowBlur = 14;
+      ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.arc(thiefX, thiefY, pulseR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.shadowBlur = 0;
+      ctx.font = `${Math.max(14, Math.round(cs * 0.4))}px sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(mode === "caught" ? "🚨" : "🥷", thiefX, thiefY + 1);
+      ctx.restore();
+    }
+
+    let lastTime = performance.now();
+    function frame(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+      updateExecution(dt);
+      drawBlueprint(now);
+      requestAnimationFrame(frame);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    loadLevel(currentLevelNum);
+    requestAnimationFrame(frame);
+  </script>
+
+</body>
+</html>
