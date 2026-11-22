@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>One-Line Symphony — 500 Musical Puzzle Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free levels of One-Line Symphony in your browser. Trace glowing constellations in one continuous stroke to unlock calming musical melodies on mobile and desktop." />
+  <title>One-Line Symphony — Free 500-Level Musical One-Stroke Puzzle Game | ZinPlay</title>
+  <meta name="description" content="Play One-Line Symphony free online with no download. Connect glowing nodes in a single continuous stroke across 500 Euler path musical puzzles with calming Web Audio melodies on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "One-Line Symphony",
+    "url": "https://zinplay.io/games/one-line-symphony/",
+    "genre": ["Puzzle", "Music", "Brain Teaser"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -29,15 +42,17 @@
       font-size: 0.9rem;
       color: var(--muted);
     }
+
+    /* Top HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0b1124;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
-      font-size: 0.85rem;
+      background: #0b1024;
+      color: #f1f5f9;
+      border-bottom: 1px solid #1e294a;
+      font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
       flex-wrap: wrap;
@@ -49,7 +64,7 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
+      color: #7dd3fc;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -61,26 +76,34 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(99, 102, 241, 0.22);
-      border: 1px solid rgba(129, 140, 248, 0.35);
-      color: #c7d2fe;
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.36);
+      color: #bae6fd;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
+    }
+
+    /* Canvas Stage */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 420px;
-      background: radial-gradient(circle at 50% 45%, #162044 0%, #090d1c 100%);
+      aspect-ratio: 1 / 1;
+      max-height: 485px;
+      background: radial-gradient(circle at 50% 45%, #161f42 0%, #090d1f 100%);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
       -webkit-user-select: none;
-    }
-    @media (min-width: 640px) {
-      .canvas-container {
-        height: 480px;
-      }
     }
     #symphonyCanvas {
       width: 100%;
@@ -89,38 +112,54 @@
       touch-action: none;
       cursor: pointer;
     }
+
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #0a0f21;
+      border-top: 1px solid #1b2542;
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+
     .status-toast {
       position: absolute;
-      bottom: 14px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(250, 204, 21, 0.55);
+      background: rgba(11, 16, 36, 0.95);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       white-space: nowrap;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.2s ease;
+      max-width: 92%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
+
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(9, 13, 28, 0.78);
-      backdrop-filter: blur(5px);
+      background: rgba(8, 12, 26, 0.8);
+      backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
     }
     .win-overlay.show {
       opacity: 1;
@@ -132,19 +171,13 @@
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 320px;
+      max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.3rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
+
     .controls-group {
       display: flex;
       gap: 6px;
@@ -171,6 +204,7 @@
       border-radius: 10px;
       cursor: pointer;
     }
+
     /* Level Picker Modal */
     .modal-backdrop {
       position: fixed;
@@ -183,9 +217,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -204,10 +236,7 @@
       padding: 14px 16px;
       border-bottom: 1px solid var(--border);
     }
-    .modal-head h3 {
-      font-size: 1rem;
-      font-weight: 800;
-    }
+    .modal-head h3 { font-size: 1rem; font-weight: 800; }
     .modal-close {
       width: 34px;
       height: 34px;
@@ -263,9 +292,7 @@
       gap: 8px;
     }
     @media (min-width: 520px) {
-      .levels-grid {
-        grid-template-columns: repeat(10, 1fr);
-      }
+      .levels-grid { grid-template-columns: repeat(10, 1fr); }
     }
     .lvl-cell {
       height: 38px;
@@ -287,6 +314,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #0b1224;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #0b1024;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #0b1224 0%, #1e1b4b 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.teal-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f2933 0%, #2e1065 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .euler-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .euler-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .euler-table th, .euler-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .euler-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .euler-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -299,7 +406,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -312,53 +419,61 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Levels &bull; Musical Puzzle</span>
+      <span class="cat-tag">500 Symphonies &bull; Musical One-Line Puzzle</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>One-Line Symphony</h1>
-      <p>Trace every faint constellation path in one continuous stroke across 500 musical puzzles.</p>
+      <p>Connect every glowing bridge in one continuous stroke without retracing a line to play a complete, calming musical melody.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="One-Line Symphony Game">
+    <section class="game-wrapper" aria-label="One-Line Symphony Musical Puzzle">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Dawn Prelude</span>
-          <span id="levelTitle">Level 1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Morning Chimes</span>
+          <span id="levelTitle">Symphony #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="edgesCounter">Lines: 0 / 3</span>
-          <span class="hud-pill" id="solvedCounter">Solved: 0 / 500</span>
+          <span class="hud-pill" id="edgesPill">Bridges: 0 / 5</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Solved: 0 / 500</span>
         </div>
       </div>
 
+      <!-- Musical Constellation Canvas -->
       <div class="canvas-container">
         <canvas id="symphonyCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
+        <!-- Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2rem; margin-bottom:6px;">🎵</div>
-            <h2 id="winHeading">Melody Complete!</h2>
-            <p id="winText">Every note connected in harmony.</p>
-            <button id="nextLevelBtn" class="btn-primary" type="button">Next Level →</button>
+            <div style="font-size:2.3rem; margin-bottom:6px;">🎵</div>
+            <h2 id="winHeading">Symphony Complete!</h2>
+            <p id="winText">Every bridge resonated in one unbroken harmonic melody.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Symphony →</button>
           </div>
         </div>
       </div>
 
+      <div class="legend-strip">
+        <span>👆 Drag or Tap Adjacent Nodes</span>
+        <span>✨ Double Arcs = Cross Twice (Ch. 3+)</span>
+        <span>🎧 Pentatonic Web Audio Chimes</span>
+      </div>
+
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Reset</button>
           <button id="undoBtn" class="btn-outline" type="button">← Undo</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reset</button>
           <button id="hintBtn" class="btn-outline" type="button">💡 Hint</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Select Level (1–500) ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Symphony 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -368,29 +483,121 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 780+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/one-line-banner-1.jpg"
+            alt="One-Line Symphony online musical one-stroke puzzle constellation with glowing cyan and gold nodes"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Musical One-Stroke Constellations — Zero Downloads</h3>
+          <p>Trace every luminous bridge in one continuous motion and hear each solved Euler graph bloom into a calming pentatonic melody.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play One-Line Symphony (500 Levels)</h2>
-        <p>One-Line Symphony combines classic Eulerian graph-tracing logic with live procedural harp audio. Across 5 musical chapters—<strong>Dawn Prelude</strong>, <strong>Starlight Etude</strong>, <strong>Nebula Nocturne</strong>, <strong>Solaris Sonata</strong>, and <strong>Cosmic Symphony</strong>—you will trace 500 unique constellations in a single unbroken line without crossing the same segment twice.</p>
+        <h2>What Is One-Line Symphony? A Relaxing Musical One-Stroke Browser Puzzle</h2>
+        <p><strong>One-Line Symphony</strong> is a free <strong>one-line drawing puzzle game online</strong> that blends classic graph-theory geometry with soothing procedural music. Instead of staring at silent black-and-white shapes, every node you connect inside our dark-mode HTML5 Canvas fires a warm harmonic chord synthesized live through the <strong>Web Audio API</strong>. Your objective is simple to learn yet deeply rewarding across all <strong>500 progressive levels</strong>: trace every single connecting edge on the board in one unbroken stroke without lifting your finger or retracing an already lit bridge.</p>
+        <p>Designed specifically as a lightweight, <strong>no-download browser brain teaser for mobile phones, iPads, and Chromebooks</strong>, One-Line Symphony loads in under a second and saves every cleared constellation privately inside your browser's local storage. Whether you are looking for a <em>calming anxiety-relief puzzle before bed</em>, a <em>5-minute logic warm-up between classes</em>, or a <em>mathematical Euler path challenge</em>, the five escalating chapters adapt cleanly from 4-node warm-ups to intricate multi-loop star graphs.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>How to Solve Any One-Line Puzzle Fast (The Euler Vertex Trick)</h2>
+        <p>Every stage in One-Line Symphony is a verified <strong>Eulerian trail puzzle</strong>—a classic mathematical problem first solved by Leonhard Euler in the famous Seven Bridges of Königsberg riddle. You never have to guess randomly once you learn how to count the lines meeting at each glowing orb (known as a node's <em>degree</em>):</p>
+
+        <div class="euler-table-wrap">
+          <table class="euler-table">
+            <thead>
+              <tr>
+                <th>Node Pattern on Board</th>
+                <th>Where to Start Your Stroke</th>
+                <th>Where Your Line Ends</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Exactly 2 Odd Nodes</strong> (3, 5, or 7 lines attached)</td>
+                <td>You <strong>must start</strong> on one of the two odd nodes.</td>
+                <td>Your final edge will always finish on the <em>other</em> odd node.</td>
+              </tr>
+              <tr>
+                <td><strong>Zero Odd Nodes</strong> (all nodes have 2, 4, or 6 lines)</td>
+                <td>Start on <strong>any glowing node</strong> on the constellation.</td>
+                <td>Your continuous loop returns cleanly to your starting node.</td>
+              </tr>
+              <tr>
+                <td><strong>Double Golden Bridges</strong> (Ch. 3–5)</td>
+                <td>Count each curved parallel bridge as 1 separate connection.</td>
+                <td>Save the second parallel arc for your return sweep.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;">Remembering this single <strong>odd-vertex rule</strong> turns intimidating 12-node webs into effortless, flowing musical runs. Whenever you get stuck on a tricky Chapter 4 or Chapter 5 star graph, tap the <strong>Undo</strong> button to step back one note or tap <strong>Hint</strong> to illuminate the optimal next bridge in gold.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner teal-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/one-line-banner-2.jpg"
+            alt="Calming Web Audio harmonic waves and glass musical orbs in One-Line Symphony browser game"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Real-Time Pentatonic Web Audio Built for Flow State</h3>
+          <p>Put on headphones—every connected edge plays a consonant note that never clashes, turning logical deduction into an interactive ambient instrument.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>5 Chapters, 500 Verified Levels &amp; Why Players Love Zero-Install Audio Puzzles</h2>
+        <p>Many free single-stroke web games recycle 20 repetitive shapes or bombard players with timers and loud failure buzzers. One-Line Symphony removes countdown stress entirely so you can think at your own pace:</p>
         <ul>
-          <li><strong>Mobile &amp; Mouse Controls:</strong> Touch any star and drag along connected paths. You can lift your finger anytime to pause, drag backward to undo a line, or tap the Undo button.</li>
-          <li><strong>Using Hints:</strong> Stuck on a tough chapter? Tap <strong>Hint</strong> to illuminate a valid starting star or the exact next line in golden light.</li>
-          <li><strong>The Secret Rule of One-Line Puzzles:</strong> Count how many lines connect to each star. If a constellation has two stars with an <em>odd</em> number of paths (3, 5, or 7), your stroke must always begin at one odd star and finish at the other!</li>
+          <li><strong>Chapter 1 (Levels 1–100 — Morning Chimes):</strong> Clean geometric triangles, envelopes, and diamonds that teach odd-node starting points naturally.</li>
+          <li><strong>Chapter 2 (Levels 101–200 — Starlight Strings):</strong> Intersecting chords and symmetrical constellations with wider harmonic arpeggios.</li>
+          <li><strong>Chapter 3 (Levels 201–300 — Double Bridges):</strong> Parallel golden arcs that require crossing certain corridors twice without trapping yourself.</li>
+          <li><strong>Chapter 4 &amp; 5 (Levels 301–500 — Grand Symphony):</strong> Dense, multi-ring Euler graphs crafted for veteran single-line puzzle enthusiasts, with an open level selector to jump to any stage from 1 to 500.</li>
         </ul>
+        <p>Because the audio engine runs purely inside browser-native Web Audio without loading bulky MP3 packs, One-Line Symphony uses virtually zero mobile data and runs smoothly even on older smartphones or school-managed Chromebooks.</p>
+        <div class="kw-strip" aria-label="Related Puzzle Topics">
+          <span class="kw-pill">One-Line Drawing Puzzle Online</span>
+          <span class="kw-pill">Euler Path Graph Game</span>
+          <span class="kw-pill">Relaxing Musical Browser Game</span>
+          <span class="kw-pill">500-Level Single Stroke Puzzle</span>
+          <span class="kw-pill">Chromebook Brain Teaser No Login</span>
+          <span class="kw-pill">Web Audio Zen Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>One-Line Symphony FAQ</h2>
         <details class="faq-item">
-          <summary>Are all 500 levels mathematically solvable?</summary>
-          <div class="faq-answer">Yes. Every single level from 1 to 500 is deterministically constructed from a verified Eulerian path, guaranteeing at least one unbroken solution.</div>
+          <summary>How do I know which glowing dot to start from in a one-line puzzle?</summary>
+          <div class="faq-answer">Count how many lines connect to each node. If two nodes have an odd number of lines (like 3 or 5), you must begin your stroke on one of those two odd nodes and finish on the other. If every node has an even number of lines, you can start anywhere!</div>
         </details>
         <details class="faq-item">
-          <summary>Does the game save my progress across all 500 levels?</summary>
-          <div class="faq-answer">Yes. Your solved puzzles and current level are saved automatically in your browser's local storage so you can continue anytime.</div>
+          <summary>Can I play One-Line Symphony on mobile touchscreens without installing an app?</summary>
+          <div class="faq-answer">Yes. Simply drag your finger smoothly from node to node (or tap adjacent dots one by one) directly in Android Chrome or iOS Safari—zero downloads required.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Are all 500 levels in One-Line Symphony guaranteed to be solvable?</summary>
+          <div class="faq-answer">Yes. Every constellation from Level 1 to Level 500 is generated directly from a verified connected Eulerian path, ensuring a valid single-stroke solution always exists.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Is there a timer or move penalty if I take my time?</summary>
+          <div class="faq-answer">No timers and no lives system. One-Line Symphony is built for relaxing, stress-free flow—you can undo moves or reset a constellation as many times as you like.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
@@ -403,31 +610,31 @@
         <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
-        <h3>Manual Bomb Defusal</h3>
-        <p>Read the technical manual against the ticking clock and cut the exact right wire.</p>
-        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🕸️</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Tension &amp; Strings</h3>
+        <p>Drag connected nodes until zero elastic lines overlap and every glowing string turns green.</p>
+        <a href="/games/tension-strings/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
-        <h3>Gravity Stone Stacker</h3>
-        <p>Stack irregular geometric stones into a balanced tower for five full seconds.</p>
-        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🏛️</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Daily Visual Paradox</h3>
+        <p>Rotate impossible isometric monuments and slide brass walkways to forge optical bridges.</p>
+        <a href="/games/visual-paradox/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
   <!-- Level Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Level">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Symphony">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Level (1 – 500)</h3>
+        <h3>Choose Symphony (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to level (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to symphony (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -451,7 +658,7 @@
             <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
             <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
             <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/visual-paradox/">Daily Visual Paradox</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -460,7 +667,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -481,7 +688,7 @@
   </footer>
 
   <script>
-    // Mobile Menu
+    // Mobile Header Menu
     const menuBtn = document.getElementById("menuBtn");
     const navMenu = document.getElementById("navMenu");
     if (menuBtn && navMenu) {
@@ -493,39 +700,29 @@
     }
 
     // ==============================================
-    // DETERMINISTIC 500-LEVEL EULERIAN GENERATOR
+    // 500-LEVEL VERIFIED EULER CONSTELLATION ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
+    const WORLD_W = 420;
+    const WORLD_H = 420;
+    const CX = WORLD_W / 2;
+    const CY = WORLD_H / 2;
+
     const CHAPTERS = [
-      { title: "Chapter 1 • Dawn Prelude", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Starlight Etude", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Nebula Nocturne", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Solaris Sonata", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Cosmic Symphony", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Morning Chimes", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Starlight Strings", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Double Bridges", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Celestial Weave", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Grand Symphony", range: "401–500", start: 401, end: 500 }
     ];
 
-    // Handcrafted first 3 levels for an instant smooth intro
-    const INTRO_LEVELS = {
-      1: {
-        nodes: [{ x: 0.24, y: 0.74 }, { x: 0.50, y: 0.22 }, { x: 0.76, y: 0.74 }],
-        edges: [[0,1], [1,2], [2,0]],
-        solution: [0, 1, 2, 0]
-      },
-      2: {
-        nodes: [{ x: 0.50, y: 0.16 }, { x: 0.22, y: 0.50 }, { x: 0.78, y: 0.50 }, { x: 0.50, y: 0.84 }],
-        edges: [[0,1], [0,2], [1,2], [1,3], [2,3]],
-        solution: [1, 0, 2, 3, 1, 2]
-      },
-      3: {
-        nodes: [{ x: 0.50, y: 0.15 }, { x: 0.24, y: 0.42 }, { x: 0.76, y: 0.42 }, { x: 0.24, y: 0.82 }, { x: 0.76, y: 0.82 }],
-        edges: [[0,1], [0,2], [1,2], [1,3], [2,4], [3,4], [1,4], [2,3]],
-        solution: [3, 1, 0, 2, 1, 4, 2, 3, 4]
-      }
-    };
-
-    function edgeKey(a, b) {
-      return a < b ? `${a}-${b}` : `${b}-${a}`;
-    }
+    // Warm Pentatonic Scales (C Major, D Major, F Major, G Major, A Minor)
+    const SCALES = [
+      [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00],
+      [293.66, 329.63, 369.99, 440.00, 493.88, 587.33, 659.25, 739.99, 880.00, 987.77],
+      [246.94, 293.66, 329.63, 392.00, 440.00, 493.88, 587.33, 659.25, 783.99, 880.00],
+      [261.63, 311.13, 349.23, 392.00, 466.16, 523.25, 622.25, 698.46, 783.99, 932.33]
+    ];
 
     function mulberry32(seed) {
       let a = seed >>> 0;
@@ -537,305 +734,294 @@
       };
     }
 
-    function pointToSegmentDist(px, py, x1, y1, x2, y2) {
-      const dx = x2 - x1;
-      const dy = y2 - y1;
-      const lenSq = dx * dx + dy * dy;
-      if (lenSq === 0) return Math.hypot(px - x1, py - y1);
-      let t = ((px - x1) * dx + (py - y1) * dy) / lenSq;
-      t = Math.max(0, Math.min(1, t));
-      return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+    function pairKey(u, v) {
+      return u < v ? `${u}-${v}` : `${v}-${u}`;
     }
 
-    function createCandidateNodes(count, style, rng) {
-      const pts = [];
-      const tooClose = (x, y, minD) => pts.some((p) => Math.hypot(p.x - x, p.y - y) < minD);
-
-      if (style === 0) {
-        // Regular polygon + optional inner star(s)
-        const inner = count >= 7 ? 2 : (count >= 5 ? 1 : 0);
-        const outer = count - inner;
-        const rot = rng() * Math.PI * 2;
-        for (let i = 0; i < outer; i++) {
-          const ang = rot + (i * Math.PI * 2) / outer;
-          const r = 0.34 + (rng() - 0.5) * 0.05;
-          pts.push({ x: 0.5 + Math.cos(ang) * r, y: 0.5 + Math.sin(ang) * r });
-        }
-        if (inner === 1) {
-          pts.push({ x: 0.5 + (rng() - 0.5) * 0.08, y: 0.5 + (rng() - 0.5) * 0.08 });
-        } else if (inner === 2) {
-          const a = rng() * Math.PI;
-          pts.push({ x: 0.5 + Math.cos(a) * 0.14, y: 0.5 + Math.sin(a) * 0.14 });
-          pts.push({ x: 0.5 - Math.cos(a) * 0.14, y: 0.5 - Math.sin(a) * 0.14 });
-        }
-      } else if (style === 1) {
-        // Symmetric constellation (left-right mirror)
-        const pairs = Math.floor(count / 2);
-        const hasCenter = count % 2 === 1;
-        let tries = 0;
-        while (pts.length < pairs * 2 && tries < 120) {
-          tries++;
-          const x = 0.14 + rng() * 0.27;
-          const y = 0.14 + rng() * 0.72;
-          if (!tooClose(x, y, 0.17) && !tooClose(1 - x, y, 0.17) && Math.abs(x - 0.5) > 0.1) {
-            pts.push({ x, y }, { x: 1 - x, y });
-          }
-        }
-        if (hasCenter) {
-          for (let t = 0; t < 40; t++) {
-            const y = 0.16 + rng() * 0.68;
-            if (!tooClose(0.5, y, 0.17)) {
-              pts.push({ x: 0.5, y });
-              break;
-            }
-          }
-        }
-      } else if (style === 2) {
-        // Two concentric rings
-        const outer = Math.ceil(count * 0.65);
-        const inner = count - outer;
-        const rot = rng() * Math.PI * 2;
-        for (let i = 0; i < outer; i++) {
-          const a = rot + (i * Math.PI * 2) / outer;
-          pts.push({ x: 0.5 + Math.cos(a) * 0.37, y: 0.5 + Math.sin(a) * 0.37 });
-        }
-        for (let i = 0; i < inner; i++) {
-          const a = rot + Math.PI / outer + (i * Math.PI * 2) / Math.max(1, inner);
-          const r = inner === 1 ? 0 : 0.16;
-          pts.push({ x: 0.5 + Math.cos(a) * r, y: 0.5 + Math.sin(a) * r });
-        }
-      } else {
-        // Organic spaced cluster
-        let tries = 0;
-        while (pts.length < count && tries < 200) {
-          tries++;
-          const x = 0.13 + rng() * 0.74;
-          const y = 0.13 + rng() * 0.74;
-          if (!tooClose(x, y, 0.18)) pts.push({ x, y });
+    // Check if segment (A,B) passes awkwardly close to a third node C
+    function passesThroughNode(nodes, u, v) {
+      const a = nodes[u], b = nodes[v];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const lenSq = dx * dx + dy * dy;
+      if (lenSq < 1) return true;
+      for (let i = 0; i < nodes.length; i++) {
+        if (i === u || i === v) continue;
+        const c = nodes[i];
+        const t = ((c.x - a.x) * dx + (c.y - a.y) * dy) / lenSq;
+        if (t > 0.08 && t < 0.92) {
+          const px = a.x + t * dx, py = a.y + t * dy;
+          if (Math.hypot(c.x - px, c.y - py) < 23) return true;
         }
       }
+      return false;
+    }
 
-      // Fill any missing points safely on a circle
-      let extra = 0;
-      while (pts.length < count && extra < 50) {
-        extra++;
-        const a = (extra * 2.39996);
-        const x = 0.5 + Math.cos(a) * 0.34;
-        const y = 0.5 + Math.sin(a) * 0.34;
-        if (!tooClose(x, y, 0.14)) pts.push({ x, y });
+    // Build Clean Geometric Node Layouts for Beautiful Constellations
+    function generateNodeLayout(nCount, style, rng) {
+      const pts = [];
+      const rot = rng() * Math.PI * 2;
+
+      if (style === 0) {
+        // Single polygon ring + optional center star
+        const hasCenter = nCount >= 5 && rng() < 0.65;
+        const ringN = hasCenter ? nCount - 1 : nCount;
+        const R = 136;
+        for (let i = 0; i < ringN; i++) {
+          const a = rot + (i * Math.PI * 2) / ringN;
+          pts.push({ x: CX + Math.cos(a) * R, y: CY + Math.sin(a) * R });
+        }
+        if (hasCenter) pts.push({ x: CX, y: CY });
+      } else if (style === 1) {
+        // Concentric twin rings
+        const outerN = Math.ceil(nCount * 0.62);
+        const innerN = nCount - outerN;
+        for (let i = 0; i < outerN; i++) {
+          const a = rot + (i * Math.PI * 2) / outerN;
+          pts.push({ x: CX + Math.cos(a) * 144, y: CY + Math.sin(a) * 144 });
+        }
+        for (let i = 0; i < innerN; i++) {
+          const a = rot + Math.PI / Math.max(1, innerN) + (i * Math.PI * 2) / Math.max(1, innerN);
+          const ir = innerN === 1 ? 0 : 68;
+          pts.push({ x: CX + Math.cos(a) * ir, y: CY + Math.sin(a) * ir });
+        }
+      } else {
+        // Classic architectural envelope / diamond grid
+        const cols = nCount <= 6 ? 3 : 4;
+        const rows = Math.ceil(nCount / cols);
+        const spanX = cols === 3 ? 230 : 270;
+        const spanY = rows <= 2 ? 180 : 250;
+        let idx = 0;
+        for (let r = 0; r < rows && idx < nCount; r++) {
+          const rowCols = Math.min(cols, nCount - idx);
+          for (let c = 0; c < rowCols; c++) {
+            const fx = rowCols === 1 ? 0.5 : c / (rowCols - 1);
+            const fy = rows === 1 ? 0.5 : r / (rows - 1);
+            const jx = (rng() - 0.5) * 18;
+            const jy = (rng() - 0.5) * 18;
+            pts.push({
+              x: CX - spanX / 2 + fx * spanX + jx,
+              y: CY - spanY / 2 + fy * spanY + jy
+            });
+            idx++;
+          }
+        }
       }
       return pts;
     }
 
-    function buildCleanLevel(levelNum) {
-      if (INTRO_LEVELS[levelNum]) return INTRO_LEVELS[levelNum];
+    // Curated First 3 Classic Intro Levels (Triangle, Envelope, Star)
+    function buildIntroLevel(num) {
+      if (num === 1) {
+        const nodes = [
+          { id: 0, x: CX, y: 92 },
+          { id: 1, x: 326, y: 298 },
+          { id: 2, x: 94, y: 298 },
+          { id: 3, x: CX, y: 215 }
+        ];
+        const path = [0, 1, 2, 0, 3, 1];
+        return finalizeLevel(num, nodes, path, SCALES[0]);
+      }
+      if (num === 2) {
+        // Iconic House Envelope
+        const nodes = [
+          { id: 0, x: CX, y: 78 },
+          { id: 1, x: 108, y: 176 },
+          { id: 2, x: 312, y: 176 },
+          { id: 3, x: 108, y: 332 },
+          { id: 4, x: 312, y: 332 }
+        ];
+        const path = [3, 1, 0, 2, 1, 4, 3, 2, 4];
+        return finalizeLevel(num, nodes, path, SCALES[1]);
+      }
+      const nodes = [
+        { id: 0, x: CX, y: 76 },
+        { id: 1, x: 336, y: 184 },
+        { id: 2, x: 284, y: 336 },
+        { id: 3, x: 136, y: 336 },
+        { id: 4, x: 84, y: 184 }
+      ];
+      const path = [0, 2, 4, 1, 3, 0, 1, 2, 3, 4, 0];
+      return finalizeLevel(num, nodes, path, SCALES[2]);
+    }
 
-      // Progressive difficulty curve from Level 4 to 500
-      const p = (levelNum - 4) / (TOTAL_LEVELS - 4); // 0..1
-      const minNodes = Math.min(9, 4 + Math.floor(p * 5.2));
-      const maxNodes = Math.min(11, minNodes + 2);
-      const minEdges = Math.min(18, 5 + Math.floor(p * 12));
-      const targetEdges = Math.min(22, minEdges + 2 + (levelNum % 3));
+    function finalizeLevel(levelNum, rawNodes, solutionPath, scale) {
+      // Prune any unvisited nodes & remap indices cleanly
+      const usedSet = new Set(solutionPath);
+      const oldToNew = new Map();
+      const nodes = [];
+      rawNodes.forEach((n, oldIdx) => {
+        if (usedSet.has(oldIdx)) {
+          oldToNew.set(oldIdx, nodes.length);
+          nodes.push({ id: nodes.length, x: n.x, y: n.y });
+        }
+      });
 
-      for (let attempt = 0; attempt < 45; attempt++) {
-        const rng = mulberry32(levelNum * 7919 + attempt * 104729 + 31337);
-        const nodeCount = minNodes + Math.floor(rng() * (maxNodes - minNodes + 1));
-        const style = (levelNum + attempt) % 4;
-        const nodes = createCandidateNodes(nodeCount, style, rng);
-        if (nodes.length < minNodes) continue;
+      // Re-center constellation nicely inside 420x420 viewport
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      for (const n of nodes) {
+        if (n.x < minX) minX = n.x; if (n.x > maxX) maxX = n.x;
+        if (n.y < minY) minY = n.y; if (n.y > maxY) maxY = n.y;
+      }
+      const span = Math.max(1, maxX - minX, maxY - minY);
+      const fitScale = Math.min(1.15, 290 / span);
+      const midX = (minX + maxX) / 2, midY = (minY + maxY) / 2;
+      for (const n of nodes) {
+        n.x = CX + (n.x - midX) * fitScale;
+        n.y = CY + (n.y - midY) * fitScale;
+      }
 
-        const minAngle = attempt < 25 ? 0.28 : 0.2;
-        const minClearance = attempt < 25 ? 0.08 : 0.06;
+      const mappedPath = solutionPath.map((id) => oldToNew.get(id));
 
-        const used = new Set();
-        const adj = Array.from({ length: nodes.length }, () => []);
+      // Count pair multiplicities to curve double bridges cleanly apart!
+      const pairCounts = new Map();
+      const rawEdges = [];
+      for (let i = 0; i < mappedPath.length - 1; i++) {
+        const u = mappedPath[i], v = mappedPath[i + 1];
+        const pk = pairKey(u, v);
+        pairCounts.set(pk, (pairCounts.get(pk) || 0) + 1);
+        rawEdges.push({ u, v, pk });
+      }
 
-        const isEdgeValid = (u, v) => {
-          if (u === v) return false;
-          if (used.has(edgeKey(u, v))) return false;
-          const p1 = nodes[u];
-          const p2 = nodes[v];
+      const seenPair = new Map();
+      const edges = rawEdges.map((e, idx) => {
+        const totalForPair = pairCounts.get(e.pk);
+        const ord = seenPair.get(e.pk) || 0;
+        seenPair.set(e.pk, ord + 1);
 
-          // Reject if any other star sits too close to this line
-          for (let w = 0; w < nodes.length; w++) {
-            if (w === u || w === v) continue;
-            if (pointToSegmentDist(nodes[w].x, nodes[w].y, p1.x, p1.y, p2.x, p2.y) < minClearance) {
-              return false;
+        const isDouble = totalForPair > 1;
+        const curve = isDouble ? (ord === 0 ? 22 : -22) : 0;
+        return {
+          id: idx,
+          u: Math.min(e.u, e.v),
+          v: Math.max(e.u, e.v),
+          curve,
+          isDouble,
+          used: false
+        };
+      });
+
+      return {
+        levelNum,
+        nodes,
+        edges,
+        solutionPath: mappedPath,
+        scale
+      };
+    }
+
+    function buildSymphonyLevel(levelNum) {
+      if (levelNum <= 3) return buildIntroLevel(levelNum);
+
+      const scale = SCALES[levelNum % SCALES.length];
+      let targetNodes, targetEdges, allowDouble, maxDoubles;
+
+      if (levelNum <= 100) {
+        targetNodes = levelNum <= 40 ? 5 : 6;
+        targetEdges = levelNum <= 40 ? 6 : 8;
+        allowDouble = false; maxDoubles = 0;
+      } else if (levelNum <= 200) {
+        targetNodes = levelNum <= 150 ? 6 : 7;
+        targetEdges = levelNum <= 150 ? 9 : 11;
+        allowDouble = false; maxDoubles = 0;
+      } else if (levelNum <= 300) {
+        targetNodes = 7;
+        targetEdges = 11;
+        allowDouble = true; maxDoubles = 2;
+      } else if (levelNum <= 400) {
+        targetNodes = 8;
+        targetEdges = 13;
+        allowDouble = true; maxDoubles = 2;
+      } else {
+        targetNodes = levelNum > 450 ? 9 : 8;
+        targetEdges = levelNum > 450 ? 16 : 14;
+        allowDouble = true; maxDoubles = 3;
+      }
+
+      for (let attempt = 0; attempt < 40; attempt++) {
+        const rng = mulberry32(levelNum * 109397 + attempt * 7919 + 4211);
+        const style = (levelNum + attempt) % 3;
+        const pts = generateNodeLayout(targetNodes, style, rng);
+
+        // Build list of clean non-collinear candidate edges
+        const validPairs = new Set();
+        for (let u = 0; u < pts.length; u++) {
+          for (let v = u + 1; v < pts.length; v++) {
+            if (!passesThroughNode(pts, u, v)) {
+              validPairs.add(pairKey(u, v));
             }
           }
+        }
 
-          // Reject very sharp overlapping angles at either endpoint
-          const angUV = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-          for (const nb of adj[u]) {
-            const angOld = Math.atan2(nodes[nb].y - p1.y, nodes[nb].x - p1.x);
-            let diff = Math.abs(angUV - angOld);
-            if (diff > Math.PI) diff = Math.PI * 2 - diff;
-            if (diff < minAngle) return false;
-          }
-          const angVU = Math.atan2(p1.y - p2.y, p1.x - p2.x);
-          for (const nb of adj[v]) {
-            const angOld = Math.atan2(nodes[nb].y - p2.y, nodes[nb].x - p2.x);
-            let diff = Math.abs(angVU - angOld);
-            if (diff > Math.PI) diff = Math.PI * 2 - diff;
-            if (diff < minAngle) return false;
-          }
-          return true;
-        };
-
-        let curr = Math.floor(rng() * nodes.length);
-        const walk = [curr];
-        const visited = new Set([curr]);
+        // Construct verified continuous Eulerian trail step-by-step
+        const start = Math.floor(rng() * pts.length);
+        const path = [start];
+        const pairUsed = new Map();
+        let doublesUsed = 0;
+        let cur = start;
 
         for (let step = 0; step < targetEdges; step++) {
-          const candidates = [];
-          for (let nxt = 0; nxt < nodes.length; nxt++) {
-            if (isEdgeValid(curr, nxt)) candidates.push(nxt);
-          }
-          if (candidates.length === 0) break;
+          const cands = [];
+          for (let nxt = 0; nxt < pts.length; nxt++) {
+            if (nxt === cur) continue;
+            const pk = pairKey(cur, nxt);
+            if (!validPairs.has(pk)) continue;
+            const usedCnt = pairUsed.get(pk) || 0;
 
-          // Bias toward visiting unused stars first so constellations stay rich
-          const unvisited = candidates.filter((c) => !visited.has(c));
-          const pool = unvisited.length > 0 && rng() < 0.72 ? unvisited : candidates;
-          const chosen = pool[Math.floor(rng() * pool.length)];
-
-          used.add(edgeKey(curr, chosen));
-          adj[curr].push(chosen);
-          adj[chosen].push(curr);
-          curr = chosen;
-          walk.push(curr);
-          visited.add(curr);
-        }
-
-        if (used.size >= minEdges && visited.size >= minNodes) {
-          // Prune unused nodes and normalize bounding box cleanly
-          const oldToNew = new Map();
-          const finalNodes = [];
-          visited.forEach((oldIdx) => {
-            oldToNew.set(oldIdx, finalNodes.length);
-            finalNodes.push({ ...nodes[oldIdx] });
-          });
-
-          let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-          finalNodes.forEach((n) => {
-            if (n.x < minX) minX = n.x;
-            if (n.x > maxX) maxX = n.x;
-            if (n.y < minY) minY = n.y;
-            if (n.y > maxY) maxY = n.y;
-          });
-          const spanX = Math.max(0.01, maxX - minX);
-          const spanY = Math.max(0.01, maxY - minY);
-          const scale = Math.min(0.74 / spanX, 0.74 / spanY);
-          const cx = (minX + maxX) / 2;
-          const cy = (minY + maxY) / 2;
-
-          finalNodes.forEach((n) => {
-            n.x = 0.5 + (n.x - cx) * scale;
-            n.y = 0.5 + (n.y - cy) * scale;
-          });
-
-          const solution = walk.map((idx) => oldToNew.get(idx));
-          const edges = [];
-          const seen = new Set();
-          for (let i = 0; i < solution.length - 1; i++) {
-            const a = solution[i];
-            const b = solution[i + 1];
-            const k = edgeKey(a, b);
-            if (!seen.has(k)) {
-              seen.add(k);
-              edges.push([a, b]);
+            if (usedCnt === 0) {
+              // Favor unvisited nodes early so every constellation node joins cleanly
+              const visitedBefore = path.includes(nxt);
+              cands.push({ nxt, pk, w: visitedBefore ? 1 : 4 });
+            } else if (allowDouble && usedCnt === 1 && doublesUsed < maxDoubles && step > 2) {
+              // Avoid immediate back-and-forth on same double edge
+              if (path.length >= 2 && path[path.length - 2] === nxt) continue;
+              cands.push({ nxt, pk, w: 0.7 });
             }
           }
-          return { nodes: finalNodes, edges, solution };
+          if (cands.length === 0) break;
+
+          // Weighted random pick
+          const totalW = cands.reduce((s, c) => s + c.w, 0);
+          let rPick = rng() * totalW;
+          let chosen = cands[0];
+          for (const c of cands) {
+            rPick -= c.w;
+            if (rPick <= 0) { chosen = c; break; }
+          }
+
+          const prevCnt = pairUsed.get(chosen.pk) || 0;
+          if (prevCnt === 1) doublesUsed++;
+          pairUsed.set(chosen.pk, prevCnt + 1);
+          path.push(chosen.nxt);
+          cur = chosen.nxt;
+        }
+
+        const uniqueVisited = new Set(path).size;
+        if (path.length - 1 >= Math.max(5, targetEdges - 2) && uniqueVisited >= Math.max(4, targetNodes - 1)) {
+          if (allowDouble && levelNum >= 201 && doublesUsed === 0 && attempt < 20) continue;
+          return finalizeLevel(levelNum, pts, path, scale);
         }
       }
 
-      // Guaranteed mathematical fallback (regular polygon + chords)
-      const n = Math.min(9, Math.max(5, minNodes));
-      const nodes = Array.from({ length: n }, (_, i) => {
-        const a = -Math.PI / 2 + (i * Math.PI * 2) / n;
-        return { x: 0.5 + Math.cos(a) * 0.36, y: 0.5 + Math.sin(a) * 0.36 };
-      });
-      const solution = [];
-      for (let i = 0; i <= n; i++) solution.push(i % n);
-      solution.push(2 % n, 4 % n);
-      const edges = [];
-      const seen = new Set();
-      for (let i = 0; i < solution.length - 1; i++) {
-        const k = edgeKey(solution[i], solution[i + 1]);
-        if (!seen.has(k)) {
-          seen.add(k);
-          edges.push([solution[i], solution[i + 1]]);
-        }
-      }
-      return { nodes, edges, solution };
+      return buildIntroLevel(2);
     }
 
     const levelCache = new Map();
     function getLevel(num) {
       if (!levelCache.has(num)) {
-        levelCache.set(num, buildCleanLevel(num));
+        levelCache.set(num, buildSymphonyLevel(num));
       }
       return levelCache.get(num);
     }
 
-    function getChapter(levelNum) {
-      return CHAPTERS.find((c) => levelNum >= c.start && levelNum <= c.end) || CHAPTERS[0];
+    function getChapter(num) {
+      return CHAPTERS.find((c) => num >= c.start && num <= c.end) || CHAPTERS[0];
     }
 
     // ==============================================
-    // GAME STATE, AUDIO & CANVAS RENDERER
+    // PENTATONIC HARP & CHIME WEB AUDIO SYNTHESIZER
     // ==============================================
-    const SCALE = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00];
-
-    const canvas = document.getElementById("symphonyCanvas");
-    const ctx = canvas.getContext("2d");
-    const chapterLabel = document.getElementById("chapterLabel");
-    const levelTitle = document.getElementById("levelTitle");
-    const edgesCounter = document.getElementById("edgesCounter");
-    const solvedCounter = document.getElementById("solvedCounter");
-    const statusToast = document.getElementById("statusToast");
-    const winOverlay = document.getElementById("winOverlay");
-    const winHeading = document.getElementById("winHeading");
-    const winText = document.getElementById("winText");
-    const nextLevelBtn = document.getElementById("nextLevelBtn");
-    const soundBtn = document.getElementById("soundBtn");
-    const openPickerBtn = document.getElementById("openPickerBtn");
-
     let audioCtx = null;
     let soundOn = true;
-
-    let solvedSet = new Set();
-    let currentLevelNum = 1;
-    try {
-      const savedSolved = JSON.parse(localStorage.getItem("zinplay_oneline_500_solved") || "[]");
-      solvedSet = new Set(savedSolved);
-      const savedLast = parseInt(localStorage.getItem("zinplay_oneline_500_last") || "1", 10);
-      if (savedLast >= 1 && savedLast <= TOTAL_LEVELS) currentLevelNum = savedLast;
-    } catch (e) {}
-
-    let currentLevel = null;
-    let path = [];
-    let tracedEdges = new Set();
-    let isDragging = false;
-    let pointerPos = null;
-    let levelWon = false;
-    let hintStep = null; // { fromIdx, toIdx, startOnly }
-    let toastTimer = null;
-    let ripples = [];
-    let particles = [];
-    const stars = Array.from({ length: 44 }, () => ({
-      x: Math.random(),
-      y: Math.random(),
-      r: Math.random() * 1.4 + 0.4,
-      a: Math.random() * 0.5 + 0.15
-    }));
-
-    function showToast(msg, ms = 2400) {
-      statusToast.textContent = msg;
-      statusToast.classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
-    }
 
     function initAudio() {
       if (!audioCtx) {
@@ -845,50 +1031,271 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playNote(stepIndex, duration = 0.6, volume = 0.16) {
+    function playNote(stepIdx, vol = 0.13, dur = 0.55) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-
-      const freq = SCALE[stepIndex % SCALE.length];
       const now = audioCtx.currentTime;
+      const scale = level ? level.scale : SCALES[0];
+      const freq = scale[stepIdx % scale.length];
+
+      // Fundamental warm sine + soft octave shimmer
       const osc1 = audioCtx.createOscillator();
       const osc2 = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const subGain = audioCtx.createGain();
-
+      const g = audioCtx.createGain();
       osc1.type = "sine";
       osc2.type = "triangle";
       osc1.frequency.setValueAtTime(freq, now);
       osc2.frequency.setValueAtTime(freq * 2, now);
 
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.exponentialRampToValueAtTime(volume, now + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + duration);
-      subGain.gain.value = 0.22;
+      const g2 = audioCtx.createGain();
+      g2.gain.value = 0.14;
 
-      osc1.connect(gain);
-      osc2.connect(subGain);
-      subGain.connect(gain);
-      gain.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
 
-      osc1.start(now);
-      osc2.start(now);
-      osc1.stop(now + duration + 0.05);
-      osc2.stop(now + duration + 0.05);
+      osc1.connect(g);
+      osc2.connect(g2);
+      g2.connect(g);
+      g.connect(audioCtx.destination);
+
+      osc1.start(now); osc2.start(now);
+      osc1.stop(now + dur + 0.03); osc2.stop(now + dur + 0.03);
     }
 
-    function playVictoryMelody() {
-      const count = Math.min(path.length, 10);
+    function sfxUndo() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(280, now);
+      osc.frequency.exponentialRampToValueAtTime(190, now + 0.09);
+      g.gain.setValueAtTime(0.08, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.12);
+    }
+
+    function playWinSymphony(totalSteps) {
+      const count = Math.min(7, totalSteps);
       for (let i = 0; i < count; i++) {
-        setTimeout(() => {
-          playNote(i, 0.8, 0.15);
-          const pos = getNodeScreenPos(path[i]);
-          spawnRipple(pos.x, pos.y, "#34d399");
-        }, i * 95);
+        setTimeout(() => playNote(i, 0.12, 0.72), i * 80);
       }
     }
 
+    // ==============================================
+    // SMART LIVE EULER SOLVER (FOR CONTEXTUAL HINTS)
+    // ==============================================
+    function findCompletionFrom(startNode, usedEdgeIds, totalEdges) {
+      const rem = totalEdges - usedEdgeIds.size;
+      if (rem === 0) return [];
+      const adj = Array.from({ length: level.nodes.length }, () => []);
+      for (const e of level.edges) {
+        if (!usedEdgeIds.has(e.id)) {
+          adj[e.u].push({ to: e.v, eid: e.id });
+          adj[e.v].push({ to: e.u, eid: e.id });
+        }
+      }
+
+      let stepsBudget = 2500;
+      const stackRes = [];
+      const usedNow = new Set(usedEdgeIds);
+
+      function dfs(u, left) {
+        if (left === 0) return true;
+        if (--stepsBudget <= 0) return false;
+        for (const item of adj[u]) {
+          if (usedNow.has(item.eid)) continue;
+          usedNow.add(item.eid);
+          stackRes.push(item);
+          if (dfs(item.to, left - 1)) return true;
+          stackRes.pop();
+          usedNow.delete(item.eid);
+        }
+        return false;
+      }
+
+      return dfs(startNode, rem) ? stackRes : null;
+    }
+
+    // ==============================================
+    // GAME STATE, INPUT & CANVAS RENDERER
+    // ==============================================
+    const canvas = document.getElementById("symphonyCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const chapterLabel = document.getElementById("chapterLabel");
+    const levelTitle = document.getElementById("levelTitle");
+    const edgesPill = document.getElementById("edgesPill");
+    const solvedCounter = document.getElementById("solvedCounter");
+    const statusToast = document.getElementById("statusToast");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
+    const soundBtn = document.getElementById("soundBtn");
+    const openPickerBtn = document.getElementById("openPickerBtn");
+
+    let solvedSet = new Set();
+    let currentLevelNum = 1;
+    try {
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_oneline_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_oneline_500_last") || "1", 10);
+      if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
+    } catch (e) {}
+
+    let level = null;
+    let nodeTrail = [];   // [nodeId, nodeId, ...]
+    let edgeTrail = [];   // [edgeId, ...]
+    let levelWon = false;
+    let isDragging = false;
+    let pointerWorld = null;
+    let hintNodeId = -1;
+    let hintEdgeId = -1;
+    let ripples = [];
+    let sparks = [];
+    let toastTimer = null;
+
+    const bgStars = Array.from({ length: 28 }, () => ({
+      x: Math.random() * WORLD_W,
+      y: Math.random() * WORLD_H,
+      r: 0.7 + Math.random() * 1.3,
+      ph: Math.random() * Math.PI * 2
+    }));
+
+    function showToast(msg, ms = 2400) {
+      statusToast.textContent = msg;
+      statusToast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
+    }
+
+    function updateHUD() {
+      const chap = getChapter(currentLevelNum);
+      chapterLabel.textContent = chap.title;
+      levelTitle.textContent = `Symphony #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      edgesPill.textContent = `Bridges: ${edgeTrail.length} / ${level.edges.length}`;
+      solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Symphony ${currentLevelNum} / 500 ▾`;
+    }
+
+    function loadLevel(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      level = getLevel(currentLevelNum);
+      level.edges.forEach((e) => { e.used = false; });
+
+      nodeTrail = [];
+      edgeTrail = [];
+      levelWon = false;
+      isDragging = false;
+      pointerWorld = null;
+      hintNodeId = -1;
+      hintEdgeId = -1;
+      ripples = [];
+      sparks = [];
+
+      winOverlay.classList.remove("show");
+      statusToast.classList.remove("show");
+
+      try {
+        localStorage.setItem("zinplay_oneline_500_last", String(currentLevelNum));
+      } catch (e) {}
+
+      updateHUD();
+    }
+
+    function spawnNodeBurst(node, color = "#38bdf8") {
+      ripples.push({ x: node.x, y: node.y, r: 12, alpha: 0.95, color });
+      for (let i = 0; i < 8; i++) {
+        const a = (i * Math.PI * 2) / 8 + Math.random() * 0.4;
+        const s = 1.1 + Math.random() * 1.9;
+        sparks.push({ x: node.x, y: node.y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: 2.2, color, alpha: 0.95 });
+      }
+    }
+
+    function tryStepToNode(targetId) {
+      if (levelWon) return false;
+      const targetNode = level.nodes[targetId];
+
+      // 1. Starting fresh stroke
+      if (nodeTrail.length === 0) {
+        nodeTrail.push(targetId);
+        hintNodeId = -1;
+        playNote(0, 0.13, 0.5);
+        spawnNodeBurst(targetNode, "#38bdf8");
+        updateHUD();
+        return true;
+      }
+
+      const curId = nodeTrail[nodeTrail.length - 1];
+      if (targetId === curId) return false;
+
+      // 2. Find an unused edge connecting curId <-> targetId
+      const availEdge = level.edges.find((e) =>
+        !e.used && ((e.u === curId && e.v === targetId) || (e.u === targetId && e.v === curId))
+      );
+
+      if (availEdge) {
+        availEdge.used = true;
+        edgeTrail.push(availEdge.id);
+        nodeTrail.push(targetId);
+        hintNodeId = -1;
+        hintEdgeId = -1;
+
+        playNote(edgeTrail.length, 0.13, 0.55);
+        spawnNodeBurst(targetNode, edgeTrail.length === level.edges.length ? "#facc15" : "#38bdf8");
+        updateHUD();
+
+        // Check Symphony Completion!
+        if (edgeTrail.length === level.edges.length) {
+          levelWon = true;
+          isDragging = false;
+          pointerWorld = null;
+          solvedSet.add(currentLevelNum);
+          try {
+            localStorage.setItem("zinplay_oneline_500_solved", JSON.stringify([...solvedSet]));
+          } catch (e) {}
+          updateHUD();
+
+          setTimeout(() => playWinSymphony(level.edges.length), 140);
+          const isLast = currentLevelNum === TOTAL_LEVELS;
+          winHeading.textContent = isLast ? "All 500 Symphonies Mastered!" : `Symphony #${currentLevelNum} Complete!`;
+          winText.textContent = `Connected all ${level.edges.length} glowing bridges in one seamless melody.`;
+          nextLevelBtn.textContent = isLast ? "Replay Symphony #1" : `Next Symphony (#${currentLevelNum + 1}) →`;
+          setTimeout(() => winOverlay.classList.add("show"), 650);
+        }
+        return true;
+      }
+
+      // 3. Smooth Backtrack if stepping back onto the immediately previous node
+      if (nodeTrail.length >= 2 && nodeTrail[nodeTrail.length - 2] === targetId) {
+        undoStep();
+        return true;
+      }
+
+      return false;
+    }
+
+    function undoStep() {
+      if (levelWon || nodeTrail.length === 0) return;
+      if (edgeTrail.length > 0) {
+        const lastEid = edgeTrail.pop();
+        level.edges[lastEid].used = false;
+      }
+      nodeTrail.pop();
+      hintNodeId = -1;
+      hintEdgeId = -1;
+      sfxUndo();
+      updateHUD();
+    }
+
+    // Viewport & Pointer Interaction (Supports BOTH Smooth Dragging AND Crisp Tap-by-Tap!)
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -897,235 +1304,92 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function getNodeScreenPos(idx) {
+    function getViewport() {
       const rect = canvas.parentElement.getBoundingClientRect();
-      const pad = 26;
-      const w = rect.width - pad * 2;
-      const h = rect.height - pad * 2;
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offsetX = (rect.width - WORLD_W * scale) / 2;
+      const offsetY = (rect.height - WORLD_H * scale) / 2;
+      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
+    }
+
+    function clientToWorld(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const vp = getViewport();
       return {
-        x: pad + currentLevel.nodes[idx].x * w,
-        y: pad + currentLevel.nodes[idx].y * h
+        x: (clientX - rect.left - vp.offsetX) / vp.scale,
+        y: (clientY - rect.top - vp.offsetY) / vp.scale
       };
     }
 
-    function findHitNode(x, y) {
-      const rect = canvas.parentElement.getBoundingClientRect();
-      const hitR = Math.max(26, Math.min(rect.width, rect.height) * 0.082);
-      let closest = -1;
-      let minDist = hitR;
-      for (let i = 0; i < currentLevel.nodes.length; i++) {
-        const pos = getNodeScreenPos(i);
-        const d = Math.hypot(pos.x - x, pos.y - y);
-        if (d < minDist) {
-          minDist = d;
-          closest = i;
-        }
+    function findNodeAt(wx, wy, radius = 32) {
+      let bestId = -1, bestD = radius;
+      for (const n of level.nodes) {
+        const d = Math.hypot(wx - n.x, wy - n.y);
+        if (d < bestD) { bestD = d; bestId = n.id; }
       }
-      return closest;
-    }
-
-    function hasEdge(a, b) {
-      const k = edgeKey(a, b);
-      return currentLevel.edges.some(([u, v]) => edgeKey(u, v) === k);
-    }
-
-    function spawnRipple(x, y, color = "#38bdf8") {
-      ripples.push({ x, y, r: 10, alpha: 0.9, color });
-      for (let i = 0; i < 6; i++) {
-        const ang = (Math.PI * 2 * i) / 6 + Math.random() * 0.4;
-        particles.push({
-          x, y,
-          vx: Math.cos(ang) * (1.2 + Math.random() * 1.4),
-          vy: Math.sin(ang) * (1.2 + Math.random() * 1.4),
-          alpha: 1,
-          color
-        });
-      }
-    }
-
-    function updateHUD() {
-      const chap = getChapter(currentLevelNum);
-      chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Level ${currentLevelNum} / ${TOTAL_LEVELS}`;
-      edgesCounter.textContent = `Lines: ${tracedEdges.size} / ${currentLevel.edges.length}`;
-      solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Level ${currentLevelNum} / 500 ▾`;
-    }
-
-    function loadLevel(num) {
-      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      currentLevel = getLevel(currentLevelNum);
-      path = [];
-      tracedEdges.clear();
-      isDragging = false;
-      pointerPos = null;
-      levelWon = false;
-      hintStep = null;
-      statusToast.classList.remove("show");
-      winOverlay.classList.remove("show");
-      try {
-        localStorage.setItem("zinplay_oneline_500_last", String(currentLevelNum));
-      } catch (e) {}
-      updateHUD();
-    }
-
-    function checkDeadEnd() {
-      if (levelWon || path.length === 0) return;
-      const head = path[path.length - 1];
-      const hasAvailable = currentLevel.edges.some(([u, v]) => {
-        if (u !== head && v !== head) return false;
-        return !tracedEdges.has(edgeKey(u, v));
-      });
-      if (!hasAvailable && tracedEdges.size < currentLevel.edges.length) {
-        showToast("Dead end! Tap Undo or Reset", 2600);
-      }
-    }
-
-    function checkWin() {
-      if (tracedEdges.size === currentLevel.edges.length) {
-        levelWon = true;
-        isDragging = false;
-        pointerPos = null;
-        hintStep = null;
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_oneline_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        updateHUD();
-        playVictoryMelody();
-
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        winHeading.textContent = isLast ? "All 500 Levels Mastered!" : `Level ${currentLevelNum} Cleared!`;
-        winText.textContent = isLast
-          ? "You completed the entire 500-level Cosmic Symphony."
-          : "Constellation unlocked in one unbroken stroke.";
-        nextLevelBtn.textContent = isLast ? "Back to Level 1" : `Play Level ${currentLevelNum + 1} →`;
-
-        setTimeout(() => winOverlay.classList.add("show"), 480);
-      } else {
-        checkDeadEnd();
-      }
-    }
-
-    function getPointerCoords(e) {
-      const rect = canvas.getBoundingClientRect();
-      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      return bestId;
     }
 
     canvas.addEventListener("pointerdown", (e) => {
       if (levelWon) return;
       initAudio();
-      canvas.setPointerCapture(e.pointerId);
-      const pos = getPointerCoords(e);
-      const hit = findHitNode(pos.x, pos.y);
-      if (hit === -1) return;
+      const pt = clientToWorld(e.clientX, e.clientY);
+      pointerWorld = pt;
+      isDragging = true;
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
 
-      if (path.length === 0) {
-        path.push(hit);
-        isDragging = true;
-        pointerPos = pos;
-        hintStep = null;
-        playNote(0);
-        const np = getNodeScreenPos(hit);
-        spawnRipple(np.x, np.y, "#38bdf8");
-      } else {
-        const head = path[path.length - 1];
-        if (hit === head) {
-          isDragging = true;
-          pointerPos = pos;
-        } else if (hasEdge(head, hit) && !tracedEdges.has(edgeKey(head, hit))) {
-          tracedEdges.add(edgeKey(head, hit));
-          path.push(hit);
-          isDragging = true;
-          pointerPos = pos;
-          hintStep = null;
-          playNote(tracedEdges.size);
-          const np = getNodeScreenPos(hit);
-          spawnRipple(np.x, np.y, "#38bdf8");
-          updateHUD();
-          checkWin();
-        }
+      const hitId = findNodeAt(pt.x, pt.y, 34);
+      if (hitId !== -1) {
+        tryStepToNode(hitId);
       }
     });
 
     canvas.addEventListener("pointermove", (e) => {
       if (!isDragging || levelWon) return;
-      const pos = getPointerCoords(e);
-      pointerPos = pos;
-      const hit = findHitNode(pos.x, pos.y);
-      if (hit === -1) return;
-
-      const head = path[path.length - 1];
-      if (hit === head) return;
-
-      // Backtrack
-      if (path.length >= 2 && hit === path[path.length - 2]) {
-        const removed = path.pop();
-        tracedEdges.delete(edgeKey(removed, hit));
-        playNote(Math.max(0, tracedEdges.size), 0.3, 0.09);
-        updateHUD();
-        return;
-      }
-
-      // Forward step
-      const key = edgeKey(head, hit);
-      if (hasEdge(head, hit) && !tracedEdges.has(key)) {
-        tracedEdges.add(key);
-        path.push(hit);
-        hintStep = null;
-        playNote(tracedEdges.size);
-        const np = getNodeScreenPos(hit);
-        spawnRipple(np.x, np.y, "#38bdf8");
-        updateHUD();
-        checkWin();
+      const pt = clientToWorld(e.clientX, e.clientY);
+      pointerWorld = pt;
+      const hitId = findNodeAt(pt.x, pt.y, 28);
+      if (hitId !== -1) {
+        const curId = nodeTrail.length > 0 ? nodeTrail[nodeTrail.length - 1] : -1;
+        if (hitId !== curId) {
+          tryStepToNode(hitId);
+        }
       }
     });
 
-    function endDrag() {
-      isDragging = false;
-      pointerPos = null;
-    }
+    const endDrag = () => { isDragging = false; pointerWorld = null; };
     canvas.addEventListener("pointerup", endDrag);
     canvas.addEventListener("pointercancel", endDrag);
 
-    // Hint Button Logic
+    // Smart Contextual Hint Button
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (levelWon) return;
-      const sol = currentLevel.solution;
-      const rev = [...sol].reverse();
+      initAudio();
 
-      const matchesPrefix = (arr) => path.every((node, i) => arr[i] === node);
+      if (nodeTrail.length === 0) {
+        hintNodeId = level.solutionPath[0];
+        showToast("💡 Start your stroke on the glowing golden node!", 2400);
+        return;
+      }
 
-      if (path.length === 0) {
-        hintStep = { fromIdx: sol[0], toIdx: sol[1] };
-        showToast("Start at the golden star & follow the arrow!");
-      } else if (matchesPrefix(sol) && path.length < sol.length) {
-        hintStep = { fromIdx: sol[path.length - 1], toIdx: sol[path.length] };
-        showToast("Follow the golden guide line!");
-      } else if (matchesPrefix(rev) && path.length < rev.length) {
-        hintStep = { fromIdx: rev[path.length - 1], toIdx: rev[path.length] };
-        showToast("Follow the golden guide line!");
+      const curNode = nodeTrail[nodeTrail.length - 1];
+      const comp = findCompletionFrom(curNode, new Set(edgeTrail), level.edges.length);
+
+      if (comp && comp.length > 0) {
+        hintEdgeId = comp[0].eid;
+        hintNodeId = comp[0].to;
+        showToast("💡 Trace the glowing golden bridge next!", 2200);
       } else {
-        hintStep = { fromIdx: sol[0], toIdx: sol[1] };
-        showToast("Tap Reset, then start from the golden star!");
+        // Current stroke hit a dead end -> guide player to undo or reset cleanly
+        showToast("💡 Dead end reached! Tap ← Undo or ↺ Reset, then tap Hint for the right start.", 3000);
       }
     });
 
-    // Buttons
-    document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
-    document.getElementById("undoBtn").addEventListener("click", () => {
-      if (levelWon || path.length === 0) return;
-      if (path.length === 1) path = [];
-      else {
-        const removed = path.pop();
-        tracedEdges.delete(edgeKey(removed, path[path.length - 1]));
-      }
-      playNote(Math.max(0, tracedEdges.size), 0.3, 0.09);
-      updateHUD();
-    });
+    document.getElementById("undoBtn").addEventListener("click", () => { initAudio(); undoStep(); });
+    document.getElementById("resetBtn").addEventListener("click", () => { initAudio(); loadLevel(currentLevelNum); });
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
     nextLevelBtn.addEventListener("click", () => {
       loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
@@ -1195,159 +1459,169 @@
       }
     });
 
-    // Main Render Loop
-    function draw(time) {
-      const rect = canvas.parentElement.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
-      ctx.clearRect(0, 0, w, h);
+    // ==============================================
+    // GLOWING MUSICAL CONSTELLATION RENDERER
+    // ==============================================
+    function drawEdgePath(e, a, b) {
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      if (e.curve !== 0) {
+        const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const len = Math.max(1, Math.hypot(dx, dy));
+        const nx = -dy / len, ny = dx / len;
+        ctx.quadraticCurveTo(mx + nx * e.curve, my + ny * e.curve, b.x, b.y);
+      } else {
+        ctx.lineTo(b.x, b.y);
+      }
+      ctx.stroke();
+    }
 
-      // Stars
-      stars.forEach((s, i) => {
-        const twinkle = 0.55 + 0.45 * Math.sin(time * 0.002 + i);
-        ctx.fillStyle = `rgba(199, 210, 254, ${s.a * twinkle})`;
+    function drawScene(now) {
+      const vp = getViewport();
+      ctx.clearRect(0, 0, vp.w, vp.h);
+
+      ctx.save();
+      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.scale(vp.scale, vp.scale);
+
+      // 1. Twinkling Ambient Starfield
+      for (const st of bgStars) {
+        const a = 0.2 + 0.35 * Math.sin(now * 0.002 + st.ph);
+        ctx.fillStyle = `rgba(186, 230, 253, ${a})`;
         ctx.beginPath();
-        ctx.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2);
+        ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
         ctx.fill();
-      });
-
-      // Untraced Edges
-      currentLevel.edges.forEach(([u, v]) => {
-        if (tracedEdges.has(edgeKey(u, v))) return;
-        const p1 = getNodeScreenPos(u);
-        const p2 = getNodeScreenPos(v);
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.3)";
-        ctx.lineWidth = 4;
-        ctx.lineCap = "round";
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-      });
-
-      // Hint Golden Guide
-      if (hintStep && !levelWon) {
-        const p1 = getNodeScreenPos(hintStep.fromIdx);
-        const p2 = getNodeScreenPos(hintStep.toIdx);
-        ctx.save();
-        ctx.strokeStyle = "#facc15";
-        ctx.shadowColor = "#facc15";
-        ctx.shadowBlur = 12;
-        ctx.lineWidth = 4;
-        ctx.setLineDash([8, 6]);
-        ctx.lineDashOffset = -(time * 0.03);
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        const goldPulse = 18 + Math.sin(time * 0.01) * 4;
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        ctx.arc(p1.x, p1.y, goldPulse, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
       }
 
-      // Traced Path
-      if (path.length >= 2) {
+      // 2. Unlit Constellation Bridges First
+      for (const e of level.edges) {
+        if (e.used) continue;
+        const a = level.nodes[e.u], b = level.nodes[e.v];
+        const isHint = e.id === hintEdgeId;
+
         ctx.save();
-        ctx.strokeStyle = levelWon ? "#34d399" : "#38bdf8";
-        ctx.shadowColor = levelWon ? "#34d399" : "#6366f1";
-        ctx.shadowBlur = 15;
-        ctx.lineWidth = 6;
         ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.beginPath();
-        const start = getNodeScreenPos(path[0]);
-        ctx.moveTo(start.x, start.y);
-        for (let i = 1; i < path.length; i++) {
-          const p = getNodeScreenPos(path[i]);
-          ctx.lineTo(p.x, p.y);
+        if (isHint) {
+          ctx.strokeStyle = "#facc15";
+          ctx.shadowColor = "#facc15";
+          ctx.shadowBlur = 16;
+          ctx.lineWidth = 5;
+          ctx.setLineDash([8, 6]);
+        } else {
+          ctx.strokeStyle = e.isDouble ? "rgba(251, 191, 36, 0.36)" : "rgba(148, 163, 184, 0.32)";
+          ctx.lineWidth = 4;
         }
+        drawEdgePath(e, a, b);
+        ctx.restore();
+      }
+
+      // 3. Lit Harmonic Bridges (Glowing Cyan -> Gold on Win!)
+      for (const e of level.edges) {
+        if (!e.used) continue;
+        const a = level.nodes[e.u], b = level.nodes[e.v];
+        ctx.save();
+        ctx.lineCap = "round";
+        ctx.strokeStyle = levelWon ? "#facc15" : "#38bdf8";
+        ctx.shadowColor = levelWon ? "#facc15" : "#38bdf8";
+        ctx.shadowBlur = 16;
+        ctx.lineWidth = 5.5;
+        drawEdgePath(e, a, b);
+
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1.8;
+        drawEdgePath(e, a, b);
+        ctx.restore();
+      }
+
+      // 4. Live Elastic Dragging Line Toward Finger/Cursor
+      if (isDragging && pointerWorld && nodeTrail.length > 0 && !levelWon) {
+        const tip = level.nodes[nodeTrail[nodeTrail.length - 1]];
+        ctx.save();
+        ctx.strokeStyle = "rgba(125, 211, 252, 0.55)";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(tip.x, tip.y);
+        ctx.lineTo(pointerWorld.x, pointerWorld.y);
         ctx.stroke();
         ctx.restore();
       }
 
-      // Dragging Elastic Line
-      if (isDragging && pointerPos && path.length > 0) {
-        const head = getNodeScreenPos(path[path.length - 1]);
-        ctx.strokeStyle = "rgba(56, 189, 248, 0.65)";
-        ctx.lineWidth = 3;
-        ctx.setLineDash([6, 6]);
-        ctx.beginPath();
-        ctx.moveTo(head.x, head.y);
-        ctx.lineTo(pointerPos.x, pointerPos.y);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
-
-      // Ripples & Sparks
-      ripples = ripples.filter((r) => r.alpha > 0.03);
-      ripples.forEach((r) => {
-        r.r += 1.6;
-        r.alpha *= 0.93;
+      // 5. Soundwave Ripples
+      ripples = ripples.filter((r) => r.alpha > 0.04);
+      for (const r of ripples) {
+        r.r += 1.9;
+        r.alpha *= 0.91;
         ctx.strokeStyle = r.color;
         ctx.globalAlpha = r.alpha;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.2;
         ctx.beginPath();
         ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
         ctx.stroke();
         ctx.globalAlpha = 1;
-      });
+      }
 
-      particles = particles.filter((p) => p.alpha > 0.04);
-      particles.forEach((p) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha *= 0.92;
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.alpha;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      });
-
-      // Nodes
-      const headIdx = path.length > 0 ? path[path.length - 1] : -1;
-      currentLevel.nodes.forEach((_, idx) => {
-        const pos = getNodeScreenPos(idx);
-        const isHead = idx === headIdx && !levelWon;
-        const isVisited = path.includes(idx);
-
-        if (isHead) {
-          const pulse = 16 + Math.sin(time * 0.008) * 4;
-          ctx.strokeStyle = "rgba(56, 189, 248, 0.75)";
-          ctx.lineWidth = 2.5;
-          ctx.beginPath();
-          ctx.arc(pos.x, pos.y, pulse, 0, Math.PI * 2);
-          ctx.stroke();
-        }
+      // 6. Glowing Constellation Musical Nodes
+      const curTipId = nodeTrail.length > 0 ? nodeTrail[nodeTrail.length - 1] : -1;
+      for (const n of level.nodes) {
+        const isCurrent = n.id === curTipId && !levelWon;
+        const isHintNode = n.id === hintNodeId && !levelWon;
+        const hasRemEdge = level.edges.some((e) => !e.used && (e.u === n.id || e.v === n.id));
+        const pulse = isCurrent || isHintNode ? (1 + 0.14 * Math.sin(now * 0.009)) : 1;
 
         ctx.save();
-        ctx.shadowColor = isVisited ? "#38bdf8" : "#6366f1";
-        ctx.shadowBlur = isVisited ? 14 : 7;
-        ctx.fillStyle = levelWon ? "#34d399" : (isHead ? "#38bdf8" : (isVisited ? "#818cf8" : "#e2e8f0"));
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, isHead ? 11.5 : 9.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        if (isCurrent || isHintNode) {
+          ctx.strokeStyle = isHintNode ? "#facc15" : "#38bdf8";
+          ctx.lineWidth = 2.4;
+          ctx.globalAlpha = 0.65;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 19 * pulse, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
 
+        ctx.fillStyle = levelWon ? "#facc15" : (isCurrent ? "#38bdf8" : (hasRemEdge ? "#1e294a" : "#0ea5e9"));
+        ctx.strokeStyle = isHintNode ? "#facc15" : (isCurrent ? "#ffffff" : (hasRemEdge ? "#7dd3fc" : "#bae6fd"));
+        ctx.shadowColor = isHintNode ? "#facc15" : (isCurrent || levelWon ? "#38bdf8" : "transparent");
+        ctx.shadowBlur = isCurrent || isHintNode || levelWon ? 16 : 0;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 12.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
         ctx.fillStyle = "#ffffff";
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 3.8, 0, Math.PI * 2);
+        ctx.arc(n.x, n.y, isCurrent ? 5 : 3.6, 0, Math.PI * 2);
         ctx.fill();
-      });
+        ctx.restore();
+      }
 
-      requestAnimationFrame(draw);
+      // 7. Sparks
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha *= 0.92;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.restore();
+      requestAnimationFrame(drawScene);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
     loadLevel(currentLevelNum);
-    requestAnimationFrame(draw);
+    requestAnimationFrame(drawScene);
   </script>
 
 </body>
