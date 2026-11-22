@@ -3,247 +3,390 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZinPlay — 31 Free Original HTML5 Browser Games (No Download, Mobile &amp; Chromebook)</title>
-  <meta name="description" content="Play 31 free original HTML5 browser games with 15,500+ levels—no download or login. Enjoy relaxing ASMR Web Audio simulators, Matter.js physics sandboxes, optical puzzles, logic gate circuits, and OSINT detective games." />
+  <title>One-Line Symphony — Free 500-Level Musical One-Stroke Puzzle Game | ZinPlay</title>
+  <meta name="description" content="Play One-Line Symphony free online with no download. Connect glowing nodes in a single continuous stroke across 500 Euler path musical puzzles with calming Web Audio melodies on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
-
-  <!-- Structured Data for Google Search & Rich Snippets -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "ZinPlay",
-    "url": "https://zinplay.io/",
-    "description": "Independent zero-install HTML5 web arcade with 31 original puzzle, 2D physics sandbox, ASMR Web Audio, strategy, and OSINT mystery browser games."
+    "@type": "VideoGame",
+    "name": "One-Line Symphony",
+    "url": "https://zinplay.io/games/one-line-symphony/",
+    "genre": ["Puzzle", "Music", "Brain Teaser"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
   }
   </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Are all 31 HTML5 browser games on ZinPlay completely free with no downloads?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Every title on ZinPlay is 100% free to play directly inside your mobile or desktop browser with zero downloads, zero app installs, and no paywalls."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Do ZinPlay games work smoothly on Chromebooks, Android phones, and iPhones?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Because every game is built with lightweight client-side HTML5 Canvas and Web Audio, all 31 games load in under a second on low-storage Android Chrome, iOS Safari, iPads, Chromebooks, Windows, and Mac."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What are the best relaxing ASMR browser games on ZinPlay for stress relief?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Top relaxing ASMR web games on ZinPlay include ASMR PowerWash, The Perfect Peel sticker simulator, The Perfect Tear paper perforation game, Oddly Satisfying Slicer for soap and kinetic sand cutting, Antique Restorer, and The Zen Lockpicker."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Which browser games on ZinPlay offer educational STEM, physics, or OSINT challenges?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Players looking for smart brain teasers can wire Boolean circuits in Minimalist Logic Gates, balance a 50Hz renewable power grid in Blackout Grid Operator, build Matter.js chain reactions in Rube Goldberg Sandbox, mix authentic RYB paint pigments in Color Alchemy Lab, or solve photo geolocation clues in OSINT Geo-Sleuth."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Do I need an account or login to save my 500-level game progress?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No sign-up is required. Your solved stages across all 500-level games are automatically saved privately in your own browser's localStorage."
-        }
-      }
-    ]
-  }
-  </script>
-
   <style>
-    /* Photo Banner 1 & 2 Styling */
-    .zp-img-banner {
+    .game-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .back-link {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .game-title-wrap h1 {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .game-title-wrap p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Top HUD */
+    .hud-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      background: #0b1024;
+      color: #f1f5f9;
+      border-bottom: 1px solid #1e294a;
+      font-size: 0.84rem;
+      font-weight: 700;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .hud-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .chapter-sub {
+      font-size: 0.72rem;
+      color: #7dd3fc;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hud-pills {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .hud-pill {
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.36);
+      color: #bae6fd;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-family: monospace;
+    }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
+    }
+
+    /* Canvas Stage */
+    .canvas-container {
       position: relative;
-      border-radius: 20px;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-height: 485px;
+      background: radial-gradient(circle at 50% 45%, #161f42 0%, #090d1f 100%);
       overflow: hidden;
-      margin: 22px 0 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #symphonyCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+      cursor: pointer;
+    }
+
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #0a0f21;
+      border-top: 1px solid #1b2542;
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+
+    .status-toast {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(11, 16, 36, 0.95);
+      border: 1px solid rgba(250, 204, 21, 0.72);
+      color: #fef08a;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      max-width: 92%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .status-toast.show { opacity: 1; }
+
+    .win-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 12, 26, 0.8);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+    .win-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .win-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 18px;
+      padding: 24px 20px;
+      text-align: center;
+      max-width: 325px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
+
+    .controls-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .level-nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--surface-soft);
+      border-top: 1px solid var(--border);
+    }
+    .level-picker-trigger {
+      flex: 1;
+      max-width: 220px;
+      min-height: 38px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 0.86rem;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    /* Level Picker Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: var(--surface);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 84vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-head h3 { font-size: 1rem; font-weight: 800; }
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .chapter-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 10px 14px;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+    .chapter-tab {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .chapter-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+    .jump-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .jump-input {
+      flex: 1;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    .levels-grid {
+      padding: 14px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 520px) {
+      .levels-grid { grid-template-columns: repeat(10, 1fr); }
+    }
+    .lvl-cell {
+      height: 38px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .lvl-cell.solved {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #166534;
+    }
+    .lvl-cell.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
       background: #0b1224;
       border: 1px solid rgba(148, 163, 184, 0.25);
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
     }
-    .zp-img-banner-media {
+    .game-seo-banner-img {
       position: relative;
       width: 100%;
       aspect-ratio: 21 / 9;
-      min-height: 165px;
+      min-height: 140px;
       overflow: hidden;
-      background: #0f172a;
+      background: #0b1024;
     }
-    .zp-img-banner-media img {
+    .game-seo-banner-img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.55s ease;
     }
-    .zp-img-banner:hover .zp-img-banner-media img {
-      transform: scale(1.03);
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #0b1224 0%, #1e1b4b 100%);
+      color: #e2e8f0;
     }
-    .zp-img-banner-media::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(8, 14, 28, 0.08) 0%, rgba(8, 14, 28, 0.72) 100%);
-      pointer-events: none;
+    .game-seo-banner.teal-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f2933 0%, #2e1065 100%);
     }
-    .zp-banner-overlay-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      z-index: 2;
-      padding: 5px 12px;
-      border-radius: 999px;
-      background: rgba(11, 18, 36, 0.82);
-      border: 1px solid rgba(125, 211, 252, 0.45);
-      color: #e0f2fe;
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      backdrop-filter: blur(6px);
-    }
-    .zp-img-banner-body {
-      padding: 18px 20px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      color: #f8fafc;
-      text-align: left;
-      background: linear-gradient(135deg, #0b1224 0%, #172554 100%);
-    }
-    .zp-img-banner.teal-theme .zp-img-banner-body {
-      background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
-    }
-    @media (min-width: 720px) {
-      .zp-img-banner-body {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: 20px 26px;
-        gap: 20px;
-      }
-    }
-    .zp-img-banner-copy h2 {
-      font-size: clamp(1.18rem, 2.5vw, 1.52rem);
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
       font-weight: 800;
       color: #ffffff;
-      margin-bottom: 5px;
+      margin: 0 0 4px;
     }
-    .zp-img-banner-copy p {
-      font-size: 0.88rem;
-      line-height: 1.55;
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
       color: #cbd5e1;
       margin: 0;
-      max-width: 620px;
+      line-height: 1.5;
     }
-    .zp-banner-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    .zp-pick-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 13px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(167, 243, 208, 0.36);
-      color: #ffffff;
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: background 0.16s ease, transform 0.12s ease;
-    }
-    .zp-pick-link:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-1px);
-    }
-
-    /* Editorial SEO Grids & Tables */
-    .editorial-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      margin: 14px 0 8px;
-    }
-    @media (min-width: 680px) {
-      .editorial-grid-2 {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    .editorial-mini-box {
-      background: var(--surface-soft);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-    }
-    .editorial-mini-box h3 {
-      font-size: 0.96rem;
-      font-weight: 800;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-    .editorial-mini-box p {
-      font-size: 0.87rem;
-      line-height: 1.6;
-      margin-bottom: 0;
-    }
-    .seo-table-wrap {
+    .euler-table-wrap {
       overflow-x: auto;
-      margin-top: 12px;
+      margin: 12px 0 4px;
       border-radius: 12px;
       border: 1px solid var(--border);
     }
-    .seo-table {
+    .euler-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.85rem;
       text-align: left;
     }
-    .seo-table th,
-    .seo-table td {
+    .euler-table th, .euler-table td {
       padding: 10px 12px;
       border-bottom: 1px solid var(--border);
     }
-    .seo-table th {
+    .euler-table th {
       background: var(--surface-soft);
       font-weight: 800;
-      color: var(--text);
-      white-space: nowrap;
     }
-    .seo-table tr:last-child td {
-      border-bottom: none;
-    }
-    .seo-table a {
-      font-weight: 700;
-      color: var(--primary);
-    }
-    .keyword-tags-row {
+    .euler-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
       display: flex;
       flex-wrap: wrap;
-      gap: 7px;
+      gap: 6px;
       margin-top: 12px;
     }
-    .kw-chip {
-      font-size: 0.76rem;
+    .kw-pill {
+      font-size: 0.74rem;
       font-weight: 600;
       color: var(--muted);
       background: var(--surface-soft);
@@ -263,9 +406,9 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="#games" class="nav-highlight">All 31 Games</a>
-        <a href="#about-engine">Game Guides</a>
-        <a href="#faq">FAQ</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
+        <a href="/#about-engine">About</a>
+        <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
         <a href="/contact/">Contact</a>
       </nav>
@@ -274,481 +417,229 @@
 
   <main class="container">
 
-    <!-- Hero -->
-    <section class="hero">
-      <div class="hero-pill">⚡ 31 Original HTML5 Browser Games &bull; 15,500+ Levels</div>
-      <h1>ZinPlay — Free Instant HTML5 Browser Games</h1>
-      <p>Play handcrafted puzzle, 2D physics sandbox, tactile ASMR, strategy, and OSINT mystery games right in your browser. Zero downloads, zero logins, and instant 60 FPS performance on mobile, Chromebook, and desktop.</p>
-
-      <!-- BANNER 1: Custom Illustrated Arcade Hero Banner -->
-      <div class="zp-img-banner" role="region" aria-label="ZinPlay Original HTML5 Arcade Banner">
-        <div class="zp-img-banner-media">
-          <span class="zp-banner-overlay-badge">✦ 31 Titles &bull; 500 Levels Each &bull; 0 MB Install</span>
-          <img
-            src="/assets/img/banner-1.jpg"
-            alt="ZinPlay free HTML5 browser puzzle and physics games featuring optical prisms, lasers, origami folds, brass clockwork gears, musical nodes, and rainbow dominoes"
-            loading="eager"
-          />
-        </div>
-        <div class="zp-img-banner-body">
-          <div class="zp-img-banner-copy">
-            <h2>15,500+ Handcrafted Levels Built for Pure Browser Play</h2>
-            <p>From optical laser mirrors and Escher illusions to Matter.js Rube Goldberg contraptions—every title opens in under a second with automatic local save progress.</p>
-          </div>
-          <div class="zp-banner-actions">
-            <a href="#games" class="btn-primary">Browse All 31 Games ↓</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4 Feature Cards (Balanced 2x2) -->
-    <section class="grid-2" aria-label="Platform Highlights">
-      <div class="card">
-        <div class="card-top"><div class="icon-box">🔒</div></div>
-        <h3>100% Local Privacy &amp; No Login</h3>
-        <p>No sign-up walls or cloud tracking. Your 500-level unlocks and high scores stay strictly inside private browser storage.</p>
-      </div>
-      <div class="card">
-        <div class="card-top"><div class="icon-box">⚡</div></div>
-        <h3>Lightweight 60 FPS Canvas</h3>
-        <p>Pure HTML5 Canvas, vector art, and Matter.js rigid-body physics run effortlessly without heavy app downloads.</p>
-      </div>
-      <div class="card">
-        <div class="card-top"><div class="icon-box">📱</div></div>
-        <h3>Phone &amp; Chromebook Friendly</h3>
-        <p>Touch-first layouts work smoothly on Android Chrome, iOS Safari, iPads, and low-storage school or work Chromebooks.</p>
-      </div>
-      <div class="card">
-        <div class="card-top"><div class="icon-box">🎧</div></div>
-        <h3>Live Web Audio ASMR</h3>
-        <p>Real-time procedural sound synthesis powers soothing water sprays, sticker peels, soap slicing, and musical puzzles.</p>
-      </div>
-    </section>
-
-    <!-- All 31 Games Section -->
-    <h2 id="games" class="section-heading">All Games Library</h2>
-    <p class="games-count">Browse all 31 dedicated game pages by category</p>
-
-    <div class="filter-bar" role="group" aria-label="Game Categories">
-      <button class="filter-btn active" data-filter="all" type="button">All (31)</button>
-      <button class="filter-btn" data-filter="puzzle" type="button">Puzzle (11)</button>
-      <button class="filter-btn" data-filter="physics" type="button">Physics (7)</button>
-      <button class="filter-btn" data-filter="asmr" type="button">ASMR &amp; Zen (6)</button>
-      <button class="filter-btn" data-filter="strategy" type="button">Strategy &amp; Mystery (7)</button>
+    <div class="game-header-bar">
+      <a href="/#games" class="back-link">← Back to All Games</a>
+      <span class="cat-tag">500 Symphonies &bull; Musical One-Line Puzzle</span>
     </div>
 
-    <section class="grid-3" id="gamesGrid" aria-label="All 31 Games">
+    <div class="game-title-wrap" style="margin-bottom: 16px;">
+      <h1>One-Line Symphony</h1>
+      <p>Connect every glowing bridge in one continuous stroke without retracing a line to play a complete, calming musical melody.</p>
+    </div>
 
-      <!-- PUZZLE (11) -->
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">🎵</div><span class="cat-tag">Puzzle</span></div>
-        <h3>One-Line Symphony</h3>
-        <p>Connect glowing nodes in one continuous line to play a complete, calming musical melody.</p>
-        <a href="/games/one-line-symphony/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Prism &amp; Lasers</h3>
-        <p>Rotate mirrors and split laser beams through optical prisms in a sleek dark-mode grid.</p>
-        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">🕸️</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Tension &amp; Strings</h3>
-        <p>Drag connected nodes until zero elastic lines overlap and every glowing string turns green.</p>
-        <a href="/games/tension-strings/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">🪢</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Tangle Master</h3>
-        <p>Untie colorful knotted ropes by moving pin ends one by one across increasingly complex stages.</p>
-        <a href="/games/tangle-master/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">🔦</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Shadow Weaver</h3>
-        <p>Rotate abstract 3D sculptures in front of a spotlight until their wall shadow reveals a hidden shape.</p>
-        <a href="/games/shadow-weaver/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">📄</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Fold &amp; Reveal</h3>
-        <p>Fold scrambled paper sheets from the right edges like origami to line up hidden messages and art.</p>
-        <a href="/games/fold-reveal/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">🔧</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Un-Builder</h3>
-        <p>Disassemble retro radios, cameras, and engines step by step in the exact logical reverse order.</p>
-        <a href="/games/un-builder/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">🔍</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Infinite Zoom Hidden Object</h3>
-        <p>Scroll endlessly deeper into nested illustrated worlds to track down three hidden artifacts.</p>
-        <a href="/games/infinite-zoom/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">⚗️</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Color Alchemy Lab</h3>
-        <p>Blend authentic paint pigments drop by drop inside a glass flask to match 500 target hues.</p>
-        <a href="/games/color-alchemy/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">🔌</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Minimalist Logic Gates</h3>
-        <p>Snap AND, OR, NOT, XOR, NAND, and NOR gates into glowing circuit boards across 500 logic tests.</p>
-        <a href="/games/logic-gates/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="puzzle">
-        <div class="card-top"><div class="icon-box">🏛️</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Daily Visual Paradox</h3>
-        <p>Rotate impossible isometric monuments and slide brass walkways to forge Escher optical bridges.</p>
-        <a href="/games/visual-paradox/" class="card-link">Play Game →</a>
-      </article>
-
-      <!-- PHYSICS (7) -->
-      <article class="card card-interactive" data-category="physics">
-        <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
-        <h3>Gravity Stone Stacker</h3>
-        <p>Stack irregular geometric stones into a balanced tower and keep it standing for five full seconds.</p>
-        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="physics">
-        <div class="card-top"><div class="icon-box">🧨</div><span class="cat-tag">Physics</span></div>
-        <h3>Controlled Demolition</h3>
-        <p>Place timed dynamite on load-bearing pillars to collapse a tower straight inward without hitting neighbors.</p>
-        <a href="/games/controlled-demolition/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="physics">
-        <div class="card-top"><div class="icon-box">🚢</div><span class="cat-tag">Physics</span></div>
-        <h3>Cargo Wave Balancer</h3>
-        <p>Drop and balance shipping containers on a swaying cargo vessel riding dynamic ocean waves.</p>
-        <a href="/games/cargo-balancer/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="physics">
-        <div class="card-top"><div class="icon-box">🛍️</div><span class="cat-tag">Physics</span></div>
-        <h3>Grocery Bagging Physics</h3>
-        <p>Pack eggs, watermelons, chips, and cacti into one paper bag without crushing or tearing anything.</p>
-        <a href="/games/grocery-bagging/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="physics">
-        <div class="card-top"><div class="icon-box">⚙️</div><span class="cat-tag">Physics</span></div>
-        <h3>Rube Goldberg Sandbox</h3>
-        <p>Arrange ramps, springs, fans, and magnets to trigger a wild chain reaction that guides the ball home.</p>
-        <a href="/games/rube-goldberg/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="physics">
-        <div class="card-top"><div class="icon-box">🁣</div><span class="cat-tag">Physics</span></div>
-        <h3>Infinite Domino Builder</h3>
-        <p>Draw custom domino trails with ramps and loops, then topple the first piece to watch the cascade.</p>
-        <a href="/games/domino-builder/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="physics">
-        <div class="card-top"><div class="icon-box">🧪</div><span class="cat-tag">Physics</span></div>
-        <h3>Oobleck Maze</h3>
-        <p>Glide a heavy ball through non-Newtonian fluid—move slowly to flow smoothly, or rush and get stuck solid.</p>
-        <a href="/games/oobleck-maze/" class="card-link">Play Game →</a>
-      </article>
-
-      <!-- ASMR & ZEN (6) -->
-      <article class="card card-interactive" data-category="asmr">
-        <div class="card-top"><div class="icon-box">💦</div><span class="cat-tag">ASMR</span></div>
-        <h3>ASMR PowerWash</h3>
-        <p>Blast away thick mud and rust from muddy rugs, old coins, and cars to reveal a spotless shine.</p>
-        <a href="/games/powerwash-asmr/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="asmr">
-        <div class="card-top"><div class="icon-box">🕰️</div><span class="cat-tag">ASMR</span></div>
-        <h3>Antique Restorer</h3>
-        <p>Scrub rust, polish brass, and fit gears back into vintage pocket watches and gramophones.</p>
-        <a href="/games/antique-restorer/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="asmr">
-        <div class="card-top"><div class="icon-box">🏷️</div><span class="cat-tag">ASMR</span></div>
-        <h3>The Perfect Peel</h3>
-        <p>Peel sticky price tags and protective films at the exact speed and angle without tearing them.</p>
-        <a href="/games/perfect-peel/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="asmr">
-        <div class="card-top"><div class="icon-box">🎟️</div><span class="cat-tag">ASMR</span></div>
-        <h3>The Perfect Tear</h3>
-        <p>Tear vintage tickets, receipts, and stamps cleanly along perforated lines at a crisp 45-degree rhythm.</p>
-        <a href="/games/perfect-tear/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="asmr">
-        <div class="card-top"><div class="icon-box">🧼</div><span class="cat-tag">ASMR</span></div>
-        <h3>Oddly Satisfying Slicer</h3>
-        <p>Slice soft soap bars, kinetic sand, and jelly into even pieces with realistic physics and soothing audio.</p>
-        <a href="/games/satisfying-slicer/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="asmr">
-        <div class="card-top"><div class="icon-box">🔐</div><span class="cat-tag">Zen</span></div>
-        <h3>The Zen Lockpicker</h3>
-        <p>Slowly turn a dark minimalist safe dial and listen closely for subtle metallic clicks to crack the lock.</p>
-        <a href="/games/zen-lockpicker/" class="card-link">Play Game →</a>
-      </article>
-
-      <!-- STRATEGY & MYSTERY (7) -->
-      <article class="card card-interactive" data-category="strategy">
-        <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
-        <h3>Manual Bomb Defusal</h3>
-        <p>Check the live technical manual against the ticking clock, decode serial rules, and cut the right wire.</p>
-        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="strategy">
-        <div class="card-top"><div class="icon-box">🧳</div><span class="cat-tag">Strategy</span></div>
-        <h3>Baggage Routing Chaos</h3>
-        <p>Flip conveyor belt switches in real time to send color-coded suitcases to the matching airport gates.</p>
-        <a href="/games/baggage-chaos/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="strategy">
-        <div class="card-top"><div class="icon-box">🗺️</div><span class="cat-tag">Strategy</span></div>
-        <h3>Heist Blueprint Planner</h3>
-        <p>Draw synchronized routes on a museum blueprint while paused, then hit Execute to dodge every laser.</p>
-        <a href="/games/heist-planner/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="strategy">
-        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
-        <h3>Blackout Grid Operator</h3>
-        <p>Balance solar, wind, and backup power plants across a 24-hour cycle to hold city frequency at 50 Hz.</p>
-        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="strategy">
-        <div class="card-top"><div class="icon-box">🖥️</div><span class="cat-tag">Mystery</span></div>
-        <h3>OS Sleuth</h3>
-        <p>Explore a retro Windows 98 desktop, inspect emails and hidden zip files, and solve a disappearance.</p>
-        <a href="/games/os-sleuth/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="strategy">
-        <div class="card-top"><div class="icon-box">👁️</div><span class="cat-tag">Mystery</span></div>
-        <h3>Micro-Expression Polygraph</h3>
-        <p>Watch a suspect's face closely during questioning and catch split-second eye twitches to expose lies.</p>
-        <a href="/games/micro-polygraph/" class="card-link">Play Game →</a>
-      </article>
-
-      <article class="card card-interactive" data-category="strategy">
-        <div class="card-top"><div class="icon-box">🌍</div><span class="cat-tag">Mystery</span></div>
-        <h3>OSINT Geo-Sleuth</h3>
-        <p>Zoom into photo clues—wall outlets, reflections, and cafe menus—to pinpoint the exact location on a map.</p>
-        <a href="/games/geo-sleuth/" class="card-link">Play Game →</a>
-      </article>
-
-    </section>
-
-    <!-- BANNER 2: Custom Illustrated ASMR, Mystery & STEM Spotlight Banner -->
-    <section class="zp-img-banner teal-theme" aria-label="Tactile ASMR and Detective Mystery Spotlight">
-      <div class="zp-img-banner-media">
-        <span class="zp-banner-overlay-badge" style="border-color:rgba(110,231,183,0.5); color:#d1fae5;">🎧 Web Audio ASMR &bull; OSINT Mystery</span>
-        <img
-          src="/assets/img/banner-2.jpg"
-          alt="Relaxing ASMR browser games and detective mysteries on ZinPlay featuring an antique brass pocket watch, pastel soap cutting, water mist, magnifying glass on a world map, and glowing logic circuits"
-          loading="lazy"
-        />
+    <!-- Game Stage -->
+    <section class="game-wrapper" aria-label="One-Line Symphony Musical Puzzle">
+      <div class="hud-strip">
+        <div class="hud-left">
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Morning Chimes</span>
+          <span id="levelTitle">Symphony #1 / 500</span>
+        </div>
+        <div class="hud-pills">
+          <span class="hud-pill" id="edgesPill">Bridges: 0 / 5</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Solved: 0 / 500</span>
+        </div>
       </div>
-      <div class="zp-img-banner-body">
-        <div class="zp-img-banner-copy">
-          <h2>Unwind with Tactile ASMR or Crack an OSINT Case</h2>
-          <p>Put on headphones for soothing soap slicing, vintage watch restoration, and pressure washing—or test your detective eye with micro-expression polygraphs and photo geolocation.</p>
+
+      <!-- Musical Constellation Canvas -->
+      <div class="canvas-container">
+        <canvas id="symphonyCanvas"></canvas>
+        <div id="statusToast" class="status-toast"></div>
+
+        <!-- Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div style="font-size:2.3rem; margin-bottom:6px;">🎵</div>
+            <h2 id="winHeading">Symphony Complete!</h2>
+            <p id="winText">Every bridge resonated in one unbroken harmonic melody.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Symphony →</button>
+          </div>
         </div>
-        <div class="zp-banner-actions">
-          <a href="/games/powerwash-asmr/" class="zp-pick-link">💦 PowerWash</a>
-          <a href="/games/satisfying-slicer/" class="zp-pick-link">🧼 Soap Slicer</a>
-          <a href="/games/geo-sleuth/" class="zp-pick-link">🌍 Geo-Sleuth</a>
-          <a href="/games/micro-polygraph/" class="zp-pick-link">👁️ Polygraph</a>
+      </div>
+
+      <div class="legend-strip">
+        <span>👆 Drag or Tap Adjacent Nodes</span>
+        <span>✨ Double Arcs = Cross Twice (Ch. 3+)</span>
+        <span>🎧 Pentatonic Web Audio Chimes</span>
+      </div>
+
+      <div class="game-controls-bar">
+        <div class="controls-group">
+          <button id="undoBtn" class="btn-outline" type="button">← Undo</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reset</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Hint</button>
         </div>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
+      </div>
+
+      <div class="level-nav-bar">
+        <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Symphony 1 / 500 ▾</button>
+        <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
 
     <!-- Safe AdSense Placement -->
     <div class="ad-slot" aria-label="Advertisement">
       <span class="ad-label">Advertisement</span>
-      <!-- AdSense code goes here after approval -->
     </div>
 
-    <!-- Rich Long-Tail SEO Editorial Content (1,150+ Natural Words) -->
-    <section id="about-engine" class="section-block">
+    <!-- Upgraded SEO Banners & 780+ Word Guide -->
+    <section class="section-block">
 
-      <article class="card editorial-card">
-        <h2>Play Original No-Download HTML5 Browser Games on Any Device</h2>
-        <p>Searching for <strong>free browser games without downloads, logins, or bloated ads</strong> usually leads to recycled clone portals full of broken iframes and slow 40 MB loaders. <strong>ZinPlay</strong> takes a different approach: every single title in our 31-game arcade is an independent, handcrafted web experience coded in lightweight HTML5 Canvas, responsive CSS, and real-time procedural Web Audio. Whether you want a <em>relaxing ASMR browser game for stress relief</em>, a <em>clever 5-minute brain teaser during a work break</em>, or a <em>Chromebook-friendly physics and logic sandbox</em>, every page boots cleanly in under a second.</p>
-        <p>Unlike short web demos that end after five minutes, every dedicated game URL on ZinPlay includes a <strong>500-level progressive campaign organized across 5 chapters</strong>—unlocking over <strong>15,500 verified puzzles, mechanical teardowns, physics contraptions, ASMR cleanups, and mystery investigations</strong> with automatic private browser saving.</p>
-      </article>
-
-      <article class="card editorial-card">
-        <h2>Find the Best Browser Game for Your Mood &amp; Play Style</h2>
-        <p>Not sure where to start? Match what you are in the mood for right now with our most popular niche browser experiences:</p>
-
-        <div class="editorial-grid-2">
-          <div class="editorial-mini-box">
-            <h3>🌿 Calming ASMR &amp; Anxiety-Relief Web Simulators</h3>
-            <p>Need a quiet digital fidget tool to decompress? Try our <strong>online pressure washing game</strong> (<a href="/games/powerwash-asmr/">ASMR PowerWash</a>), realistic <strong>virtual soap cutting and kinetic sand slicing</strong> (<a href="/games/satisfying-slicer/">Oddly Satisfying Slicer</a>), <strong>sticker and screen protector peeling simulator</strong> (<a href="/games/perfect-peel/">The Perfect Peel</a>), <strong>perforated paper ticket tearing</strong> (<a href="/games/perfect-tear/">The Perfect Tear</a>), <strong>vintage pocket watch restoration</strong> (<a href="/games/antique-restorer/">Antique Restorer</a>), or audio-guided vault cracking in <a href="/games/zen-lockpicker/">The Zen Lockpicker</a>.</p>
-          </div>
-
-          <div class="editorial-mini-box">
-            <h3>🧠 Spatial, Optical Illusion &amp; Origami Brain Teasers</h3>
-            <p>If you enjoy minimalist visual puzzles like Monument Valley, Shadowmatic, or untangling knot games without installing heavy mobile apps, explore <strong>3D wall shadow puzzles</strong> in <a href="/games/shadow-weaver/">Shadow Weaver</a>, <strong>impossible Escher perspective bridges</strong> in <a href="/games/visual-paradox/">Daily Visual Paradox</a>, <strong>layered origami paper folding</strong> in <a href="/games/fold-reveal/">Fold &amp; Reveal</a>, <strong>reverse mechanical disassembly</strong> in <a href="/games/un-builder/">Un-Builder</a>, <strong>vector infinite zoom hidden object</strong> hunts in <a href="/games/infinite-zoom/">Infinite Zoom</a>, and untangling graphs in <a href="/games/tension-strings/">Tension &amp; Strings</a> and <a href="/games/tangle-master/">Tangle Master</a>.</p>
-          </div>
-
-          <div class="editorial-mini-box">
-            <h3>🔬 STEM, Coding Logic &amp; Realistic Physics Sandboxes</h3>
-            <p>Students, engineers, and curious tinkerers love our science-backed browser sandboxes. Wire live <strong>AND, OR, NOT, XOR, NAND, and NOR digital circuits</strong> in <a href="/games/logic-gates/">Minimalist Logic Gates</a>, practice real <strong>RYB subtractive paint color mixing</strong> in <a href="/games/color-alchemy/">Color Alchemy Lab</a>, build <strong>Matter.js chain-reaction contraptions</strong> in <a href="/games/rube-goldberg/">Rube Goldberg Sandbox</a>, design <strong>overpass bridge domino rallies</strong> in <a href="/games/domino-builder/">Infinite Domino Builder</a>, test <strong>non-Newtonian fluid viscosity</strong> in <a href="/games/oobleck-maze/">Oobleck Maze</a>, or calculate tower collapses in <a href="/games/controlled-demolition/">Controlled Demolition</a>.</p>
-          </div>
-
-          <div class="editorial-mini-box">
-            <h3>🕵️ Detective Mysteries, OSINT &amp; Tactical Control Rooms</h3>
-            <p>Craving high-focus strategy or investigative puzzles right in your browser tab? Identify real-world wall outlets, currencies, and left-hand traffic clues in our <strong>free OSINT photo geolocation quiz</strong> (<a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a>), spot split-second facial tells in our <strong>micro-expression lie detector game</strong> (<a href="/games/micro-polygraph/">Micro-Expression Polygraph</a>), snoop through a <strong>retro Windows 98 mystery desktop</strong> in <a href="/games/os-sleuth/">OS Sleuth</a>, stabilize a <strong>50Hz renewable power grid simulator</strong> in <a href="/games/blackout-grid/">Blackout Grid Operator</a>, plan stealth laser routes in <a href="/games/heist-planner/">Heist Blueprint Planner</a>, or race the clock in <a href="/games/bomb-defusal/">Manual Bomb Defusal</a>.</p>
-          </div>
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/one-line-banner-1.jpg"
+            alt="One-Line Symphony online musical one-stroke puzzle constellation with glowing cyan and gold nodes"
+            loading="lazy"
+          />
         </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Musical One-Stroke Constellations — Zero Downloads</h3>
+          <p>Trace every luminous bridge in one continuous motion and hear each solved Euler graph bloom into a calming pentatonic melody.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>What Is One-Line Symphony? A Relaxing Musical One-Stroke Browser Puzzle</h2>
+        <p><strong>One-Line Symphony</strong> is a free <strong>one-line drawing puzzle game online</strong> that blends classic graph-theory geometry with soothing procedural music. Instead of staring at silent black-and-white shapes, every node you connect inside our dark-mode HTML5 Canvas fires a warm harmonic chord synthesized live through the <strong>Web Audio API</strong>. Your objective is simple to learn yet deeply rewarding across all <strong>500 progressive levels</strong>: trace every single connecting edge on the board in one unbroken stroke without lifting your finger or retracing an already lit bridge.</p>
+        <p>Designed specifically as a lightweight, <strong>no-download browser brain teaser for mobile phones, iPads, and Chromebooks</strong>, One-Line Symphony loads in under a second and saves every cleared constellation privately inside your browser's local storage. Whether you are looking for a <em>calming anxiety-relief puzzle before bed</em>, a <em>5-minute logic warm-up between classes</em>, or a <em>mathematical Euler path challenge</em>, the five escalating chapters adapt cleanly from 4-node warm-ups to intricate multi-loop star graphs.</p>
       </article>
 
       <article class="card editorial-card">
-        <h2>Quick Guide: Top Niche Browser Experiences on ZinPlay</h2>
-        <p>Compare gameplay mechanics, audio styles, and ideal session lengths across our standout original web games:</p>
-        <div class="seo-table-wrap">
-          <table class="seo-table">
+        <h2>How to Solve Any One-Line Puzzle Fast (The Euler Vertex Trick)</h2>
+        <p>Every stage in One-Line Symphony is a verified <strong>Eulerian trail puzzle</strong>—a classic mathematical problem first solved by Leonhard Euler in the famous Seven Bridges of Königsberg riddle. You never have to guess randomly once you learn how to count the lines meeting at each glowing orb (known as a node's <em>degree</em>):</p>
+
+        <div class="euler-table-wrap">
+          <table class="euler-table">
             <thead>
               <tr>
-                <th>Game Title</th>
-                <th>Core Mechanic &amp; Niche</th>
-                <th>Best For</th>
-                <th>Controls</th>
+                <th>Node Pattern on Board</th>
+                <th>Where to Start Your Stroke</th>
+                <th>Where Your Line Ends</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><a href="/games/one-line-symphony/">One-Line Symphony</a></td>
-                <td>Euler path musical line puzzle</td>
-                <td>Calm focus &amp; melody creation</td>
-                <td>Tap / Drag</td>
+                <td><strong>Exactly 2 Odd Nodes</strong> (3, 5, or 7 lines attached)</td>
+                <td>You <strong>must start</strong> on one of the two odd nodes.</td>
+                <td>Your final edge will always finish on the <em>other</em> odd node.</td>
               </tr>
               <tr>
-                <td><a href="/games/prism-lasers/">Prism &amp; Lasers</a></td>
-                <td>Optical mirror reflection &amp; color beam splitting</td>
-                <td>Dark-mode logic fans</td>
-                <td>Tap / Rotate</td>
+                <td><strong>Zero Odd Nodes</strong> (all nodes have 2, 4, or 6 lines)</td>
+                <td>Start on <strong>any glowing node</strong> on the constellation.</td>
+                <td>Your continuous loop returns cleanly to your starting node.</td>
               </tr>
               <tr>
-                <td><a href="/games/rube-goldberg/">Rube Goldberg Sandbox</a></td>
-                <td>Ramps, springs, wind fans &amp; electromagnets (Matter.js)</td>
-                <td>Creative physics &amp; sandbox play</td>
-                <td>Drag &amp; Angle</td>
-              </tr>
-              <tr>
-                <td><a href="/games/domino-builder/">Infinite Domino Builder</a></td>
-                <td>Custom curving domino trails &amp; Figure-8 bridge loops</td>
-                <td>Satisfying chain reactions</td>
-                <td>Draw &amp; Topple</td>
-              </tr>
-              <tr>
-                <td><a href="/games/powerwash-asmr/">ASMR PowerWash</a></td>
-                <td>Multi-nozzle mud &amp; rust cleaning with live water audio</td>
-                <td>Stress relief &amp; relaxation</td>
-                <td>Touch Spray</td>
-              </tr>
-              <tr>
-                <td><a href="/games/logic-gates/">Minimalist Logic Gates</a></td>
-                <td>Boolean PCB circuit puzzles (AND/OR/XOR/NAND/NOR)</td>
-                <td>STEM &amp; computer science logic</td>
-                <td>Tap Sockets</td>
-              </tr>
-              <tr>
-                <td><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></td>
-                <td>Photo zooming (outlets, menus, plates) + world map pin</td>
-                <td>Geography &amp; GeoGuessr-style fans</td>
-                <td>Pinch &amp; Pin</td>
-              </tr>
-              <tr>
-                <td><a href="/games/blackout-grid/">Blackout Grid Operator</a></td>
-                <td>24-hour SCADA solar, wind, battery &amp; turbine dispatch</td>
-                <td>Real-time strategy &amp; management</td>
-                <td>Tap Switches</td>
+                <td><strong>Double Golden Bridges</strong> (Ch. 3–5)</td>
+                <td>Count each curved parallel bridge as 1 separate connection.</td>
+                <td>Save the second parallel arc for your return sweep.</td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        <p style="margin-top:12px;">Remembering this single <strong>odd-vertex rule</strong> turns intimidating 12-node webs into effortless, flowing musical runs. Whenever you get stuck on a tricky Chapter 4 or Chapter 5 star graph, tap the <strong>Undo</strong> button to step back one note or tap <strong>Hint</strong> to illuminate the optimal next bridge in gold.</p>
       </article>
 
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner teal-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/one-line-banner-2.jpg"
+            alt="Calming Web Audio harmonic waves and glass musical orbs in One-Line Symphony browser game"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Real-Time Pentatonic Web Audio Built for Flow State</h3>
+          <p>Put on headphones—every connected edge plays a consonant note that never clashes, turning logical deduction into an interactive ambient instrument.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>Why Client-Side Web Games Are Ideal for Low-Storage Phones &amp; Chromebooks</h2>
-        <p>Installing dozens of casual puzzle and ASMR apps quickly eats gigabytes of smartphone storage, drains battery with background notifications, and forces mandatory account sign-ups. ZinPlay solves this with a <strong>100% client-side static web architecture</strong>:</p>
+        <h2>5 Chapters, 500 Verified Levels &amp; Why Players Love Zero-Install Audio Puzzles</h2>
+        <p>Many free single-stroke web games recycle 20 repetitive shapes or bombard players with timers and loud failure buzzers. One-Line Symphony removes countdown stress entirely so you can think at your own pace:</p>
         <ul>
-          <li><strong>Ultra-Fast Loading on Mobile Data:</strong> Vector Canvas rendering and procedural Web Audio keep every game page tiny, allowing instant play on Android Chrome, iOS Safari, tablets, and school or office Chromebooks without downloads.</li>
-          <li><strong>Zero Accounts &amp; Full Local Privacy:</strong> Your progress across all 500-stage level pickers stays strictly on your own device via browser <code>localStorage</code>—never sold or synced to third-party profiles.</li>
-          <li><strong>Built-In Smart Hints &amp; Open Level Selectors:</strong> Every single game lets you jump to any chapter (1 to 500) and offers context-aware hints—whether you need a space-time stealth step, an optical bridge angle, or an OSINT outlet breakdown.</li>
+          <li><strong>Chapter 1 (Levels 1–100 — Morning Chimes):</strong> Clean geometric triangles, envelopes, and diamonds that teach odd-node starting points naturally.</li>
+          <li><strong>Chapter 2 (Levels 101–200 — Starlight Strings):</strong> Intersecting chords and symmetrical constellations with wider harmonic arpeggios.</li>
+          <li><strong>Chapter 3 (Levels 201–300 — Double Bridges):</strong> Parallel golden arcs that require crossing certain corridors twice without trapping yourself.</li>
+          <li><strong>Chapter 4 &amp; 5 (Levels 301–500 — Grand Symphony):</strong> Dense, multi-ring Euler graphs crafted for veteran single-line puzzle enthusiasts, with an open level selector to jump to any stage from 1 to 500.</li>
         </ul>
-        <div class="keyword-tags-row" aria-label="Popular Game Topics">
-          <span class="kw-chip">No-Download HTML5 Games</span>
-          <span class="kw-chip">ASMR Web Audio Simulators</span>
-          <span class="kw-chip">2D Matter.js Physics Sandbox</span>
-          <span class="kw-chip">Chromebook Puzzle Games</span>
-          <span class="kw-chip">OSINT Geolocation Quiz</span>
-          <span class="kw-chip">Boolean Logic Gate Puzzles</span>
-          <span class="kw-chip">Origami &amp; Optical Illusions</span>
-          <span class="kw-chip">No-Login Mobile Brain Teasers</span>
+        <p>Because the audio engine runs purely inside browser-native Web Audio without loading bulky MP3 packs, One-Line Symphony uses virtually zero mobile data and runs smoothly even on older smartphones or school-managed Chromebooks.</p>
+        <div class="kw-strip" aria-label="Related Puzzle Topics">
+          <span class="kw-pill">One-Line Drawing Puzzle Online</span>
+          <span class="kw-pill">Euler Path Graph Game</span>
+          <span class="kw-pill">Relaxing Musical Browser Game</span>
+          <span class="kw-pill">500-Level Single Stroke Puzzle</span>
+          <span class="kw-pill">Chromebook Brain Teaser No Login</span>
+          <span class="kw-pill">Web Audio Zen Game</span>
         </div>
       </article>
 
+      <div class="card faq-card">
+        <h2>One-Line Symphony FAQ</h2>
+        <details class="faq-item">
+          <summary>How do I know which glowing dot to start from in a one-line puzzle?</summary>
+          <div class="faq-answer">Count how many lines connect to each node. If two nodes have an odd number of lines (like 3 or 5), you must begin your stroke on one of those two odd nodes and finish on the other. If every node has an even number of lines, you can start anywhere!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I play One-Line Symphony on mobile touchscreens without installing an app?</summary>
+          <div class="faq-answer">Yes. Simply drag your finger smoothly from node to node (or tap adjacent dots one by one) directly in Android Chrome or iOS Safari—zero downloads required.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Are all 500 levels in One-Line Symphony guaranteed to be solvable?</summary>
+          <div class="faq-answer">Yes. Every constellation from Level 1 to Level 500 is generated directly from a verified connected Eulerian path, ensuring a valid single-stroke solution always exists.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Is there a timer or move penalty if I take my time?</summary>
+          <div class="faq-answer">No timers and no lives system. One-Line Symphony is built for relaxing, stress-free flow—you can undo moves or reset a constellation as many times as you like.</div>
+        </details>
+      </div>
+
     </section>
 
-    <!-- FAQ -->
-    <section id="faq" class="card faq-card">
-      <h2>Frequently Asked Questions</h2>
-
-      <details class="faq-item">
-        <summary>Are all 31 HTML5 browser games on ZinPlay completely free?</summary>
-        <div class="faq-answer">Yes. Every game in our 31-title library is 100% free to play directly inside your browser with no downloads, subscriptions, or locked chapters.</div>
-      </details>
-
-      <details class="faq-item">
-        <summary>Do these games work smoothly on smartphones, tablets, and Chromebooks?</summary>
-        <div class="faq-answer">Yes. Every game stage is built mobile-first with responsive touch dragging, pinch-to-zoom, and large buttons for Android and iOS, while also supporting mouse wheels and keyboard shortcuts on Chromebooks, Windows, and Mac.</div>
-      </details>
-
-      <details class="faq-item">
-        <summary>Do I need to install an app or sign up to save my levels?</summary>
-        <div class="faq-answer">No registration or installation required. Your solved levels across all 500-stage games are saved privately inside your browser's local storage automatically.</div>
-      </details>
-
-      <details class="faq-item">
-        <summary>Which ZinPlay games are best for relaxing ASMR sounds and stress relief?</summary>
-        <div class="faq-answer">Put on headphones and try <strong>ASMR PowerWash</strong>, <strong>The Perfect Peel</strong>, <strong>The Perfect Tear</strong>, <strong>Oddly Satisfying Slicer</strong>, <strong>Antique Restorer</strong>, or <strong>The Zen Lockpicker</strong>—all use live Web Audio synthesis reacting directly to your touch speed.</div>
-      </details>
-
-      <details class="faq-item">
-        <summary>Which games are best for fans of GeoGuessr, Monument Valley, or engineering puzzles?</summary>
-        <div class="faq-answer">Try <strong>OSINT Geo-Sleuth</strong> for real-world photo geolocation, <strong>Daily Visual Paradox</strong> and <strong>Shadow Weaver</strong> for optical illusion art, <strong>Minimalist Logic Gates</strong> for Boolean electronics, and <strong>Blackout Grid Operator</strong> or <strong>Rube Goldberg Sandbox</strong> for engineering challenges.</div>
-      </details>
+    <!-- More Games -->
+    <h2 class="section-heading">More Games to Try</h2>
+    <section class="grid-3">
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Prism &amp; Lasers</h3>
+        <p>Rotate mirrors and split laser beams through optical prisms in a sleek dark-mode grid.</p>
+        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🕸️</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Tension &amp; Strings</h3>
+        <p>Drag connected nodes until zero elastic lines overlap and every glowing string turns green.</p>
+        <a href="/games/tension-strings/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🏛️</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Daily Visual Paradox</h3>
+        <p>Rotate impossible isometric monuments and slide brass walkways to forge optical bridges.</p>
+        <a href="/games/visual-paradox/" class="card-link">Play Game →</a>
+      </article>
     </section>
 
   </main>
+
+  <!-- Level Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Symphony">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Choose Symphony (1 – 500)</h3>
+        <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
+      </div>
+      <div id="chapterTabs" class="chapter-tabs"></div>
+      <div class="jump-row">
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to symphony (1-500)..." />
+        <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
+      </div>
+      <div id="levelsGrid" class="levels-grid"></div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="site-footer">
@@ -761,27 +652,24 @@
           <p class="footer-desc">Your independent hub for lightweight, privacy-first HTML5 puzzle, physics, ASMR, and strategy browser games.</p>
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
-
         <div class="footer-col">
           <h4>Top Puzzles</h4>
           <ul>
             <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
             <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/fold-reveal/">Fold &amp; Reveal</a></li>
+            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
             <li><a href="/games/visual-paradox/">Daily Visual Paradox</a></li>
           </ul>
         </div>
-
         <div class="footer-col">
           <h4>Top Strategy</h4>
           <ul>
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
             <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
-
         <div class="footer-col">
           <h4>Explore &amp; Legal</h4>
           <ul>
@@ -792,7 +680,6 @@
           </ul>
         </div>
       </div>
-
       <div class="footer-bottom">
         <span>&copy; 2026 ZinPlay. Independent HTML5 browser games.</span>
         <span>Built for instant play on mobile &amp; desktop.</span>
@@ -801,7 +688,7 @@
   </footer>
 
   <script>
-    // Mobile Menu Toggle
+    // Mobile Header Menu
     const menuBtn = document.getElementById("menuBtn");
     const navMenu = document.getElementById("navMenu");
     if (menuBtn && navMenu) {
@@ -810,29 +697,931 @@
         menuBtn.setAttribute("aria-expanded", isOpen);
         menuBtn.textContent = isOpen ? "✕" : "☰";
       });
-      navMenu.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          navMenu.classList.remove("open");
-          menuBtn.setAttribute("aria-expanded", "false");
-          menuBtn.textContent = "☰";
-        });
-      });
     }
 
-    // Category Filter
-    const filterBtns = document.querySelectorAll(".filter-btn");
-    const gameCards = document.querySelectorAll("#gamesGrid .card-interactive");
-    filterBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        filterBtns.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        const filter = btn.getAttribute("data-filter");
-        gameCards.forEach((card) => {
-          const match = filter === "all" || card.getAttribute("data-category") === filter;
-          card.classList.toggle("hidden", !match);
-        });
+    // ==============================================
+    // 500-LEVEL VERIFIED EULER CONSTELLATION ENGINE
+    // ==============================================
+    const TOTAL_LEVELS = 500;
+    const WORLD_W = 420;
+    const WORLD_H = 420;
+    const CX = WORLD_W / 2;
+    const CY = WORLD_H / 2;
+
+    const CHAPTERS = [
+      { title: "Chapter 1 • Morning Chimes", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Starlight Strings", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Double Bridges", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Celestial Weave", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Grand Symphony", range: "401–500", start: 401, end: 500 }
+    ];
+
+    // Warm Pentatonic Scales (C Major, D Major, F Major, G Major, A Minor)
+    const SCALES = [
+      [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00],
+      [293.66, 329.63, 369.99, 440.00, 493.88, 587.33, 659.25, 739.99, 880.00, 987.77],
+      [246.94, 293.66, 329.63, 392.00, 440.00, 493.88, 587.33, 659.25, 783.99, 880.00],
+      [261.63, 311.13, 349.23, 392.00, 466.16, 523.25, 622.25, 698.46, 783.99, 932.33]
+    ];
+
+    function mulberry32(seed) {
+      let a = seed >>> 0;
+      return function () {
+        a = (a + 0x6D2B79F5) >>> 0;
+        let t = Math.imul(a ^ (a >>> 15), a | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function pairKey(u, v) {
+      return u < v ? `${u}-${v}` : `${v}-${u}`;
+    }
+
+    // Check if segment (A,B) passes awkwardly close to a third node C
+    function passesThroughNode(nodes, u, v) {
+      const a = nodes[u], b = nodes[v];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const lenSq = dx * dx + dy * dy;
+      if (lenSq < 1) return true;
+      for (let i = 0; i < nodes.length; i++) {
+        if (i === u || i === v) continue;
+        const c = nodes[i];
+        const t = ((c.x - a.x) * dx + (c.y - a.y) * dy) / lenSq;
+        if (t > 0.08 && t < 0.92) {
+          const px = a.x + t * dx, py = a.y + t * dy;
+          if (Math.hypot(c.x - px, c.y - py) < 23) return true;
+        }
+      }
+      return false;
+    }
+
+    // Build Clean Geometric Node Layouts for Beautiful Constellations
+    function generateNodeLayout(nCount, style, rng) {
+      const pts = [];
+      const rot = rng() * Math.PI * 2;
+
+      if (style === 0) {
+        // Single polygon ring + optional center star
+        const hasCenter = nCount >= 5 && rng() < 0.65;
+        const ringN = hasCenter ? nCount - 1 : nCount;
+        const R = 136;
+        for (let i = 0; i < ringN; i++) {
+          const a = rot + (i * Math.PI * 2) / ringN;
+          pts.push({ x: CX + Math.cos(a) * R, y: CY + Math.sin(a) * R });
+        }
+        if (hasCenter) pts.push({ x: CX, y: CY });
+      } else if (style === 1) {
+        // Concentric twin rings
+        const outerN = Math.ceil(nCount * 0.62);
+        const innerN = nCount - outerN;
+        for (let i = 0; i < outerN; i++) {
+          const a = rot + (i * Math.PI * 2) / outerN;
+          pts.push({ x: CX + Math.cos(a) * 144, y: CY + Math.sin(a) * 144 });
+        }
+        for (let i = 0; i < innerN; i++) {
+          const a = rot + Math.PI / Math.max(1, innerN) + (i * Math.PI * 2) / Math.max(1, innerN);
+          const ir = innerN === 1 ? 0 : 68;
+          pts.push({ x: CX + Math.cos(a) * ir, y: CY + Math.sin(a) * ir });
+        }
+      } else {
+        // Classic architectural envelope / diamond grid
+        const cols = nCount <= 6 ? 3 : 4;
+        const rows = Math.ceil(nCount / cols);
+        const spanX = cols === 3 ? 230 : 270;
+        const spanY = rows <= 2 ? 180 : 250;
+        let idx = 0;
+        for (let r = 0; r < rows && idx < nCount; r++) {
+          const rowCols = Math.min(cols, nCount - idx);
+          for (let c = 0; c < rowCols; c++) {
+            const fx = rowCols === 1 ? 0.5 : c / (rowCols - 1);
+            const fy = rows === 1 ? 0.5 : r / (rows - 1);
+            const jx = (rng() - 0.5) * 18;
+            const jy = (rng() - 0.5) * 18;
+            pts.push({
+              x: CX - spanX / 2 + fx * spanX + jx,
+              y: CY - spanY / 2 + fy * spanY + jy
+            });
+            idx++;
+          }
+        }
+      }
+      return pts;
+    }
+
+    // Curated First 3 Classic Intro Levels (Triangle, Envelope, Star)
+    function buildIntroLevel(num) {
+      if (num === 1) {
+        const nodes = [
+          { id: 0, x: CX, y: 92 },
+          { id: 1, x: 326, y: 298 },
+          { id: 2, x: 94, y: 298 },
+          { id: 3, x: CX, y: 215 }
+        ];
+        const path = [0, 1, 2, 0, 3, 1];
+        return finalizeLevel(num, nodes, path, SCALES[0]);
+      }
+      if (num === 2) {
+        // Iconic House Envelope
+        const nodes = [
+          { id: 0, x: CX, y: 78 },
+          { id: 1, x: 108, y: 176 },
+          { id: 2, x: 312, y: 176 },
+          { id: 3, x: 108, y: 332 },
+          { id: 4, x: 312, y: 332 }
+        ];
+        const path = [3, 1, 0, 2, 1, 4, 3, 2, 4];
+        return finalizeLevel(num, nodes, path, SCALES[1]);
+      }
+      const nodes = [
+        { id: 0, x: CX, y: 76 },
+        { id: 1, x: 336, y: 184 },
+        { id: 2, x: 284, y: 336 },
+        { id: 3, x: 136, y: 336 },
+        { id: 4, x: 84, y: 184 }
+      ];
+      const path = [0, 2, 4, 1, 3, 0, 1, 2, 3, 4, 0];
+      return finalizeLevel(num, nodes, path, SCALES[2]);
+    }
+
+    function finalizeLevel(levelNum, rawNodes, solutionPath, scale) {
+      // Prune any unvisited nodes & remap indices cleanly
+      const usedSet = new Set(solutionPath);
+      const oldToNew = new Map();
+      const nodes = [];
+      rawNodes.forEach((n, oldIdx) => {
+        if (usedSet.has(oldIdx)) {
+          oldToNew.set(oldIdx, nodes.length);
+          nodes.push({ id: nodes.length, x: n.x, y: n.y });
+        }
       });
+
+      // Re-center constellation nicely inside 420x420 viewport
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      for (const n of nodes) {
+        if (n.x < minX) minX = n.x; if (n.x > maxX) maxX = n.x;
+        if (n.y < minY) minY = n.y; if (n.y > maxY) maxY = n.y;
+      }
+      const span = Math.max(1, maxX - minX, maxY - minY);
+      const fitScale = Math.min(1.15, 290 / span);
+      const midX = (minX + maxX) / 2, midY = (minY + maxY) / 2;
+      for (const n of nodes) {
+        n.x = CX + (n.x - midX) * fitScale;
+        n.y = CY + (n.y - midY) * fitScale;
+      }
+
+      const mappedPath = solutionPath.map((id) => oldToNew.get(id));
+
+      // Count pair multiplicities to curve double bridges cleanly apart!
+      const pairCounts = new Map();
+      const rawEdges = [];
+      for (let i = 0; i < mappedPath.length - 1; i++) {
+        const u = mappedPath[i], v = mappedPath[i + 1];
+        const pk = pairKey(u, v);
+        pairCounts.set(pk, (pairCounts.get(pk) || 0) + 1);
+        rawEdges.push({ u, v, pk });
+      }
+
+      const seenPair = new Map();
+      const edges = rawEdges.map((e, idx) => {
+        const totalForPair = pairCounts.get(e.pk);
+        const ord = seenPair.get(e.pk) || 0;
+        seenPair.set(e.pk, ord + 1);
+
+        const isDouble = totalForPair > 1;
+        const curve = isDouble ? (ord === 0 ? 22 : -22) : 0;
+        return {
+          id: idx,
+          u: Math.min(e.u, e.v),
+          v: Math.max(e.u, e.v),
+          curve,
+          isDouble,
+          used: false
+        };
+      });
+
+      return {
+        levelNum,
+        nodes,
+        edges,
+        solutionPath: mappedPath,
+        scale
+      };
+    }
+
+    function buildSymphonyLevel(levelNum) {
+      if (levelNum <= 3) return buildIntroLevel(levelNum);
+
+      const scale = SCALES[levelNum % SCALES.length];
+      let targetNodes, targetEdges, allowDouble, maxDoubles;
+
+      if (levelNum <= 100) {
+        targetNodes = levelNum <= 40 ? 5 : 6;
+        targetEdges = levelNum <= 40 ? 6 : 8;
+        allowDouble = false; maxDoubles = 0;
+      } else if (levelNum <= 200) {
+        targetNodes = levelNum <= 150 ? 6 : 7;
+        targetEdges = levelNum <= 150 ? 9 : 11;
+        allowDouble = false; maxDoubles = 0;
+      } else if (levelNum <= 300) {
+        targetNodes = 7;
+        targetEdges = 11;
+        allowDouble = true; maxDoubles = 2;
+      } else if (levelNum <= 400) {
+        targetNodes = 8;
+        targetEdges = 13;
+        allowDouble = true; maxDoubles = 2;
+      } else {
+        targetNodes = levelNum > 450 ? 9 : 8;
+        targetEdges = levelNum > 450 ? 16 : 14;
+        allowDouble = true; maxDoubles = 3;
+      }
+
+      for (let attempt = 0; attempt < 40; attempt++) {
+        const rng = mulberry32(levelNum * 109397 + attempt * 7919 + 4211);
+        const style = (levelNum + attempt) % 3;
+        const pts = generateNodeLayout(targetNodes, style, rng);
+
+        // Build list of clean non-collinear candidate edges
+        const validPairs = new Set();
+        for (let u = 0; u < pts.length; u++) {
+          for (let v = u + 1; v < pts.length; v++) {
+            if (!passesThroughNode(pts, u, v)) {
+              validPairs.add(pairKey(u, v));
+            }
+          }
+        }
+
+        // Construct verified continuous Eulerian trail step-by-step
+        const start = Math.floor(rng() * pts.length);
+        const path = [start];
+        const pairUsed = new Map();
+        let doublesUsed = 0;
+        let cur = start;
+
+        for (let step = 0; step < targetEdges; step++) {
+          const cands = [];
+          for (let nxt = 0; nxt < pts.length; nxt++) {
+            if (nxt === cur) continue;
+            const pk = pairKey(cur, nxt);
+            if (!validPairs.has(pk)) continue;
+            const usedCnt = pairUsed.get(pk) || 0;
+
+            if (usedCnt === 0) {
+              // Favor unvisited nodes early so every constellation node joins cleanly
+              const visitedBefore = path.includes(nxt);
+              cands.push({ nxt, pk, w: visitedBefore ? 1 : 4 });
+            } else if (allowDouble && usedCnt === 1 && doublesUsed < maxDoubles && step > 2) {
+              // Avoid immediate back-and-forth on same double edge
+              if (path.length >= 2 && path[path.length - 2] === nxt) continue;
+              cands.push({ nxt, pk, w: 0.7 });
+            }
+          }
+          if (cands.length === 0) break;
+
+          // Weighted random pick
+          const totalW = cands.reduce((s, c) => s + c.w, 0);
+          let rPick = rng() * totalW;
+          let chosen = cands[0];
+          for (const c of cands) {
+            rPick -= c.w;
+            if (rPick <= 0) { chosen = c; break; }
+          }
+
+          const prevCnt = pairUsed.get(chosen.pk) || 0;
+          if (prevCnt === 1) doublesUsed++;
+          pairUsed.set(chosen.pk, prevCnt + 1);
+          path.push(chosen.nxt);
+          cur = chosen.nxt;
+        }
+
+        const uniqueVisited = new Set(path).size;
+        if (path.length - 1 >= Math.max(5, targetEdges - 2) && uniqueVisited >= Math.max(4, targetNodes - 1)) {
+          if (allowDouble && levelNum >= 201 && doublesUsed === 0 && attempt < 20) continue;
+          return finalizeLevel(levelNum, pts, path, scale);
+        }
+      }
+
+      return buildIntroLevel(2);
+    }
+
+    const levelCache = new Map();
+    function getLevel(num) {
+      if (!levelCache.has(num)) {
+        levelCache.set(num, buildSymphonyLevel(num));
+      }
+      return levelCache.get(num);
+    }
+
+    function getChapter(num) {
+      return CHAPTERS.find((c) => num >= c.start && num <= c.end) || CHAPTERS[0];
+    }
+
+    // ==============================================
+    // PENTATONIC HARP & CHIME WEB AUDIO SYNTHESIZER
+    // ==============================================
+    let audioCtx = null;
+    let soundOn = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    }
+
+    function playNote(stepIdx, vol = 0.13, dur = 0.55) {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const scale = level ? level.scale : SCALES[0];
+      const freq = scale[stepIdx % scale.length];
+
+      // Fundamental warm sine + soft octave shimmer
+      const osc1 = audioCtx.createOscillator();
+      const osc2 = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc1.type = "sine";
+      osc2.type = "triangle";
+      osc1.frequency.setValueAtTime(freq, now);
+      osc2.frequency.setValueAtTime(freq * 2, now);
+
+      const g2 = audioCtx.createGain();
+      g2.gain.value = 0.14;
+
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+
+      osc1.connect(g);
+      osc2.connect(g2);
+      g2.connect(g);
+      g.connect(audioCtx.destination);
+
+      osc1.start(now); osc2.start(now);
+      osc1.stop(now + dur + 0.03); osc2.stop(now + dur + 0.03);
+    }
+
+    function sfxUndo() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(280, now);
+      osc.frequency.exponentialRampToValueAtTime(190, now + 0.09);
+      g.gain.setValueAtTime(0.08, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.12);
+    }
+
+    function playWinSymphony(totalSteps) {
+      const count = Math.min(7, totalSteps);
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => playNote(i, 0.12, 0.72), i * 80);
+      }
+    }
+
+    // ==============================================
+    // SMART LIVE EULER SOLVER (FOR CONTEXTUAL HINTS)
+    // ==============================================
+    function findCompletionFrom(startNode, usedEdgeIds, totalEdges) {
+      const rem = totalEdges - usedEdgeIds.size;
+      if (rem === 0) return [];
+      const adj = Array.from({ length: level.nodes.length }, () => []);
+      for (const e of level.edges) {
+        if (!usedEdgeIds.has(e.id)) {
+          adj[e.u].push({ to: e.v, eid: e.id });
+          adj[e.v].push({ to: e.u, eid: e.id });
+        }
+      }
+
+      let stepsBudget = 2500;
+      const stackRes = [];
+      const usedNow = new Set(usedEdgeIds);
+
+      function dfs(u, left) {
+        if (left === 0) return true;
+        if (--stepsBudget <= 0) return false;
+        for (const item of adj[u]) {
+          if (usedNow.has(item.eid)) continue;
+          usedNow.add(item.eid);
+          stackRes.push(item);
+          if (dfs(item.to, left - 1)) return true;
+          stackRes.pop();
+          usedNow.delete(item.eid);
+        }
+        return false;
+      }
+
+      return dfs(startNode, rem) ? stackRes : null;
+    }
+
+    // ==============================================
+    // GAME STATE, INPUT & CANVAS RENDERER
+    // ==============================================
+    const canvas = document.getElementById("symphonyCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const chapterLabel = document.getElementById("chapterLabel");
+    const levelTitle = document.getElementById("levelTitle");
+    const edgesPill = document.getElementById("edgesPill");
+    const solvedCounter = document.getElementById("solvedCounter");
+    const statusToast = document.getElementById("statusToast");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
+    const soundBtn = document.getElementById("soundBtn");
+    const openPickerBtn = document.getElementById("openPickerBtn");
+
+    let solvedSet = new Set();
+    let currentLevelNum = 1;
+    try {
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_oneline_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_oneline_500_last") || "1", 10);
+      if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
+    } catch (e) {}
+
+    let level = null;
+    let nodeTrail = [];   // [nodeId, nodeId, ...]
+    let edgeTrail = [];   // [edgeId, ...]
+    let levelWon = false;
+    let isDragging = false;
+    let pointerWorld = null;
+    let hintNodeId = -1;
+    let hintEdgeId = -1;
+    let ripples = [];
+    let sparks = [];
+    let toastTimer = null;
+
+    const bgStars = Array.from({ length: 28 }, () => ({
+      x: Math.random() * WORLD_W,
+      y: Math.random() * WORLD_H,
+      r: 0.7 + Math.random() * 1.3,
+      ph: Math.random() * Math.PI * 2
+    }));
+
+    function showToast(msg, ms = 2400) {
+      statusToast.textContent = msg;
+      statusToast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
+    }
+
+    function updateHUD() {
+      const chap = getChapter(currentLevelNum);
+      chapterLabel.textContent = chap.title;
+      levelTitle.textContent = `Symphony #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      edgesPill.textContent = `Bridges: ${edgeTrail.length} / ${level.edges.length}`;
+      solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Symphony ${currentLevelNum} / 500 ▾`;
+    }
+
+    function loadLevel(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      level = getLevel(currentLevelNum);
+      level.edges.forEach((e) => { e.used = false; });
+
+      nodeTrail = [];
+      edgeTrail = [];
+      levelWon = false;
+      isDragging = false;
+      pointerWorld = null;
+      hintNodeId = -1;
+      hintEdgeId = -1;
+      ripples = [];
+      sparks = [];
+
+      winOverlay.classList.remove("show");
+      statusToast.classList.remove("show");
+
+      try {
+        localStorage.setItem("zinplay_oneline_500_last", String(currentLevelNum));
+      } catch (e) {}
+
+      updateHUD();
+    }
+
+    function spawnNodeBurst(node, color = "#38bdf8") {
+      ripples.push({ x: node.x, y: node.y, r: 12, alpha: 0.95, color });
+      for (let i = 0; i < 8; i++) {
+        const a = (i * Math.PI * 2) / 8 + Math.random() * 0.4;
+        const s = 1.1 + Math.random() * 1.9;
+        sparks.push({ x: node.x, y: node.y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: 2.2, color, alpha: 0.95 });
+      }
+    }
+
+    function tryStepToNode(targetId) {
+      if (levelWon) return false;
+      const targetNode = level.nodes[targetId];
+
+      // 1. Starting fresh stroke
+      if (nodeTrail.length === 0) {
+        nodeTrail.push(targetId);
+        hintNodeId = -1;
+        playNote(0, 0.13, 0.5);
+        spawnNodeBurst(targetNode, "#38bdf8");
+        updateHUD();
+        return true;
+      }
+
+      const curId = nodeTrail[nodeTrail.length - 1];
+      if (targetId === curId) return false;
+
+      // 2. Find an unused edge connecting curId <-> targetId
+      const availEdge = level.edges.find((e) =>
+        !e.used && ((e.u === curId && e.v === targetId) || (e.u === targetId && e.v === curId))
+      );
+
+      if (availEdge) {
+        availEdge.used = true;
+        edgeTrail.push(availEdge.id);
+        nodeTrail.push(targetId);
+        hintNodeId = -1;
+        hintEdgeId = -1;
+
+        playNote(edgeTrail.length, 0.13, 0.55);
+        spawnNodeBurst(targetNode, edgeTrail.length === level.edges.length ? "#facc15" : "#38bdf8");
+        updateHUD();
+
+        // Check Symphony Completion!
+        if (edgeTrail.length === level.edges.length) {
+          levelWon = true;
+          isDragging = false;
+          pointerWorld = null;
+          solvedSet.add(currentLevelNum);
+          try {
+            localStorage.setItem("zinplay_oneline_500_solved", JSON.stringify([...solvedSet]));
+          } catch (e) {}
+          updateHUD();
+
+          setTimeout(() => playWinSymphony(level.edges.length), 140);
+          const isLast = currentLevelNum === TOTAL_LEVELS;
+          winHeading.textContent = isLast ? "All 500 Symphonies Mastered!" : `Symphony #${currentLevelNum} Complete!`;
+          winText.textContent = `Connected all ${level.edges.length} glowing bridges in one seamless melody.`;
+          nextLevelBtn.textContent = isLast ? "Replay Symphony #1" : `Next Symphony (#${currentLevelNum + 1}) →`;
+          setTimeout(() => winOverlay.classList.add("show"), 650);
+        }
+        return true;
+      }
+
+      // 3. Smooth Backtrack if stepping back onto the immediately previous node
+      if (nodeTrail.length >= 2 && nodeTrail[nodeTrail.length - 2] === targetId) {
+        undoStep();
+        return true;
+      }
+
+      return false;
+    }
+
+    function undoStep() {
+      if (levelWon || nodeTrail.length === 0) return;
+      if (edgeTrail.length > 0) {
+        const lastEid = edgeTrail.pop();
+        level.edges[lastEid].used = false;
+      }
+      nodeTrail.pop();
+      hintNodeId = -1;
+      hintEdgeId = -1;
+      sfxUndo();
+      updateHUD();
+    }
+
+    // Viewport & Pointer Interaction (Supports BOTH Smooth Dragging AND Crisp Tap-by-Tap!)
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function getViewport() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offsetX = (rect.width - WORLD_W * scale) / 2;
+      const offsetY = (rect.height - WORLD_H * scale) / 2;
+      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
+    }
+
+    function clientToWorld(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const vp = getViewport();
+      return {
+        x: (clientX - rect.left - vp.offsetX) / vp.scale,
+        y: (clientY - rect.top - vp.offsetY) / vp.scale
+      };
+    }
+
+    function findNodeAt(wx, wy, radius = 32) {
+      let bestId = -1, bestD = radius;
+      for (const n of level.nodes) {
+        const d = Math.hypot(wx - n.x, wy - n.y);
+        if (d < bestD) { bestD = d; bestId = n.id; }
+      }
+      return bestId;
+    }
+
+    canvas.addEventListener("pointerdown", (e) => {
+      if (levelWon) return;
+      initAudio();
+      const pt = clientToWorld(e.clientX, e.clientY);
+      pointerWorld = pt;
+      isDragging = true;
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+
+      const hitId = findNodeAt(pt.x, pt.y, 34);
+      if (hitId !== -1) {
+        tryStepToNode(hitId);
+      }
     });
+
+    canvas.addEventListener("pointermove", (e) => {
+      if (!isDragging || levelWon) return;
+      const pt = clientToWorld(e.clientX, e.clientY);
+      pointerWorld = pt;
+      const hitId = findNodeAt(pt.x, pt.y, 28);
+      if (hitId !== -1) {
+        const curId = nodeTrail.length > 0 ? nodeTrail[nodeTrail.length - 1] : -1;
+        if (hitId !== curId) {
+          tryStepToNode(hitId);
+        }
+      }
+    });
+
+    const endDrag = () => { isDragging = false; pointerWorld = null; };
+    canvas.addEventListener("pointerup", endDrag);
+    canvas.addEventListener("pointercancel", endDrag);
+
+    // Smart Contextual Hint Button
+    document.getElementById("hintBtn").addEventListener("click", () => {
+      if (levelWon) return;
+      initAudio();
+
+      if (nodeTrail.length === 0) {
+        hintNodeId = level.solutionPath[0];
+        showToast("💡 Start your stroke on the glowing golden node!", 2400);
+        return;
+      }
+
+      const curNode = nodeTrail[nodeTrail.length - 1];
+      const comp = findCompletionFrom(curNode, new Set(edgeTrail), level.edges.length);
+
+      if (comp && comp.length > 0) {
+        hintEdgeId = comp[0].eid;
+        hintNodeId = comp[0].to;
+        showToast("💡 Trace the glowing golden bridge next!", 2200);
+      } else {
+        // Current stroke hit a dead end -> guide player to undo or reset cleanly
+        showToast("💡 Dead end reached! Tap ← Undo or ↺ Reset, then tap Hint for the right start.", 3000);
+      }
+    });
+
+    document.getElementById("undoBtn").addEventListener("click", () => { initAudio(); undoStep(); });
+    document.getElementById("resetBtn").addEventListener("click", () => { initAudio(); loadLevel(currentLevelNum); });
+    soundBtn.addEventListener("click", () => {
+      soundOn = !soundOn;
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
+    });
+    nextLevelBtn.addEventListener("click", () => {
+      loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
+    });
+    document.getElementById("prevLvlBtn").addEventListener("click", () => {
+      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
+    });
+    document.getElementById("nextLvlBtn").addEventListener("click", () => {
+      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
+    });
+
+    // Level Picker Modal
+    const pickerModal = document.getElementById("pickerModal");
+    const chapterTabsEl = document.getElementById("chapterTabs");
+    const levelsGridEl = document.getElementById("levelsGrid");
+    const jumpInput = document.getElementById("jumpInput");
+    let activeChapterIdx = 0;
+
+    function renderPicker() {
+      chapterTabsEl.innerHTML = "";
+      CHAPTERS.forEach((chap, idx) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chapter-tab" + (idx === activeChapterIdx ? " active" : "");
+        b.textContent = chap.range;
+        b.addEventListener("click", () => {
+          activeChapterIdx = idx;
+          renderPicker();
+        });
+        chapterTabsEl.appendChild(b);
+      });
+
+      const chap = CHAPTERS[activeChapterIdx];
+      levelsGridEl.innerHTML = "";
+      for (let n = chap.start; n <= chap.end; n++) {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "lvl-cell";
+        if (solvedSet.has(n)) cell.classList.add("solved");
+        if (n === currentLevelNum) cell.classList.add("active");
+        cell.textContent = n;
+        cell.addEventListener("click", () => {
+          loadLevel(n);
+          pickerModal.classList.remove("open");
+        });
+        levelsGridEl.appendChild(cell);
+      }
+    }
+
+    openPickerBtn.addEventListener("click", () => {
+      activeChapterIdx = Math.floor((currentLevelNum - 1) / 100);
+      jumpInput.value = "";
+      renderPicker();
+      pickerModal.classList.add("open");
+    });
+    document.getElementById("closePickerBtn").addEventListener("click", () => {
+      pickerModal.classList.remove("open");
+    });
+    pickerModal.addEventListener("click", (e) => {
+      if (e.target === pickerModal) pickerModal.classList.remove("open");
+    });
+    document.getElementById("jumpBtn").addEventListener("click", () => {
+      const val = parseInt(jumpInput.value, 10);
+      if (val >= 1 && val <= TOTAL_LEVELS) {
+        loadLevel(val);
+        pickerModal.classList.remove("open");
+      }
+    });
+
+    // ==============================================
+    // GLOWING MUSICAL CONSTELLATION RENDERER
+    // ==============================================
+    function drawEdgePath(e, a, b) {
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      if (e.curve !== 0) {
+        const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const len = Math.max(1, Math.hypot(dx, dy));
+        const nx = -dy / len, ny = dx / len;
+        ctx.quadraticCurveTo(mx + nx * e.curve, my + ny * e.curve, b.x, b.y);
+      } else {
+        ctx.lineTo(b.x, b.y);
+      }
+      ctx.stroke();
+    }
+
+    function drawScene(now) {
+      const vp = getViewport();
+      ctx.clearRect(0, 0, vp.w, vp.h);
+
+      ctx.save();
+      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.scale(vp.scale, vp.scale);
+
+      // 1. Twinkling Ambient Starfield
+      for (const st of bgStars) {
+        const a = 0.2 + 0.35 * Math.sin(now * 0.002 + st.ph);
+        ctx.fillStyle = `rgba(186, 230, 253, ${a})`;
+        ctx.beginPath();
+        ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 2. Unlit Constellation Bridges First
+      for (const e of level.edges) {
+        if (e.used) continue;
+        const a = level.nodes[e.u], b = level.nodes[e.v];
+        const isHint = e.id === hintEdgeId;
+
+        ctx.save();
+        ctx.lineCap = "round";
+        if (isHint) {
+          ctx.strokeStyle = "#facc15";
+          ctx.shadowColor = "#facc15";
+          ctx.shadowBlur = 16;
+          ctx.lineWidth = 5;
+          ctx.setLineDash([8, 6]);
+        } else {
+          ctx.strokeStyle = e.isDouble ? "rgba(251, 191, 36, 0.36)" : "rgba(148, 163, 184, 0.32)";
+          ctx.lineWidth = 4;
+        }
+        drawEdgePath(e, a, b);
+        ctx.restore();
+      }
+
+      // 3. Lit Harmonic Bridges (Glowing Cyan -> Gold on Win!)
+      for (const e of level.edges) {
+        if (!e.used) continue;
+        const a = level.nodes[e.u], b = level.nodes[e.v];
+        ctx.save();
+        ctx.lineCap = "round";
+        ctx.strokeStyle = levelWon ? "#facc15" : "#38bdf8";
+        ctx.shadowColor = levelWon ? "#facc15" : "#38bdf8";
+        ctx.shadowBlur = 16;
+        ctx.lineWidth = 5.5;
+        drawEdgePath(e, a, b);
+
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1.8;
+        drawEdgePath(e, a, b);
+        ctx.restore();
+      }
+
+      // 4. Live Elastic Dragging Line Toward Finger/Cursor
+      if (isDragging && pointerWorld && nodeTrail.length > 0 && !levelWon) {
+        const tip = level.nodes[nodeTrail[nodeTrail.length - 1]];
+        ctx.save();
+        ctx.strokeStyle = "rgba(125, 211, 252, 0.55)";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(tip.x, tip.y);
+        ctx.lineTo(pointerWorld.x, pointerWorld.y);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 5. Soundwave Ripples
+      ripples = ripples.filter((r) => r.alpha > 0.04);
+      for (const r of ripples) {
+        r.r += 1.9;
+        r.alpha *= 0.91;
+        ctx.strokeStyle = r.color;
+        ctx.globalAlpha = r.alpha;
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      // 6. Glowing Constellation Musical Nodes
+      const curTipId = nodeTrail.length > 0 ? nodeTrail[nodeTrail.length - 1] : -1;
+      for (const n of level.nodes) {
+        const isCurrent = n.id === curTipId && !levelWon;
+        const isHintNode = n.id === hintNodeId && !levelWon;
+        const hasRemEdge = level.edges.some((e) => !e.used && (e.u === n.id || e.v === n.id));
+        const pulse = isCurrent || isHintNode ? (1 + 0.14 * Math.sin(now * 0.009)) : 1;
+
+        ctx.save();
+        if (isCurrent || isHintNode) {
+          ctx.strokeStyle = isHintNode ? "#facc15" : "#38bdf8";
+          ctx.lineWidth = 2.4;
+          ctx.globalAlpha = 0.65;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 19 * pulse, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+
+        ctx.fillStyle = levelWon ? "#facc15" : (isCurrent ? "#38bdf8" : (hasRemEdge ? "#1e294a" : "#0ea5e9"));
+        ctx.strokeStyle = isHintNode ? "#facc15" : (isCurrent ? "#ffffff" : (hasRemEdge ? "#7dd3fc" : "#bae6fd"));
+        ctx.shadowColor = isHintNode ? "#facc15" : (isCurrent || levelWon ? "#38bdf8" : "transparent");
+        ctx.shadowBlur = isCurrent || isHintNode || levelWon ? 16 : 0;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 12.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, isCurrent ? 5 : 3.6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // 7. Sparks
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha *= 0.92;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.restore();
+      requestAnimationFrame(drawScene);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    loadLevel(currentLevelNum);
+    requestAnimationFrame(drawScene);
   </script>
 
 </body>
