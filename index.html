@@ -3,9 +3,232 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZinPlay — 31 Free Original HTML5 Browser Games</title>
-  <meta name="description" content="Play 31 free, fast-loading original HTML5 browser games on mobile and desktop. Puzzle, physics, ASMR, strategy, and mystery games with zero downloads." />
+  <title>ZinPlay — 31 Free Original HTML5 Browser Games (No Download)</title>
+  <meta name="description" content="Play 31 free original HTML5 browser games with 15,500+ procedural levels. Relaxing ASMR Web Audio games, Matter.js physics puzzles, logic circuits, and OSINT mysteries with zero downloads." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+
+  <!-- Structured Data for Google Search & Rich Snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ZinPlay",
+    "url": "https://zinplay.io/",
+    "description": "Independent hub for 31 lightweight, privacy-first HTML5 Canvas puzzle, physics, ASMR, strategy, and OSINT mystery browser games."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Are all 31 HTML5 browser games on ZinPlay completely free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Every game on ZinPlay is 100% free to play directly inside your mobile or desktop browser with zero paywalls, subscriptions, or locked chapters."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do these browser games work smoothly on smartphones and Chromebooks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. All 31 games use lightweight HTML5 Canvas rendering and touch-first controls that run smoothly on Android Chrome, iOS Safari, school or work Chromebooks, and desktop browsers without taking up device storage."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many levels are included across the ZinPlay library?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Each dedicated title includes a deterministic 500-level progression system organized into 5 escalating chapters—totaling over 15,500 unique puzzles, physics contraptions, ASMR restorations, and mystery cases."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does ZinPlay save my game progress without an account?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Your solved stages and preferences are automatically stored locally inside your own browser storage, keeping your activity private with no login or sign-up required."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* Banner 1: Hero Visual Showcase Banner */
+    .zp-banner-primary {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      padding: 26px 24px;
+      margin: 22px auto 26px;
+      background: linear-gradient(135deg, #0b1224 0%, #172554 52%, #312e81 100%);
+      border: 1px solid rgba(125, 211, 252, 0.28);
+      color: #f8fafc;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: center;
+      text-align: left;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
+    }
+    @media (min-width: 760px) {
+      .zp-banner-primary {
+        grid-template-columns: 1.35fr 0.85fr;
+        padding: 32px 34px;
+      }
+    }
+    .zp-banner-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid rgba(56, 189, 248, 0.42);
+      color: #bae6fd;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .zp-banner-primary h2 {
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    .zp-banner-primary p {
+      font-size: 0.94rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+      max-width: 560px;
+    }
+    .zp-stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .zp-stat-pill {
+      padding: 6px 12px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.52);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .zp-stat-pill strong {
+      color: #38bdf8;
+    }
+    .zp-banner-art {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .zp-banner-art svg {
+      width: 100%;
+      max-width: 260px;
+      height: auto;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35));
+    }
+
+    /* Banner 2: Mid-Page ASMR, Physics & Mystery Spotlight Banner */
+    .zp-banner-spotlight {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      padding: 26px 24px;
+      margin: 34px 0 28px;
+      background: linear-gradient(135deg, #064e3b 0%, #0f766e 48%, #1e3a8a 100%);
+      border: 1px solid rgba(110, 231, 183, 0.32);
+      color: #f8fafc;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: center;
+      box-shadow: 0 16px 38px rgba(15, 23, 42, 0.16);
+    }
+    @media (min-width: 760px) {
+      .zp-banner-spotlight {
+        grid-template-columns: 0.85fr 1.45fr;
+        padding: 30px 34px;
+      }
+    }
+    .zp-banner-spotlight h2 {
+      font-size: clamp(1.28rem, 2.8vw, 1.72rem);
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .zp-banner-spotlight p {
+      font-size: 0.92rem;
+      line-height: 1.62;
+      color: #d1fae5;
+      margin-bottom: 16px;
+    }
+    .zp-quick-picks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .zp-pick-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(167, 243, 208, 0.38);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.12s ease, background 0.16s ease;
+    }
+    .zp-pick-link:hover {
+      background: rgba(15, 23, 42, 0.72);
+      transform: translateY(-2px);
+    }
+
+    /* Rich Editorial Styling Enhancements */
+    .editorial-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin: 14px 0 8px;
+    }
+    @media (min-width: 680px) {
+      .editorial-grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .editorial-mini-box {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .editorial-mini-box h3 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .editorial-mini-box p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+  </style>
 </head>
 <body>
 
@@ -18,7 +241,7 @@
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
         <a href="#games" class="nav-highlight">All 31 Games</a>
-        <a href="#about-engine">About</a>
+        <a href="#about-engine">Guides &amp; Info</a>
         <a href="#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
         <a href="/contact/">Contact</a>
@@ -30,16 +253,55 @@
 
     <!-- Hero -->
     <section class="hero">
-      <div class="hero-pill">⚡ 31 Original HTML5 Browser Games</div>
-      <h1>ZinPlay - Free Online Games!</h1>
-      <p>Fast, handcrafted browser games built with pure HTML5 Canvas, physics, and Web Audio. Play instantly on phone or desktop with zero downloads.</p>
+      <div class="hero-pill">⚡ 31 Original HTML5 Browser Games &bull; 15,500+ Levels</div>
+      <h1>ZinPlay — Free Instant HTML5 Browser Games</h1>
+      <p>Play handcrafted puzzle, 2D physics, tactile ASMR, strategy, and OSINT mystery games directly inside your browser. Zero app installs, zero sign-ups, and 100% private local saves.</p>
 
-      <div class="hero-banner">
-        <p class="hero-banner-title">Puzzle, Physics, ASMR &amp; Strategy Worlds</p>
-        <p class="hero-banner-sub">Instant loading &bull; Mobile-first controls &bull; 100% browser-based</p>
+      <!-- BANNER 1: Visual Showcase Banner -->
+      <div class="zp-banner-primary" role="region" aria-label="Featured Platform Highlights">
+        <div>
+          <span class="zp-banner-eyebrow">✦ Zero-Install Web Arcade Engine</span>
+          <h2>500 Procedural Levels Inside Every Single Game</h2>
+          <p>Skip shallow 5-stage prototypes. Every title on ZinPlay runs a dedicated HTML5 Canvas &amp; Web Audio engine built for instant mobile touch play, Chromebooks, and desktop browsers.</p>
+          <div class="zp-stat-row">
+            <span class="zp-stat-pill"><strong>31</strong> Original Titles</span>
+            <span class="zp-stat-pill"><strong>15,500+</strong> Verified Levels</span>
+            <span class="zp-stat-pill"><strong>60 FPS</strong> Pure Canvas</span>
+            <span class="zp-stat-pill"><strong>0 MB</strong> Device Storage</span>
+          </div>
+          <a href="#games" class="btn-primary">Explore All 31 Games ↓</a>
+        </div>
+        <div class="zp-banner-art" aria-hidden="true">
+          <svg viewBox="0 0 260 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="260" y2="190" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#38BDF8"/>
+                <stop offset="0.5" stop-color="#818CF8"/>
+                <stop offset="1" stop-color="#F472B6"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="30" y1="20" x2="230" y2="170" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FACC15"/>
+                <stop offset="1" stop-color="#34D399"/>
+              </linearGradient>
+            </defs>
+            <rect x="8" y="8" width="244" height="174" rx="22" fill="rgba(15,23,42,0.65)" stroke="url(#g1)" stroke-width="2"/>
+            <!-- Laser & Prism Constellation -->
+            <path d="M32 136 L108 62 L182 118 L228 54" stroke="url(#g1)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M108 62 L192 52" stroke="#FACC15" stroke-width="2" stroke-dasharray="5 5"/>
+            <polygon points="108,36 130,74 86,74" fill="rgba(56,189,248,0.22)" stroke="#7DD3FC" stroke-width="2.5"/>
+            <!-- Glowing Musical Nodes -->
+            <circle cx="32" cy="136" r="10" fill="#0F172A" stroke="#38BDF8" stroke-width="3"/>
+            <circle cx="32" cy="136" r="4" fill="#E0F2FE"/>
+            <circle cx="182" cy="118" r="12" fill="#0F172A" stroke="#F472B6" stroke-width="3"/>
+            <circle cx="182" cy="118" r="5" fill="#FBCFE8"/>
+            <circle cx="228" cy="54" r="10" fill="#0F172A" stroke="#34D399" stroke-width="3"/>
+            <circle cx="228" cy="54" r="4" fill="#A7F3D0"/>
+            <!-- Mini Soundwave & Play Pill -->
+            <rect x="34" y="152" width="192" height="14" rx="7" fill="rgba(30,41,59,0.9)"/>
+            <rect x="38" y="156" width="128" height="6" rx="3" fill="url(#g2)"/>
+          </svg>
+        </div>
       </div>
-
-      <a href="#games" class="btn-primary">Explore All 31 Games ↓</a>
     </section>
 
     <!-- 4 Feature Cards (Balanced 2x2) -->
@@ -47,22 +309,22 @@
       <div class="card">
         <div class="card-top"><div class="icon-box">🔒</div></div>
         <h3>100% Local Privacy</h3>
-        <p>No accounts, no cloud tracking. Your high scores and unlocked levels stay strictly inside your browser storage.</p>
+        <p>No accounts, no cloud tracking. Your solved levels, chapter unlocks, and best scores stay strictly inside your browser storage.</p>
       </div>
       <div class="card">
         <div class="card-top"><div class="icon-box">⚡</div></div>
-        <h3>Instant 60 FPS Engine</h3>
-        <p>Hardware-accelerated HTML5 Canvas and Web Audio deliver smooth gameplay without heavy downloads or lag.</p>
+        <h3>Instant 60 FPS Canvas Engine</h3>
+        <p>Hardware-accelerated HTML5 Canvas, Matter.js rigid-body physics, and real-time vector art load in under a second.</p>
       </div>
       <div class="card">
         <div class="card-top"><div class="icon-box">📱</div></div>
-        <h3>Built for Mobile &amp; Desktop</h3>
-        <p>Touch-friendly layouts run smoothly on Android Chrome, iOS Safari, and desktop browsers without taking up storage.</p>
+        <h3>Mobile &amp; Chromebook Ready</h3>
+        <p>Touch-friendly controls run smoothly on Android Chrome, iOS Safari, tablets, and low-storage laptops without installation.</p>
       </div>
       <div class="card">
         <div class="card-top"><div class="icon-box">🎧</div></div>
-        <h3>Interactive Soundscapes</h3>
-        <p>Procedural Web Audio and tactile ASMR sound effects bring musical puzzles, peeling, and lockpicking to life.</p>
+        <h3>Procedural Web Audio ASMR</h3>
+        <p>Synthesized soundscapes generate live water sprays, adhesive peels, wooden domino clacks, and musical chords with zero audio bloat.</p>
       </div>
     </section>
 
@@ -303,28 +565,88 @@
 
     </section>
 
+    <!-- BANNER 2: Tactile ASMR, Physics & Detective Spotlight Banner -->
+    <section class="zp-banner-spotlight" aria-label="Editor Spotlight Collection">
+      <div class="zp-banner-art" aria-hidden="true">
+        <svg viewBox="0 0 240 165" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="6" width="228" height="153" rx="20" fill="rgba(6,24,38,0.58)" stroke="rgba(167,243,208,0.4)" stroke-width="2"/>
+          <!-- Procedural ASMR Audio Waveform -->
+          <path d="M26 84 Q42 42 58 84 T90 84 T122 84 T154 84 T186 84 T214 84" stroke="#6EE7B7" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M26 84 Q42 116 58 84 T90 84 T122 84 T154 84 T186 84 T214 84" stroke="#38BDF8" stroke-width="2" stroke-opacity="0.7" stroke-linecap="round"/>
+          <!-- Compass & Physics Gear Badges -->
+          <circle cx="64" cy="40" r="14" fill="rgba(250,204,21,0.18)" stroke="#FDE047" stroke-width="2"/>
+          <circle cx="64" cy="40" r="4" fill="#FDE047"/>
+          <circle cx="176" cy="126" r="16" fill="rgba(56,189,248,0.18)" stroke="#7DD3FC" stroke-width="2" stroke-dasharray="4 3"/>
+          <circle cx="176" cy="126" r="6" fill="#BAE6FD"/>
+          <text x="120" y="144" text-anchor="middle" fill="#D1FAE5" font-family="monospace" font-size="10" font-weight="bold">WEB AUDIO • MATTER.JS • OSINT</text>
+        </svg>
+      </div>
+      <div>
+        <span class="zp-banner-eyebrow" style="background:rgba(167,243,208,0.16); border-color:rgba(167,243,208,0.45); color:#d1fae5;">🎧 Interactive Sound &amp; Physics Originals</span>
+        <h2>Unwind with Tactile ASMR or Crack a Mystery Case</h2>
+        <p>Looking for relaxing browser games to clear your mind—or clever detective challenges you cannot find on generic clone arcades? Jump straight into our four most played interactive experiences:</p>
+        <div class="zp-quick-picks">
+          <a href="/games/powerwash-asmr/" class="zp-pick-link">💦 ASMR PowerWash</a>
+          <a href="/games/perfect-peel/" class="zp-pick-link">🏷️ The Perfect Peel</a>
+          <a href="/games/geo-sleuth/" class="zp-pick-link">🌍 OSINT Geo-Sleuth</a>
+          <a href="/games/rube-goldberg/" class="zp-pick-link">⚙️ Rube Goldberg</a>
+        </div>
+      </div>
+    </section>
+
     <!-- Safe AdSense Placement -->
     <div class="ad-slot" aria-label="Advertisement">
       <span class="ad-label">Advertisement</span>
       <!-- AdSense code goes here after approval -->
     </div>
 
-    <!-- Editorial Content (SEO & AdSense) -->
+    <!-- Rich SEO Editorial Content (800+ Words Targeted at Low-Competition Long-Tail Keywords) -->
     <section id="about-engine" class="section-block">
+
       <article class="card editorial-card">
-        <h2>Reimagining Casual Gaming: The Zero-Install HTML5 Web</h2>
-        <p>Modern browsers now have the rendering speed and audio precision to run creative puzzle, physics, and strategy games directly inside a tab—without bulky downloads, account sign-ups, or intrusive mobile permissions.</p>
-        <p>Every game on ZinPlay is built as an independent, lightweight static page so you can jump straight into gameplay on any smartphone or computer in under a second.</p>
+        <h2>Play 31 Original HTML5 Browser Games Without Downloads or Sign-Ups</h2>
+        <p>Most free online game portals recycle the same bloated third-party embeds packed with pop-ups, broken Flash wrappers, and heavy 50 MB loaders. <strong>ZinPlay</strong> was engineered from the ground up as a dedicated, zero-install HTML5 web arcade where every single title is handcrafted in pure JavaScript, HTML5 Canvas, and real-time Web Audio. Whether you are searching for <em>relaxing ASMR browser games with realistic sound</em>, <em>2D Matter.js physics sandboxes</em>, <em>digital logic gate puzzles</em>, or <em>OSINT geolocation detective challenges</em>, every page opens instantly on mobile phones, tablets, Chromebooks, and desktop browsers.</p>
+        <p>Instead of trapping players inside shallow five-level demos, our deterministic level architecture powers <strong>500 distinct stages per game</strong>—giving you more than <strong>15,500 verified puzzles, contraptions, wash jobs, and interrogation cases</strong> that never require an account, app store download, or intrusive device permissions.</p>
       </article>
 
       <article class="card editorial-card">
-        <h2>🔒 Why 100% Client-Side Architecture Matters</h2>
+        <h2>Inside Our Four Interactive Game Worlds</h2>
+        <p>To make discovering new browser experiences effortless, ZinPlay organizes its 31 original web games into four specialized genres—each built around tactile touch feedback and progressive chapter difficulty:</p>
+
+        <div class="editorial-grid-2">
+          <div class="editorial-mini-box">
+            <h3>🧩 Spatial, Optical &amp; Logic Puzzles (11 Games)</h3>
+            <p>Train visual perception and deductive reasoning across dedicated browser puzzles you can play in short coffee breaks. Bend laser beams in <strong>Prism &amp; Lasers</strong>, rotate 3D wooden sculptures in <strong>Shadow Weaver</strong>, fold multi-layered origami sheets in <strong>Fold &amp; Reveal</strong>, strip down vintage electronics in <strong>Un-Builder</strong>, blend authentic artist pigments in <strong>Color Alchemy Lab</strong>, wire real Boolean circuits in <strong>Minimalist Logic Gates</strong>, or navigate impossible Escher bridges in <strong>Daily Visual Paradox</strong>.</p>
+          </div>
+
+          <div class="editorial-mini-box">
+            <h3>⚙️ Real-Time 2D Physics Sandboxes (7 Games)</h3>
+            <p>Powered by live rigid-body gravity, buoyancy, and chain-reaction simulation, our physics library rewards creative problem-solving over rote memorization. Engineer ramps, springs, fans, and magnets in <strong>Rube Goldberg Sandbox</strong>, draw curving multi-branch cascades in <strong>Infinite Domino Builder</strong>, balance heavy shipping containers over rolling swells in <strong>Cargo Wave Balancer</strong>, pack fragile groceries in <strong>Grocery Bagging Physics</strong>, or glide gently through non-Newtonian fluid in <strong>Oobleck Maze</strong>.</p>
+          </div>
+
+          <div class="editorial-mini-box">
+            <h3>🎧 Tactile ASMR &amp; Zen Soundscapes (6 Games)</h3>
+            <p>Unwind with soothing, oddly satisfying web experiences synthesized live through the Web Audio API. Strip mud and stubborn rust off Persian rugs and classic cars in <strong>ASMR PowerWash</strong>, scrub and reassemble heirloom pocket watches in <strong>Antique Restorer</strong>, glide stickers cleanly off glossy screens in <strong>The Perfect Peel</strong>, snap perforated cinema stubs at 45 degrees in <strong>The Perfect Tear</strong>, carve kinetic sand and jelly in <strong>Oddly Satisfying Slicer</strong>, or crack dark minimalist vaults by ear in <strong>The Zen Lockpicker</strong>.</p>
+          </div>
+
+          <div class="editorial-mini-box">
+            <h3>🕵️ Real-Time Strategy &amp; OSINT Mysteries (7 Games)</h3>
+            <p>Step into high-stakes control rooms and detective bureaus directly in your tab. Hold a city's electrical grid steady at 50 Hz in <strong>Blackout Grid Operator</strong>, plot synchronized museum stealth routes in <strong>Heist Blueprint Planner</strong>, decode technical wire charts in <strong>Manual Bomb Defusal</strong>, spot split-second facial tells in <strong>Micro-Expression Polygraph</strong>, investigate a retro desktop in <strong>OS Sleuth</strong>, and cross-reference wall outlets, menus, and skylines on a world map in <strong>OSINT Geo-Sleuth</strong>.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Why Lightweight Client-Side Canvas Games Beat Heavy Mobile Apps</h2>
+        <p>Modern mobile browsers have become powerful enough to deliver crisp 60 FPS graphics and responsive procedural audio without forcing you to clear gigabytes of phone storage. Running 100% client-side brings clear practical advantages for everyday players:</p>
         <ul>
-          <li><strong>Dedicated Game URLs:</strong> Each of our 31 titles runs on its own focused page with clear controls, rules, and tips.</li>
-          <li><strong>Private Local Storage:</strong> Progress and best scores stay on your own device without third-party tracking accounts.</li>
-          <li><strong>Mobile-First Performance:</strong> Responsive touch controls and optimized Canvas loops keep frame rates smooth and battery drain low.</li>
+          <li><strong>Zero Storage Footprint &amp; Instant Loading:</strong> Because every ZinPlay page uses lightweight vector graphics and synthesized Web Audio instead of massive video or MP3 bundles, games launch in under a second—even on older Android phones, budget laptops, or school-friendly Chromebooks.</li>
+          <li><strong>Privacy-First Local Storage Saves:</strong> We never ask for email sign-ups, social logins, or tracking cookies just to save your unlocked chapters. Every cleared stage across all 500-level progression grids is saved automatically inside your browser's private <code>localStorage</code>.</li>
+          <li><strong>Smart Hints &amp; Open Chapter Selectors:</strong> Every single game includes a built-in Level Picker covering Chapters 1 through 5 (Levels 1–500) so you can play sequentially from easy onboarding stages or jump directly to expert challenges—alongside context-aware hint tools whenever you want a gentle nudge.</li>
+          <li><strong>Clean, Dedicated Game URLs:</strong> Each of our 31 browser games lives on its own focused, clutter-free URL complete with clear controls, gameplay tips, and device-adaptive touch layouts so you can bookmark your favorite daily puzzle or sandbox.</li>
         </ul>
       </article>
+
     </section>
 
     <!-- FAQ -->
@@ -332,18 +654,28 @@
       <h2>Frequently Asked Questions</h2>
 
       <details class="faq-item">
-        <summary>Are all 31 games on ZinPlay completely free?</summary>
-        <div class="faq-answer">Yes. Every game in our library is 100% free to play in your browser with no paywalls or subscriptions.</div>
+        <summary>Are all 31 HTML5 browser games on ZinPlay completely free?</summary>
+        <div class="faq-answer">Yes. Every game in our 31-title library is 100% free to play directly in your browser with no paywalls, in-app purchases, or locked chapters.</div>
       </details>
 
       <details class="faq-item">
-        <summary>Do these games work smoothly on smartphones?</summary>
-        <div class="faq-answer">Yes. The hub and game stages are designed mobile-first with touch controls and responsive layouts for Android and iOS browsers.</div>
+        <summary>Do these games work smoothly on smartphones and Chromebooks?</summary>
+        <div class="faq-answer">Yes. Every game stage is built mobile-first with touch drag, pinch-to-zoom, and large on-screen buttons for Android and iOS browsers, while also supporting keyboard and mouse shortcuts on Chromebooks, Windows, and macOS.</div>
       </details>
 
       <details class="faq-item">
-        <summary>Do I need to install an app or sign up?</summary>
-        <div class="faq-answer">No downloads or registration required. Just tap any game card above to start playing immediately.</div>
+        <summary>Do I need to install an app or create an account to save my levels?</summary>
+        <div class="faq-answer">No downloads or registration required. Your cleared levels across all 500-stage games are stored privately inside your own browser's local storage automatically.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Which ZinPlay games are best for relaxing ASMR audio?</summary>
+        <div class="faq-answer">Put on headphones and try <strong>ASMR PowerWash</strong>, <strong>The Perfect Peel</strong>, <strong>The Perfect Tear</strong>, <strong>Oddly Satisfying Slicer</strong>, <strong>Antique Restorer</strong>, or <strong>The Zen Lockpicker</strong>—all feature live Web Audio sound synthesis that responds directly to your touch speed.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Are the physics and logic puzzles solvable without guessing?</summary>
+        <div class="faq-answer">Yes. Our logic, stealth, origami, and optical paradox puzzles are backed by algorithmic solvers (including Space-Time BFS and state-space verification), and every game features a built-in Hint button if you ever get stuck.</div>
       </details>
     </section>
 
@@ -366,8 +698,8 @@
           <ul>
             <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
             <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/fold-reveal/">Fold &amp; Reveal</a></li>
+            <li><a href="/games/visual-paradox/">Daily Visual Paradox</a></li>
           </ul>
         </div>
 
@@ -375,9 +707,9 @@
           <h4>Top Strategy</h4>
           <ul>
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
-            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
 
