@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tension &amp; Strings — 500 Geometric Untangling Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free levels of Tension & Strings in your browser. Drag connected nodes to untangle red intersecting elastic strings until every line turns glowing green." />
+  <title>Tension &amp; Strings — Free 500-Level Untangle Line &amp; Planarity Puzzle | ZinPlay</title>
+  <meta name="description" content="Play Tension &amp; Strings free online with no download. Drag glowing nodes until zero elastic lines intersect across 500 verified planarity graph puzzles with live plucked Web Audio on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Tension & Strings",
+    "url": "https://zinplay.io/games/tension-strings/",
+    "genre": ["Puzzle", "Logic", "Spatial Brain Teaser"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -29,14 +42,16 @@
       font-size: 0.9rem;
       color: var(--muted);
     }
+
+    /* Top Planar Web HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0b1120;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #080d1c;
+      color: #f1f5f9;
+      border-bottom: 1px solid #1b2847;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -49,7 +64,7 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
+      color: #34d399;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -61,54 +76,77 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(99, 102, 241, 0.22);
-      border: 1px solid rgba(129, 140, 248, 0.35);
-      color: #c7d2fe;
+      background: rgba(244, 63, 94, 0.18);
+      border: 1px solid rgba(251, 113, 133, 0.42);
+      color: #fecdd3;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
+      transition: all 0.2s ease;
     }
-    .hud-pill.cross-red {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: rgba(248, 113, 113, 0.45);
-      color: #fecaca;
-    }
-    .hud-pill.cross-zero {
-      background: rgba(34, 197, 94, 0.22);
+    .hud-pill.clear-pill {
+      background: rgba(34, 197, 94, 0.2);
       border-color: rgba(74, 222, 128, 0.5);
       color: #bbf7d0;
     }
+    .hud-pill.moves-pill {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(56, 189, 248, 0.36);
+      color: #bae6fd;
+    }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
+    }
+
+    /* Dark-Mode Elastic Strings Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 440px;
-      background: radial-gradient(circle at 50% 45%, #131c36 0%, #080c18 100%);
+      aspect-ratio: 1 / 1;
+      max-height: 495px;
+      background: radial-gradient(circle at 50% 45%, #121c38 0%, #060a16 100%);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
       -webkit-user-select: none;
     }
-    @media (min-width: 640px) {
-      .canvas-container {
-        height: 500px;
-      }
-    }
-    #stringsCanvas {
+    #tensionCanvas {
       width: 100%;
       height: 100%;
       display: block;
       touch-action: none;
       cursor: grab;
     }
-    #stringsCanvas.dragging {
+    #tensionCanvas.dragging {
       cursor: grabbing;
     }
+
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #090e1f;
+      border-top: 1px solid #1b2847;
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+
     .status-toast {
       position: absolute;
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.94);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(8, 13, 28, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -122,13 +160,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
+
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(8, 12, 24, 0.76);
+      background: rgba(6, 10, 22, 0.8);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -136,7 +173,7 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
     }
     .win-overlay.show {
       opacity: 1;
@@ -148,19 +185,13 @@
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 320px;
+      max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
+
     .controls-group {
       display: flex;
       gap: 6px;
@@ -187,6 +218,7 @@
       border-radius: 10px;
       cursor: pointer;
     }
+
     /* Level Picker Modal */
     .modal-backdrop {
       position: fixed;
@@ -199,9 +231,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -298,6 +328,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #080d1c;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #080d1c;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #080d1c 0%, #1e1b4b 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.emerald-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .strat-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .strat-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .strat-table th, .strat-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .strat-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .strat-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -310,7 +420,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -323,53 +433,63 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Levels &bull; Geometric Puzzle</span>
+      <span class="cat-tag">500 Planar Webs &bull; Untangle Logic Puzzle</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Tension &amp; Strings</h1>
-      <p>Drag connected nodes until zero elastic strings overlap and the entire web turns glowing green.</p>
+      <p>Drag glowing anchor nodes across the dark board until zero elastic strings overlap and the entire web shines emerald green.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Tension and Strings Game">
+    <section class="game-wrapper" aria-label="Tension and Strings Untangle Puzzle">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Loose Threads</span>
-          <span id="levelTitle">Level 1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Elastic Warm-Up</span>
+          <span id="levelTitle">Web #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill cross-red" id="crossCounter">Crossings: 0</span>
-          <span class="hud-pill" id="movesCounter">Moves: 0</span>
-          <span class="hud-pill" id="solvedCounter">Solved: 0 / 500</span>
+          <span class="hud-pill" id="crossingsPill">Crossings: 0</span>
+          <span class="hud-pill moves-pill" id="movesPill">Moves: 0</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Solved: 0 / 500</span>
         </div>
       </div>
 
+      <!-- Dark-Mode Elastic Strings Canvas -->
       <div class="canvas-container">
-        <canvas id="stringsCanvas"></canvas>
+        <canvas id="tensionCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
+        <!-- Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2.1rem; margin-bottom:6px;">🕸️</div>
-            <h2 id="winHeading">Knot Untangled!</h2>
-            <p id="winText">Every elastic string is aligned in clean geometry.</p>
-            <button id="nextLevelBtn" class="btn-primary" type="button">Next Level →</button>
+            <div style="font-size:2.3rem; margin-bottom:6px;">🕸️</div>
+            <h2 id="winHeading">Web Untangled!</h2>
+            <p id="winText">Zero intersections remaining—every elastic string is in perfect harmony.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Web →</button>
           </div>
         </div>
       </div>
 
+      <div class="legend-strip">
+        <span>🔴 Red String = Crossing</span>
+        <span>🟢 Green String = Untangled</span>
+        <span>🔒 Gold Pin = Fixed Anchor (Ch. 3+)</span>
+        <span>👆 Drag Any Blue Node Smoothly</span>
+      </div>
+
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Reset</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Untangle 1 Node</button>
+          <button id="undoBtn" class="btn-outline" type="button">← Undo</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reset Web</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Smart Hint</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Level 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Web 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -379,66 +499,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 830+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/tension-strings-banner-1.jpg"
+            alt="Tension and Strings untangle planar graph puzzle showing red intersecting strings transforming into glowing emerald green threads"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Verified Planarity Webs — Tactile Elastic String Physics</h3>
+          <p>Pull knotted red filaments apart until every single crossing vanishes and the constellation locks into radiant green equilibrium.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Tension &amp; Strings (500 Levels)</h2>
-        <p>Tension &amp; Strings is a calming spatial-reasoning puzzle inspired by planar graph geometry. Every stage starts with a tangled web of elastic strings connecting glowing nodes. Any string that crosses another glows <strong>red</strong>, while completely free strings shine <strong>emerald green</strong>. Drag the nodes around the board until the crossing counter hits zero.</p>
+        <h2>What Is Tension &amp; Strings? A Tactile Untangle Line Puzzle Online</h2>
+        <p><strong>Tension &amp; Strings</strong> is a free <strong>untangle lines browser game</strong> inspired by the classic mathematical puzzle <em>Planarity</em>, upgraded with vibrating elastic string physics and live harp-like Web Audio. Every puzzle presents a tangled network of luminous nodes wired together by glowing elastic filaments. Whenever two lines cross over each other, both strings flash <strong>neon crimson</strong> and spark at the intersection point. Drag nodes freely around the canvas until <strong>zero lines intersect</strong> and the entire geometric web turns calm <strong>emerald green</strong>.</p>
+        <p>Engineered as a lightweight, <strong>no-download spatial brain teaser for smartphones, tablets, and Chromebooks</strong>, Tension &amp; Strings runs smoothly at 60 FPS with generous touch hitboxes and zero timers. Every release plucks the attached filaments with soft synthesized acoustic tones, turning logical untangling into an oddly satisfying sensory break you can play for two minutes or two hours.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>How to Untangle Complex Planar Graphs Quickly (Pro Strategy Table)</h2>
+        <p>Early levels with 6 or 7 nodes untangle intuitively in seconds, but once you reach 16-node lattices in Chapters 4 and 5, dragging randomly can feel chaotic. Use these four proven <strong>planar graph untangling techniques</strong> to flatten even the densest knots methodically:</p>
+
+        <div class="strat-table-wrap">
+          <table class="strat-table">
+            <thead>
+              <tr>
+                <th>Untangling Technique</th>
+                <th>What to Look For</th>
+                <th>How to Execute It</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Pull Out Low-Degree Nodes First</strong></td>
+                <td>Nodes connected to only <strong>2 or 3 strings</strong>.</td>
+                <td>Drag them out toward the perimeter of the board first—they naturally form clean outer triangle edges.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Spot Closed Triangles</strong></td>
+                <td>Three mutually linked nodes forming a tight 3-sided loop.</td>
+                <td>Keep triangle neighbors positioned close together so their three filaments turn green as a solid building block.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Isolate High-Degree Hubs</strong></td>
+                <td>Busy central dots with <strong>5 or more strings</strong> attached.</td>
+                <td>Drag the hub near the center of the board and fan its connected neighbors radially around it like bicycle spokes.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Build Around Gold Anchors</strong></td>
+                <td>Locked hexagonal pins (Chapters 3–5) that cannot move.</td>
+                <td>Trace which movable nodes connect directly to each Gold Anchor and place them in the same quadrant immediately!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;">Still facing one stubborn crossing? Tap <strong>💡 Smart Hint</strong>—our solver identifies the single node causing the highest number of intersections and lights up a pulsing golden target ring showing a verified crossing-free destination for it.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner emerald-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/tension-strings-banner-2.jpg"
+            alt="Completely untangled emerald green geometric web on crystal anchor pins in Tension and Strings browser game"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Real Plucked-String Vibration &amp; Zero-Crossing Satisfaction</h3>
+          <p>Every node you release sends a subtle harmonic ripple down its elastic threads—and solving a web triggers a full emerald resonance chord.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>5 Escalating Chapters (500 Guaranteed Solvable Planar Webs)</h2>
+        <p>Unlike random line generators that accidentally spawn mathematically impossible non-planar graphs (such as K<sub>5</sub> or K<sub>3,3</sub>), every level in Tension &amp; Strings is constructed from a verified <strong>planar face triangulation</strong> before being scrambled onto a circle—guaranteeing 100% solvability across all 500 stages:</p>
         <ul>
-          <li><strong>Start from the Outer Frame:</strong> Pull nodes that have only 2 or 3 connections out toward the corners first. Opening up the perimeter creates wide space in the center to untangle denser inner triangles.</li>
-          <li><strong>Watch Node Highlights:</strong> While dragging a node, all of its attached strings brighten so you can immediately see which lines are pulling across the web.</li>
-          <li><strong>Use the Untangle Hint (💡):</strong> Stuck in a 20-node Gordian knot? Tap <strong>Untangle 1 Node</strong> to smoothly glide a tangled node directly to its verified geometric coordinate and mark it with a golden ring.</li>
+          <li><strong>Chapter 1 (Levels 1–100 — Elastic Warm-Up):</strong> Clean 5-to-8 node constellations designed for relaxing untangling and learning triangle clusters.</li>
+          <li><strong>Chapter 2 (Levels 101–200 — Web Weaver):</strong> Medium 9-to-11 node geometric networks with crisscrossing inner chords.</li>
+          <li><strong>Chapter 3 (Levels 201–300 — Pinned Anchors):</strong> Introduces <strong>Locked Gold Anchor Pins</strong> fixed right on the board, adding an extra layer of spatial deduction as you route elastic lines around immutable points.</li>
+          <li><strong>Chapter 4 (Levels 301–400 — Harmonic Lattice):</strong> Intricate 14-to-16 node webs combining multiple gold anchor pins and dense interior triangles.</li>
+          <li><strong>Chapter 5 (Levels 401–500 — Planarity Master):</strong> Grand 17-to-21 node master networks built for dedicated topology and spatial logic fans, complete with an open 1–500 level selector and private browser auto-save.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Untangle Puzzle Topics">
+          <span class="kw-pill">Untangle Lines Puzzle Online</span>
+          <span class="kw-pill">Planarity Graph Browser Game</span>
+          <span class="kw-pill">Uncross Elastic Strings Game</span>
+          <span class="kw-pill">500-Level Topology Brain Teaser</span>
+          <span class="kw-pill">Relaxing Dark-Mode Logic Puzzle</span>
+          <span class="kw-pill">No-Download Chromebook Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Tension &amp; Strings FAQ</h2>
         <details class="faq-item">
-          <summary>Is every level guaranteed to have a zero-crossing solution?</summary>
-          <div class="faq-answer">Yes. All 500 levels are generated as mathematically planar graphs first—ensuring a completely non-overlapping geometric layout exists—before scrambling the node positions.</div>
+          <summary>Are all 500 levels in Tension &amp; Strings mathematically guaranteed to have a zero-crossing solution?</summary>
+          <div class="faq-answer">Yes! Every stage is constructed from an exact non-crossing planar triangulation before its movable nodes are scrambled, guaranteeing at least one clean zero-intersection layout always exists.</div>
         </details>
         <details class="faq-item">
-          <summary>Do I have to match one exact shape to win?</summary>
-          <div class="faq-answer">No! Any arrangement of the nodes where zero strings intersect wins the level immediately, allowing you to discover your own clean geometric solution.</div>
+          <summary>Why can't I drag the hexagonal Gold Anchor Pins in Chapters 3 through 5?</summary>
+          <div class="faq-answer">Gold Anchor Pins are locked stationary checkpoints already positioned in a valid planar spot. Your challenge is to untangle and arrange the movable blue nodes cleanly around those fixed anchors!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Is there only one exact position for each node to solve the level?</summary>
+          <div class="faq-answer">Not at all! Any arrangement of the nodes where zero strings overlap wins the level immediately—even if your untangled shape is mirrored, rotated, or stretched completely differently from the Hint layout.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does Tension &amp; Strings work smoothly with touchscreens on Android and iPhone?</summary>
+          <div class="faq-answer">Yes. Touch dragging uses expanded fingertip hitboxes and pointer lock so moving nodes feels effortless on smartphones and tablets without scrolling the page.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🪢</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Tangle Master</h3>
+        <p>Untie colorful knotted ropes by moving pin ends one by one across 500 pegboard stages.</p>
+        <a href="/games/tangle-master/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🎵</div><span class="cat-tag">Puzzle</span></div>
         <h3>One-Line Symphony</h3>
-        <p>Trace glowing constellations in one continuous stroke across 500 musical levels.</p>
+        <p>Connect glowing nodes in one continuous line to play a complete, calming musical melody.</p>
         <a href="/games/one-line-symphony/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
         <h3>Prism &amp; Lasers</h3>
-        <p>Place mirrors and split laser beams through prisms across 500 dark-mode levels.</p>
+        <p>Rotate mirrors and split laser beams through optical prisms in a sleek dark-mode grid.</p>
         <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🖥️</div><span class="cat-tag">Mystery</span></div>
-        <h3>OS Sleuth</h3>
-        <p>Search a retro Windows 98 desktop and crack encrypted ZIP vaults across 500 cases.</p>
-        <a href="/games/os-sleuth/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Level Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Level">
+  <!-- Web Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Planar Web">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Level (1 – 500)</h3>
+        <h3>Choose Planar Web (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to level (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to web (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -471,7 +688,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -504,15 +721,20 @@
     }
 
     // ==============================================
-    // GEOMETRY & 500-LEVEL PLANAR GRAPH GENERATOR
+    // GUARANTEED PLANAR TRIANGULATION & 500-LEVEL ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
+    const WORLD_W = 420;
+    const WORLD_H = 420;
+    const CX = WORLD_W / 2;
+    const CY = WORLD_H / 2;
+
     const CHAPTERS = [
-      { title: "Chapter 1 • Loose Threads", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Tangled Loom", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Geometric Web", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Gordian Knots", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Sacred Symmetry", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Elastic Warm-Up", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Web Weaver", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Pinned Anchors", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Harmonic Lattice", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Planarity Master", range: "401–500", start: 401, end: 500 }
     ];
 
     function mulberry32(seed) {
@@ -534,247 +756,237 @@
       return copy;
     }
 
-    // Strict 2D segment intersection (ignoring shared endpoints)
-    function cross2D(ax, ay, bx, by, cx, cy) {
-      return (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
+    function triArea(a, b, c) {
+      return Math.abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) * 0.5);
     }
 
-    function onSegment(ax, ay, bx, by, px, py) {
-      return (
-        px <= Math.max(ax, bx) + 1e-6 &&
-        px >= Math.min(ax, bx) - 1e-6 &&
-        py <= Math.max(ay, by) + 1e-6 &&
-        py >= Math.min(ay, by) - 1e-6
-      );
-    }
+    // Exact 2D Segment Proper Intersection + Point Calculation
+    function getSegmentIntersection(a, b, c, d) {
+      const rX = b.x - a.x, rY = b.y - a.y;
+      const sX = d.x - c.x, sY = d.y - c.y;
+      const denom = rX * sY - rY * sX;
+      const eps = 1e-4;
 
-    function segmentsIntersect(p1, p2, p3, p4) {
-      const d1 = cross2D(p3.x, p3.y, p4.x, p4.y, p1.x, p1.y);
-      const d2 = cross2D(p3.x, p3.y, p4.x, p4.y, p2.x, p2.y);
-      const d3 = cross2D(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
-      const d4 = cross2D(p1.x, p1.y, p2.x, p2.y, p4.x, p4.y);
-
-      const eps = 1e-7;
-      if (((d1 > eps && d2 < -eps) || (d1 < -eps && d2 > eps)) &&
-          ((d3 > eps && d4 < -eps) || (d3 < -eps && d4 > eps))) {
-        return true;
+      if (Math.abs(denom) < eps) {
+        // Collinear overlap check
+        const cmaX = c.x - a.x, cmaY = c.y - a.y;
+        if (Math.abs(cmaX * rY - cmaY * rX) > 2.5) return null;
+        const rLenSq = rX * rX + rY * rY;
+        if (rLenSq < 1) return null;
+        const t0 = ((c.x - a.x) * rX + (c.y - a.y) * rY) / rLenSq;
+        const t1 = ((d.x - a.x) * rX + (d.y - a.y) * rY) / rLenSq;
+        const lo = Math.max(0.02, Math.min(t0, t1));
+        const hi = Math.min(0.98, Math.max(t0, t1));
+        if (lo < hi) {
+          const tm = (lo + hi) * 0.5;
+          return { x: a.x + rX * tm, y: a.y + rY * tm };
+        }
+        return null;
       }
-      if (Math.abs(d1) <= eps && onSegment(p3.x, p3.y, p4.x, p4.y, p1.x, p1.y)) return true;
-      if (Math.abs(d2) <= eps && onSegment(p3.x, p3.y, p4.x, p4.y, p2.x, p2.y)) return true;
-      if (Math.abs(d3) <= eps && onSegment(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)) return true;
-      if (Math.abs(d4) <= eps && onSegment(p1.x, p1.y, p2.x, p2.y, p4.x, p4.y)) return true;
-      return false;
+
+      const qpX = c.x - a.x, qpY = c.y - a.y;
+      const t = (qpX * sY - qpY * sX) / denom;
+      const u = (qpX * rY - qpY * rX) / denom;
+
+      if (t > 0.005 && t < 0.995 && u > 0.005 && u < 0.995) {
+        return { x: a.x + t * rX, y: a.y + t * rY };
+      }
+      return null;
     }
 
-    function pointToSegDist(px, py, p1, p2) {
-      const dx = p2.x - p1.x;
-      const dy = p2.y - p1.y;
-      const lenSq = dx * dx + dy * dy;
-      if (lenSq < 1e-9) return Math.hypot(px - p1.x, py - p1.y);
-      const t = Math.max(0, Math.min(1, ((px - p1.x) * dx + (py - p1.y) * dy) / lenSq));
-      return Math.hypot(px - (p1.x + t * dx), py - (p1.y + t * dy));
-    }
+    function evaluateCrossings(nodes, edges) {
+      const edgeCrossCounts = new Array(edges.length).fill(0);
+      const nodeCrossCounts = new Array(nodes.length).fill(0);
+      const crossPoints = [];
 
-    function countCrossings(nodes, edges) {
-      const edgeCrossed = new Array(edges.length).fill(false);
-      let total = 0;
       for (let i = 0; i < edges.length; i++) {
-        const [u1, v1] = edges[i];
-        const p1 = nodes[u1], p2 = nodes[v1];
+        const e1 = edges[i];
+        const a = nodes[e1.u], b = nodes[e1.v];
         for (let j = i + 1; j < edges.length; j++) {
-          const [u2, v2] = edges[j];
-          if (u1 === u2 || u1 === v2 || v1 === u2 || v1 === v2) continue;
-          if (segmentsIntersect(p1, p2, nodes[u2], nodes[v2])) {
-            edgeCrossed[i] = true;
-            edgeCrossed[j] = true;
-            total++;
+          const e2 = edges[j];
+          if (e1.u === e2.u || e1.u === e2.v || e1.v === e2.u || e1.v === e2.v) continue;
+          const pt = getSegmentIntersection(a, b, nodes[e2.u], nodes[e2.v]);
+          if (pt) {
+            edgeCrossCounts[i]++;
+            edgeCrossCounts[j]++;
+            nodeCrossCounts[e1.u]++;
+            nodeCrossCounts[e1.v]++;
+            nodeCrossCounts[e2.u]++;
+            nodeCrossCounts[e2.v]++;
+            crossPoints.push(pt);
           }
         }
       }
-      return { total, edgeCrossed };
+
+      return {
+        totalCrossings: crossPoints.length,
+        edgeCrossCounts,
+        nodeCrossCounts,
+        crossPoints
+      };
     }
 
-    // Handcrafted first 2 levels for an instant intuitive warm-up
-    const INTRO_LEVELS = {
-      1: {
-        solved: [
-          { x: 0.50, y: 0.16 },
-          { x: 0.80, y: 0.42 },
-          { x: 0.68, y: 0.82 },
-          { x: 0.32, y: 0.82 },
-          { x: 0.20, y: 0.42 }
-        ],
-        initial: [
-          { x: 0.50, y: 0.18 },
-          { x: 0.24, y: 0.78 },
-          { x: 0.78, y: 0.40 },
-          { x: 0.22, y: 0.40 },
-          { x: 0.76, y: 0.78 }
-        ],
-        edges: [[0,1],[1,2],[2,3],[3,4],[4,0],[0,2],[0,3]]
-      },
-      2: {
-        solved: [
-          { x: 0.50, y: 0.14 },
-          { x: 0.82, y: 0.32 },
-          { x: 0.82, y: 0.68 },
-          { x: 0.50, y: 0.86 },
-          { x: 0.18, y: 0.68 },
-          { x: 0.18, y: 0.32 }
-        ],
-        initial: [
-          { x: 0.50, y: 0.16 },
-          { x: 0.20, y: 0.66 },
-          { x: 0.80, y: 0.32 },
-          { x: 0.20, y: 0.32 },
-          { x: 0.80, y: 0.66 },
-          { x: 0.50, y: 0.84 }
-        ],
-        edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[0,2],[2,4],[4,0]]
-      }
-    };
+    // Constructive 100% Solvable Planar Graph via Incremental Face Subdivision!
+    function buildPlanarLevel(levelNum) {
+      const rng = mulberry32(levelNum * 149213 + 7717);
 
-    function createPlanarPositions(n, style, rng) {
-      const pts = [];
-      const minGap = Math.max(0.11, 0.26 - n * 0.006);
-      const tooClose = (x, y, g) => pts.some((p) => Math.hypot(p.x - x, p.y - y) < g);
-
-      if (style === 0) {
-        // Concentric geometric rings (very symmetrical & satisfying when solved)
-        const rings = n <= 8 ? [n - 1, 1] : (n <= 15 ? [Math.ceil(n * 0.6), n - Math.ceil(n * 0.6)] : [Math.ceil(n * 0.5), Math.ceil(n * 0.34), n - Math.ceil(n * 0.5) - Math.ceil(n * 0.34)]);
-        const radii = rings.length === 2 ? [0.37, 0.15] : [0.39, 0.23, 0.09];
-        const baseRot = rng() * Math.PI * 2;
-        rings.forEach((cnt, rIdx) => {
-          const rad = cnt === 1 ? 0 : radii[rIdx];
-          for (let i = 0; i < cnt; i++) {
-            const ang = baseRot + rIdx * 0.45 + (i * Math.PI * 2) / cnt;
-            const jitter = cnt === 1 ? 0 : (rng() - 0.5) * 0.025;
-            pts.push({
-              x: 0.5 + Math.cos(ang) * (rad + jitter),
-              y: 0.5 + Math.sin(ang) * (rad + jitter)
-            });
-          }
-        });
+      let nodeCount, lockedCount, pruneRatio;
+      if (levelNum <= 100) {
+        nodeCount = 5 + Math.floor(((levelNum - 1) / 100) * 4); // 5..8
+        lockedCount = 0;
+        pruneRatio = 0.24;
+      } else if (levelNum <= 200) {
+        nodeCount = 9 + Math.floor(((levelNum - 101) / 100) * 3); // 9..11
+        lockedCount = 0;
+        pruneRatio = 0.28;
+      } else if (levelNum <= 300) {
+        nodeCount = 11 + Math.floor(((levelNum - 201) / 100) * 3); // 11..13
+        lockedCount = levelNum <= 250 ? 1 : 2;
+        pruneRatio = 0.30;
+      } else if (levelNum <= 400) {
+        nodeCount = 14 + Math.floor(((levelNum - 301) / 100) * 3); // 14..16
+        lockedCount = 2;
+        pruneRatio = 0.32;
       } else {
-        // Spaced organic geometric points
-        let tries = 0;
-        while (pts.length < n && tries < 600) {
-          tries++;
-          const x = 0.12 + rng() * 0.76;
-          const y = 0.12 + rng() * 0.76;
-          if (!tooClose(x, y, minGap)) pts.push({ x, y });
-        }
-        // Fallback fill if tight
-        while (pts.length < n) {
-          const a = pts.length * 2.39996;
-          const r = 0.12 + 0.27 * Math.sqrt(pts.length / n);
-          pts.push({ x: 0.5 + Math.cos(a) * r, y: 0.5 + Math.sin(a) * r });
-        }
+        nodeCount = 17 + Math.floor(((levelNum - 401) / 100) * 5); // 17..21
+        lockedCount = levelNum <= 450 ? 2 : 3;
+        pruneRatio = 0.34;
       }
 
-      // Normalize nicely inside [0.13, 0.87]
-      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-      pts.forEach((p) => {
-        if (p.x < minX) minX = p.x;
-        if (p.x > maxX) maxX = p.x;
-        if (p.y < minY) minY = p.y;
-        if (p.y > maxY) maxY = p.y;
-      });
-      const sx = Math.max(0.01, maxX - minX);
-      const sy = Math.max(0.01, maxY - minY);
-      const sc = Math.min(0.74 / sx, 0.74 / sy);
-      const cx = (minX + maxX) / 2;
-      const cy = (minY + maxY) / 2;
-      return pts.map((p) => ({
-        x: 0.5 + (p.x - cx) * sc,
-        y: 0.5 + (p.y - cy) * sc
+      // 1. Start with a clean convex outer polygon (3 to 5 vertices)
+      const outerN = Math.min(nodeCount, 3 + (levelNum % 3));
+      const solNodes = [];
+      const rot0 = rng() * Math.PI * 2;
+      for (let i = 0; i < outerN; i++) {
+        const a = rot0 + (i * Math.PI * 2) / outerN;
+        const r = 152 + (rng() - 0.5) * 14;
+        solNodes.push({ id: i, x: CX + Math.cos(a) * r, y: CY + Math.sin(a) * r, locked: false });
+      }
+
+      // Initial non-crossing triangular faces fanning from vertex 0
+      const faces = [];
+      for (let i = 1; i < outerN - 1; i++) {
+        faces.push([0, i, i + 1]);
+      }
+
+      // 2. Iteratively pick the LARGEST triangle face and insert a new interior vertex inside it!
+      // Splitting a triangle into 3 sub-triangles strictly preserves zero-crossing planarity!
+      while (solNodes.length < nodeCount) {
+        // Sort faces by area descending and pick among top 2 for balanced spacing
+        faces.sort((f1, f2) =>
+          triArea(solNodes[f2[0]], solNodes[f2[1]], solNodes[f2[2]]) -
+          triArea(solNodes[f1[0]], solNodes[f1[1]], solNodes[f1[2]])
+        );
+        const pickIdx = faces.length > 1 && rng() < 0.35 ? 1 : 0;
+        const [iA, iB, iC] = faces.splice(pickIdx, 1)[0];
+        const A = solNodes[iA], B = solNodes[iB], C = solNodes[iC];
+
+        // Barycentric interior weights well away from edges so solved nodes never crowd
+        const w1 = 0.25 + rng() * 0.26;
+        const w2 = 0.25 + rng() * 0.26;
+        const w3 = 1 - w1 - w2;
+        const newId = solNodes.length;
+        solNodes.push({
+          id: newId,
+          x: A.x * w1 + B.x * w2 + C.x * w3,
+          y: A.y * w1 + B.y * w2 + C.y * w3,
+          locked: false
+        });
+
+        faces.push([iA, iB, newId], [iB, iC, newId], [iC, iA, newId]);
+      }
+
+      // 3. Collect unique edges from all triangular faces
+      const edgeMap = new Map();
+      const addE = (u, v) => {
+        const a = Math.min(u, v), b = Math.max(u, v);
+        const k = `${a}-${b}`;
+        if (!edgeMap.has(k)) edgeMap.set(k, { u: a, v: b, isOuter: a < outerN && b < outerN && (b - a === 1 || (a === 0 && b === outerN - 1)) });
+      };
+      for (const [a, b, c] of faces) {
+        addE(a, b); addE(b, c); addE(c, a);
+      }
+
+      let edges = [...edgeMap.values()];
+
+      // 4. Gently prune a few non-outer chords so the web breathes while keeping degree >= 2 & connected
+      const deg = new Array(nodeCount).fill(0);
+      edges.forEach((e) => { deg[e.u]++; deg[e.v]++; });
+
+      const internalEdges = shuffle(edges.filter((e) => !e.isOuter), rng);
+      const maxPrune = Math.floor(internalEdges.length * pruneRatio);
+      const removedSet = new Set();
+
+      for (const e of internalEdges) {
+        if (removedSet.size >= maxPrune) break;
+        if (deg[e.u] <= 2 || deg[e.v] <= 2) continue;
+        removedSet.add(e);
+        deg[e.u]--; deg[e.v]--;
+      }
+      edges = edges.filter((e) => !removedSet.has(e)).map((e, idx) => ({
+        id: idx,
+        u: e.u,
+        v: e.v,
+        vibAmp: 0,
+        vibPhase: 0
       }));
-    }
 
-    function buildLevel(levelNum) {
-      if (INTRO_LEVELS[levelNum]) return INTRO_LEVELS[levelNum];
-
-      const rng = mulberry32(levelNum * 17903 + 918273);
-      const p = (levelNum - 3) / (TOTAL_LEVELS - 3); // 0..1
-
-      // Smoothly scale node count from 5 up to 24 across 500 levels
-      const nodeCount = Math.min(24, 5 + Math.floor(p * 19.2));
-      const style = levelNum % 3 === 0 ? 1 : 0;
-      const solved = createPlanarPositions(nodeCount, style, rng);
-
-      // Build all candidate edges sorted by distance (with tiny jitter for variety)
-      const candidates = [];
-      for (let i = 0; i < nodeCount; i++) {
-        for (let j = i + 1; j < nodeCount; j++) {
-          const dist = Math.hypot(solved[i].x - solved[j].x, solved[i].y - solved[j].y);
-          candidates.push({ u: i, v: j, score: dist * (0.9 + rng() * 0.25) });
-        }
-      }
-      candidates.sort((a, b) => a.score - b.score);
-
-      const edges = [];
-      const edgeLimit = Math.round((nodeCount * 2.15) + p * (nodeCount * 0.5));
-      const clearance = Math.max(0.032, 0.065 - nodeCount * 0.0014);
-
-      for (const cand of candidates) {
-        if (edges.length >= edgeLimit) break;
-        const p1 = solved[cand.u];
-        const p2 = solved[cand.v];
-
-        // Avoid passing right over an unrelated node
-        let hitsNode = false;
-        for (let w = 0; w < nodeCount; w++) {
-          if (w === cand.u || w === cand.v) continue;
-          if (pointToSegDist(solved[w].x, solved[w].y, p1, p2) < clearance) {
-            hitsNode = true;
-            break;
-          }
-        }
-        if (hitsNode) continue;
-
-        // Avoid crossing any already-accepted edge
-        let crosses = false;
-        for (const [eu, ev] of edges) {
-          if (eu === cand.u || eu === cand.v || ev === cand.u || ev === cand.v) continue;
-          if (segmentsIntersect(p1, p2, solved[eu], solved[ev])) {
-            crosses = true;
-            break;
-          }
-        }
-        if (!crosses) {
-          edges.push([cand.u, cand.v]);
+      // 5. Assign Locked Gold Anchor Pins (Chapters 3–5) at well-spaced outer/interior vertices!
+      if (lockedCount > 0) {
+        const lockCands = shuffle(Array.from({ length: nodeCount }, (_, i) => i), rng);
+        for (let k = 0; k < Math.min(lockedCount, nodeCount - 3); k++) {
+          solNodes[lockCands[k]].locked = true;
         }
       }
 
-      // Scramble nodes onto a classic perimeter ring (guaranteed tangled start)
-      let initial = [];
-      const baseRot = rng() * Math.PI * 2;
+      // 6. Scramble Movable Nodes onto a Symmetric Perimeter Circle (Guaranteed Tangled Start!)
+      const movableIds = solNodes.filter((n) => !n.locked).map((n) => n.id);
+      let startNodes = null;
+
       for (let attempt = 0; attempt < 25; attempt++) {
-        const order = shuffle(Array.from({ length: nodeCount }, (_, i) => i), rng);
-        const testPos = new Array(nodeCount);
-        const ringR = 0.37;
-        for (let slot = 0; slot < nodeCount; slot++) {
-          const ang = baseRot + (slot * Math.PI * 2) / nodeCount;
-          testPos[order[slot]] = {
-            x: 0.5 + Math.cos(ang) * ringR,
-            y: 0.5 + Math.sin(ang) * ringR
-          };
-        }
-        const check = countCrossings(testPos, edges);
-        if (check.total >= Math.min(3, Math.max(1, nodeCount - 3))) {
-          initial = testPos;
+        const perm = shuffle(movableIds, rng);
+        const testNodes = solNodes.map((sn) => ({
+          id: sn.id,
+          x: sn.x,
+          y: sn.y,
+          locked: sn.locked
+        }));
+
+        const scRot = rng() * Math.PI * 2;
+        const rad = 152;
+        perm.forEach((nid, slotIdx) => {
+          const ang = scRot + (slotIdx * Math.PI * 2) / perm.length;
+          testNodes[nid].x = CX + Math.cos(ang) * rad;
+          testNodes[nid].y = CY + Math.sin(ang) * rad;
+        });
+
+        const ev = evaluateCrossings(testNodes, edges);
+        if (ev.totalCrossings >= Math.min(3, Math.max(1, Math.floor(nodeCount / 2)))) {
+          startNodes = testNodes;
           break;
         }
-        if (attempt === 24) initial = testPos;
       }
 
-      return { solved, initial, edges };
+      if (!startNodes) {
+        startNodes = solNodes.map((sn, i) => {
+          if (sn.locked) return { ...sn };
+          const ang = ((i * 5) % nodeCount) * ((Math.PI * 2) / nodeCount);
+          return { id: sn.id, x: CX + Math.cos(ang) * 150, y: CY + Math.sin(ang) * 150, locked: false };
+        });
+      }
+
+      return {
+        levelNum,
+        solNodes,
+        startNodes,
+        edges
+      };
     }
 
     const levelCache = new Map();
     function getLevel(num) {
       if (!levelCache.has(num)) {
-        levelCache.set(num, buildLevel(num));
+        levelCache.set(num, buildPlanarLevel(num));
       }
       return levelCache.get(num);
     }
@@ -784,11 +996,12 @@
     }
 
     // ==============================================
-    // AUDIO ENGINE (SOFT ELASTIC PLUCKS & CHIMES)
+    // PLUCKED ELASTIC STRING WEB AUDIO SYNTHESIZER
     // ==============================================
-    const SCALE = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25];
     let audioCtx = null;
     let soundOn = true;
+
+    const HARP_NOTES = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99];
 
     function initAudio() {
       if (!audioCtx) {
@@ -798,41 +1011,67 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.11) {
+    function sfxPluckString(noteIdx, vol = 0.095, dur = 0.34) {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const freq = HARP_NOTES[Math.abs(noteIdx) % HARP_NOTES.length];
+
+      const osc = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const g = audioCtx.createGain();
+
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq, now);
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(freq * 4, now);
+      filter.frequency.exponentialRampToValueAtTime(freq * 1.2, now + dur);
+
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+
+      osc.connect(filter);
+      filter.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + dur + 0.02);
+    }
+
+    function sfxLockedPin() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.exponentialRampToValueAtTime(vol, now + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      const g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(185, now);
+      g.gain.setValueAtTime(0.09, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + dur + 0.03);
+      osc.stop(now + 0.12);
     }
 
-    function sfxGrab() { playTone(310, 0.06, "triangle", 0.07); }
-    function sfxUntangle(step) { playTone(SCALE[step % SCALE.length], 0.24, "sine", 0.11); }
-    function sfxWin() {
-      [261.63, 329.63, 392.00, 523.25, 659.25].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.45, "sine", 0.13), i * 80);
+    function sfxUntangledWin() {
+      [2, 4, 5, 7, 8].forEach((n, i) => {
+        setTimeout(() => sfxPluckString(n, 0.12, 0.65), i * 75);
       });
     }
 
     // ==============================================
-    // GAME STATE & CANVAS INTERACTION
+    // GAME STATE, POINTER DRAG & SMART HINT CONTROLLER
     // ==============================================
-    const canvas = document.getElementById("stringsCanvas");
+    const canvas = document.getElementById("tensionCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const crossCounter = document.getElementById("crossCounter");
-    const movesCounter = document.getElementById("movesCounter");
+    const crossingsPill = document.getElementById("crossingsPill");
+    const movesPill = document.getElementById("movesPill");
     const solvedCounter = document.getElementById("solvedCounter");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
@@ -851,17 +1090,20 @@
     } catch (e) {}
 
     let level = null;
-    let nodes = []; // current { x, y } in normalized 0..1
-    let edgeCrossed = [];
-    let crossings = 0;
+    let nodes = [];
+    let edges = [];
+    let evalState = null;
     let moves = 0;
+    let undoStack = [];
     let levelWon = false;
 
-    let dragIdx = -1;
-    let dragStartCrossings = 0;
-    let hintedNodes = new Set(); // nodes already moved by Hint
-    let animatingNodes = []; // { idx, tx, ty }
-    let ripples = [];
+    let draggingId = -1;
+    let dragOffset = { x: 0, y: 0 };
+    let dragStartPos = null;
+    let prevCrossOnGrab = 0;
+
+    let hintNodeId = -1;
+    let sparks = [];
     let toastTimer = null;
 
     function showToast(msg, ms = 2400) {
@@ -871,70 +1113,85 @@
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
+    function pluckNodeEdges(nid, strength = 10) {
+      for (const e of edges) {
+        if (e.u === nid || e.v === nid) {
+          e.vibAmp = Math.max(e.vibAmp, strength);
+          e.vibPhase = 0;
+        }
+      }
+    }
+
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Level ${currentLevelNum} / ${TOTAL_LEVELS}`;
-      crossCounter.textContent = `Crossings: ${crossings}`;
-      crossCounter.className = "hud-pill " + (crossings === 0 ? "cross-zero" : "cross-red");
-      movesCounter.textContent = `Moves: ${moves}`;
+      levelTitle.textContent = `Web #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      const cc = evalState ? evalState.totalCrossings : 0;
+      crossingsPill.textContent = cc === 0 ? "Crossings: 0 ✓" : `Crossings: ${cc}`;
+      crossingsPill.className = "hud-pill" + (cc === 0 ? " clear-pill" : "");
+      movesPill.textContent = `Moves: ${moves}`;
       solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Level ${currentLevelNum} / 500 ▾`;
-    }
-
-    function recomputeCrossings(allowWinTrigger = false) {
-      const res = countCrossings(nodes, level.edges);
-      crossings = res.total;
-      edgeCrossed = res.edgeCrossed;
-      updateHUD();
-
-      if (allowWinTrigger && crossings === 0 && !levelWon) {
-        levelWon = true;
-        dragIdx = -1;
-        canvas.classList.remove("dragging");
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_tension_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        updateHUD();
-        sfxWin();
-
-        // Spawn green victory ripples on all nodes
-        nodes.forEach((n) => {
-          const p = toScreen(n.x, n.y);
-          ripples.push({ x: p.x, y: p.y, r: 10, alpha: 0.9, color: "#22c55e" });
-        });
-
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        winHeading.textContent = isLast ? "All 500 Webs Untangled!" : `Level ${currentLevelNum} Untangled!`;
-        winText.textContent = `Zero crossings achieved in ${moves} move${moves === 1 ? "" : "s"}.`;
-        nextLevelBtn.textContent = isLast ? "Replay Level 1" : `Play Level ${currentLevelNum + 1} →`;
-
-        setTimeout(() => winOverlay.classList.add("show"), 520);
-      }
+      openPickerBtn.textContent = `Web ${currentLevelNum} / 500 ▾`;
     }
 
     function loadLevel(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
       level = getLevel(currentLevelNum);
-      nodes = level.initial.map((p) => ({ x: p.x, y: p.y }));
+      nodes = level.startNodes.map((n) => ({ ...n }));
+      edges = level.edges.map((e) => ({ ...e, vibAmp: 0, vibPhase: 0 }));
       moves = 0;
+      undoStack = [];
       levelWon = false;
-      dragIdx = -1;
-      hintedNodes.clear();
-      animatingNodes = [];
-      ripples = [];
-      canvas.classList.remove("dragging");
+      draggingId = -1;
+      hintNodeId = -1;
+      sparks = [];
+
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
+
+      evalState = evaluateCrossings(nodes, edges);
 
       try {
         localStorage.setItem("zinplay_tension_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      recomputeCrossings(false);
+      updateHUD();
     }
 
+    function checkSolved() {
+      if (levelWon || evalState.totalCrossings > 0) return;
+      levelWon = true;
+      draggingId = -1;
+      hintNodeId = -1;
+      canvas.classList.remove("dragging");
+
+      // Send celebratory emerald wave down every elastic string!
+      for (const e of edges) {
+        e.vibAmp = 11;
+        e.vibPhase = 0;
+      }
+      for (const n of nodes) {
+        for (let i = 0; i < 4; i++) {
+          const a = Math.random() * Math.PI * 2;
+          sparks.push({ x: n.x, y: n.y, vx: Math.cos(a) * 1.8, vy: Math.sin(a) * 1.8, r: 2.4, color: "#34d399", alpha: 1 });
+        }
+      }
+
+      solvedSet.add(currentLevelNum);
+      try {
+        localStorage.setItem("zinplay_tension_500_solved", JSON.stringify([...solvedSet]));
+      } catch (e) {}
+      sfxUntangledWin();
+      updateHUD();
+
+      const isLast = currentLevelNum === TOTAL_LEVELS;
+      winHeading.textContent = isLast ? "All 500 Planar Webs Solved!" : `Web #${currentLevelNum} Untangled!`;
+      winText.textContent = `Cleared every string intersection in ${moves} move${moves === 1 ? "" : "s"}.`;
+      nextLevelBtn.textContent = isLast ? "Replay Web #1" : `Next Web (#${currentLevelNum + 1}) →`;
+      setTimeout(() => winOverlay.classList.add("show"), 620);
+    }
+
+    // Viewport & Touch Dragging
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -943,147 +1200,138 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function getBoardBox() {
+    function getViewport() {
       const rect = canvas.parentElement.getBoundingClientRect();
-      const pad = 26;
-      const w = rect.width - pad * 2;
-      const h = rect.height - pad * 2;
-      return { pad, w, h, fullW: rect.width, fullH: rect.height };
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offsetX = (rect.width - WORLD_W * scale) / 2;
+      const offsetY = (rect.height - WORLD_H * scale) / 2;
+      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    function toScreen(nx, ny) {
-      const b = getBoardBox();
-      return { x: b.pad + nx * b.w, y: b.pad + ny * b.h };
-    }
-
-    function toNorm(sx, sy) {
-      const b = getBoardBox();
+    function clientToWorld(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const vp = getViewport();
       return {
-        x: Math.max(0.02, Math.min(0.98, (sx - b.pad) / b.w)),
-        y: Math.max(0.02, Math.min(0.98, (sy - b.pad) / b.h))
+        x: (clientX - rect.left - vp.offsetX) / vp.scale,
+        y: (clientY - rect.top - vp.offsetY) / vp.scale
       };
     }
 
-    function findNodeAt(sx, sy) {
-      let best = -1;
-      let bestD = 32; // Generous mobile finger radius
-      for (let i = 0; i < nodes.length; i++) {
-        const p = toScreen(nodes[i].x, nodes[i].y);
-        const d = Math.hypot(p.x - sx, p.y - sy);
-        if (d < bestD) {
-          bestD = d;
-          best = i;
-        }
-      }
-      return best;
-    }
-
-    // Pointer Events (Mobile & Desktop)
     canvas.addEventListener("pointerdown", (e) => {
       if (levelWon) return;
       initAudio();
-      const rect = canvas.getBoundingClientRect();
-      const sx = e.clientX - rect.left;
-      const sy = e.clientY - rect.top;
-      const hit = findNodeAt(sx, sy);
-      if (hit === -1) return;
 
-      // Cancel auto-animation on this node if player grabs it
-      animatingNodes = animatingNodes.filter((a) => a.idx !== hit);
-      hintedNodes.delete(hit);
+      const pt = clientToWorld(e.clientX, e.clientY);
+      let hit = null;
+      let bestD = 30; // generous mobile fingertip hitbox
+      for (const n of nodes) {
+        const d = Math.hypot(pt.x - n.x, pt.y - n.y);
+        if (d < bestD) { bestD = d; hit = n; }
+      }
+      if (!hit) return;
 
-      dragIdx = hit;
-      dragStartCrossings = crossings;
+      if (hit.locked) {
+        sfxLockedPin();
+        showToast("🔒 Locked Gold Anchor Pin — weave movable blue nodes around it!", 2000);
+        return;
+      }
+
+      draggingId = hit.id;
+      dragOffset = { x: hit.x - pt.x, y: hit.y - pt.y };
+      dragStartPos = { x: hit.x, y: hit.y };
+      prevCrossOnGrab = evalState.totalCrossings;
       canvas.classList.add("dragging");
+      sfxPluckString(hit.id, 0.08, 0.24);
+      pluckNodeEdges(hit.id, 7);
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-      sfxGrab();
     });
 
     canvas.addEventListener("pointermove", (e) => {
-      if (dragIdx === -1 || levelWon) return;
-      const rect = canvas.getBoundingClientRect();
-      const norm = toNorm(e.clientX - rect.left, e.clientY - rect.top);
-      nodes[dragIdx].x = norm.x;
-      nodes[dragIdx].y = norm.y;
-      recomputeCrossings(false);
+      if (draggingId === -1 || levelWon) return;
+      const pt = clientToWorld(e.clientX, e.clientY);
+      const n = nodes[draggingId];
+      n.x = Math.max(24, Math.min(WORLD_W - 24, pt.x + dragOffset.x));
+      n.y = Math.max(24, Math.min(WORLD_H - 24, pt.y + dragOffset.y));
+      evalState = evaluateCrossings(nodes, edges);
+      updateHUD();
     });
 
-    function finishDrag() {
-      if (dragIdx === -1) return;
-      const releasedIdx = dragIdx;
-      dragIdx = -1;
-      canvas.classList.remove("dragging");
-      moves++;
+    function onDragEnd() {
+      if (draggingId === -1) return;
+      const n = nodes[draggingId];
+      const movedDist = dragStartPos ? Math.hypot(n.x - dragStartPos.x, n.y - dragStartPos.y) : 0;
 
-      // Tiny anti-overlap nudge if dropped directly on another node
-      for (let i = 0; i < nodes.length; i++) {
-        if (i === releasedIdx) continue;
-        const dx = nodes[releasedIdx].x - nodes[i].x;
-        const dy = nodes[releasedIdx].y - nodes[i].y;
-        const d = Math.hypot(dx, dy);
-        if (d < 0.045) {
-          const ang = d < 0.001 ? releasedIdx * 1.1 : Math.atan2(dy, dx);
-          nodes[releasedIdx].x = Math.max(0.03, Math.min(0.97, nodes[i].x + Math.cos(ang) * 0.055));
-          nodes[releasedIdx].y = Math.max(0.03, Math.min(0.97, nodes[i].y + Math.sin(ang) * 0.055));
+      if (movedDist > 4) {
+        undoStack.push({ id: draggingId, x: dragStartPos.x, y: dragStartPos.y });
+        if (undoStack.length > 40) undoStack.shift();
+        moves++;
+        pluckNodeEdges(draggingId, 11);
+
+        if (evalState.totalCrossings < prevCrossOnGrab) {
+          sfxPluckString(5 + (draggingId % 4), 0.11, 0.36);
+        } else {
+          sfxPluckString(draggingId % 4, 0.075, 0.25);
         }
       }
 
-      const prevCross = dragStartCrossings;
-      recomputeCrossings(true);
-      if (!levelWon && crossings < prevCross) {
-        sfxUntangle(Math.max(0, prevCross - crossings));
-        const p = toScreen(nodes[releasedIdx].x, nodes[releasedIdx].y);
-        ripples.push({ x: p.x, y: p.y, r: 10, alpha: 0.85, color: "#38bdf8" });
+      if (hintNodeId === draggingId) {
+        const sol = level.solNodes[draggingId];
+        if (Math.hypot(n.x - sol.x, n.y - sol.y) < 32) hintNodeId = -1;
       }
-    }
-    canvas.addEventListener("pointerup", finishDrag);
-    canvas.addEventListener("pointercancel", finishDrag);
 
-    // Hint: Smoothly glide one unaligned node to its clean geometric coordinate
+      draggingId = -1;
+      dragStartPos = null;
+      canvas.classList.remove("dragging");
+      evalState = evaluateCrossings(nodes, edges);
+      updateHUD();
+      checkSolved();
+    }
+
+    canvas.addEventListener("pointerup", onDragEnd);
+    canvas.addEventListener("pointercancel", onDragEnd);
+
+    // Smart Hint Button (Guides Most-Tangled Node Toward Verified Non-Crossing Target!)
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (levelWon) return;
       initAudio();
 
-      // Count red edges per node to prioritize the most tangled unaligned node
-      const redCount = new Array(nodes.length).fill(0);
-      level.edges.forEach(([u, v], i) => {
-        if (edgeCrossed[i]) {
-          redCount[u]++;
-          redCount[v]++;
-        }
-      });
-
-      let pickIdx = -1;
+      // Find movable node furthest from its verified planar position that is involved in crossings
+      let bestId = -1;
       let bestScore = -1;
-      for (let i = 0; i < nodes.length; i++) {
-        const distToSol = Math.hypot(nodes[i].x - level.solved[i].x, nodes[i].y - level.solved[i].y);
-        if (distToSol < 0.015) continue;
-        const score = redCount[i] * 2 + distToSol * 5 + (hintedNodes.has(i) ? -10 : 0);
-        if (score > bestScore) {
+      for (const n of nodes) {
+        if (n.locked) continue;
+        const sol = level.solNodes[n.id];
+        const dist = Math.hypot(n.x - sol.x, n.y - sol.y);
+        const crossW = evalState.nodeCrossCounts[n.id] * 45;
+        const score = crossW + dist;
+        if (dist > 22 && score > bestScore) {
           bestScore = score;
-          pickIdx = i;
+          bestId = n.id;
         }
       }
 
-      if (pickIdx !== -1) {
-        hintedNodes.add(pickIdx);
-        animatingNodes = animatingNodes.filter((a) => a.idx !== pickIdx);
-        animatingNodes.push({
-          idx: pickIdx,
-          tx: level.solved[pickIdx].x,
-          ty: level.solved[pickIdx].y
-        });
-        moves++;
-        sfxUntangle(3);
-        showToast("Node aligned to its clean geometric spot (golden ring)!", 2200);
+      if (bestId !== -1) {
+        hintNodeId = bestId;
+        showToast("💡 Drag the glowing golden node into the dashed golden target ring!", 2800);
       }
     });
 
-    // Buttons & Navigation
+    document.getElementById("undoBtn").addEventListener("click", () => {
+      if (levelWon || undoStack.length === 0) return;
+      initAudio();
+      const prev = undoStack.pop();
+      nodes[prev.id].x = prev.x;
+      nodes[prev.id].y = prev.y;
+      pluckNodeEdges(prev.id, 7);
+      sfxPluckString(1, 0.07, 0.2);
+      evalState = evaluateCrossings(nodes, edges);
+      updateHUD();
+    });
+
     document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
     nextLevelBtn.addEventListener("click", () => {
       loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
@@ -1095,7 +1343,7 @@
       if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
     });
 
-    // Level Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1154,150 +1402,208 @@
     });
 
     // ==============================================
-    // RENDER & ANIMATION LOOP
+    // VIBRATING ELASTIC FILAMENTS & ANCHOR RENDERER
     // ==============================================
-    function draw(time) {
-      // Smoothly animate any Hint-guided nodes
-      if (animatingNodes.length > 0) {
-        let finishedAny = false;
-        for (let i = animatingNodes.length - 1; i >= 0; i--) {
-          const a = animatingNodes[i];
-          const n = nodes[a.idx];
-          n.x += (a.tx - n.x) * 0.2;
-          n.y += (a.ty - n.y) * 0.2;
-          if (Math.hypot(a.tx - n.x, a.ty - n.y) < 0.003) {
-            n.x = a.tx;
-            n.y = a.ty;
-            animatingNodes.splice(i, 1);
-            finishedAny = true;
-            const p = toScreen(n.x, n.y);
-            ripples.push({ x: p.x, y: p.y, r: 10, alpha: 0.9, color: "#facc15" });
-          }
-        }
-        recomputeCrossings(finishedAny && animatingNodes.length === 0);
-      }
+    let lastTime = performance.now();
 
-      const b = getBoardBox();
-      ctx.clearRect(0, 0, b.fullW, b.fullH);
+    function frame(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
 
-      // Subtle blueprint dot grid
-      ctx.fillStyle = "rgba(148, 163, 184, 0.1)";
-      for (let x = 24; x < b.fullW; x += 28) {
-        for (let y = 24; y < b.fullH; y += 28) {
-          ctx.fillRect(x, y, 1.5, 1.5);
-        }
-      }
-
-      // Track which nodes still touch at least one red string
-      const nodeHasRed = new Array(nodes.length).fill(false);
-      level.edges.forEach(([u, v], i) => {
-        if (edgeCrossed[i]) {
-          nodeHasRed[u] = true;
-          nodeHasRed[v] = true;
-        }
-      });
-
-      // 1. Draw Green (Clear) Strings First, Then Red (Tangled) Strings On Top
-      const drawEdge = (i) => {
-        const [u, v] = level.edges[i];
-        const p1 = toScreen(nodes[u].x, nodes[u].y);
-        const p2 = toScreen(nodes[v].x, nodes[v].y);
-        const isRed = edgeCrossed[i];
-        const isAttachedToDrag = dragIdx === u || dragIdx === v;
-
-        ctx.save();
-        if (isRed) {
-          ctx.strokeStyle = isAttachedToDrag ? "#fb7185" : "#ef4444";
-          ctx.shadowColor = "#ef4444";
-          ctx.shadowBlur = isAttachedToDrag ? 12 : 5;
-          ctx.lineWidth = isAttachedToDrag ? 3.5 : 2.5;
-          ctx.globalAlpha = isAttachedToDrag ? 0.98 : 0.82;
+      // Decay elastic string pluck vibrations smoothly
+      for (const e of edges) {
+        if (e.vibAmp > 0.05) {
+          e.vibPhase += dt * 44;
+          e.vibAmp *= Math.pow(0.04, dt);
         } else {
-          ctx.strokeStyle = isAttachedToDrag ? "#4ade80" : "#22c55e";
-          ctx.shadowColor = "#22c55e";
-          ctx.shadowBlur = levelWon ? 16 : (isAttachedToDrag ? 12 : 7);
-          ctx.lineWidth = levelWon ? 3.4 : (isAttachedToDrag ? 3.4 : 2.6);
-          ctx.globalAlpha = 0.92;
+          e.vibAmp = 0;
         }
-        ctx.lineCap = "round";
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-        ctx.restore();
-      };
+      }
 
-      for (let i = 0; i < level.edges.length; i++) if (!edgeCrossed[i]) drawEdge(i);
-      for (let i = 0; i < level.edges.length; i++) if (edgeCrossed[i]) drawEdge(i);
+      const vp = getViewport();
+      ctx.clearRect(0, 0, vp.w, vp.h);
 
-      // 2. Ripples
-      ripples = ripples.filter((r) => r.alpha > 0.04);
-      ripples.forEach((r) => {
-        r.r += 1.7;
-        r.alpha *= 0.91;
-        ctx.strokeStyle = r.color;
-        ctx.globalAlpha = r.alpha;
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-      });
+      ctx.save();
+      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.scale(vp.scale, vp.scale);
 
-      // 3. Nodes
-      const baseR = nodes.length > 18 ? 9.5 : (nodes.length > 12 ? 11 : 12.5);
-      for (let i = 0; i < nodes.length; i++) {
-        const p = toScreen(nodes[i].x, nodes[i].y);
-        const isDragged = i === dragIdx;
-        const isClean = !nodeHasRed[i];
-        const isHinted = hintedNodes.has(i);
-        const r = isDragged ? baseR + 3 : baseR;
+      // 1. Subtle Blueprint Dot Matrix
+      ctx.fillStyle = "rgba(56, 189, 248, 0.12)";
+      for (let x = 22; x < WORLD_W; x += 26) {
+        for (let y = 22; y < WORLD_H; y += 26) {
+          ctx.fillRect(x, y, 1.4, 1.4);
+        }
+      }
+
+      // 2. Hint Golden Target Ring & Dashed Guide Arrow
+      if (hintNodeId !== -1 && !levelWon) {
+        const hn = nodes[hintNodeId];
+        const sol = level.solNodes[hintNodeId];
+        const pulse = 1 + 0.12 * Math.sin(now * 0.009);
 
         ctx.save();
+        ctx.strokeStyle = "rgba(250, 204, 21, 0.6)";
+        ctx.lineWidth = 2.2;
+        ctx.setLineDash([6, 5]);
+        ctx.beginPath();
+        ctx.moveTo(hn.x, hn.y);
+        ctx.lineTo(sol.x, sol.y);
+        ctx.stroke();
 
-        // Active drag halo
-        if (isDragged) {
-          ctx.strokeStyle = "rgba(56, 189, 248, 0.7)";
-          ctx.lineWidth = 2.5;
+        ctx.fillStyle = "rgba(250, 204, 21, 0.14)";
+        ctx.strokeStyle = "#facc15";
+        ctx.shadowColor = "#facc15";
+        ctx.shadowBlur = 14;
+        ctx.beginPath();
+        ctx.arc(sol.x, sol.y, 17 * pulse, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 3. Draw Glowing Elastic Strings (Untangled Green First, Tangled Crimson On Top!)
+      const orderedEdges = edges.map((e, i) => ({ e, idx: i, crossed: evalState.edgeCrossCounts[i] > 0 }))
+        .sort((a, b) => (a.crossed ? 1 : 0) - (b.crossed ? 1 : 0));
+
+      for (const item of orderedEdges) {
+        const e = item.e;
+        const a = nodes[e.u], b = nodes[e.v];
+        const isDragAttached = draggingId === e.u || draggingId === e.v;
+
+        const mx = (a.x + b.x) * 0.5;
+        const my = (a.y + b.y) * 0.5;
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const len = Math.max(1, Math.hypot(dx, dy));
+        const nx = -dy / len, ny = dx / len;
+        const disp = e.vibAmp > 0 ? Math.sin(e.vibPhase) * e.vibAmp : 0;
+
+        ctx.save();
+        ctx.lineCap = "round";
+        const strokeCol = item.crossed ? "#f43f5e" : "#10b981";
+        const coreCol = item.crossed ? "#fda4af" : "#a7f3d0";
+
+        ctx.strokeStyle = strokeCol;
+        ctx.shadowColor = strokeCol;
+        ctx.shadowBlur = isDragAttached || levelWon ? 16 : 9;
+        ctx.lineWidth = isDragAttached ? 4.2 : 3.2;
+
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        if (Math.abs(disp) > 0.1) {
+          ctx.quadraticCurveTo(mx + nx * disp, my + ny * disp, b.x, b.y);
+        } else {
+          ctx.lineTo(b.x, b.y);
+        }
+        ctx.stroke();
+
+        // Crisp inner bright filament core
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = coreCol;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 4. Tiny Red Spark Dots at Exact Crossing Intersections
+      if (evalState.crossPoints.length > 0 && evalState.crossPoints.length <= 45) {
+        ctx.save();
+        for (const cp of evalState.crossPoints) {
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowColor = "#ef4444";
+          ctx.shadowBlur = 8;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, r + 7 + Math.sin(time * 0.012) * 2, 0, Math.PI * 2);
-          ctx.stroke();
-        } else if (isHinted && !levelWon) {
-          ctx.strokeStyle = "rgba(250, 204, 21, 0.85)";
-          ctx.lineWidth = 2.2;
+          ctx.arc(cp.x, cp.y, 2.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      // 5. Draw Movable Nodes & Locked Hexagonal Gold Anchor Pins
+      for (const n of nodes) {
+        const isDragged = n.id === draggingId;
+        const isHint = n.id === hintNodeId && !levelWon;
+        const hasCross = evalState.nodeCrossCounts[n.id] > 0;
+        const r = isDragged ? 14.5 : 12.2;
+
+        ctx.save();
+        ctx.translate(n.x, n.y);
+
+        if (isHint) {
+          const p = 1 + 0.16 * Math.sin(now * 0.01);
+          ctx.strokeStyle = "#facc15";
+          ctx.lineWidth = 2.4;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, r + 4.5, 0, Math.PI * 2);
+          ctx.arc(0, 0, 19 * p, 0, Math.PI * 2);
           ctx.stroke();
         }
 
-        // Main node orb
-        ctx.fillStyle = levelWon || isClean ? "#22c55e" : (isDragged ? "#38bdf8" : "#1e293b");
-        ctx.strokeStyle = levelWon || isClean ? "#bbf7d0" : (isDragged ? "#ffffff" : "#f87171");
-        ctx.shadowColor = levelWon || isClean ? "#22c55e" : (isDragged ? "#38bdf8" : "#ef4444");
-        ctx.shadowBlur = isDragged ? 16 : 9;
-        ctx.lineWidth = 2.8;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
+        if (n.locked) {
+          // Hexagonal Gold Locked Anchor Pin (Chapter 3-5)
+          ctx.fillStyle = "#78350f";
+          ctx.strokeStyle = "#facc15";
+          ctx.shadowColor = "#f59e0b";
+          ctx.shadowBlur = 12;
+          ctx.lineWidth = 2.6;
+          ctx.beginPath();
+          for (let i = 0; i < 6; i++) {
+            const a = (i * Math.PI) / 3 - Math.PI / 6;
+            if (i === 0) ctx.moveTo(Math.cos(a) * 13.5, Math.sin(a) * 13.5);
+            else ctx.lineTo(Math.cos(a) * 13.5, Math.sin(a) * 13.5);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
 
-        // Crisp inner core
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r * 0.34, 0, Math.PI * 2);
-        ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "#fef08a";
+          ctx.beginPath();
+          ctx.arc(0, 0, 4.2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // Movable Luminous Node Pin
+          const rimCol = isHint ? "#facc15" : (isDragged ? "#ffffff" : (hasCross ? "#fb7185" : "#34d399"));
+          ctx.fillStyle = isDragged ? "#38bdf8" : (hasCross ? "#1e1b2e" : "#064e3b");
+          ctx.strokeStyle = rimCol;
+          ctx.shadowColor = rimCol;
+          ctx.shadowBlur = isDragged || levelWon ? 16 : 9;
+          ctx.lineWidth = 2.8;
+          ctx.beginPath();
+          ctx.arc(0, 0, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.arc(0, 0, isDragged ? 5 : 3.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
 
         ctx.restore();
       }
 
-      requestAnimationFrame(draw);
+      // 6. Victory Sparks
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha *= 0.93;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.restore();
+      requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
     loadLevel(currentLevelNum);
-    requestAnimationFrame(draw);
+    requestAnimationFrame(frame);
   </script>
 
 </body>
