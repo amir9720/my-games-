@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prism &amp; Lasers — 500 Optical Puzzle Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free levels of Prism & Lasers in your browser. Place mirrors, split beams with optical prisms, and mix neon light colors in a dark-mode logic game." />
+  <title>Prism &amp; Lasers — Free 500-Level Optical Mirror &amp; Color Mixing Puzzle | ZinPlay</title>
+  <meta name="description" content="Play Prism &amp; Lasers free online with no download. Rotate optical mirrors, split light beams through prisms, and mix RGB laser colors across 500 dark-mode logic puzzles on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Prism & Lasers",
+    "url": "https://zinplay.io/games/prism-lasers/",
+    "genre": ["Puzzle", "Logic", "Physics Optics"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -29,15 +42,17 @@
       font-size: 0.9rem;
       color: var(--muted);
     }
+
+    /* Top Optical Lab HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #080d1e;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
-      font-size: 0.85rem;
+      background: #070b18;
+      color: #f1f5f9;
+      border-bottom: 1px solid #17233f;
+      font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
       flex-wrap: wrap;
@@ -49,7 +64,7 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
+      color: #22d3ee;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -61,19 +76,28 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #bae6fd;
+      background: rgba(34, 211, 238, 0.16);
+      border: 1px solid rgba(34, 211, 238, 0.36);
+      color: #a5f3fc;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
+    }
+
+    /* Dark-Mode Optical Grid Stage */
     .canvas-container {
       position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
-      max-height: 490px;
-      background: radial-gradient(circle at 50% 45%, #111936 0%, #060914 100%);
+      max-height: 495px;
+      background: radial-gradient(circle at 50% 45%, #111b36 0%, #050812 100%);
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -88,74 +112,27 @@
       touch-action: manipulation;
       cursor: pointer;
     }
-    .tray-bar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 14px;
-      background: #0c1328;
-      border-top: 1px solid #1e293b;
-      flex-wrap: wrap;
-    }
-    .tool-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 8px 14px;
-      border-radius: 12px;
-      border: 1.5px solid #293556;
-      background: #131c38;
-      color: #e2e8f0;
-      font-size: 0.84rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.15s ease;
-    }
-    .tool-btn.active {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.18);
-      color: #ffffff;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
-    }
-    .tool-btn.empty {
-      opacity: 0.45;
-    }
-    .tool-count {
-      background: #1e293b;
-      color: #38bdf8;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-    }
-    .color-legend {
+
+    .legend-strip {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #080d1e;
-      border-top: 1px solid #16203d;
-      font-size: 0.75rem;
+      background: #080d1c;
+      border-top: 1px solid #17233f;
+      font-size: 0.73rem;
       color: #94a3b8;
     }
-    .dot {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      vertical-align: middle;
-      margin-right: 3px;
-    }
+
     .status-toast {
       position: absolute;
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.94);
-      border: 1px solid rgba(250, 204, 21, 0.6);
+      background: rgba(7, 11, 24, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -169,21 +146,20 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
+
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(6, 9, 20, 0.8);
-      backdrop-filter: blur(5px);
+      background: rgba(5, 8, 18, 0.82);
+      backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
     }
     .win-overlay.show {
       opacity: 1;
@@ -195,19 +171,13 @@
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 320px;
+      max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.3rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
+
     .controls-group {
       display: flex;
       gap: 6px;
@@ -234,6 +204,7 @@
       border-radius: 10px;
       cursor: pointer;
     }
+
     /* Level Picker Modal */
     .modal-backdrop {
       position: fixed;
@@ -246,9 +217,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -267,10 +236,7 @@
       padding: 14px 16px;
       border-bottom: 1px solid var(--border);
     }
-    .modal-head h3 {
-      font-size: 1rem;
-      font-weight: 800;
-    }
+    .modal-head h3 { font-size: 1rem; font-weight: 800; }
     .modal-close {
       width: 34px;
       height: 34px;
@@ -326,9 +292,7 @@
       gap: 8px;
     }
     @media (min-width: 520px) {
-      .levels-grid {
-        grid-template-columns: repeat(10, 1fr);
-      }
+      .levels-grid { grid-template-columns: repeat(10, 1fr); }
     }
     .lvl-cell {
       height: 38px;
@@ -350,6 +314,94 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #070b18;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #070b18;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #070b18 0%, #172554 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.rgb-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f172a 0%, #3b0764 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .optics-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .optics-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .optics-table th, .optics-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .optics-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .optics-table tr:last-child td { border-bottom: none; }
+    .swatch-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -362,7 +414,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -375,72 +427,62 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Levels &bull; Optical Puzzle</span>
+      <span class="cat-tag">500 Optical Grids &bull; Mirror &amp; Laser Puzzle</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Prism &amp; Lasers</h1>
-      <p>Place mirrors and optical prisms in the dark grid to refract beams, mix colors, and charge every crystal target.</p>
+      <p>Tap mirrors and semi-silvered beam splitters to steer glowing laser rays, tint beams through color prisms, and illuminate every target crystal.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Prism and Lasers Game">
+    <section class="game-wrapper" aria-label="Prism and Lasers Optical Puzzle">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Mirror Lab</span>
-          <span id="levelTitle">Level 1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Mirror Reflections</span>
+          <span id="levelTitle">Grid #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="targetsCounter">Targets: 0 / 1</span>
-          <span class="hud-pill" id="solvedCounter">Solved: 0 / 500</span>
+          <span class="hud-pill" id="targetsPill">Crystals: 0 / 1</span>
+          <span class="hud-pill" id="movesPill">Rotations: 0</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Solved: 0 / 500</span>
         </div>
       </div>
 
+      <!-- Dark-Mode Optical Canvas -->
       <div class="canvas-container">
         <canvas id="prismCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
+        <!-- Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2rem; margin-bottom:6px;">💎</div>
+            <div style="font-size:2.3rem; margin-bottom:6px;">💎</div>
             <h2 id="winHeading">Optics Aligned!</h2>
-            <p id="winText">All crystal targets illuminated in harmony.</p>
-            <button id="nextLevelBtn" class="btn-primary" type="button">Next Level →</button>
+            <p id="winText">Every target crystal resonated with pure laser light.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Grid →</button>
           </div>
         </div>
       </div>
 
-      <!-- Optical Tools Tray -->
-      <div class="tray-bar" role="group" aria-label="Optical Tools">
-        <button id="mirrorToolBtn" class="tool-btn active" type="button">
-          <span>⟋ Mirror</span>
-          <span id="mirrorCount" class="tool-count">1</span>
-        </button>
-        <button id="prismToolBtn" class="tool-btn" type="button">
-          <span>◇ Prism</span>
-          <span id="prismCount" class="tool-count">0</span>
-        </button>
-      </div>
-
-      <!-- Color Mixing Key -->
-      <div class="color-legend">
-        <span><i class="dot" style="background:#f8fafc"></i>White + ◇ Prism → <i class="dot" style="background:#ff3b6b"></i>Red &amp; <i class="dot" style="background:#38bdf8"></i>Blue</span>
-        <span><i class="dot" style="background:#ff3b6b"></i>+<i class="dot" style="background:#38bdf8"></i>=<strong style="color:#e879f9">Magenta</strong></span>
-        <span><i class="dot" style="background:#ff3b6b"></i>+<i class="dot" style="background:#22c55e"></i>=<strong style="color:#facc15">Yellow</strong></span>
-        <span><i class="dot" style="background:#22c55e"></i>+<i class="dot" style="background:#38bdf8"></i>=<strong style="color:#22d3ee">Cyan</strong></span>
+      <div class="legend-strip">
+        <span>👆 Tap Mirrors ( / \ ) to Rotate 90°</span>
+        <span>◬ Dashed Prism = Splits Beam (Straight + 90°)</span>
+        <span>◉ Color Lens = Tints Beam</span>
+        <span>💎 Match Every Gem's Exact Color</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Clear</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Hint</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reset Grid</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Optical Hint</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Level 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Grid 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -450,29 +492,126 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 820+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/prism-lasers-banner-1.jpg"
+            alt="Prism and Lasers dark-mode optical mirror reflection puzzle with glowing cyan, magenta, and white laser beams"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Dark-Mode Laser &amp; Mirror Grids — Zero Downloads</h3>
+          <p>Bounce beams off angled mirrors, divide light through 50/50 beam splitters, and light up crystalline targets in pure 60 FPS HTML5 Canvas.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Prism &amp; Lasers (500 Levels)</h2>
-        <p>Prism &amp; Lasers is a sleek dark-mode optical logic game with 500 handcrafted and procedurally verified puzzles. Guide beams from the laser emitter into every crystal target on the grid—matching each target's exact light color—while listening to harmonic musical notes triggered by every reflection.</p>
+        <h2>What Is Prism &amp; Lasers? A Dark-Mode Optical Reflection Puzzle Online</h2>
+        <p><strong>Prism &amp; Lasers</strong> is a free <strong>laser mirror puzzle game online</strong> engineered for fans of crisp geometric logic, dark-mode aesthetics, and real additive light physics. Set inside a minimalist obsidian laboratory grid, each level fires one or more glowing laser beams from fixed emitters. Your task is to tap rotatable 45-degree <strong>silvered mirrors</strong> and semi-transparent <strong>beam-splitter prisms</strong> until every faceted target crystal on the board receives the exact color of light it requires.</p>
+        <p>Built as a lightweight, <strong>no-download optical puzzle for phones, tablets, and Chromebooks</strong>, Prism &amp; Lasers runs smoothly inside any modern browser with zero installation, zero timers, and automatic private progress saving across all <strong>500 verified grids</strong>. Every mirror turn plays a soft crystalline harmonic ping through the Web Audio API, making it equally satisfying as a quiet late-night brain teaser or a focused STEM optics warm-up.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Additive RGB Laser Mixing Guide (Chapters 3–5 Strategy)</h2>
+        <p>While paint pigments mix subtractively, real light beams follow <strong>additive RGB color physics</strong>—meaning two different colored laser rays converging onto the same target crystal combine into a brighter secondary hue! Mastering the table below will help you breeze through Chapters 3, 4, and 5:</p>
+
+        <div class="optics-table-wrap">
+          <table class="optics-table">
+            <thead>
+              <tr>
+                <th>Incoming Laser Beams</th>
+                <th>Combined Crystal Color</th>
+                <th>How to Achieve It</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="swatch-dot" style="background:#ef4444"></span>Red + <span class="swatch-dot" style="background:#22c55e"></span>Green</td>
+                <td><strong><span class="swatch-dot" style="background:#facc15"></span>Yellow</strong></td>
+                <td>Guide a Red beam and a Green beam into the same target gem from two open sides.</td>
+              </tr>
+              <tr>
+                <td><span class="swatch-dot" style="background:#ef4444"></span>Red + <span class="swatch-dot" style="background:#3b82f6"></span>Blue</td>
+                <td><strong><span class="swatch-dot" style="background:#ec4899"></span>Magenta</strong></td>
+                <td>Route a Red ray and a Blue ray (via mirrors or color lenses) onto the Magenta gem.</td>
+              </tr>
+              <tr>
+                <td><span class="swatch-dot" style="background:#22c55e"></span>Green + <span class="swatch-dot" style="background:#3b82f6"></span>Blue</td>
+                <td><strong><span class="swatch-dot" style="background:#22d3ee"></span>Cyan</strong></td>
+                <td>Merge Green and Blue rays together—or split a Cyan emitter through a beam splitter!</td>
+              </tr>
+              <tr>
+                <td><span class="swatch-dot" style="background:#ef4444"></span>Red + <span class="swatch-dot" style="background:#22c55e"></span>Green + <span class="swatch-dot" style="background:#3b82f6"></span>Blue</td>
+                <td><strong><span class="swatch-dot" style="background:#f8fafc; border:1px solid #94a3b8"></span>Pure White</strong></td>
+                <td>Combine all three primary channels (or Cyan + Red / Yellow + Blue) onto the diamond target.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Pro Tip:</strong> Work <em>backward</em> from each target gem! Look at which open corridors lead into a crystal—especially if obsidian walls surround three of its sides—then trace back to find the exact mirror orientation required to feed that lane.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner rgb-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/prism-lasers-banner-2.jpg"
+            alt="RGB color mixing laser beams converging into a glass prism in Prism and Lasers browser puzzle"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Real-Time Raytracing, Beam Splitters &amp; Color Filters</h3>
+          <p>Watch live volumetric laser reflections update at 60 FPS with every tap—no waiting for test runs or clunky drag menus.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Chapters (500 Verified Optical Puzzles)</h2>
+        <p>Every grid in Prism &amp; Lasers is generated constructively and double-checked by our live raytracing engine before scrambling, guaranteeing 100% logical solvability without pixel hunting or guesswork:</p>
         <ul>
-          <li><strong>One-Tap Controls:</strong> Choose <strong>Mirror</strong> or <strong>Prism</strong> from the tray below the board and tap any empty square to place it. Tap the same piece once to flip its angle (<code>/</code> to <code>\</code>), and tap again to pick it back up into your tray.</li>
-          <li><strong>How Prisms Refract Light:</strong> A Prism acts as an optical splitter—one beam passes straight through while a second beam reflects at 90 degrees. When a <strong>White</strong> laser enters a Prism, it splits into a straight <strong>Blue</strong> beam and a reflected <strong>Red</strong> beam.</li>
-          <li><strong>Color Filters &amp; Light Mixing:</strong> Colored rings on the grid tint any passing laser into Red, Green, or Blue. When two different colored lasers cross inside a crystal target, their colors add together (Red + Blue = Magenta, Red + Green = Yellow, Green + Blue = Cyan).</li>
+          <li><strong>Chapter 1 (Levels 1–100 — Mirror Reflections):</strong> Crisp <code>6×6</code> optical boards focused on 90-degree mirror steering around obsidian blockers—ideal for relaxing, intuitive play.</li>
+          <li><strong>Chapter 2 (Levels 101–200 — Beam Splitters):</strong> Introduces semi-silvered 50/50 glass prisms that transmit half a beam straight ahead while reflecting the other half sideways to energize multiple gems simultaneously.</li>
+          <li><strong>Chapter 3 (Levels 201–300 — Chromatic Filters):</strong> Adds glowing Red, Green, and Blue optical converter lenses that tint passing laser rays to match color-coded crystals on <code>7×7</code> grids.</li>
+          <li><strong>Chapter 4 (Levels 301–400 — RGB Color Synthesis):</strong> Dual colored emitters challenge you to intersect beams directly on Yellow, Magenta, and Cyan target gems without accidentally tainting single-color crystals.</li>
+          <li><strong>Chapter 5 (Levels 401–500 — Grand Optical Lab):</strong> Expansive <code>8×8</code> networks combining beam splitters, color filters, dual emitters, and dense blocker walls—with an instant <strong>💡 Optical Hint</strong> button whenever you want to spotlight a misaligned mirror.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Optical Puzzle Topics">
+          <span class="kw-pill">Laser Mirror Puzzle Online</span>
+          <span class="kw-pill">Optical Prism Browser Game</span>
+          <span class="kw-pill">RGB Color Mixing Laser Game</span>
+          <span class="kw-pill">Dark Mode Reflection Brain Teaser</span>
+          <span class="kw-pill">500-Level Beam Splitter Logic</span>
+          <span class="kw-pill">Chromebook Physics Puzzle No Download</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Prism &amp; Lasers FAQ</h2>
         <details class="faq-item">
-          <summary>Why isn't a colored target lighting up when a White beam hits it?</summary>
-          <div class="faq-answer">Each crystal target requires its exact color frequency. Use a Prism or a colored lens filter on the board to convert White light into the exact color shown on the target.</div>
+          <summary>What is the difference between a solid mirror and a dashed beam-splitter prism?</summary>
+          <div class="faq-answer">A solid silvered mirror (<code>/</code> or <code>\</code>) reflects 100% of the laser beam by 90 degrees. A semi-transparent beam splitter (dashed glowing diamond line) lets one beam pass straight through <em>and</em> bounces a second beam 90 degrees at the same time!</div>
         </details>
         <details class="faq-item">
-          <summary>Are all 500 optical levels verified to be solvable?</summary>
-          <div class="faq-answer">Yes. Every single level from 1 to 500 is verified by our live ray-tracer simulation before loading, ensuring every tool in your tray has a clean solution path.</div>
+          <summary>Why isn't my Magenta or Yellow crystal lighting up when a single beam hits it?</summary>
+          <div class="faq-answer">Secondary colored crystals require <strong>two</strong> primary colors combined at once! A Yellow gem needs both Red + Green rays, Magenta needs Red + Blue, and Cyan needs Green + Blue. Check the RGB table above for every combination.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can two laser beams cross over the same empty square safely?</summary>
+          <div class="faq-answer">Yes! Just like real photons of light, perpendicular laser rays pass straight through each other across empty tiles without blocking or interfering—they only mix when they strike the same target crystal.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does Prism &amp; Lasers save my progress on mobile and Chromebook without login?</summary>
+          <div class="faq-answer">Yes. All solved grids across Levels 1 to 500 are saved automatically inside your browser's private local storage with zero accounts or downloads required.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
@@ -481,35 +620,35 @@
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🎵</div><span class="cat-tag">Puzzle</span></div>
         <h3>One-Line Symphony</h3>
-        <p>Connect glowing nodes in one unbroken stroke across 500 calming musical puzzles.</p>
+        <p>Connect glowing nodes in one continuous line to play a complete, calming musical melody.</p>
         <a href="/games/one-line-symphony/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
-        <h3>Manual Bomb Defusal</h3>
-        <p>Read the technical manual against the ticking clock and cut the exact right wire.</p>
-        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔌</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Minimalist Logic Gates</h3>
+        <p>Snap AND, OR, NOT, XOR, NAND, and NOR gates into glowing circuit boards across 500 tests.</p>
+        <a href="/games/logic-gates/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
-        <h3>Gravity Stone Stacker</h3>
-        <p>Stack irregular geometric stones into a balanced tower for five full seconds.</p>
-        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔦</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Shadow Weaver</h3>
+        <p>Rotate abstract 3D sculptures in front of a spotlight until their wall shadow reveals art.</p>
+        <a href="/games/shadow-weaver/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Level Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Level">
+  <!-- Grid Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Optical Grid">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Level (1 – 500)</h3>
+        <h3>Choose Optical Grid (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to level (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to grid (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -533,7 +672,7 @@
             <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
             <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
             <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/visual-paradox/">Daily Visual Paradox</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -542,7 +681,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -563,7 +702,7 @@
   </footer>
 
   <script>
-    // Mobile Menu
+    // Mobile Header Menu
     const menuBtn = document.getElementById("menuBtn");
     const navMenu = document.getElementById("navMenu");
     if (menuBtn && navMenu) {
@@ -575,37 +714,47 @@
     }
 
     // ==============================================
-    // OPTICAL CONSTANTS & RAY TRACER
+    // ADDITIVE RGB OPTICS & 500-LEVEL GRID ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
-    const CHAPTERS = [
-      { title: "Chapter 1 • Mirror Lab", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Prism Split", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Spectral Filters", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Chroma Fusion", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Quantum Optics", range: "401–500", start: 401, end: 500 }
-    ];
-
     // Directions: 0=Right, 1=Down, 2=Left, 3=Up
     const DR = [0, 1, 0, -1];
     const DC = [1, 0, -1, 0];
-    const REFLECT_SLASH = [3, 2, 1, 0];     // '/'
-    const REFLECT_BACKSLASH = [1, 0, 3, 2]; // '\'
 
-    // Bitmask Colors: 1=Red, 2=Green, 4=Blue
-    const COLOR_HEX = {
-      1: "#ff3b6b", // Red
-      2: "#22c55e", // Green
-      3: "#facc15", // Yellow (R+G)
-      4: "#38bdf8", // Blue
-      5: "#e879f9", // Magenta (R+B)
-      6: "#22d3ee", // Cyan (G+B)
-      7: "#f8fafc"  // White (R+G+B)
+    // Additive RGB Color Bitmask (1=R, 2=G, 4=B)
+    const COLOR_MAP = {
+      1: { hex: "#ef4444", core: "#fecaca", name: "Red" },
+      2: { hex: "#22c55e", core: "#bbf7d0", name: "Green" },
+      4: { hex: "#3b82f6", core: "#bfdbfe", name: "Blue" },
+      3: { hex: "#facc15", core: "#fef9c3", name: "Yellow" },
+      5: { hex: "#ec4899", core: "#fbcfe8", name: "Magenta" },
+      6: { hex: "#22d3ee", core: "#cffafe", name: "Cyan" },
+      7: { hex: "#f8fafc", core: "#ffffff", name: "White" }
     };
 
-    const COLOR_NAME = {
-      1: "Red", 2: "Green", 3: "Yellow", 4: "Blue", 5: "Magenta", 6: "Cyan", 7: "White"
-    };
+    const CHAPTERS = [
+      { title: "Chapter 1 • Mirror Reflections", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Beam Splitters", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Chromatic Lenses", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • RGB Color Synthesis", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Grand Optical Lab", range: "401–500", start: 401, end: 500 }
+    ];
+
+    // Mirror reflection tables: rot=0 is '/', rot=1 is '\'
+    function reflectDir(inDir, rot) {
+      if (rot === 0) {
+        // '/' mirror: R->U, U->R, D->L, L->D
+        return [3, 2, 1, 0][inDir];
+      }
+      // '\' mirror: R->D, D->R, L->U, U->L
+      return [1, 0, 3, 2][inDir];
+    }
+
+    function mirrorRotForTurn(inDir, outDir) {
+      if (reflectDir(inDir, 0) === outDir) return 0;
+      if (reflectDir(inDir, 1) === outDir) return 1;
+      return -1;
+    }
 
     function mulberry32(seed) {
       let a = seed >>> 0;
@@ -617,424 +766,342 @@
       };
     }
 
-    function cellKey(r, c) {
-      return `${r},${c}`;
+    function shuffle(arr, rng) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
     }
 
-    // Simulate all laser beams across the grid
-    function traceLasers(level, playerPiecesMap) {
-      const N = level.size;
-      const wallSet = new Set(level.walls.map(([r, c]) => cellKey(r, c)));
-      const filterMap = new Map(level.filters.map((f) => [cellKey(f.r, f.c), f.color]));
+    // Exact Physics Raytracer (Loop-Safe, Supports Multi-Color Beams & Splitters!)
+    function traceAllRays(size, pieces) {
+      const grid = Array.from({ length: size }, () => Array(size).fill(null));
+      for (const p of pieces) {
+        grid[p.r][p.c] = p;
+        if (p.type === "target") p.receivedColor = 0;
+      }
 
-      const segments = []; // { r1, c1, r2, c2, color, dir }
-      const cellColors = Array.from({ length: N }, () => Array(N).fill(0));
-      const hitPieceKeys = new Set();
+      const segments = []; // { r1, c1, r2, c2, color }
+      const hitPieces = new Set();
       const visited = new Set();
+      const queue = [];
 
-      const queue = [{
-        r: level.emitter.r,
-        c: level.emitter.c,
-        dir: level.emitter.dir,
-        color: level.emitter.color
-      }];
+      // Seed rays from all laser emitters
+      for (const p of pieces) {
+        if (p.type === "emitter") {
+          queue.push({ r: p.r, c: p.c, dir: p.dir, color: p.color });
+        }
+      }
 
       let safety = 0;
-      while (queue.length > 0 && safety < 240) {
+      while (queue.length > 0 && safety < 1400) {
         safety++;
         const ray = queue.shift();
-        let r = ray.r;
-        let c = ray.c;
-        let dir = ray.dir;
-        let color = ray.color;
-
-        const stateKey = `${r},${c},${dir},${color}`;
+        const stateKey = `${ray.r},${ray.c},${ray.dir},${ray.color}`;
         if (visited.has(stateKey)) continue;
         visited.add(stateKey);
 
-        let curR = r;
-        let curC = c;
+        let cr = ray.r;
+        let cc = ray.c;
+        let curColor = ray.color;
 
-        for (let step = 0; step < N + 2; step++) {
-          const nr = curR + DR[dir];
-          const nc = curC + DC[dir];
+        while (true) {
+          const nr = cr + DR[ray.dir];
+          const nc = cc + DC[ray.dir];
 
-          if (nr < 0 || nr >= N || nc < 0 || nc >= N) {
-            // Beam exits board edge
-            segments.push({
-              r1: curR, c1: curC,
-              r2: curR + DR[dir] * 0.5, c2: curC + DC[dir] * 0.5,
-              color, dir
-            });
+          if (nr < 0 || nr >= size || nc < 0 || nc >= size) {
+            // Beam exits grid edge cleanly
+            segments.push({ r1: cr, c1: cc, r2: cr + DR[ray.dir] * 0.5, c2: cc + DC[ray.dir] * 0.5, color: curColor });
             break;
           }
 
-          const k = cellKey(nr, nc);
+          segments.push({ r1: cr, c1: cc, r2: nr, c2: nc, color: curColor });
+          const cellP = grid[nr][nc];
 
-          // Hit wall or emitter housing
-          if (wallSet.has(k) || (nr === level.emitter.r && nc === level.emitter.c)) {
-            segments.push({
-              r1: curR, c1: curC,
-              r2: curR + DR[dir] * 0.45, c2: curC + DC[dir] * 0.45,
-              color, dir
-            });
+          if (!cellP) {
+            cr = nr;
+            cc = nc;
+            continue;
+          }
+
+          hitPieces.add(cellP.id);
+
+          if (cellP.type === "wall" || cellP.type === "emitter") {
             break;
           }
-
-          // Travel to center of (nr, nc)
-          segments.push({ r1: curR, c1: curC, r2: nr, c2: nc, color, dir });
-          cellColors[nr][nc] |= color;
-          curR = nr;
-          curC = nc;
-
-          // Check fixed color filter
-          if (filterMap.has(k)) {
-            color = filterMap.get(k);
-            cellColors[nr][nc] |= color;
+          if (cellP.type === "target") {
+            // Target crystal absorbs incoming beam & accumulates additive RGB color!
+            cellP.receivedColor |= curColor;
+            break;
           }
-
-          // Check player piece (Mirror or Prism)
-          const piece = playerPiecesMap.get(k);
-          if (piece) {
-            hitPieceKeys.add(k);
-            const reflDir = piece.orient === "/" ? REFLECT_SLASH[dir] : REFLECT_BACKSLASH[dir];
-
-            if (piece.type === "mirror") {
-              queue.push({ r: nr, c: nc, dir: reflDir, color });
-            } else if (piece.type === "prism") {
-              if (color === 7) {
-                // White splits into Blue (straight) + Red (reflected)
-                queue.push({ r: nr, c: nc, dir: dir, color: 4 });
-                queue.push({ r: nr, c: nc, dir: reflDir, color: 1 });
-              } else {
-                // Colored beam splits into two matching beams
-                queue.push({ r: nr, c: nc, dir: dir, color });
-                queue.push({ r: nr, c: nc, dir: reflDir, color });
-              }
-            }
+          if (cellP.type === "filter") {
+            // Chromatic converter lens tints passing beam to its filter color!
+            curColor = cellP.color;
+            cr = nr;
+            cc = nc;
+            continue;
+          }
+          if (cellP.type === "mirror") {
+            const outD = reflectDir(ray.dir, cellP.rot);
+            queue.push({ r: nr, c: nc, dir: outD, color: curColor });
+            break;
+          }
+          if (cellP.type === "splitter") {
+            const outD = reflectDir(ray.dir, cellP.rot);
+            // Both reflected AND transmitted straight!
+            queue.push({ r: nr, c: nc, dir: outD, color: curColor });
+            queue.push({ r: nr, c: nc, dir: ray.dir, color: curColor });
             break;
           }
         }
       }
 
-      const targetStates = level.targets.map((t) => {
-        const received = cellColors[t.r][t.c];
-        return {
-          ...t,
-          received,
-          lit: received === t.color
-        };
-      });
+      const targets = pieces.filter((p) => p.type === "target");
+      const solvedCount = targets.filter((t) => t.receivedColor === t.reqColor).length;
+      const allSolved = targets.length > 0 && solvedCount === targets.length;
 
-      return {
-        segments,
-        cellColors,
-        hitPieceKeys,
-        targetStates,
-        allLit: targetStates.length > 0 && targetStates.every((t) => t.lit)
-      };
+      return { segments, hitPieces, targets, solvedCount, allSolved };
     }
 
-    // ==============================================
-    // DETERMINISTIC 500-LEVEL GENERATOR
-    // ==============================================
-    const INTRO_LEVELS = {
-      1: {
-        size: 5,
-        emitter: { r: 4, c: 0, dir: 3, color: 7 },
-        walls: [[2, 2], [3, 3]],
-        filters: [],
-        targets: [{ r: 1, c: 4, color: 7 }],
-        solutionPieces: [{ r: 1, c: 0, type: "mirror", orient: "/" }]
-      },
-      2: {
-        size: 5,
-        emitter: { r: 0, c: 0, dir: 0, color: 6 },
-        walls: [[0, 3], [2, 1], [3, 3]],
-        filters: [],
-        targets: [{ r: 4, c: 4, color: 6 }],
-        solutionPieces: [
-          { r: 0, c: 2, type: "mirror", orient: "\\" },
-          { r: 4, c: 2, type: "mirror", orient: "\\" }
-        ]
-      },
-      3: {
-        size: 5,
-        emitter: { r: 2, c: 0, dir: 0, color: 7 },
-        walls: [[0, 0], [4, 4]],
-        filters: [],
-        targets: [
-          { r: 2, c: 4, color: 4 },
-          { r: 0, c: 2, color: 1 }
-        ],
-        solutionPieces: [
-          { r: 2, c: 2, type: "prism", orient: "/" }
-        ]
-      },
-      4: {
-        size: 5,
-        emitter: { r: 4, c: 1, dir: 3, color: 7 },
-        walls: [[4, 3], [1, 2]],
-        filters: [],
-        targets: [{ r: 0, c: 3, color: 5 }],
-        solutionPieces: [
-          { r: 2, c: 1, type: "prism", orient: "/" },
-          { r: 0, c: 1, type: "mirror", orient: "/" },
-          { r: 2, c: 3, type: "mirror", orient: "/" }
-        ]
+    // Constructive 500-Level Solvable Optical Puzzle Generator
+    function buildPrismLevel(levelNum) {
+      const size = levelNum <= 200 ? 6 : (levelNum <= 400 ? 7 : 8);
+
+      let wantTurns, wantSplitters, wantFilters, dualMix, wallTarget;
+      if (levelNum <= 100) {
+        wantTurns = levelNum <= 30 ? 3 : 4;
+        wantSplitters = 0; wantFilters = 0; dualMix = false;
+        wallTarget = levelNum <= 30 ? 2 : 3;
+      } else if (levelNum <= 200) {
+        wantTurns = 3; wantSplitters = levelNum <= 150 ? 1 : 2;
+        wantFilters = 0; dualMix = false; wallTarget = 3;
+      } else if (levelNum <= 300) {
+        wantTurns = 4; wantSplitters = 1;
+        wantFilters = levelNum <= 250 ? 1 : 2; dualMix = false; wallTarget = 4;
+      } else if (levelNum <= 400) {
+        wantTurns = 4; wantSplitters = 1; wantFilters = 1;
+        dualMix = true; wallTarget = 4;
+      } else {
+        wantTurns = 5; wantSplitters = 2; wantFilters = 1;
+        dualMix = true; wallTarget = 5;
       }
-    };
 
-    function buildOpticalLevel(levelNum) {
-      if (INTRO_LEVELS[levelNum]) return INTRO_LEVELS[levelNum];
+      const key = (r, c) => `${r},${c}`;
 
-      const size = levelNum <= 60 ? 5 : (levelNum <= 180 ? 6 : (levelNum <= 340 ? 7 : 8));
-      const wantPrism = levelNum >= 25 && (levelNum >= 101 || levelNum % 2 === 0);
-      const wantMix = levelNum >= 140 && (levelNum % 2 === 0);
-      const wantFilter = levelNum >= 160 && (levelNum >= 201 || levelNum % 3 === 0);
-
-      const minPieces = levelNum <= 40 ? 2 : (levelNum <= 150 ? 3 : (levelNum <= 320 ? 4 : 5));
-      const maxPieces = Math.min(8, minPieces + 2);
-
-      for (let attempt = 0; attempt < 60; attempt++) {
-        const rng = mulberry32(levelNum * 8191 + attempt * 65521 + 9973);
-
-        // Place emitter on an edge pointing inward
-        const edge = Math.floor(rng() * 4);
-        let er, ec, edir;
-        if (edge === 0) { er = Math.floor(rng() * size); ec = 0; edir = 0; }
-        else if (edge === 1) { er = 0; ec = Math.floor(rng() * size); edir = 1; }
-        else if (edge === 2) { er = Math.floor(rng() * size); ec = size - 1; edir = 2; }
-        else { er = size - 1; ec = Math.floor(rng() * size); edir = 3; }
-
-        const pureColors = [1, 2, 4, 6, 7];
-        const eColor = (wantPrism || wantMix) ? 7 : pureColors[Math.floor(rng() * pureColors.length)];
-
-        const occupied = new Set([cellKey(er, ec)]);
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const rng = mulberry32(levelNum * 135799 + attempt * 8191 + 5511);
         const pieces = [];
-        const filters = [];
-        let prismsPlaced = 0;
-        const maxPrisms = wantPrism ? (levelNum > 330 && rng() < 0.45 ? 2 : 1) : 0;
-
-        // Walk rays to place solution pieces
-        const walkQueue = [{ r: er, c: ec, dir: edir, depth: 0 }];
-        const targetCountGoal = minPieces + Math.floor(rng() * (maxPieces - minPieces + 1));
-
-        let guard = 0;
-        while (walkQueue.length > 0 && pieces.length < targetCountGoal && guard < 40) {
-          guard++;
-          const cur = walkQueue.shift();
-          if (cur.depth > 5) continue;
-
-          // Gather empty cells along current ray
-          const lineCells = [];
-          let r = cur.r + DR[cur.dir];
-          let c = cur.c + DC[cur.dir];
-          while (r >= 0 && r < size && c >= 0 && c < size) {
-            if (occupied.has(cellKey(r, c))) break;
-            lineCells.push({ r, c });
-            r += DR[cur.dir];
-            c += DC[cur.dir];
-          }
-
-          if (lineCells.length < 1) continue;
-
-          // Pick a spot along the line (preferring cells with room to bounce)
-          const shuffled = lineCells.slice().sort(() => rng() - 0.5);
-          let placed = false;
-
-          for (const spot of shuffled) {
-            const canSlash = (() => {
-              const nd = REFLECT_SLASH[cur.dir];
-              const nr = spot.r + DR[nd], nc = spot.c + DC[nd];
-              return nr >= 0 && nr < size && nc >= 0 && nc < size && !occupied.has(cellKey(nr, nc));
-            })();
-            const canBack = (() => {
-              const nd = REFLECT_BACKSLASH[cur.dir];
-              const nr = spot.r + DR[nd], nc = spot.c + DC[nd];
-              return nr >= 0 && nr < size && nc >= 0 && nc < size && !occupied.has(cellKey(nr, nc));
-            })();
-
-            if (!canSlash && !canBack) continue;
-
-            const orient = (canSlash && canBack)
-              ? (rng() < 0.5 ? "/" : "\\")
-              : (canSlash ? "/" : "\\");
-
-            // Check if straight continues cleanly for a prism
-            const strR = spot.r + DR[cur.dir], strC = spot.c + DC[cur.dir];
-            const canStraight = strR >= 0 && strR < size && strC >= 0 && strC < size && !occupied.has(cellKey(strR, strC));
-
-            const makePrism = prismsPlaced < maxPrisms && canStraight && (pieces.length === 0 || rng() < 0.6);
-            const type = makePrism ? "prism" : "mirror";
-            if (makePrism) prismsPlaced++;
-
-            occupied.add(cellKey(spot.r, spot.c));
-            pieces.push({ r: spot.r, c: spot.c, type, orient });
-
-            const reflDir = orient === "/" ? REFLECT_SLASH[cur.dir] : REFLECT_BACKSLASH[cur.dir];
-            walkQueue.push({ r: spot.r, c: spot.c, dir: reflDir, depth: cur.depth + 1 });
-            if (makePrism) {
-              walkQueue.push({ r: spot.r, c: spot.c, dir: cur.dir, depth: cur.depth + 1 });
-            }
-            placed = true;
-            break;
-          }
-          if (!placed) continue;
-        }
-
-        if (pieces.length < minPieces) continue;
-        if (wantPrism && prismsPlaced === 0) continue;
-
-        // Run initial trace to inspect beam cells
-        const baseLevel = {
-          size,
-          emitter: { r: er, c: ec, dir: edir, color: eColor },
-          walls: [],
-          filters: [],
-          targets: []
+        const occupied = new Map();
+        const addPiece = (p) => {
+          p.id = pieces.length;
+          pieces.push(p);
+          occupied.set(key(p.r, p.c), p);
+          return p;
         };
-        const solMap = new Map(pieces.map((p) => [cellKey(p.r, p.c), p]));
-        let sim = traceLasers(baseLevel, solMap);
 
-        // Optionally place 1-2 color filters on empty beam cells
-        if (wantFilter) {
-          const beamCandidates = [];
-          for (let r = 0; r < size; r++) {
-            for (let c = 0; c < size; c++) {
-              const k = cellKey(r, c);
-              if (!occupied.has(k) && sim.cellColors[r][c] > 0) {
-                beamCandidates.push({ r, c });
+        // Pick Emitter 1 along a perimeter cell pointing cleanly inward
+        const side = Math.floor(rng() * 4);
+        let er, ec, ed;
+        if (side === 0) { er = Math.floor(rng() * size); ec = 0; ed = 0; }
+        else if (side === 1) { er = 0; ec = Math.floor(rng() * size); ed = 1; }
+        else if (side === 2) { er = Math.floor(rng() * size); ec = size - 1; ed = 2; }
+        else { er = size - 1; ec = Math.floor(rng() * size); ed = 3; }
+
+        const primaryColors = [1, 2, 4]; // R, G, B
+        const em1Color = dualMix
+          ? primaryColors[Math.floor(rng() * 3)]
+          : (levelNum <= 200 ? 6 : 7); // Crisp Cyan in Ch 1-2, Pure White in Ch 3
+
+        addPiece({ type: "emitter", r: er, c: ec, dir: ed, color: em1Color });
+
+        // Helper: find free steps ahead along (r, c, dir)
+        const freeStepsAhead = (r, c, dir) => {
+          const list = [];
+          let cr = r + DR[dir], cc = c + DC[dir];
+          while (cr >= 0 && cr < size && cc >= 0 && cc < size) {
+            if (occupied.has(key(cr, cc))) break;
+            list.push({ r: cr, c: cc });
+            cr += DR[dir]; cc += DC[dir];
+          }
+          return list;
+        };
+
+        let turnsLeft = wantTurns;
+        let splitLeft = wantSplitters;
+        let filterLeft = wantFilters;
+        const targetList = [];
+
+        // Recursive Ray Builder placing mirrors, splitters, filters & target gems
+        function buildBranch(sr, sc, dir, depth) {
+          const ahead = freeStepsAhead(sr, sc, dir);
+          if (ahead.length === 0) return false;
+
+          // Option A: Place a Beam Splitter if room allows both straight & 90° branches!
+          if (splitLeft > 0 && depth < 3 && ahead.length >= 2) {
+            const cands = shuffle(ahead.slice(0, ahead.length - 1), rng);
+            for (const cell of cands) {
+              const perpDirs = shuffle([(dir + 1) % 4, (dir + 3) % 4], rng);
+              for (const pd of perpDirs) {
+                if (freeStepsAhead(cell.r, cell.c, pd).length >= 1) {
+                  const sRot = mirrorRotForTurn(dir, pd);
+                  splitLeft--;
+                  addPiece({ type: "splitter", r: cell.r, c: cell.c, rot: sRot, solRot: sRot, animRot: sRot });
+                  const ok1 = buildBranch(cell.r, cell.c, dir, depth + 1);
+                  const ok2 = buildBranch(cell.r, cell.c, pd, depth + 1);
+                  return ok1 && ok2;
+                }
               }
             }
           }
-          if (beamCandidates.length > 0) {
-            const pick = beamCandidates[Math.floor(rng() * beamCandidates.length)];
-            const filterColors = [1, 2, 4];
-            const fc = filterColors[Math.floor(rng() * filterColors.length)];
-            baseLevel.filters.push({ r: pick.r, c: pick.c, color: fc });
-            occupied.add(cellKey(pick.r, pick.c));
-            sim = traceLasers(baseLevel, solMap);
-          }
-        }
 
-        // Choose targets from empty cells hit by the laser
-        const emptyLit = [];
-        const mixedLit = [];
-        for (let r = 0; r < size; r++) {
-          for (let c = 0; c < size; c++) {
-            const k = cellKey(r, c);
-            const col = sim.cellColors[r][c];
-            if (!occupied.has(k) && col > 0) {
-              emptyLit.push({ r, c, color: col });
-              if (col === 3 || col === 5 || col === 6) {
-                mixedLit.push({ r, c, color: col });
+          // Option B: Place a 90° Mirror turn
+          if (turnsLeft > 0 && depth < 6 && ahead.length >= 1) {
+            const cands = shuffle(ahead, rng);
+            for (const cell of cands) {
+              const perpDirs = shuffle([(dir + 1) % 4, (dir + 3) % 4], rng);
+              for (const pd of perpDirs) {
+                if (freeStepsAhead(cell.r, cell.c, pd).length >= 1) {
+                  const mRot = mirrorRotForTurn(dir, pd);
+                  turnsLeft--;
+                  addPiece({ type: "mirror", r: cell.r, c: cell.c, rot: mRot, solRot: mRot, animRot: mRot });
+                  return buildBranch(cell.r, cell.c, pd, depth + 1);
+                }
               }
             }
           }
-        }
 
-        if (emptyLit.length === 0) continue;
-
-        const chosenTargets = [];
-        const targetKeys = new Set();
-
-        // Prioritize a mixed-color intersection target if available
-        if (wantMix && mixedLit.length > 0) {
-          const m = mixedLit[Math.floor(rng() * mixedLit.length)];
-          chosenTargets.push(m);
-          targetKeys.add(cellKey(m.r, m.c));
-        }
-
-        // Also pick cells from the later segments of the ray trace so all bounces matter
-        const revSegs = sim.segments.slice().reverse();
-        const desiredTargets = Math.min(3, 1 + prismsPlaced);
-        for (const seg of revSegs) {
-          if (chosenTargets.length >= desiredTargets) break;
-          const r = Math.round(seg.r2);
-          const c = Math.round(seg.c2);
-          if (r < 0 || r >= size || c < 0 || c >= size) continue;
-          const k = cellKey(r, c);
-          if (occupied.has(k) || targetKeys.has(k)) continue;
-          const col = sim.cellColors[r][c];
-          if (col > 0) {
-            chosenTargets.push({ r, c, color: col });
-            targetKeys.add(k);
+          // Option C: End this branch with a Target Crystal (plus optional color filter along the way!)
+          const endIdx = Math.max(0, ahead.length - 1 - (ahead.length > 2 && rng() < 0.4 ? 1 : 0));
+          const endCell = ahead[endIdx];
+          if (filterLeft > 0 && endIdx >= 1) {
+            const fCell = ahead[Math.floor(endIdx / 2)];
+            const fCol = primaryColors[(filterLeft + levelNum) % 3];
+            filterLeft--;
+            addPiece({ type: "filter", r: fCell.r, c: fCell.c, color: fCol });
           }
+
+          const tgt = addPiece({ type: "target", r: endCell.r, c: endCell.c, reqColor: 6, receivedColor: 0 });
+          targetList.push(tgt);
+          return true;
         }
 
-        if (chosenTargets.length === 0) continue;
-        baseLevel.targets = chosenTargets;
+        if (!buildBranch(er, ec, ed, 0)) continue;
+        if (targetList.length === 0) continue;
 
-        // Prune any redundant piece not actually needed to satisfy all targets
-        let activePieces = pieces.filter((p) => sim.hitPieceKeys.has(cellKey(p.r, p.c)));
-        for (let i = activePieces.length - 1; i >= 0; i--) {
-          const reduced = activePieces.filter((_, idx) => idx !== i);
-          const testMap = new Map(reduced.map((p) => [cellKey(p.r, p.c), p]));
-          const testSim = traceLasers(baseLevel, testMap);
-          if (testSim.allLit) {
-            activePieces = reduced;
+        // For Chapter 4-5: Add Second Colored Emitter aiming into one existing Target (for RGB Mixing!)
+        if (dualMix) {
+          const mixTarget = targetList[0];
+          const em2Color = primaryColors.find((c) => c !== em1Color);
+          const approachDirs = shuffle([0, 1, 2, 3], rng);
+          let addedMix = false;
+
+          for (const dBack of approachDirs) {
+            // Walk backward from mixTarget to place a mirror and Emitter 2
+            const leg1 = freeStepsAhead(mixTarget.r, mixTarget.c, dBack);
+            if (leg1.length < 1) continue;
+            const turnCell = leg1[Math.floor(rng() * leg1.length)];
+            const perp2 = shuffle([(dBack + 1) % 4, (dBack + 3) % 4], rng);
+            for (const dBack2 of perp2) {
+              const leg2 = freeStepsAhead(turnCell.r, turnCell.c, dBack2);
+              if (leg2.length < 1) continue;
+              const em2Cell = leg2[leg2.length - 1];
+              const fireDir = (dBack2 + 2) % 4;
+              const intoTgtDir = (dBack + 2) % 4;
+              const mRot = mirrorRotForTurn(fireDir, intoTgtDir);
+              if (mRot === -1) continue;
+
+              addPiece({ type: "emitter", r: em2Cell.r, c: em2Cell.c, dir: fireDir, color: em2Color });
+              addPiece({ type: "mirror", r: turnCell.r, c: turnCell.c, rot: mRot, solRot: mRot, animRot: mRot });
+              addedMix = true;
+              break;
+            }
+            if (addedMix) break;
           }
+          if (!addedMix) continue;
         }
 
-        if (activePieces.length < minPieces) continue;
-        if (wantPrism && !activePieces.some((p) => p.type === "prism")) continue;
+        // Run REAL Raytracer on solution to lock exact expected target colors & prune dead pieces
+        const solTrace = traceAllRays(size, pieces);
+        const validTargets = pieces.filter((p) => p.type === "target" && p.receivedColor > 0);
+        if (validTargets.length !== targetList.length) continue;
 
-        // Verify empty board does NOT already solve it
-        const emptySim = traceLasers(baseLevel, new Map());
-        if (emptySim.allLit) continue;
+        for (const t of validTargets) {
+          t.reqColor = t.receivedColor;
+        }
 
-        // Final solution check & add decorative walls on completely unused cells
-        const finalMap = new Map(activePieces.map((p) => [cellKey(p.r, p.c), p]));
-        const finalSim = traceLasers(baseLevel, finalMap);
-        if (!finalSim.allLit) continue;
+        // Require genuinely mixed secondary/white color in Chapters 4-5!
+        if (dualMix && !validTargets.some((t) => [3, 5, 6, 7].includes(t.reqColor))) continue;
 
-        const freeCells = [];
+        // Require at least 2 active rotatable mirrors/splitters
+        const activeRotatables = pieces.filter((p) => (p.type === "mirror" || p.type === "splitter") && solTrace.hitPieces.has(p.id));
+        if (activeRotatables.length < 2) continue;
+
+        // Add decorative obsidian blocker walls on unused cells (verified not to block solution!)
+        const emptyCells = [];
         for (let r = 0; r < size; r++) {
           for (let c = 0; c < size; c++) {
-            const k = cellKey(r, c);
-            if (
-              !finalMap.has(k) &&
-              !targetKeys.has(k) &&
-              !(r === er && c === ec) &&
-              !baseLevel.filters.some((f) => f.r === r && f.c === c) &&
-              finalSim.cellColors[r][c] === 0
-            ) {
-              freeCells.push([r, c]);
-            }
+            if (!occupied.has(key(r, c))) emptyCells.push({ r, c });
+          }
+        }
+        let wallsAdded = 0;
+        for (const wc of shuffle(emptyCells, rng)) {
+          if (wallsAdded >= wallTarget) break;
+          const wallP = { id: pieces.length, type: "wall", r: wc.r, c: wc.c };
+          pieces.push(wallP);
+          const checkT = traceAllRays(size, pieces);
+          if (checkT.allSolved) {
+            occupied.set(key(wc.r, wc.c), wallP);
+            wallsAdded++;
+          } else {
+            pieces.pop();
           }
         }
 
-        const wallCount = Math.min(freeCells.length, Math.floor(size * 0.7));
-        freeCells.sort(() => rng() - 0.5);
-        baseLevel.walls = freeCells.slice(0, wallCount);
-        baseLevel.solutionPieces = activePieces;
+        // Scramble rotatable pieces so puzzle starts clearly UNSOLVED!
+        const rotList = pieces.filter((p) => p.type === "mirror" || p.type === "splitter");
+        let flipped = 0;
+        for (const rp of rotList) {
+          if (rng() < 0.72) {
+            rp.rot = 1 - rp.solRot;
+            rp.animRot = rp.rot;
+            flipped++;
+          }
+        }
+        if (flipped === 0 && rotList.length > 0) {
+          rotList[0].rot = 1 - rotList[0].solRot;
+          rotList[0].animRot = rotList[0].rot;
+        }
 
-        return baseLevel;
+        const initTrace = traceAllRays(size, pieces);
+        if (initTrace.allSolved) {
+          // Force flip every rotatable piece if accidentally solved
+          for (const rp of rotList) {
+            rp.rot = 1 - rp.solRot;
+            rp.animRot = rp.rot;
+          }
+          if (traceAllRays(size, pieces).allSolved) continue;
+        }
+
+        return { levelNum, size, pieces };
       }
 
-      // Guaranteed deterministic fallback (clean zigzag mirror puzzle)
-      const rng = mulberry32(levelNum * 12347 + 77);
-      const r1 = 1 + Math.floor(rng() * (size - 2));
-      const c1 = 1 + Math.floor(rng() * (size - 2));
-      const c2 = size - 1;
-      return {
-        size,
-        emitter: { r: r1, c: 0, dir: 0, color: 6 },
-        walls: [[r1, Math.min(size - 1, c1 + 1)]],
-        filters: [],
-        targets: [{ r: 0, c: c2, color: 6 }],
-        solutionPieces: [
-          { r: r1, c: c1, type: "mirror", orient: "/" },
-          { r: 0, c: c1, type: "mirror", orient: "/" }
-        ]
-      };
+      // Guaranteed Solvable Fallback Grid
+      const fb = [
+        { id: 0, type: "emitter", r: 1, c: 0, dir: 0, color: 6 },
+        { id: 1, type: "mirror", r: 1, c: 4, rot: 0, solRot: 1, animRot: 0 },
+        { id: 2, type: "mirror", r: 4, c: 4, rot: 1, solRot: 0, animRot: 1 },
+        { id: 3, type: "target", r: 4, c: 1, reqColor: 6, receivedColor: 0 },
+        { id: 4, type: "wall", r: 2, c: 2 }
+      ];
+      return { levelNum, size: 6, pieces: fb };
     }
 
     const levelCache = new Map();
     function getLevel(num) {
       if (!levelCache.has(num)) {
-        levelCache.set(num, buildOpticalLevel(num));
+        levelCache.set(num, buildPrismLevel(num));
       }
       return levelCache.get(num);
     }
@@ -1044,55 +1111,10 @@
     }
 
     // ==============================================
-    // GAME STATE, AUDIO & NEON CANVAS RENDERER
+    // CRYSTALLINE GLASS & OPTICS WEB AUDIO ENGINE
     // ==============================================
-    const SCALE = [293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00];
-
-    const canvas = document.getElementById("prismCanvas");
-    const ctx = canvas.getContext("2d");
-    const chapterLabel = document.getElementById("chapterLabel");
-    const levelTitle = document.getElementById("levelTitle");
-    const targetsCounter = document.getElementById("targetsCounter");
-    const solvedCounter = document.getElementById("solvedCounter");
-    const mirrorToolBtn = document.getElementById("mirrorToolBtn");
-    const prismToolBtn = document.getElementById("prismToolBtn");
-    const mirrorCountEl = document.getElementById("mirrorCount");
-    const prismCountEl = document.getElementById("prismCount");
-    const statusToast = document.getElementById("statusToast");
-    const winOverlay = document.getElementById("winOverlay");
-    const winHeading = document.getElementById("winHeading");
-    const winText = document.getElementById("winText");
-    const nextLevelBtn = document.getElementById("nextLevelBtn");
-    const soundBtn = document.getElementById("soundBtn");
-    const openPickerBtn = document.getElementById("openPickerBtn");
-
     let audioCtx = null;
     let soundOn = true;
-
-    let solvedSet = new Set();
-    let currentLevelNum = 1;
-    try {
-      const savedSolved = JSON.parse(localStorage.getItem("zinplay_prism_500_solved") || "[]");
-      solvedSet = new Set(savedSolved);
-      const savedLast = parseInt(localStorage.getItem("zinplay_prism_500_last") || "1", 10);
-      if (savedLast >= 1 && savedLast <= TOTAL_LEVELS) currentLevelNum = savedLast;
-    } catch (e) {}
-
-    let currentLevel = null;
-    let playerPieces = new Map(); // cellKey -> { r, c, type, orient }
-    let selectedTool = "mirror";
-    let simResult = null;
-    let levelWon = false;
-    let hintPiece = null;
-    let toastTimer = null;
-    let hitFlashes = [];
-
-    function showToast(msg, ms = 2500) {
-      statusToast.textContent = msg;
-      statusToast.classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
-    }
 
     function initAudio() {
       if (!audioCtx) {
@@ -1102,145 +1124,109 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playChime(noteIdx, dur = 0.55, vol = 0.14) {
+    function playTone(freq, dur, type = "sine", vol = 0.1) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-
-      const freq = SCALE[noteIdx % SCALE.length];
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const osc2 = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const g2 = audioCtx.createGain();
-
-      osc.type = "sine";
-      osc2.type = "triangle";
+      const g = audioCtx.createGain();
+      osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
-      osc2.frequency.setValueAtTime(freq * 1.5, now);
-
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.exponentialRampToValueAtTime(vol, now + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + dur);
-      g2.gain.value = 0.2;
-
-      osc.connect(gain);
-      osc2.connect(g2);
-      g2.connect(gain);
-      gain.connect(audioCtx.destination);
-
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
-      osc2.start(now);
-      osc.stop(now + dur + 0.05);
-      osc2.stop(now + dur + 0.05);
+      osc.stop(now + dur + 0.02);
     }
 
-    function playWinArpeggio() {
-      [0, 2, 4, 6, 8].forEach((n, i) => {
-        setTimeout(() => playChime(n, 0.75, 0.15), i * 85);
-      });
-    }
-
-    function getInventoryCounts() {
-      const totalMirrors = currentLevel.solutionPieces.filter((p) => p.type === "mirror").length;
-      const totalPrisms = currentLevel.solutionPieces.filter((p) => p.type === "prism").length;
-      let usedMirrors = 0;
-      let usedPrisms = 0;
-      playerPieces.forEach((p) => {
-        if (p.type === "mirror") usedMirrors++;
-        if (p.type === "prism") usedPrisms++;
-      });
-      return {
-        mirrorsLeft: totalMirrors - usedMirrors,
-        prismsLeft: totalPrisms - usedPrisms,
-        totalMirrors,
-        totalPrisms
-      };
-    }
-
-    function updateTrayUI() {
-      const inv = getInventoryCounts();
-      mirrorCountEl.textContent = inv.mirrorsLeft;
-      prismCountEl.textContent = inv.prismsLeft;
-
-      mirrorToolBtn.classList.toggle("empty", inv.totalMirrors === 0);
-      prismToolBtn.classList.toggle("empty", inv.totalPrisms === 0);
-
-      // Auto-select available tool if current has 0 total
-      if (selectedTool === "mirror" && inv.mirrorsLeft === 0 && inv.prismsLeft > 0) {
-        selectedTool = "prism";
-      } else if (selectedTool === "prism" && inv.prismsLeft === 0 && inv.mirrorsLeft > 0) {
-        selectedTool = "mirror";
+    function sfxRotateGlass(litMore) {
+      playTone(620, 0.055, "triangle", 0.08);
+      if (litMore) {
+        setTimeout(() => playTone(987.77, 0.22, "sine", 0.11), 40);
       }
+    }
 
-      mirrorToolBtn.classList.toggle("active", selectedTool === "mirror");
-      prismToolBtn.classList.toggle("active", selectedTool === "prism");
+    function sfxOpticsWin() {
+      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.45, "sine", 0.12), i * 75);
+      });
+    }
+
+    // ==============================================
+    // GAME STATE, INTERACTION & LASER RENDERER
+    // ==============================================
+    const canvas = document.getElementById("prismCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const chapterLabel = document.getElementById("chapterLabel");
+    const levelTitle = document.getElementById("levelTitle");
+    const targetsPill = document.getElementById("targetsPill");
+    const movesPill = document.getElementById("movesPill");
+    const solvedCounter = document.getElementById("solvedCounter");
+    const statusToast = document.getElementById("statusToast");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
+    const soundBtn = document.getElementById("soundBtn");
+    const openPickerBtn = document.getElementById("openPickerBtn");
+
+    let solvedSet = new Set();
+    let currentLevelNum = 1;
+    try {
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_prism_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_prism_500_last") || "1", 10);
+      if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
+    } catch (e) {}
+
+    let level = null;
+    let activePieces = [];
+    let liveTrace = null;
+    let rotations = 0;
+    let levelWon = false;
+    let hintPieceId = -1;
+    let sparks = [];
+    let toastTimer = null;
+
+    function showToast(msg, ms = 2400) {
+      statusToast.textContent = msg;
+      statusToast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Level ${currentLevelNum} / ${TOTAL_LEVELS}`;
-      const litCount = simResult.targetStates.filter((t) => t.lit).length;
-      targetsCounter.textContent = `Targets: ${litCount} / ${currentLevel.targets.length}`;
+      levelTitle.textContent = `Grid #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      targetsPill.textContent = `Crystals: ${liveTrace.solvedCount} / ${liveTrace.targets.length}`;
+      movesPill.textContent = `Rotations: ${rotations}`;
       solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Level ${currentLevelNum} / 500 ▾`;
-      updateTrayUI();
-    }
-
-    function recomputeAndCheck(playSound = false) {
-      const prevLit = simResult ? simResult.targetStates.filter((t) => t.lit).length : 0;
-      simResult = traceLasers(currentLevel, playerPieces);
-      const nowLit = simResult.targetStates.filter((t) => t.lit).length;
-
-      if (playSound) {
-        if (nowLit > prevLit) {
-          playChime(5 + nowLit, 0.7, 0.17);
-        } else {
-          playChime(simResult.hitPieceKeys.size, 0.45, 0.13);
-        }
-      }
-
-      updateHUD();
-
-      if (simResult.allLit && !levelWon) {
-        levelWon = true;
-        hintPiece = null;
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_prism_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        updateHUD();
-        playWinArpeggio();
-
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        winHeading.textContent = isLast ? "All 500 Levels Mastered!" : `Level ${currentLevelNum} Aligned!`;
-        winText.textContent = isLast
-          ? "You mastered every mirror, prism, and color blend."
-          : "All crystal targets charged in optical harmony.";
-        nextLevelBtn.textContent = isLast ? "Back to Level 1" : `Play Level ${currentLevelNum + 1} →`;
-
-        setTimeout(() => winOverlay.classList.add("show"), 460);
-      }
+      openPickerBtn.textContent = `Grid ${currentLevelNum} / 500 ▾`;
     }
 
     function loadLevel(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      currentLevel = getLevel(currentLevelNum);
-      playerPieces = new Map();
+      level = getLevel(currentLevelNum);
+      activePieces = level.pieces.map((p) => ({ ...p }));
+      rotations = 0;
       levelWon = false;
-      hintPiece = null;
-      statusToast.classList.remove("show");
-      winOverlay.classList.remove("show");
+      hintPieceId = -1;
+      sparks = [];
 
-      const hasMirrors = currentLevel.solutionPieces.some((p) => p.type === "mirror");
-      selectedTool = hasMirrors ? "mirror" : "prism";
+      winOverlay.classList.remove("show");
+      statusToast.classList.remove("show");
+
+      liveTrace = traceAllRays(level.size, activePieces);
 
       try {
         localStorage.setItem("zinplay_prism_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      recomputeAndCheck(false);
+      updateHUD();
     }
 
     function resizeCanvas() {
@@ -1251,114 +1237,89 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function getGridMetrics() {
+    function getBoardMetrics() {
       const rect = canvas.parentElement.getBoundingClientRect();
-      const pad = 18;
-      const boardSize = Math.min(rect.width, rect.height) - pad * 2;
-      const cellSize = boardSize / currentLevel.size;
-      const offsetX = (rect.width - boardSize) / 2;
-      const offsetY = (rect.height - boardSize) / 2;
-      return { boardSize, cellSize, offsetX, offsetY, w: rect.width, h: rect.height };
+      const pad = 16;
+      const boardPx = Math.min(rect.width, rect.height) - pad * 2;
+      const cs = boardPx / level.size;
+      const ox = (rect.width - boardPx) / 2;
+      const oy = (rect.height - boardPx) / 2;
+      return { w: rect.width, h: rect.height, cs, ox, oy, boardPx };
     }
 
-    function isCellBlockedForPlacement(r, c) {
-      if (r === currentLevel.emitter.r && c === currentLevel.emitter.c) return true;
-      if (currentLevel.walls.some(([wr, wc]) => wr === r && wc === c)) return true;
-      if (currentLevel.targets.some((t) => t.r === r && t.c === c)) return true;
-      if (currentLevel.filters.some((f) => f.r === r && f.c === c)) return true;
-      return false;
-    }
-
-    // Handle Board Tap/Click
     canvas.addEventListener("pointerdown", (e) => {
       if (levelWon) return;
       initAudio();
+
       const rect = canvas.getBoundingClientRect();
-      const px = e.clientX - rect.left;
-      const py = e.clientY - rect.top;
-      const m = getGridMetrics();
+      const m = getBoardMetrics();
+      const c = Math.floor((e.clientX - rect.left - m.ox) / m.cs);
+      const r = Math.floor((e.clientY - rect.top - m.oy) / m.cs);
+      if (r < 0 || r >= level.size || c < 0 || c >= level.size) return;
 
-      const c = Math.floor((px - m.offsetX) / m.cellSize);
-      const r = Math.floor((py - m.offsetY) / m.cellSize);
-      if (r < 0 || r >= currentLevel.size || c < 0 || c >= currentLevel.size) return;
+      const hit = activePieces.find((p) => p.r === r && p.c === c);
+      if (!hit) return;
 
-      if (isCellBlockedForPlacement(r, c)) {
-        showToast("Can't place optics on emitters, walls, filters, or targets!", 1800);
-        return;
+      if (hit.type === "mirror" || hit.type === "splitter") {
+        const prevLit = liveTrace.solvedCount;
+        hit.rot = 1 - hit.rot;
+        rotations++;
+        if (hintPieceId === hit.id && hit.rot === hit.solRot) {
+          hintPieceId = -1;
+        }
+
+        liveTrace = traceAllRays(level.size, activePieces);
+        sfxRotateGlass(liveTrace.solvedCount > prevLit);
+
+        const cx = m.ox + (c + 0.5) * m.cs;
+        const cy = m.oy + (r + 0.5) * m.cs;
+        for (let k = 0; k < 7; k++) {
+          const a = Math.random() * Math.PI * 2;
+          sparks.push({ x: cx, y: cy, vx: Math.cos(a) * 1.8, vy: Math.sin(a) * 1.8, r: 2.2, color: "#38bdf8", alpha: 0.9 });
+        }
+
+        updateHUD();
+
+        if (liveTrace.allSolved) {
+          levelWon = true;
+          hintPieceId = -1;
+          solvedSet.add(currentLevelNum);
+          try {
+            localStorage.setItem("zinplay_prism_500_solved", JSON.stringify([...solvedSet]));
+          } catch (err) {}
+          updateHUD();
+          sfxOpticsWin();
+
+          const isLast = currentLevelNum === TOTAL_LEVELS;
+          winHeading.textContent = isLast ? "All 500 Grids Aligned!" : `Grid #${currentLevelNum} Solved!`;
+          winText.textContent = `Illuminated all ${liveTrace.targets.length} crystal${liveTrace.targets.length > 1 ? "s" : ""} in ${rotations} rotation${rotations === 1 ? "" : "s"}.`;
+          nextLevelBtn.textContent = isLast ? "Replay Grid #1" : `Next Grid (#${currentLevelNum + 1}) →`;
+          setTimeout(() => winOverlay.classList.add("show"), 520);
+        }
+      } else if (hit.type === "target") {
+        const reqName = COLOR_MAP[hit.reqColor]?.name || "Light";
+        showToast(`💎 This crystal requires ${reqName} laser light!`, 2000);
+      } else if (hit.type === "filter") {
+        const fName = COLOR_MAP[hit.color]?.name || "";
+        showToast(`◉ Fixed ${fName} Lens — tints any passing laser beam ${fName}!`, 2100);
       }
-
-      const k = cellKey(r, c);
-      const existing = playerPieces.get(k);
-
-      if (existing) {
-        if (existing.orient === "/") {
-          existing.orient = "\\";
-        } else {
-          playerPieces.delete(k);
-        }
-        hitFlashes.push({ r, c, alpha: 1 });
-        hintPiece = null;
-        recomputeAndCheck(true);
-      } else {
-        const inv = getInventoryCounts();
-        if (selectedTool === "mirror" && inv.mirrorsLeft <= 0) {
-          showToast("No Mirrors left — tap a placed Mirror to rotate or pick it up!", 2100);
-          return;
-        }
-        if (selectedTool === "prism" && inv.prismsLeft <= 0) {
-          showToast("No Prisms left — tap a placed Prism to rotate or pick it up!", 2100);
-          return;
-        }
-
-        playerPieces.set(k, { r, c, type: selectedTool, orient: "/" });
-        hitFlashes.push({ r, c, alpha: 1 });
-        hintPiece = null;
-        recomputeAndCheck(true);
-      }
     });
 
-    // Tool Tray & Buttons
-    mirrorToolBtn.addEventListener("click", () => {
-      selectedTool = "mirror";
-      updateTrayUI();
-    });
-    prismToolBtn.addEventListener("click", () => {
-      selectedTool = "prism";
-      updateTrayUI();
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      if (levelWon) return;
-      playerPieces.clear();
-      hintPiece = null;
-      recomputeAndCheck(false);
-    });
-
+    // Smart Optical Hint Button
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (levelWon) return;
-      // Find first missing or misoriented solution piece
-      let targetSol = null;
-      for (const sp of currentLevel.solutionPieces) {
-        const cur = playerPieces.get(cellKey(sp.r, sp.c));
-        if (!cur || cur.type !== sp.type || cur.orient !== sp.orient) {
-          targetSol = sp;
-          break;
-        }
-      }
-      if (targetSol) {
-        hintPiece = targetSol;
-        selectedTool = targetSol.type;
-        updateTrayUI();
-        const label = targetSol.type === "prism" ? "Prism" : "Mirror";
-        showToast(`Place a ${label} (${targetSol.orient}) in the golden cell!`, 3000);
-      } else {
-        showToast("Remove extra misplaced pieces not matching the solution!", 2500);
+      initAudio();
+      const wrong = activePieces.find((p) => (p.type === "mirror" || p.type === "splitter") && p.rot !== p.solRot);
+      if (wrong) {
+        hintPieceId = wrong.id;
+        showToast(`💡 Tap the glowing golden ${wrong.type === "splitter" ? "Beam Splitter" : "Mirror"} to align it!`, 2500);
       }
     });
 
+    document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
     nextLevelBtn.addEventListener("click", () => {
       loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
@@ -1370,7 +1331,7 @@
       if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
     });
 
-    // Level Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1429,313 +1390,252 @@
     });
 
     // ==============================================
-    // ANIMATED RENDER LOOP
+    // DARK-MODE VOLUMETRIC LASER & PRISM RENDERER
     // ==============================================
-    function draw(time) {
-      const m = getGridMetrics();
+    let lastTime = performance.now();
+
+    function frame(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      // Smoothly ease mirror/splitter rotation animation
+      for (const p of activePieces) {
+        if (p.type === "mirror" || p.type === "splitter") {
+          p.animRot += (p.rot - p.animRot) * Math.min(1, dt * 18);
+        }
+      }
+
+      const m = getBoardMetrics();
+      const cs = m.cs;
+      const N = level.size;
       ctx.clearRect(0, 0, m.w, m.h);
 
-      const N = currentLevel.size;
-      const cs = m.cellSize;
-      const cxOf = (c) => m.offsetX + (c + 0.5) * cs;
-      const cyOf = (r) => m.offsetY + (r + 0.5) * cs;
+      const cxOf = (c) => m.ox + (c + 0.5) * cs;
+      const cyOf = (r) => m.oy + (r + 0.5) * cs;
 
-      // Grid Cells
+      // 1. Sleek Dark Obsidian Optical Grid Cells
       for (let r = 0; r < N; r++) {
         for (let c = 0; c < N; c++) {
-          const x = m.offsetX + c * cs;
-          const y = m.offsetY + r * cs;
-          ctx.fillStyle = (r + c) % 2 === 0 ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.04)";
+          const x = m.ox + c * cs;
+          const y = m.oy + r * cs;
+          ctx.fillStyle = (r + c) % 2 === 0 ? "rgba(30, 41, 74, 0.25)" : "rgba(15, 23, 42, 0.35)";
           ctx.fillRect(x + 1, y + 1, cs - 2, cs - 2);
-          ctx.strokeStyle = "rgba(148, 163, 184, 0.11)";
+          ctx.strokeStyle = "rgba(56, 189, 248, 0.14)";
           ctx.lineWidth = 1;
           ctx.strokeRect(x + 1, y + 1, cs - 2, cs - 2);
         }
       }
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.35)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(m.ox, m.oy, m.boardPx, m.boardPx);
 
-      // Tap Flashes
-      hitFlashes = hitFlashes.filter((f) => f.alpha > 0.04);
-      hitFlashes.forEach((f) => {
-        f.alpha *= 0.88;
-        ctx.fillStyle = `rgba(56, 189, 248, ${f.alpha * 0.28})`;
-        ctx.fillRect(m.offsetX + f.c * cs + 2, m.offsetY + f.r * cs + 2, cs - 4, cs - 4);
-      });
+      // 2. Volumetric Additive Laser Beams!
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.lineCap = "round";
+      for (const seg of liveTrace.segments) {
+        const col = COLOR_MAP[seg.color] || COLOR_MAP[6];
+        const x1 = cxOf(seg.c1), y1 = cyOf(seg.r1);
+        const x2 = cxOf(seg.c2), y2 = cyOf(seg.r2);
 
-      // Hint Golden Ghost Guide
-      if (hintPiece && !levelWon) {
-        const x = m.offsetX + hintPiece.c * cs;
-        const y = m.offsetY + hintPiece.r * cs;
-        const pulse = 0.5 + 0.4 * Math.sin(time * 0.008);
-        ctx.save();
-        ctx.strokeStyle = `rgba(250, 204, 21, ${pulse})`;
-        ctx.fillStyle = `rgba(250, 204, 21, ${pulse * 0.14})`;
-        ctx.lineWidth = 2.5;
-        ctx.strokeRect(x + 3, y + 3, cs - 6, cs - 6);
-        ctx.fillRect(x + 3, y + 3, cs - 6, cs - 6);
-
-        // Draw dashed orientation preview
-        const len = cs * 0.3;
-        const cx = cxOf(hintPiece.c);
-        const cy = cyOf(hintPiece.r);
-        ctx.strokeStyle = "#facc15";
-        ctx.setLineDash([4, 4]);
-        ctx.lineWidth = 3;
+        // Outer neon bloom
+        ctx.strokeStyle = col.hex;
+        ctx.shadowColor = col.hex;
+        ctx.shadowBlur = 16;
+        ctx.lineWidth = Math.max(4.5, cs * 0.12);
         ctx.beginPath();
-        if (hintPiece.orient === "/") {
-          ctx.moveTo(cx - len, cy + len);
-          ctx.lineTo(cx + len, cy - len);
-        } else {
-          ctx.moveTo(cx - len, cy - len);
-          ctx.lineTo(cx + len, cy + len);
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+
+        // Crisp hot white core
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = col.core;
+        ctx.lineWidth = Math.max(1.6, cs * 0.042);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // 3. Draw Optical Pieces (Walls, Filters, Mirrors, Splitters, Emitters, Crystals)
+      for (const p of activePieces) {
+        const px = cxOf(p.c);
+        const py = cyOf(p.r);
+        const isHint = p.id === hintPieceId && !levelWon;
+
+        ctx.save();
+        ctx.translate(px, py);
+
+        if (isHint) {
+          const pulse = 0.55 + 0.45 * Math.sin(now * 0.011);
+          ctx.strokeStyle = `rgba(250, 204, 21, ${pulse})`;
+          ctx.shadowColor = "#facc15";
+          ctx.shadowBlur = 14;
+          ctx.lineWidth = 2.6;
+          ctx.beginPath();
+          ctx.roundRect(-cs * 0.45, -cs * 0.45, cs * 0.9, cs * 0.9, 8);
+          ctx.stroke();
+          ctx.shadowBlur = 0;
         }
-        ctx.stroke();
-        ctx.restore();
-      }
 
-      // Walls
-      currentLevel.walls.forEach(([r, c]) => {
-        const x = m.offsetX + c * cs + 4;
-        const y = m.offsetY + r * cs + 4;
-        const s = cs - 8;
-        ctx.fillStyle = "#1e293b";
-        ctx.strokeStyle = "#334155";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.roundRect(x, y, s, s, 8);
-        ctx.fill();
-        ctx.stroke();
-
-        // Diagonal hatch detail
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.16)";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(x + 6, y + s - 6);
-        ctx.lineTo(x + s - 6, y + 6);
-        ctx.stroke();
-      });
-
-      // Fixed Color Filters
-      currentLevel.filters.forEach((f) => {
-        const cx = cxOf(f.c);
-        const cy = cyOf(f.r);
-        const col = COLOR_HEX[f.color];
-        ctx.save();
-        ctx.strokeStyle = col;
-        ctx.shadowColor = col;
-        ctx.shadowBlur = 12;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(cx, cy, cs * 0.28, 0, Math.PI * 2);
-        ctx.stroke();
-
-        ctx.fillStyle = col;
-        ctx.globalAlpha = 0.22;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = "#ffffff";
-        ctx.font = `700 ${Math.max(10, Math.round(cs * 0.22))}px sans-serif`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(COLOR_NAME[f.color][0], cx, cy + 1);
-        ctx.restore();
-      });
-
-      // Laser Beams (Neon Layered Glow)
-      if (simResult) {
-        simResult.segments.forEach((seg) => {
-          const x1 = cxOf(seg.c1);
-          const y1 = cyOf(seg.r1);
-          const x2 = cxOf(seg.c2);
-          const y2 = cyOf(seg.r2);
-          const hex = COLOR_HEX[seg.color] || "#38bdf8";
-
-          // Outer glow
-          ctx.save();
-          ctx.strokeStyle = hex;
-          ctx.shadowColor = hex;
-          ctx.shadowBlur = 16;
-          ctx.lineWidth = 6;
-          ctx.lineCap = "round";
-          ctx.globalAlpha = 0.85;
-          ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
-          ctx.stroke();
-
-          // Bright white core
-          ctx.shadowBlur = 0;
-          ctx.strokeStyle = "#ffffff";
+        if (p.type === "wall") {
+          // Matte Obsidian Blocker Cube
+          const s = cs * 0.78;
+          ctx.fillStyle = "#1e293b";
+          ctx.strokeStyle = "#475569";
           ctx.lineWidth = 2;
-          ctx.globalAlpha = 0.9;
           ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
-          ctx.stroke();
-
-          // Flowing energy pulse
-          const t = (time * 0.0018) % 1;
-          const px = x1 + (x2 - x1) * t;
-          const py = y1 + (y2 - y1) * t;
-          ctx.fillStyle = "#ffffff";
-          ctx.beginPath();
-          ctx.arc(px, py, 2.3, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        });
-      }
-
-      // Targets (Crystal Nodes)
-      if (simResult) {
-        simResult.targetStates.forEach((t) => {
-          const cx = cxOf(t.c);
-          const cy = cyOf(t.r);
-          const reqHex = COLOR_HEX[t.color];
-          const rad = cs * 0.28;
-
-          ctx.save();
-          if (t.lit) {
-            const glowR = rad + 5 + Math.sin(time * 0.008) * 3;
-            ctx.strokeStyle = reqHex;
-            ctx.shadowColor = reqHex;
-            ctx.shadowBlur = 20;
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
-            ctx.stroke();
-          }
-
-          // Diamond crystal shape
-          ctx.beginPath();
-          ctx.moveTo(cx, cy - rad);
-          ctx.lineTo(cx + rad, cy);
-          ctx.lineTo(cx, cy + rad);
-          ctx.lineTo(cx - rad, cy);
-          ctx.closePath();
-
-          ctx.fillStyle = t.lit ? reqHex : "rgba(15, 23, 42, 0.92)";
-          ctx.shadowColor = reqHex;
-          ctx.shadowBlur = t.lit ? 18 : 8;
-          ctx.fill();
-
-          ctx.lineWidth = 3;
-          ctx.strokeStyle = reqHex;
-          ctx.stroke();
-
-          // Inner core dot or lit checkmark flare
-          ctx.shadowBlur = 0;
-          ctx.fillStyle = t.lit ? "#ffffff" : reqHex;
-          ctx.beginPath();
-          ctx.arc(cx, cy, t.lit ? 4.5 : 3.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        });
-      }
-
-      // Emitter Housing
-      {
-        const em = currentLevel.emitter;
-        const cx = cxOf(em.c);
-        const cy = cyOf(em.r);
-        const hex = COLOR_HEX[em.color];
-        const rad = cs * 0.32;
-
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(em.dir * (Math.PI / 2));
-
-        ctx.fillStyle = "#1e293b";
-        ctx.strokeStyle = hex;
-        ctx.shadowColor = hex;
-        ctx.shadowBlur = 12;
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        ctx.roundRect(-rad, -rad * 0.72, rad * 1.75, rad * 1.44, 7);
-        ctx.fill();
-        ctx.stroke();
-
-        // Emitter nozzle lens
-        ctx.fillStyle = hex;
-        ctx.beginPath();
-        ctx.arc(rad * 0.78, 0, rad * 0.3, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // Player Placed Pieces (Mirrors & Prisms)
-      playerPieces.forEach((p) => {
-        const cx = cxOf(p.c);
-        const cy = cyOf(p.r);
-        const len = cs * 0.34;
-        const isHit = simResult && simResult.hitPieceKeys.has(cellKey(p.r, p.c));
-
-        ctx.save();
-        if (p.type === "mirror") {
-          ctx.strokeStyle = isHit ? "#e0f2fe" : "#94a3b8";
-          ctx.shadowColor = isHit ? "#38bdf8" : "#64748b";
-          ctx.shadowBlur = isHit ? 14 : 4;
-          ctx.lineWidth = 5;
-          ctx.lineCap = "round";
-          ctx.beginPath();
-          if (p.orient === "/") {
-            ctx.moveTo(cx - len, cy + len);
-            ctx.lineTo(cx + len, cy - len);
-          } else {
-            ctx.moveTo(cx - len, cy - len);
-            ctx.lineTo(cx + len, cy + len);
-          }
-          ctx.stroke();
-
-          // Metallic end caps
-          ctx.shadowBlur = 0;
-          ctx.fillStyle = "#38bdf8";
-          const pts = p.orient === "/"
-            ? [[cx - len, cy + len], [cx + len, cy - len]]
-            : [[cx - len, cy - len], [cx + len, cy + len]];
-          pts.forEach(([px, py]) => {
-            ctx.beginPath();
-            ctx.arc(px, py, 3.2, 0, Math.PI * 2);
-            ctx.fill();
-          });
-        } else {
-          // Optical Prism Splitter (Glass Diamond + Internal Refracting Plane)
-          const rP = cs * 0.3;
-          ctx.fillStyle = isHit ? "rgba(168, 85, 247, 0.24)" : "rgba(148, 163, 184, 0.14)";
-          ctx.strokeStyle = isHit ? "#e879f9" : "#c084fc";
-          ctx.shadowColor = "#c084fc";
-          ctx.shadowBlur = isHit ? 16 : 6;
-          ctx.lineWidth = 2.2;
-          ctx.beginPath();
-          ctx.moveTo(cx, cy - rP);
-          ctx.lineTo(cx + rP, cy);
-          ctx.lineTo(cx, cy + rP);
-          ctx.lineTo(cx - rP, cy);
-          ctx.closePath();
+          ctx.roundRect(-s / 2, -s / 2, s, s, 7);
           ctx.fill();
           ctx.stroke();
-
-          // Internal diagonal splitter plane
-          ctx.strokeStyle = "#ffffff";
+          ctx.strokeStyle = "rgba(148, 163, 184, 0.2)";
+          ctx.beginPath();
+          ctx.moveTo(-s * 0.3, -s * 0.3); ctx.lineTo(s * 0.3, s * 0.3);
+          ctx.moveTo(s * 0.3, -s * 0.3); ctx.lineTo(-s * 0.3, s * 0.3);
+          ctx.stroke();
+        } else if (p.type === "emitter") {
+          const col = COLOR_MAP[p.color] || COLOR_MAP[6];
+          ctx.rotate(p.dir * (Math.PI / 2));
+          ctx.fillStyle = "#0f172a";
+          ctx.strokeStyle = col.hex;
+          ctx.shadowColor = col.hex;
+          ctx.shadowBlur = 12;
           ctx.lineWidth = 2.5;
           ctx.beginPath();
-          if (p.orient === "/") {
-            ctx.moveTo(cx - len * 0.78, cy + len * 0.78);
-            ctx.lineTo(cx + len * 0.78, cy - len * 0.78);
-          } else {
-            ctx.moveTo(cx - len * 0.78, cy - len * 0.78);
-            ctx.lineTo(cx + len * 0.78, cy + len * 0.78);
-          }
+          ctx.roundRect(-cs * 0.34, -cs * 0.28, cs * 0.62, cs * 0.56, 7);
+          ctx.fill();
           ctx.stroke();
-        }
-        ctx.restore();
-      });
+          // Glowing nozzle barrel
+          ctx.fillStyle = col.hex;
+          ctx.fillRect(cs * 0.22, -cs * 0.11, cs * 0.18, cs * 0.22);
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.arc(0, 0, cs * 0.11, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (p.type === "mirror" || p.type === "splitter") {
+          // Subtle rotatable turntable ring
+          ctx.strokeStyle = "rgba(148, 163, 184, 0.24)";
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.arc(0, 0, cs * 0.36, 0, Math.PI * 2);
+          ctx.stroke();
 
-      requestAnimationFrame(draw);
+          // Angle: animRot 0 -> -45° ('/'), animRot 1 -> +45° ('\')
+          const ang = -Math.PI / 4 + p.animRot * (Math.PI / 2);
+          ctx.rotate(ang);
+
+          const len = cs * 0.72;
+          if (p.type === "mirror") {
+            // Solid Silvered Glass Mirror Bar
+            ctx.fillStyle = "#e2e8f0";
+            ctx.strokeStyle = "#38bdf8";
+            ctx.shadowColor = "#38bdf8";
+            ctx.shadowBlur = 10;
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.roundRect(-len / 2, -4, len, 8, 4);
+            ctx.fill();
+            ctx.stroke();
+          } else {
+            // Semi-Silvered 50/50 Beam Splitter Crystal Bar!
+            ctx.fillStyle = "rgba(56, 189, 248, 0.22)";
+            ctx.strokeStyle = "#67e8f9";
+            ctx.shadowColor = "#22d3ee";
+            ctx.shadowBlur = 12;
+            ctx.lineWidth = 2.2;
+            ctx.setLineDash([5, 4]);
+            ctx.beginPath();
+            ctx.roundRect(-len / 2, -6, len, 12, 4);
+            ctx.fill();
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Tiny prism diamond center mark
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.moveTo(0, -6); ctx.lineTo(6, 0); ctx.lineTo(0, 6); ctx.lineTo(-6, 0);
+            ctx.closePath();
+            ctx.fill();
+          }
+        } else if (p.type === "filter") {
+          // Fixed Chromatic Converter Lens Ring
+          const col = COLOR_MAP[p.color] || COLOR_MAP[1];
+          ctx.fillStyle = col.hex + "33";
+          ctx.strokeStyle = col.hex;
+          ctx.shadowColor = col.hex;
+          ctx.shadowBlur = 12;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(0, 0, cs * 0.28, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "#ffffff";
+          ctx.font = `900 ${Math.max(9, Math.round(cs * 0.2))}px monospace`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(col.name[0], 0, 1);
+        } else if (p.type === "target") {
+          // Faceted Target Gem Crystal!
+          const reqCol = COLOR_MAP[p.reqColor] || COLOR_MAP[6];
+          const lit = p.receivedColor === p.reqColor;
+          const wrongLit = p.receivedColor > 0 && !lit;
+          const rGem = cs * 0.31 * (lit ? (1 + 0.06 * Math.sin(now * 0.008)) : 1);
+
+          ctx.fillStyle = lit ? reqCol.hex : "#0b1224";
+          ctx.strokeStyle = reqCol.hex;
+          ctx.shadowColor = reqCol.hex;
+          ctx.shadowBlur = lit ? 22 : 8;
+          ctx.lineWidth = lit ? 3.2 : 2.5;
+
+          ctx.beginPath();
+          ctx.moveTo(0, -rGem);
+          ctx.lineTo(rGem * 0.85, 0);
+          ctx.lineTo(0, rGem);
+          ctx.lineTo(-rGem * 0.85, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.shadowBlur = 0;
+          if (lit) {
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(0, 0, rGem * 0.34, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (wrongLit) {
+            // Show subtle inner dot of currently received color so player knows what else to mix!
+            const recCol = COLOR_MAP[p.receivedColor];
+            ctx.fillStyle = recCol ? recCol.hex : "#94a3b8";
+            ctx.beginPath();
+            ctx.arc(0, 0, rGem * 0.35, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        ctx.restore();
+      }
+
+      // 4. Glass Rotation Sparks
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha *= 0.9;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
     loadLevel(currentLevelNum);
-    requestAnimationFrame(draw);
+    requestAnimationFrame(frame);
   </script>
 
 </body>
