@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Color Alchemy Lab — 500 Pigment Mixing Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 relaxing pigment-mixing puzzles in Color Alchemy Lab. Blend crimson, amber, cobalt, pearl white, and obsidian drops inside an animated glass flask to match target hues." />
+  <title>Color Alchemy Lab — Free 500-Level RYB Paint Color Mixing Puzzle | ZinPlay</title>
+  <meta name="description" content="Play Color Alchemy Lab free online with no download. Blend authentic RYB paint pigments, white tints, and black shades drop by drop inside an animated glass flask across 500 color matching puzzles on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Color Alchemy Lab",
+    "url": "https://zinplay.io/games/color-alchemy/",
+    "genre": ["Puzzle", "Color Theory", "Relaxing Art Simulation"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top Lab HUD */
+    /* Top Alchemy Studio HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0d1020;
-      color: #f1f5f9;
-      border-bottom: 1px solid #232946;
+      background: #10101e;
+      color: #f8fafc;
+      border-bottom: 1px solid #262542;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #a5b4fc;
-      font-weight: 600;
+      color: #c084fc;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -63,13 +76,18 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(129, 140, 248, 0.18);
-      border: 1px solid rgba(129, 140, 248, 0.36);
-      color: #e0e7ff;
+      background: rgba(192, 132, 252, 0.16);
+      border: 1px solid rgba(192, 132, 252, 0.36);
+      color: #e9d5ff;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
       font-family: monospace;
+    }
+    .hud-pill.warn-pill {
+      background: rgba(244, 63, 94, 0.2);
+      border-color: rgba(251, 113, 133, 0.5);
+      color: #fecdd3;
     }
     .hud-pill.done-pill {
       background: rgba(34, 197, 94, 0.16);
@@ -78,41 +96,42 @@
       font-family: inherit;
     }
 
-    /* Live Hue Accuracy Meter */
-    .match-bar-wrap {
+    /* Live Match Accuracy Bar */
+    .match-strip {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 9px 14px;
-      background: #141930;
-      border-bottom: 1px solid #252c4a;
-      color: #cbd5e1;
-      font-size: 0.75rem;
+      background: #17162b;
+      border-bottom: 1px solid #292747;
+      color: #e2e8f0;
+      font-size: 0.76rem;
       font-weight: 800;
     }
-    .match-label {
-      min-width: 96px;
-      color: #c4b5fd;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .match-title {
+      min-width: 108px;
+      color: #fde68a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .match-track {
       flex: 1;
-      height: 10px;
-      background: #080b16;
+      height: 11px;
+      background: #0a0914;
       border-radius: 999px;
-      border: 1px solid #2d365c;
-      overflow: hidden;
+      border: 1px solid #323059;
       position: relative;
+      overflow: hidden;
     }
     .match-fill {
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      background: linear-gradient(90deg, #818cf8 0%, #f59e0b 68%, #22c55e 100%);
-      transition: width 0.14s ease-out;
+      background: linear-gradient(90deg, #f43f5e 0%, #f59e0b 55%, #22c55e 100%);
+      transition: width 0.2s ease-out;
     }
-    .match-goal-line {
+    .match-goal-tick {
       position: absolute;
       top: 0;
       bottom: 0;
@@ -121,19 +140,19 @@
       box-shadow: 0 0 6px #ffffff;
     }
     .match-pct {
-      min-width: 74px;
+      min-width: 68px;
       text-align: right;
       font-family: monospace;
-      font-size: 0.8rem;
-      color: #fde68a;
+      font-size: 0.82rem;
+      color: #ffffff;
     }
 
-    /* Lab Canvas Stage */
+    /* Animated Glass Flask Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
       height: 390px;
-      background: radial-gradient(circle at 50% 42%, #1e2340 0%, #0b0e1c 100%);
+      background: radial-gradient(circle at 50% 42%, #201e3d 0%, #0b0a17 100%);
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
@@ -149,110 +168,78 @@
       display: block;
     }
 
-    /* Current Formula Chips Strip */
-    .formula-strip {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 8px 14px;
-      background: #101426;
-      border-top: 1px solid #232946;
-      min-height: 40px;
-      flex-wrap: wrap;
-    }
-    .formula-dots {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      flex-wrap: wrap;
-    }
-    .f-dot {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(255, 255, 255, 0.55);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
-      display: inline-block;
-    }
-    .formula-placeholder {
-      font-size: 0.74rem;
-      color: #64748b;
-      font-weight: 600;
-    }
-    .drops-cap-txt {
-      font-size: 0.74rem;
-      font-family: monospace;
-      font-weight: 800;
-      color: #94a3b8;
-    }
-
-    /* Pigment Droppers Dock */
-    .droppers-dock {
+    /* Tactile Pigment Dropper Bottles Dock */
+    .pigment-dock {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
       padding: 12px;
-      background: #141930;
-      border-top: 1px solid #252c4a;
+      background: #121124;
+      border-top: 1px solid #262542;
     }
-    .droppers-dock.cols-4 {
+    .pigment-dock.cols-4 {
       grid-template-columns: repeat(4, 1fr);
     }
-    .droppers-dock.cols-5 {
+    .pigment-dock.cols-5 {
       grid-template-columns: repeat(5, 1fr);
     }
     .pigment-btn {
-      min-height: 76px;
-      padding: 8px 4px;
-      border-radius: 14px;
-      border: 1.5px solid #2f3860;
-      background: #1b2240;
-      color: #f1f5f9;
+      min-height: 64px;
+      padding: 7px 4px;
+      border-radius: 13px;
+      border: 1.5px solid #2f2d52;
+      background: #1b1a36;
+      color: #f8fafc;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 4px;
       cursor: pointer;
-      position: relative;
-      transition: transform 0.08s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+      transition: transform 0.08s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     }
     .pigment-btn:active {
-      transform: scale(0.95);
+      transform: scale(0.94);
     }
     .pigment-btn:disabled {
-      opacity: 0.42;
+      opacity: 0.36;
       cursor: default;
     }
     .pigment-btn.hint-glow {
       border-color: #facc15;
-      box-shadow: 0 0 18px rgba(250, 204, 21, 0.52);
+      box-shadow: 0 0 18px rgba(250, 204, 21, 0.6);
       background: rgba(250, 204, 21, 0.14);
     }
-    .drop-orb {
-      width: 28px;
-      height: 28px;
+    .pig-drop-dot {
+      width: 22px;
+      height: 22px;
       border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-      border: 2px solid rgba(255, 255, 255, 0.55);
-      box-shadow: inset -4px -4px 8px rgba(0, 0, 0, 0.35), 0 4px 10px rgba(0, 0, 0, 0.35);
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.45);
     }
-    .pigment-name {
+    .pig-name {
       font-size: 0.72rem;
       font-weight: 800;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
     }
-    .pigment-count {
-      position: absolute;
-      top: 5px;
-      right: 6px;
+    .pig-cnt {
       font-size: 0.65rem;
       font-family: monospace;
-      font-weight: 900;
-      color: #a5b4fc;
-      background: rgba(13, 16, 32, 0.72);
-      padding: 1px 5px;
-      border-radius: 999px;
+      color: #cbd5e1;
+      font-weight: 800;
+    }
+
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #0c0b1a;
+      border-top: 1px solid #1f1e38;
+      font-size: 0.73rem;
+      color: #94a3b8;
     }
 
     .status-toast {
@@ -260,8 +247,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(13, 16, 32, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.68);
+      background: rgba(12, 11, 26, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -275,14 +262,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(10, 12, 26, 0.82);
+      background: rgba(10, 9, 22, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -300,29 +285,28 @@
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
-      padding: 24px 20px;
+      padding: 22px 20px;
       text-align: center;
       max-width: 330px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-swatch {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      margin: 0 auto 10px;
-      border: 4px solid #f1f5f9;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.22);
+    .win-swatch-compare {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 8px auto 12px;
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
+    .win-swatch-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.16);
     }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.3rem; margin-bottom: 4px; }
+    .win-card p { font-size: 0.87rem; color: #64748b; margin-bottom: 14px; }
 
     .controls-group {
       display: flex;
@@ -363,9 +347,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -462,6 +444,95 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #10101e;
+      border: 1px solid rgba(192, 132, 252, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #10101e;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #10101e 0%, #3b0764 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.teal-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #134e4a 0%, #1e1b4b 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .ryb-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .ryb-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .ryb-table th, .ryb-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ryb-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .ryb-table tr:last-child td { border-bottom: none; }
+    .chip-dot {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+      border: 1px solid rgba(15, 23, 42, 0.25);
+    }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -474,7 +545,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -487,69 +558,71 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Formulas &bull; Color Puzzle</span>
+      <span class="cat-tag">500 Hues &bull; RYB Pigment Puzzle</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Color Alchemy Lab</h1>
-      <p>Drop authentic paint pigments into the glass mixing flask to match the exact target shade—from bright primaries to subtle pastel and jewel tones.</p>
+      <p>Blend authentic RYB paint pigments, white tints, and charcoal shades drop by drop inside a bubbling glass flask to match 500 target hues.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Color Alchemy Lab Game">
+    <section class="game-wrapper" aria-label="Color Alchemy Lab Pigment Mixing Puzzle">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Primary Studio</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Primary RYB Blends</span>
           <span id="levelTitle">Formula #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="goalPill">Need: 92%+</span>
-          <span class="hud-pill done-pill" id="solvedCounter">Brewed: 0 / 500</span>
+          <span class="hud-pill" id="dropsPill">Drops: 0 / 8</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Matched: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Color Match Accuracy Gauge -->
-      <div class="match-bar-wrap">
-        <span id="matchLabel" class="match-label">⚗️ HUE MATCH</span>
+      <!-- Live Perceptual Match Meter -->
+      <div class="match-strip">
+        <span id="matchGoalLabel" class="match-title">🎯 Need 92% Match</span>
         <div class="match-track">
           <div id="matchFill" class="match-fill"></div>
-          <div id="matchGoalLine" class="match-goal-line" style="left:92%;"></div>
+          <div id="matchTick" class="match-goal-tick" style="left:92%;"></div>
         </div>
-        <span id="matchPct" class="match-pct">0% / 92%</span>
+        <span id="matchPct" class="match-pct">0.0%</span>
       </div>
 
-      <!-- Animated Mixing Flask & Split Swatch Comparison -->
+      <!-- Animated Alchemy Flask Canvas -->
       <div class="canvas-container">
         <canvas id="alchemyCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Formula Brewed Overlay -->
+        <!-- Formula Matched Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div id="winSwatch" class="win-swatch"></div>
-            <h2 id="winHeading">Perfect Elixir!</h2>
-            <p id="winText">Matched the target hue with 99% precision.</p>
+            <div class="win-swatch-compare">
+              <div id="winTargetSwatch" class="win-swatch-box" title="Target Color"></div>
+              <span style="font-weight:900; color:#22c55e;">≈</span>
+              <div id="winMixSwatch" class="win-swatch-box" title="Your Mixed Color"></div>
+            </div>
+            <h2 id="winHeading">Elixir Matched!</h2>
+            <p id="winText">Your hand-blended pigment hit 99.4% perceptual accuracy.</p>
             <button id="nextLevelBtn" class="btn-primary" type="button">Next Formula →</button>
           </div>
         </div>
       </div>
 
-      <!-- Live Drop History Chips -->
-      <div class="formula-strip">
-        <div id="formulaDots" class="formula-dots">
-          <span class="formula-placeholder">Tap any pigment dropper below to start mixing...</span>
-        </div>
-        <span id="dropsCapTxt" class="drops-cap-txt">0 / 8 drops</span>
-      </div>
+      <!-- Dynamic Pigment Dropper Buttons -->
+      <div id="pigmentDock" class="pigment-dock" role="group" aria-label="Pigment Droppers"></div>
 
-      <!-- Interactive Pigment Droppers -->
-      <div id="droppersDock" class="droppers-dock" role="group" aria-label="Pigment Droppers"></div>
+      <div class="legend-strip">
+        <span>💧 Tap Pigments to Drop into Flask</span>
+        <span>🎨 True Paint Physics (Blue + Yellow = Green!)</span>
+        <span>⚪ White = Pastel Tint • ⚫ Black = Deep Shade</span>
+      </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
           <button id="undoBtn" class="btn-outline" type="button">← Undo Drop</button>
-          <button id="resetBtn" class="btn-outline" type="button">↺ Pour Out</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Alchemist Hint</button>
+          <button id="resetBtn" class="btn-outline" type="button">🚿 Rinse Flask</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Recipe Hint</button>
         </div>
         <button id="soundBtn" class="btn-outline" type="button">🔊 ASMR ON</button>
       </div>
@@ -566,61 +639,158 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 840+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/color-alchemy-banner-1.jpg"
+            alt="Color Alchemy Lab online RYB paint mixing puzzle featuring a glowing glass flask and red, yellow, and blue pigment droppers"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Authentic RYB Pigment Formulas — Zero Downloads</h3>
+          <p>Drop vivid artist pigments into a sloshing glass beaker, hear soft ASMR liquid plops, and train your painter's eye on any mobile or desktop browser.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Color Alchemy Lab (500 Formulas)</h2>
-        <p>Color Alchemy Lab uses real artist <strong>RYB subtractive pigment mixing</strong>—just like blending oil paints or watercolors on a palette—inside a glowing glass workshop. Above your mixing flask sits a split comparison medallion showing the <strong>Target Elixir</strong> on the left and <strong>Your Brew</strong> directly beside it on the right.</p>
+        <h2>What Is Color Alchemy Lab? An Authentic RYB Paint Mixing Game Online</h2>
+        <p><strong>Color Alchemy Lab</strong> is a free <strong>online paint color mixing game</strong> built for visual artists, designers, students, and puzzle fans who love tactile color matching challenges. Most casual web games average standard digital RGB hex codes—meaning blue and yellow turn into dull muddy gray! Color Alchemy Lab runs a true <strong>RYB subtractive pigment model</strong> inspired by real acrylic and gouache paint physics, so blending <strong>Blue + Yellow</strong> produces lush leaf green, <strong>Red + Yellow</strong> bursts into warm tangerine orange, and <strong>Red + Blue</strong> swirls into rich royal violet.</p>
+        <p>Crafted as a lightweight, <strong>no-download color theory brain teaser for smartphones, iPads, and Chromebooks</strong>, every tap sends a gleaming droplet splashing into your animated glass alchemy flask with gentle wave physics and soothing liquid bubbles synthesized live through the <strong>Web Audio API</strong>. Match all <strong>500 unique pigment formulas</strong> at your own pace with zero countdown stress and automatic private local storage saves.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Artist's RYB Color Mixing Cheat Sheet (Tints, Tones &amp; Shades)</h2>
+        <p>Unlocking <strong>White</strong> in Chapter 2 and <strong>Black</strong> in Chapter 3 transforms five simple dropper bottles into hundreds of nuanced hues—from dusty rose and sage pastel to burnt sienna and deep forest teal. Keep this classic artist reference table handy as you climb toward Formula #500:</p>
+
+        <div class="ryb-table-wrap">
+          <table class="ryb-table">
+            <thead>
+              <tr>
+                <th>Target Hue Family</th>
+                <th>Base RYB Pigment Ratio</th>
+                <th>Tint / Shade Modifier</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong><span class="chip-dot" style="background:#f97316"></span>Tangerine &amp; Coral</strong></td>
+                <td>Equal <strong>Red + Yellow</strong> (add extra Red for vermilion, extra Yellow for amber)</td>
+                <td>Add <strong>White</strong> for soft Peach / Salmon Coral.</td>
+              </tr>
+              <tr>
+                <td><strong><span class="chip-dot" style="background:#22c55e"></span>Emerald, Lime &amp; Teal</strong></td>
+                <td>Equal <strong>Yellow + Blue</strong> (more Yellow = Lime, more Blue = Deep Teal)</td>
+                <td>Add <strong>White</strong> for Mint Pastel, or <strong>Black</strong> for Pine Forest.</td>
+              </tr>
+              <tr>
+                <td><strong><span class="chip-dot" style="background:#9333ea"></span>Violet, Plum &amp; Lavender</strong></td>
+                <td>Equal <strong>Red + Blue</strong> (more Red = Magenta Plum, more Blue = Indigo)</td>
+                <td>Add <strong>White</strong> for dreamy Lavender / Lilac.</td>
+              </tr>
+              <tr>
+                <td><strong><span class="chip-dot" style="background:#78350f"></span>Warm Earth &amp; Olive</strong></td>
+                <td>All three primaries (<strong>Red + Yellow + Blue</strong>) mute vibrancy into rich organic browns!</td>
+                <td>Add <strong>Yellow</strong> for Olive Moss, or <strong>Red + Black</strong> for Mahogany.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Alchemist Pro Tip:</strong> Always dial in the base <em>hue</em> (Red, Yellow, Blue) first until the general color family matches the glowing Target Crystal—then fine-tune lightness with a single drop of <strong>White</strong> (tint) or <strong>Black</strong> (shade) last! If a blend ever goes too far, tap <strong>← Undo Drop</strong> to pull out your latest drop instantly.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner teal-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/color-alchemy-banner-2.jpg"
+            alt="Rainbow gradient of glowing glass color potion vials and acrylic swatches in Color Alchemy Lab browser game"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Train Your Eye Across 500 Curated Hues &amp; 5 Escalating Chapters</h3>
+          <p>Perfect for graphic designers, art classes, and relaxing daily color perception workouts—with real-time perceptual match percentages.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Laboratory Chapters (500 Verified Color Formulas)</h2>
+        <p>Every single target swatch in Color Alchemy Lab is synthesized directly from a verified drop recipe using the exact same RYB pigment engine as your flask—guaranteeing that every formula from #1 to #500 can reach a clean <strong>100% match</strong>:</p>
         <ul>
-          <li><strong>Intuitive Paint Physics:</strong> Combine <strong>Crimson (Red) + Amber (Yellow)</strong> for warm Orange, <strong>Amber + Cobalt (Blue)</strong> for vibrant Emerald Green, <strong>Crimson + Cobalt</strong> for Royal Purple, or blend all three primaries to craft rich earthy browns and muted olives.</li>
-          <li><strong>Master Tints &amp; Shades (Chapters 2–5):</strong> Starting at Formula #101, <strong>Pearl White</strong> unlocks soft pinks, sky blues, and creamy pastels. At Formula #201, <strong>Obsidian Black</strong> unlocks deep midnight navy, burgundy, and forest tones.</li>
-          <li><strong>Refine with Undo &amp; Ratios:</strong> Remember that color depends on the <em>proportion</em> of drops—adding a second drop of Yellow to a 1:1 Orange shifts it smoothly toward Golden Marigold. If your flask fills up, tap <strong>← Undo Drop</strong> or <strong>↺ Pour Out</strong> anytime to fine-tune your recipe!</li>
+          <li><strong>Chapter 1 (Formulas 1–100 — Primary RYB Blends):</strong> Pure Red, Yellow, and Blue pigments with a friendly <strong>92% accuracy goal</strong>—ideal for mastering secondary and tertiary hues like saffron, chartreuse, teal, and crimson-violet.</li>
+          <li><strong>Chapter 2 (Formulas 101–200 — Pastel Tints + White):</strong> Unlocks the <strong>⚪ White</strong> dropper to brew creamy pastels, sky blues, blush pinks, and mint greens (93% goal).</li>
+          <li><strong>Chapter 3 (Formulas 201–300 — Deep Shades + Black):</strong> Unlocks <strong>⚫ Black</strong> charcoal pigment for rich navy, burgundy, espresso, and moss tones (94% goal).</li>
+          <li><strong>Chapter 4 (Formulas 301–400 — Precision Alchemy):</strong> Introduces multi-pigment 5-to-7 drop formulas with tighter flask drop caps and a <strong>95% perceptual match bar</strong>.</li>
+          <li><strong>Chapter 5 (Formulas 401–500 — Master Colorist):</strong> High-precision <strong>96%+ color matching</strong> combining complex subtle tones, earth neutrals, and strict drop budgets—plus a built-in <strong>💡 Recipe Hint</strong> button that highlights the exact next pigment bottle in gold whenever you want a second opinion.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Color Mixing Topics">
+          <span class="kw-pill">Online Paint Color Mixing Game</span>
+          <span class="kw-pill">RYB Subtractive Pigment Simulator</span>
+          <span class="kw-pill">Color Matching Quiz Browser</span>
+          <span class="kw-pill">Free Color Theory Practice for Artists</span>
+          <span class="kw-pill">Tint Tone and Shade Lab</span>
+          <span class="kw-pill">No-Download Chromebook Art Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Color Alchemy Lab FAQ</h2>
         <details class="faq-item">
-          <summary>Is every one of the 500 target colors guaranteed to be 100% matchable?</summary>
-          <div class="faq-answer">Yes! Every level's target swatch is synthesized directly from a valid multi-drop pigment recipe within the flask's drop limit, meaning a 100% exact match is always achievable.</div>
+          <summary>Why does Blue + Yellow make bright Green here instead of gray?</summary>
+          <div class="faq-answer">Standard computer RGB averaging turns Blue + Yellow into gray because screens mix <em>light</em>, not paint. Color Alchemy Lab uses a real trilinear <strong>RYB subtractive paint model</strong> so mixing pigments behaves just like real acrylics and watercolors!</div>
         </details>
         <details class="faq-item">
-          <summary>How does the Alchemist Hint (💡) button help?</summary>
-          <div class="faq-answer">Tapping Alchemist Hint inspects your current brew and glows a golden ring around the single best next pigment drop to bring your elixir closer to the target—or lets you know if undoing a misplaced drop will get you right back on track.</div>
+          <summary>Does the order in which I add pigment drops change the final color?</summary>
+          <div class="faq-answer">No! Only the final ratio of drops inside your flask matters—for example, adding Red then Yellow produces the exact same vibrant Orange as adding Yellow then Red.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What happens if my flask fills up to the Drop Cap before reaching the match threshold?</summary>
+          <div class="faq-answer">You can tap <strong>← Undo Drop</strong> to remove your last drop(s) and try a different pigment, or tap <strong>🚿 Rinse Flask</strong> for a fresh empty beaker with zero penalties.</div>
+        </details>
+        <details class="faq-item">
+          <summary>How does the Recipe Hint (💡) button help?</summary>
+          <div class="faq-answer">Recipe Hint compares your current flask contents against a verified 100%-match formula and glows the exact next pigment dropper bottle you should tap in bright gold!</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🔦</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Shadow Weaver</h3>
-        <p>Rotate 3D wooden sculptures in a warm gallery spotlight until their shadows reveal hidden art.</p>
-        <a href="/games/shadow-weaver/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
         <h3>Prism &amp; Lasers</h3>
-        <p>Place mirrors and split laser beams through prisms across 500 dark-mode optical puzzles.</p>
+        <p>Rotate mirrors and mix additive RGB laser beams through optical prisms in a dark-mode grid.</p>
         <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧼</div><span class="cat-tag">ASMR</span></div>
-        <h3>Oddly Satisfying Slicer</h3>
-        <p>Slice pastel soap bars, crunchy kinetic sand, and wobbly jelly into even pieces across 500 blocks.</p>
-        <a href="/games/satisfying-slicer/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔌</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Minimalist Logic Gates</h3>
+        <p>Snap AND, OR, NOT, XOR, NAND, and NOR gates into glowing circuit boards across 500 tests.</p>
+        <a href="/games/logic-gates/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">📄</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Fold &amp; Reveal</h3>
+        <p>Fold scrambled paper sheets from the right edges like origami to line up hidden messages and art.</p>
+        <a href="/games/fold-reveal/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
   <!-- Formula Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Formula">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Color Formula">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Alchemy Formula (1 – 500)</h3>
+        <h3>Choose Color Formula (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
@@ -648,8 +818,8 @@
           <ul>
             <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
             <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/shadow-weaver/">Shadow Weaver</a></li>
             <li><a href="/games/color-alchemy/">Color Alchemy Lab</a></li>
+            <li><a href="/games/logic-gates/">Minimalist Logic Gates</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -658,7 +828,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -691,147 +861,119 @@
     }
 
     // ==============================================
-    // SUBTRACTIVE RYB PIGMENT ENGINE & 500 FORMULAS
+    // AUTHENTIC RYB SUBTRACTIVE PAINT MIXING ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
     const WORLD_W = 420;
-    const WORLD_H = 395;
+    const WORLD_H = 390;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Primary Studio", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Pastel Tints", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Deep Shades", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Master Apothecary", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Grand Alchemist", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Primary RYB Blends", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Pastel Tints (+ White)", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Deep Shades (+ Black)", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Precision Alchemy", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Colorist", range: "401–500", start: 401, end: 500 }
     ];
 
-    const PIGMENTS = {
-      red:    { key: "red",    name: "Crimson",  hex: "#ef2d3a", rgb: [239, 45, 58],   note: 329.63 },
-      yellow: { key: "yellow", name: "Amber",    hex: "#fce024", rgb: [252, 224, 36],  note: 392.00 },
-      blue:   { key: "blue",   name: "Cobalt",   hex: "#226cee", rgb: [34, 108, 238],  note: 440.00 },
-      white:  { key: "white",  name: "Pearl",    hex: "#f8f6f0", rgb: [248, 246, 240], note: 587.33 },
-      black:  { key: "black",  name: "Obsidian", hex: "#1c202c", rgb: [24, 27, 36],    note: 246.94 }
-    };
+    const PIGMENTS = [
+      { key: "r", name: "Red",    hex: "#fe2712", note: 329.63 },
+      { key: "y", name: "Yellow", hex: "#fefe33", note: 392.00 },
+      { key: "b", name: "Blue",   hex: "#1255f5", note: 440.00 },
+      { key: "w", name: "White",  hex: "#fcfaf5", note: 523.25 },
+      { key: "k", name: "Black",  hex: "#1c1f29", note: 246.94 }
+    ];
 
-    // Authentic Artist RYB Cube Corner RGBs (Gossett-Chen Trilinear Interpolation)
+    // Gossett-Chen Paint-Inspired RYB Cube Corners (Ensures Blue + Yellow = Vivid Green!)
     const RYB_CORNERS = {
-      c000: [255, 255, 255],
-      c100: [239, 45, 58],    // Pure Crimson
-      c010: [252, 224, 36],   // Pure Amber Yellow
-      c001: [34, 108, 238],   // Pure Cobalt Blue
-      c110: [252, 130, 22],   // Vibrant Orange (Red + Yellow)
-      c011: [32, 190, 94],    // Lush Emerald Green (Yellow + Blue)
-      c101: [148, 52, 214],   // Royal Purple (Red + Blue)
-      c111: [110, 74, 48]     // Warm Umber Brown (Red + Yellow + Blue)
+      c000: [252, 250, 245], // Paper White
+      c100: [254, 39, 18],   // Cadmium Red
+      c010: [254, 245, 42],  // Lemon Yellow
+      c001: [18, 85, 245],   // Cobalt Blue
+      c110: [251, 146, 8],   // Tangerine Orange
+      c101: [138, 22, 188],  // Royal Violet
+      c011: [32, 178, 62],   // Leaf Emerald Green
+      c111: [78, 50, 34]     // Rich Earth Umber
     };
 
-    function mixPigments(counts) {
-      const r = counts.red || 0;
-      const y = counts.yellow || 0;
-      const b = counts.blue || 0;
-      const w = counts.white || 0;
-      const k = counts.black || 0;
-      const tot = r + y + b + w + k;
-      if (tot <= 0) return null;
+    function cubicInterp(t) {
+      return t * t * (3 - 2 * t);
+    }
 
-      const cTot = r + y + b;
-      let baseRGB;
+    function rybCubeToRgb(R, Y, B) {
+      const r = cubicInterp(R), y = cubicInterp(Y), b = cubicInterp(B);
+      const out = [0, 0, 0];
+      for (let i = 0; i < 3; i++) {
+        const x0 = RYB_CORNERS.c000[i] * (1 - r) + RYB_CORNERS.c100[i] * r;
+        const x1 = RYB_CORNERS.c010[i] * (1 - r) + RYB_CORNERS.c110[i] * r;
+        const x2 = RYB_CORNERS.c001[i] * (1 - r) + RYB_CORNERS.c101[i] * r;
+        const x3 = RYB_CORNERS.c011[i] * (1 - r) + RYB_CORNERS.c111[i] * r;
+        const y0 = x0 * (1 - y) + x1 * y;
+        const y1 = x2 * (1 - y) + x3 * y;
+        out[i] = Math.round(y0 * (1 - b) + y1 * b);
+      }
+      return out;
+    }
 
-      if (cTot === 0) {
-        baseRGB = [128, 128, 128];
-      } else {
-        const maxC = Math.max(r, y, b);
-        const nr = r / maxC;
-        const ny = y / maxC;
-        const nb = b / maxC;
+    // Commutative Paint Mixing from Drop Counts { r, y, b, w, k }
+    function mixDropsToRgb(counts) {
+      const r = counts.r || 0, y = counts.y || 0, b = counts.b || 0;
+      const w = counts.w || 0, k = counts.k || 0;
+      const P = r + y + b;
+      const T = P + w + k;
+      if (T === 0) return null;
 
-        const w000 = (1 - nr) * (1 - ny) * (1 - nb);
-        const w100 = nr * (1 - ny) * (1 - nb);
-        const w010 = (1 - nr) * ny * (1 - nb);
-        const w001 = (1 - nr) * (1 - ny) * nb;
-        const w110 = nr * ny * (1 - nb);
-        const w011 = (1 - nr) * ny * nb;
-        const w101 = nr * (1 - ny) * nb;
-        const w111 = nr * ny * nb;
-
-        baseRGB = [0, 1, 2].map((ch) =>
-          RYB_CORNERS.c000[ch] * w000 +
-          RYB_CORNERS.c100[ch] * w100 +
-          RYB_CORNERS.c010[ch] * w010 +
-          RYB_CORNERS.c001[ch] * w001 +
-          RYB_CORNERS.c110[ch] * w110 +
-          RYB_CORNERS.c011[ch] * w011 +
-          RYB_CORNERS.c101[ch] * w101 +
-          RYB_CORNERS.c111[ch] * w111
-        );
+      let pigRgb = [252, 250, 245];
+      if (P > 0) {
+        const mx = Math.max(r, y, b);
+        pigRgb = rybCubeToRgb(r / mx, y / mx, b / mx);
       }
 
-      const wFrac = w / tot;
-      const kFrac = k / tot;
-      const cFrac = cTot / tot;
+      const W_RGB = [252, 250, 245];
+      const K_RGB = [18, 20, 28];
 
-      return [0, 1, 2].map((ch) =>
-        Math.round(
-          baseRGB[ch] * cFrac +
-          PIGMENTS.white.rgb[ch] * wFrac +
-          PIGMENTS.black.rgb[ch] * kFrac
-        )
-      );
+      return [
+        Math.round((P * pigRgb[0] + w * W_RGB[0] + k * K_RGB[0]) / T),
+        Math.round((P * pigRgb[1] + w * W_RGB[1] + k * K_RGB[1]) / T),
+        Math.round((P * pigRgb[2] + w * W_RGB[2] + k * K_RGB[2]) / T)
+      ];
     }
 
-    function rgbToCss(rgb) {
-      if (!rgb) return "rgba(186, 230, 253, 0.16)";
-      return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+    function rgbToHex(rgb) {
+      if (!rgb) return "#1e293b";
+      return "#" + rgb.map((v) => Math.max(0, Math.min(255, v)).toString(16).padStart(2, "0")).join("").toUpperCase();
     }
 
-    // Perceptual Color Similarity (Redmean Weighted Delta-E approximation -> 0..100%)
-    function colorMatchPercent(rgbA, rgbB) {
-      if (!rgbA || !rgbB) return 0;
-      const dr = rgbA[0] - rgbB[0];
-      const dg = rgbA[1] - rgbB[1];
-      const db = rgbA[2] - rgbB[2];
-      const rMean = (rgbA[0] + rgbB[0]) * 0.5;
+    // Perceptual Weighted Redmean Color Similarity (0..100%)
+    function colorMatchPercent(c1, c2) {
+      if (!c1 || !c2) return 0;
+      const rMean = (c1[0] + c2[0]) * 0.5;
+      const dr = c1[0] - c2[0];
+      const dg = c1[1] - c2[1];
+      const db = c1[2] - c2[2];
       const dist = Math.sqrt(
         (2 + rMean / 256) * dr * dr +
         4 * dg * dg +
         (2 + (255 - rMean) / 256) * db * db
       );
-      if (dist < 1.5) return 100;
-      return Math.max(0, Math.min(99.9, 100 - dist / 4.25));
+      return Math.max(0, Math.min(100, (1 - dist / 460) * 100));
     }
 
-    function nameElixir(rgb, recipe) {
-      const [r, g, b] = rgb;
-      const max = Math.max(r, g, b);
-      const min = Math.min(r, g, b);
-      const lum = (r * 0.299 + g * 0.587 + b * 0.114) / 255;
-      const sat = max === 0 ? 0 : (max - min) / max;
-
-      if (sat < 0.14) {
-        if (lum > 0.78) return "Moonstone Mist";
-        if (lum < 0.28) return "Obsidian Ash";
-        return "Alchemist Slate";
+    function nameThatColor(counts) {
+      const { r, y, b, w, k } = counts;
+      const P = r + y + b;
+      if (P === 0) return w > k ? "Silver Mist" : "Obsidian Slate";
+      const prefix = w > k && w >= 2 ? "Pastel " : (w > 0 && k === 0 ? "Soft " : (k >= 2 ? "Midnight " : (k > 0 ? "Deep " : "")));
+      if (r > 0 && y > 0 && b > 0) {
+        if (r >= y && r >= b) return prefix + "Terracotta Clay";
+        if (y >= r && y >= b) return prefix + "Olive Ochre";
+        return prefix + "Stormy Indigo";
       }
-
-      let hue = 0;
-      const d = max - min;
-      if (max === r) hue = ((g - b) / d + (g < b ? 6 : 0)) * 60;
-      else if (max === g) hue = ((b - r) / d + 2) * 60;
-      else hue = ((r - g) / d + 4) * 60;
-
-      const prefix = lum > 0.72 ? "Pastel " : (lum < 0.34 ? "Midnight " : (sat < 0.48 ? "Dusty " : "Radiant "));
-      let base = "Crimson";
-      if (hue < 18 || hue >= 340) base = lum > 0.65 ? "Rose" : "Ruby";
-      else if (hue < 42) base = lum < 0.42 ? "Amber" : "Tangerine";
-      else if (hue < 68) base = "Marigold";
-      else if (hue < 115) base = "Chartreuse";
-      else if (hue < 168) base = "Emerald";
-      else if (hue < 205) base = "Teal";
-      else if (hue < 252) base = "Cobalt";
-      else if (hue < 292) base = "Amethyst";
-      else base = "Orchid";
-
-      return prefix + base;
+      if (r > 0 && y > 0) return prefix + (r > y ? "Vermilion Coral" : (y > r ? "Saffron Gold" : "Tangerine Flame"));
+      if (y > 0 && b > 0) return prefix + (y > b ? "Chartreuse Lime" : (b > y ? "Lagoon Teal" : "Emerald Leaf"));
+      if (r > 0 && b > 0) return prefix + (r > b ? "Berry Magenta" : (b > r ? "Twilight Violet" : "Royal Amethyst"));
+      if (r > 0) return prefix + "Crimson Rose";
+      if (y > 0) return prefix + "Buttercup Sun";
+      return prefix + "Cobalt Sky";
     }
 
     function mulberry32(seed) {
@@ -844,111 +986,102 @@
       };
     }
 
-    // Warm, curated intro formulas so players immediately experience RYB magic!
-    const INTRO_RECIPES = {
-      1: { red: 1, yellow: 1 },              // Classic Vibrant Orange
-      2: { yellow: 1, blue: 1 },             // Classic Emerald Green
-      3: { red: 1, blue: 1 },                // Classic Royal Purple
-      4: { red: 2, yellow: 1 },              // Fiery Vermilion
-      5: { yellow: 2, blue: 1 }              // Lime Chartreuse
-    };
-
+    // Build 500 Verified, Distinct Paint Formulas Across 5 Escalating Chapters
     function buildFormulaLevel(levelNum) {
-      const rng = mulberry32(levelNum * 104729 + 77113);
+      const rng = mulberry32(levelNum * 168913 + 31415);
 
-      let availableKeys, minDrops, maxRecipeDrops, targetPct, extraCap;
+      let unlockedKeys, minDrops, maxDrops, reqPct, dropCap;
       if (levelNum <= 100) {
-        availableKeys = ["red", "yellow", "blue"];
+        unlockedKeys = ["r", "y", "b"];
         minDrops = levelNum <= 25 ? 2 : 3;
-        maxRecipeDrops = levelNum <= 45 ? 3 : 4;
-        targetPct = 92;
-        extraCap = 4;
+        maxDrops = levelNum <= 25 ? 3 : 4;
+        reqPct = 92;
+        dropCap = 8;
       } else if (levelNum <= 200) {
-        availableKeys = ["red", "yellow", "blue", "white"];
-        minDrops = 3;
-        maxRecipeDrops = 5;
-        targetPct = 94;
-        extraCap = 4;
+        unlockedKeys = ["r", "y", "b", "w"];
+        minDrops = 3; maxDrops = 5;
+        reqPct = 93;
+        dropCap = 9;
       } else if (levelNum <= 300) {
-        availableKeys = ["red", "yellow", "blue", "white", "black"];
-        minDrops = 4;
-        maxRecipeDrops = 6;
-        targetPct = 95;
-        extraCap = 3;
+        unlockedKeys = ["r", "y", "b", "w", "k"];
+        minDrops = 4; maxDrops = 6;
+        reqPct = 94;
+        dropCap = 9;
       } else if (levelNum <= 400) {
-        availableKeys = ["red", "yellow", "blue", "white", "black"];
-        minDrops = 5;
-        maxRecipeDrops = 7;
-        targetPct = 96;
-        extraCap = 2;
+        unlockedKeys = ["r", "y", "b", "w", "k"];
+        minDrops = 5; maxDrops = 7;
+        reqPct = 95;
+        dropCap = 8;
       } else {
-        availableKeys = ["red", "yellow", "blue", "white", "black"];
-        minDrops = 6;
-        maxRecipeDrops = 9;
-        targetPct = 97;
-        extraCap = 2;
+        unlockedKeys = ["r", "y", "b", "w", "k"];
+        minDrops = 6; maxDrops = 8;
+        reqPct = 96;
+        dropCap = 8;
       }
 
-      let recipe = { red: 0, yellow: 0, blue: 0, white: 0, black: 0 };
-
-      if (INTRO_RECIPES[levelNum]) {
-        recipe = { ...recipe, ...INTRO_RECIPES[levelNum] };
-      } else {
-        const dropCount = minDrops + Math.floor(rng() * (maxRecipeDrops - minDrops + 1));
-        const chromKeys = ["red", "yellow", "blue"];
-
-        // Always start with at least 1 primary pigment so formulas stay colorful
-        const firstC = chromKeys[Math.floor(rng() * 3)];
-        recipe[firstC]++;
-        let placed = 1;
-
-        // Guarantee chapter-defining pigments appear cleanly
-        if (levelNum >= 101 && levelNum <= 200 && rng() < 0.78) {
-          recipe.white++;
-          placed++;
-        } else if (levelNum >= 201 && levelNum <= 300 && rng() < 0.75) {
-          recipe.black++;
-          placed++;
-        } else if (levelNum >= 301 && rng() < 0.65) {
-          recipe[rng() < 0.5 ? "white" : "black"]++;
-          placed++;
-        }
-
-        // Fill remaining drops with variety (avoid dull pure single-pigment recipes)
-        while (placed < dropCount) {
-          const pickKey = availableKeys[Math.floor(rng() * availableKeys.length)];
-          // Keep white/black balanced so hues remain visually distinct & readable
-          if ((pickKey === "white" || pickKey === "black") && recipe[pickKey] >= Math.ceil(dropCount * 0.45)) {
-            const alt = chromKeys[Math.floor(rng() * 3)];
-            recipe[alt]++;
-          } else {
-            recipe[pickKey]++;
-          }
-          placed++;
-        }
-
-        // Ensure at least 2 distinct pigments exist in every recipe
-        const distinctUsed = availableKeys.filter((k) => recipe[k] > 0);
-        if (distinctUsed.length < 2) {
-          const other = availableKeys.find((k) => k !== distinctUsed[0]);
-          recipe[distinctUsed[0]] = Math.max(1, recipe[distinctUsed[0]] - 1);
-          recipe[other]++;
-        }
+      // Curated Intro Levels 1–3 for Instant "Aha!" Moment (Orange, Green, Violet!)
+      if (levelNum === 1) {
+        const sol = { r: 1, y: 1, b: 0, w: 0, k: 0 };
+        return { levelNum, unlockedKeys, sol, targetRgb: mixDropsToRgb(sol), reqPct, dropCap, colorName: "Tangerine Flame" };
+      }
+      if (levelNum === 2) {
+        const sol = { r: 0, y: 1, b: 1, w: 0, k: 0 };
+        return { levelNum, unlockedKeys, sol, targetRgb: mixDropsToRgb(sol), reqPct, dropCap, colorName: "Emerald Leaf" };
+      }
+      if (levelNum === 3) {
+        const sol = { r: 1, y: 0, b: 1, w: 0, k: 0 };
+        return { levelNum, unlockedKeys, sol, targetRgb: mixDropsToRgb(sol), reqPct, dropCap, colorName: "Royal Amethyst" };
       }
 
-      const recipeLen = Object.values(recipe).reduce((a, b) => a + b, 0);
-      const targetRGB = mixPigments(recipe);
-      const elixirName = nameElixir(targetRGB, recipe);
+      const sol = { r: 0, y: 0, b: 0, w: 0, k: 0 };
+      const totalD = minDrops + Math.floor(rng() * (maxDrops - minDrops + 1));
+      const primaries = ["r", "y", "b"];
+
+      // Guarantee at least 2 distinct pigments so target is never just 1 raw bottle!
+      const p1 = primaries[Math.floor(rng() * 3)];
+      const p2 = primaries.filter((x) => x !== p1)[Math.floor(rng() * 2)];
+      sol[p1]++;
+      let placed = 1;
+
+      if (levelNum >= 101 && levelNum <= 200) {
+        // Guarantee White tint appears in Chapter 2
+        sol.w++;
+        placed++;
+      } else if (levelNum >= 201 && levelNum <= 300) {
+        // Guarantee Black shade appears in Chapter 3
+        sol.k++;
+        placed++;
+      } else {
+        sol[p2]++;
+        placed++;
+      }
+
+      while (placed < totalD) {
+        const pick = unlockedKeys[Math.floor(rng() * unlockedKeys.length)];
+        // Avoid overwhelming with too much black or white (> 50%)
+        if ((pick === "k" || pick === "w") && (sol.k + sol.w) >= Math.floor(totalD * 0.5)) {
+          sol[primaries[Math.floor(rng() * 3)]]++;
+        } else {
+          sol[pick]++;
+        }
+        placed++;
+      }
+
+      // Make sure at least 2 distinct colors exist
+      const nonZero = Object.values(sol).filter((v) => v > 0).length;
+      if (nonZero < 2) sol[p2]++;
+
+      const totalSolDrops = Object.values(sol).reduce((s, v) => s + v, 0);
+      const finalCap = Math.max(dropCap, totalSolDrops + (levelNum > 400 ? 1 : 2));
 
       return {
         levelNum,
-        availableKeys,
-        recipe,
-        recipeLen,
-        maxDrops: recipeLen + extraCap,
-        targetPct,
-        targetRGB,
-        elixirName
+        unlockedKeys,
+        sol,
+        targetRgb: mixDropsToRgb(sol),
+        reqPct,
+        dropCap: finalCap,
+        colorName: nameThatColor(sol)
       };
     }
 
@@ -957,7 +1090,7 @@
     }
 
     // ==============================================
-    // ASMR LIQUID DROP & ALCHEMY WEB AUDIO ENGINE
+    // ASMR LIQUID DROP & ALCHEMY CHIME WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
@@ -970,21 +1103,18 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function sfxDropPlop(pigmentKey) {
+    function sfxWaterPlop(baseFreq) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
-      const baseF = PIGMENTS[pigmentKey].note;
-
-      // Liquid "bloop!" rising sine droplet
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(baseF * 0.72, now);
-      osc.frequency.exponentialRampToValueAtTime(baseF * 1.48, now + 0.085);
+      osc.frequency.setValueAtTime(baseFreq * 0.72, now);
+      osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.65, now + 0.085);
       g.gain.setValueAtTime(0.001, now);
-      g.gain.exponentialRampToValueAtTime(0.15, now + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.13, now + 0.014);
       g.gain.exponentialRampToValueAtTime(0.0008, now + 0.14);
       osc.connect(g);
       g.connect(audioCtx.destination);
@@ -992,7 +1122,7 @@
       osc.stop(now + 0.16);
     }
 
-    function sfxPourOut() {
+    function sfxRinse() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
@@ -1000,21 +1130,21 @@
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       osc.type = "triangle";
-      osc.frequency.setValueAtTime(360, now);
-      osc.frequency.exponentialRampToValueAtTime(140, now + 0.18);
+      osc.frequency.setValueAtTime(340, now);
+      osc.frequency.exponentialRampToValueAtTime(140, now + 0.15);
       g.gain.setValueAtTime(0.09, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
       osc.connect(g);
       g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + 0.22);
+      osc.stop(now + 0.18);
     }
 
-    function sfxBrewComplete() {
+    function sfxAlchemyWin() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-      [440, 554.37, 659.25, 880, 1108.73].forEach((f, i) => {
+      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => {
         setTimeout(() => {
           const now = audioCtx.currentTime;
           const osc = audioCtx.createOscillator();
@@ -1022,36 +1152,35 @@
           osc.type = "sine";
           osc.frequency.setValueAtTime(f, now);
           g.gain.setValueAtTime(0.001, now);
-          g.gain.exponentialRampToValueAtTime(0.12, now + 0.02);
-          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.55);
+          g.gain.exponentialRampToValueAtTime(0.12, now + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.48);
           osc.connect(g);
           g.connect(audioCtx.destination);
           osc.start(now);
-          osc.stop(now + 0.6);
+          osc.stop(now + 0.52);
         }, i * 75);
       });
     }
 
     // ==============================================
-    // GAME STATE, FLUID ANIMATION & UI CONTROLLER
+    // GAME STATE, FLASK ANIMATION & DROP CONTROLLER
     // ==============================================
     const canvas = document.getElementById("alchemyCanvas");
     const ctx = canvas.getContext("2d");
 
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const goalPill = document.getElementById("goalPill");
+    const dropsPill = document.getElementById("dropsPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const matchLabel = document.getElementById("matchLabel");
+    const matchGoalLabel = document.getElementById("matchGoalLabel");
     const matchFill = document.getElementById("matchFill");
-    const matchGoalLine = document.getElementById("matchGoalLine");
+    const matchTick = document.getElementById("matchTick");
     const matchPct = document.getElementById("matchPct");
-    const formulaDots = document.getElementById("formulaDots");
-    const dropsCapTxt = document.getElementById("dropsCapTxt");
-    const droppersDock = document.getElementById("droppersDock");
+    const pigmentDock = document.getElementById("pigmentDock");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
-    const winSwatch = document.getElementById("winSwatch");
+    const winTargetSwatch = document.getElementById("winTargetSwatch");
+    const winMixSwatch = document.getElementById("winMixSwatch");
     const winHeading = document.getElementById("winHeading");
     const winText = document.getElementById("winText");
     const nextLevelBtn = document.getElementById("nextLevelBtn");
@@ -1067,18 +1196,17 @@
     } catch (e) {}
 
     let level = null;
-    let drops = []; // chronological pigment keys ['red', 'yellow', ...]
-    let counts = { red: 0, yellow: 0, blue: 0, white: 0, black: 0 };
-    let currentRGB = null;
-    let displayRGB = [40, 56, 86]; // smoothly lerped visual liquid color
-    let fillRatio = 0;             // animated liquid height 0..1
-    let sloshAmp = 0;
-    let matchScore = 0;
+    let dropHistory = []; // ['r', 'y', ...]
+    let counts = { r: 0, y: 0, b: 0, w: 0, k: 0 };
+    let curRgb = null;
+    let displayRgb = [40, 48, 82]; // smoothly animated liquid color
+    let fillFrac = 0;
+    let waveEnergy = 0;
     let levelWon = false;
-    let hintKey = null;
+    let hintPigmentKey = null;
 
-    let fallingDrops = []; // { x, y, vy, color, r }
-    let bubbles = [];      // { x, y, r, vy, alpha }
+    let fallingDrops = [];
+    let bubbles = [];
     let sparkles = [];
     let toastTimer = null;
 
@@ -1090,155 +1218,139 @@
     }
 
     function recomputeCounts() {
-      counts = { red: 0, yellow: 0, blue: 0, white: 0, black: 0 };
-      for (const k of drops) counts[k]++;
-      currentRGB = mixPigments(counts);
-      matchScore = currentRGB ? colorMatchPercent(currentRGB, level.targetRGB) : 0;
+      counts = { r: 0, y: 0, b: 0, w: 0, k: 0 };
+      for (const k of dropHistory) counts[k]++;
+      curRgb = mixDropsToRgb(counts);
     }
 
-    function renderDroppers() {
-      droppersDock.innerHTML = "";
-      droppersDock.className = "droppers-dock" + (level.availableKeys.length === 4 ? " cols-4" : (level.availableKeys.length === 5 ? " cols-5" : ""));
+    function renderPigmentDock() {
+      pigmentDock.innerHTML = "";
+      const cnt = level.unlockedKeys.length;
+      pigmentDock.className = "pigment-dock" + (cnt === 4 ? " cols-4" : (cnt === 5 ? " cols-5" : ""));
 
-      const isFull = drops.length >= level.maxDrops;
-      level.availableKeys.forEach((key) => {
-        const pg = PIGMENTS[key];
+      const atCap = dropHistory.length >= level.dropCap;
+      level.unlockedKeys.forEach((key) => {
+        const pig = PIGMENTS.find((p) => p.key === key);
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "pigment-btn" + (hintKey === key ? " hint-glow" : "");
-        btn.disabled = levelWon || isFull;
+        btn.className = "pigment-btn" + (hintPigmentKey === key ? " hint-glow" : "");
+        btn.disabled = levelWon || atCap;
         btn.innerHTML = `
-          <span class="pigment-count">${counts[key] || 0}</span>
-          <span class="drop-orb" style="background:${pg.hex};"></span>
-          <span class="pigment-name">${pg.name}</span>
+          <span class="pig-drop-dot" style="background:${pig.hex};"></span>
+          <span class="pig-name">${pig.name}</span>
+          <span class="pig-cnt">${counts[key]} drop${counts[key] === 1 ? "" : "s"}</span>
         `;
         btn.addEventListener("click", () => addDrop(key));
-        droppersDock.appendChild(btn);
+        pigmentDock.appendChild(btn);
       });
-    }
-
-    function renderFormulaChips() {
-      formulaDots.innerHTML = "";
-      if (drops.length === 0) {
-        formulaDots.innerHTML = `<span class="formula-placeholder">Tap any pigment dropper below to mix your elixir...</span>`;
-      } else {
-        drops.forEach((k) => {
-          const dot = document.createElement("span");
-          dot.className = "f-dot";
-          dot.style.background = PIGMENTS[k].hex;
-          dot.title = PIGMENTS[k].name;
-          formulaDots.appendChild(dot);
-        });
-      }
-      dropsCapTxt.textContent = `${drops.length} / ${level.maxDrops} drops`;
-      dropsCapTxt.style.color = drops.length >= level.maxDrops ? "#fb7185" : "#94a3b8";
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Formula #${currentLevelNum} / ${TOTAL_LEVELS} — ${level.elixirName}`;
-      goalPill.textContent = `Need: ${level.targetPct}%+`;
-      solvedCounter.textContent = `Brewed: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      levelTitle.textContent = `Formula #${currentLevelNum} / ${TOTAL_LEVELS} — ${level.colorName}`;
+      solvedCounter.textContent = `Matched: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Formula ${currentLevelNum} / 500 ▾`;
 
-      const shownPct = Math.round(matchScore);
-      matchFill.style.width = `${Math.min(100, matchScore)}%`;
-      matchGoalLine.style.left = `${level.targetPct}%`;
-      matchPct.textContent = `${shownPct}% / ${level.targetPct}%`;
+      const used = dropHistory.length;
+      dropsPill.textContent = `Drops: ${used} / ${level.dropCap}`;
+      dropsPill.className = "hud-pill" + (used >= level.dropCap && !levelWon ? " warn-pill" : "");
 
-      if (levelWon) {
-        matchLabel.textContent = "★ MATCHED!";
-        matchLabel.style.color = "#4ade80";
-      } else if (matchScore >= level.targetPct - 8) {
-        matchLabel.textContent = "✦ VERY CLOSE";
-        matchLabel.style.color = "#facc15";
-      } else {
-        matchLabel.textContent = "⚗️ HUE MATCH";
-        matchLabel.style.color = "#c4b5fd";
-      }
+      const pct = curRgb ? colorMatchPercent(curRgb, level.targetRgb) : 0;
+      matchGoalLabel.textContent = `🎯 Need ${level.reqPct}% Match`;
+      matchTick.style.left = `${level.reqPct}%`;
+      matchFill.style.width = `${pct.toFixed(1)}%`;
+      matchPct.textContent = `${pct.toFixed(1)}%`;
 
-      renderFormulaChips();
-      renderDroppers();
+      renderPigmentDock();
     }
 
     function addDrop(key) {
-      if (levelWon || drops.length >= level.maxDrops) return;
+      if (levelWon) return;
+      if (dropHistory.length >= level.dropCap) {
+        showToast("Flask is full! Tap ← Undo Drop or 🚿 Rinse Flask to refine your blend.", 2400);
+        return;
+      }
+
       initAudio();
-
-      drops.push(key);
-      hintKey = null;
+      const pig = PIGMENTS.find((p) => p.key === key);
+      dropHistory.push(key);
       recomputeCounts();
-      sloshAmp = Math.min(14, sloshAmp + 7.5);
-      sfxDropPlop(key);
+      if (hintPigmentKey === key) hintPigmentKey = null;
 
-      // Spawn falling pigment drop from above flask neck
+      // Spawn animated falling droplet from pipette above flask neck!
       fallingDrops.push({
-        x: WORLD_W / 2 + (Math.random() - 0.5) * 10,
-        y: 132,
-        vy: 3.5,
-        color: PIGMENTS[key].hex,
+        x: 266,
+        y: 92,
+        vy: 1.5,
+        color: pig.hex,
         r: 7.5
       });
 
-      // Spawn fizz bubbles inside flask
+      sfxWaterPlop(pig.note);
+      waveEnergy = Math.min(1.6, waveEnergy + 0.85);
+
       for (let i = 0; i < 6; i++) {
         bubbles.push({
-          x: WORLD_W / 2 + (Math.random() - 0.5) * 86,
-          y: 335 - Math.random() * 24,
-          r: 2 + Math.random() * 3.5,
+          x: 266 + (Math.random() - 0.5) * 66,
+          y: 315 - Math.random() * 25,
           vy: 0.6 + Math.random() * 1.1,
-          alpha: 0.78
+          r: 2.2 + Math.random() * 3.2,
+          alpha: 0.8
         });
       }
 
       updateHUD();
 
-      // Check Victory!
-      if (matchScore >= level.targetPct) {
+      const pct = colorMatchPercent(curRgb, level.targetRgb);
+      if (pct >= level.reqPct) {
         levelWon = true;
+        hintPigmentKey = null;
         solvedSet.add(currentLevelNum);
         try {
           localStorage.setItem("zinplay_alchemy_500_solved", JSON.stringify([...solvedSet]));
         } catch (e) {}
-        sfxBrewComplete();
-        updateHUD();
 
         for (let i = 0; i < 20; i++) {
-          const a = (i * Math.PI * 2) / 20;
+          const a = Math.random() * Math.PI * 2;
           sparkles.push({
-            x: WORLD_W / 2 + Math.cos(a) * (35 + Math.random() * 65),
-            y: 270 + Math.sin(a) * (35 + Math.random() * 55),
-            size: 4 + Math.random() * 5,
-            alpha: 1,
-            phase: Math.random() * Math.PI * 2
+            x: 266, y: 248,
+            vx: Math.cos(a) * (1.5 + Math.random() * 2.5),
+            vy: Math.sin(a) * (1.5 + Math.random() * 2.5),
+            r: 2.5 + Math.random() * 2.5,
+            color: i % 2 === 0 ? "#fef08a" : rgbToHex(level.targetRgb),
+            alpha: 1
           });
         }
 
+        updateHUD();
+        setTimeout(() => sfxAlchemyWin(), 180);
+
         const isLast = currentLevelNum === TOTAL_LEVELS;
-        winSwatch.style.background = rgbToCss(currentRGB);
-        winHeading.textContent = isLast ? "All 500 Elixirs Brewed!" : `${level.elixirName} Brewed!`;
-        winText.textContent = `Achieved ${Math.round(matchScore)}% hue accuracy in ${drops.length} drop${drops.length === 1 ? "" : "s"}.`;
+        winTargetSwatch.style.background = rgbToHex(level.targetRgb);
+        winMixSwatch.style.background = rgbToHex(curRgb);
+        winHeading.textContent = isLast ? "All 500 Elixirs Brewed!" : `${level.colorName} Matched!`;
+        winText.textContent = `Achieved ${pct.toFixed(1)}% match accuracy in ${dropHistory.length} drop${dropHistory.length === 1 ? "" : "s"} (${rgbToHex(curRgb)}).`;
         nextLevelBtn.textContent = isLast ? "Replay Formula #1" : `Next Formula (#${currentLevelNum + 1}) →`;
-        setTimeout(() => winOverlay.classList.add("show"), 560);
-      } else if (drops.length >= level.maxDrops) {
-        showToast("Flask is full! Tap ← Undo Drop or ↺ Pour Out to tweak your blend.", 2800);
+        setTimeout(() => winOverlay.classList.add("show"), 620);
+      } else if (dropHistory.length >= level.dropCap) {
+        showToast(`Reached ${pct.toFixed(1)}% (Need ${level.reqPct}%). Tap ← Undo Drop or 🚿 Rinse to adjust!`, 3000);
       }
     }
 
     function loadLevel(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
       level = buildFormulaLevel(currentLevelNum);
-      drops = [];
-      hintKey = null;
+      dropHistory = [];
+      recomputeCounts();
+      fillFrac = 0;
+      waveEnergy = 0;
       levelWon = false;
-      sloshAmp = 0;
-      fillRatio = 0;
+      hintPigmentKey = null;
       fallingDrops = [];
       bubbles = [];
       sparkles = [];
 
-      recomputeCounts();
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
@@ -1249,82 +1361,54 @@
       updateHUD();
     }
 
-    // Smart Alchemist Hint Button
+    // Smart Alchemist Recipe Hint (Compares Current Drops Against Verified Solution!)
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (levelWon) return;
       initAudio();
 
-      // 1. Check if current counts are a clean subset of the canonical recipe
-      const isSubset = level.availableKeys.every((k) => counts[k] <= level.recipe[k]);
-      if (isSubset) {
-        let bestK = null;
-        let maxDeficit = 0;
-        for (const k of level.availableKeys) {
-          const def = level.recipe[k] - counts[k];
-          if (def > maxDeficit) {
-            maxDeficit = def;
-            bestK = k;
-          }
-        }
-        if (bestK) {
-          hintKey = bestK;
-          renderDroppers();
-          showToast(`💡 Add 1 drop of ${PIGMENTS[bestK].name} (glowing gold)!`, 2400);
-          return;
-        }
-      }
-
-      // 2. If off-recipe, check if flask is full -> suggest Undo
-      if (drops.length >= level.maxDrops) {
-        showToast("💡 Flask is full — tap ← Undo Drop or ↺ Pour Out to refine!", 2600);
+      // Check if player added more of any pigment than the canonical recipe needs
+      const overAdded = level.unlockedKeys.some((k) => counts[k] > (level.sol[k] || 0));
+      if (overAdded) {
+        showToast("💡 Your blend drifted off-recipe! Tap ← Undo Drop or 🚿 Rinse Flask, then tap Hint.", 3000);
         return;
       }
 
-      // 3. Greedy lookahead: find which single pigment drop increases matchScore the most
-      let bestDrop = null;
-      let bestGain = -1;
-      for (const k of level.availableKeys) {
-        const trial = { ...counts, [k]: counts[k] + 1 };
-        const simPct = colorMatchPercent(mixPigments(trial), level.targetRGB);
-        if (simPct > matchScore + 0.5 && simPct > bestGain) {
-          bestGain = simPct;
-          bestDrop = k;
+      // Find the pigment with the largest deficit relative to the verified solution
+      let bestKey = null, bestDef = 0;
+      for (const k of level.unlockedKeys) {
+        const def = (level.sol[k] || 0) - counts[k];
+        if (def > bestDef) {
+          bestDef = def;
+          bestKey = k;
         }
       }
 
-      if (bestDrop) {
-        hintKey = bestDrop;
-        renderDroppers();
-        showToast(`💡 Try adding 1 drop of ${PIGMENTS[bestDrop].name} to move closer!`, 2500);
-      } else {
-        showToast("💡 You have an extra pigment — tap ← Undo Drop to rebalance!", 2500);
+      if (bestKey) {
+        hintPigmentKey = bestKey;
+        const pName = PIGMENTS.find((p) => p.key === bestKey).name;
+        renderPigmentDock();
+        showToast(`💡 Add 1 drop of glowing golden ${pName} pigment next!`, 2500);
       }
     });
 
-    // Undo & Pour Out Controls
     document.getElementById("undoBtn").addEventListener("click", () => {
-      if (levelWon || drops.length === 0) return;
+      if (levelWon || dropHistory.length === 0) return;
       initAudio();
-      drops.pop();
-      hintKey = null;
+      dropHistory.pop();
       recomputeCounts();
-      sloshAmp = Math.min(10, sloshAmp + 4);
-      sfxPourOut();
+      hintPigmentKey = null;
+      sfxRinse();
       updateHUD();
     });
 
     document.getElementById("resetBtn").addEventListener("click", () => {
-      if (levelWon) {
-        loadLevel(currentLevelNum);
-        return;
-      }
-      if (drops.length === 0) return;
+      if (levelWon) { loadLevel(currentLevelNum); return; }
       initAudio();
-      drops = [];
-      hintKey = null;
+      dropHistory = [];
       recomputeCounts();
-      sloshAmp = 6;
-      sfxPourOut();
+      hintPigmentKey = null;
+      waveEnergy = 0.4;
+      sfxRinse();
       updateHUD();
     });
 
@@ -1342,7 +1426,7 @@
       if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
     });
 
-    // Formula Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1401,7 +1485,7 @@
     });
 
     // ==============================================
-    // ANIMATED ALCHEMICAL FLASK & SWATCH RENDERER
+    // ALCHEMY BENCH, TARGET VIAL & SLOSHING FLASK RENDERER
     // ==============================================
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
@@ -1419,28 +1503,15 @@
       return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    function traceFlaskPath(cx, neckTopY, bulbCy, bulbR) {
-      const neckHalfW = 24;
-      const neckJoinY = bulbCy - bulbR * 0.88;
+    function defineFlaskPath(fx, fy) {
+      // Classic Round-Bottom Erlenmeyer Alchemy Flask centered at (fx, fy)
       ctx.beginPath();
-      ctx.moveTo(cx - neckHalfW - 6, neckTopY);
-      ctx.lineTo(cx + neckHalfW + 6, neckTopY);
-      ctx.quadraticCurveTo(cx + neckHalfW, neckTopY + 10, cx + neckHalfW, neckTopY + 14);
-      ctx.lineTo(cx + neckHalfW, neckJoinY);
-      // Right rounded spherical bulb curve
-      ctx.bezierCurveTo(
-        cx + bulbR * 1.18, bulbCy - bulbR * 0.42,
-        cx + bulbR * 1.18, bulbCy + bulbR * 0.96,
-        cx, bulbCy + bulbR
-      );
-      // Left rounded spherical bulb curve
-      ctx.bezierCurveTo(
-        cx - bulbR * 1.18, bulbCy + bulbR * 0.96,
-        cx - bulbR * 1.18, bulbCy - bulbR * 0.42,
-        cx - neckHalfW, neckJoinY
-      );
-      ctx.lineTo(cx - neckHalfW, neckTopY + 14);
-      ctx.quadraticCurveTo(cx - neckHalfW, neckTopY + 10, cx - neckHalfW - 6, neckTopY);
+      ctx.moveTo(fx - 24, fy - 122);
+      ctx.lineTo(fx - 24, fy - 72);
+      ctx.bezierCurveTo(fx - 86, fy - 42, fx - 94, fy + 48, fx - 54, fy + 86);
+      ctx.quadraticCurveTo(fx, fy + 104, fx + 54, fy + 86);
+      ctx.bezierCurveTo(fx + 94, fy + 48, fx + 86, fy - 42, fx + 24, fy - 72);
+      ctx.lineTo(fx + 24, fy - 122);
       ctx.closePath();
     }
 
@@ -1450,15 +1521,15 @@
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
-      // Smooth liquid fill & color blending transitions
-      const targetFill = drops.length === 0 ? 0 : Math.min(0.92, 0.22 + (drops.length / level.maxDrops) * 0.68);
-      fillRatio += (targetFill - fillRatio) * Math.min(1, dt * 7);
-      sloshAmp *= Math.pow(0.08, dt);
+      // Smoothly interpolate liquid color & fill height
+      const targetFill = dropHistory.length === 0 ? 0 : (0.24 + (dropHistory.length / level.dropCap) * 0.62);
+      fillFrac += (targetFill - fillFrac) * Math.min(1, dt * 7);
+      waveEnergy = Math.max(0.14, waveEnergy * Math.pow(0.18, dt));
 
-      if (currentRGB) {
-        displayRGB[0] += (currentRGB[0] - displayRGB[0]) * Math.min(1, dt * 10);
-        displayRGB[1] += (currentRGB[1] - displayRGB[1]) * Math.min(1, dt * 10);
-        displayRGB[2] += (currentRGB[2] - displayRGB[2]) * Math.min(1, dt * 10);
+      if (curRgb) {
+        displayRgb[0] += (curRgb[0] - displayRgb[0]) * Math.min(1, dt * 8);
+        displayRgb[1] += (curRgb[1] - displayRgb[1]) * Math.min(1, dt * 8);
+        displayRgb[2] += (curRgb[2] - displayRgb[2]) * Math.min(1, dt * 8);
       }
 
       const vp = getViewport();
@@ -1468,238 +1539,209 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      const cx = WORLD_W / 2;
-
-      // 1. Split Comparison Swatch Medallion (Edge-to-Edge Target vs Your Brew!)
-      {
-        const swW = 296, swH = 68;
-        const swX = cx - swW / 2, swY = 18;
-
-        ctx.save();
-        ctx.shadowColor = "rgba(0, 0, 0, 0.48)";
-        ctx.shadowBlur = 18;
-        ctx.beginPath();
-        ctx.roundRect(swX, swY, swW, swH, 16);
-        ctx.clip();
-
-        // Left Half: TARGET COLOR
-        ctx.fillStyle = rgbToCss(level.targetRGB);
-        ctx.fillRect(swX, swY, swW / 2, swH);
-
-        // Right Half: YOUR CURRENT BREW
-        ctx.fillStyle = currentRGB
-          ? `rgb(${Math.round(displayRGB[0])}, ${Math.round(displayRGB[1])}, ${Math.round(displayRGB[2])})`
-          : "#161c34";
-        ctx.fillRect(swX + swW / 2, swY, swW / 2, swH);
-
-        // Subtle label pills on top corners (keeps center edge 100% unobstructed for comparison!)
-        ctx.fillStyle = "rgba(15, 23, 42, 0.62)";
-        ctx.beginPath();
-        ctx.roundRect(swX + 8, swY + 8, 62, 18, 6);
-        ctx.roundRect(swX + swW - 76, swY + 8, 68, 18, 6);
-        ctx.fill();
-
-        ctx.fillStyle = "#f8fafc";
-        ctx.font = "800 9.5px sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("TARGET", swX + 39, swY + 17);
-        ctx.fillText("YOUR BREW", swX + swW - 42, swY + 17);
-
-        if (!currentRGB) {
-          ctx.fillStyle = "#64748b";
-          ctx.font = "700 11px sans-serif";
-          ctx.fillText("Empty", swX + swW * 0.75, swY + swH * 0.62);
-        }
-        ctx.restore();
-
-        // Crisp Outer Medallion Rim (Glows green on match!)
-        ctx.save();
-        ctx.strokeStyle = levelWon ? "#4ade80" : "rgba(226, 232, 240, 0.32)";
-        ctx.lineWidth = levelWon ? 3 : 2;
-        if (levelWon) {
-          ctx.shadowColor = "#4ade80";
-          ctx.shadowBlur = 14;
-        }
-        ctx.beginPath();
-        ctx.roundRect(swX, swY, swW, swH, 16);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // 2. Wooden Lab Pedestal Shelf Beneath Flask
-      const shelfY = 362;
-      ctx.fillStyle = "#241b2f";
+      // 1. Dark Alchemy Laboratory Wooden Bench Surface
+      ctx.fillStyle = "#181529";
+      ctx.fillRect(0, 336, WORLD_W, WORLD_H - 336);
+      ctx.strokeStyle = "rgba(192, 132, 252, 0.24)";
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.roundRect(cx - 116, shelfY, 232, 14, 7);
-      ctx.fill();
-      ctx.strokeStyle = "rgba(165, 180, 252, 0.2)";
-      ctx.lineWidth = 1.5;
+      ctx.moveTo(0, 336); ctx.lineTo(WORLD_W, 336);
       ctx.stroke();
 
-      // Ambient elixir under-glow radiating onto pedestal
-      if (currentRGB) {
-        ctx.save();
-        const glow = ctx.createRadialGradient(cx, 286, 12, cx, 286, 122);
-        glow.addColorStop(0, `rgba(${Math.round(displayRGB[0])}, ${Math.round(displayRGB[1])}, ${Math.round(displayRGB[2])}, 0.28)`);
-        glow.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.arc(cx, 286, 122, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
+      // 2. LEFT SIDE: TARGET ELIXIR SWATCH CARD & CRYSTAL REFERENCE VIAL
+      const tx = 94, ty = 216;
+      const targetHex = rgbToHex(level.targetRgb);
 
-      // 3. Falling Pigment Droplets Entering Flask Neck
-      const neckTopY = 146;
-      const bulbCy = 276;
-      const bulbR = 86;
-      const liquidTopY = (bulbCy + bulbR) - fillRatio * (bulbR * 1.92);
+      ctx.save();
+      // Subtle glow behind target swatch
+      ctx.shadowColor = targetHex;
+      ctx.shadowBlur = 22;
+      ctx.fillStyle = targetHex;
+      ctx.beginPath();
+      ctx.roundRect(tx - 54, ty - 78, 108, 128, 18);
+      ctx.fill();
+      ctx.shadowBlur = 0;
 
-      fallingDrops = fallingDrops.filter((d) => d.y < liquidTopY + 10);
+      // Crisp specular card rim
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.72)";
+      ctx.lineWidth = 2.6;
+      ctx.stroke();
+
+      // Subtle glossy corner highlight
+      ctx.fillStyle = "rgba(255, 255, 255, 0.16)";
+      ctx.beginPath();
+      ctx.roundRect(tx - 46, ty - 70, 92, 34, 12);
+      ctx.fill();
+
+      // Target Label Plaque
+      ctx.fillStyle = "rgba(12, 11, 26, 0.84)";
+      ctx.beginPath();
+      ctx.roundRect(tx - 52, ty + 62, 104, 44, 10);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(192, 132, 252, 0.36)";
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+
+      ctx.fillStyle = "#fde68a";
+      ctx.font = "900 9.5px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("TARGET HUE", tx, ty + 78);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 10.5px sans-serif";
+      ctx.fillText(level.colorName.slice(0, 14), tx, ty + 95);
+      ctx.restore();
+
+      // 3. RIGHT SIDE: GLASS PIPETTE DROPPER & ANIMATED MIXING FLASK
+      const fx = 266, fy = 240;
+
+      // Glass Dropper Pipette Tip Centered Above Flask Mouth
+      ctx.save();
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.roundRect(fx - 10, 26, 20, 28, 8);
+      ctx.fill();
+      ctx.fillStyle = "rgba(226, 232, 240, 0.35)";
+      ctx.strokeStyle = "rgba(226, 232, 240, 0.85)";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(fx - 7, 54); ctx.lineTo(fx + 7, 54);
+      ctx.lineTo(fx + 3, 92); ctx.lineTo(fx - 3, 92);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      // Falling Paint Droplets Animating Down Into Flask Neck
+      fallingDrops = fallingDrops.filter((d) => d.y < fy + 76 - fillFrac * 145);
       for (const d of fallingDrops) {
-        d.vy += 0.42;
+        d.vy += 0.48;
         d.y += d.vy;
         ctx.save();
         ctx.fillStyle = d.color;
         ctx.shadowColor = d.color;
         ctx.shadowBlur = 10;
         ctx.beginPath();
-        ctx.moveTo(d.x, d.y - d.r * 1.4);
+        ctx.moveTo(d.x, d.y - d.r * 1.35);
         ctx.bezierCurveTo(d.x + d.r, d.y, d.x + d.r, d.y + d.r, d.x, d.y + d.r);
-        ctx.bezierCurveTo(d.x - d.r, d.y + d.r, d.x - d.r, d.y, d.x, d.y - d.r * 1.4);
+        ctx.bezierCurveTo(d.x - d.r, d.y + d.r, d.x - d.r, d.y, d.x, d.y - d.r * 1.35);
         ctx.closePath();
         ctx.fill();
         ctx.restore();
       }
 
-      // 4. Alchemical Round-Bottom Glass Flask + Sloshing Liquid
-      ctx.save();
-      traceFlaskPath(cx, neckTopY, bulbCy, bulbR);
-      ctx.fillStyle = "rgba(15, 23, 42, 0.55)";
+      // Flask Contact Shadow on Bench
+      ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+      ctx.beginPath();
+      ctx.ellipse(fx, 342, 62, 10, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Clip sloshing liquid & rising bubbles strictly inside the glass bulb
+      // Clipped Sloshing Liquid Body Inside Glass Flask
       ctx.save();
-      traceFlaskPath(cx, neckTopY, bulbCy, bulbR);
+      defineFlaskPath(fx, fy);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.05)";
+      ctx.fill();
       ctx.clip();
 
-      if (fillRatio > 0.01) {
-        const liqCol = `rgb(${Math.round(displayRGB[0])}, ${Math.round(displayRGB[1])}, ${Math.round(displayRGB[2])})`;
-        const waveT = now * 0.0055;
-        const amp = 2.5 + sloshAmp;
+      if (fillFrac > 0.01 && curRgb) {
+        const liqHex = rgbToHex([Math.round(displayRgb[0]), Math.round(displayRgb[1]), Math.round(displayRgb[2])]);
+        const surfY = (fy + 96) - fillFrac * 172;
+        const amp = 4.2 * waveEnergy;
 
-        // Back darker liquid wave crest for 3D depth
-        ctx.fillStyle = liqCol;
-        ctx.globalAlpha = 0.65;
+        ctx.fillStyle = liqHex;
         ctx.beginPath();
-        ctx.moveTo(cx - bulbR - 20, bulbCy + bulbR + 12);
-        for (let x = cx - bulbR - 15; x <= cx + bulbR + 15; x += 8) {
-          const y = liquidTopY - 3 + Math.sin(x * 0.032 - waveT * 1.2) * (amp * 0.7);
-          ctx.lineTo(x, y);
+        ctx.moveTo(fx - 105, surfY);
+        for (let wx = -105; wx <= 105; wx += 10) {
+          const wy = surfY + Math.sin(wx * 0.055 + now * 0.008) * amp;
+          ctx.lineTo(fx + wx, wy);
         }
-        ctx.lineTo(cx + bulbR + 20, bulbCy + bulbR + 12);
+        ctx.lineTo(fx + 105, fy + 115);
+        ctx.lineTo(fx - 105, fy + 115);
         ctx.closePath();
         ctx.fill();
 
-        // Main Foreground Potion Liquid
-        ctx.globalAlpha = 0.94;
+        // Lighter glossy top meniscus crest
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.38)";
+        ctx.lineWidth = 2.6;
         ctx.beginPath();
-        ctx.moveTo(cx - bulbR - 20, bulbCy + bulbR + 12);
-        for (let x = cx - bulbR - 15; x <= cx + bulbR + 15; x += 8) {
-          const y = liquidTopY + Math.sin(x * 0.035 + waveT) * amp;
-          ctx.lineTo(x, y);
+        for (let wx = -100; wx <= 100; wx += 10) {
+          const wy = surfY + Math.sin(wx * 0.055 + now * 0.008) * amp;
+          if (wx === -100) ctx.moveTo(fx + wx, wy);
+          else ctx.lineTo(fx + wx, wy);
         }
-        ctx.lineTo(cx + bulbR + 20, bulbCy + bulbR + 12);
-        ctx.closePath();
-        ctx.fill();
+        ctx.stroke();
 
-        // Subtle inner luminous sheen at bottom center
-        const sh = ctx.createRadialGradient(cx - 22, bulbCy + 16, 6, cx, bulbCy + 10, bulbR);
-        sh.addColorStop(0, "rgba(255, 255, 255, 0.24)");
-        sh.addColorStop(0.55, "rgba(255, 255, 255, 0.0)");
-        sh.addColorStop(1, "rgba(0, 0, 0, 0.34)");
-        ctx.fillStyle = sh;
-        ctx.fillRect(cx - bulbR - 10, liquidTopY - 20, bulbR * 2 + 20, bulbR * 2 + 30);
-
-        // Rising Fizz Bubbles
-        bubbles = bubbles.filter((b) => b.alpha > 0.04 && b.y > liquidTopY + 3);
+        // Rising Effervescent Bubbles Inside Liquid
+        bubbles = bubbles.filter((b) => b.alpha > 0.05 && b.y > surfY + 4);
         for (const b of bubbles) {
           b.y -= b.vy;
-          b.x += Math.sin(now * 0.008 + b.r) * 0.3;
+          b.x += Math.sin(now * 0.006 + b.y * 0.1) * 0.35;
           b.alpha *= 0.985;
-          ctx.strokeStyle = `rgba(255, 255, 255, ${b.alpha * 0.7})`;
-          ctx.fillStyle = `rgba(255, 255, 255, ${b.alpha * 0.22})`;
-          ctx.lineWidth = 1.2;
+          ctx.fillStyle = `rgba(255, 255, 255, ${b.alpha * 0.55})`;
           ctx.beginPath();
           ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
           ctx.fill();
-          ctx.stroke();
         }
       }
-      ctx.restore(); // End liquid clip
+      ctx.restore();
 
-      // Glass Flask Outer Outline & Specular Curved Highlights
-      traceFlaskPath(cx, neckTopY, bulbCy, bulbR);
-      ctx.strokeStyle = levelWon ? "#4ade80" : "rgba(226, 232, 240, 0.58)";
-      ctx.lineWidth = 3;
+      // Glass Flask Outer Rim, Rim Lip & Curved Specular Highlights
+      ctx.save();
+      defineFlaskPath(fx, fy);
+      ctx.strokeStyle = levelWon ? "#4ade80" : "rgba(226, 232, 240, 0.78)";
+      if (levelWon) {
+        ctx.shadowColor = "#22c55e";
+        ctx.shadowBlur = 18;
+      }
+      ctx.lineWidth = 3.2;
       ctx.stroke();
+      ctx.shadowBlur = 0;
 
-      // Curved glass glare highlight on left side of bulb
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
-      ctx.lineWidth = 4.5;
+      // Top Flared Glass Lip
+      ctx.strokeStyle = "rgba(241, 245, 249, 0.9)";
+      ctx.lineWidth = 4.2;
       ctx.lineCap = "round";
       ctx.beginPath();
-      ctx.arc(cx, bulbCy, bulbR - 12, Math.PI * 0.76, Math.PI * 1.18);
+      ctx.moveTo(fx - 30, fy - 122);
+      ctx.lineTo(fx + 30, fy - 122);
       ctx.stroke();
 
-      // Measurement tick marks on right glass side
-      ctx.strokeStyle = "rgba(226, 232, 240, 0.28)";
+      // Curved Left Glass Reflection Arc
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(fx, fy + 20, 62, Math.PI * 0.78, Math.PI * 1.15);
+      ctx.stroke();
+
+      // Volumetric Milliliter Tick Marks on Right Side of Flask
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.32)";
       ctx.lineWidth = 1.5;
       for (let m = 0; m < 4; m++) {
-        const my = bulbCy + 42 - m * 24;
+        const my = fy + 58 - m * 24;
         ctx.beginPath();
-        ctx.moveTo(cx + 42, my);
-        ctx.lineTo(cx + (m % 2 === 0 ? 54 : 49), my);
+        ctx.moveTo(fx + 40, my);
+        ctx.lineTo(fx + 52, my);
         ctx.stroke();
       }
+
+      // Live Hex Code Readout Under Flask
+      ctx.fillStyle = "#cbd5e1";
+      ctx.font = "800 10px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(curRgb ? `YOUR MIX • ${rgbToHex(curRgb)}` : "YOUR FLASK • EMPTY", fx, 366);
       ctx.restore();
 
-      // 5. Pipette Tip Hovering Directly Over Flask Neck
-      ctx.save();
-      ctx.fillStyle = "#334155";
-      ctx.strokeStyle = "#94a3b8";
-      ctx.lineWidth = 1.6;
-      ctx.beginPath();
-      ctx.moveTo(cx - 7, 102);
-      ctx.lineTo(cx + 7, 102);
-      ctx.lineTo(cx + 3, 128);
-      ctx.lineTo(cx - 3, 128);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      ctx.restore();
-
-      // 6. Victory Alchemy Sparkles
-      sparkles = sparkles.filter((sp) => sp.alpha > 0.03);
+      // 4. Celebratory Victory Sparkles
+      sparkles = sparkles.filter((sp) => sp.alpha > 0.04);
       for (const sp of sparkles) {
-        sp.alpha *= 0.965;
-        const sc = sp.size * (0.7 + 0.3 * Math.sin(now * 0.015 + sp.phase));
-        ctx.save();
-        ctx.translate(sp.x, sp.y);
-        ctx.fillStyle = `rgba(254, 249, 195, ${sp.alpha})`;
+        sp.x += sp.vx;
+        sp.y += sp.vy;
+        sp.alpha *= 0.93;
+        ctx.fillStyle = sp.color;
+        ctx.globalAlpha = sp.alpha;
         ctx.beginPath();
-        ctx.moveTo(0, -sc);
-        ctx.lineTo(sc * 0.28, -sc * 0.28);
-        ctx.lineTo(sc, 0);
-        ctx.lineTo(sc * 0.28, sc * 0.28);
-        ctx.lineTo(0, sc);
-        ctx.lineTo(-sc * 0.28, sc * 0.28);
-        ctx.lineTo(-sc, 0);
-        ctx.lineTo(-sc * 0.28, -sc * 0.28);
-        ctx.closePath();
+        ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
         ctx.fill();
-        ctx.restore();
+        ctx.globalAlpha = 1;
       }
 
       ctx.restore();
