@@ -3,10 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rube Goldberg Sandbox — 500 Chain-Reaction Physics Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free physics contraption levels in Rube Goldberg Sandbox. Arrange ramps, bouncy springs, wind fans, and electromagnets to guide the marble home." />
+  <title>Rube Goldberg Sandbox — Free 500-Level Chain Reaction Physics Game | ZinPlay</title>
+  <meta name="description" content="Play Rube Goldberg Sandbox free online with no download. Drag and rotate wooden ramps, spring bumpers, turbo wind fans, and magnetic boosters to guide a steel marble into the golden bell across 500 Matter.js contraptions." />
   <link rel="stylesheet" href="/assets/css/style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Rube Goldberg Sandbox",
+    "url": "https://zinplay.io/games/rube-goldberg/",
+    "genre": ["Physics", "Contraption Sandbox", "STEM Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -31,15 +44,15 @@
       color: var(--muted);
     }
 
-    /* Top Workshop HUD */
+    /* Top Workshop Blueprint HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0a1224;
+      background: #0b1322;
       color: #f1f5f9;
-      border-bottom: 1px solid #1b2a47;
+      border-bottom: 1px solid #1d2d4a;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -53,7 +66,7 @@
     .chapter-sub {
       font-size: 0.72rem;
       color: #fbbf24;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -65,18 +78,17 @@
     }
     .hud-pill {
       background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      border: 1px solid rgba(56, 189, 248, 0.36);
       color: #bae6fd;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
       font-family: monospace;
     }
-    .hud-pill.sandbox-pill {
-      background: rgba(168, 85, 247, 0.22);
-      border-color: rgba(192, 132, 252, 0.5);
-      color: #e9d5ff;
-      font-family: inherit;
+    .hud-pill.run-pill {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: rgba(251, 191, 36, 0.55);
+      color: #fef08a;
     }
     .hud-pill.done-pill {
       background: rgba(34, 197, 94, 0.16);
@@ -85,19 +97,19 @@
       font-family: inherit;
     }
 
-    /* Physics Blueprint Canvas */
+    /* Workshop Blueprint Canvas Stage */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 445px;
-      background: radial-gradient(circle at 50% 42%, #13223e 0%, #091020 100%);
+      height: 435px;
+      background: radial-gradient(circle at 50% 45%, #15233d 0%, #09101f 100%);
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 495px;
+        height: 475px;
       }
     }
     #rubeCanvas {
@@ -105,130 +117,64 @@
       height: 100%;
       display: block;
       touch-action: none;
-      cursor: crosshair;
+      cursor: grab;
+    }
+    #rubeCanvas.dragging {
+      cursor: grabbing;
     }
 
-    /* Selected Gadget Fine-Tune Bar */
-    .selected-bar {
+    /* Gadget Rotate & Run Machine Control Dock */
+    .rube-dock {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 7px;
-      padding: 8px 12px;
-      background: #101b33;
-      border-top: 1px solid #1e3154;
-      color: #e2e8f0;
-      font-size: 0.76rem;
-      font-weight: 800;
-      flex-wrap: wrap;
+      gap: 8px;
+      padding: 11px 12px;
+      background: #0d1729;
+      border-top: 1px solid #1d2d4a;
     }
-    .sel-title {
-      color: #7dd3fc;
+    .rube-btn {
+      min-height: 46px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 1.5px solid #283f66;
+      background: #162540;
+      color: #f8fafc;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 4px;
+      transition: transform 0.08s ease, background 0.14s ease, border-color 0.14s ease;
     }
-    .sel-actions {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      flex-wrap: wrap;
+    .rube-btn:active { transform: scale(0.95); }
+    .rube-btn:disabled { opacity: 0.36; cursor: default; }
+    .rube-btn.run-main {
+      flex: 1;
+      background: linear-gradient(135deg, #16a34a 0%, #0d9488 100%);
+      border-color: #86efac;
+      color: #ffffff;
+      font-size: 0.92rem;
+      box-shadow: 0 5px 16px rgba(22, 163, 74, 0.32);
     }
-    .mini-act-btn {
-      min-height: 32px;
-      padding: 0 10px;
-      border-radius: 8px;
-      border: 1.5px solid #2e4570;
-      background: #18294a;
-      color: #f8fafc;
-      font-size: 0.75rem;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .mini-act-btn:active { transform: scale(0.95); }
-    .mini-act-btn:disabled { opacity: 0.35; cursor: default; }
-    .mini-act-btn.danger {
-      border-color: #7f1d1d;
-      background: #3b131c;
-      color: #fecaca;
-    }
-    .mini-act-btn.mag-mode {
-      border-color: #a855f7;
-      background: rgba(168, 85, 247, 0.24);
-      color: #f3e8ff;
+    .rube-btn.run-main.stop-mode {
+      background: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
+      border-color: #fde68a;
+      box-shadow: 0 5px 16px rgba(234, 88, 12, 0.32);
     }
 
-    /* Gadget Toolbox + Big Run Button Dock */
-    .toolbox-dock {
+    .legend-strip {
       display: flex;
-      flex-direction: column;
-      gap: 9px;
-      padding: 11px 12px 12px;
-      background: #0c1528;
-      border-top: 1px solid #1b2a47;
-    }
-    .gadgets-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 7px;
-    }
-    .gadget-btn {
-      min-height: 54px;
-      padding: 6px 4px;
-      border-radius: 11px;
-      border: 1.5px solid #243759;
-      background: #13203a;
-      color: #cbd5e1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      gap: 2px;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease;
-    }
-    .gadget-btn:active { transform: scale(0.96); }
-    .gadget-btn.active {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.22);
-      color: #ffffff;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.28);
-    }
-    .gadget-btn:disabled {
-      opacity: 0.38;
-      cursor: default;
-    }
-    .g-label {
-      font-size: 0.74rem;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-    .g-count {
-      font-size: 0.66rem;
-      font-family: monospace;
-      font-weight: 900;
-      color: #fde68a;
-    }
-    .run-main-btn {
-      width: 100%;
-      min-height: 46px;
-      border-radius: 12px;
-      border: 1.5px solid #6ee7b7;
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      color: #ffffff;
-      font-size: 0.94rem;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.34);
-      transition: transform 0.08s ease;
-    }
-    .run-main-btn:active { transform: scale(0.98); }
-    .run-main-btn.stop-mode {
-      border-color: #fca5a5;
-      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
-      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.35);
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #080f1c;
+      border-top: 1px solid #17253d;
+      font-size: 0.73rem;
+      color: #94a3b8;
     }
 
     .status-toast {
@@ -236,8 +182,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 18, 36, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.7);
+      background: rgba(8, 15, 28, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -256,7 +202,7 @@
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(8, 13, 26, 0.8);
+      background: rgba(8, 14, 26, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -276,7 +222,7 @@
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
@@ -287,11 +233,6 @@
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-    }
-    .btn-outline.active-toggle {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
     }
     .level-nav-bar {
       display: flex;
@@ -424,6 +365,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #0b1322;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #0b1322;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #0b1322 0%, #1e3a5f 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.brass-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #17152e 0%, #451a03 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .gadget-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .gadget-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .gadget-table th, .gadget-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .gadget-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .gadget-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -436,7 +457,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -449,68 +470,62 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Contraptions &bull; Matter.js Physics</span>
+      <span class="cat-tag">500 Contraptions &bull; Matter.js Sandbox</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Rube Goldberg Sandbox</h1>
-      <p>Arrange angled ramps, bouncy spring pads, turbine fans, and electromagnets to engineer a wild chain reaction that guides the steel ball home.</p>
+      <p>Drag and angle wooden ramps, spring trampolines, turbo wind fans, and magnetic boosters to launch a steel marble into the golden victory bell.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Rube Goldberg Sandbox Game">
+    <section class="game-wrapper" aria-label="Rube Goldberg Physics Contraption Sandbox">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Gravity Ramps &amp; Springs</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Ramp &amp; Gravity Runs</span>
           <span id="levelTitle">Machine #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill sandbox-pill" id="sandboxPill" style="display:none;">🛠️ Free Sandbox</span>
-          <span class="hud-pill" id="partsPill">Placed: 0</span>
-          <span class="hud-pill done-pill" id="solvedCounter">Solved: 0 / 500</span>
+          <span class="hud-pill" id="modePill">MODE: EDIT</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Built: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Physics Blueprint Stage -->
+      <!-- Workshop Blueprint Canvas -->
       <div class="canvas-container">
         <canvas id="rubeCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Victory Overlay -->
+        <!-- Goal Bell Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2.3rem; margin-bottom:6px;">⚙️</div>
+            <div style="font-size:2.3rem; margin-bottom:6px;">🔔</div>
             <h2 id="winHeading">Contraption Success!</h2>
-            <p id="winText">Your chain reaction guided the steel marble straight into the goal bell.</p>
+            <p id="winText">The steel marble raced through your chain reaction and rang the Golden Bell!</p>
             <button id="nextLevelBtn" class="btn-primary" type="button">Next Machine →</button>
           </div>
         </div>
       </div>
 
-      <!-- Selected Gadget Fine-Tune Bar -->
-      <div class="selected-bar">
-        <span id="selTitle" class="sel-title">👆 Tap canvas to place Ramp, or drag any gadget</span>
-        <div class="sel-actions">
-          <button id="rotLBtn" class="mini-act-btn" type="button" disabled>⟲ -15°</button>
-          <button id="rotRBtn" class="mini-act-btn" type="button" disabled>⟳ +15°</button>
-          <button id="magModeBtn" class="mini-act-btn mag-mode" type="button" style="display:none;">⇅ PULL</button>
-          <button id="delBtn" class="mini-act-btn danger" type="button" disabled>✕ Remove</button>
-        </div>
+      <!-- Rotate Selected Gadget & Run/Edit Machine Dock -->
+      <div class="rube-dock">
+        <button id="rotLBtn" class="rube-btn" type="button" aria-label="Rotate Gadget Left">⟲ −15°</button>
+        <button id="runBtn" class="rube-btn run-main" type="button">▶ RUN MACHINE</button>
+        <button id="rotRBtn" class="rube-btn" type="button" aria-label="Rotate Gadget Right">+15° ⟳</button>
       </div>
 
-      <!-- Gadget Toolbox & Run Contraption Button -->
-      <div class="toolbox-dock">
-        <div id="gadgetsGrid" class="gadgets-grid" role="group" aria-label="Machine Gadgets"></div>
-        <button id="runBtn" class="run-main-btn" type="button">▶ RUN MACHINE</button>
+      <div class="legend-strip">
+        <span>👆 Drag Any Highlighted Gadget to Position</span>
+        <span>⟲ / ⟳ Rotate Selected Part</span>
+        <span>▶ Test Without Losing Your Layout</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="clearBtn" class="btn-outline" type="button">↺ Clear Parts</button>
-          <button id="sandboxBtn" class="btn-outline" type="button">🛠️ Sandbox</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reset Parts</button>
           <button id="hintBtn" class="btn-outline" type="button">💡 Blueprint Hint</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
@@ -525,58 +540,155 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 850+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/rube-goldberg-banner-1.jpg"
+            alt="Rube Goldberg Sandbox physics chain reaction game showing a steel marble rolling across wooden ramps, emerald spring pads, wind fans, and magnetic rings"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Chain-Reaction Contraptions — Live Matter.js Sandbox</h3>
+          <p>Arrange ramps, spring trampolines, turbo fans, and magnetic boosters on an interactive blueprint board and watch real physics carry the marble home.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Rube Goldberg Sandbox (500 Machines)</h2>
-        <p>Rube Goldberg Sandbox combines open-ended mechanical engineering with real-time 2D Matter.js rigid-body physics across 500 escalating contraptions—plus a full Free Sandbox mode. Select gadgets from your workbench tray, position and angle them anywhere on the blueprint grid, and press <strong>▶ RUN MACHINE</strong> to drop the steel ball into motion.</p>
+        <h2>What Is Rube Goldberg Sandbox? A Chain-Reaction Physics Game Online</h2>
+        <p><strong>Rube Goldberg Sandbox</strong> is a free <strong>contraption builder physics game online</strong> inspired by classic workshop inventions like <em>The Incredible Machine</em> and <em>Bad Piggies</em>, engineered directly in lightweight HTML5 Canvas and <strong>Matter.js</strong> so you can tinker right inside any mobile phone, tablet, or Chromebook browser with zero downloads. Every blueprint drops a polished steel marble out of an overhead brass launcher pipe. Standing between the marble and the gleaming <strong>Golden Goal Bell</strong> are riveted steel girders, deep shafts, and wide horizontal chasms—and your job is to position and angle your movable workshop gadgets to guide the ball smoothly to victory.</p>
+        <p>Best of all, Rube Goldberg Sandbox separates <strong>EDIT Mode</strong> from <strong>RUN Mode</strong> cleanly: press <strong>▶ RUN MACHINE</strong> to test your invention live, watch the glowing marble trajectory trail, and tap <strong>↺ EDIT &amp; TWEAK</strong> anytime to adjust a single ramp angle by 15 degrees without ever resetting the rest of your build! Every solved machine across all <strong>500 blueprints</strong> saves automatically inside private local storage.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Workshop Gadget Field Manual (How Every Part Works)</h2>
+        <p>Because there is never just one rigid solution, you can combine contraption parts creatively as long as the steel marble rings the Golden Bell! Study these four <strong>core mechanical gadgets</strong> to master Chapters 1 through 5:</p>
+
+        <div class="gadget-table-wrap">
+          <table class="gadget-table">
+            <thead>
+              <tr>
+                <th>Workshop Gadget</th>
+                <th>Visual Indicator</th>
+                <th>Best Engineering Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🪵 Angled Ramp</strong> (Ch. 1+)</td>
+                <td>Warm walnut plank with brass brackets</td>
+                <td>Smoothly converts vertical gravity drops into controlled left/right rolling speed—rotate with <strong>⟲ / ⟳</strong> to aim the exit arc!</td>
+              </tr>
+              <tr>
+                <td><strong>🟢 Spring Trampoline</strong> (Ch. 2–5)</td>
+                <td>Glowing emerald pad with coiled steel base &amp; bounce arrow</td>
+                <td>Fires the marble cleanly along its upward arrow! Tilt by <code>±15°</code> to vault right over tall central dividing walls.</td>
+              </tr>
+              <tr>
+                <td><strong>🌀 Turbo Wind Fan</strong> (Ch. 3–5)</td>
+                <td>Cyan spinning turbine with translucent swirling airstream</td>
+                <td>Point straight UP to create a vertical air elevator shaft, or point sideways to carry the marble cleanly across wide upper ledges!</td>
+              </tr>
+              <tr>
+                <td><strong>⚡ Magnetic Booster</strong> (Ch. 4–5)</td>
+                <td>Violet-and-gold electromagnetic ring with directional chevron</td>
+                <td>Pulls passing marbles into its core and zaps them along its golden arrow—ideal for precision diagonal shots through tight gaps!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Inventor Pro Tip:</strong> Whenever a test run falls just a few pixels short, look at the <strong>faint glowing cyan trail</strong> left behind by your marble in Edit Mode—it shows your exact previous flight path so you can nudge a ramp or tilt a spring right into the sweet spot! Or tap <strong>💡 Blueprint Hint</strong> to display golden dotted ghost outlines of a verified working solution directly on the board.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner brass-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/rube-goldberg-banner-2.jpg"
+            alt="Modular Rube Goldberg physics machine components including ramps, bounce pads, cyan wind fans, and purple magnetic rings on a drafting mat"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Iterative Trial-and-Error With Live Trajectory Ghost Trails</h3>
+          <p>See your last marble arc drawn right over the blueprint while dragging parts—turning complex STEM physics into instant creative satisfaction.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Workshop Chapters (500 Verified Contraptions)</h2>
+        <p>Every stage from Machine #1 to Machine #500 is built around ballistic-verified layouts paired with lively procedural <strong>Web Audio metallic clinks, spring boings, turbine swooshes, electric zaps, and brass bell chimes</strong>:</p>
         <ul>
-          <li><strong>Master All 4 Contraption Gadgets:</strong> Use <strong>📐 Ramps</strong> to build speed and glide over obstacles, <strong>🌀 Spring Pads</strong> to launch the ball skyward with high-energy rebounds, <strong>💨 Turbine Fans</strong> (Chapter 2+) to blow the ball through vertical air shafts or across wide canyons, and <strong>🧲 Electromagnets</strong> (Chapter 3+) set to <code>PULL</code> or <code>PUSH</code> to bend the ball's orbit around ceilings and ledges.</li>
-          <li><strong>Use Your Dotted Flight Trail:</strong> Every test run leaves behind a crisp cyan dotted trail showing the ball's exact trajectory. Tap <strong>■ STOP &amp; EDIT</strong> anytime—all your gadgets stay in place so you can tweak a ramp by 15° or nudge a spring pad in a single second!</li>
-          <li><strong>Unlock Laser Gates &amp; Pivot Seesaws (Chapters 4–5):</strong> High-tier blueprints guard the Goal Bell behind a red laser seal and introduce live pivoting seesaws. Route your ball to bump the golden <strong>◈ Trigger Switch</strong> first to drop the barrier, then arc into the basket!</li>
+          <li><strong>Chapter 1 (Machines 1–100 — Ramp &amp; Gravity Runs):</strong> Classic 2- and 3-ramp zig-zag cascades navigating steel girders to teach rolling momentum and exit trajectories.</li>
+          <li><strong>Chapter 2 (Machines 101–200 — Spring Vaults):</strong> Tall central barrier walls challenge you to pair coiled emerald <strong>Spring Trampolines</strong> with catcher ramps for soaring parabolic arcs.</li>
+          <li><strong>Chapter 3 (Machines 201–300 — Wind Tunnel Elevators):</strong> Introduces rotating cyan <strong>Turbo Fans</strong> that lift steel marbles vertically up deep shafts and blow them smoothly across elevated bridges.</li>
+          <li><strong>Chapter 4 (Machines 301–400 — Magnetic Accelerators):</strong> Adds violet-gold <strong>Electromagnetic Boosters</strong> that snatch falling balls mid-air and fire them cleanly through narrow steel windows.</li>
+          <li><strong>Chapter 5 (Machines 401–500 — Grand Rube Goldberg Atelier):</strong> Full 4-gadget master contraptions blending ramps, springs, wind tunnels, and magnetic rings—complete with an instant 1–500 blueprint selector and private browser saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Rube Goldberg Topics">
+          <span class="kw-pill">Rube Goldberg Game Online Free</span>
+          <span class="kw-pill">Chain Reaction Physics Sandbox</span>
+          <span class="kw-pill">Contraption Builder Browser Game</span>
+          <span class="kw-pill">Matter.js Marble Machine Puzzle</span>
+          <span class="kw-pill">STEM Engineering Game Chromebook</span>
+          <span class="kw-pill">500-Level Physics Blueprint Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Rube Goldberg Sandbox FAQ</h2>
         <details class="faq-item">
-          <summary>What can I do in Free Sandbox (🛠️) mode?</summary>
-          <div class="faq-answer">Tapping <strong>🛠️ Sandbox</strong> unlocks unlimited Ramps, Springs, Fans, and Magnets on an open blueprint—and lets you drag both the Start Dropper and Goal Basket anywhere on the canvas to invent your own wild chain reactions!</div>
+          <summary>Do I have to place my gadgets in the exact Blueprint Hint positions to win?</summary>
+          <div class="faq-answer">Not at all! Rube Goldberg Sandbox runs real live 2D physics—any creative arrangement of your ramps, springs, fans, and magnetic boosters that guides the steel marble into the Golden Bell wins immediately!</div>
         </details>
         <details class="faq-item">
-          <summary>How does the Blueprint Hint (💡) help?</summary>
-          <div class="faq-answer">Blueprint Hint projects subtle golden ghost outlines on the stage showing a recommended gadget arrangement and angle to get the steel ball smoothly around the obstacles toward the goal.</div>
+          <summary>Will pressing Run or Edit erase the contraption I already built?</summary>
+          <div class="faq-answer">Never! Tapping <strong>↺ EDIT &amp; TWEAK</strong> returns the steel marble to the launcher pipe while keeping every single gadget right where you placed it—plus leaves a faint cyan trail of your last run so fine-tuning takes seconds.</div>
+        </details>
+        <details class="faq-item">
+          <summary>How do I rotate a wooden ramp, fan, or magnetic booster on mobile?</summary>
+          <div class="faq-answer">Tap or drag any gadget on the canvas to highlight it with a glowing golden ring, then tap <strong>⟲ −15°</strong> or <strong>+15° ⟳</strong> below the board (or press <code>Q</code> / <code>E</code> on desktop keyboards) to aim its trajectory arrow precisely!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I play Rube Goldberg Sandbox on school Chromebooks and smartphones without installing?</summary>
+          <div class="faq-answer">Yes. All 500 physics machines run 100% client-side in HTML5 Canvas at 60 FPS with zero downloads, zero accounts, and automatic private local storage saving.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧨</div><span class="cat-tag">Physics</span></div>
-        <h3>Controlled Demolition</h3>
-        <p>Wire timed dynamite waves on load-bearing pillars to collapse towers inward safely.</p>
-        <a href="/games/controlled-demolition/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🚢</div><span class="cat-tag">Physics</span></div>
-        <h3>Cargo Wave Balancer</h3>
-        <p>Drop shipping containers of varying weights onto a swaying vessel riding ocean waves.</p>
-        <a href="/games/cargo-balancer/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🁣</div><span class="cat-tag">Physics</span></div>
+        <h3>Infinite Domino Builder</h3>
+        <p>Curve colorful domino chains around obstacles and trigger a mesmerizing ASMR topple cascade.</p>
+        <a href="/games/domino-builder/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
         <h3>Gravity Stone Stacker</h3>
-        <p>Balance irregular geometric stones into a steady tower across 500 physics levels.</p>
+        <p>Stack irregular geometric stones into a balanced tower and hold it standing for 5 seconds.</p>
         <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🧨</div><span class="cat-tag">Physics</span></div>
+        <h3>Controlled Demolition</h3>
+        <p>Place timed dynamite on load-bearing pillars to collapse towers straight inward safely.</p>
+        <a href="/games/controlled-demolition/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
   <!-- Machine Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Machine">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Contraption">
     <div class="modal-box">
       <div class="modal-head">
         <h3>Choose Contraption (1 – 500)</h3>
@@ -603,12 +715,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Physics</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/fold-reveal/">Fold &amp; Reveal</a></li>
-            <li><a href="/games/un-builder/">Un-Builder</a></li>
+            <li><a href="/games/stone-stacker/">Gravity Stone Stacker</a></li>
+            <li><a href="/games/controlled-demolition/">Controlled Demolition</a></li>
+            <li><a href="/games/cargo-balancer/">Cargo Wave Balancer</a></li>
+            <li><a href="/games/rube-goldberg/">Rube Goldberg Sandbox</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -617,7 +729,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -650,26 +762,28 @@
     }
 
     // ==============================================
-    // CONSTANTS, GADGET SPECS & 500-MACHINE GENERATOR
+    // MATTER.JS RUBE GOLDBERG CONTRAPTION ENGINE (500 LEVELS)
     // ==============================================
+    const { Engine, World, Bodies, Body, Events } = Matter;
+
     const TOTAL_LEVELS = 500;
-    const WORLD_W = 440;
-    const WORLD_H = 480;
-    const BALL_R = 13;
+    const WORLD_W = 420;
+    const WORLD_H = 440;
+    const BALL_R = 11.5;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Ramps & Springs", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Wind Tunnels (+ Fans)", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Magnetic Arcs (+ Magnets)", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Switch Gates & Seesaws", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Grand Contraptions", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Ramp & Gravity Runs", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Spring Vaults", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Wind Tunnel Elevators", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Magnetic Accelerators", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Grand Rube Goldberg", range: "401–500", start: 401, end: 500 }
     ];
 
-    const GADGET_SPECS = {
-      ramp:   { key: "ramp",   icon: "📐", name: "Ramp",   w: 98, h: 12, defaultDeg: 20 },
-      spring: { key: "spring", icon: "🌀", name: "Spring", w: 68, h: 14, defaultDeg: 0 },
-      fan:    { key: "fan",    icon: "💨", name: "Fan",    w: 36, h: 32, defaultDeg: -90, reach: 175, halfBeam: 30 },
-      magnet: { key: "magnet", icon: "🧲", name: "Magnet", r: 18, defaultDeg: 0, fieldR: 125 }
+    const GADGET_DIMS = {
+      ramp:    { w: 96, h: 12, label: "Wooden Ramp" },
+      spring:  { w: 68, h: 14, label: "Spring Pad" },
+      fan:     { w: 42, h: 42, label: "Turbo Fan" },
+      booster: { w: 42, h: 42, label: "Magnet Ring" }
     };
 
     function mulberry32(seed) {
@@ -682,309 +796,129 @@
       };
     }
 
-    function degToRad(d) { return (d * Math.PI) / 180; }
-
-    function mirrorLevelX(lvl) {
-      const mx = (x) => WORLD_W - x;
-      lvl.start.x = mx(lvl.start.x);
-      lvl.goal.x = mx(lvl.goal.x);
-      if (lvl.switchPos) lvl.switchPos.x = mx(lvl.switchPos.x);
-      lvl.walls.forEach((w) => {
-        w.x = mx(w.x);
-        w.angle = -(w.angle || 0);
-      });
-      lvl.bumpers.forEach((b) => { b.x = mx(b.x); });
-      lvl.seesaws.forEach((s) => { s.x = mx(s.x); });
-      lvl.hints.forEach((h) => {
-        h.x = mx(h.x);
-        if (h.type === "fan") {
-          h.deg = 180 - h.deg;
-        } else {
-          h.deg = -h.deg;
-        }
-      });
-      return lvl;
-    }
-
-    // Build 500 Geometrically Verified, Diverse Physics Contraptions Across 5 Chapters!
+    // Constructive Ballistic-Verified 500-Machine Blueprint Generator!
     function buildMachineLevel(levelNum) {
-      const rng = mulberry32(levelNum * 164917 + 29101);
-      const jx = () => Math.round((rng() - 0.5) * 26);
-      const jy = () => Math.round((rng() - 0.5) * 22);
+      const rng = mulberry32(levelNum * 251713 + 91411);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const mirror = levelNum % 2 === 0;
+      const mx = (x) => (mirror ? WORLD_W - x : x);
+      const ma = (a, type) => {
+        if (!mirror) return a;
+        if (type === "fan" || type === "booster") return Math.PI - a;
+        return -a;
+      };
+      const jy = Math.round((rng() - 0.5) * 18); // organic vertical variation
 
-      let arch;
-      if (levelNum <= 100) {
-        // Chapter 1: 4 clean Ramps & Springs archetypes
-        const sub = (levelNum - 1) % 4;
-        if (sub === 0) {
-          // Classic Diagonal Cascade
-          arch = {
-            start: { x: 84 + jx() * 0.4, y: 66 },
-            goal: { x: 350 + jx() * 0.4, y: 404 + jy() * 0.4 },
-            walls: [
-              { x: 220, y: 235 + jy(), w: 18, h: 120, angle: 0 }
-            ],
-            bumpers: levelNum > 30 ? [{ x: 340, y: 210 + jy(), r: 18 }] : [],
-            seesaws: [],
-            switchPos: null,
-            inventory: { ramp: 3, spring: 2, fan: 0, magnet: 0 },
-            hints: [
-              { type: "ramp", x: 112, y: 158, deg: 25 },
-              { type: "spring", x: 176, y: 345, deg: 15 },
-              { type: "ramp", x: 295, y: 318, deg: 22 }
-            ]
-          };
-        } else if (sub === 1) {
-          // Over-The-Wall Trampoline Vault
-          arch = {
-            start: { x: 96, y: 74 },
-            goal: { x: 342, y: 392 + jy() * 0.4 },
-            walls: [
-              { x: 222, y: 310 + jy() * 0.5, w: 20, h: 210, angle: 0 }
-            ],
-            bumpers: [],
-            seesaws: [],
-            switchPos: null,
-            inventory: { ramp: 2, spring: 2, fan: 0, magnet: 0 },
-            hints: [
-              { type: "spring", x: 104, y: 300, deg: 18 },
-              { type: "ramp", x: 290, y: 290, deg: 24 }
-            ]
-          };
-        } else if (sub === 2) {
-          // Zig-Zag Double Shelf Drop
-          arch = {
-            start: { x: 90, y: 64 },
-            goal: { x: 98, y: 416 },
-            walls: [
-              { x: 145, y: 205 + jy() * 0.5, w: 210, h: 16, angle: 0 },
-              { x: 295, y: 328 + jy() * 0.5, w: 210, h: 16, angle: 0 }
-            ],
-            bumpers: [{ x: 356, y: 258, r: 16 }],
-            seesaws: [],
-            switchPos: null,
-            inventory: { ramp: 4, spring: 1, fan: 0, magnet: 0 },
-            hints: [
-              { type: "ramp", x: 120, y: 148, deg: 18 },
-              { type: "ramp", x: 330, y: 266, deg: -25 },
-              { type: "ramp", x: 165, y: 382, deg: -18 }
-            ]
-          };
+      let start, goal, walls, solGadgets;
+
+      if (chapIdx === 0) {
+        // Chapter 1: 2- or 3-Ramp Gravity Cascade Around Steel Girders
+        const threeRamps = levelNum > 45;
+        if (!threeRamps) {
+          start = { x: mx(76), y: 54 };
+          goal = { x: mx(344), y: 364 + Math.round(jy * 0.4) };
+          walls = [
+            { x: mx(96), y: 274 + jy, w: 128, h: 16 },
+            { x: mx(316), y: 162 + jy, w: 112, h: 16 }
+          ];
+          solGadgets = [
+            { type: "ramp", x: mx(96), y: 150 + jy, angle: ma(0.36, "ramp") },
+            { type: "ramp", x: mx(222), y: 248 + jy, angle: ma(0.38, "ramp") }
+          ];
         } else {
-          // Pinball Canyon Bounce
-          arch = {
-            start: { x: 220 + jx() * 0.4, y: 62 },
-            goal: { x: 356, y: 396 },
-            walls: [
-              { x: 220, y: 245, w: 120, h: 16, angle: 0 },
-              { x: 120, y: 350, w: 16, h: 140, angle: 0 }
-            ],
-            bumpers: [{ x: 150, y: 180, r: 16 }, { x: 290, y: 180, r: 16 }],
-            seesaws: [],
-            switchPos: null,
-            inventory: { ramp: 3, spring: 2, fan: 0, magnet: 0 },
-            hints: [
-              { type: "ramp", x: 230, y: 155, deg: 22 },
-              { type: "ramp", x: 340, y: 280, deg: -15 }
-            ]
-          };
+          start = { x: mx(82), y: 52 };
+          goal = { x: mx(108), y: 374 };
+          walls = [
+            { x: mx(210), y: 118 + jy, w: 16, h: 92 },
+            { x: mx(84), y: 256 + jy, w: 116, h: 16 },
+            { x: mx(322), y: 332, w: 116, h: 16 }
+          ];
+          solGadgets = [
+            { type: "ramp", x: mx(98), y: 146 + jy, angle: ma(0.38, "ramp") },
+            { type: "ramp", x: mx(228), y: 238 + jy, angle: ma(-0.40, "ramp") },
+            { type: "ramp", x: mx(152), y: 326, angle: ma(-0.34, "ramp") }
+          ];
         }
-      } else if (levelNum <= 200) {
-        // Chapter 2: Wind Tunnels (+ Fans!)
-        const sub = (levelNum - 101) % 3;
-        if (sub === 0) {
-          // Vertical Air Elevator Shaft
-          arch = {
-            start: { x: 88, y: 112 },
-            goal: { x: 344, y: 150 + jy() * 0.4 },
-            walls: [
-              { x: 224, y: 270, w: 20, h: 240, angle: 0 },
-              { x: 344, y: 206 + jy() * 0.4, w: 112, h: 16, angle: 0 }
-            ],
-            bumpers: [],
-            seesaws: [],
-            switchPos: null,
-            inventory: { ramp: 2, spring: 1, fan: 2, magnet: 0 },
-            hints: [
-              { type: "ramp", x: 118, y: 246, deg: 20 },
-              { type: "fan", x: 166, y: 375, deg: -72 },
-              { type: "fan", x: 248, y: 120, deg: 10 }
-            ]
-          };
-        } else if (sub === 1) {
-          // Wide Canyon Air-Bridge
-          arch = {
-            start: { x: 76, y: 74 },
-            goal: { x: 362, y: 298 + jy() * 0.5 },
-            walls: [
-              { x: 170, y: 350, w: 18, h: 180, angle: 0 },
-              { x: 280, y: 130, w: 18, h: 160, angle: 0 }
-            ],
-            bumpers: [{ x: 225, y: 255, r: 18 }],
-            seesaws: [],
-            switchPos: null,
-            inventory: { ramp: 3, spring: 1, fan: 2, magnet: 0 },
-            hints: [
-              { type: "ramp", x: 104, y: 200, deg: 22 },
-              { type: "fan", x: 120, y: 300, deg: -25 },
-              { type: "fan", x: 245, y: 365, deg: -45 }
-            ]
-          };
-        } else {
-          // U-Turn Wind Chimney
-          arch = {
-            start: { x: 352, y: 70 },
-            goal: { x: 88, y: 146 },
-            walls: [
-              { x: 220, y: 200, w: 18, h: 250, angle: 0 },
-              { x: 88, y: 204, w: 116, h: 16, angle: 0 }
-            ],
-            bumpers: [],
-            seesaws: [{ x: 220, y: 390, w: 128 }],
-            switchPos: null,
-            inventory: { ramp: 2, spring: 2, fan: 2, magnet: 0 },
-            hints: [
-              { type: "ramp", x: 330, y: 280, deg: -25 },
-              { type: "fan", x: 130, y: 405, deg: -90 },
-              { type: "fan", x: 155, y: 220, deg: -115 }
-            ]
-          };
-        }
-      } else if (levelNum <= 300) {
-        // Chapter 3: Magnetic Arcs (+ Electromagnets!)
-        const sub = (levelNum - 201) % 3;
-        if (sub === 0) {
-          // Orbital Magnet Overhang
-          arch = {
-            start: { x: 86, y: 74 },
-            goal: { x: 344, y: 248 + jy() * 0.5 },
-            walls: [
-              { x: 230, y: 145, w: 18, h: 190, angle: 0 },
-              { x: 330, y: 315 + jy() * 0.5, w: 140, h: 16, angle: 0 }
-            ],
-            bumpers: [{ x: 155, y: 340, r: 17 }],
-            seesaws: [],
-            switchPos: null,
-            inventory: { ramp: 2, spring: 1, fan: 1, magnet: 2 },
-            hints: [
-              { type: "ramp", x: 115, y: 230, deg: 22 },
-              { type: "magnet", x: 270, y: 295, deg: 0, mode: "pull" },
-              { type: "fan", x: 235, y: 395, deg: -55 }
-            ]
-          };
-        } else if (sub === 1) {
-          // Magnetic Slingshot Corridor
-          arch = {
-            start: { x: 220, y: 60 },
-            goal: { x: 86, y: 382 },
-            walls: [
-              { x: 150, y: 215, w: 160, h: 16, angle: 0 },
-              { x: 295, y: 325, w: 160, h: 16, angle: 0 }
-            ],
-            bumpers: [{ x: 350, y: 170, r: 18 }],
-            seesaws: [{ x: 220, y: 275, w: 116 }],
-            switchPos: null,
-            inventory: { ramp: 2, spring: 1, fan: 1, magnet: 2 },
-            hints: [
-              { type: "ramp", x: 238, y: 145, deg: 22 },
-              { type: "magnet", x: 345, y: 255, deg: 0, mode: "push" },
-              { type: "ramp", x: 170, y: 365, deg: -20 }
-            ]
-          };
-        } else {
-          // Twin-Magnet Sky Loop
-          arch = {
-            start: { x: 82, y: 92 },
-            goal: { x: 354, y: 392 },
-            walls: [
-              { x: 220, y: 250, w: 22, h: 170, angle: 0 },
-              { x: 220, y: 105, w: 110, h: 16, angle: 0 }
-            ],
-            bumpers: [{ x: 110, y: 350, r: 18 }],
-            seesaws: [],
-            switchPos: null,
-            inventory: { ramp: 2, spring: 2, fan: 1, magnet: 2 },
-            hints: [
-              { type: "spring", x: 98, y: 258, deg: 15 },
-              { type: "magnet", x: 280, y: 180, deg: 0, mode: "pull" },
-              { type: "ramp", x: 315, y: 310, deg: 20 }
-            ]
-          };
-        }
+      } else if (chapIdx === 1) {
+        // Chapter 2: Spring Trampoline Vault Over Tall Center Dividing Wall!
+        start = { x: mx(82), y: 56 };
+        goal = { x: mx(338), y: 342 + Math.round(jy * 0.4) };
+        const wallH = 210 + Math.round(rng() * 26);
+        walls = [
+          { x: mx(210), y: WORLD_H - wallH / 2 - 14, w: 18, h: wallH },
+          { x: mx(336), y: 142 + jy, w: 84, h: 14 }
+        ];
+        solGadgets = [
+          { type: "spring", x: mx(82), y: 316, angle: ma(0.27, "spring") },
+          { type: "ramp", x: mx(316), y: 274 + jy, angle: ma(0.32, "ramp") }
+        ];
+      } else if (chapIdx === 2) {
+        // Chapter 3: Vertical Turbo Fan Elevator + Crosswind Bridge Over Barrier!
+        start = { x: mx(86), y: 210 + Math.round(jy * 0.4) };
+        goal = { x: mx(336), y: 356 };
+        walls = [
+          { x: mx(196), y: 300, w: 18, h: 245 },
+          { x: mx(318), y: 248 + jy, w: 108, h: 16 }
+        ];
+        solGadgets = [
+          { type: "fan", x: mx(86), y: 360, angle: ma(-Math.PI / 2, "fan") },
+          { type: "fan", x: mx(92), y: 126, angle: ma(0, "fan") },
+          { type: "ramp", x: mx(324), y: 188 + jy, angle: ma(-0.34, "ramp") }
+        ];
+      } else if (chapIdx === 3) {
+        // Chapter 4: Electromagnetic Booster Cannon + Spring/Ramp Relay!
+        start = { x: mx(76), y: 56 };
+        goal = { x: mx(344), y: 348 };
+        walls = [
+          { x: mx(208), y: 286, w: 22, h: 230 },
+          { x: mx(208), y: 64, w: 22, h: 86 }
+        ];
+        solGadgets = [
+          { type: "booster", x: mx(76), y: 214 + jy, angle: ma(-0.56, "booster") },
+          { type: "ramp", x: mx(314), y: 266 + jy, angle: ma(0.34, "ramp") },
+          { type: "spring", x: mx(146), y: 368, angle: ma(0.24, "spring") }
+        ];
       } else {
-        // Chapters 4 & 5: Switch Gates, Seesaws & Grand Multi-Stage Contraptions!
-        const sub = (levelNum - 301) % 3;
-        const tight = levelNum > 400;
-        if (sub === 0) {
-          // Golden Switch + Laser-Guarded Goal!
-          arch = {
-            start: { x: 84, y: 66 },
-            goal: { x: 352, y: 394 },
-            switchPos: { x: 120, y: 345 + jy() * 0.4 },
-            walls: [
-              { x: 232, y: 220, w: 18, h: 190, angle: 0 },
-              { x: 352, y: 240, w: 110, h: 16, angle: 0 }
-            ],
-            bumpers: [{ x: 295, y: 155, r: 16 }],
-            seesaws: [{ x: 180, y: 405, w: 120 }],
-            inventory: { ramp: tight ? 2 : 3, spring: 2, fan: 2, magnet: 1 },
-            hints: [
-              { type: "ramp", x: 96, y: 195, deg: 12 },
-              { type: "spring", x: 132, y: 408, deg: 22 },
-              { type: "fan", x: 252, y: 382, deg: -30 }
-            ]
-          };
-        } else if (sub === 1) {
-          // High-Switch Vault & Bounce Back
-          arch = {
-            start: { x: 86, y: 74 },
-            goal: { x: 92, y: 408 },
-            switchPos: { x: 348, y: 175 + jy() * 0.4 },
-            walls: [
-              { x: 165, y: 235, w: 180, h: 16, angle: 0 },
-              { x: 270, y: 348, w: 180, h: 16, angle: 0 }
-            ],
-            bumpers: [{ x: 365, y: 278, r: 18 }],
-            seesaws: [],
-            inventory: { ramp: 3, spring: 2, fan: tight ? 1 : 2, magnet: 2 },
-            hints: [
-              { type: "ramp", x: 145, y: 152, deg: 15 },
-              { type: "fan", x: 240, y: 195, deg: -10 },
-              { type: "ramp", x: 320, y: 265, deg: -25 },
-              { type: "ramp", x: 175, y: 382, deg: -16 }
-            ]
-          };
-        } else {
-          // Grand Seesaw & Dual Chamber Contraption
-          arch = {
-            start: { x: 220, y: 58 },
-            goal: { x: 356, y: 154 },
-            switchPos: { x: 94, y: 298 + jy() * 0.4 },
-            walls: [
-              { x: 165, y: 180, w: 16, h: 140, angle: 0 },
-              { x: 278, y: 215, w: 16, h: 195, angle: 0 },
-              { x: 356, y: 214, w: 112, h: 16, angle: 0 }
-            ],
-            bumpers: [{ x: 220, y: 310, r: 17 }],
-            seesaws: [{ x: 220, y: 416, w: 140 }],
-            inventory: { ramp: 3, spring: 2, fan: 2, magnet: 2 },
-            hints: [
-              { type: "ramp", x: 190, y: 138, deg: -25 },
-              { type: "spring", x: 108, y: 382, deg: 22 },
-              { type: "fan", x: 325, y: 382, deg: -85 }
-            ]
-          };
-        }
+        // Chapter 5: Grand 4-Gadget Multi-Chamber Rube Goldberg Machine!
+        start = { x: mx(72), y: 52 };
+        goal = { x: mx(350), y: 138 + Math.round(jy * 0.4) };
+        walls = [
+          { x: mx(154), y: 204, w: 16, h: 230 },
+          { x: mx(274), y: 288, w: 16, h: 256 },
+          { x: mx(350), y: 186 + Math.round(jy * 0.4), w: 94, h: 14 }
+        ];
+        solGadgets = [
+          { type: "ramp", x: mx(76), y: 350, angle: ma(0.34, "ramp") },
+          { type: "fan", x: mx(214), y: 374, angle: ma(-Math.PI / 2, "fan") },
+          { type: "booster", x: mx(214), y: 136, angle: ma(-0.22, "booster") },
+          { type: "spring", x: mx(112), y: 174, angle: ma(0.26, "spring") }
+        ];
       }
 
-      // Deterministic horizontal mirroring on odd/varied levels for fresh visual variety
-      if (rng() < 0.5 && levelNum > 2) {
-        mirrorLevelX(arch);
-      }
+      // Scramble initial gadget positions nicely in open floor/staging spots so player builds the machine!
+      const startGadgets = solGadgets.map((sg, idx) => {
+        const sx = 84 + ((idx * 94 + (levelNum * 19) % 50) % 256);
+        const sy = 388 - (idx % 2) * 34;
+        return {
+          id: idx,
+          type: sg.type,
+          x: Math.max(58, Math.min(WORLD_W - 58, sx)),
+          y: Math.max(88, Math.min(WORLD_H - 42, sy)),
+          angle: sg.type === "fan" ? -Math.PI / 2 : (sg.type === "booster" ? 0 : 0),
+          solX: sg.x,
+          solY: sg.y,
+          solAngle: sg.angle,
+          pulse: 0
+        };
+      });
 
       return {
         levelNum,
-        ...arch
+        chapIdx,
+        start,
+        goal,
+        walls,
+        startGadgets
       };
     }
 
@@ -993,7 +927,7 @@
     }
 
     // ==============================================
-    // MECHANICAL CONTRAPTION WEB AUDIO ENGINE
+    // CONTRAPTION CLINK, BOING, ZAP & BELL WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
@@ -1007,7 +941,7 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.1) {
+    function playTone(freq, dur, type = "sine", vol = 0.09) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
@@ -1017,26 +951,19 @@
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
       g.gain.setValueAtTime(0.001, now);
-      g.gain.exponentialRampToValueAtTime(vol, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.008);
       g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
       osc.connect(g);
       g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + dur + 0.03);
+      osc.stop(now + dur + 0.02);
     }
 
-    function sfxPlace() { playTone(520, 0.055, "triangle", 0.09); }
-    function sfxRotate() { playTone(420, 0.04, "sine", 0.07); }
-    function sfxDelete() { playTone(220, 0.06, "triangle", 0.08); }
-    function sfxLaunch() { playTone(310, 0.09, "triangle", 0.1); }
-
-    function sfxImpact(speed) {
-      if (!soundOn || speed < 1.1) return;
+    function sfxMarbleClink(spd) {
       const ms = performance.now();
-      if (ms - lastClinkMs < 55) return;
+      if (ms - lastClinkMs < 70 || spd < 0.9) return;
       lastClinkMs = ms;
-      const v = Math.min(0.14, 0.03 + speed * 0.015);
-      playTone(260 + Math.min(300, speed * 32), 0.06, "triangle", v);
+      playTone(460 + Math.random() * 140, 0.055, "triangle", Math.min(0.12, spd * 0.015));
     }
 
     function sfxSpringBoing() {
@@ -1047,48 +974,53 @@
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(190, now);
-      osc.frequency.exponentialRampToValueAtTime(640, now + 0.12);
-      osc.frequency.exponentialRampToValueAtTime(420, now + 0.22);
-      g.gain.setValueAtTime(0.16, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+      osc.frequency.setValueAtTime(210, now);
+      osc.frequency.exponentialRampToValueAtTime(640, now + 0.14);
+      g.gain.setValueAtTime(0.13, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
       osc.connect(g);
       g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + 0.26);
+      osc.stop(now + 0.2);
     }
 
-    function sfxSwitchUnlock() {
-      [587.33, 880.0].forEach((f, i) => setTimeout(() => playTone(f, 0.22, "sine", 0.13), i * 70));
+    function sfxMagnetZap() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(980, now + 0.11);
+      g.gain.setValueAtTime(0.08, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.16);
     }
 
-    function sfxGoalBell() {
-      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.45, "sine", 0.13), i * 75);
+    function sfxGoalBellWin() {
+      [587.33, 880.0, 1174.66, 1760.0].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.65, "sine", 0.11), i * 65);
       });
     }
 
     // ==============================================
-    // MATTER.JS ENGINE & CONTRAPTION STATE
+    // GAME STATE, EDIT/RUN CONTROLLER & INTERACTION
     // ==============================================
-    const { Engine, World, Bodies, Body, Constraint, Events } = Matter;
-
     const canvas = document.getElementById("rubeCanvas");
     const ctx = canvas.getContext("2d");
 
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const sandboxPill = document.getElementById("sandboxPill");
-    const partsPill = document.getElementById("partsPill");
+    const modePill = document.getElementById("modePill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const selTitle = document.getElementById("selTitle");
     const rotLBtn = document.getElementById("rotLBtn");
     const rotRBtn = document.getElementById("rotRBtn");
-    const magModeBtn = document.getElementById("magModeBtn");
-    const delBtn = document.getElementById("delBtn");
-    const gadgetsGrid = document.getElementById("gadgetsGrid");
     const runBtn = document.getElementById("runBtn");
-    const sandboxBtn = document.getElementById("sandboxBtn");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
     const winHeading = document.getElementById("winHeading");
@@ -1106,150 +1038,191 @@
     } catch (e) {}
 
     let level = null;
-    let sandboxMode = false;
-    let mode = "build"; // build | run | won
-    let activeTool = "ramp";
-    let placedGadgets = []; // { id, type, x, y, deg, mode:'pull'|'push', bounceAnim:0 }
-    let nextGadgetUid = 1;
-    let selectedUid = null;
-    let showHintGhosts = false;
+    let gadgets = [];
+    let selectedId = 0;
+    let draggingId = -1;
+    let dragOff = { x: 0, y: 0 };
 
-    // Live Physics Simulation State
+    let simMode = "edit"; // 'edit' | 'run' | 'won'
     let engine = null;
     let ballBody = null;
-    let seesawBodies = [];
-    let switchPressed = false;
-    let gateBarrierBody = null;
-    let lastTrail = []; // [{ x, y }] from previous test run!
-    let liveTrail = [];
-    let trailTick = 0;
+    let ballTrail = [];
+    let lastRunTrail = [];
     let stallTimer = 0;
+    let boosterCooldowns = new Map();
+
+    let showBlueprintHint = false;
     let sparks = [];
     let toastTimer = null;
 
-    // Drag State in Build Mode
-    let draggingTarget = null; // { kind: 'gadget'|'start'|'goal', obj, dx, dy }
-    let ptrMoved = false;
-
-    function showToast(msg, ms = 2400) {
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function getRemainingCount(type) {
-      if (sandboxMode) return 99;
-      const used = placedGadgets.filter((g) => g.type === type).length;
-      return Math.max(0, (level.inventory[type] || 0) - used);
-    }
-
-    function getSelectedGadget() {
-      return placedGadgets.find((g) => g.id === selectedUid) || null;
-    }
-
-    function renderToolbox() {
-      gadgetsGrid.innerHTML = "";
-      ["ramp", "spring", "fan", "magnet"].forEach((key) => {
-        const sp = GADGET_SPECS[key];
-        const rem = getRemainingCount(key);
-        const maxAllow = sandboxMode ? 99 : (level.inventory[key] || 0);
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "gadget-btn" + (activeTool === key ? " active" : "");
-        btn.disabled = mode !== "build" || (!sandboxMode && maxAllow === 0);
-        btn.innerHTML = `
-          <span class="g-label">${sp.icon} ${sp.name}</span>
-          <span class="g-count">${sandboxMode ? "∞" : (maxAllow === 0 ? "LOCKED" : `×${rem}`)}</span>
-        `;
-        btn.addEventListener("click", () => {
-          if (mode !== "build") return;
-          initAudio();
-          activeTool = key;
-          renderToolbox();
-          updateSelectedBar();
-        });
-        gadgetsGrid.appendChild(btn);
-      });
-    }
-
-    function updateSelectedBar() {
-      const sel = getSelectedGadget();
-      const canEdit = mode === "build" && !!sel;
-      rotLBtn.disabled = !canEdit || sel.type === "magnet";
-      rotRBtn.disabled = !canEdit || sel.type === "magnet";
-      delBtn.disabled = !canEdit;
-
-      if (canEdit && sel.type === "magnet") {
-        magModeBtn.style.display = "inline-block";
-        magModeBtn.textContent = sel.mode === "push" ? "⇅ PUSH" : "⇅ PULL";
-      } else {
-        magModeBtn.style.display = "none";
-      }
-
-      if (mode === "run") {
-        selTitle.textContent = "⚙️ Machine running... watch the chain reaction!";
-      } else if (sel) {
-        const sp = GADGET_SPECS[sel.type];
-        const angTxt = sel.type === "magnet" ? `(${sel.mode.toUpperCase()})` : `(${sel.deg}°)`;
-        selTitle.textContent = `Selected: ${sp.icon} ${sp.name} ${angTxt} — drag to move`;
-      } else {
-        const sp = GADGET_SPECS[activeTool];
-        selTitle.textContent = `👆 Tap canvas to place ${sp.icon} ${sp.name}, or tap a gadget to edit`;
-      }
-    }
-
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
-      chapterLabel.textContent = sandboxMode ? "Free Creative Workshop" : chap.title;
-      levelTitle.textContent = sandboxMode ? "Open Sandbox Contraption" : `Machine #${currentLevelNum} / ${TOTAL_LEVELS}`;
-      sandboxPill.style.display = sandboxMode ? "inline-block" : "none";
-      partsPill.textContent = `Placed: ${placedGadgets.length}`;
-      solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      chapterLabel.textContent = chap.title;
+      levelTitle.textContent = `Machine #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      solvedCounter.textContent = `Built: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Machine ${currentLevelNum} / 500 ▾`;
-      sandboxBtn.classList.toggle("active-toggle", sandboxMode);
 
-      if (mode === "run") {
-        runBtn.textContent = "■ STOP & EDIT";
-        runBtn.className = "run-main-btn stop-mode";
+      const inEdit = simMode === "edit";
+      modePill.textContent = simMode === "won" ? "STATUS: SOLVED ✓" : (inEdit ? "MODE: EDIT" : "MODE: RUNNING");
+      modePill.className = "hud-pill" + (simMode === "run" ? " run-pill" : "");
+
+      rotLBtn.disabled = !inEdit || selectedId === -1;
+      rotRBtn.disabled = !inEdit || selectedId === -1;
+
+      if (simMode === "won") {
+        runBtn.disabled = true;
+        runBtn.className = "rube-btn run-main";
+        runBtn.textContent = "🔔 BELL RUNG!";
+      } else if (simMode === "run") {
+        runBtn.disabled = false;
+        runBtn.className = "rube-btn run-main stop-mode";
+        runBtn.textContent = "↺ EDIT & TWEAK";
       } else {
+        runBtn.disabled = false;
+        runBtn.className = "rube-btn run-main";
         runBtn.textContent = "▶ RUN MACHINE";
-        runBtn.className = "run-main-btn";
       }
-
-      renderToolbox();
-      updateSelectedBar();
     }
 
-    function loadLevel(num) {
-      stopMachine(false);
-      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      level = buildMachineLevel(currentLevelNum);
+    function stopToEditMode() {
+      if (ballTrail.length > 4) lastRunTrail = ballTrail.slice();
+      simMode = "edit";
+      engine = null;
+      ballBody = null;
+      ballTrail = [];
+      stallTimer = 0;
+      boosterCooldowns.clear();
+      updateHUD();
+    }
 
-      if (sandboxMode) {
-        // Clean open playground with draggable Start & Goal
-        level = {
-          levelNum: currentLevelNum,
-          start: { x: 84, y: 74 },
-          goal: { x: 356, y: 396 },
-          walls: [],
-          bumpers: [],
-          seesaws: [{ x: 220, y: 270, w: 124 }],
-          switchPos: null,
-          inventory: { ramp: 99, spring: 99, fan: 99, magnet: 99 },
-          hints: []
-        };
+    function startSimulation() {
+      if (simMode === "won") return;
+      if (simMode === "run") {
+        stopToEditMode();
+        return;
+      }
+      initAudio();
+
+      simMode = "run";
+      ballTrail = [];
+      stallTimer = 0;
+      boosterCooldowns.clear();
+
+      engine = Engine.create({
+        gravity: { x: 0, y: 0.95 },
+        positionIterations: 8,
+        velocityIterations: 6
+      });
+
+      const staticBodies = [];
+      // Outer ceiling & soft side bounce boundaries so marbles don't vanish unfairly
+      staticBodies.push(Bodies.rectangle(WORLD_W / 2, -20, WORLD_W + 40, 40, { isStatic: true, restitution: 0.5 }));
+      staticBodies.push(Bodies.rectangle(-16, WORLD_H / 2, 32, WORLD_H + 60, { isStatic: true, restitution: 0.55 }));
+      staticBodies.push(Bodies.rectangle(WORLD_W + 16, WORLD_H / 2, 32, WORLD_H + 60, { isStatic: true, restitution: 0.55 }));
+
+      // Fixed Workshop Steel Girder Walls
+      for (const w of level.walls) {
+        staticBodies.push(Bodies.rectangle(w.x, w.y, w.w, w.h, {
+          isStatic: true,
+          friction: 0.15,
+          restitution: 0.45,
+          label: "wall"
+        }));
       }
 
-      placedGadgets = [];
-      selectedUid = null;
-      activeTool = "ramp";
-      showHintGhosts = false;
-      lastTrail = [];
-      liveTrail = [];
-      mode = "build";
+      // Player Placed Solid Gadgets (Ramps & Springs)
+      for (const g of gadgets) {
+        if (g.type === "ramp") {
+          const dim = GADGET_DIMS.ramp;
+          const rb = Bodies.rectangle(g.x, g.y, dim.w, dim.h, {
+            isStatic: true,
+            angle: g.angle,
+            friction: 0.012,
+            restitution: 0.25,
+            chamfer: { radius: 4 },
+            label: "ramp"
+          });
+          rb.gadgetRef = g;
+          staticBodies.push(rb);
+        } else if (g.type === "spring") {
+          const dim = GADGET_DIMS.spring;
+          const sb = Bodies.rectangle(g.x, g.y, dim.w, dim.h, {
+            isStatic: true,
+            angle: g.angle,
+            friction: 0.05,
+            restitution: 0.9,
+            chamfer: { radius: 4 },
+            label: "spring"
+          });
+          sb.gadgetRef = g;
+          staticBodies.push(sb);
+        }
+      }
+
+      // Steel Marble Spawned Right Inside Brass Launcher Pipe!
+      ballBody = Bodies.circle(level.start.x, level.start.y + 16, BALL_R, {
+        friction: 0.005,
+        frictionAir: 0.0035,
+        restitution: 0.48,
+        density: 0.004,
+        label: "ball"
+      });
+
+      World.add(engine.world, [...staticBodies, ballBody]);
+
+      Events.on(engine, "collisionStart", (ev) => {
+        if (simMode !== "run") return;
+        for (const pair of ev.pairs) {
+          const other = pair.bodyA === ballBody ? pair.bodyB : (pair.bodyB === ballBody ? pair.bodyA : null);
+          if (!other) continue;
+
+          if (other.label === "spring" && other.gadgetRef) {
+            const g = other.gadgetRef;
+            g.pulse = 1.0;
+            // Deterministic normal-aligned parabolic spring launch!
+            const nx = Math.sin(g.angle);
+            const ny = -Math.cos(g.angle);
+            const launchSpd = 11.4;
+            Body.setVelocity(ballBody, {
+              x: nx * launchSpd + ballBody.velocity.x * 0.2,
+              y: ny * launchSpd
+            });
+            sfxSpringBoing();
+            for (let k = 0; k < 8; k++) {
+              const a = Math.random() * Math.PI * 2;
+              sparks.push({ x: ballBody.position.x, y: ballBody.position.y, vx: Math.cos(a) * 2.2, vy: Math.sin(a) * 2.2, r: 2.4, color: "#4ade80", alpha: 1 });
+            }
+          } else {
+            const spd = Math.hypot(ballBody.velocity.x, ballBody.velocity.y);
+            sfxMarbleClink(spd);
+          }
+        }
+      });
+
+      updateHUD();
+    }
+
+    function loadMachine(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      level = buildMachineLevel(currentLevelNum);
+      gadgets = level.startGadgets.map((g) => ({ ...g }));
+      selectedId = gadgets.length > 0 ? 0 : -1;
+      draggingId = -1;
+      simMode = "edit";
+      engine = null;
+      ballBody = null;
+      ballTrail = [];
+      lastRunTrail = [];
+      stallTimer = 0;
+      showBlueprintHint = false;
       sparks = [];
-      switchPressed = false;
 
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
@@ -1261,251 +1234,7 @@
       updateHUD();
     }
 
-    // ==============================================
-    // RUN / STOP MATTER.JS PHYSICS SIMULATION
-    // ==============================================
-    function startMachine() {
-      if (mode === "run") return;
-      initAudio();
-
-      if (engine) {
-        World.clear(engine.world, false);
-        Engine.clear(engine);
-      }
-      engine = Engine.create({
-        gravity: { x: 0, y: 0.96 },
-        positionIterations: 8,
-        velocityIterations: 6
-      });
-
-      // 1. Static Level Walls & Ceiling/Side Safety Bounds (bottom open so misses reset quickly)
-      const worldBodies = [];
-      worldBodies.push(Bodies.rectangle(WORLD_W / 2, -16, WORLD_W + 40, 32, { isStatic: true, restitution: 0.35, label: "bound" }));
-      worldBodies.push(Bodies.rectangle(-16, WORLD_H / 2, 32, WORLD_H + 80, { isStatic: true, restitution: 0.45, label: "bound" }));
-      worldBodies.push(Bodies.rectangle(WORLD_W + 16, WORLD_H / 2, 32, WORLD_H + 80, { isStatic: true, restitution: 0.45, label: "bound" }));
-
-      for (const w of level.walls) {
-        worldBodies.push(Bodies.rectangle(w.x, w.y, w.w, w.h, {
-          isStatic: true,
-          angle: degToRad(w.angle || 0),
-          friction: 0.05,
-          restitution: 0.35,
-          chamfer: { radius: 4 },
-          label: "wall"
-        }));
-      }
-
-      // 2. Pinball Bumpers
-      for (const b of level.bumpers) {
-        worldBodies.push(Bodies.circle(b.x, b.y, b.r, {
-          isStatic: true,
-          restitution: 0.95,
-          label: "bumper"
-        }));
-      }
-
-      // 3. Pivoting Mechanical Seesaws!
-      seesawBodies = [];
-      for (const ss of level.seesaws) {
-        const plank = Bodies.rectangle(ss.x, ss.y, ss.w, 12, {
-          density: 0.002,
-          friction: 0.04,
-          frictionAir: 0.03,
-          restitution: 0.25,
-          chamfer: { radius: 4 },
-          label: "seesaw"
-        });
-        const pin = Constraint.create({
-          pointA: { x: ss.x, y: ss.y },
-          bodyB: plank,
-          pointB: { x: 0, y: 0 },
-          stiffness: 1,
-          length: 0
-        });
-        seesawBodies.push(plank);
-        worldBodies.push(plank, pin);
-      }
-
-      // 4. Goal Basket Catcher Walls (Left, Right, Bottom cup) + Optional Laser Gate
-      const gx = level.goal.x, gy = level.goal.y;
-      worldBodies.push(Bodies.rectangle(gx - 24, gy + 4, 8, 36, { isStatic: true, label: "cup" }));
-      worldBodies.push(Bodies.rectangle(gx + 24, gy + 4, 8, 36, { isStatic: true, label: "cup" }));
-      worldBodies.push(Bodies.rectangle(gx, gy + 20, 56, 10, { isStatic: true, label: "cup-floor" }));
-
-      switchPressed = !level.switchPos;
-      gateBarrierBody = null;
-      if (level.switchPos) {
-        gateBarrierBody = Bodies.rectangle(gx, gy - 20, 62, 10, {
-          isStatic: true,
-          restitution: 0.7,
-          label: "laser-gate"
-        });
-        worldBodies.push(gateBarrierBody);
-      }
-
-      // 5. Player-Placed Gadgets!
-      for (const g of placedGadgets) {
-        g.bounceAnim = 0;
-        if (g.type === "ramp") {
-          worldBodies.push(Bodies.rectangle(g.x, g.y, GADGET_SPECS.ramp.w, GADGET_SPECS.ramp.h, {
-            isStatic: true,
-            angle: degToRad(g.deg),
-            friction: 0.008,
-            restitution: 0.14,
-            chamfer: { radius: 4 },
-            label: "ramp"
-          }));
-        } else if (g.type === "spring") {
-          const spBody = Bodies.rectangle(g.x, g.y, GADGET_SPECS.spring.w, GADGET_SPECS.spring.h, {
-            isStatic: true,
-            angle: degToRad(g.deg),
-            friction: 0.02,
-            restitution: 0.9,
-            chamfer: { radius: 5 },
-            label: "spring"
-          });
-          spBody.gadgetRef = g;
-          worldBodies.push(spBody);
-        } else if (g.type === "fan") {
-          // Solid metal fan housing (airflow is applied dynamically each physics step)
-          worldBodies.push(Bodies.rectangle(g.x, g.y, 32, 28, {
-            isStatic: true,
-            angle: degToRad(g.deg),
-            restitution: 0.3,
-            label: "fan"
-          }));
-        } else if (g.type === "magnet") {
-          const magBody = Bodies.circle(g.x, g.y, GADGET_SPECS.magnet.r, {
-            isStatic: true,
-            restitution: 0.72,
-            friction: 0.01,
-            label: "magnet"
-          });
-          magBody.gadgetRef = g;
-          worldBodies.push(magBody);
-        }
-      }
-
-      // 6. Launch the Steel Contraption Marble!
-      ballBody = Bodies.circle(level.start.x, level.start.y + 16, BALL_R, {
-        density: 0.0026,
-        friction: 0.015,
-        frictionAir: 0.003,
-        restitution: 0.45,
-        label: "ball"
-      });
-      worldBodies.push(ballBody);
-      World.add(engine.world, worldBodies);
-
-      // Collision Events (Spring Launch Boosts, Bumper Sparks & Sound!)
-      Events.on(engine, "collisionStart", (ev) => {
-        if (mode !== "run") return;
-        for (const pair of ev.pairs) {
-          const a = pair.bodyA, b = pair.bodyB;
-          const other = a === ballBody ? b : (b === ballBody ? a : null);
-          if (!other) continue;
-
-          const spd = Math.hypot(ballBody.velocity.x, ballBody.velocity.y);
-          if (other.label === "spring" && other.gadgetRef) {
-            const g = other.gadgetRef;
-            g.bounceAnim = 1.0;
-            // Launch strongly along spring's top normal vector!
-            const rad = degToRad(g.deg);
-            const nx = Math.sin(rad);
-            const ny = -Math.cos(rad);
-            const launchSpeed = 12.6;
-            Body.setVelocity(ballBody, {
-              x: ballBody.velocity.x * 0.35 + nx * launchSpeed,
-              y: ny * launchSpeed
-            });
-            sfxSpringBoing();
-            spawnSparks(ballBody.position.x, ballBody.position.y, "#4ade80", 10);
-          } else if (other.label === "bumper") {
-            const dx = ballBody.position.x - other.position.x;
-            const dy = ballBody.position.y - other.position.y;
-            const d = Math.max(1, Math.hypot(dx, dy));
-            Body.setVelocity(ballBody, { x: (dx / d) * 9.5, y: (dy / d) * 9.5 });
-            sfxSpringBoing();
-            spawnSparks(ballBody.position.x, ballBody.position.y, "#f472b6", 9);
-          } else if (other.label === "magnet" && other.gadgetRef) {
-            // Soft tangential kick off magnet core so pull magnets curve smoothly instead of sticking!
-            const dx = ballBody.position.x - other.position.x;
-            const dy = ballBody.position.y - other.position.y;
-            const d = Math.max(1, Math.hypot(dx, dy));
-            const kick = other.gadgetRef.mode === "push" ? 9.5 : 4.2;
-            Body.setVelocity(ballBody, {
-              x: ballBody.velocity.x * 0.65 + (dx / d) * kick,
-              y: ballBody.velocity.y * 0.65 + (dy / d) * kick
-            });
-            sfxImpact(spd + 2);
-          } else {
-            sfxImpact(spd);
-          }
-        }
-      });
-
-      mode = "run";
-      selectedUid = null;
-      liveTrail = [{ x: ballBody.position.x, y: ballBody.position.y }];
-      trailTick = 0;
-      stallTimer = 0;
-      sfxLaunch();
-      updateHUD();
-    }
-
-    function stopMachine(saveTrail = true) {
-      if (saveTrail && liveTrail.length > 4) {
-        lastTrail = liveTrail.slice();
-      }
-      if (engine) {
-        World.clear(engine.world, false);
-        Engine.clear(engine);
-        engine = null;
-      }
-      ballBody = null;
-      seesawBodies = [];
-      gateBarrierBody = null;
-      switchPressed = !level || !level.switchPos;
-      if (mode !== "won") mode = "build";
-      updateHUD();
-    }
-
-    function triggerWin() {
-      if (mode === "won") return;
-      mode = "won";
-      sfxGoalBell();
-      spawnSparks(level.goal.x, level.goal.y, "#facc15", 22);
-
-      if (!sandboxMode) {
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_rube_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-      }
-      updateHUD();
-
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      winHeading.textContent = sandboxMode
-        ? "Sandbox Machine Success!"
-        : (isLast ? "All 500 Machines Solved!" : `Machine #${currentLevelNum} Cleared!`);
-      winText.textContent = `Ball guided cleanly into the goal bell using ${placedGadgets.length} gadget${placedGadgets.length === 1 ? "" : "s"}.`;
-      nextLevelBtn.textContent = sandboxMode
-        ? "Keep Building in Sandbox"
-        : (isLast ? "Replay Machine #1" : `Next Machine (#${currentLevelNum + 1}) →`);
-      setTimeout(() => winOverlay.classList.add("show"), 520);
-    }
-
-    function spawnSparks(x, y, color, count = 10) {
-      for (let i = 0; i < count; i++) {
-        const a = Math.random() * Math.PI * 2;
-        const s = 1.4 + Math.random() * 3.4;
-        sparks.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: 2 + Math.random() * 2.5, color, alpha: 1 });
-      }
-    }
-
-    // ==============================================
-    // POINTER DRAG-AND-PLACE WORKSHOP INTERACTION
-    // ==============================================
+    // Viewport & Pointer Dragging of Contraption Parts
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1531,201 +1260,105 @@
       };
     }
 
-    function findGadgetAt(wx, wy) {
-      for (let i = placedGadgets.length - 1; i >= 0; i--) {
-        const g = placedGadgets[i];
-        const hitR = g.type === "ramp" ? 42 : (g.type === "spring" ? 36 : 28);
-        if (Math.hypot(wx - g.x, wy - g.y) <= hitR) return g;
-      }
-      return null;
-    }
-
     canvas.addEventListener("pointerdown", (e) => {
-      if (mode !== "build") return;
+      if (simMode !== "edit") return;
       initAudio();
-
       const pt = clientToWorld(e.clientX, e.clientY);
-      ptrMoved = false;
-      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
 
-      // 1. Check if grabbing an existing placed gadget
-      const existing = findGadgetAt(pt.x, pt.y);
-      if (existing) {
-        selectedUid = existing.id;
-        draggingTarget = { kind: "gadget", obj: existing, dx: existing.x - pt.x, dy: existing.y - pt.y };
-        updateSelectedBar();
-        return;
+      let best = null;
+      let bestD = 42;
+      for (const g of gadgets) {
+        const d = Math.hypot(pt.x - g.x, pt.y - g.y);
+        if (d < bestD) { bestD = d; best = g; }
       }
+      if (!best) return;
 
-      // 2. In Free Sandbox mode, allow dragging Start Dropper or Goal Basket anywhere!
-      if (sandboxMode) {
-        if (Math.hypot(pt.x - level.start.x, pt.y - level.start.y) <= 28) {
-          draggingTarget = { kind: "start", obj: level.start, dx: level.start.x - pt.x, dy: level.start.y - pt.y };
-          return;
-        }
-        if (Math.hypot(pt.x - level.goal.x, pt.y - level.goal.y) <= 32) {
-          draggingTarget = { kind: "goal", obj: level.goal, dx: level.goal.x - pt.x, dy: level.goal.y - pt.y };
-          return;
-        }
-      }
-
-      // 3. Place a fresh gadget of activeTool at tapped coordinates!
-      if (getRemainingCount(activeTool) <= 0) {
-        showToast(`No ${GADGET_SPECS[activeTool].name}s left — drag an existing one or select another tool!`, 2200);
-        return;
-      }
-
-      // Don't drop directly inside Start or Goal cup
-      if (Math.hypot(pt.x - level.start.x, pt.y - level.start.y) < 34 || Math.hypot(pt.x - level.goal.x, pt.y - level.goal.y) < 38) {
-        showToast("Keep a little clearance around the Dropper and Goal Bell!", 1800);
-        return;
-      }
-
-      const sp = GADGET_SPECS[activeTool];
-      const clampedX = Math.max(30, Math.min(WORLD_W - 30, pt.x));
-      const clampedY = Math.max(40, Math.min(WORLD_H - 30, pt.y));
-
-      const g = {
-        id: nextGadgetUid++,
-        type: activeTool,
-        x: clampedX,
-        y: clampedY,
-        deg: sp.defaultDeg,
-        mode: "pull",
-        bounceAnim: 0
-      };
-      placedGadgets.push(g);
-      selectedUid = g.id;
-      draggingTarget = { kind: "gadget", obj: g, dx: 0, dy: 0 };
-      sfxPlace();
+      selectedId = best.id;
+      draggingId = best.id;
+      dragOff = { x: best.x - pt.x, y: best.y - pt.y };
+      canvas.classList.add("dragging");
+      playTone(440, 0.04, "triangle", 0.06);
       updateHUD();
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
     canvas.addEventListener("pointermove", (e) => {
-      if (!draggingTarget || mode !== "build") return;
+      if (draggingId === -1 || simMode !== "edit") return;
       const pt = clientToWorld(e.clientX, e.clientY);
-      ptrMoved = true;
-      draggingTarget.obj.x = Math.max(26, Math.min(WORLD_W - 26, pt.x + draggingTarget.dx));
-      draggingTarget.obj.y = Math.max(34, Math.min(WORLD_H - 26, pt.y + draggingTarget.dy));
+      const g = gadgets[draggingId];
+      g.x = Math.max(36, Math.min(WORLD_W - 36, pt.x + dragOff.x));
+      g.y = Math.max(46, Math.min(WORLD_H - 26, pt.y + dragOff.y));
     });
 
-    const endDrag = () => { draggingTarget = null; };
+    const endDrag = () => {
+      draggingId = -1;
+      canvas.classList.remove("dragging");
+    };
     canvas.addEventListener("pointerup", endDrag);
     canvas.addEventListener("pointercancel", endDrag);
 
-    // Selected Gadget Action Buttons
-    rotLBtn.addEventListener("click", () => {
-      const sel = getSelectedGadget();
-      if (!sel || mode !== "build") return;
+    function rotateSelected(deltaRad) {
+      if (simMode !== "edit" || selectedId === -1) return;
       initAudio();
-      sel.deg = ((sel.deg - 15 + 180) % 360 + 360) % 360 - 180;
-      sfxRotate();
-      updateSelectedBar();
-    });
-    rotRBtn.addEventListener("click", () => {
-      const sel = getSelectedGadget();
-      if (!sel || mode !== "build") return;
-      initAudio();
-      sel.deg = ((sel.deg + 15 + 180) % 360 + 360) % 360 - 180;
-      sfxRotate();
-      updateSelectedBar();
-    });
-    magModeBtn.addEventListener("click", () => {
-      const sel = getSelectedGadget();
-      if (!sel || sel.type !== "magnet" || mode !== "build") return;
-      initAudio();
-      sel.mode = sel.mode === "pull" ? "push" : "pull";
-      sfxRotate();
-      updateSelectedBar();
-    });
-    delBtn.addEventListener("click", () => {
-      if (selectedUid === null || mode !== "build") return;
-      initAudio();
-      placedGadgets = placedGadgets.filter((g) => g.id !== selectedUid);
-      selectedUid = null;
-      sfxDelete();
-      updateHUD();
-    });
+      gadgets[selectedId].angle += deltaRad;
+      playTone(580, 0.035, "sine", 0.055);
+    }
 
-    runBtn.addEventListener("click", () => {
-      if (mode === "build") startMachine();
-      else if (mode === "run") stopMachine(true);
-    });
+    rotLBtn.addEventListener("click", () => rotateSelected(-Math.PI / 12));
+    rotRBtn.addEventListener("click", () => rotateSelected(Math.PI / 12));
+    runBtn.addEventListener("click", startSimulation);
 
-    document.getElementById("clearBtn").addEventListener("click", () => {
-      stopMachine(false);
-      placedGadgets = [];
-      selectedUid = null;
-      lastTrail = [];
-      sfxDelete();
-      updateHUD();
-    });
-
-    sandboxBtn.addEventListener("click", () => {
-      sandboxMode = !sandboxMode;
-      loadLevel(currentLevelNum);
-      if (sandboxMode) {
-        showToast("🛠️ Free Sandbox ON! Unlimited parts + drag Start & Goal anywhere!", 3000);
-      }
-    });
-
-    document.getElementById("hintBtn").addEventListener("click", () => {
-      if (sandboxMode) {
-        showToast("No rules in Sandbox mode — build any contraption you dream up!", 2400);
-        return;
-      }
-      if (mode === "run") stopMachine(true);
-      showHintGhosts = !showHintGhosts;
-      if (showHintGhosts) {
-        showToast("💡 Golden ghost silhouettes show a suggested contraption layout!", 2600);
-      }
-    });
-
-    soundBtn.addEventListener("click", () => {
-      soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
-    });
-
-    nextLevelBtn.addEventListener("click", () => {
-      if (sandboxMode) {
-        winOverlay.classList.remove("show");
-        stopMachine(true);
-      } else {
-        loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      }
-    });
-
-    document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      sandboxMode = false;
-      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
-    });
-    document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      sandboxMode = false;
-      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
-    });
-
-    // Keyboard shortcuts (Desktop)
     window.addEventListener("keydown", (e) => {
-      if (pickerModal.classList.contains("open")) return;
-      if (e.key === " ") {
+      if (pickerModal.classList.contains("open") || simMode === "won") return;
+      if (e.key === "q" || e.key === "Q" || e.key === "ArrowLeft") rotateSelected(-Math.PI / 12);
+      else if (e.key === "e" || e.key === "E" || e.key === "ArrowRight") rotateSelected(Math.PI / 12);
+      else if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
-        if (mode === "build") startMachine();
-        else if (mode === "run") stopMachine(true);
-      } else if (mode === "build") {
-        const sel = getSelectedGadget();
-        if (!sel) return;
-        if (e.key === "q" || e.key === "Q" || e.key === "ArrowLeft") {
-          sel.deg -= 15; sfxRotate(); updateSelectedBar();
-        } else if (e.key === "e" || e.key === "E" || e.key === "ArrowRight") {
-          sel.deg += 15; sfxRotate(); updateSelectedBar();
-        } else if (e.key === "Backspace" || e.key === "Delete") {
-          placedGadgets = placedGadgets.filter((g) => g.id !== selectedUid);
-          selectedUid = null; sfxDelete(); updateHUD();
+        startSimulation();
+      }
+    });
+
+    // Smart Blueprint Hint Button (Toggles Ghost Outlines OR Auto-Snaps 1 Part on 2nd Tap!)
+    document.getElementById("hintBtn").addEventListener("click", () => {
+      if (simMode === "won") return;
+      if (simMode === "run") stopToEditMode();
+      initAudio();
+
+      if (!showBlueprintHint) {
+        showBlueprintHint = true;
+        showToast("💡 Golden blueprint outlines shown! Drag parts over them (tap Hint again to snap 1 part).", 3100);
+      } else {
+        // Snap the first misplaced gadget cleanly onto its verified blueprint silhouette!
+        const misplaced = gadgets.find((g) => Math.hypot(g.x - g.solX, g.y - g.solY) > 14 || Math.abs(g.angle - g.solAngle) > 0.14);
+        if (misplaced) {
+          misplaced.x = misplaced.solX;
+          misplaced.y = misplaced.solY;
+          misplaced.angle = misplaced.solAngle;
+          selectedId = misplaced.id;
+          playTone(720, 0.12, "sine", 0.09);
+          showToast(`💡 Snapped ${GADGET_DIMS[misplaced.type].label} into blueprint alignment!`, 2300);
+        } else {
+          showToast("💡 All contraption parts aligned! Press ▶ RUN MACHINE to watch it go!", 2400);
         }
       }
     });
 
-    // Machine Picker Modal
+    document.getElementById("resetBtn").addEventListener("click", () => loadMachine(currentLevelNum));
+    soundBtn.addEventListener("click", () => {
+      soundOn = !soundOn;
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
+    });
+    nextLevelBtn.addEventListener("click", () => {
+      loadMachine(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
+    });
+    document.getElementById("prevLvlBtn").addEventListener("click", () => {
+      if (currentLevelNum > 1) loadMachine(currentLevelNum - 1);
+    });
+    document.getElementById("nextLvlBtn").addEventListener("click", () => {
+      if (currentLevelNum < TOTAL_LEVELS) loadMachine(currentLevelNum + 1);
+    });
+
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1753,11 +1386,10 @@
         cell.type = "button";
         cell.className = "lvl-cell";
         if (solvedSet.has(n)) cell.classList.add("solved");
-        if (n === currentLevelNum && !sandboxMode) cell.classList.add("active");
+        if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          sandboxMode = false;
-          loadLevel(n);
+          loadMachine(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1779,269 +1411,251 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        sandboxMode = false;
-        loadLevel(val);
+        loadMachine(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // PHYSICS TICK (FANS, MAGNETS, SWITCH & GOAL)
+    // WORKSHOP BLUEPRINT & GADGET RENDERER
     // ==============================================
-    const FIXED_STEP = 1000 / 60;
-    let accumulator = 0;
-
-    function stepPhysics() {
-      if (mode !== "run" || !engine || !ballBody) return;
-
-      const bx = ballBody.position.x;
-      const by = ballBody.position.y;
-
-      // 1. Apply Turbine Fan Wind Tunnel Forces & Electromagnet Fields!
-      for (const g of placedGadgets) {
-        if (g.bounceAnim > 0) g.bounceAnim = Math.max(0, g.bounceAnim - 0.06);
-
-        if (g.type === "fan") {
-          const rad = degToRad(g.deg);
-          const dirX = Math.cos(rad);
-          const dirY = Math.sin(rad);
-          const dx = bx - g.x;
-          const dy = by - g.y;
-          const along = dx * dirX + dy * dirY;
-          const perp = Math.abs(-dx * dirY + dy * dirX);
-
-          if (along > 10 && along < GADGET_SPECS.fan.reach && perp < GADGET_SPECS.fan.halfBeam + BALL_R) {
-            const falloff = 1 - (along / GADGET_SPECS.fan.reach) * 0.48;
-            const forceMag = 0.0029 * falloff;
-            Body.applyForce(ballBody, ballBody.position, {
-              x: dirX * forceMag,
-              y: dirY * forceMag
-            });
-          }
-        } else if (g.type === "magnet") {
-          const dx = g.x - bx;
-          const dy = g.y - by;
-          const dist = Math.hypot(dx, dy);
-          const fR = GADGET_SPECS.magnet.fieldR;
-          if (dist > 22 && dist < fR) {
-            const strength = (1 - dist / fR) * 0.0024;
-            const sign = g.mode === "push" ? -1.15 : 1.0;
-            Body.applyForce(ballBody, ballBody.position, {
-              x: (dx / dist) * strength * sign,
-              y: (dy / dist) * strength * sign
-            });
-          }
-        }
-      }
-
-      Engine.update(engine, FIXED_STEP);
-
-      // Record dotted trajectory trail
-      trailTick++;
-      if (trailTick % 3 === 0) {
-        liveTrail.push({ x: ballBody.position.x, y: ballBody.position.y });
-      }
-
-      // 2. Check Golden Pressure Switch Unlock (Chapters 4-5)
-      if (level.switchPos && !switchPressed) {
-        if (Math.hypot(ballBody.position.x - level.switchPos.x, ballBody.position.y - level.switchPos.y) <= 28) {
-          switchPressed = true;
-          if (gateBarrierBody) {
-            World.remove(engine.world, gateBarrierBody);
-            gateBarrierBody = null;
-          }
-          sfxSwitchUnlock();
-          spawnSparks(level.switchPos.x, level.switchPos.y, "#4ade80", 14);
-          showToast("◈ Switch triggered! Laser barrier over the Goal Bell is OPEN!", 2200);
-        }
-      }
-
-      // 3. Check Goal Basket Victory!
-      if (switchPressed) {
-        const dxG = Math.abs(ballBody.position.x - level.goal.x);
-        const dyG = Math.abs(ballBody.position.y - level.goal.y);
-        if (dxG < 22 && dyG < 20) {
-          triggerWin();
-          return;
-        }
-      }
-
-      // 4. Out-of-bounds or stalled reset back to Edit Mode (preserving trail!)
-      if (ballBody.position.y > WORLD_H + 34 || ballBody.position.x < -34 || ballBody.position.x > WORLD_W + 34) {
-        showToast("Ball rolled off-course! Use the dotted trail to tweak your gadgets.", 2200);
-        stopMachine(true);
-        return;
-      }
-
-      const speedNow = Math.hypot(ballBody.velocity.x, ballBody.velocity.y);
-      if (speedNow < 0.14) {
-        stallTimer += FIXED_STEP / 1000;
-        if (stallTimer >= 2.2) {
-          showToast("Ball stalled! Adjust your ramp angle or add a Spring/Fan.", 2200);
-          stopMachine(true);
-        }
-      } else {
-        stallTimer = 0;
-      }
-    }
-
-    // ==============================================
-    // BLUEPRINT WORKSHOP CANVAS RENDERER
-    // ==============================================
-    function drawGadgetGraphic(g, isSelected, isGhost, now) {
+    function drawGadgetShape(g, x, y, angle, isSel, isGhost, now) {
       ctx.save();
-      ctx.translate(g.x, g.y);
-      ctx.globalAlpha = isGhost ? 0.38 : 1;
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      if (isGhost) ctx.globalAlpha = 0.34;
 
-      if (g.type === "ramp") {
-        const w = GADGET_SPECS.ramp.w, h = GADGET_SPECS.ramp.h;
-        ctx.rotate(degToRad(g.deg));
-        ctx.fillStyle = isGhost ? "#facc15" : "#d97706";
-        ctx.strokeStyle = isSelected ? "#38bdf8" : (isGhost ? "#fef08a" : "#fef3c7");
-        ctx.lineWidth = isSelected ? 2.8 : 1.8;
-        if (isGhost) ctx.setLineDash([5, 4]);
+      if (isSel && !isGhost && simMode === "edit") {
+        ctx.strokeStyle = "#facc15";
+        ctx.shadowColor = "#facc15";
+        ctx.shadowBlur = 12;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
         ctx.beginPath();
-        ctx.roundRect(-w / 2, -h / 2, w, h, 4);
-        ctx.fill();
+        ctx.arc(0, 0, g.type === "ramp" ? 56 : 36, 0, Math.PI * 2);
         ctx.stroke();
         ctx.setLineDash([]);
+        ctx.shadowBlur = 0;
+      }
 
+      if (g.type === "ramp") {
+        const w = GADGET_DIMS.ramp.w, h = GADGET_DIMS.ramp.h;
+        ctx.fillStyle = isGhost ? "#facc15" : "#b45309";
+        ctx.strokeStyle = isGhost ? "#fef08a" : "#fde68a";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(-w / 2, -h / 2, w, h, 5);
+        ctx.fill();
+        ctx.stroke();
+
+        // Brass end rivets
         if (!isGhost) {
-          // Brass end bolts on wooden plank
           ctx.fillStyle = "#fef08a";
           ctx.beginPath();
-          ctx.arc(-w / 2 + 8, 0, 2.5, 0, Math.PI * 2);
-          ctx.arc(w / 2 - 8, 0, 2.5, 0, Math.PI * 2);
+          ctx.arc(-w / 2 + 10, 0, 2.5, 0, Math.PI * 2);
+          ctx.arc(w / 2 - 10, 0, 2.5, 0, Math.PI * 2);
           ctx.fill();
         }
       } else if (g.type === "spring") {
-        const w = GADGET_SPECS.spring.w, h = GADGET_SPECS.spring.h;
-        ctx.rotate(degToRad(g.deg));
-        const squash = (g.bounceAnim || 0) * 5;
+        const w = GADGET_DIMS.spring.w, h = GADGET_DIMS.spring.h;
+        const bounceOff = g.pulse > 0 ? -g.pulse * 6 : 0;
 
-        // Spring coil accordion base
-        ctx.strokeStyle = isGhost ? "#facc15" : "#86efac";
+        // Upward Bounce Direction Indicator Arrow (in Edit Mode)
+        if (!isGhost && simMode === "edit") {
+          ctx.strokeStyle = "rgba(74, 222, 128, 0.75)";
+          ctx.lineWidth = 2.2;
+          ctx.beginPath();
+          ctx.moveTo(0, -10); ctx.lineTo(0, -34);
+          ctx.moveTo(-6, -27); ctx.lineTo(0, -34); ctx.lineTo(6, -27);
+          ctx.stroke();
+        }
+
+        // Coiled steel springs underneath pad
+        ctx.strokeStyle = "#cbd5e1";
         ctx.lineWidth = 2.4;
         ctx.beginPath();
-        ctx.moveTo(-w * 0.34, h / 2);
-        ctx.lineTo(-w * 0.2, -h / 2 + squash);
-        ctx.lineTo(0, h / 2);
-        ctx.lineTo(w * 0.2, -h / 2 + squash);
-        ctx.lineTo(w * 0.34, h / 2);
+        ctx.moveTo(-18, 8); ctx.lineTo(-18, bounceOff);
+        ctx.moveTo(18, 8); ctx.lineTo(18, bounceOff);
         ctx.stroke();
 
-        // Top neon green trampoline bumper cap
-        ctx.fillStyle = isGhost ? "#facc15" : "#22c55e";
-        ctx.strokeStyle = isSelected ? "#38bdf8" : "#dcfce7";
-        ctx.lineWidth = isSelected ? 2.8 : 1.8;
+        ctx.fillStyle = isGhost ? "#facc15" : "#10b981";
+        ctx.strokeStyle = isGhost ? "#fef08a" : "#bbf7d0";
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.roundRect(-w / 2, -h / 2 - 2 + squash, w, 9, 4);
+        ctx.roundRect(-w / 2, -h / 2 + bounceOff, w, h, 5);
         ctx.fill();
         ctx.stroke();
-
-        // Upward bounce direction chevron
-        ctx.strokeStyle = "#bbf7d0";
-        ctx.lineWidth = 1.8;
-        ctx.beginPath();
-        ctx.moveTo(-6, -13); ctx.lineTo(0, -19); ctx.lineTo(6, -13);
-        ctx.stroke();
       } else if (g.type === "fan") {
-        ctx.rotate(degToRad(g.deg));
-        const reach = GADGET_SPECS.fan.reach;
-        const hb = GADGET_SPECS.fan.halfBeam;
-
-        // Animated Airflow Wind Stream Cone!
-        const windGrad = ctx.createLinearGradient(14, 0, reach, 0);
-        windGrad.addColorStop(0, isGhost ? "rgba(250, 204, 21, 0.25)" : "rgba(56, 189, 248, 0.26)");
-        windGrad.addColorStop(1, "rgba(56, 189, 248, 0.0)");
-        ctx.fillStyle = windGrad;
-        ctx.fillRect(14, -hb, reach - 14, hb * 2);
-
-        // Animated rushing air streaks
+        // Translucent Swirling Wind Tunnel Stream Ahead of Fan!
         if (!isGhost) {
+          const beamLen = 225;
+          const wg = ctx.createLinearGradient(16, 0, beamLen, 0);
+          wg.addColorStop(0, "rgba(34, 211, 238, 0.32)");
+          wg.addColorStop(1, "rgba(34, 211, 238, 0)");
+          ctx.fillStyle = wg;
+          ctx.beginPath();
+          ctx.moveTo(16, -20);
+          ctx.lineTo(beamLen, -34);
+          ctx.lineTo(beamLen, 34);
+          ctx.lineTo(16, 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Animated flowing wind streaks
           ctx.strokeStyle = "rgba(186, 230, 253, 0.55)";
-          ctx.lineWidth = 1.8;
+          ctx.lineWidth = 1.6;
           for (let s = 0; s < 3; s++) {
-            const sy = (s - 1) * 16;
-            const sx = 20 + (((now * 0.22 + s * 55) % (reach - 42)));
+            const prog = ((now * 0.002 + s * 0.33) % 1);
+            const sx = 22 + prog * (beamLen - 44);
+            const sy = (s - 1) * 14;
             ctx.beginPath();
-            ctx.moveTo(sx, sy);
-            ctx.lineTo(sx + 24, sy);
+            ctx.moveTo(sx, sy); ctx.lineTo(sx + 20, sy);
             ctx.stroke();
           }
         }
 
-        // Steel Fan Housing
-        ctx.fillStyle = isGhost ? "#facc15" : "#0284c7";
-        ctx.strokeStyle = isSelected ? "#facc15" : "#e0f2fe";
-        ctx.lineWidth = isSelected ? 2.8 : 2;
+        // Industrial Fan Housing + Spinning Blades
+        ctx.fillStyle = isGhost ? "#facc15" : "#0e7490";
+        ctx.strokeStyle = isGhost ? "#fef08a" : "#67e8f9";
+        ctx.lineWidth = 2.2;
         ctx.beginPath();
-        ctx.roundRect(-17, -16, 32, 32, 6);
+        ctx.roundRect(-18, -22, 34, 44, 7);
         ctx.fill();
         ctx.stroke();
 
-        // Spinning turbine blades graphic
-        const spin = Math.sin(now * 0.03) * 11;
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 2.6;
-        ctx.beginPath();
-        ctx.moveTo(15, -spin); ctx.lineTo(15, spin);
-        ctx.stroke();
-      } else if (g.type === "magnet") {
-        const isPush = g.mode === "push";
-        const col = isPush ? "#f43f5e" : "#a855f7";
-        const fR = GADGET_SPECS.magnet.fieldR;
-
-        // Pulsing Magnetic Field Rings
-        ctx.strokeStyle = isGhost ? "rgba(250, 204, 21, 0.4)" : (isPush ? "rgba(244, 63, 94, 0.25)" : "rgba(168, 85, 247, 0.28)");
-        ctx.lineWidth = 1.6;
-        ctx.setLineDash([5, 5]);
-        ctx.beginPath();
-        ctx.arc(0, 0, fR, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
+        // Spinning turbine rotor bar
         if (!isGhost) {
-          const pulseFrac = ((now * 0.0007) % 1);
-          const pr = isPush ? (22 + pulseFrac * (fR - 22)) : (fR - pulseFrac * (fR - 22));
-          ctx.strokeStyle = isPush ? `rgba(251, 113, 133, ${(1 - pulseFrac) * 0.45})` : `rgba(192, 132, 252, ${(1 - pulseFrac) * 0.45})`;
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(0, 0, pr, 0, Math.PI * 2);
-          ctx.stroke();
+          const bladeH = 14 * Math.abs(Math.sin(now * 0.018));
+          ctx.fillStyle = "#e0f2fe";
+          ctx.fillRect(10, -bladeH, 5, bladeH * 2);
         }
-
-        // Electromagnet Core Hub
-        ctx.fillStyle = isGhost ? "#facc15" : col;
-        ctx.strokeStyle = isSelected ? "#38bdf8" : "#ffffff";
-        ctx.lineWidth = isSelected ? 3 : 2;
+      } else if (g.type === "booster") {
+        // Glowing Violet-Gold Electromagnetic Accelerator Ring
+        ctx.fillStyle = isGhost ? "rgba(250, 204, 21, 0.25)" : "rgba(124, 58, 237, 0.26)";
+        ctx.strokeStyle = isGhost ? "#fef08a" : "#c084fc";
+        ctx.shadowColor = isGhost ? "transparent" : "#a855f7";
+        ctx.shadowBlur = 12;
+        ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(0, 0, GADGET_SPECS.magnet.r, 0, Math.PI * 2);
+        ctx.arc(0, 0, 21, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
+        ctx.shadowBlur = 0;
 
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "900 10px monospace";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(isPush ? "PUSH" : "PULL", 0, 1);
-      }
-
-      // Selection Highlight Ring
-      if (isSelected && !isGhost) {
-        ctx.rotate(-degToRad(g.type === "magnet" ? 0 : g.deg));
-        ctx.strokeStyle = "#38bdf8";
-        ctx.lineWidth = 1.8;
-        ctx.setLineDash([4, 4]);
+        // Golden Aim Chevron Inside Ring
+        ctx.strokeStyle = "#fde047";
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
         ctx.beginPath();
-        ctx.arc(0, 0, g.type === "ramp" ? 54 : 38, 0, Math.PI * 2);
+        ctx.moveTo(-7, -8); ctx.lineTo(4, 0); ctx.lineTo(-7, 8);
+        ctx.moveTo(2, -8); ctx.lineTo(13, 0); ctx.lineTo(2, 8);
         ctx.stroke();
       }
 
       ctx.restore();
     }
 
-    function drawScene(now) {
+    let lastTime = performance.now();
+
+    function frame(now) {
+      const dt = Math.min(0.025, (now - lastTime) / 1000);
+      lastTime = now;
+
+      for (const g of gadgets) {
+        if (g.pulse > 0) g.pulse = Math.max(0, g.pulse - dt * 4.2);
+      }
+
+      // === LIVE PHYSICS SIMULATION STEP ===
+      if (simMode === "run" && engine && ballBody) {
+        const bx = ballBody.position.x, by = ballBody.position.y;
+
+        // 1. Apply Turbo Fan Wind Streams & Electromagnetic Booster Rings!
+        for (const g of gadgets) {
+          if (g.type === "fan") {
+            const dx = bx - g.x, dy = by - g.y;
+            const ca = Math.cos(g.angle), sa = Math.sin(g.angle);
+            const along = dx * ca + dy * sa;
+            const perp = -dx * sa + dy * ca;
+            if (along > 6 && along < 235 && Math.abs(perp) < 38) {
+              const str = 0.0029 * ballBody.mass * (1 - along / 340);
+              // Forward wind thrust + gentle beam-centering force!
+              const fx = ca * str - sa * (-perp * 0.000045 * ballBody.mass);
+              const fy = sa * str + ca * (-perp * 0.000045 * ballBody.mass);
+              Body.applyForce(ballBody, ballBody.position, { x: fx, y: fy });
+            }
+          } else if (g.type === "booster") {
+            const dist = Math.hypot(bx - g.x, by - g.y);
+            const cd = boosterCooldowns.get(g.id) || 0;
+            if (cd > 0) boosterCooldowns.set(g.id, Math.max(0, cd - dt));
+
+            if (dist < 42 && cd <= 0) {
+              // Snap into ring core & fire smoothly along booster chevron direction!
+              boosterCooldowns.set(g.id, 0.55);
+              g.pulse = 1.0;
+              const spd = 7.8;
+              Body.setPosition(ballBody, { x: g.x, y: g.y });
+              Body.setVelocity(ballBody, { x: Math.cos(g.angle) * spd, y: Math.sin(g.angle) * spd });
+              sfxMagnetZap();
+              for (let k = 0; k < 10; k++) {
+                const a = Math.random() * Math.PI * 2;
+                sparks.push({ x: g.x, y: g.y, vx: Math.cos(a) * 2.5, vy: Math.sin(a) * 2.5, r: 2.3, color: "#fde047", alpha: 1 });
+              }
+            }
+          }
+        }
+
+        Engine.update(engine, dt * 1000);
+
+        // Record glowing flight trail
+        if (ballTrail.length === 0 || Math.hypot(ballBody.position.x - ballTrail[ballTrail.length - 1].x, ballBody.position.y - ballTrail[ballTrail.length - 1].y) > 5) {
+          ballTrail.push({ x: ballBody.position.x, y: ballBody.position.y });
+          if (ballTrail.length > 140) ballTrail.shift();
+        }
+
+        // Check Goal Bell Victory!
+        if (Math.hypot(ballBody.position.x - level.goal.x, ballBody.position.y - level.goal.y) < 30) {
+          simMode = "won";
+          solvedSet.add(currentLevelNum);
+          try {
+            localStorage.setItem("zinplay_rube_500_solved", JSON.stringify([...solvedSet]));
+          } catch (e) {}
+          sfxGoalBellWin();
+          for (let k = 0; k < 22; k++) {
+            const a = Math.random() * Math.PI * 2;
+            sparks.push({
+              x: level.goal.x, y: level.goal.y,
+              vx: Math.cos(a) * (1.8 + Math.random() * 2.8),
+              vy: Math.sin(a) * (1.8 + Math.random() * 2.8),
+              r: 2.8, color: k % 2 === 0 ? "#fde047" : "#38bdf8", alpha: 1
+            });
+          }
+          updateHUD();
+
+          const isLast = currentLevelNum === TOTAL_LEVELS;
+          winHeading.textContent = isLast ? "All 500 Contraptions Built!" : `Machine #${currentLevelNum} Solved!`;
+          winText.textContent = "Your Rube Goldberg chain reaction delivered the steel marble cleanly into the Golden Bell!";
+          nextLevelBtn.textContent = isLast ? "Replay Machine #1" : `Next Machine (#${currentLevelNum + 1}) →`;
+          setTimeout(() => winOverlay.classList.add("show"), 560);
+        } else {
+          // Detect Marble Out-of-Bounds or Stalled -> Helpful Prompt to Tweak!
+          const spd = Math.hypot(ballBody.velocity.x, ballBody.velocity.y);
+          if (ballBody.position.y > WORLD_H + 28) {
+            showToast("Marble dropped out of frame! Tap ↺ EDIT & TWEAK to adjust your gadgets.", 2800);
+            stopToEditMode();
+          } else if (spd < 0.18) {
+            stallTimer += dt;
+            if (stallTimer > 2.1) {
+              showToast("Marble stalled! Tap ↺ EDIT & TWEAK to steepen a ramp or aim a gadget.", 2800);
+              stopToEditMode();
+            }
+          } else {
+            stallTimer = 0;
+          }
+        }
+      }
+
+      // === RENDER BLUEPRINT WORKSHOP SCENE ===
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
@@ -2049,7 +1663,7 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Blueprint Engineering Grid Lines
+      // 1. Dark Drafting Blueprint Grid Lines
       ctx.strokeStyle = "rgba(56, 189, 248, 0.08)";
       ctx.lineWidth = 1;
       for (let x = 20; x < WORLD_W; x += 24) {
@@ -2059,220 +1673,142 @@
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WORLD_W, y); ctx.stroke();
       }
 
-      // 2. Dotted Previous-Run Trajectory Trail (Huge UX Win for Fine-Tuning!)
-      const trailToDraw = mode === "run" ? liveTrail : lastTrail;
-      if (trailToDraw.length >= 2) {
+      // 2. Faint Previous-Run Cyan Ghost Trail in Edit Mode (Makes Fine-Tuning Effortless!)
+      if (simMode === "edit" && lastRunTrail.length > 2) {
         ctx.save();
-        ctx.strokeStyle = mode === "run" ? "rgba(56, 189, 248, 0.52)" : "rgba(125, 211, 252, 0.34)";
-        ctx.lineWidth = 2.2;
-        ctx.setLineDash([4, 6]);
+        ctx.strokeStyle = "rgba(56, 189, 248, 0.25)";
+        ctx.lineWidth = 2.4;
+        ctx.setLineDash([4, 5]);
         ctx.beginPath();
-        trailToDraw.forEach((pt, idx) => {
-          if (idx === 0) ctx.moveTo(pt.x, pt.y);
-          else ctx.lineTo(pt.x, pt.y);
+        lastRunTrail.forEach((p, i) => {
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
         });
         ctx.stroke();
         ctx.restore();
       }
 
-      // 3. Static Structural Walls
+      // 3. Optional Golden Blueprint Hint Silhouettes (When 💡 Hint Active!)
+      if (showBlueprintHint && simMode === "edit") {
+        for (const g of gadgets) {
+          drawGadgetShape(g, g.solX, g.solY, g.solAngle, false, true, now);
+        }
+      }
+
+      // 4. Fixed Workshop Riveted Steel Girder Walls
       for (const w of level.walls) {
         ctx.save();
-        ctx.translate(w.x, w.y);
-        ctx.rotate(degToRad(w.angle || 0));
         ctx.fillStyle = "#334155";
-        ctx.strokeStyle = "#94a3b8";
+        ctx.strokeStyle = "#64748b";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.roundRect(-w.w / 2, -w.h / 2, w.w, w.h, 5);
+        ctx.roundRect(w.x - w.w / 2, w.y - w.h / 2, w.w, w.h, 4);
         ctx.fill();
         ctx.stroke();
 
-        // Diagonal industrial caution stripes inside wall
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.16)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(-w.w / 2 + 4, -w.h / 2 + 4);
-        ctx.lineTo(w.w / 2 - 4, w.h / 2 - 4);
-        ctx.stroke();
+        // Diagonal cross-bracing detail inside girders
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.22)";
+        ctx.lineWidth = 1.4;
+        ctx.strokeRect(w.x - w.w / 2 + 3, w.y - w.h / 2 + 3, w.w - 6, w.h - 6);
         ctx.restore();
       }
 
-      // 4. Pinball Bumpers
-      for (const b of level.bumpers) {
-        ctx.save();
-        ctx.fillStyle = "#db2777";
-        ctx.strokeStyle = "#fbcfe8";
-        ctx.shadowColor = "#ec4899";
-        ctx.shadowBlur = 12;
-        ctx.lineWidth = 2.4;
+      // 5. Brass Overhead Marble Launcher Pipe (Start Point)
+      ctx.save();
+      ctx.translate(level.start.x, level.start.y);
+      ctx.fillStyle = "#b45309";
+      ctx.strokeStyle = "#fde68a";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(-16, -24, 32, 34, 5);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#d97706";
+      ctx.fillRect(-20, 4, 40, 8);
+      ctx.strokeRect(-20, 4, 40, 8);
+      // Preview marble waiting inside launcher mouth during Edit Mode
+      if (simMode === "edit") {
+        ctx.fillStyle = "#e2e8f0";
         ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.arc(0, 18, BALL_R * 0.85, 0, Math.PI * 2);
         ctx.fill();
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r * 0.35, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+      }
+      ctx.restore();
+
+      // 6. Glowing Golden Victory Goal Bell
+      ctx.save();
+      ctx.translate(level.goal.x, level.goal.y);
+      const bellPulse = 1 + 0.06 * Math.sin(now * 0.007);
+      ctx.scale(bellPulse, bellPulse);
+      ctx.fillStyle = "rgba(250, 204, 21, 0.16)";
+      ctx.strokeStyle = "#facc15";
+      ctx.shadowColor = "#facc15";
+      ctx.shadowBlur = 16;
+      ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.arc(0, 0, 24, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Bell icon silhouette
+      ctx.fillStyle = "#fde047";
+      ctx.beginPath();
+      ctx.moveTo(-11, 8);
+      ctx.quadraticCurveTo(-9, -10, 0, -11);
+      ctx.quadraticCurveTo(9, -10, 11, 8);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#92400e";
+      ctx.beginPath();
+      ctx.arc(0, 10, 3.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 7. Player Movable Contraption Gadgets
+      for (const g of gadgets) {
+        drawGadgetShape(g, g.x, g.y, g.angle, g.id === selectedId, false, now);
       }
 
-      // 5. Pivoting Mechanical Seesaws
-      level.seesaws.forEach((ss, idx) => {
-        const body = seesawBodies[idx];
-        const angle = body ? body.angle : 0;
+      // 8. Live Glowing Marble Trail & Polished Steel Marble
+      if (ballTrail.length > 1) {
         ctx.save();
-        ctx.translate(ss.x, ss.y);
-        ctx.rotate(angle);
-        ctx.fillStyle = "#6366f1";
-        ctx.strokeStyle = "#c7d2fe";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.roundRect(-ss.w / 2, -6, ss.w, 12, 4);
-        ctx.fill();
-        ctx.stroke();
-
-        // Center brass pivot axle
-        ctx.fillStyle = "#facc15";
-        ctx.beginPath();
-        ctx.arc(0, 0, 5.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      });
-
-      // 6. Golden Pressure Switch (Chapters 4-5)
-      if (level.switchPos) {
-        const sp = level.switchPos;
-        ctx.save();
-        ctx.fillStyle = switchPressed ? "#16a34a" : "#f59e0b";
-        ctx.strokeStyle = switchPressed ? "#86efac" : "#fef08a";
-        ctx.shadowColor = switchPressed ? "#22c55e" : "#f59e0b";
-        ctx.shadowBlur = 14;
-        ctx.lineWidth = 2.4;
-        ctx.beginPath();
-        ctx.arc(sp.x, sp.y, 16, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "#0f172a";
-        ctx.font = "900 12px sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(switchPressed ? "✓" : "◈", sp.x, sp.y + 1);
-        ctx.restore();
-      }
-
-      // 7. Start Marble Dropper Pipe
-      {
-        const sx = level.start.x, sy = level.start.y;
-        ctx.save();
-        ctx.fillStyle = "#1e293b";
         ctx.strokeStyle = "#38bdf8";
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.roundRect(sx - 20, sy - 16, 40, 24, 6);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = "#bae6fd";
-        ctx.font = "900 9px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("DROP", sx, sy - 1);
-
-        // Resting preview ball before Run
-        if (mode === "build") {
-          const g = ctx.createRadialGradient(sx - 4, sy + 12, 2, sx, sy + 16, BALL_R);
-          g.addColorStop(0, "#ffffff");
-          g.addColorStop(0.5, "#38bdf8");
-          g.addColorStop(1, "#1e3a8a");
-          ctx.fillStyle = g;
-          ctx.beginPath();
-          ctx.arc(sx, sy + 16, BALL_R, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
-      }
-
-      // 8. Goal Home Basket & Optional Red Laser Seal
-      {
-        const gx = level.goal.x, gy = level.goal.y;
-        const locked = level.switchPos && !switchPressed;
-
-        ctx.save();
-        // Glowing basket interior
-        ctx.fillStyle = locked ? "rgba(239, 68, 68, 0.16)" : "rgba(34, 197, 94, 0.22)";
-        ctx.fillRect(gx - 22, gy - 12, 44, 30);
-
-        // U-shaped metallic goal cup
-        ctx.strokeStyle = locked ? "#f87171" : "#4ade80";
-        ctx.shadowColor = locked ? "#ef4444" : "#22c55e";
-        ctx.shadowBlur = 14;
-        ctx.lineWidth = 5;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.beginPath();
-        ctx.moveTo(gx - 24, gy - 12);
-        ctx.lineTo(gx - 24, gy + 20);
-        ctx.lineTo(gx + 24, gy + 20);
-        ctx.lineTo(gx + 24, gy - 12);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        ctx.font = "16px sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(locked ? "🔒" : "🔔", gx, gy + 4);
-
-        // Active red laser barrier sealing goal until switch is hit
-        if (locked) {
-          ctx.strokeStyle = "#ef4444";
-          ctx.shadowColor = "#ef4444";
-          ctx.shadowBlur = 12;
-          ctx.lineWidth = 4;
-          ctx.beginPath();
-          ctx.moveTo(gx - 30, gy - 20);
-          ctx.lineTo(gx + 30, gy - 20);
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-
-      // 9. Optional Golden Blueprint Hint Ghosts
-      if (showHintGhosts && mode === "build" && level.hints.length > 0) {
-        for (const h of level.hints) {
-          drawGadgetGraphic(h, false, true, now);
-        }
-      }
-
-      // 10. Player-Placed Contraption Gadgets
-      for (const g of placedGadgets) {
-        drawGadgetGraphic(g, g.id === selectedUid && mode === "build", false, now);
-      }
-
-      // 11. Live Rolling Steel Marble
-      if (ballBody && (mode === "run" || mode === "won")) {
-        const bx = ballBody.position.x, by = ballBody.position.y;
-        ctx.save();
         ctx.shadowColor = "#38bdf8";
-        ctx.shadowBlur = 12;
-        const bg = ctx.createRadialGradient(bx - 4, by - 4, 2, bx, by, BALL_R);
-        bg.addColorStop(0, "#ffffff");
-        bg.addColorStop(0.5, "#38bdf8");
-        bg.addColorStop(1, "#1e3a8a");
-        ctx.fillStyle = bg;
+        ctx.shadowBlur = 10;
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
         ctx.beginPath();
-        ctx.arc(bx, by, BALL_R, 0, Math.PI * 2);
-        ctx.fill();
+        ballTrail.forEach((p, i) => {
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        });
+        ctx.stroke();
         ctx.restore();
       }
 
-      // 12. Sparks
+      if (ballBody) {
+        ctx.save();
+        ctx.translate(ballBody.position.x, ballBody.position.y);
+        const mg = ctx.createRadialGradient(-4, -4, 1.5, 0, 0, BALL_R);
+        mg.addColorStop(0, "#ffffff");
+        mg.addColorStop(0.5, "#cbd5e1");
+        mg.addColorStop(1, "#475569");
+        ctx.fillStyle = mg;
+        ctx.strokeStyle = "#f8fafc";
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.arc(0, 0, BALL_R, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 9. Sparks & Victory Confetti Particles
       sparks = sparks.filter((s) => s.alpha > 0.04);
       for (const s of sparks) {
         s.x += s.vx;
         s.y += s.vy;
-        s.vy += 0.1;
         s.alpha *= 0.92;
         ctx.fillStyle = s.color;
         ctx.globalAlpha = s.alpha;
@@ -2283,28 +1819,12 @@
       }
 
       ctx.restore();
-    }
-
-    let lastTime = performance.now();
-    function frame(now) {
-      const rawDt = Math.min(50, now - lastTime);
-      lastTime = now;
-
-      if (mode === "run") {
-        accumulator += rawDt;
-        while (accumulator >= FIXED_STEP) {
-          stepPhysics();
-          accumulator -= FIXED_STEP;
-        }
-      }
-
-      drawScene(now);
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadLevel(currentLevelNum);
+    loadMachine(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
