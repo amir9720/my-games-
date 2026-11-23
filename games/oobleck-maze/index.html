@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oobleck Maze — 500 Non-Newtonian Fluid Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free levels of Oobleck Maze in your browser. Glide a heavy steel sphere slowly through non-Newtonian fluid—rush too fast and the liquid solidifies instantly!" />
+  <title>Oobleck Maze — Free 500-Level Non-Newtonian Fluid Physics Game | ZinPlay</title>
+  <meta name="description" content="Play Oobleck Maze free online with no download. Master real non-Newtonian shear-thickening fluid physics—sprint fast to skim over oobleck pits and glide slowly to slip through gel barriers across 500 lab mazes." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Oobleck Maze",
+    "url": "https://zinplay.io/games/oobleck-maze/",
+    "genre": ["Physics", "Maze Puzzle", "STEM Fluid Simulation"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top HUD */
+    /* Top Fluid Lab HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0b1120;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #0b141f;
+      color: #f1f5f9;
+      border-bottom: 1px solid #1d2f45;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #2dd4bf;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -63,109 +76,114 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #bae6fd;
+      background: rgba(45, 212, 191, 0.16);
+      border: 1px solid rgba(45, 212, 191, 0.36);
+      color: #ccfbf1;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.freezes {
-      background: rgba(244, 63, 94, 0.16);
-      border-color: rgba(251, 113, 133, 0.38);
-      color: #fecdd3;
+    .hud-pill.key-pill {
+      background: rgba(250, 204, 21, 0.16);
+      border-color: rgba(250, 204, 21, 0.42);
+      color: #fef08a;
+    }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Live Non-Newtonian Viscosity Gauge Strip */
-    .viscosity-bar-wrap {
+    /* Live Non-Newtonian Shear Viscosity Meter */
+    .shear-strip {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 14px;
-      background: #11192e;
-      border-bottom: 1px solid #1e293b;
-      color: #cbd5e1;
-      font-size: 0.76rem;
+      padding: 9px 14px;
+      background: #101d2c;
+      border-bottom: 1px solid #20364f;
+      color: #e2e8f0;
+      font-size: 0.75rem;
       font-weight: 800;
     }
-    .visc-label {
-      min-width: 96px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .shear-state {
+      min-width: 126px;
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: #67e8f9;
+      white-space: nowrap;
     }
-    .visc-label.state-liquid { color: #34d399; }
-    .visc-label.state-thick  { color: #facc15; }
-    .visc-label.state-solid  { color: #fb7185; }
-    .visc-track {
+    .shear-state.solid-mode {
+      color: #fbbf24;
+    }
+    .shear-track {
       flex: 1;
-      height: 10px;
-      background: #070c18;
+      height: 11px;
+      background: #070f18;
       border-radius: 999px;
-      border: 1px solid #26324d;
-      overflow: hidden;
+      border: 1px solid #25405e;
       position: relative;
+      overflow: hidden;
     }
-    .visc-fill {
+    .shear-fill {
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      background: linear-gradient(90deg, #2dd4bf 0%, #facc15 68%, #f43f5e 100%);
-      transition: width 0.05s linear;
+      background: linear-gradient(90deg, #38bdf8 0%, #c084fc 48%, #f59e0b 100%);
+      transition: width 0.06s linear;
     }
-    .visc-thresh {
+    .shear-thresh {
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 82%;
+      left: 52%;
       width: 2px;
-      background: rgba(255, 255, 255, 0.55);
+      background: #ffffff;
+      box-shadow: 0 0 6px #ffffff;
+    }
+    .shear-spd {
+      min-width: 56px;
+      text-align: right;
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: #cbd5e1;
     }
 
-    /* Canvas Stage */
+    /* Oobleck Lab Tray Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 440px;
-      background: radial-gradient(circle at 50% 45%, #16223d 0%, #090e1d 100%);
+      aspect-ratio: 1 / 1;
+      max-height: 495px;
+      background: radial-gradient(circle at 50% 45%, #162638 0%, #09111b 100%);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
       -webkit-user-select: none;
-    }
-    @media (min-width: 640px) {
-      .canvas-container {
-        height: 500px;
-      }
     }
     #oobleckCanvas {
       width: 100%;
       height: 100%;
       display: block;
       touch-action: none;
-      cursor: grab;
-    }
-    #oobleckCanvas.dragging {
-      cursor: grabbing;
+      cursor: crosshair;
     }
 
     .legend-strip {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
-      padding: 8px 14px;
-      background: #0d1426;
-      border-top: 1px solid #1e293b;
-      font-size: 0.74rem;
+      padding: 9px 14px;
+      background: #0a121c;
+      border-top: 1px solid #1a2b40;
+      font-size: 0.73rem;
       color: #94a3b8;
-    }
-    .leg-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      vertical-align: middle;
-      margin-right: 4px;
     }
 
     .status-toast {
@@ -173,8 +191,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.94);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(9, 17, 27, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -188,14 +206,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(8, 12, 24, 0.8);
+      background: rgba(8, 15, 24, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -203,7 +219,7 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
     }
     .win-overlay.show {
       opacity: 1;
@@ -215,19 +231,12 @@
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 320px;
+      max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -256,7 +265,7 @@
       cursor: pointer;
     }
 
-    /* Level Picker Modal */
+    /* Lab Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -268,9 +277,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -367,6 +374,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #0b141f;
+      border: 1px solid rgba(45, 212, 191, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #0b141f;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #0b141f 0%, #115e59 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.gel-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #17152e 0%, #701a75 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #ccfbf1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .fluid-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .fluid-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .fluid-table th, .fluid-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .fluid-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .fluid-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -379,7 +466,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -392,70 +479,70 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Mazes &bull; Fluid Physics</span>
+      <span class="cat-tag">500 Labs &bull; Non-Newtonian Physics</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Oobleck Maze</h1>
-      <p>Guide the steel sphere gently through non-Newtonian fluid. Glide slowly to flow like silk—pull too fast and the fluid hardens solid!</p>
+      <p>Master real non-Newtonian fluid physics: sprint fast so creamy oobleck pits harden beneath you like stone, and glide slowly to slip smoothly through shear-thickening gel curtains.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Oobleck Maze Physics Game">
+    <section class="game-wrapper" aria-label="Oobleck Maze Non-Newtonian Physics Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Silky Channels</span>
-          <span id="levelTitle">Maze 1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Surface Tension Pits</span>
+          <span id="levelTitle">Lab #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="timeCounter">Time: 0.0s</span>
-          <span class="hud-pill freezes" id="freezeCounter">Solidified: 0</span>
-          <span class="hud-pill" id="solvedCounter">Solved: 0 / 500</span>
+          <span class="hud-pill key-pill" id="keysPill" style="display:none;">🔑 Keys: 0 / 1</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Escaped: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Viscosity Meter -->
-      <div class="viscosity-bar-wrap">
-        <span id="viscLabel" class="visc-label state-liquid">● LIQUID</span>
-        <div class="visc-track">
-          <div id="viscFill" class="visc-fill"></div>
-          <div class="visc-thresh" title="Solidification Threshold"></div>
+      <!-- Live Shear-Thickening Viscosity Bar -->
+      <div class="shear-strip">
+        <span id="shearState" class="shear-state">💧 LIQUID (Slow)</span>
+        <div class="shear-track">
+          <div id="shearFill" class="shear-fill"></div>
+          <div class="shear-thresh" title="Solidification Threshold"></div>
         </div>
-        <span style="font-size:0.72rem; color:#94a3b8;">SHEAR</span>
+        <span id="shearSpd" class="shear-spd">0.0 m/s</span>
       </div>
 
+      <!-- Oobleck Physics Maze Canvas -->
       <div class="canvas-container">
         <canvas id="oobleckCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
+        <!-- Lab Cleared Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2.1rem; margin-bottom:6px;">🧪</div>
-            <h2 id="winHeading">Maze Cleared!</h2>
-            <p id="winText">Smooth patience conquered the non-Newtonian fluid.</p>
-            <button id="nextLevelBtn" class="btn-primary" type="button">Next Maze →</button>
+            <div style="font-size:2.3rem; margin-bottom:6px;">🧪</div>
+            <h2 id="winHeading">Lab Cleared!</h2>
+            <p id="winText">Masterful shear-speed control carried the chrome orb safely into the exit drain.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Lab →</button>
           </div>
         </div>
       </div>
 
       <div class="legend-strip">
-        <span><i class="leg-dot" style="background:#2dd4bf"></i>Drag Gently = Liquid Flow</span>
-        <span><i class="leg-dot" style="background:#f43f5e"></i>Pull Fast = Solid Lock!</span>
-        <span><i class="leg-dot" style="background:#7c3aed"></i>Dense Puddle (Extra Slow)</span>
-        <span><i class="leg-dot" style="background:#f59e0b"></i>Timed Gate</span>
+        <span>👆 Drag Anywhere to Steer (Short Drag = Slow, Long Drag = Fast!)</span>
+        <span>🥣 Cream Oobleck Pit = Sprint FAST</span>
+        <span>🟣 Pink Gel Curtain = Glide SLOW</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Restart</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Calm Path</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Respawn Orb</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Speed Map</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Maze 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Lab 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -465,66 +552,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 840+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/oobleck-maze-banner-1.jpg"
+            alt="Oobleck Maze non-Newtonian fluid physics game showing a chrome steel marble skimming swiftly across hardened rippled oobleck toward an emerald exit"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Non-Newtonian Fluid Mazes — Fast = Solid, Slow = Liquid</h3>
+          <p>Control shear velocity in real time to walk on liquid cornstarch pools and melt effortlessly through impact-hardening gel barriers.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Oobleck Maze (500 Levels)</h2>
-        <p>Oobleck Maze simulates real-world <strong>shear-thickening non-Newtonian fluid</strong>—just like a bowl of cornstarch and water. Unlike ordinary maze games where speed wins, rushing here backfires immediately: applying sudden force turns the soft liquid around your heavy steel ball into a rigid crystalline solid.</p>
+        <h2>What Is Oobleck Maze? A Non-Newtonian Fluid Physics Game Online</h2>
+        <p><strong>Oobleck Maze</strong> is a free <strong>non-Newtonian fluid physics puzzle game online</strong> inspired by the famous science classroom mixture of cornstarch and water. Unlike ordinary liquids, oobleck is a <em>shear-thickening dilatant fluid</em>: punch it fast and its suspended starch grains lock together instantly like solid concrete; push your finger into it gently and it parts like smooth cream! Oobleck Maze turns that mind-bending real-world physics rule into a tactile 60 FPS labyrinth challenge across <strong>500 progressive chemistry lab stages</strong>.</p>
+        <p>Built as a lightweight, <strong>no-download STEM physics game for smartphones, iPads, and Chromebooks</strong>, Oobleck Maze features intuitive one-thumb analog steering—drag a short distance to creep smoothly in <strong>💧 LIQUID Mode</strong>, or pull further to sprint in <strong>🪨 SOLID Mode</strong>—complete with procedural <strong>Web Audio squishy liquid warbles, crystalline solid bounces, and lab portal chimes</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>The Shear-Velocity Rulebook (Every Lab Tile Explained)</h2>
+        <p>Watch the live <strong>Viscosity Bar</strong> right above the lab tray! Crossing the white vertical threshold switches oobleck behavior instantaneously from liquid to solid. Study these four interactive lab hazards to breeze through Chapters 1 through 5:</p>
+
+        <div class="fluid-table-wrap">
+          <table class="fluid-table">
+            <thead>
+              <tr>
+                <th>Laboratory Tile</th>
+                <th>When You Move FAST (🪨 Solid)</th>
+                <th>When You Move SLOW (💧 Liquid)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🥣 Cream Oobleck Pit</strong> (Ch. 1+)</td>
+                <td><strong>SAFE!</strong> Fluid hardens under your orb—skim straight across without sinking!</td>
+                <td><strong>SINK!</strong> Surface liquefies and pulls the orb down into a respawn splash.</td>
+              </tr>
+              <tr>
+                <td><strong>🟣 Magenta Gel Curtain</strong> (Ch. 2–5)</td>
+                <td><strong>BOUNCE!</strong> High-speed impact locks the gel like rubberized brick wall!</td>
+                <td><strong>PASS THROUGH!</strong> Gentle low-speed glide melts the curtain open smoothly!</td>
+              </tr>
+              <tr>
+                <td><strong>⚡ Cyan Boost Pad</strong> (Ch. 3–5)</td>
+                <td>Launches your orb automatically into high-speed skim velocity across wide pits.</td>
+                <td>Same boost! Be ready to brake gently afterward if a Pink Gel Curtain sits ahead!</td>
+              </tr>
+              <tr>
+                <td><strong>🔑 Golden Lab Keys</strong> (Ch. 4–5)</td>
+                <td>Collect all glowing keys in any speed state to unlock the Emerald Exit Drain.</td>
+                <td>Sometimes guarded behind a Pink Gel Curtain—slow down to slip inside!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Fluid Dynamics Pro Tip:</strong> Whenever a Cream Oobleck Pit sits right after a Pink Gel Curtain, slip through the curtain at a gentle creep, build a short 1-tile runway inside the safe tile ahead, then flick swiftly into <strong>🪨 SOLID Mode</strong> to clear the pit! Tap <strong>💡 Speed Map</strong> anytime to see the golden route marked with exact <code>⚡</code> (Fast) and <code>💧</code> (Slow) zones.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner gel-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/oobleck-maze-banner-2.jpg"
+            alt="Contrasting oobleck physics zones showing fast skimming on solid cream oobleck and slow gliding through translucent pink gel curtains in Oobleck Maze"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Precision Analog Steering &amp; Keyboard Cruise/Sprint Controls</h3>
+          <p>Play effortlessly with one-finger touch steering on phones, or glide smoothly with WASD/Arrow Keys plus Shift-to-Sprint on Chromebooks and laptops.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Chemistry Lab Chapters (500 Verified Mazes)</h2>
+        <p>Every maze from Lab #1 to Lab #500 is generated from a verified connected floorplan with guaranteed runway spacing before every Oobleck Pit and clean clearance around every Gel Curtain:</p>
         <ul>
-          <li><strong>Mobile &amp; Mouse Tether Controls:</strong> Touch and drag anywhere on the maze to gently pull the steel sphere toward your finger or cursor. Keep the glowing tether line short and <strong>teal</strong> to glide smoothly through turns. Stretching the tether too far or jerking quickly pushes the Shear Meter past the white line and freezes you solid!</li>
-          <li><strong>Keyboard Controls:</strong> On desktop, you can also use <code>WASD</code> or Arrow keys to steer calmly—watch out for slamming walls or rapid reversals inside dense puddles.</li>
-          <li><strong>Dense Puddles &amp; Timed Gates:</strong> Deep violet puddles thicken 55% faster than normal fluid, so slow down to a crawl as you cross them. Amber pressure gates open and close on a steady rhythm—wait patiently rather than darting through, or the fluid will lock you right at the threshold.</li>
+          <li><strong>Chapter 1 (Labs 1–100 — Surface Tension Pits):</strong> Clean 7×7 lab trays introducing Cream Oobleck Pits so you can master accelerating across wide liquid pools without slowing down mid-crossing.</li>
+          <li><strong>Chapter 2 (Labs 101–200 — Gel Barrier Curtains):</strong> Introduces translucent <strong>Magenta Shear-Thickening Curtains</strong> that rebound fast impacts while melting open when approached patiently below the shear threshold.</li>
+          <li><strong>Chapter 3 (Labs 201–300 — Velocity Switches):</strong> Mixes pits and gel curtains along twisting 9×9 corridors plus glowing <strong>Cyan Speed Boosters</strong> that challenge rapid fast-to-slow transitions.</li>
+          <li><strong>Chapter 4 (Labs 301–400 — Key Vault Labs):</strong> Locks the emerald exit drain behind 1 or 2 glowing <strong>Golden Lab Keys</strong> tucked behind guarded curtains and oobleck moats.</li>
+          <li><strong>Chapter 5 (Labs 401–500 — Master Rheology Trials):</strong> Intricate 9×9 multi-key chemistry labyrinths combining dual oobleck lakes, tight gel airlocks, and boost launchers—complete with an instant 1–500 lab selector and private browser auto-save.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Oobleck Physics Topics">
+          <span class="kw-pill">Oobleck Physics Game Online</span>
+          <span class="kw-pill">Non-Newtonian Fluid Simulator Browser</span>
+          <span class="kw-pill">Shear Thickening Maze Puzzle</span>
+          <span class="kw-pill">STEM Science Game for Chromebook</span>
+          <span class="kw-pill">500-Level Marble Speed Control Game</span>
+          <span class="kw-pill">No-Download HTML5 Physics Lab</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Oobleck Maze FAQ</h2>
         <details class="faq-item">
-          <summary>How do I unfreeze when the Oobleck turns solid?</summary>
-          <div class="faq-answer">Simply lift your finger (or stop pulling hard) for less than a second. As soon as shear stress drops, the crystalline crust melts smoothly back into liquid so you can continue gliding.</div>
+          <summary>How do I control speed accurately on a smartphone touchscreen?</summary>
+          <div class="faq-answer">Touch and drag anywhere on the maze canvas—a subtle tether appears showing your steering direction and thrust! Keep your finger close to where you touched for gentle <strong>💧 LIQUID (Slow)</strong> gliding, or drag further outward to surge into <strong>🪨 SOLID (Fast)</strong> skimming!</div>
         </details>
         <details class="faq-item">
-          <summary>Are all 500 mazes verified to have a clean path?</summary>
-          <div class="faq-answer">Yes. Every single level from 1 to 500 is deterministically generated and verified with a shortest-path solver—tap <strong>💡 Calm Path</strong> anytime to illuminate the optimal route.</div>
+          <summary>How do keyboard controls work on Chromebooks and PCs?</summary>
+          <div class="faq-answer">Use <code>WASD</code> or <code>Arrow Keys</code> to glide steadily in <strong>💧 LIQUID (Slow)</strong> speed—perfect for slipping right through Magenta Gel Curtains! Hold <code>Shift</code> (or <code>Space</code>) while moving to boost instantly into <strong>🪨 SOLID (Fast)</strong> speed for crossing Oobleck Pits!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Why did I bounce off the Pink Gel Curtain when I tried to cross it?</summary>
+          <div class="faq-answer">Pink Gel Curtains harden instantly on high-speed impact! Watch the Viscosity Bar above the canvas—slow down until it reads <strong>💧 LIQUID (Slow)</strong>, then roll gently straight through the curtain like warm butter.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Is Oobleck Maze based on real-world fluid science?</summary>
+          <div class="faq-answer">Yes! Cornstarch-and-water oobleck is a real non-Newtonian dilatant suspension whose viscosity increases sharply under high shear stress—allowing people to run across a pool of oobleck yet sink if they stand still.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🔐</div><span class="cat-tag">Zen</span></div>
-        <h3>The Zen Lockpicker</h3>
-        <p>Turn a dark minimalist safe dial slowly and listen for metallic clicks across 500 vaults.</p>
-        <a href="/games/zen-lockpicker/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">💦</div><span class="cat-tag">ASMR</span></div>
+        <h3>PowerWash ASMR</h3>
+        <p>Blast layers of grime off vintage bikes, stone statues, and tiles with realistic water spray audio.</p>
+        <a href="/games/powerwash-asmr/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
-        <h3>Gravity Stone Stacker</h3>
-        <p>Stack irregular geometric stones into a steady tower across 500 physics levels.</p>
-        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🁣</div><span class="cat-tag">Physics</span></div>
+        <h3>Infinite Domino Builder</h3>
+        <p>Curve colorful domino chains around obstacles and trigger a mesmerizing ASMR topple cascade.</p>
+        <a href="/games/domino-builder/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🕸️</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Tension &amp; Strings</h3>
-        <p>Drag connected nodes until zero elastic strings overlap across 500 geometric webs.</p>
-        <a href="/games/tension-strings/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">⚙️</div><span class="cat-tag">Physics</span></div>
+        <h3>Rube Goldberg Sandbox</h3>
+        <p>Arrange ramps, springs, fans, and magnets to trigger a wild physics chain reaction.</p>
+        <a href="/games/rube-goldberg/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Maze Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Maze">
+  <!-- Lab Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Oobleck Lab">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Maze (1 – 500)</h3>
+        <h3>Choose Fluid Lab (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to maze (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to lab (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -543,12 +727,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Physics &amp; ASMR</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/oobleck-maze/">Oobleck Maze</a></li>
+            <li><a href="/games/powerwash-asmr/">PowerWash ASMR</a></li>
+            <li><a href="/games/stone-stacker/">Gravity Stone Stacker</a></li>
+            <li><a href="/games/domino-builder/">Infinite Domino Builder</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -557,7 +741,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -590,15 +774,21 @@
     }
 
     // ==============================================
-    // DETERMINISTIC 500-LEVEL OOBLECK MAZE GENERATOR
+    // NON-NEWTONIAN FLUID PHYSICS & 500-LAB GENERATOR
     // ==============================================
     const TOTAL_LEVELS = 500;
+    const WORLD_W = 420;
+    const WORLD_H = 420;
+    const SHEAR_THRESHOLD = 148; // px/sec: >= SOLID (skim pits, bounce gel), < LIQUID (slip gel, sink pits)
+    const MAX_SPEED = 290;
+
+    // Tile Types: 0=Floor, 1=Steel Wall, 2=Cream Oobleck Pit (FAST!), 3=Pink Gel Curtain (SLOW!), 4=Speed Boost Pad
     const CHAPTERS = [
-      { title: "Chapter 1 • Silky Channels", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Dense Puddles", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Pressure Gates", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Viscosity Lab", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Non-Newtonian Master", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Surface Tension Pits", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Gel Barrier Curtains", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Velocity Switches", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Key Vault Labs", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Rheology Trials", range: "401–500", start: 401, end: 500 }
     ];
 
     function mulberry32(seed) {
@@ -620,157 +810,144 @@
       return copy;
     }
 
-    function findShortestPath(grid, rows, cols, start, goal) {
-      const q = [start];
-      const prev = new Map();
-      const key = (r, c) => `${r},${c}`;
-      prev.set(key(start.r, start.c), null);
-      const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+    // Generate Guaranteed-Connected Odd-Grid Maze + Strategic Non-Newtonian Hazards!
+    function buildOobleckLab(levelNum) {
+      const rng = mulberry32(levelNum * 291143 + 47123);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const N = levelNum <= 200 ? 7 : 9;
 
-      while (q.length > 0) {
-        const cur = q.shift();
-        if (cur.r === goal.r && cur.c === goal.c) break;
-        for (const [dr, dc] of dirs) {
-          const nr = cur.r + dr;
-          const nc = cur.c + dc;
-          if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
-          if (grid[nr][nc] === 1) continue;
-          const k = key(nr, nc);
-          if (!prev.has(k)) {
-            prev.set(k, cur);
-            q.push({ r: nr, c: nc });
-          }
-        }
-      }
-
-      const path = [];
-      let cur = goal;
-      while (cur) {
-        path.push(cur);
-        cur = prev.get(key(cur.r, cur.c));
-      }
-      return path.reverse();
-    }
-
-    function buildMaze(levelNum) {
-      const rng = mulberry32(levelNum * 25117 + 60493);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1);
-
-      // Odd dimensions: 7x7 -> 9x9 -> 11x11 -> 13x13
-      let size;
-      if (levelNum <= 45) size = 7;
-      else if (levelNum <= 160) size = 9;
-      else if (levelNum <= 330) size = 11;
-      else size = 13;
-
-      const rows = size;
-      const cols = size;
-      // 1 = wall, 0 = fluid channel
-      const grid = Array.from({ length: rows }, () => Array(cols).fill(1));
-
-      // Recursive backtracker carving from (1,1)
-      const stack = [{ r: 1, c: 1 }];
+      // 1. Standard Recursive-Backtracker Perfect Maze on Odd Coordinates (1,3,5...)
+      const grid = Array.from({ length: N }, () => Array(N).fill(1));
+      const dirs = [[0, -2], [2, 0], [0, 2], [-2, 0]];
+      const visited = new Set(["1,1"]);
       grid[1][1] = 0;
 
-      while (stack.length > 0) {
-        const cur = stack[stack.length - 1];
-        const dirs = shuffle([[0, 2], [2, 0], [0, -2], [-2, 0]], rng);
-        let carved = false;
-        for (const [dr, dc] of dirs) {
-          const nr = cur.r + dr;
-          const nc = cur.c + dc;
-          if (nr > 0 && nr < rows - 1 && nc > 0 && nc < cols - 1 && grid[nr][nc] === 1) {
-            grid[cur.r + dr / 2][cur.c + dc / 2] = 0;
+      function carve(r, c) {
+        for (const [dr, dc] of shuffle(dirs, rng)) {
+          const nr = r + dr, nc = c + dc;
+          if (nr > 0 && nr < N - 1 && nc > 0 && nc < N - 1 && !visited.has(`${nr},${nc}`)) {
+            visited.add(`${nr},${nc}`);
+            grid[r + dr / 2][c + dc / 2] = 0;
             grid[nr][nc] = 0;
-            stack.push({ r: nr, c: nc });
-            carved = true;
-            break;
+            carve(nr, nc);
           }
         }
-        if (!carved) stack.pop();
       }
+      carve(1, 1);
 
-      // Open a couple of extra connectors in larger mazes for route strategy
-      const extraOpenings = Math.floor(size / 4);
-      for (let e = 0; e < extraOpenings; e++) {
-        const r = 1 + Math.floor(rng() * (rows - 2));
-        const c = 1 + Math.floor(rng() * (cols - 2));
-        if (grid[r][c] === 1) {
-          const horiz = grid[r][c - 1] === 0 && grid[r][c + 1] === 0 && grid[r - 1][c] === 1 && grid[r + 1][c] === 1;
-          const vert = grid[r - 1][c] === 0 && grid[r + 1][c] === 0 && grid[r][c - 1] === 1 && grid[r][c + 1] === 1;
-          if (horiz || vert) grid[r][c] = 0;
+      // Open 1–2 extra corridor loops for smoother flow & speed-runway choices
+      const extraLoops = N === 7 ? 2 : 4;
+      for (let k = 0; k < extraLoops; k++) {
+        const rr = 1 + Math.floor(rng() * (N - 2));
+        const cc = 1 + Math.floor(rng() * (N - 2));
+        if (grid[rr][cc] === 1) {
+          const openH = grid[rr][cc - 1] === 0 && grid[rr][cc + 1] === 0;
+          const openV = grid[rr - 1][cc] === 0 && grid[rr + 1][cc] === 0;
+          if (openH || openV) grid[rr][cc] = 0;
         }
       }
 
-      // Corner pairing rotated by level for freshness
-      const corners = [
-        [{ r: 1, c: 1 }, { r: rows - 2, c: cols - 2 }],
-        [{ r: 1, c: cols - 2 }, { r: rows - 2, c: 1 }],
-        [{ r: rows - 2, c: 1 }, { r: 1, c: cols - 2 }],
-        [{ r: rows - 2, c: cols - 2 }, { r: 1, c: 1 }]
-      ];
-      const [start, goal] = corners[levelNum % 4];
-      const solution = findShortestPath(grid, rows, cols, start, goal);
+      // 2. BFS from Start (1,1) to Pick Furthest Cell as Exit Drain & Recover Exact Solution Path!
+      const parent = new Map();
+      const distMap = new Map([["1,1", 0]]);
+      const q = [[1, 1]];
+      let farCell = [N - 2, N - 2];
+      let maxD = -1;
 
-      // Special Hazard 1: Dense Oobleck Puddles (Chapter 2+)
-      const denseSet = new Set();
-      if (levelNum >= 101) {
-        const denseCount = Math.min(8, 2 + Math.floor((levelNum - 100) / 55));
-        const candidates = solution.slice(2, Math.max(2, solution.length - 2));
-        const shuffled = shuffle(candidates, rng);
-        for (let i = 0; i < Math.min(denseCount, shuffled.length); i++) {
-          denseSet.add(`${shuffled[i].r},${shuffled[i].c}`);
+      while (q.length > 0) {
+        const [r, c] = q.shift();
+        const d = distMap.get(`${r},${c}`);
+        if (d > maxD && (r % 2 === 1 && c % 2 === 1)) {
+          maxD = d;
+          farCell = [r, c];
         }
-      }
-
-      // Special Hazard 2: Timed Pressure Gates (Chapter 3+)
-      const gates = [];
-      if (levelNum >= 201) {
-        const gateCount = levelNum > 380 ? 3 : (levelNum > 280 ? 2 : 1);
-        const candidates = solution.slice(3, Math.max(3, solution.length - 3));
-        const shuffled = shuffle(candidates, rng);
-        for (const cand of shuffled) {
-          if (gates.length >= gateCount) break;
-          const k = `${cand.r},${cand.c}`;
-          // Only place gates on straight corridors (2 opposite walls)
-          const horizCorr = grid[cand.r - 1][cand.c] === 1 && grid[cand.r + 1][cand.c] === 1;
-          const vertCorr = grid[cand.r][cand.c - 1] === 1 && grid[cand.r][cand.c + 1] === 1;
-          if ((horizCorr || vertCorr) && !denseSet.has(k) && !gates.some((g) => Math.abs(g.r - cand.r) + Math.abs(g.c - cand.c) < 3)) {
-            gates.push({
-              r: cand.r,
-              c: cand.c,
-              horiz: horizCorr,
-              phase: rng() * 5.2,
-              cycle: 5.2, // 3.4s open, 1.8s closed
-              openDur: 3.4
-            });
+        for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+          const nr = r + dr, nc = c + dc;
+          const k = `${nr},${nc}`;
+          if (nr >= 0 && nr < N && nc >= 0 && nc < N && grid[nr][nc] === 0 && !distMap.has(k)) {
+            distMap.set(k, d + 1);
+            parent.set(k, [r, c]);
+            q.push([nr, nc]);
           }
         }
       }
 
-      // Shear sensitivity scales gently across 500 levels
-      const shearSensitivity = 0.85 + p * 0.45;
+      const solPath = [];
+      let cur = farCell;
+      while (cur) {
+        solPath.unshift({ r: cur[0], c: cur[1] });
+        cur = parent.get(`${cur[0]},${cur[1]}`);
+      }
+
+      // 3. Place Authentic Non-Newtonian Hazards Along Interior Path Cells (Never on Start or Exit!)
+      const wantPits = chapIdx === 0 ? 3 : (chapIdx <= 2 ? 3 : 4);
+      const wantGels = chapIdx === 0 ? 0 : (chapIdx === 1 ? 3 : (chapIdx <= 3 ? 3 : 4));
+      const wantBoosts = chapIdx >= 2 ? 2 : 0;
+      const wantKeys = chapIdx >= 3 ? (chapIdx === 4 && levelNum > 450 ? 2 : 1) : 0;
+
+      // Eligible interior path indices (skipping index 0=start, 1=runway, and last=exit)
+      const pathIdxPool = [];
+      for (let i = 2; i < solPath.length - 1; i++) pathIdxPool.push(i);
+
+      let placedPits = 0, placedGels = 0;
+      const usedPathIdx = new Set();
+
+      // Place Oobleck Pits (2) preferentially on straight corridor segments so player has crisp runway!
+      for (const idx of shuffle(pathIdxPool, rng)) {
+        if (placedPits >= wantPits) break;
+        if (usedPathIdx.has(idx) || usedPathIdx.has(idx - 1) || usedPathIdx.has(idx + 1)) continue;
+        const prev = solPath[idx - 1], curP = solPath[idx], nxt = solPath[idx + 1];
+        const isStraight = (prev.r === curP.r && curP.r === nxt.r) || (prev.c === curP.c && curP.c === nxt.c);
+        if (!isStraight) continue;
+        grid[curP.r][curP.c] = 2;
+        usedPathIdx.add(idx);
+        placedPits++;
+      }
+
+      // Place Magenta Gel Curtains (3) on separate non-adjacent corridor cells!
+      for (const idx of shuffle(pathIdxPool, rng)) {
+        if (placedGels >= wantGels) break;
+        if (usedPathIdx.has(idx) || usedPathIdx.has(idx - 1) || usedPathIdx.has(idx + 1)) continue;
+        const curP = solPath[idx];
+        grid[curP.r][curP.c] = 3;
+        usedPathIdx.add(idx);
+        placedGels++;
+      }
+
+      // Place Cyan Boost Pads (4) right BEFORE an Oobleck Pit when space allows (Ch. 3–5!)
+      let placedBoosts = 0;
+      for (let i = 2; i < solPath.length - 2 && placedBoosts < wantBoosts; i++) {
+        if (grid[solPath[i].r][solPath[i].c] === 0 && grid[solPath[i + 1].r][solPath[i + 1].c] === 2) {
+          grid[solPath[i].r][solPath[i].c] = 4;
+          placedBoosts++;
+        }
+      }
+
+      // Place Optional Golden Lab Keys on Open Reachable Cells (Ch. 4–5!)
+      const keys = [];
+      if (wantKeys > 0) {
+        const keyCands = [];
+        for (let r = 1; r < N - 1; r++) {
+          for (let c = 1; c < N - 1; c++) {
+            if (grid[r][c] === 0 && !(r === 1 && c === 1) && !(r === farCell[0] && c === farCell[1])) {
+              keyCands.push({ r, c });
+            }
+          }
+        }
+        const picked = shuffle(keyCands, rng).slice(0, wantKeys);
+        picked.forEach((kp, idx) => keys.push({ id: idx, r: kp.r, c: kp.c, got: false }));
+      }
 
       return {
         levelNum,
-        rows,
-        cols,
+        chapIdx,
+        N,
         grid,
-        start,
-        goal,
-        solution,
-        denseSet,
-        gates,
-        shearSensitivity
+        start: { r: 1, c: 1 },
+        exit: { r: farCell[0], c: farCell[1] },
+        keys,
+        solPath
       };
-    }
-
-    const levelCache = new Map();
-    function getLevel(num) {
-      if (!levelCache.has(num)) {
-        levelCache.set(num, buildMaze(num));
-      }
-      return levelCache.get(num);
     }
 
     function getChapter(num) {
@@ -778,11 +955,11 @@
     }
 
     // ==============================================
-    // AUDIO ENGINE (LIQUID RIPPLES & SOLID FREEZE)
+    // FLUID SQUISH, RUBBER BOUNCE & LAB CHIME AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
-    let lastBubbleTime = 0;
+    let lastSoundMs = 0;
 
     function initAudio() {
       if (!audioCtx) {
@@ -792,87 +969,99 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function sfxBubble(speedNorm) {
+    function playTone(freq, dur, type = "sine", vol = 0.09) {
       if (!soundOn) return;
-      const nowMs = performance.now();
-      if (nowMs - lastBubbleTime < 220) return;
-      lastBubbleTime = nowMs;
       initAudio();
       if (!audioCtx) return;
-
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      const g = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + dur + 0.02);
+    }
+
+    function sfxOobleckSkim() {
+      const ms = performance.now();
+      if (ms - lastSoundMs < 130) return;
+      lastSoundMs = ms;
+      playTone(480 + Math.random() * 90, 0.045, "triangle", 0.05);
+    }
+
+    function sfxGelBounce() {
+      const ms = performance.now();
+      if (ms - lastSoundMs < 120) return;
+      lastSoundMs = ms;
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
       osc.type = "sine";
-      const baseF = 240 + speedNorm * 140 + Math.random() * 50;
-      osc.frequency.setValueAtTime(baseF, now);
-      osc.frequency.exponentialRampToValueAtTime(baseF * 1.45, now + 0.065);
-      gain.gain.setValueAtTime(0.032, now);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.075);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      osc.frequency.setValueAtTime(240, now);
+      osc.frequency.exponentialRampToValueAtTime(115, now + 0.11);
+      g.gain.setValueAtTime(0.12, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + 0.08);
+      osc.stop(now + 0.15);
     }
 
-    function sfxSolidify() {
+    function sfxSinkSplash() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
-
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(165, now);
-      osc.frequency.exponentialRampToValueAtTime(64, now + 0.16);
-
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.value = 520;
-
-      gain.gain.setValueAtTime(0.18, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.19);
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
+      const g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(340, now);
+      osc.frequency.exponentialRampToValueAtTime(85, now + 0.25);
+      g.gain.setValueAtTime(0.13, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + 0.2);
+      osc.stop(now + 0.3);
     }
 
-    function sfxWin() {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx) return;
-      [329.63, 392.0, 493.88, 659.25].forEach((freq, i) => {
-        setTimeout(() => {
-          const now = audioCtx.currentTime;
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(freq, now);
-          gain.gain.setValueAtTime(0.13, now);
-          gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.45);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.48);
-        }, i * 85);
+    function sfxBoost() {
+      playTone(620, 0.08, "triangle", 0.08);
+      setTimeout(() => playTone(880, 0.12, "sine", 0.09), 40);
+    }
+
+    function sfxKeyPickup() {
+      playTone(659.25, 0.14, "sine", 0.11);
+      setTimeout(() => playTone(987.77, 0.24, "sine", 0.11), 65);
+    }
+
+    function sfxLabWin() {
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.42, "sine", 0.11), i * 75);
       });
     }
 
     // ==============================================
-    // GAME STATE, NON-NEWTONIAN PHYSICS & RENDERING
+    // GAME STATE, ANALOG STEERING & PHYSICS LOOP
     // ==============================================
     const canvas = document.getElementById("oobleckCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const timeCounter = document.getElementById("timeCounter");
-    const freezeCounter = document.getElementById("freezeCounter");
+    const keysPill = document.getElementById("keysPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const viscLabel = document.getElementById("viscLabel");
-    const viscFill = document.getElementById("viscFill");
+    const shearState = document.getElementById("shearState");
+    const shearFill = document.getElementById("shearFill");
+    const shearSpd = document.getElementById("shearSpd");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
     const winHeading = document.getElementById("winHeading");
@@ -889,83 +1078,77 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let maze = null;
-    // Ball state in grid coordinates (1.5, 1.5 = center of cell 1,1)
-    let ball = { x: 1.5, y: 1.5, vx: 0, vy: 0, r: 0.31 };
-    let viscosity = 0; // 0 (liquid) -> 1 (solidified)
-    let solidTimer = 0;
-    let freezeCount = 0;
-    let levelTime = 0;
-    let startedMoving = false;
+    let lab = null;
+    let orb = { x: 0, y: 0, vx: 0, vy: 0, r: 12, sinkProg: 0 };
     let levelWon = false;
-    let showHint = false;
+    let showSpeedMap = false;
+
+    // Smooth Analog Touch Joystick + Desktop Keyboard Steering
+    let joyActive = false;
+    let joyOrigin = null;
+    let joyCurrent = null;
+    const keysDown = new Set();
+
     let ripples = [];
-    let rippleAccum = 0;
-    let shakeAmt = 0;
+    let trail = [];
     let toastTimer = null;
 
-    // Input state
-    let pointerActive = false;
-    let pointerGrid = { x: 1.5, y: 1.5 };
-    let lastPointerGrid = { x: 1.5, y: 1.5 };
-    let pointerVel = 0;
-    const keys = { up: false, down: false, left: false, right: false };
-
-    function showToast(msg, ms = 2200) {
+    function showToast(msg, ms = 2400) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
+    function getCellSize() {
+      return (WORLD_W - 24) / lab.N;
+    }
+
+    function cellCenter(r, c) {
+      const cs = getCellSize();
+      return { x: 12 + (c + 0.5) * cs, y: 12 + (r + 0.5) * cs };
+    }
+
+    function worldToCell(x, y) {
+      const cs = getCellSize();
+      return { r: Math.floor((y - 12) / cs), c: Math.floor((x - 12) / cs) };
+    }
+
+    function resetOrbPosition() {
+      const st = cellCenter(lab.start.r, lab.start.c);
+      const cs = getCellSize();
+      orb = { x: st.x, y: st.y, vx: 0, vy: 0, r: cs * 0.27, sinkProg: 0 };
+      trail = [];
+    }
+
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Maze ${currentLevelNum} / ${TOTAL_LEVELS}`;
-      timeCounter.textContent = `Time: ${levelTime.toFixed(1)}s`;
-      freezeCounter.textContent = `Solidified: ${freezeCount}`;
-      solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Maze ${currentLevelNum} / 500 ▾`;
-    }
+      levelTitle.textContent = `Lab #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      solvedCounter.textContent = `Escaped: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Lab ${currentLevelNum} / 500 ▾`;
 
-    function updateViscosityUI() {
-      const pct = Math.min(100, Math.round(viscosity * 100));
-      viscFill.style.width = `${pct}%`;
-      if (solidTimer > 0) {
-        viscLabel.textContent = "■ SOLIDIFIED!";
-        viscLabel.className = "visc-label state-solid";
-      } else if (viscosity > 0.52) {
-        viscLabel.textContent = "▲ THICKENING";
-        viscLabel.className = "visc-label state-thick";
+      if (lab.keys.length > 0) {
+        const gotCnt = lab.keys.filter((k) => k.got).length;
+        keysPill.style.display = "inline-flex";
+        keysPill.textContent = `🔑 Keys: ${gotCnt} / ${lab.keys.length}`;
       } else {
-        viscLabel.textContent = "● LIQUID";
-        viscLabel.className = "visc-label state-liquid";
+        keysPill.style.display = "none";
       }
     }
 
-    function loadLevel(num) {
+    function loadLab(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      maze = getLevel(currentLevelNum);
-      ball = {
-        x: maze.start.c + 0.5,
-        y: maze.start.r + 0.5,
-        vx: 0,
-        vy: 0,
-        r: 0.3
-      };
-      viscosity = 0;
-      solidTimer = 0;
-      freezeCount = 0;
-      levelTime = 0;
-      startedMoving = false;
+      lab = buildOobleckLab(currentLevelNum);
+      lab.keys.forEach((k) => { k.got = false; });
       levelWon = false;
-      showHint = false;
-      pointerActive = false;
-      pointerVel = 0;
+      showSpeedMap = false;
+      joyActive = false;
+      joyOrigin = null;
+      joyCurrent = null;
       ripples = [];
-      shakeAmt = 0;
+      resetOrbPosition();
 
-      canvas.classList.remove("dragging");
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
@@ -974,9 +1157,9 @@
       } catch (e) {}
 
       updateHUD();
-      updateViscosityUI();
     }
 
+    // Viewport & Analog Steering Pointer Events
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -985,98 +1168,84 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function getBoardMetrics() {
+    function getViewport() {
       const rect = canvas.parentElement.getBoundingClientRect();
-      const pad = 16;
-      const boardPx = Math.min(rect.width, rect.height) - pad * 2;
-      const cellPx = boardPx / maze.cols;
-      const ox = (rect.width - cellPx * maze.cols) / 2;
-      const oy = (rect.height - cellPx * maze.rows) / 2;
-      return { w: rect.width, h: rect.height, cellPx, ox, oy };
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offsetX = (rect.width - WORLD_W * scale) / 2;
+      const offsetY = (rect.height - WORLD_H * scale) / 2;
+      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    function clientToGrid(clientX, clientY) {
+    function clientToWorld(clientX, clientY) {
       const rect = canvas.getBoundingClientRect();
-      const m = getBoardMetrics();
+      const vp = getViewport();
       return {
-        x: (clientX - rect.left - m.ox) / m.cellPx,
-        y: (clientY - rect.top - m.oy) / m.cellPx
+        x: (clientX - rect.left - vp.offsetX) / vp.scale,
+        y: (clientY - rect.top - vp.offsetY) / vp.scale
       };
     }
 
-    function isGateOpen(gate, t) {
-      const mod = (t + gate.phase) % gate.cycle;
-      return mod < gate.openDur;
-    }
-
-    // Pointer Events (Magnetic Tether Dragging)
     canvas.addEventListener("pointerdown", (e) => {
       if (levelWon) return;
       initAudio();
-      pointerActive = true;
-      startedMoving = true;
-      canvas.classList.add("dragging");
+      const pt = clientToWorld(e.clientX, e.clientY);
+      joyActive = true;
+      joyOrigin = pt;
+      joyCurrent = pt;
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-      pointerGrid = clientToGrid(e.clientX, e.clientY);
-      lastPointerGrid = { ...pointerGrid };
-      pointerVel = 0;
     });
 
     canvas.addEventListener("pointermove", (e) => {
-      if (!pointerActive || levelWon) return;
-      const next = clientToGrid(e.clientX, e.clientY);
-      const jump = Math.hypot(next.x - pointerGrid.x, next.y - pointerGrid.y);
-      pointerVel = Math.min(18, pointerVel * 0.55 + jump * 24);
-      lastPointerGrid = { ...pointerGrid };
-      pointerGrid = next;
+      if (!joyActive || levelWon) return;
+      joyCurrent = clientToWorld(e.clientX, e.clientY);
     });
 
-    const releasePointer = () => {
-      pointerActive = false;
-      pointerVel = 0;
-      canvas.classList.remove("dragging");
+    const endJoy = () => {
+      joyActive = false;
+      joyOrigin = null;
+      joyCurrent = null;
     };
-    canvas.addEventListener("pointerup", releasePointer);
-    canvas.addEventListener("pointercancel", releasePointer);
+    canvas.addEventListener("pointerup", endJoy);
+    canvas.addEventListener("pointercancel", endJoy);
 
-    // Keyboard Support (Desktop)
     window.addEventListener("keydown", (e) => {
-      if (pickerModal.classList.contains("open") || levelWon) return;
-      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) e.preventDefault();
-      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") { keys.up = true; startedMoving = true; initAudio(); }
-      if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") { keys.down = true; startedMoving = true; initAudio(); }
-      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") { keys.left = true; startedMoving = true; initAudio(); }
-      if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") { keys.right = true; startedMoving = true; initAudio(); }
+      if (pickerModal.classList.contains("open")) return;
+      keysDown.add(e.key.toLowerCase());
+      if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(e.key.toLowerCase())) {
+        e.preventDefault();
+      }
     });
     window.addEventListener("keyup", (e) => {
-      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") keys.up = false;
-      if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") keys.down = false;
-      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") keys.left = false;
-      if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") keys.right = false;
+      keysDown.delete(e.key.toLowerCase());
     });
 
-    // Controls
-    document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (levelWon) return;
-      showHint = !showHint;
-      if (showHint) showToast("Golden calm path revealed — glide gently along it!", 2300);
+      initAudio();
+      showSpeedMap = !showSpeedMap;
+      showToast(showSpeedMap ? "💡 Speed Map active! ⚡ = Sprint FAST, 💧 = Glide SLOW." : "Speed Map hidden.", 2600);
     });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      if (levelWon) { loadLab(currentLevelNum); return; }
+      initAudio();
+      resetOrbPosition();
+    });
+
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
     nextLevelBtn.addEventListener("click", () => {
-      loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
+      loadLab(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadLab(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadLab(currentLevelNum + 1);
     });
 
-    // Maze Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1107,7 +1276,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadLevel(n);
+          loadLab(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1129,481 +1298,454 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadLevel(val);
+        loadLab(val);
         pickerModal.classList.remove("open");
       }
     });
 
-    // ==============================================
-    // NON-NEWTONIAN PHYSICS STEP & WALL RESOLUTION
-    // ==============================================
-    function isCellBlocking(r, c, t) {
-      if (r < 0 || r >= maze.rows || c < 0 || c >= maze.cols) return true;
-      if (maze.grid[r][c] === 1) return true;
-      for (const g of maze.gates) {
-        if (g.r === r && g.c === c) {
-          if (!isGateOpen(g, t)) {
-            // Never crush player if ball is already inside the gate cell
-            const ballR = Math.floor(ball.y);
-            const ballC = Math.floor(ball.x);
-            if (ballR === r && ballC === c) return false;
-            return true;
-          }
-        }
-      }
-      return false;
-    }
+    // Circle vs Grid Tile Collision Resolver (Solid Walls + Fast-Impact Gel Curtains!)
+    function resolveSolidTiles(speedNow) {
+      const cs = getCellSize();
+      const rMin = Math.max(0, Math.floor((orb.y - orb.r - 12) / cs));
+      const rMax = Math.min(lab.N - 1, Math.floor((orb.y + orb.r - 12) / cs));
+      const cMin = Math.max(0, Math.floor((orb.x - orb.r - 12) / cs));
+      const cMax = Math.min(lab.N - 1, Math.floor((orb.x + orb.r - 12) / cs));
 
-    function resolveWallCollisions(t) {
-      const minC = Math.floor(ball.x - ball.r) - 1;
-      const maxC = Math.floor(ball.x + ball.r) + 1;
-      const minR = Math.floor(ball.y - ball.r) - 1;
-      const maxR = Math.floor(ball.y + ball.r) + 1;
+      for (let r = rMin; r <= rMax; r++) {
+        for (let c = cMin; c <= cMax; c++) {
+          const tile = lab.grid[r][c];
+          const isSolidWall = tile === 1;
+          // Magenta Gel Curtain (3) hardens like rubberized steel when struck FAST (>= SHEAR_THRESHOLD)!
+          const isHardenedGel = tile === 3 && speedNow >= SHEAR_THRESHOLD;
+          if (!isSolidWall && !isHardenedGel) continue;
 
-      for (let r = minR; r <= maxR; r++) {
-        for (let c = minC; c <= maxC; c++) {
-          if (!isCellBlocking(r, c, t)) continue;
-          const closestX = Math.max(c, Math.min(ball.x, c + 1));
-          const closestY = Math.max(r, Math.min(ball.y, r + 1));
-          const dx = ball.x - closestX;
-          const dy = ball.y - closestY;
-          const distSq = dx * dx + dy * dy;
+          const rx = 12 + c * cs;
+          const ry = 12 + r * cs;
+          const closestX = Math.max(rx, Math.min(orb.x, rx + cs));
+          const closestY = Math.max(ry, Math.min(orb.y, ry + cs));
+          const dx = orb.x - closestX;
+          const dy = orb.y - closestY;
+          const dist = Math.hypot(dx, dy);
 
-          if (distSq < ball.r * ball.r) {
-            const dist = Math.sqrt(distSq);
-            if (dist > 0.0001) {
-              const overlap = ball.r - dist;
-              const nx = dx / dist;
-              const ny = dy / dist;
-              ball.x += nx * overlap;
-              ball.y += ny * overlap;
+          if (dist < orb.r) {
+            const nx = dist > 1e-4 ? dx / dist : 0;
+            const ny = dist > 1e-4 ? dy / dist : -1;
+            const overlap = orb.r - dist;
+            orb.x += nx * overlap;
+            orb.y += ny * overlap;
 
-              // Dampen velocity into the wall
-              const vn = ball.vx * nx + ball.vy * ny;
-              if (vn < 0) {
-                ball.vx -= vn * nx;
-                ball.vy -= vn * ny;
+            const vn = orb.vx * nx + orb.vy * ny;
+            if (vn < 0) {
+              const bounce = isHardenedGel ? 1.55 : 1.18;
+              orb.vx -= bounce * vn * nx;
+              orb.vy -= bounce * vn * ny;
+              if (isHardenedGel) {
+                sfxGelBounce();
+                ripples.push({ x: closestX, y: closestY, r: 5, alpha: 0.95, color: "#f472b6" });
+                showToast("🟣 Too fast! Gel curtain hardened—glide SLOWLY to slip through!", 2100);
               }
-            } else {
-              ball.x += 0.01;
             }
           }
         }
       }
     }
 
-    function updatePhysics(dt, totalSec) {
-      if (levelWon) return;
+    // ==============================================
+    // PHYSICS TICK & LABORATORY FLUID RENDERER
+    // ==============================================
+    let lastTime = performance.now();
 
-      if (startedMoving) {
-        levelTime += dt;
-        timeCounter.textContent = `Time: ${levelTime.toFixed(1)}s`;
-      }
+    function frame(now) {
+      const dt = Math.min(0.033, (now - lastTime) / 1000);
+      lastTime = now;
 
-      pointerVel *= Math.pow(0.08, dt);
-      if (shakeAmt > 0) shakeAmt = Math.max(0, shakeAmt - dt * 16);
+      if (!levelWon) {
+        // 1. Read Desired Steering Vector from Analog Touch Drag OR Keyboard!
+        let targetVx = 0, targetVy = 0;
+        let hasInput = false;
 
-      const cellR = Math.floor(ball.y);
-      const cellC = Math.floor(ball.x);
-      const inDense = maze.denseSet.has(`${cellR},${cellC}`);
-      const zoneMult = inDense ? 1.55 : 1.0;
-
-      // Compute player steering force (Tether OR Keyboard)
-      let pullX = 0;
-      let pullY = 0;
-      let shearDemand = 0;
-
-      if (pointerActive) {
-        const dx = pointerGrid.x - ball.x;
-        const dy = pointerGrid.y - ball.y;
-        const dist = Math.hypot(dx, dy);
-
-        if (dist > 0.06) {
-          const ux = dx / dist;
-          const uy = dy / dist;
-          const clampedPull = Math.min(dist, 2.2);
-          pullX = ux * clampedPull * 1.45;
-          pullY = uy * clampedPull * 1.45;
-
-          // Non-Newtonian Shear Stress: pulling far or jerking fast spikes viscosity!
-          const stretchStress = Math.max(0, dist - 0.85) * 0.42;
-          const jerkStress = Math.max(0, pointerVel - 2.6) * 0.12;
-          shearDemand = (stretchStress + jerkStress) * maze.shearSensitivity * zoneMult;
-        }
-      } else {
-        const kx = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
-        const ky = (keys.down ? 1 : 0) - (keys.up ? 1 : 0);
-        const kl = Math.hypot(kx, ky);
-        if (kl > 0) {
-          pullX = (kx / kl) * 1.75;
-          pullY = (ky / kl) * 1.75;
-          // Continuous keyboard pushing slowly thickens inside dense zones if held nonstop
-          shearDemand = (inDense ? 0.48 : 0.16) * maze.shearSensitivity;
-        }
-      }
-
-      // Integrate Non-Newtonian Viscosity
-      if (solidTimer > 0) {
-        solidTimer = Math.max(0, solidTimer - dt);
-        // Pulling while solidified keeps it hardened longer
-        if (shearDemand > 0.35) {
-          solidTimer = Math.min(0.85, solidTimer + dt * 0.65);
-          viscosity = Math.min(1, viscosity + dt * 0.5);
-        } else {
-          viscosity = Math.max(0.2, viscosity - dt * 0.95);
-        }
-        ball.vx *= Math.pow(0.002, dt);
-        ball.vy *= Math.pow(0.002, dt);
-      } else {
-        if (shearDemand > 0.05) {
-          viscosity = Math.min(1, viscosity + shearDemand * dt * 1.65);
-        } else {
-          // Relax quickly back into silky liquid when calm
-          viscosity = Math.max(0, viscosity - dt * 0.88);
-        }
-
-        // Trigger Solidification Lock if shear passes threshold!
-        if (viscosity >= 0.82) {
-          solidTimer = 0.72;
-          freezeCount++;
-          shakeAmt = 5;
-          ball.vx *= 0.08;
-          ball.vy *= 0.08;
-          sfxSolidify();
-          freezeCounter.textContent = `Solidified: ${freezeCount}`;
-          showToast(inDense ? "Dense Oobleck solidified! Ease off and glide slowly." : "Too fast — Oobleck hardened! Relax your pull.", 1900);
-        } else {
-          // Smooth fluid resistance: soft when liquid, sluggish as it thickens
-          const fluidity = Math.max(0.18, 1 - viscosity * 0.95) * (inDense ? 0.74 : 1.0);
-          const accel = 9.5 * fluidity;
-          ball.vx += pullX * accel * dt;
-          ball.vy += pullY * accel * dt;
-
-          // Liquid drag
-          const drag = Math.pow(0.045, dt);
-          ball.vx *= drag;
-          ball.vy *= drag;
-
-          // Clamp gentle glide velocity
-          const speed = Math.hypot(ball.vx, ball.vy);
-          const maxSpd = (inDense ? 1.75 : 2.35) * fluidity;
-          if (speed > maxSpd) {
-            ball.vx = (ball.vx / speed) * maxSpd;
-            ball.vy = (ball.vy / speed) * maxSpd;
+        if (joyActive && joyOrigin && joyCurrent) {
+          const dx = joyCurrent.x - joyOrigin.x;
+          const dy = joyCurrent.y - joyOrigin.y;
+          const d = Math.hypot(dx, dy);
+          if (d > 4) {
+            hasInput = true;
+            const frac = Math.min(1, d / 72); // Smooth analog speed curve: short drag = slow, long drag = fast!
+            const spd = frac * MAX_SPEED;
+            targetVx = (dx / d) * spd;
+            targetVy = (dy / d) * spd;
           }
+        } else {
+          let kx = 0, ky = 0;
+          if (keysDown.has("arrowleft") || keysDown.has("a")) kx -= 1;
+          if (keysDown.has("arrowright") || keysDown.has("d")) kx += 1;
+          if (keysDown.has("arrowup") || keysDown.has("w")) ky -= 1;
+          if (keysDown.has("arrowdown") || keysDown.has("s")) ky += 1;
+          if (kx !== 0 || ky !== 0) {
+            hasInput = true;
+            const len = Math.hypot(kx, ky);
+            const sprint = keysDown.has("shift") || keysDown.has(" ");
+            const spd = sprint ? MAX_SPEED * 0.92 : SHEAR_THRESHOLD * 0.62;
+            targetVx = (kx / len) * spd;
+            targetVy = (ky / len) * spd;
+          }
+        }
 
-          // Spawn soft fluid ripples while gliding smoothly
-          if (speed > 0.35) {
-            rippleAccum += speed * dt;
-            if (rippleAccum > 0.24) {
-              rippleAccum = 0;
-              ripples.push({
-                x: ball.x,
-                y: ball.y,
-                r: ball.r * 0.8,
-                alpha: 0.55,
-                color: inDense ? "#a78bfa" : "#5eead4"
-              });
-              sfxBubble(Math.min(1, speed / 2.2));
+        // Smooth physical inertia
+        const accel = hasInput ? 10.5 : 6.2;
+        orb.vx += (targetVx - orb.vx) * Math.min(1, dt * accel);
+        orb.vy += (targetVy - orb.vy) * Math.min(1, dt * accel);
+
+        const speedNow = Math.hypot(orb.vx, orb.vy);
+        const isSolid = speedNow >= SHEAR_THRESHOLD;
+
+        // Check tile currently under orb center
+        const cell = worldToCell(orb.x, orb.y);
+        const curTile = (cell.r >= 0 && cell.r < lab.N && cell.c >= 0 && cell.c < lab.N) ? lab.grid[cell.r][cell.c] : 0;
+
+        // Cyan Speed Booster Pad (4): Instantly surges orb into solid skimming speed!
+        if (curTile === 4 && speedNow > 25 && speedNow < MAX_SPEED * 0.88) {
+          const boostSpd = MAX_SPEED * 0.96;
+          orb.vx = (orb.vx / speedNow) * boostSpd;
+          orb.vy = (orb.vy / speedNow) * boostSpd;
+          sfxBoost();
+          ripples.push({ x: orb.x, y: orb.y, r: 8, alpha: 0.9, color: "#22d3ee" });
+        }
+
+        // Move & resolve wall / hardened gel collisions
+        orb.x += orb.vx * dt;
+        orb.y += orb.vy * dt;
+        resolveSolidTiles(Math.hypot(orb.vx, orb.vy));
+
+        // Evaluate Non-Newtonian Cream Oobleck Pit (Tile 2):
+        const postSpd = Math.hypot(orb.vx, orb.vy);
+        const postCell = worldToCell(orb.x, orb.y);
+        const postTile = (postCell.r >= 0 && postCell.r < lab.N && postCell.c >= 0 && postCell.c < lab.N) ? lab.grid[postCell.r][postCell.c] : 0;
+
+        if (postTile === 2) {
+          if (postSpd >= SHEAR_THRESHOLD) {
+            // Skimming FAST! Oobleck hardens into solid ripples beneath orb!
+            orb.sinkProg = Math.max(0, orb.sinkProg - dt * 3);
+            sfxOobleckSkim();
+            if (Math.random() < 0.35) {
+              ripples.push({ x: orb.x, y: orb.y, r: 4, alpha: 0.7, color: "#fef3c7" });
+            }
+          } else {
+            // Too slow! Oobleck turns liquid and pulls orb down!
+            orb.sinkProg += dt * 2.5;
+            orb.vx *= 0.85;
+            orb.vy *= 0.85;
+            if (orb.sinkProg >= 1) {
+              sfxSinkSplash();
+              ripples.push({ x: orb.x, y: orb.y, r: 10, alpha: 1, color: "#facc15" });
+              showToast("🥣 You slowed down on Oobleck & sank! Drag further to sprint FAST across!", 2600);
+              resetOrbPosition();
             }
           }
+        } else {
+          orb.sinkProg = Math.max(0, orb.sinkProg - dt * 4);
         }
+
+        // Check Golden Lab Keys Pickup
+        for (const k of lab.keys) {
+          if (k.got) continue;
+          const kc = cellCenter(k.r, k.c);
+          if (Math.hypot(orb.x - kc.x, orb.y - kc.y) < orb.r + 12) {
+            k.got = true;
+            sfxKeyPickup();
+            ripples.push({ x: kc.x, y: kc.y, r: 8, alpha: 1, color: "#fde047" });
+            updateHUD();
+          }
+        }
+
+        // Check Emerald Exit Drain Victory!
+        const ex = cellCenter(lab.exit.r, lab.exit.c);
+        if (Math.hypot(orb.x - ex.x, orb.y - ex.y) < orb.r + 13) {
+          const allKeys = lab.keys.every((k) => k.got);
+          if (allKeys) {
+            levelWon = true;
+            joyActive = false;
+            solvedSet.add(currentLevelNum);
+            try {
+              localStorage.setItem("zinplay_oobleck_500_solved", JSON.stringify([...solvedSet]));
+            } catch (e) {}
+            sfxLabWin();
+            updateHUD();
+
+            const isLast = currentLevelNum === TOTAL_LEVELS;
+            winHeading.textContent = isLast ? "All 500 Fluid Labs Cleared!" : `Lab #${currentLevelNum} Cleared!`;
+            winText.textContent = "You mastered non-Newtonian shear control and reached the exit drain!";
+            nextLevelBtn.textContent = isLast ? "Replay Lab #1" : `Next Lab (#${currentLevelNum + 1}) →`;
+            setTimeout(() => winOverlay.classList.add("show"), 460);
+          } else {
+            showToast("🔑 Collect all Golden Lab Keys before entering the Exit Drain!", 2200);
+          }
+        }
+
+        // Record Smooth Wake Trail
+        if (postSpd > 20) {
+          trail.push({ x: orb.x, y: orb.y, solid: postSpd >= SHEAR_THRESHOLD, alpha: 0.7 });
+          if (trail.length > 22) trail.shift();
+        }
+
+        // Update Live Viscosity HUD Meter
+        const pct = Math.min(100, (postSpd / MAX_SPEED) * 100);
+        shearFill.style.width = `${pct.toFixed(0)}%`;
+        shearSpd.textContent = `${(postSpd / 45).toFixed(1)} m/s`;
+        const solidNow = postSpd >= SHEAR_THRESHOLD;
+        shearState.textContent = solidNow ? "🪨 SOLID (Fast)" : "💧 LIQUID (Slow)";
+        shearState.className = "shear-state" + (solidNow ? " solid-mode" : "");
       }
 
-      // Move ball with 2 sub-steps for crisp corner gliding
-      const subSteps = 2;
-      for (let s = 0; s < subSteps; s++) {
-        ball.x += (ball.vx * dt) / subSteps;
-        ball.y += (ball.vy * dt) / subSteps;
-        resolveWallCollisions(totalSec);
-      }
-
-      updateViscosityUI();
-
-      // Check Goal Reach
-      const distGoal = Math.hypot(ball.x - (maze.goal.c + 0.5), ball.y - (maze.goal.r + 0.5));
-      if (distGoal < 0.34) {
-        levelWon = true;
-        pointerActive = false;
-        canvas.classList.remove("dragging");
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_oobleck_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        updateHUD();
-        sfxWin();
-
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        winHeading.textContent = isLast ? "All 500 Oobleck Mazes Cleared!" : `Maze ${currentLevelNum} Cleared!`;
-        winText.textContent = `Finished in ${levelTime.toFixed(1)}s with ${freezeCount} solidification${freezeCount === 1 ? "" : "s"}.`;
-        nextLevelBtn.textContent = isLast ? "Replay Maze 1" : `Play Maze ${currentLevelNum + 1} →`;
-        setTimeout(() => winOverlay.classList.add("show"), 320);
-      }
-    }
-
-    // ==============================================
-    // RENDER LOOP (CREAMY NON-NEWTONIAN AESTHETIC)
-    // ==============================================
-    function drawScene(nowMs) {
-      const totalSec = nowMs / 1000;
-      const m = getBoardMetrics();
-      const cs = m.cellPx;
-
-      ctx.clearRect(0, 0, m.w, m.h);
-
-      const shakeX = shakeAmt > 0 ? (Math.random() - 0.5) * shakeAmt : 0;
-      const shakeY = shakeAmt > 0 ? (Math.random() - 0.5) * shakeAmt : 0;
+      // === RENDER LAB TRAY SCENE ===
+      const vp = getViewport();
+      ctx.clearRect(0, 0, vp.w, vp.h);
 
       ctx.save();
-      ctx.translate(m.ox + shakeX, m.oy + shakeY);
+      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.scale(vp.scale, vp.scale);
 
-      // 1. Oobleck Fluid Floor Bed
-      const floorGrad = ctx.createLinearGradient(0, 0, cs * maze.cols, cs * maze.rows);
-      floorGrad.addColorStop(0, "#1c2d4a");
-      floorGrad.addColorStop(0.5, "#1f3454");
-      floorGrad.addColorStop(1, "#182844");
-      ctx.fillStyle = floorGrad;
-      ctx.beginPath();
-      ctx.roundRect(0, 0, cs * maze.cols, cs * maze.rows, 10);
-      ctx.fill();
+      const cs = getCellSize();
 
-      // 2. Dense Oobleck Puddles (Chapter 2+)
-      maze.denseSet.forEach((k) => {
-        const [r, c] = k.split(",").map(Number);
-        const cx = (c + 0.5) * cs;
-        const cy = (r + 0.5) * cs;
-        const pulse = 1 + Math.sin(totalSec * 2.4 + r + c) * 0.04;
-        ctx.save();
-        ctx.fillStyle = "rgba(124, 58, 237, 0.36)";
-        ctx.beginPath();
-        ctx.roundRect(c * cs + 2, r * cs + 2, cs - 4, cs - 4, 7);
-        ctx.fill();
-        ctx.strokeStyle = "rgba(167, 139, 250, 0.55)";
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.arc(cx, cy, cs * 0.27 * pulse, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-      });
+      // 1. Draw Laboratory Grid Tiles
+      for (let r = 0; r < lab.N; r++) {
+        for (let c = 0; c < lab.N; c++) {
+          const x = 12 + c * cs;
+          const y = 12 + r * cs;
+          const t = lab.grid[r][c];
 
-      // 3. Optional Calm Path Hint
-      if (showHint && maze.solution.length > 1) {
+          if (t === 1) {
+            // Brushed Steel Lab Wall
+            ctx.fillStyle = "#1e293b";
+            ctx.strokeStyle = "#475569";
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.roundRect(x + 1, y + 1, cs - 2, cs - 2, 5);
+            ctx.fill();
+            ctx.stroke();
+          } else {
+            // Matte Slate Floor Tile
+            ctx.fillStyle = (r + c) % 2 === 0 ? "#0f1c2b" : "#122133";
+            ctx.fillRect(x, y, cs, cs);
+
+            if (t === 2) {
+              // Swirling Creamy Non-Newtonian Oobleck Pit (Sprint FAST!)
+              const wave = Math.sin(now * 0.004 + r + c) * 2.5;
+              const g = ctx.createRadialGradient(x + cs / 2, y + cs / 2, 2, x + cs / 2, y + cs / 2, cs * 0.56);
+              g.addColorStop(0, "#fef3c7");
+              g.addColorStop(0.7, "#fde68a");
+              g.addColorStop(1, "#ca8a04");
+              ctx.fillStyle = g;
+              ctx.beginPath();
+              ctx.roundRect(x + 2, y + 2, cs - 4, cs - 4, 9);
+              ctx.fill();
+
+              // Concentric Fluid Ripple Inside Oobleck Pool
+              ctx.strokeStyle = "rgba(120, 53, 15, 0.25)";
+              ctx.lineWidth = 1.6;
+              ctx.beginPath();
+              ctx.arc(x + cs / 2, y + cs / 2, cs * 0.24 + wave, 0, Math.PI * 2);
+              ctx.stroke();
+
+              ctx.fillStyle = "rgba(120, 53, 15, 0.65)";
+              ctx.font = `900 ${Math.max(8, Math.round(cs * 0.22))}px monospace`;
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+              ctx.fillText("FAST", x + cs / 2, y + cs / 2);
+            } else if (t === 3) {
+              // Translucent Magenta Shear-Thickening Gel Curtain (Glide SLOW!)
+              const wob = Math.sin(now * 0.005 + r * 2) * 2;
+              ctx.fillStyle = "rgba(217, 70, 239, 0.32)";
+              ctx.strokeStyle = "#f0abfc";
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.roundRect(x + 3, y + 3, cs - 6, cs - 6, 8);
+              ctx.fill();
+              ctx.stroke();
+
+              // Soft Wavy Gel Membranes
+              ctx.strokeStyle = "rgba(250, 232, 255, 0.45)";
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.moveTo(x + 8, y + cs * 0.35 + wob);
+              ctx.lineTo(x + cs - 8, y + cs * 0.35 - wob);
+              ctx.moveTo(x + 8, y + cs * 0.65 - wob);
+              ctx.lineTo(x + cs - 8, y + cs * 0.65 + wob);
+              ctx.stroke();
+
+              ctx.fillStyle = "#fae8ff";
+              ctx.font = `900 ${Math.max(8, Math.round(cs * 0.21))}px monospace`;
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+              ctx.fillText("SLOW", x + cs / 2, y + cs / 2);
+            } else if (t === 4) {
+              // Glowing Cyan Speed Boost Pad
+              ctx.fillStyle = "rgba(34, 211, 238, 0.22)";
+              ctx.strokeStyle = "#22d3ee";
+              ctx.lineWidth = 1.8;
+              ctx.beginPath();
+              ctx.roundRect(x + 4, y + 4, cs - 8, cs - 8, 7);
+              ctx.fill();
+              ctx.stroke();
+              ctx.fillStyle = "#a5f3fc";
+              ctx.font = `900 ${Math.max(10, Math.round(cs * 0.34))}px sans-serif`;
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+              ctx.fillText("⚡", x + cs / 2, y + cs / 2 + 1);
+            }
+          }
+        }
+      }
+
+      // 2. Optional Golden Speed Map Route Hint (When 💡 Speed Map Active!)
+      if (showSpeedMap) {
         ctx.save();
         ctx.strokeStyle = "rgba(250, 204, 21, 0.72)";
-        ctx.lineWidth = Math.max(2.5, cs * 0.11);
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.setLineDash([6, 7]);
-        ctx.lineDashOffset = -(nowMs * 0.02);
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
         ctx.beginPath();
-        maze.solution.forEach((pt, idx) => {
-          const px = (pt.c + 0.5) * cs;
-          const py = (pt.r + 0.5) * cs;
-          if (idx === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
+        lab.solPath.forEach((p, i) => {
+          const cc = cellCenter(p.r, p.c);
+          if (i === 0) ctx.moveTo(cc.x, cc.y);
+          else ctx.lineTo(cc.x, cc.y);
         });
         ctx.stroke();
         ctx.restore();
       }
 
-      // 4. Timed Pressure Gates (Chapter 3+)
-      for (const g of maze.gates) {
-        const open = isGateOpen(g, totalSec);
-        const mod = (totalSec + g.phase) % g.cycle;
-        const warning = open && mod > g.openDur - 0.75;
-        const x = g.c * cs;
-        const y = g.r * cs;
-
+      // 3. Golden Lab Keys
+      for (const k of lab.keys) {
+        if (k.got) continue;
+        const kc = cellCenter(k.r, k.c);
+        const bob = Math.sin(now * 0.006 + k.id) * 2.5;
         ctx.save();
-        if (!open) {
-          ctx.fillStyle = "rgba(245, 158, 11, 0.34)";
-          ctx.fillRect(x + 2, y + 2, cs - 4, cs - 4);
-          ctx.strokeStyle = "#f59e0b";
-          ctx.shadowColor = "#f59e0b";
-          ctx.shadowBlur = 10;
-          ctx.lineWidth = Math.max(4, cs * 0.16);
-          ctx.beginPath();
-          if (g.horiz) {
-            ctx.moveTo(x + cs * 0.5, y + 2);
-            ctx.lineTo(x + cs * 0.5, y + cs - 2);
-          } else {
-            ctx.moveTo(x + 2, y + cs * 0.5);
-            ctx.lineTo(x + cs - 2, y + cs * 0.5);
-          }
-          ctx.stroke();
-        } else {
-          ctx.strokeStyle = warning
-            ? `rgba(251, 191, 36, ${0.45 + 0.45 * Math.sin(nowMs * 0.025)})`
-            : "rgba(52, 211, 153, 0.38)";
-          ctx.lineWidth = 2;
-          ctx.setLineDash([4, 4]);
-          ctx.strokeRect(x + 4, y + 4, cs - 8, cs - 8);
-        }
-        ctx.restore();
-      }
-
-      // 5. Walls (Clean Rounded Lab Barriers)
-      ctx.fillStyle = "#0b1222";
-      ctx.strokeStyle = "#334155";
-      ctx.lineWidth = 1.4;
-      for (let r = 0; r < maze.rows; r++) {
-        for (let c = 0; c < maze.cols; c++) {
-          if (maze.grid[r][c] === 1) {
-            ctx.beginPath();
-            ctx.roundRect(c * cs + 1, r * cs + 1, cs - 2, cs - 2, Math.min(6, cs * 0.16));
-            ctx.fill();
-            ctx.stroke();
-          }
-        }
-      }
-
-      // 6. Start Ring & Glowing Goal Vortex
-      {
-        const sx = (maze.start.c + 0.5) * cs;
-        const sy = (maze.start.r + 0.5) * cs;
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.35)";
+        ctx.translate(kc.x, kc.y + bob);
+        ctx.fillStyle = "rgba(250, 204, 21, 0.24)";
+        ctx.strokeStyle = "#facc15";
+        ctx.shadowColor = "#facc15";
+        ctx.shadowBlur = 12;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(sx, sy, cs * 0.28, 0, Math.PI * 2);
-        ctx.stroke();
-
-        const gx = (maze.goal.c + 0.5) * cs;
-        const gy = (maze.goal.r + 0.5) * cs;
-        const gPulse = cs * (0.28 + Math.sin(totalSec * 4) * 0.04);
-        ctx.save();
-        ctx.fillStyle = "rgba(34, 197, 94, 0.25)";
-        ctx.strokeStyle = "#34d399";
-        ctx.shadowColor = "#34d399";
-        ctx.shadowBlur = 16;
-        ctx.lineWidth = 2.8;
-        ctx.beginPath();
-        ctx.arc(gx, gy, gPulse, 0, Math.PI * 2);
+        ctx.arc(0, 0, cs * 0.28, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
-
-        ctx.fillStyle = "#d1fae5";
-        ctx.beginPath();
-        ctx.arc(gx, gy, cs * 0.12, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#fef08a";
+        ctx.font = `${Math.max(11, Math.round(cs * 0.34))}px sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("🔑", 0, 1);
         ctx.restore();
       }
 
-      // 7. Fluid Ripples Behind Ball
-      ripples = ripples.filter((rp) => rp.alpha > 0.03);
+      // 4. Emerald Exit Portal Drain
+      const ex = cellCenter(lab.exit.r, lab.exit.c);
+      const unlocked = lab.keys.every((k) => k.got);
+      ctx.save();
+      ctx.translate(ex.x, ex.y);
+      ctx.rotate(now * 0.002);
+      ctx.fillStyle = unlocked ? "rgba(34, 197, 94, 0.26)" : "rgba(100, 116, 139, 0.25)";
+      ctx.strokeStyle = unlocked ? "#4ade80" : "#94a3b8";
+      ctx.shadowColor = unlocked ? "#22c55e" : "transparent";
+      ctx.shadowBlur = unlocked ? 16 : 0;
+      ctx.lineWidth = 2.8;
+      ctx.setLineDash([7, 4]);
+      ctx.beginPath();
+      ctx.arc(0, 0, cs * 0.34, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.rotate(-now * 0.002);
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = unlocked ? "#bbf7d0" : "#cbd5e1";
+      ctx.font = `900 ${Math.max(8, Math.round(cs * 0.2))}px monospace`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(unlocked ? "EXIT" : "LOCK", 0, 1);
+      ctx.restore();
+
+      // 5. Orb Wake Trail & Fluid Ripples
+      for (const tr of trail) {
+        tr.alpha *= 0.92;
+        ctx.fillStyle = tr.solid ? `rgba(251, 191, 36, ${tr.alpha * 0.5})` : `rgba(56, 189, 248, ${tr.alpha * 0.45})`;
+        ctx.beginPath();
+        ctx.arc(tr.x, tr.y, orb.r * 0.55, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ripples = ripples.filter((rp) => rp.alpha > 0.04);
       for (const rp of ripples) {
-        rp.r += 0.015;
-        rp.alpha *= 0.93;
-        ctx.save();
+        rp.r += 1.6;
+        rp.alpha *= 0.89;
         ctx.strokeStyle = rp.color;
         ctx.globalAlpha = rp.alpha;
-        ctx.lineWidth = 1.8;
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(rp.x * cs, rp.y * cs, rp.r * cs, 0, Math.PI * 2);
+        ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
         ctx.stroke();
-        ctx.restore();
+        ctx.globalAlpha = 1;
       }
 
-      // 8. Magnetic Tether Line (Shows Live Pull Tension)
-      const bx = ball.x * cs;
-      const by = ball.y * cs;
-      if (pointerActive && !levelWon) {
-        const px = Math.max(0, Math.min(maze.cols, pointerGrid.x)) * cs;
-        const py = Math.max(0, Math.min(maze.rows, pointerGrid.y)) * cs;
-        const tetherColor = solidTimer > 0
-          ? "#fb7185"
-          : (viscosity > 0.52 ? "#facc15" : "#2dd4bf");
+      // 6. Chrome Steel Player Orb (Shrinks Gently If Sinking!)
+      const curSpd = Math.hypot(orb.vx, orb.vy);
+      const isSolidOrb = curSpd >= SHEAR_THRESHOLD;
+      const drawR = orb.r * Math.max(0.35, 1 - orb.sinkProg * 0.65);
 
-        ctx.save();
-        ctx.strokeStyle = tetherColor;
-        ctx.lineWidth = solidTimer > 0 ? 3.2 : 2.4;
-        ctx.setLineDash(solidTimer > 0 ? [3, 4] : [7, 5]);
-        ctx.globalAlpha = 0.85;
-        ctx.beginPath();
-        ctx.moveTo(bx, by);
-        ctx.lineTo(px, py);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        ctx.fillStyle = tetherColor;
-        ctx.beginPath();
-        ctx.arc(px, py, 4.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // 9. Shear-Thickening Crust Halo Around Ball
-      const ballPxR = ball.r * cs;
-      if (viscosity > 0.18 || solidTimer > 0) {
-        const isFrozen = solidTimer > 0;
-        ctx.save();
-        ctx.translate(bx, by);
-        ctx.strokeStyle = isFrozen ? "#fb7185" : (viscosity > 0.52 ? "#facc15" : "#5eead4");
-        ctx.fillStyle = isFrozen ? "rgba(244, 63, 94, 0.28)" : "rgba(250, 204, 21, 0.15)";
-        ctx.shadowColor = isFrozen ? "#fb7185" : "#facc15";
-        ctx.shadowBlur = isFrozen ? 16 : 8;
-        ctx.lineWidth = isFrozen ? 2.6 : 1.8;
-
-        // Jagged crystalline ring when hardened
-        const spikes = 8;
-        const outerR = ballPxR * (1.28 + viscosity * 0.28);
-        ctx.beginPath();
-        for (let i = 0; i < spikes * 2; i++) {
-          const a = (i * Math.PI) / spikes;
-          const rr = isFrozen ? (i % 2 === 0 ? outerR : ballPxR * 1.05) : outerR;
-          const x = Math.cos(a) * rr;
-          const y = Math.sin(a) * rr;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // 10. Heavy Brushed-Chrome Sphere
       ctx.save();
-      const sphereGrad = ctx.createRadialGradient(
-        bx - ballPxR * 0.32,
-        by - ballPxR * 0.32,
-        ballPxR * 0.1,
-        bx,
-        by,
-        ballPxR
-      );
-      sphereGrad.addColorStop(0, "#ffffff");
-      sphereGrad.addColorStop(0.38, "#cbd5e1");
-      sphereGrad.addColorStop(0.85, "#475569");
-      sphereGrad.addColorStop(1, "#1e293b");
-
-      ctx.shadowColor = "rgba(0, 0, 0, 0.55)";
-      ctx.shadowBlur = 10;
-      ctx.fillStyle = sphereGrad;
+      ctx.translate(orb.x, orb.y);
+      const og = ctx.createRadialGradient(-drawR * 0.32, -drawR * 0.32, 1.5, 0, 0, drawR);
+      og.addColorStop(0, "#ffffff");
+      og.addColorStop(0.55, isSolidOrb ? "#fde68a" : "#bae6fd");
+      og.addColorStop(1, isSolidOrb ? "#b45309" : "#0369a1");
+      ctx.fillStyle = og;
+      ctx.strokeStyle = isSolidOrb ? "#facc15" : "#38bdf8";
+      ctx.shadowColor = isSolidOrb ? "#f59e0b" : "#38bdf8";
+      ctx.shadowBlur = 12;
+      ctx.lineWidth = 2.2;
       ctx.beginPath();
-      ctx.arc(bx, by, ballPxR, 0, Math.PI * 2);
+      ctx.arc(0, 0, drawR, 0, Math.PI * 2);
       ctx.fill();
-
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = solidTimer > 0 ? "#fda4af" : "#e2e8f0";
-      ctx.lineWidth = 1.6;
       ctx.stroke();
       ctx.restore();
 
-      ctx.restore(); // End board offset
-    }
+      // 7. Subtle Translucent Analog Joystick Visual Indicator While Dragging!
+      if (joyActive && joyOrigin && joyCurrent) {
+        const dx = joyCurrent.x - joyOrigin.x;
+        const dy = joyCurrent.y - joyOrigin.y;
+        const dist = Math.hypot(dx, dy);
+        const clamped = Math.min(72, dist);
+        const kx = joyOrigin.x + (dist > 1 ? (dx / dist) * clamped : 0);
+        const ky = joyOrigin.y + (dist > 1 ? (dy / dist) * clamped : 0);
+        const isFastDrag = clamped >= 72 * (SHEAR_THRESHOLD / MAX_SPEED);
 
-    let lastFrame = performance.now();
-    function frame(now) {
-      const dt = Math.min(0.05, (now - lastFrame) / 1000);
-      lastFrame = now;
-      updatePhysics(dt, now / 1000);
-      drawScene(now);
+        ctx.save();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.28)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(joyOrigin.x, joyOrigin.y, 40, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = isFastDrag ? "#facc15" : "#38bdf8";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(joyOrigin.x, joyOrigin.y);
+        ctx.lineTo(kx, ky);
+        ctx.stroke();
+
+        ctx.fillStyle = isFastDrag ? "#facc15" : "#38bdf8";
+        ctx.beginPath();
+        ctx.arc(kx, ky, 9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      ctx.restore();
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadLevel(currentLevelNum);
+    loadLab(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
