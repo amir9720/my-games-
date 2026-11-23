@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Infinite Domino Builder — 500 Cascade Physics Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free cascade puzzles in Infinite Domino Builder. Draw custom curving domino trails, Y-splits, and overpass bridge loops, then topple the first piece to watch the chain reaction." />
+  <title>Infinite Domino Builder — Free 500-Level ASMR Chain Reaction Game | ZinPlay</title>
+  <meta name="description" content="Play Infinite Domino Builder free online with no download. Draw curved rainbow domino tracks, build Y-fork splits around obstacles, and trigger crisp ASMR chain reactions across 500 physics levels on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Infinite Domino Builder",
+    "url": "https://zinplay.io/games/domino-builder/",
+    "genre": ["Physics", "ASMR", "Chain Reaction Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top Studio HUD */
+    /* Top Domino Studio HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #101423;
+      background: #14121d;
       color: #f8fafc;
-      border-bottom: 1px solid #232a42;
+      border-bottom: 1px solid #2b263d;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -52,7 +65,7 @@
     .chapter-sub {
       font-size: 0.72rem;
       color: #f472b6;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -63,24 +76,18 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #bae6fd;
+      background: rgba(244, 114, 182, 0.16);
+      border: 1px solid rgba(244, 114, 182, 0.36);
+      color: #fbcfe8;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
       font-family: monospace;
     }
-    .hud-pill.budget-low {
-      background: rgba(239, 68, 68, 0.22);
-      border-color: rgba(248, 113, 113, 0.5);
-      color: #fecaca;
-    }
-    .hud-pill.sandbox-pill {
-      background: rgba(168, 85, 247, 0.22);
-      border-color: rgba(192, 132, 252, 0.5);
-      color: #e9d5ff;
-      font-family: inherit;
+    .hud-pill.bell-pill {
+      background: rgba(250, 204, 21, 0.16);
+      border-color: rgba(250, 204, 21, 0.42);
+      color: #fef08a;
     }
     .hud-pill.done-pill {
       background: rgba(34, 197, 94, 0.16);
@@ -89,56 +96,53 @@
       font-family: inherit;
     }
 
-    /* Live Cascade Telemetry Strip */
-    .cascade-bar {
+    /* Cascade Progress Strip */
+    .cascade-strip {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: 10px;
-      padding: 8px 14px;
-      background: #171c30;
-      border-bottom: 1px solid #262e4a;
-      color: #cbd5e1;
+      padding: 9px 14px;
+      background: #1c1929;
+      border-bottom: 1px solid #302a45;
+      color: #e2e8f0;
       font-size: 0.75rem;
       font-weight: 800;
-      flex-wrap: wrap;
     }
-    .goal-badges {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .g-pill {
-      padding: 2px 9px;
-      border-radius: 999px;
-      background: #0e1222;
-      border: 1px solid #303a5e;
-      font-family: monospace;
+    .cascade-lbl {
+      min-width: 118px;
       color: #fde68a;
+      white-space: nowrap;
     }
-    .g-pill.ok {
-      border-color: #22c55e;
-      color: #86efac;
-      background: rgba(34, 197, 94, 0.14);
-    }
-    .theme-chip {
-      padding: 3px 10px;
+    .cascade-track {
+      flex: 1;
+      height: 10px;
+      background: #0d0b14;
       border-radius: 999px;
-      border: 1px solid #38446b;
-      background: #1e2642;
-      color: #e2e8f0;
-      font-size: 0.72rem;
-      font-weight: 800;
-      cursor: pointer;
+      border: 1px solid #3a3354;
+      overflow: hidden;
+    }
+    .cascade-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ec4899 0%, #f59e0b 50%, #22c55e 100%);
+      transition: width 0.12s ease-out;
+    }
+    .cascade-val {
+      min-width: 66px;
+      text-align: right;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: #ffffff;
     }
 
-    /* Domino Floor Canvas */
+    /* Interactive Domino Studio Floor Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
       max-height: 495px;
-      background: radial-gradient(circle at 50% 45%, #242942 0%, #131728 100%);
+      background: radial-gradient(circle at 50% 45%, #262038 0%, #120f1c 100%);
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -154,81 +158,51 @@
       cursor: crosshair;
     }
 
-    /* Builder Tools & Topple Action Dock */
-    .builder-dock {
+    /* Draw / Erase / Push Trigger Dock */
+    .domino-dock {
       display: flex;
-      flex-direction: column;
-      gap: 9px;
-      padding: 11px 12px 12px;
-      background: #111629;
-      border-top: 1px solid #232b47;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 12px;
+      background: #151221;
+      border-top: 1px solid #2b263d;
     }
-    .tools-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 7px;
-    }
-    .tools-row.cols-4 {
-      grid-template-columns: repeat(4, 1fr);
-    }
-    .mode-btn {
-      min-height: 44px;
-      padding: 6px 6px;
-      border-radius: 11px;
-      border: 1.5px solid #2a3457;
-      background: #19213c;
-      color: #cbd5e1;
-      font-size: 0.78rem;
+    .dom-btn {
+      min-height: 46px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 1.5px solid #352f4d;
+      background: #211d30;
+      color: #e2e8f0;
+      font-size: 0.82rem;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 5px;
-      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease;
+      transition: transform 0.08s ease, background 0.14s ease, border-color 0.14s ease;
     }
-    .mode-btn:active { transform: scale(0.96); }
-    .mode-btn.active {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.22);
+    .dom-btn:active { transform: scale(0.95); }
+    .dom-btn:disabled { opacity: 0.36; cursor: default; }
+    .dom-btn.active-tool {
+      border-color: #f472b6;
+      background: rgba(244, 114, 182, 0.2);
       color: #ffffff;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
     }
-    .mode-btn:disabled { opacity: 0.4; cursor: default; }
-
-    .topple-row {
-      display: grid;
-      grid-template-columns: 1.85fr 0.75fr;
-      gap: 8px;
-    }
-    .topple-main-btn {
-      min-height: 46px;
-      border-radius: 12px;
-      border: 1.5px solid #6ee7b7;
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    .dom-btn.push-main {
+      flex: 1;
+      background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%);
+      border-color: #fde68a;
       color: #ffffff;
-      font-size: 0.94rem;
+      font-size: 0.92rem;
       font-weight: 900;
-      letter-spacing: 0.03em;
-      cursor: pointer;
-      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.34);
-      transition: transform 0.08s ease;
+      box-shadow: 0 6px 18px rgba(236, 72, 153, 0.32);
     }
-    .topple-main-btn:active { transform: scale(0.98); }
-    .topple-main-btn.stop-mode {
-      border-color: #fca5a5;
-      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
-      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.34);
-    }
-    .speed-btn {
-      min-height: 46px;
-      border-radius: 12px;
-      border: 1.5px solid #303c63;
-      background: #1b2442;
-      color: #fde68a;
-      font-size: 0.82rem;
-      font-weight: 800;
-      cursor: pointer;
+    .dom-btn.push-main.stand-mode {
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      border-color: #93c5fd;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.32);
     }
 
     .legend-strip {
@@ -238,8 +212,8 @@
       gap: 12px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #0c101f;
-      border-top: 1px solid #1d243b;
+      background: #0f0d17;
+      border-top: 1px solid #241f36;
       font-size: 0.73rem;
       color: #94a3b8;
     }
@@ -249,8 +223,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(12, 16, 31, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.7);
+      background: rgba(15, 13, 23, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -269,7 +243,7 @@
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(10, 13, 26, 0.8);
+      background: rgba(12, 10, 20, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -289,7 +263,7 @@
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
@@ -300,11 +274,6 @@
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-    }
-    .btn-outline.active-toggle {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
     }
     .level-nav-bar {
       display: flex;
@@ -437,6 +406,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #14121d;
+      border: 1px solid rgba(244, 114, 182, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #14121d;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #1b1528 0%, #500724 100%);
+      color: #fce7f3;
+    }
+    .game-seo-banner.teal-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f2933 0%, #312e81 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fbcfe8;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .dom-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .dom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .dom-table th, .dom-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dom-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .dom-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -449,7 +498,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -462,36 +511,35 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Cascades &bull; Domino Physics</span>
+      <span class="cat-tag">500 Courses &bull; ASMR Domino Physics</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Infinite Domino Builder</h1>
-      <p>Draw custom curving domino trails, multi-branch splits, and wooden overpass bridge loops, then topple the first piece to watch the cascade.</p>
+      <p>Draw smooth curved rainbow domino trails around stone walls, fork your chain to hit every golden victory bell, and hear the crisp ASMR topple cascade.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Infinite Domino Builder Game">
+    <section class="game-wrapper" aria-label="Infinite Domino Builder Chain Reaction Game">
       <div class="hud-strip">
         <div class="hud-left">
           <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Smooth Curves</span>
-          <span id="levelTitle">Cascade #1 / 500</span>
+          <span id="levelTitle">Course #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill sandbox-pill" id="sandboxPill" style="display:none;">🛠️ Free Sandbox</span>
-          <span class="hud-pill" id="budgetPill">Dominoes: 0 / 35</span>
-          <span class="hud-pill done-pill" id="solvedCounter">Cleared: 0 / 500</span>
+          <span class="hud-pill" id="tilesPill">Tiles: 0 / 32</span>
+          <span class="hud-pill bell-pill" id="bellsPill">Bells: 0 / 1</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Toppled: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Goals & Palette Telemetry Bar -->
-      <div class="cascade-bar">
-        <div class="goal-badges">
-          <span id="bellBadge" class="g-pill">🔔 Bells: 0 / 1</span>
-          <span id="starBadge" class="g-pill" style="display:none;">★ Stars: 0 / 1</span>
-          <span id="fallenBadge" class="g-pill">Toppled: 0</span>
+      <!-- Cascade Topple Meter -->
+      <div class="cascade-strip">
+        <span id="cascadeLbl" class="cascade-lbl">🁣 Draw Domino Chain</span>
+        <div class="cascade-track">
+          <div id="cascadeFill" class="cascade-fill"></div>
         </div>
-        <button id="paletteBtn" class="theme-chip" type="button">🎨 Rainbow</button>
+        <span id="cascadeVal" class="cascade-val">EDIT</span>
       </div>
 
       <!-- 2.5D Domino Studio Canvas -->
@@ -499,50 +547,42 @@
         <canvas id="dominoCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Victory Overlay -->
+        <!-- Cascade Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2.3rem; margin-bottom:6px;">🁣</div>
-            <h2 id="winHeading">Cascade Complete!</h2>
-            <p id="winText">Every bell rang out in a crisp, uninterrupted chain reaction.</p>
-            <button id="nextLevelBtn" class="btn-primary" type="button">Next Cascade →</button>
+            <div style="font-size:2.3rem; margin-bottom:6px;">🔔</div>
+            <h2 id="winHeading">Flawless Cascade!</h2>
+            <p id="winText">Every golden bell chimed in one unbroken rainbow domino wave!</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Course →</button>
           </div>
         </div>
       </div>
 
-      <!-- Builder Tools & Topple Dock -->
-      <div class="builder-dock">
-        <div id="toolsRow" class="tools-row">
-          <button id="drawToolBtn" class="mode-btn active" type="button">✏️ Draw Trail</button>
-          <button id="eraseToolBtn" class="mode-btn" type="button">🧹 Erase</button>
-          <button id="rampToolBtn" class="mode-btn" type="button" style="display:none;">🌉 Add Ramp</button>
-          <button id="undoBtn" class="mode-btn" type="button">← Undo</button>
-        </div>
-        <div class="topple-row">
-          <button id="toppleBtn" class="topple-main-btn" type="button">▶ TOPPLE FIRST</button>
-          <button id="speedBtn" class="speed-btn" type="button">1.0× Pace</button>
-        </div>
+      <!-- Draw / Erase / Push Trigger Dock -->
+      <div class="domino-dock">
+        <button id="drawToolBtn" class="dom-btn active-tool" type="button">✏️ Draw</button>
+        <button id="eraseToolBtn" class="dom-btn" type="button">🧽 Erase</button>
+        <button id="pushBtn" class="dom-btn push-main" type="button">▶ PUSH DOMINO</button>
       </div>
 
       <div class="legend-strip">
-        <span>👆 Drag from Green Starter to Draw Trail</span>
-        <span>🔀 Branch Anytime for Multiple Bells</span>
-        <span>🌉 Draw Over &amp; Under Wooden Bridges for Loops!</span>
-        <span>🔴 Avoid Red Glass Pillars</span>
+        <span>👆 Drag Starting From the Golden Starter Arrow</span>
+        <span>🔀 Draw Branches From Any Tile to Split Paths (Y-Fork)</span>
+        <span>🏺 Avoid Red Crystal Vases (Ch. 3+)</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="clearBtn" class="btn-outline" type="button">↺ Clear Floor</button>
-          <button id="sandboxBtn" class="btn-outline" type="button">🛠️ Sandbox</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Trail Hint</button>
+          <button id="undoBtn" class="btn-outline" type="button">← Undo Stroke</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Clear Tiles</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Guide Path</button>
         </div>
         <button id="soundBtn" class="btn-outline" type="button">🔊 ASMR ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Cascade 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Course 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -552,29 +592,126 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 850+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/domino-builder-banner-1.jpg"
+            alt="Infinite Domino Builder online ASMR chain reaction game showing rainbow acrylic dominoes toppling in sweeping S-curves toward golden bells"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Rainbow Domino Courses — Crisp ASMR Web Audio</h3>
+          <p>Paint smooth domino lines with a single finger swipe, engineer Y-fork splits around obstacles, and listen to every wooden clack ripple across the studio.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Infinite Domino Builder (500 Cascades)</h2>
-        <p>Infinite Domino Builder brings the addictive precision of domino rally art straight to your fingertips. Draw flowing lines, smooth spirals, multi-way splits, and crossover bridge loops across 500 puzzle arenas—or switch to <strong>🛠️ Free Sandbox</strong> to sculpt massive 200+ domino masterpieces with four selectable color palettes.</p>
+        <h2>What Is Infinite Domino Builder? An ASMR Chain Reaction Game Online</h2>
+        <p><strong>Infinite Domino Builder</strong> is a free <strong>domino topple simulator online</strong> that turns the hypnotic thrill of setting up rainbow domino art into a sleek, stress-free browser puzzle. Instead of painfully placing tiles one by one with shaky hands, simply press and drag across the dark studio floor starting near the glowing <strong>Brass Starter Domino</strong>. Our auto-spacing engine lays down glossy rainbow tiles at the exact physical pitch needed for a clean fall—rotating every domino perpendicular to your curve so you can weave sweeping S-bends, spirals, and multi-way branches in seconds.</p>
+        <p>Built as a lightweight, <strong>no-download ASMR physics game for smartphones, iPads, and Chromebooks</strong>, Infinite Domino Builder features live directional 2.5D toppling animations and synthesized <strong>Web Audio acrylic-and-wood clack tones</strong> that climb subtly in harmonic pitch as your combo accelerates. Every cleared layout across all <strong>500 courses</strong> saves automatically inside private local storage.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Master Domino Art Engineering (Y-Forks, Tight Turns &amp; Zero Gaps)</h2>
+        <p>Anyone can draw a straight line—but navigating tight maze corridors, dodging fragile crimson crystal vases, and splitting one wave into three simultaneous bells takes real chain-reaction craft. Use these four proven <strong>domino building techniques</strong> to ace Chapters 2 through 5:</p>
+
+        <div class="dom-table-wrap">
+          <table class="dom-table">
+            <thead>
+              <tr>
+                <th>Domino Technique</th>
+                <th>When to Use It</th>
+                <th>How to Build It Cleanly</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Gentle Sweeping Curves</strong></td>
+                <td>Navigating around stone barrier walls or pillars.</td>
+                <td>Avoid sharp 90° hairpins—draw wide, smooth arcs so each falling tile sweeps squarely into the next tile's center!</td>
+              </tr>
+              <tr>
+                <td><strong>2. Building a Y-Fork Split</strong> (Ch. 2–5)</td>
+                <td>Levels featuring <strong>2 or 3 Golden Victory Bells</strong> in opposite corners.</td>
+                <td>Draw one main trunk line first, then start a second stroke directly off the side of any standing domino at a gentle ~35° angle—one fall triggers BOTH branches!</td>
+              </tr>
+              <tr>
+                <td><strong>3. Safe Clearance Around Vases</strong> (Ch. 3–5)</td>
+                <td>Courses guarded by fragile glowing <strong>Red Crystal Vases</strong>.</td>
+                <td>Keep your curve at least one domino-length clear of every vase—a falling tile's forward sweep will shatter a vase if aimed straight toward it!</td>
+              </tr>
+              <tr>
+                <td><strong>4. Stand Up &amp; Tweak (Never Redraw!)</strong></td>
+                <td>Your chain stops 1 tile short of a bell or misses a sharp corner.</td>
+                <td>Tap <strong>↺ STAND UP &amp; EDIT</strong>—every single domino pops neatly back upright so you can erase two tiles and patch just that corner!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;">Running tight on your domino budget in a tricky multi-bell maze? Tap <strong>💡 Guide Path</strong> to project a glowing golden dotted engineering curve across the studio floor showing an exact obstacle-free route from the Starter Domino to every bell!</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner teal-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/domino-builder-banner-2.jpg"
+            alt="Isometric domino art studio featuring rainbow spirals, brass trigger tiles, golden victory bells, and red crystal vases in Infinite Domino Builder"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Multi-Branch Y-Fork Cascades &amp; Instant Stand-Up Reset</h3>
+          <p>Watch multiple rainbow waves race across opposite corners of the board at 60 FPS and ring every golden victory bell in harmonious chords.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Studio Chapters (500 Verified Domino Courses)</h2>
+        <p>Every stage from Course #1 to Course #500 is generated around verified collision-free splines and calibrated domino tile budgets so every single puzzle is 100% solvable with room for creative style:</p>
         <ul>
-          <li><strong>Draw &amp; Branch Effortlessly:</strong> Drag your finger or mouse starting near the glowing green <strong>START</strong> domino. Pieces auto-space themselves cleanly along your curve. Need to hit two or three <strong>🔔 Goal Bells</strong> at once? Simply start a second stroke branching off the side of any existing domino in your trail!</li>
-          <li><strong>Build Figure-8 Overpass Loops (Chapter 3+):</strong> Wooden <strong>Bridge Ramps</strong> let your trail cross right over itself! Draw straight lengthwise across a bridge to elevate dominoes onto the upper deck, and draw sideways through its arch to pass cleanly underneath without premature collisions.</li>
-          <li><strong>Avoid Fragile Red Pillars (Chapter 4+):</strong> Keep your curves safely away from glowing red glass hazards—if any falling tile smacks a red pillar, the run resets cleanly to Edit Mode with all your dominoes preserved so you can touch up that corner and try again!</li>
+          <li><strong>Chapter 1 (Courses 1–100 — Smooth Curves):</strong> Wide studio floors with 1 to 2 carved stone barriers and a single Golden Bell—ideal for feeling out smooth swipe painting and crisp ASMR clacks.</li>
+          <li><strong>Chapter 2 (Courses 101–200 — Twin-Bell Splits):</strong> Places <strong>two Golden Victory Bells</strong> on opposite flanks of the board, teaching you how to build clean Y-fork splits or sweeping figure-8 loops within budget.</li>
+          <li><strong>Chapter 3 (Courses 201–300 — Fragile Crystal Vases):</strong> Introduces glowing <strong>Red Crystal Hazard Vases</strong> stationed near tight turns—knock over a single vase and the glass shatters!</li>
+          <li><strong>Chapter 4 (Courses 301–400 — Triple-Bell Labyrinths):</strong> Combines three separated Golden Bells, stone baffle walls, and crystal hazards requiring clever multi-branch cascades.</li>
+          <li><strong>Chapter 5 (Courses 401–500 — Grand Domino Architect):</strong> Intricate master arenas with tight tile budgets, dual crystal hazards, and 3-to-4 victory bells—complete with an instant 1–500 course picker and private browser local saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Domino Game Topics">
+          <span class="kw-pill">Infinite Domino Builder Online</span>
+          <span class="kw-pill">ASMR Domino Topple Simulator</span>
+          <span class="kw-pill">Chain Reaction Drawing Puzzle</span>
+          <span class="kw-pill">Satisfying Domino Cascade Browser</span>
+          <span class="kw-pill">500-Level Rainbow Domino Game</span>
+          <span class="kw-pill">No-Download Chromebook Physics Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Infinite Domino Builder FAQ</h2>
         <details class="faq-item">
-          <summary>Why did my domino chain stop halfway around a sharp corner?</summary>
-          <div class="faq-answer">Just like real wooden dominoes, a 180° hairpin bend can miss the next tile! Draw gentle, sweeping arcs (or use <strong>🧹 Erase</strong> to smooth out a tight kink) and watch the whole line cascade effortlessly.</div>
+          <summary>How do I make a domino chain split into two directions (a Y-fork)?</summary>
+          <div class="faq-answer">First draw your main domino curve smoothly past the split point. Then lift your finger, touch right next to any standing domino along that main line, and drag outward along your second branch at a gentle angle (~30°–45°). When the wave reaches that junction, one tile tips both paths simultaneously!</div>
         </details>
         <details class="faq-item">
-          <summary>Can I watch my domino cascade in slow motion?</summary>
-          <div class="faq-answer">Yes! Tap the <strong>1.0× Pace</strong> button next to Topple to cycle between cinematic <strong>0.5× Slow-Mo</strong>, standard <strong>1.0×</strong>, and turbo <strong>2.0×</strong> cascade speeds—even live while tiles are falling!</div>
+          <summary>Why did my dominoes stop falling right at a tight corner?</summary>
+          <div class="faq-answer">Just like real physical dominoes, if a turn bends sharper than ~55° in a single step, a falling tile misses the face of the next tile. Tap <strong>↺ STAND UP &amp; EDIT</strong>, use <strong>🧽 Erase</strong> on the tight corner, and redraw it as a wider, smoother curve!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Do I have to redraw my entire course if a test run misses the bell?</summary>
+          <div class="faq-answer">Never! Tapping <strong>↺ STAND UP &amp; EDIT</strong> pops every placed domino back upright exactly where you drew it—so you can tweak just one section or erase a couple stray tiles in seconds.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I play Infinite Domino Builder smoothly on mobile touchscreens with headphones?</summary>
+          <div class="faq-answer">Yes! Touch dragging paints evenly-spaced dominoes smoothly at 60 FPS on Android and iOS, and putting on headphones brings out the crisp rising-pitch ASMR wooden clacks synthesized live via the Web Audio API.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
@@ -583,35 +720,35 @@
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">⚙️</div><span class="cat-tag">Physics</span></div>
         <h3>Rube Goldberg Sandbox</h3>
-        <p>Arrange ramps, springs, fans, and magnets to trigger a wild chain reaction that guides the ball home.</p>
+        <p>Arrange ramps, springs, fans, and magnets to trigger a wild physics chain reaction.</p>
         <a href="/games/rube-goldberg/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧨</div><span class="cat-tag">Physics</span></div>
-        <h3>Controlled Demolition</h3>
-        <p>Wire timed dynamite waves on load-bearing pillars to collapse towers inward safely.</p>
-        <a href="/games/controlled-demolition/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
+        <h3>Gravity Stone Stacker</h3>
+        <p>Stack irregular geometric stones into a balanced tower and hold it standing for 5 seconds.</p>
+        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧼</div><span class="cat-tag">ASMR</span></div>
-        <h3>Oddly Satisfying Slicer</h3>
-        <p>Slice pastel soap bars, crunchy kinetic sand, and wobbly jelly into crisp equal pieces.</p>
-        <a href="/games/satisfying-slicer/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🫧</div><span class="cat-tag">ASMR</span></div>
+        <h3>Bubble Wrap Zen</h3>
+        <p>Pop glossy translucent bubble wrap sheets with authentic crisp Web Audio pops and patterns.</p>
+        <a href="/games/bubble-wrap-zen/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Cascade Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Cascade Level">
+  <!-- Course Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Domino Course">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Domino Cascade (1 – 500)</h3>
+        <h3>Choose Domino Course (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to cascade (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to course (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -630,12 +767,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Physics</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/fold-reveal/">Fold &amp; Reveal</a></li>
-            <li><a href="/games/un-builder/">Un-Builder</a></li>
+            <li><a href="/games/stone-stacker/">Gravity Stone Stacker</a></li>
+            <li><a href="/games/controlled-demolition/">Controlled Demolition</a></li>
+            <li><a href="/games/rube-goldberg/">Rube Goldberg Sandbox</a></li>
+            <li><a href="/games/domino-builder/">Infinite Domino Builder</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -644,7 +781,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -677,29 +814,20 @@
     }
 
     // ==============================================
-    // CONSTANTS, PALETTES & 500-CASCADE GENERATOR
+    // 2.5D DIRECTIONAL DOMINO PHYSICS & 500-COURSE ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
-    const WORLD_W = 440;
-    const WORLD_H = 440;
-    const SPACING = 17;
-    const DOMINO_W = 14;
-    const DOMINO_THICK = 5.5;
-    const DOMINO_H = 24;
+    const WORLD_W = 420;
+    const WORLD_H = 420;
+    const DOMINO_STEP = 16.5;   // Ideal tactile domino spacing while dragging!
+    const SWEEP_REACH = 27.5;   // Forward falling domino tip reach
 
     const CHAPTERS = [
       { title: "Chapter 1 • Smooth Curves", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Multi-Branch Splits", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Bridge Ramps & Loops", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Fragile Glass Pillars", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Grand Master Cascades", range: "401–500", start: 401, end: 500 }
-    ];
-
-    const PALETTES = [
-      { name: "🎨 Rainbow", fn: (i) => `hsl(${(i * 11) % 360}, 86%, 60%)` },
-      { name: "🌸 Pastel",  fn: (i) => `hsl(${(i * 15 + 310) % 360}, 78%, 76%)` },
-      { name: "⚡ Neon",    fn: (i) => ["#38bdf8", "#f472b6", "#a855f7", "#22d3ee", "#facc15", "#4ade80"][i % 6] },
-      { name: "🁣 Ivory",   fn: () => "#f8f4e8" }
+      { title: "Chapter 2 • Twin-Bell Splits", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Fragile Crystal Vases", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Triple-Bell Labyrinths", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Grand Domino Architect", range: "401–500", start: 401, end: 500 }
     ];
 
     function mulberry32(seed) {
@@ -712,245 +840,213 @@
       };
     }
 
-    function mirrorXLevel(lvl) {
-      const mx = (x) => WORLD_W - x;
-      lvl.start.x = mx(lvl.start.x);
-      lvl.start.angle = Math.PI - lvl.start.angle;
-      lvl.bells.forEach((b) => { b.x = mx(b.x); });
-      lvl.stars.forEach((s) => { s.x = mx(s.x); });
-      lvl.walls.forEach((w) => { w.x = mx(w.x); });
-      lvl.hazards.forEach((h) => { h.x = mx(h.x); });
-      lvl.ramps.forEach((r) => { r.x = mx(r.x); r.angle = -r.angle; });
-      lvl.hintPaths.forEach((path) => {
-        path.forEach((pt) => { pt.x = mx(pt.x); });
-      });
-      return lvl;
+    function distToSegment(px, py, x1, y1, x2, y2) {
+      const dx = x2 - x1, dy = y2 - y1;
+      const lenSq = dx * dx + dy * dy;
+      if (lenSq < 1e-6) return Math.hypot(px - x1, py - y1);
+      const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / lenSq));
+      return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
     }
 
-    // Build 500 Clean, Geometrically Solvable Domino Arenas Across 5 Chapters!
-    function buildCascadeLevel(levelNum) {
-      const rng = mulberry32(levelNum * 179423 + 33107);
-      const j = (amp = 16) => Math.round((rng() - 0.5) * amp);
-      let arch;
+    // Check if point (x,y) collides with any rectangular stone barrier
+    function hitsAnyWall(x, y, walls, pad = 9) {
+      for (const w of walls) {
+        if (Math.abs(x - w.x) <= w.w / 2 + pad && Math.abs(y - w.y) <= w.h / 2 + pad) return true;
+      }
+      return false;
+    }
 
-      if (levelNum <= 100) {
-        // Chapter 1: Graceful S-Curves, U-Turns & Pillar Slaloms (1 Bell)
-        const sub = (levelNum - 1) % 3;
-        if (sub === 0) {
-          arch = {
-            start: { x: 68, y: 220 + j(40), angle: 0 },
-            bells: [{ x: 372, y: 220 + j(40) }],
-            stars: levelNum > 40 ? [{ x: 220, y: 102 }] : [],
-            walls: [{ x: 220, y: 220, w: 32, h: 150 }],
-            hazards: [],
-            ramps: [],
-            budget: 40,
-            hintPaths: [[
-              { x: 68, y: 220 }, { x: 140, y: 120 }, { x: 220, y: 98 }, { x: 300, y: 120 }, { x: 372, y: 220 }
-            ]]
-          };
-        } else if (sub === 1) {
-          // Double Slalom Wall
-          arch = {
-            start: { x: 64, y: 84 },
-            bells: [{ x: 374, y: 356 }],
-            stars: levelNum > 55 ? [{ x: 220, y: 220 }] : [],
-            walls: [
-              { x: 158, y: 138, w: 26, h: 170 },
-              { x: 282, y: 302, w: 26, h: 170 }
-            ],
-            hazards: [],
-            ramps: [],
-            budget: 52,
-            hintPaths: [[
-              { x: 64, y: 84 }, { x: 76, y: 268 }, { x: 158, y: 295 }, { x: 220, y: 220 },
-              { x: 282, y: 145 }, { x: 364, y: 178 }, { x: 374, y: 356 }
-            ]]
-          };
-        } else {
-          // Spiral Arch Around Center Block
-          arch = {
-            start: { x: 76, y: 356 },
-            bells: [{ x: 220, y: 220 }],
-            stars: [],
-            walls: [
-              { x: 220, y: 288, w: 150, h: 24 },
-              { x: 146, y: 190, w: 24, h: 120 }
-            ],
-            hazards: [],
-            ramps: [],
-            budget: 48,
-            hintPaths: [[
-              { x: 76, y: 356 }, { x: 345, y: 350 }, { x: 356, y: 145 }, { x: 220, y: 112 }, { x: 220, y: 220 }
-            ]]
-          };
+    // Check if segment (x1,y1)-(x2,y2) crosses through a stone wall
+    function segHitsWall(x1, y1, x2, y2, walls) {
+      const steps = 6;
+      for (let i = 1; i < steps; i++) {
+        const t = i / steps;
+        if (hitsAnyWall(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, walls, 2)) return true;
+      }
+      return false;
+    }
+
+    // Sample smooth quadratic bezier spline points for verified Guide Paths
+    function sampleQuad(p0, p1, p2, n = 14) {
+      const out = [];
+      for (let i = 0; i <= n; i++) {
+        const t = i / n;
+        const u = 1 - t;
+        out.push({
+          x: u * u * p0.x + 2 * u * t * p1.x + t * t * p2.x,
+          y: u * u * p0.y + 2 * u * t * p1.y + t * t * p2.y
+        });
+      }
+      return out;
+    }
+
+    // Constructive 500-Course Domino Arena Generator (Guaranteed Solvable & Clear of Obstacles!)
+    function buildCourseLevel(levelNum) {
+      const rng = mulberry32(levelNum * 265443 + 40991);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const mirrorX = levelNum % 2 === 0;
+      const mirrorY = Math.floor(levelNum / 2) % 2 === 1;
+      const mx = (x) => (mirrorX ? WORLD_W - x : x);
+      const my = (y) => (mirrorY ? WORLD_H - y : y);
+      const jx = Math.round((rng() - 0.5) * 26);
+      const jy = Math.round((rng() - 0.5) * 26);
+
+      let starter, bells, walls, vases, guideBranches;
+
+      if (chapIdx === 0) {
+        // Chapter 1: Graceful S-Curves Around 1-2 Stone Barriers -> 1 Golden Bell
+        const sPos = { x: mx(56), y: my(210 + jy) };
+        const bPos = { x: mx(362), y: my(210 - jy) };
+        const dirA = Math.atan2(my(110) - sPos.y, mx(150) - sPos.x);
+        starter = { x: sPos.x, y: sPos.y, angle: dirA };
+        bells = [{ id: 0, x: bPos.x, y: bPos.y, rung: false }];
+
+        const midCtrl = { x: mx(210), y: my(92 + Math.round(jy * 0.4)) };
+        guideBranches = [sampleQuad(sPos, midCtrl, bPos, 18)];
+
+        walls = [{ x: mx(210 + Math.round(jx * 0.5)), y: my(232), w: 32, h: 128 }];
+        if (levelNum > 50) {
+          walls.push({ x: mx(210), y: my(346), w: 112, h: 24 });
         }
-      } else if (levelNum <= 200) {
-        // Chapter 2: Multi-Branch Y-Splits (2 or 3 Goal Bells!)
-        const sub = (levelNum - 101) % 3;
-        if (sub === 0) {
-          arch = {
-            start: { x: 64, y: 220 },
-            bells: [{ x: 368, y: 96 + j(24) }, { x: 368, y: 344 + j(24) }],
-            stars: [{ x: 195, y: 220 }],
-            walls: [{ x: 276, y: 220, w: 30, h: 136 }],
-            hazards: [],
-            ramps: [],
-            budget: 52,
-            hintPaths: [
-              [{ x: 64, y: 220 }, { x: 195, y: 220 }, { x: 266, y: 115 }, { x: 368, y: 96 }],
-              [{ x: 195, y: 220 }, { x: 266, y: 325 }, { x: 368, y: 344 }]
-            ]
-          };
-          arch.start.angle = 0;
-        } else if (sub === 1) {
-          // Trident 3-Bell Fan
-          arch = {
-            start: { x: 220, y: 382, angle: -Math.PI / 2 },
-            bells: [
-              { x: 78, y: 88 },
-              { x: 220, y: 74 },
-              { x: 362, y: 88 }
-            ],
-            stars: [{ x: 220, y: 240 }],
-            walls: [
-              { x: 144, y: 162, w: 28, h: 90 },
-              { x: 296, y: 162, w: 28, h: 90 }
-            ],
-            hazards: [],
-            ramps: [],
-            budget: 64,
-            hintPaths: [
-              [{ x: 220, y: 382 }, { x: 220, y: 240 }, { x: 220, y: 74 }],
-              [{ x: 220, y: 268 }, { x: 96, y: 225 }, { x: 78, y: 88 }],
-              [{ x: 220, y: 268 }, { x: 344, y: 225 }, { x: 362, y: 88 }]
-            ]
-          };
-        } else {
-          // Corner Twin Split
-          arch = {
-            start: { x: 68, y: 76, angle: 0.4 },
-            bells: [{ x: 368, y: 84 }, { x: 84, y: 362 }],
-            stars: [{ x: 240, y: 240 }],
-            walls: [{ x: 220, y: 142, w: 120, h: 24 }],
-            hazards: [],
-            ramps: [],
-            budget: 58,
-            hintPaths: [
-              [{ x: 68, y: 76 }, { x: 145, y: 215 }, { x: 240, y: 240 }, { x: 348, y: 205 }, { x: 368, y: 84 }],
-              [{ x: 145, y: 215 }, { x: 84, y: 362 }]
-            ]
-          };
-        }
-      } else if (levelNum <= 300) {
-        // Chapter 3: Wooden Overpass Bridge Ramps & Figure-8 Loops!
-        const sub = (levelNum - 201) % 2;
-        if (sub === 0) {
-          // Classic Figure-8 Crossover Loop!
-          arch = {
-            start: { x: 72, y: 220, angle: 0 },
-            bells: [{ x: 220, y: 376 }],
-            stars: [{ x: 360, y: 120 }, { x: 220, y: 76 }],
-            walls: [
-              { x: 115, y: 325, w: 28, h: 90 },
-              { x: 325, y: 325, w: 28, h: 90 }
-            ],
-            hazards: [],
-            ramps: [{ x: 220, y: 220, angle: 0, len: 108, w: 36 }],
-            budget: 66,
-            hintPaths: [[
-              { x: 72, y: 220 }, { x: 220, y: 220 }, { x: 360, y: 210 },
-              { x: 360, y: 120 }, { x: 290, y: 74 }, { x: 220, y: 76 },
-              { x: 220, y: 220 }, { x: 220, y: 376 }
-            ]]
-          };
-        } else {
-          // X-Bridge Twin Bell Loop
-          arch = {
-            start: { x: 72, y: 356, angle: -0.5 },
-            bells: [{ x: 366, y: 356 }, { x: 366, y: 82 }],
-            stars: [{ x: 96, y: 108 }],
-            walls: [{ x: 220, y: 350, w: 30, h: 110 }],
-            hazards: [],
-            ramps: [{ x: 220, y: 215, angle: -Math.PI / 4, len: 108, w: 36 }],
-            budget: 68,
-            hintPaths: [
-              [{ x: 72, y: 356 }, { x: 220, y: 215 }, { x: 366, y: 82 }],
-              [{ x: 72, y: 356 }, { x: 96, y: 108 }, { x: 220, y: 215 }, { x: 366, y: 356 }]
-            ]
-          };
-        }
+        vases = [];
+      } else if (chapIdx === 1) {
+        // Chapter 2: Y-Fork Split -> 2 Golden Bells on Opposite Sides!
+        const sPos = { x: mx(52), y: my(210) };
+        const fork = { x: mx(174 + Math.round(jx * 0.5)), y: my(210 + Math.round(jy * 0.4)) };
+        const b1 = { x: mx(356), y: my(86 + Math.round(jy * 0.3)) };
+        const b2 = { x: mx(356), y: my(334 - Math.round(jy * 0.3)) };
+        starter = { x: sPos.x, y: sPos.y, angle: Math.atan2(fork.y - sPos.y, fork.x - sPos.x) };
+        bells = [
+          { id: 0, x: b1.x, y: b1.y, rung: false },
+          { id: 1, x: b2.x, y: b2.y, rung: false }
+        ];
+        guideBranches = [
+          sampleQuad(sPos, { x: (sPos.x + fork.x) / 2, y: fork.y }, fork, 8),
+          sampleQuad(fork, { x: mx(252), y: my(112) }, b1, 12),
+          sampleQuad(fork, { x: mx(252), y: my(308) }, b2, 12)
+        ];
+        walls = [
+          { x: mx(292), y: my(210), w: 34, h: 108 },
+          { x: mx(146), y: my(86), w: 68, h: 24 }
+        ];
+        vases = [];
+      } else if (chapIdx === 2) {
+        // Chapter 3: Fragile Red Crystal Vases + Twin Bells!
+        const sPos = { x: mx(54), y: my(348) };
+        const fork = { x: mx(186), y: my(220 + Math.round(jy * 0.4)) };
+        const b1 = { x: mx(358), y: my(82) };
+        const b2 = { x: mx(358), y: my(338) };
+        starter = { x: sPos.x, y: sPos.y, angle: Math.atan2(fork.y - sPos.y, fork.x - sPos.x) };
+        bells = [
+          { id: 0, x: b1.x, y: b1.y, rung: false },
+          { id: 1, x: b2.x, y: b2.y, rung: false }
+        ];
+        guideBranches = [
+          sampleQuad(sPos, { x: mx(106), y: my(270) }, fork, 10),
+          sampleQuad(fork, { x: mx(246), y: my(112) }, b1, 12),
+          sampleQuad(fork, { x: mx(274), y: my(286) }, b2, 11)
+        ];
+        walls = [{ x: mx(296), y: my(204), w: 28, h: 86 }];
+        vases = [
+          { id: 0, x: mx(134), y: my(140), broken: false },
+          { id: 1, x: mx(236), y: my(354), broken: false }
+        ];
+      } else if (chapIdx === 3) {
+        // Chapter 4: Triple-Bell Multi-Fork Cascade + Crystal Vases!
+        const sPos = { x: mx(52), y: my(210) };
+        const fork1 = { x: mx(154), y: my(210) };
+        const fork2 = { x: mx(262), y: my(210) };
+        const b1 = { x: mx(222), y: my(66) };
+        const b2 = { x: mx(362), y: my(112) };
+        const b3 = { x: mx(362), y: my(338) };
+        starter = { x: sPos.x, y: sPos.y, angle: Math.atan2(fork1.y - sPos.y, fork1.x - sPos.x) };
+        bells = [
+          { id: 0, x: b1.x, y: b1.y, rung: false },
+          { id: 1, x: b2.x, y: b2.y, rung: false },
+          { id: 2, x: b3.x, y: b3.y, rung: false }
+        ];
+        guideBranches = [
+          sampleQuad(sPos, { x: mx(102), y: my(210) }, fork1, 6),
+          sampleQuad(fork1, { x: mx(180), y: my(114) }, b1, 10),
+          sampleQuad(fork1, { x: mx(208), y: my(210) }, fork2, 6),
+          sampleQuad(fork2, { x: mx(314), y: my(152) }, b2, 9),
+          sampleQuad(fork2, { x: mx(312), y: my(286) }, b3, 10)
+        ];
+        walls = [
+          { x: mx(112), y: my(102), w: 26, h: 78 },
+          { x: mx(344), y: my(222), w: 54, h: 24 }
+        ];
+        vases = [
+          { id: 0, x: mx(146), y: my(328), broken: false },
+          { id: 1, x: mx(284), y: my(82), broken: false }
+        ];
       } else {
-        // Chapters 4 & 5: Fragile Red Glass Pillars + Ramps + Multi-Bells + Stars!
-        const sub = (levelNum - 301) % 3;
-        const tight = levelNum > 400;
-        if (sub === 0) {
-          arch = {
-            start: { x: 64, y: 220, angle: 0 },
-            bells: [{ x: 372, y: 104 }, { x: 372, y: 336 }],
-            stars: [{ x: 220, y: 84 }, { x: 220, y: 356 }],
-            walls: [],
-            hazards: [
-              { x: 162, y: 162, r: 19 },
-              { x: 162, y: 278, r: 19 },
-              { x: 282, y: 220, r: 22 }
-            ],
-            ramps: [],
-            budget: tight ? 52 : 62,
-            hintPaths: [
-              [{ x: 64, y: 220 }, { x: 115, y: 220 }, { x: 115, y: 92 }, { x: 220, y: 84 }, { x: 372, y: 104 }],
-              [{ x: 115, y: 220 }, { x: 115, y: 348 }, { x: 220, y: 356 }, { x: 372, y: 336 }]
-            ]
-          };
-        } else if (sub === 1) {
-          // Overpass Gauntlet with Red Pillars
-          arch = {
-            start: { x: 66, y: 220, angle: 0 },
-            bells: [{ x: 220, y: 378 }, { x: 372, y: 366 }],
-            stars: [{ x: 220, y: 74 }],
-            walls: [],
-            hazards: [
-              { x: 140, y: 140, r: 18 },
-              { x: 300, y: 298, r: 19 },
-              { x: 138, y: 318, r: 18 }
-            ],
-            ramps: [{ x: 220, y: 220, angle: 0, len: 108, w: 36 }],
-            budget: tight ? 62 : 74,
-            hintPaths: [
-              [{ x: 66, y: 220 }, { x: 220, y: 220 }, { x: 368, y: 210 }, { x: 355, y: 85 }, { x: 220, y: 74 }, { x: 220, y: 220 }, { x: 220, y: 378 }],
-              [{ x: 368, y: 210 }, { x: 372, y: 366 }]
-            ]
-          };
-        } else {
-          // Grand 3-Bell Hazard Labyrinth
-          arch = {
-            start: { x: 220, y: 386, angle: -Math.PI / 2 },
-            bells: [{ x: 74, y: 78 }, { x: 220, y: 66 }, { x: 366, y: 78 }],
-            stars: [{ x: 78, y: 244 }, { x: 362, y: 244 }],
-            walls: [{ x: 220, y: 176, w: 96, h: 22 }],
-            hazards: [
-              { x: 144, y: 280, r: 19 },
-              { x: 296, y: 280, r: 19 },
-              { x: 148, y: 120, r: 16 },
-              { x: 292, y: 120, r: 16 }
-            ],
-            ramps: [],
-            budget: tight ? 68 : 80,
-            hintPaths: [
-              [{ x: 220, y: 386 }, { x: 220, y: 342 }, { x: 78, y: 330 }, { x: 78, y: 244 }, { x: 74, y: 78 }, { x: 220, y: 66 }],
-              [{ x: 220, y: 342 }, { x: 362, y: 330 }, { x: 362, y: 244 }, { x: 366, y: 78 }]
-            ]
-          };
+        // Chapter 5: Grand Domino Architect — 3 to 4 Bells + Maze Walls + 3 Crystal Vases!
+        const sPos = { x: mx(54), y: my(210) };
+        const hub = { x: mx(188), y: my(210) };
+        const b1 = { x: mx(188), y: my(62) };
+        const b2 = { x: mx(188), y: my(358) };
+        const b3 = { x: mx(364), y: my(102) };
+        const b4 = { x: mx(364), y: my(318) };
+        starter = { x: sPos.x, y: sPos.y, angle: Math.atan2(hub.y - sPos.y, hub.x - sPos.x) };
+        bells = [
+          { id: 0, x: b1.x, y: b1.y, rung: false },
+          { id: 1, x: b2.x, y: b2.y, rung: false },
+          { id: 2, x: b3.x, y: b3.y, rung: false }
+        ];
+        guideBranches = [
+          sampleQuad(sPos, { x: mx(122), y: my(210) }, hub, 8),
+          sampleQuad(hub, { x: mx(198), y: my(134) }, b1, 9),
+          sampleQuad(hub, { x: mx(198), y: my(286) }, b2, 9),
+          sampleQuad(hub, { x: mx(282), y: my(148) }, b3, 12)
+        ];
+        if (levelNum > 450) {
+          bells.push({ id: 3, x: b4.x, y: b4.y, rung: false });
+          guideBranches.push(sampleQuad(hub, { x: mx(282), y: my(272) }, b4, 12));
         }
+        walls = [
+          { x: mx(302), y: my(210), w: 28, h: 78 },
+          { x: mx(106), y: my(118), w: 26, h: 66 },
+          { x: mx(106), y: my(302), w: 26, h: 66 }
+        ];
+        vases = [
+          { id: 0, x: mx(262), y: my(78), broken: false },
+          { id: 1, x: mx(262), y: my(342), broken: false },
+          { id: 2, x: mx(64), y: my(76), broken: false }
+        ];
       }
 
-      if (rng() < 0.5 && levelNum > 2) {
-        mirrorXLevel(arch);
+      // Filter any decorative wall/vase that accidentally sits too close to a verified guide spline
+      const nearGuide = (px, py, pad) => {
+        for (const br of guideBranches) {
+          for (let i = 0; i < br.length - 1; i++) {
+            if (distToSegment(px, py, br[i].x, br[i].y, br[i + 1].x, br[i + 1].y) < pad) return true;
+          }
+        }
+        return false;
+      };
+      vases = vases.filter((v) => !nearGuide(v.x, v.y, 26));
+
+      // Compute generous verified tile budget from total spline length!
+      let totalPathLen = 0;
+      for (const br of guideBranches) {
+        for (let i = 0; i < br.length - 1; i++) {
+          totalPathLen += Math.hypot(br[i + 1].x - br[i].x, br[i + 1].y - br[i].y);
+        }
       }
+      const neededTiles = Math.ceil(totalPathLen / DOMINO_STEP);
+      const spareTiles = chapIdx <= 1 ? 16 : (chapIdx <= 3 ? 14 : 12);
+      const maxTiles = Math.max(22, neededTiles + spareTiles);
 
       return {
         levelNum,
-        ...arch
+        chapIdx,
+        starter,
+        bells,
+        walls,
+        vases,
+        guideBranches,
+        maxTiles
       };
     }
 
@@ -959,14 +1055,12 @@
     }
 
     // ==============================================
-    // ASMR WOODEN DOMINO CLACK & MARIMBA AUDIO ENGINE
+    // CRISP ASMR WOODEN DOMINO CLACK WEB AUDIO ENGINE
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
     let lastClackMs = 0;
-
-    // Warm pentatonic cascade scale so long chains sound musical & hypnotic!
-    const CLACK_NOTES = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00];
+    let clackCombo = 0;
 
     function initAudio() {
       if (!audioCtx) {
@@ -976,94 +1070,132 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.1) {
+    function sfxPlaceTile(idx) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, now);
-      g.gain.setValueAtTime(0.001, now);
-      g.gain.exponentialRampToValueAtTime(vol, now + 0.006);
-      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(520 + (idx % 12) * 28, now);
+      osc.frequency.exponentialRampToValueAtTime(240, now + 0.032);
+      g.gain.setValueAtTime(0.055, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.038);
       osc.connect(g);
       g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + dur + 0.02);
+      osc.stop(now + 0.045);
     }
 
-    function sfxPlaceDomino(idx) {
-      playTone(460 + (idx % 6) * 28, 0.035, "triangle", 0.055);
-    }
-
-    function sfxDominoClack(chainIdx) {
+    function sfxDominoClack() {
       if (!soundOn) return;
       const ms = performance.now();
       if (ms - lastClackMs < 24) return;
       lastClackMs = ms;
-
       initAudio();
       if (!audioCtx) return;
-      const now = audioCtx.currentTime;
-      const f = CLACK_NOTES[chainIdx % CLACK_NOTES.length];
 
-      // Crisp woody click + warm marimba harmonic
+      const now = audioCtx.currentTime;
+      clackCombo++;
+      const pitchShift = Math.min(340, clackCombo * 6);
+
+      // Tactile wooden/acrylic knock (band-focused short click + subtle body resonance)
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       osc.type = "triangle";
-      osc.frequency.setValueAtTime(f * 2.0, now);
-      osc.frequency.exponentialRampToValueAtTime(f, now + 0.032);
-      g.gain.setValueAtTime(0.11, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+      osc.frequency.setValueAtTime(760 + pitchShift + (Math.random() - 0.5) * 45, now);
+      osc.frequency.exponentialRampToValueAtTime(290, now + 0.035);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(0.11, now + 0.003);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + 0.042);
       osc.connect(g);
       g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + 0.07);
+      osc.stop(now + 0.05);
     }
 
-    function sfxBellRing() {
-      playTone(1046.5, 0.42, "sine", 0.14);
-      setTimeout(() => playTone(1567.98, 0.48, "sine", 0.11), 50);
+    function sfxBellRing(bellIdx) {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const notes = [659.25, 783.99, 987.77, 1174.66];
+      const f = notes[bellIdx % notes.length];
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(f, now);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(0.14, now + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + 0.6);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.65);
     }
-    function sfxStarCollect() {
-      playTone(880, 0.2, "sine", 0.11);
-      setTimeout(() => playTone(1318.5, 0.28, "sine", 0.1), 55);
+
+    function sfxGlassBreak() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      [1480, 1120, 860].forEach((f, i) => {
+        setTimeout(() => {
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(f, now);
+          osc.frequency.exponentialRampToValueAtTime(f * 0.55, now + 0.09);
+          g.gain.setValueAtTime(0.08, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        }, i * 32);
+      });
     }
-    function sfxHazardShatter() {
-      playTone(180, 0.22, "sawtooth", 0.16);
-      setTimeout(() => playTone(115, 0.26, "sawtooth", 0.15), 90);
-    }
-    function sfxWinFanfare() {
+
+    function sfxCascadeWin() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
       [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.45, "sine", 0.13), i * 80);
+        setTimeout(() => {
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(f, now);
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.exponentialRampToValueAtTime(0.11, now + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.55);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.6);
+        }, i * 75);
       });
     }
 
     // ==============================================
-    // GAME STATE, TRAIL BUILDER & CASCADE SIMULATION
+    // GAME STATE, STROKE PAINTING & TOPPLE ENGINE
     // ==============================================
     const canvas = document.getElementById("dominoCanvas");
     const ctx = canvas.getContext("2d");
 
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const sandboxPill = document.getElementById("sandboxPill");
-    const budgetPill = document.getElementById("budgetPill");
+    const tilesPill = document.getElementById("tilesPill");
+    const bellsPill = document.getElementById("bellsPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const bellBadge = document.getElementById("bellBadge");
-    const starBadge = document.getElementById("starBadge");
-    const fallenBadge = document.getElementById("fallenBadge");
-    const paletteBtn = document.getElementById("paletteBtn");
-    const toolsRow = document.getElementById("toolsRow");
+    const cascadeLbl = document.getElementById("cascadeLbl");
+    const cascadeFill = document.getElementById("cascadeFill");
+    const cascadeVal = document.getElementById("cascadeVal");
     const drawToolBtn = document.getElementById("drawToolBtn");
     const eraseToolBtn = document.getElementById("eraseToolBtn");
-    const rampToolBtn = document.getElementById("rampToolBtn");
-    const undoBtn = document.getElementById("undoBtn");
-    const toppleBtn = document.getElementById("toppleBtn");
-    const speedBtn = document.getElementById("speedBtn");
-    const sandboxBtn = document.getElementById("sandboxBtn");
+    const pushBtn = document.getElementById("pushBtn");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
     const winHeading = document.getElementById("winHeading");
@@ -1081,154 +1213,151 @@
     } catch (e) {}
 
     let level = null;
-    let sandboxMode = false;
-    let paletteIdx = 0;
-    let mode = "build"; // build | run | won
-    let tool = "draw";  // draw | erase | ramp
-    let speedIdx = 1;   // 0=0.5x, 1=1.0x, 2=2.0x
-    const SPEEDS = [
-      { mult: 0.5, label: "🐢 0.5×" },
-      { mult: 1.0, label: "1.0× Pace" },
-      { mult: 2.0, label: "⚡ 2.0×" }
-    ];
+    let dominoes = [];      // [{ id, x, y, angle, hue, isStarter, strokeId, state, fallT, fallAngle, triggeredNext }]
+    let strokeCounter = 0;
+    let activeTool = "draw"; // 'draw' | 'erase'
+    let simState = "edit";   // 'edit' | 'toppling' | 'stopped' | 'failed' | 'won'
+    let showGuide = false;
 
-    // Dominoes & Dynamic Ramp State
-    let dominoes = [];   // index 0 is always the fixed Green Starter Domino!
-    let customRamps = [];
-    let strokeCounter = 1;
-    let bellsState = [];
-    let starsState = [];
-    let hazardsState = [];
-    let showHints = false;
-    let toppledCount = 0;
-    let idleRunTimer = 0;
-    let sparks = [];
-    let toastTimer = null;
-
-    // Drawing Pointer State
     let isDrawing = false;
-    let lastPlacePt = null;
+    let lastDrawPt = null;
     let currentStrokeId = 0;
 
-    function showToast(msg, ms = 2400) {
+    let sparks = [];
+    let rings = [];
+    let toastTimer = null;
+
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function getAllRamps() {
-      return [...level.ramps, ...customRamps];
-    }
-
-    function getMaxDominoes() {
-      return sandboxMode ? 999 : level.budget;
-    }
-
-    function getUserDominoCount() {
-      return Math.max(0, dominoes.length - 1);
+    function getPlacedCount() {
+      return Math.max(0, dominoes.length - 1); // exclude starter domino
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
-      chapterLabel.textContent = sandboxMode ? "Free Domino Art Studio" : chap.title;
-      levelTitle.textContent = sandboxMode ? "Infinite Sandbox Floor" : `Cascade #${currentLevelNum} / ${TOTAL_LEVELS}`;
-      sandboxPill.style.display = sandboxMode ? "inline-block" : "none";
+      chapterLabel.textContent = chap.title;
+      levelTitle.textContent = `Course #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      solvedCounter.textContent = `Toppled: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Course ${currentLevelNum} / 500 ▾`;
 
-      const used = getUserDominoCount();
-      const cap = getMaxDominoes();
-      budgetPill.textContent = sandboxMode ? `Pieces: ${used} (∞)` : `Dominoes: ${used} / ${cap}`;
-      budgetPill.className = "hud-pill" + (!sandboxMode && used >= cap ? " budget-low" : "");
-      solvedCounter.textContent = `Cleared: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Cascade ${currentLevelNum} / 500 ▾`;
+      const placed = getPlacedCount();
+      tilesPill.textContent = `Tiles: ${placed} / ${level.maxTiles}`;
 
-      const hitBells = bellsState.filter((b) => b.hit).length;
-      bellBadge.textContent = `🔔 Bells: ${hitBells} / ${bellsState.length}`;
-      bellBadge.className = "g-pill" + (bellsState.length > 0 && hitBells === bellsState.length ? " ok" : "");
+      const rungCnt = level.bells.filter((b) => b.rung).length;
+      bellsPill.textContent = `Bells: ${rungCnt} / ${level.bells.length}`;
 
-      if (starsState.length > 0) {
-        starBadge.style.display = "inline-block";
-        const gotStars = starsState.filter((s) => s.got).length;
-        starBadge.textContent = `★ Stars: ${gotStars} / ${starsState.length}`;
-        starBadge.className = "g-pill" + (gotStars === starsState.length ? " ok" : "");
+      const inEdit = simState === "edit";
+      drawToolBtn.disabled = !inEdit;
+      eraseToolBtn.disabled = !inEdit;
+      drawToolBtn.className = "dom-btn" + (activeTool === "draw" ? " active-tool" : "");
+      eraseToolBtn.className = "dom-btn" + (activeTool === "erase" ? " active-tool" : "");
+
+      if (simState === "won") {
+        pushBtn.disabled = true;
+        pushBtn.className = "dom-btn push-main";
+        pushBtn.textContent = "🔔 ALL BELLS CHIMED!";
+      } else if (simState === "toppling") {
+        pushBtn.disabled = false;
+        pushBtn.className = "dom-btn push-main stand-mode";
+        pushBtn.textContent = "↺ STAND UP & EDIT";
+      } else if (simState === "stopped" || simState === "failed") {
+        pushBtn.disabled = false;
+        pushBtn.className = "dom-btn push-main stand-mode";
+        pushBtn.textContent = "↺ STAND UP & TWEAK";
       } else {
-        starBadge.style.display = "none";
+        pushBtn.disabled = placed === 0;
+        pushBtn.className = "dom-btn push-main";
+        pushBtn.textContent = placed > 0 ? "▶ PUSH STARTER DOMINO" : "✏️ DRAW CHAIN FIRST";
       }
 
-      fallenBadge.textContent = `Toppled: ${toppledCount}`;
-      paletteBtn.textContent = PALETTES[paletteIdx].name;
-      sandboxBtn.classList.toggle("active-toggle", sandboxMode);
-
-      // Show Ramp tool button in Sandbox Mode
-      rampToolBtn.style.display = sandboxMode ? "inline-flex" : "none";
-      toolsRow.className = "tools-row" + (sandboxMode ? " cols-4" : "");
-
-      drawToolBtn.classList.toggle("active", tool === "draw");
-      eraseToolBtn.classList.toggle("active", tool === "erase");
-      rampToolBtn.classList.toggle("active", tool === "ramp");
-
-      const canBuild = mode === "build";
-      drawToolBtn.disabled = !canBuild;
-      eraseToolBtn.disabled = !canBuild;
-      rampToolBtn.disabled = !canBuild;
-      undoBtn.disabled = !canBuild || dominoes.length <= 1;
-
-      if (mode === "run") {
-        toppleBtn.textContent = "■ STAND UP & EDIT";
-        toppleBtn.className = "topple-main-btn stop-mode";
+      const fallenCnt = dominoes.filter((d) => d.state !== "standing").length;
+      const pct = dominoes.length > 0 ? Math.round((fallenCnt / dominoes.length) * 100) : 0;
+      if (simState === "edit") {
+        cascadeLbl.textContent = "✏️ Paint Rainbow Chain";
+        cascadeFill.style.width = "0%";
+        cascadeVal.textContent = "READY";
+      } else if (simState === "failed") {
+        cascadeLbl.textContent = "🏺 Crystal Vase Shattered!";
+        cascadeFill.style.width = `${pct}%`;
+        cascadeVal.textContent = "SHATTERED";
+      } else if (simState === "won") {
+        cascadeLbl.textContent = "✨ Flawless Chain Reaction!";
+        cascadeFill.style.width = "100%";
+        cascadeVal.textContent = "100%";
       } else {
-        toppleBtn.textContent = "▶ TOPPLE FIRST";
-        toppleBtn.className = "topple-main-btn";
+        cascadeLbl.textContent = simState === "toppling" ? "🁣 Toppling Wave..." : "⚠️ Chain Stopped Early";
+        cascadeFill.style.width = `${pct}%`;
+        cascadeVal.textContent = `${fallenCnt} / ${dominoes.length}`;
       }
-      speedBtn.textContent = SPEEDS[speedIdx].label;
     }
 
-    function createStarterDomino() {
-      return {
-        x: level.start.x,
-        y: level.start.y,
-        angle: level.start.angle,
-        origAngle: level.start.angle,
-        tilt: 0,
-        tiltVel: 0,
-        state: "standing",
-        layer: 0,
-        isStart: true,
-        strokeId: 0,
-        color: "#22c55e",
-        hasPassedImpact: false
-      };
+    function standDominoesUp() {
+      simState = "edit";
+      clackCombo = 0;
+      for (const d of dominoes) {
+        d.state = "standing";
+        d.fallT = 0;
+        d.fallAngle = d.angle;
+        d.triggeredNext = false;
+      }
+      for (const b of level.bells) b.rung = false;
+      for (const v of level.vases) v.broken = false;
+      updateHUD();
     }
 
-    function loadLevel(num) {
+    function startDominoPush() {
+      if (simState === "won") return;
+      if (simState !== "edit") {
+        standDominoesUp();
+        return;
+      }
+      if (getPlacedCount() === 0) return;
+
+      initAudio();
+      simState = "toppling";
+      clackCombo = 0;
+      for (const b of level.bells) b.rung = false;
+      for (const v of level.vases) v.broken = false;
+
+      // Tip the Brass Starter Domino in its exact forward arrow direction!
+      const st = dominoes[0];
+      st.state = "falling";
+      st.fallT = 0.01;
+      st.fallAngle = st.angle;
+      st.triggeredNext = false;
+      sfxDominoClack();
+      updateHUD();
+    }
+
+    function loadCourse(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      level = buildCascadeLevel(currentLevelNum);
-
-      if (sandboxMode) {
-        level = {
-          levelNum: currentLevelNum,
-          start: { x: 74, y: 220, angle: 0 },
-          bells: [{ x: 372, y: 220 }],
-          stars: [],
-          walls: [],
-          hazards: [],
-          ramps: [{ x: 220, y: 220, angle: 0, len: 108, w: 36 }],
-          budget: 999,
-          hintPaths: []
-        };
-      }
-
-      customRamps = [];
-      dominoes = [createStarterDomino()];
-      bellsState = level.bells.map((b) => ({ ...b, hit: false, ringAnim: 0 }));
-      starsState = level.stars.map((s) => ({ ...s, got: false }));
-      hazardsState = level.hazards.map((h) => ({ ...h, broken: false }));
-      mode = "build";
-      tool = "draw";
-      showHints = false;
-      toppledCount = 0;
-      idleRunTimer = 0;
+      level = buildCourseLevel(currentLevelNum);
+      dominoes = [{
+        id: 0,
+        x: level.starter.x,
+        y: level.starter.y,
+        angle: level.starter.angle,
+        hue: 45,
+        isStarter: true,
+        strokeId: -1,
+        state: "standing",
+        fallT: 0,
+        fallAngle: level.starter.angle,
+        triggeredNext: false
+      }];
+      strokeCounter = 0;
+      activeTool = "draw";
+      simState = "edit";
+      showGuide = false;
+      isDrawing = false;
+      lastDrawPt = null;
       sparks = [];
+      rings = [];
 
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
@@ -1240,292 +1369,7 @@
       updateHUD();
     }
 
-    // Check Ramp Geometry: returns { onRamp, alignedWithBridge, atEnd }
-    function inspectRampAt(x, y, moveAngle) {
-      for (const r of getAllRamps()) {
-        const dx = x - r.x;
-        const dy = y - r.y;
-        const c = Math.cos(-r.angle);
-        const s = Math.sin(-r.angle);
-        const lx = dx * c - dy * s; // along bridge length
-        const ly = dx * s + dy * c; // across bridge width
-
-        if (Math.abs(lx) <= r.len * 0.56 && Math.abs(ly) <= r.w * 0.52) {
-          const dotAlign = Math.abs(Math.cos(moveAngle - r.angle));
-          const alignedWithBridge = dotAlign >= 0.58;
-          const atEnd = Math.abs(lx) >= r.len * 0.34;
-          return { onRamp: true, alignedWithBridge, atEnd, ramp: r };
-        }
-      }
-      return { onRamp: false, alignedWithBridge: false, atEnd: false, ramp: null };
-    }
-
-    function hitsWallOrHazard(x, y) {
-      for (const w of level.walls) {
-        if (Math.abs(x - w.x) <= w.w / 2 + 8 && Math.abs(y - w.y) <= w.h / 2 + 8) return true;
-      }
-      for (const h of level.hazards) {
-        if (Math.hypot(x - h.x, y - h.y) <= h.r + 8) return true;
-      }
-      return false;
-    }
-
-    function tryPlaceDominoAt(x, y, angle) {
-      if (getUserDominoCount() >= getMaxDominoes()) return false;
-      if (x < 22 || x > WORLD_W - 22 || y < 22 || y > WORLD_H - 22) return false;
-      if (hitsWallOrHazard(x, y)) return false;
-
-      const rInfo = inspectRampAt(x, y, angle);
-      const layer = (rInfo.onRamp && rInfo.alignedWithBridge) ? 1 : 0;
-
-      // Prevent stacking directly on top of an existing domino on the SAME layer
-      for (const d of dominoes) {
-        if (d.layer === layer && Math.hypot(d.x - x, d.y - y) < SPACING * 0.72) {
-          return false;
-        }
-      }
-
-      const idx = dominoes.length;
-      dominoes.push({
-        x, y,
-        angle,
-        origAngle: angle,
-        tilt: 0,
-        tiltVel: 0,
-        state: "standing",
-        layer,
-        isStart: false,
-        strokeId: currentStrokeId,
-        color: PALETTES[paletteIdx].fn(idx),
-        hasPassedImpact: false
-      });
-
-      // Smart Start Domino Auto-Aim: gently aim starter toward player's nearest trail head!
-      const st = dominoes[0];
-      if (Math.hypot(x - st.x, y - st.y) <= 44) {
-        st.angle = Math.atan2(y - st.y, x - st.x);
-        st.origAngle = st.angle;
-      }
-
-      sfxPlaceDomino(idx);
-      updateHUD();
-      return true;
-    }
-
-    function eraseNear(x, y) {
-      const before = dominoes.length;
-      dominoes = dominoes.filter((d) => d.isStart || Math.hypot(d.x - x, d.y - y) > 20);
-      if (sandboxMode) {
-        customRamps = customRamps.filter((r) => Math.hypot(r.x - x, r.y - y) > 26);
-      }
-      if (dominoes.length !== before) updateHUD();
-    }
-
-    function resetToBuildKeepDominoes() {
-      mode = "build";
-      toppledCount = 0;
-      idleRunTimer = 0;
-      for (const d of dominoes) {
-        d.tilt = 0;
-        d.tiltVel = 0;
-        d.state = "standing";
-        d.angle = d.origAngle;
-        d.hasPassedImpact = false;
-      }
-      bellsState.forEach((b) => { b.hit = false; b.ringAnim = 0; });
-      starsState.forEach((s) => { s.got = false; });
-      hazardsState.forEach((h) => { h.broken = false; });
-      updateHUD();
-    }
-
-    function startCascade() {
-      if (mode !== "build") return;
-      if (dominoes.length < 2) {
-        showToast("Draw a domino trail from the green START piece first!", 2200);
-        return;
-      }
-      initAudio();
-      resetToBuildKeepDominoes();
-
-      // Auto-aim Starter Domino toward the closest placed domino within 48px for zero frustration!
-      const st = dominoes[0];
-      let nearest = null, bestD = 48;
-      for (let i = 1; i < dominoes.length; i++) {
-        const d = Math.hypot(dominoes[i].x - st.x, dominoes[i].y - st.y);
-        if (d < bestD) { bestD = d; nearest = dominoes[i]; }
-      }
-      if (nearest) {
-        st.angle = Math.atan2(nearest.y - st.y, nearest.x - st.x);
-        st.origAngle = st.angle;
-      }
-
-      mode = "run";
-      st.state = "falling";
-      st.tiltVel = 5.4;
-      toppledCount = 1;
-      sfxDominoClack(0);
-      updateHUD();
-    }
-
-    function spawnSparks(x, y, color, count = 12) {
-      for (let i = 0; i < count; i++) {
-        const a = Math.random() * Math.PI * 2;
-        const s = 1.4 + Math.random() * 3.2;
-        sparks.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: 2 + Math.random() * 2.5, color, alpha: 1 });
-      }
-    }
-
-    // ==============================================
-    // CASCADE PHYSICS PROPAGATION ENGINE
-    // ==============================================
-    function stepCascade(dt) {
-      if (mode !== "run") return;
-      const effDt = dt * SPEEDS[speedIdx].mult;
-      let anyActive = false;
-
-      for (const b of bellsState) {
-        if (b.ringAnim > 0) b.ringAnim = Math.max(0, b.ringAnim - effDt * 2.5);
-      }
-
-      for (let i = 0; i < dominoes.length; i++) {
-        const d = dominoes[i];
-        if (d.state !== "falling") continue;
-        anyActive = true;
-
-        // Gravity-accelerated tipping motion
-        d.tiltVel += (14.5 * Math.sin(d.tilt + 0.25)) * effDt;
-        d.tilt += d.tiltVel * effDt;
-
-        // Impact transfer window (when tile leans ~28° forward!)
-        if (!d.hasPassedImpact && d.tilt >= 0.44) {
-          d.hasPassedImpact = true;
-          const dirX = Math.cos(d.angle);
-          const dirY = Math.sin(d.angle);
-          const tipX = d.x + dirX * 14;
-          const tipY = d.y + dirY * 14;
-
-          const dRamp = inspectRampAt(d.x, d.y, d.angle);
-
-          // 1. Check Red Glass Hazard Pillars!
-          for (const h of hazardsState) {
-            if (Math.hypot(tipX - h.x, tipY - h.y) <= h.r + 10) {
-              h.broken = true;
-              sfxHazardShatter();
-              spawnSparks(h.x, h.y, "#ef4444", 18);
-              showToast("💥 Hit a fragile red glass pillar! Erase that corner and route around it.", 3000);
-              setTimeout(() => {
-                if (mode === "run") resetToBuildKeepDominoes();
-              }, 520);
-              return;
-            }
-          }
-
-          // 2. Check Golden Star Checkpoints
-          for (const st of starsState) {
-            if (!st.got && Math.hypot(tipX - st.x, tipY - st.y) <= 26) {
-              st.got = true;
-              sfxStarCollect();
-              spawnSparks(st.x, st.y, "#facc15", 12);
-              updateHUD();
-            }
-          }
-
-          // 3. Check Goal Bells!
-          for (const bl of bellsState) {
-            if (!bl.hit && Math.hypot(tipX - bl.x, tipY - bl.y) <= 30) {
-              bl.hit = true;
-              bl.ringAnim = 1.0;
-              sfxBellRing();
-              spawnSparks(bl.x, bl.y, "#4ade80", 16);
-              updateHUD();
-            }
-          }
-
-          // 4. Propagate Impulse to Adjacent Standing Dominoes (Supports Curves, Splits & Bridges!)
-          for (let j = 0; j < dominoes.length; j++) {
-            if (i === j) continue;
-            const other = dominoes[j];
-            if (other.state !== "standing") continue;
-
-            // Layer bridge check: cross-layer handoff allowed ONLY at ramp entry/exit ramps!
-            if (d.layer !== other.layer) {
-              const oRamp = inspectRampAt(other.x, other.y, other.angle);
-              const validTransition = (d.layer === 1 && dRamp.atEnd) || (other.layer === 1 && oRamp.atEnd);
-              if (!validTransition) continue;
-            }
-
-            const vx = other.x - d.x;
-            const vy = other.y - d.y;
-            const dist = Math.hypot(vx, vy);
-            if (dist < 4 || dist > 30) continue;
-
-            const forwardDot = (vx / dist) * dirX + (vy / dist) * dirY;
-            if (forwardDot >= 0.25) {
-              // Ensure next tile always topples cleanly forward along the curve/branch!
-              const oDirX = Math.cos(other.angle);
-              const oDirY = Math.sin(other.angle);
-              if (oDirX * vx + oDirY * vy < 0) {
-                other.angle += Math.PI;
-              }
-              other.state = "falling";
-              other.tiltVel = 5.2 + Math.min(3.5, d.tiltVel * 0.35);
-              toppledCount++;
-              sfxDominoClack(toppledCount);
-              updateHUD();
-            }
-          }
-        }
-
-        // Rest flat on floor/next tile at ~79°
-        if (d.tilt >= 1.38) {
-          d.tilt = 1.38;
-          d.tiltVel = 0;
-          d.state = "fallen";
-        }
-      }
-
-      // Check Immediate Victory once all Bells & Stars are triggered!
-      const allBells = bellsState.every((b) => b.hit);
-      const allStars = starsState.every((s) => s.got);
-
-      if (!anyActive) {
-        idleRunTimer += dt;
-        if (allBells && allStars && idleRunTimer >= 0.28) {
-          mode = "won";
-          if (!sandboxMode) {
-            solvedSet.add(currentLevelNum);
-            try {
-              localStorage.setItem("zinplay_domino_500_solved", JSON.stringify([...solvedSet]));
-            } catch (e) {}
-          }
-          sfxWinFanfare();
-          updateHUD();
-
-          const isLast = currentLevelNum === TOTAL_LEVELS;
-          winHeading.textContent = sandboxMode
-            ? "Awesome Domino Rally!"
-            : (isLast ? "All 500 Cascades Cleared!" : `Cascade #${currentLevelNum} Cleared!`);
-          winText.textContent = `Toppled ${toppledCount} dominoes in one seamless chain reaction!`;
-          nextLevelBtn.textContent = sandboxMode
-            ? "Keep Designing in Sandbox"
-            : (isLast ? "Replay Cascade #1" : `Next Cascade (#${currentLevelNum + 1}) →`);
-          winOverlay.classList.add("show");
-        } else if (idleRunTimer >= 0.75) {
-          // Chain stopped short of goals — smoothly stand dominoes back up so player can patch the gap!
-          const msg = !allBells
-            ? "Cascade stopped short of a 🔔 Goal Bell! Patch the gap or widen tight corners."
-            : "All bells rang, but a ★ Star was missed! Route a branch through the star.";
-          showToast(msg, 3000);
-          resetToBuildKeepDominoes();
-        }
-      } else {
-        idleRunTimer = 0;
-      }
-    }
-
-    // ==============================================
-    // POINTER DRAWING, ERASING & RAMP PLACEMENT
-    // ==============================================
+    // Viewport & Smooth Finger/Mouse Drawing
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1551,153 +1395,126 @@
       };
     }
 
+    function canPlaceDominoAt(x, y) {
+      if (x < 18 || x > WORLD_W - 18 || y < 18 || y > WORLD_H - 18) return false;
+      if (hitsAnyWall(x, y, level.walls, 9)) return false;
+      if (level.bells.some((b) => Math.hypot(x - b.x, y - b.y) < 17)) return false;
+      if (level.vases.some((v) => Math.hypot(x - v.x, y - v.y) < 18)) return false;
+      if (dominoes.some((d) => Math.hypot(x - d.x, y - d.y) < 12.5)) return false;
+      return true;
+    }
+
+    function tryEraseAt(pt) {
+      const before = dominoes.length;
+      dominoes = dominoes.filter((d) => d.isStarter || Math.hypot(d.x - pt.x, d.y - pt.y) > 20);
+      if (dominoes.length !== before) updateHUD();
+    }
+
     canvas.addEventListener("pointerdown", (e) => {
-      if (mode !== "build") return;
+      if (simState !== "edit") return;
       initAudio();
       const pt = clientToWorld(e.clientX, e.clientY);
+      isDrawing = true;
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
 
-      if (tool === "ramp" && sandboxMode) {
-        // Place or rotate a custom overpass wooden bridge ramp
-        const existing = customRamps.find((r) => Math.hypot(r.x - pt.x, r.y - pt.y) < 34);
-        if (existing) {
-          existing.angle += Math.PI / 4;
-          sfxPlaceDomino(2);
-        } else {
-          customRamps.push({ x: pt.x, y: pt.y, angle: 0, len: 108, w: 36 });
-          sfxPlaceDomino(4);
-          showToast("🌉 Bridge placed! Tap it again to rotate 45°, or switch to Draw Trail.", 2200);
-        }
+      if (activeTool === "erase") {
+        tryEraseAt(pt);
         return;
       }
 
-      isDrawing = true;
-      if (tool === "erase") {
-        eraseNear(pt.x, pt.y);
-      } else {
-        currentStrokeId = strokeCounter++;
-        lastPlacePt = pt;
+      // Clicking directly on the Starter Domino when tiles are already drawn acts as quick push!
+      if (getPlacedCount() > 2 && Math.hypot(pt.x - level.starter.x, pt.y - level.starter.y) < 16) {
+        // Only push on quick tap if they don't drag; wait until move to distinguish
       }
+
+      strokeCounter++;
+      currentStrokeId = strokeCounter;
+      lastDrawPt = pt;
     });
 
     canvas.addEventListener("pointermove", (e) => {
-      if (!isDrawing || mode !== "build") return;
+      if (!isDrawing || simState !== "edit") return;
       const pt = clientToWorld(e.clientX, e.clientY);
 
-      if (tool === "erase") {
-        eraseNear(pt.x, pt.y);
+      if (activeTool === "erase") {
+        tryEraseAt(pt);
         return;
       }
 
-      if (!lastPlacePt) {
-        lastPlacePt = pt;
-        return;
-      }
+      if (!lastDrawPt) { lastDrawPt = pt; return; }
+      const dist = Math.hypot(pt.x - lastDrawPt.x, pt.y - lastDrawPt.y);
 
-      const dx = pt.x - lastPlacePt.x;
-      const dy = pt.y - lastPlacePt.y;
-      const dist = Math.hypot(dx, dy);
-
-      if (dist >= SPACING) {
-        const ang = Math.atan2(dy, dx);
-        const steps = Math.floor(dist / SPACING);
-        let curX = lastPlacePt.x;
-        let curY = lastPlacePt.y;
-
-        for (let s = 1; s <= steps; s++) {
-          curX += Math.cos(ang) * SPACING;
-          curY += Math.sin(ang) * SPACING;
-          if (getUserDominoCount() >= getMaxDominoes()) {
-            showToast(`Domino budget full (${getMaxDominoes()})! Erase extra pieces or hit Topple.`, 2000);
-            break;
-          }
-          tryPlaceDominoAt(curX, curY, ang);
+      if (dist >= DOMINO_STEP) {
+        if (getPlacedCount() >= level.maxTiles) {
+          showToast(`Tile budget (${level.maxTiles}) reached! Erase extras or press ▶ PUSH.`, 2200);
+          lastDrawPt = pt;
+          return;
         }
-        lastPlacePt = { x: curX, y: curY };
+        const ang = Math.atan2(pt.y - lastDrawPt.y, pt.x - lastDrawPt.x);
+        const nx = lastDrawPt.x + Math.cos(ang) * DOMINO_STEP;
+        const ny = lastDrawPt.y + Math.sin(ang) * DOMINO_STEP;
+
+        if (canPlaceDominoAt(nx, ny)) {
+          const idx = dominoes.length;
+          dominoes.push({
+            id: idx,
+            x: nx,
+            y: ny,
+            angle: ang,
+            hue: (idx * 13 + currentLevelNum * 29) % 360,
+            isStarter: false,
+            strokeId: currentStrokeId,
+            state: "standing",
+            fallT: 0,
+            fallAngle: ang,
+            triggeredNext: false
+          });
+          sfxPlaceTile(idx);
+          updateHUD();
+        }
+        lastDrawPt = { x: nx, y: ny };
       }
     });
 
-    const stopDraw = () => { isDrawing = false; lastPlacePt = null; };
-    canvas.addEventListener("pointerup", stopDraw);
-    canvas.addEventListener("pointercancel", stopDraw);
+    const endDraw = () => { isDrawing = false; lastDrawPt = null; };
+    canvas.addEventListener("pointerup", endDraw);
+    canvas.addEventListener("pointercancel", endDraw);
 
-    // Dock & Utility Buttons
-    drawToolBtn.addEventListener("click", () => { tool = "draw"; updateHUD(); });
-    eraseToolBtn.addEventListener("click", () => { tool = "erase"; updateHUD(); });
-    rampToolBtn.addEventListener("click", () => { tool = "ramp"; updateHUD(); });
+    drawToolBtn.addEventListener("click", () => { initAudio(); activeTool = "draw"; updateHUD(); });
+    eraseToolBtn.addEventListener("click", () => { initAudio(); activeTool = "erase"; updateHUD(); });
+    pushBtn.addEventListener("click", startDominoPush);
 
-    undoBtn.addEventListener("click", () => {
-      if (mode !== "build" || dominoes.length <= 1) return;
+    document.getElementById("undoBtn").addEventListener("click", () => {
+      if (simState !== "edit") standDominoesUp();
+      if (dominoes.length <= 1) return;
       initAudio();
-      const lastId = dominoes[dominoes.length - 1].strokeId;
-      dominoes = dominoes.filter((d) => d.isStart || d.strokeId !== lastId);
+      const lastSid = dominoes[dominoes.length - 1].strokeId;
+      dominoes = dominoes.filter((d) => d.isStarter || d.strokeId !== lastSid);
+      sfxPlaceTile(1);
       updateHUD();
     });
 
-    toppleBtn.addEventListener("click", () => {
-      if (mode === "build") startCascade();
-      else if (mode === "run") resetToBuildKeepDominoes();
-    });
-
-    speedBtn.addEventListener("click", () => {
-      speedIdx = (speedIdx + 1) % SPEEDS.length;
-      updateHUD();
-    });
-
-    paletteBtn.addEventListener("click", () => {
-      paletteIdx = (paletteIdx + 1) % PALETTES.length;
-      dominoes.forEach((d, idx) => {
-        if (!d.isStart) d.color = PALETTES[paletteIdx].fn(idx);
-      });
-      updateHUD();
-    });
-
-    document.getElementById("clearBtn").addEventListener("click", () => {
-      mode = "build";
-      dominoes = [createStarterDomino()];
-      customRamps = [];
-      resetToBuildKeepDominoes();
-    });
-
-    sandboxBtn.addEventListener("click", () => {
-      sandboxMode = !sandboxMode;
-      loadLevel(currentLevelNum);
-      if (sandboxMode) {
-        showToast("🛠️ Infinite Sandbox ON! Unlimited dominoes + custom overpass bridges!", 2800);
-      }
-    });
+    document.getElementById("resetBtn").addEventListener("click", () => loadCourse(currentLevelNum));
 
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (sandboxMode) {
-        showToast("Draw spirals, hearts, or Figure-8 bridge loops freely in Sandbox mode!", 2500);
-        return;
-      }
-      showHints = !showHints;
-      if (showHints) {
-        showToast("💡 Golden dashed trail shows a clean route to every bell & star!", 2600);
-      }
+      if (simState === "won") return;
+      initAudio();
+      showGuide = !showGuide;
+      showToast(showGuide ? "💡 Golden dotted Guide Path shown! Trace along it smoothly." : "Guide Path hidden.", 2500);
     });
 
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
       soundBtn.textContent = soundOn ? "🔊 ASMR ON" : "🔇 OFF";
     });
-
     nextLevelBtn.addEventListener("click", () => {
-      if (sandboxMode) {
-        winOverlay.classList.remove("show");
-        resetToBuildKeepDominoes();
-      } else {
-        loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      }
+      loadCourse(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      sandboxMode = false;
-      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadCourse(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      sandboxMode = false;
-      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadCourse(currentLevelNum + 1);
     });
 
     // Picker Modal
@@ -1728,11 +1545,10 @@
         cell.type = "button";
         cell.className = "lvl-cell";
         if (solvedSet.has(n)) cell.classList.add("solved");
-        if (n === currentLevelNum && !sandboxMode) cell.classList.add("active");
+        if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          sandboxMode = false;
-          loadLevel(n);
+          loadCourse(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1754,105 +1570,199 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        sandboxMode = false;
-        loadLevel(val);
+        loadCourse(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // 2.5D WOODEN STUDIO & DOMINO CASCADE RENDERER
+    // DIRECTIONAL CHAIN-REACTION STEP & 2.5D RENDERER
     // ==============================================
-    function drawBridgeRamp(r) {
-      ctx.save();
-      ctx.translate(r.x, r.y);
-      ctx.rotate(r.angle);
+    function angleDiff(a, b) {
+      let d = ((a - b + Math.PI) % (Math.PI * 2) + (Math.PI * 2)) % (Math.PI * 2) - Math.PI;
+      return d;
+    }
 
-      // Ground drop shadow underneath elevated arch
-      ctx.fillStyle = "rgba(0, 0, 0, 0.36)";
+    function stepDominoCascade(dt) {
+      if (simState !== "toppling") return;
+
+      let anyFalling = false;
+      for (const d of dominoes) {
+        if (d.state !== "falling") continue;
+        anyFalling = true;
+
+        d.fallT = Math.min(1, d.fallT + dt * 7.8);
+
+        // At mid-arc (~0.42), domino strikes everything in its forward sweep cone!
+        if (!d.triggeredNext && d.fallT >= 0.42) {
+          d.triggeredNext = true;
+          const fx = Math.cos(d.fallAngle);
+          const fy = Math.sin(d.fallAngle);
+
+          // 1. Trigger Nearby Standing Dominoes (Naturally Supports Smooth Curves & Y-Fork Splits!)
+          for (const other of dominoes) {
+            if (other === d || other.state !== "standing") continue;
+            const dx = other.x - d.x;
+            const dy = other.y - d.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist > SWEEP_REACH || dist < 4) continue;
+
+            const fwdDot = (dx * fx + dy * fy) / dist;
+            if (fwdDot < 0.42) continue; // must lie inside forward ~65° sweep cone!
+            if (segHitsWall(d.x, d.y, other.x, other.y, level.walls)) continue;
+
+            // Choose the natural fall direction of `other` aligned with the incoming push!
+            const optA = other.angle;
+            const optB = other.angle + Math.PI;
+            const pushAng = Math.atan2(dy, dx);
+            const bestFall = Math.abs(angleDiff(optA, pushAng)) <= Math.abs(angleDiff(optB, pushAng)) ? optA : optB;
+
+            other.state = "falling";
+            other.fallT = 0.01;
+            other.fallAngle = bestFall;
+            other.triggeredNext = false;
+            sfxDominoClack();
+          }
+
+          // 2. Check Golden Victory Bells!
+          for (const b of level.bells) {
+            if (b.rung) continue;
+            const dx = b.x - d.x, dy = b.y - d.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist <= 30 && (dx * fx + dy * fy) / Math.max(1, dist) > 0.2) {
+              b.rung = true;
+              sfxBellRing(b.id);
+              rings.push({ x: b.x, y: b.y, r: 12, alpha: 1, color: "#fde047" });
+              for (let k = 0; k < 14; k++) {
+                const a = Math.random() * Math.PI * 2;
+                sparks.push({ x: b.x, y: b.y, vx: Math.cos(a) * 2.4, vy: Math.sin(a) * 2.4, r: 2.6, color: "#fde047", alpha: 1 });
+              }
+            }
+          }
+
+          // 3. Check Fragile Red Crystal Vases (Chapters 3–5)!
+          for (const v of level.vases) {
+            if (v.broken) continue;
+            const dx = v.x - d.x, dy = v.y - d.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist <= 26 && (dx * fx + dy * fy) / Math.max(1, dist) > 0.2) {
+              v.broken = true;
+              simState = "failed";
+              sfxGlassBreak();
+              rings.push({ x: v.x, y: v.y, r: 10, alpha: 1, color: "#ef4444" });
+              for (let k = 0; k < 14; k++) {
+                const a = Math.random() * Math.PI * 2;
+                sparks.push({ x: v.x, y: v.y, vx: Math.cos(a) * 2.8, vy: Math.sin(a) * 2.8, r: 2.6, color: "#f87171", alpha: 1 });
+              }
+              showToast("🏺 A Red Crystal Vase shattered! Tap ↺ STAND UP & TWEAK to steer wider.", 3100);
+              updateHUD();
+              return;
+            }
+          }
+        }
+
+        if (d.fallT >= 1) {
+          d.state = "fallen";
+        }
+      }
+
+      updateHUD();
+
+      // Check Victory Once All Bells Have Rung!
+      if (level.bells.every((b) => b.rung)) {
+        simState = "won";
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_domino_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+        sfxCascadeWin();
+        updateHUD();
+
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winHeading.textContent = isLast ? "All 500 Courses Mastered!" : `Course #${currentLevelNum} Cleared!`;
+        winText.textContent = `Toppled ${dominoes.filter((d) => d.state !== "standing").length} dominoes to chime every Golden Bell!`;
+        nextLevelBtn.textContent = isLast ? "Replay Course #1" : `Next Course (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 650);
+        return;
+      }
+
+      if (!anyFalling) {
+        simState = "stopped";
+        showToast("Chain stopped before ringing all bells! Tap ↺ STAND UP & TWEAK to patch the gap.", 3000);
+        updateHUD();
+      }
+    }
+
+    function drawDomino25D(d, now) {
+      const f = d.fallT; // 0 = standing upright, 1 = flat on studio floor
+      const drawAng = d.state === "standing" ? d.angle : d.fallAngle;
+      const bodyFill = d.isStarter ? "#f59e0b" : `hsl(${d.hue}, 82%, 58%)`;
+      const bodyTop  = d.isStarter ? "#fef08a" : `hsl(${d.hue}, 92%, 78%)`;
+      const bodyDark = d.isStarter ? "#92400e" : `hsl(${d.hue}, 76%, 34%)`;
+
+      ctx.save();
+      ctx.translate(d.x, d.y);
+      ctx.rotate(drawAng);
+
+      // 2.5D elongated tile footprint as domino tips forward along +X!
+      const lenFlat = 21;
+      const thick = 6.5;
+      const wTile = 15.5;
+      const tipX = f * lenFlat;
+
+      // Ground drop shadow
+      ctx.fillStyle = "rgba(0, 0, 0, 0.42)";
       ctx.beginPath();
-      ctx.roundRect(-r.len / 2 + 5, -r.w / 2 + 7, r.len, r.w, 6);
+      ctx.roundRect(-thick / 2 + 2, -wTile / 2 + 3, thick + tipX, wTile, 2.5);
       ctx.fill();
 
-      // Main warm timber bridge deck
-      const grad = ctx.createLinearGradient(-r.len / 2, 0, r.len / 2, 0);
-      grad.addColorStop(0, "#78350f");
-      grad.addColorStop(0.22, "#b45309");
-      grad.addColorStop(0.5, "#d97706");
-      grad.addColorStop(0.78, "#b45309");
-      grad.addColorStop(1, "#78350f");
-      ctx.fillStyle = grad;
-      ctx.strokeStyle = "#fde68a";
-      ctx.lineWidth = 2;
+      // Main falling/fallen domino face
+      ctx.fillStyle = f > 0.15 ? bodyFill : bodyDark;
+      ctx.strokeStyle = bodyTop;
+      ctx.lineWidth = 1.3;
       ctx.beginPath();
-      ctx.roundRect(-r.len / 2, -r.w / 2, r.len, r.w, 5);
+      ctx.roundRect(-thick / 2, -wTile / 2, thick + tipX, wTile, 2.5);
       ctx.fill();
       ctx.stroke();
 
-      // Wooden deck planks & center directional stripe
-      ctx.strokeStyle = "rgba(69, 26, 3, 0.45)";
-      ctx.lineWidth = 1.4;
-      for (let px = -r.len / 2 + 12; px < r.len / 2 - 8; px += 12) {
+      // Center ivory divider & pip dot visible when domino lays flat!
+      if (f > 0.35) {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.72)";
+        ctx.fillRect(tipX * 0.45, -wTile / 2 + 3, 1.6, wTile - 6);
         ctx.beginPath();
-        ctx.moveTo(px, -r.w / 2 + 2);
-        ctx.lineTo(px, r.w / 2 - 2);
+        ctx.arc(tipX * 0.72, 0, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Upright top glossy cap highlight
+        ctx.fillStyle = bodyTop;
+        ctx.fillRect(-thick / 2 + 1, -wTile / 2 + 1, thick - 2, wTile - 2);
+      }
+
+      // Glowing directional arrow on Brass Starter Domino in Edit Mode!
+      if (d.isStarter && simState === "edit") {
+        const pulse = 3 * Math.sin(now * 0.008);
+        ctx.strokeStyle = "#fef08a";
+        ctx.shadowColor = "#facc15";
+        ctx.shadowBlur = 10;
+        ctx.lineWidth = 2.4;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(8, 0); ctx.lineTo(22 + pulse, 0);
+        ctx.moveTo(16 + pulse, -5); ctx.lineTo(22 + pulse, 0); ctx.lineTo(16 + pulse, 5);
         ctx.stroke();
       }
 
-      // Guard rails on top/bottom edges of deck
-      ctx.fillStyle = "#fef3c7";
-      ctx.fillRect(-r.len / 2 + 8, -r.w / 2 - 1, r.len - 16, 3.2);
-      ctx.fillRect(-r.len / 2 + 8, r.w / 2 - 2.2, r.len - 16, 3.2);
-
       ctx.restore();
     }
 
-    function drawDomino3D(d) {
-      const liftY = d.layer === 1 ? -7 : 0;
-      const sinT = Math.sin(d.tilt);
-      const cosT = Math.cos(d.tilt);
+    let lastTime = performance.now();
 
-      // Projected horizontal footprint length as domino tips forward!
-      const fallLen = DOMINO_H * sinT;
-      const standingH = DOMINO_H * cosT * 0.52;
+    function frame(now) {
+      const dt = Math.min(0.04, (now - lastTime) / 1000);
+      lastTime = now;
 
-      ctx.save();
-      ctx.translate(d.x, d.y + liftY);
-      ctx.rotate(d.angle);
+      stepDominoCascade(dt);
 
-      // Ground contact shadow
-      ctx.fillStyle = d.layer === 1 ? "rgba(0, 0, 0, 0.34)" : "rgba(0, 0, 0, 0.42)";
-      ctx.beginPath();
-      ctx.roundRect(-DOMINO_THICK * 0.5 + 2, -DOMINO_W / 2 + 3, DOMINO_THICK + fallLen + 5, DOMINO_W, 2);
-      ctx.fill();
-
-      // Side/Front body of domino leaning forward along +X
-      ctx.fillStyle = d.color;
-      ctx.strokeStyle = d.isStart ? "#dcfce7" : "rgba(15, 23, 42, 0.55)";
-      ctx.lineWidth = d.isStart ? 2 : 1.3;
-
-      const bodyW = DOMINO_THICK + fallLen;
-      ctx.beginPath();
-      ctx.roundRect(-DOMINO_THICK / 2, -DOMINO_W / 2 - standingH * 0.35, bodyW, DOMINO_W, 2.5);
-      ctx.fill();
-      ctx.stroke();
-
-      // Crisp specular top edge when upright, or decorative center pip when fallen!
-      if (d.tilt < 0.5) {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.52)";
-        ctx.fillRect(-DOMINO_THICK / 2 + 1, -DOMINO_W / 2 - standingH * 0.35 + 1, DOMINO_THICK - 2, DOMINO_W - 2);
-      } else {
-        ctx.fillStyle = "rgba(15, 23, 42, 0.45)";
-        ctx.beginPath();
-        ctx.arc(fallLen * 0.38, 0, 1.8, 0, Math.PI * 2);
-        ctx.arc(fallLen * 0.72, 0, 1.8, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.restore();
-    }
-
-    function drawScene(now) {
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
@@ -1860,173 +1770,143 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Studio Floor Subtle Dot Grid
-      ctx.fillStyle = "rgba(148, 163, 184, 0.14)";
-      for (let x = 22; x < WORLD_W; x += 24) {
-        for (let y = 22; y < WORLD_H; y += 24) {
+      // 1. Subtle Studio Woodgrain / Mat Dot Grid
+      ctx.fillStyle = "rgba(244, 114, 182, 0.1)";
+      for (let x = 22; x < WORLD_W; x += 26) {
+        for (let y = 22; y < WORLD_H; y += 26) {
           ctx.fillRect(x, y, 1.5, 1.5);
         }
       }
 
-      // 2. Optional Golden Trail Hint Paths
-      if (showHints && level.hintPaths.length > 0 && mode === "build") {
+      // 2. Optional Golden Dotted Blueprint Guide Path (When 💡 Guide Path Active!)
+      if (showGuide) {
         ctx.save();
-        ctx.strokeStyle = "rgba(250, 204, 21, 0.62)";
-        ctx.lineWidth = 3;
-        ctx.setLineDash([7, 7]);
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        for (const path of level.hintPaths) {
+        ctx.strokeStyle = "rgba(250, 204, 21, 0.65)";
+        ctx.lineWidth = 2.6;
+        ctx.setLineDash([5, 6]);
+        for (const br of level.guideBranches) {
           ctx.beginPath();
-          path.forEach((pt, idx) => {
-            if (idx === 0) ctx.moveTo(pt.x, pt.y);
-            else ctx.lineTo(pt.x, pt.y);
+          br.forEach((p, i) => {
+            if (i === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
           });
           ctx.stroke();
         }
         ctx.restore();
       }
 
-      // 3. Solid Floor Obstacles
+      // 3. Carved Stone Obstacle Walls
       for (const w of level.walls) {
         ctx.save();
         ctx.fillStyle = "#334155";
-        ctx.strokeStyle = "#94a3b8";
+        ctx.strokeStyle = "#64748b";
         ctx.lineWidth = 2;
-        ctx.shadowColor = "rgba(0,0,0,0.45)";
-        ctx.shadowBlur = 10;
         ctx.beginPath();
         ctx.roundRect(w.x - w.w / 2, w.y - w.h / 2, w.w, w.h, 7);
         ctx.fill();
-        ctx.shadowBlur = 0;
         ctx.stroke();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+        ctx.strokeRect(w.x - w.w / 2 + 4, w.y - w.h / 2 + 4, w.w - 8, w.h - 8);
         ctx.restore();
       }
 
-      // 4. Fragile Red Glass Hazard Pillars (Ch. 4-5)
-      for (const h of hazardsState) {
+      // 4. Fragile Red Crystal Hazard Vases (Ch. 3–5)
+      for (const v of level.vases) {
         ctx.save();
-        ctx.fillStyle = h.broken ? "rgba(239, 68, 68, 0.25)" : "rgba(220, 38, 38, 0.82)";
-        ctx.strokeStyle = "#fca5a5";
-        ctx.shadowColor = "#ef4444";
-        ctx.shadowBlur = h.broken ? 4 : 14;
-        ctx.lineWidth = 2.4;
-        ctx.beginPath();
-        ctx.arc(h.x, h.y, h.r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "900 12px sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(h.broken ? "💥" : "✕", h.x, h.y + 1);
-        ctx.restore();
-      }
-
-      // 5. Golden Star Checkpoints
-      for (const st of starsState) {
-        if (st.got) continue;
-        const pulse = 1 + Math.sin(now * 0.007) * 0.1;
-        ctx.save();
-        ctx.translate(st.x, st.y);
-        ctx.scale(pulse, pulse);
-        ctx.fillStyle = "#facc15";
-        ctx.shadowColor = "#facc15";
-        ctx.shadowBlur = 14;
-        ctx.beginPath();
-        for (let i = 0; i < 10; i++) {
-          const a = -Math.PI / 2 + (i * Math.PI) / 5;
-          const rr = i % 2 === 0 ? 13 : 5.5;
-          if (i === 0) ctx.moveTo(Math.cos(a) * rr, Math.sin(a) * rr);
-          else ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
+        ctx.translate(v.x, v.y);
+        if (v.broken) {
+          ctx.fillStyle = "rgba(239, 68, 68, 0.45)";
+          for (let i = 0; i < 6; i++) {
+            const a = (i * Math.PI) / 3;
+            ctx.beginPath();
+            ctx.arc(Math.cos(a) * 10, Math.sin(a) * 10, 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        } else {
+          ctx.fillStyle = "rgba(239, 68, 68, 0.22)";
+          ctx.strokeStyle = "#f87171";
+          ctx.shadowColor = "#ef4444";
+          ctx.shadowBlur = 10;
+          ctx.lineWidth = 2.2;
+          ctx.beginPath();
+          ctx.arc(0, 0, 15, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "#fecaca";
+          ctx.font = "13px sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("🏺", 0, 1);
         }
-        ctx.closePath();
-        ctx.fill();
         ctx.restore();
       }
 
-      // 6. Start Pad Halo
-      {
-        const sx = level.start.x, sy = level.start.y;
+      // 5. Golden Target Victory Bells
+      for (const b of level.bells) {
         ctx.save();
-        ctx.strokeStyle = "#4ade80";
-        ctx.fillStyle = "rgba(34, 197, 94, 0.18)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(sx, sy, 20, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = "#bbf7d0";
-        ctx.font = "900 8.5px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("START", sx, sy + 30);
-        ctx.restore();
-      }
-
-      // 7. Goal Target Bells
-      for (const bl of bellsState) {
-        const wob = bl.ringAnim > 0 ? Math.sin(now * 0.05) * bl.ringAnim * 0.35 : 0;
-        ctx.save();
-        ctx.translate(bl.x, bl.y);
-        ctx.rotate(wob);
-        ctx.fillStyle = bl.hit ? "#16a34a" : "#1e293b";
-        ctx.strokeStyle = bl.hit ? "#86efac" : "#facc15";
-        ctx.shadowColor = bl.hit ? "#22c55e" : "#facc15";
-        ctx.shadowBlur = 14;
+        ctx.translate(b.x, b.y);
+        const sc = b.rung ? 1.1 : (1 + 0.05 * Math.sin(now * 0.007 + b.id));
+        ctx.scale(sc, sc);
+        ctx.fillStyle = b.rung ? "rgba(34, 197, 94, 0.26)" : "rgba(250, 204, 21, 0.16)";
+        ctx.strokeStyle = b.rung ? "#4ade80" : "#facc15";
+        ctx.shadowColor = b.rung ? "#22c55e" : "#facc15";
+        ctx.shadowBlur = b.rung ? 18 : 12;
         ctx.lineWidth = 2.6;
         ctx.beginPath();
-        ctx.arc(0, 0, 20, 0, Math.PI * 2);
+        ctx.arc(0, 0, 19, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
         ctx.shadowBlur = 0;
-        ctx.font = "18px sans-serif";
+
+        ctx.fillStyle = b.rung ? "#bbf7d0" : "#fde047";
+        ctx.font = "15px sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(bl.hit ? "✓" : "🔔", 0, 1);
+        ctx.fillText(b.rung ? "✓" : "🔔", 0, 1);
         ctx.restore();
       }
 
-      // 8. Layer-0 Ground Dominoes (Underneath Bridges!)
-      const groundDoms = dominoes.filter((d) => d.layer === 0).sort((a, b) => a.y - b.y);
-      for (const d of groundDoms) drawDomino3D(d);
+      // 6. Dominoes (Fallen Tiles Underneath, Standing/Falling Tiles Crisply On Top!)
+      const drawList = dominoes.slice().sort((a, b) => (a.state === "fallen" ? 0 : 1) - (b.state === "fallen" ? 0 : 1));
+      for (const d of drawList) {
+        drawDomino25D(d, now);
+      }
 
-      // 9. Elevated Wooden Overpass Bridge Ramps
-      for (const r of getAllRamps()) drawBridgeRamp(r);
-
-      // 10. Layer-1 Elevated Bridge Dominoes (Crossing Over Top!)
-      const bridgeDoms = dominoes.filter((d) => d.layer === 1).sort((a, b) => a.y - b.y);
-      for (const d of bridgeDoms) drawDomino3D(d);
-
-      // 11. Sparks
-      sparks = sparks.filter((sp) => sp.alpha > 0.04);
-      for (const sp of sparks) {
-        sp.x += sp.vx;
-        sp.y += sp.vy;
-        sp.alpha *= 0.92;
-        ctx.fillStyle = sp.color;
-        ctx.globalAlpha = sp.alpha;
+      // 7. Chime Shockwave Rings & Sparks
+      rings = rings.filter((rg) => rg.alpha > 0.04);
+      for (const rg of rings) {
+        rg.r += 2.1;
+        rg.alpha *= 0.9;
+        ctx.strokeStyle = rg.color;
+        ctx.globalAlpha = rg.alpha;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
-        ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+        ctx.arc(rg.x, rg.y, rg.r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha *= 0.92;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalAlpha = 1;
       }
 
       ctx.restore();
-    }
-
-    let lastTime = performance.now();
-    function frame(now) {
-      const dt = Math.min(0.05, (now - lastTime) / 1000);
-      lastTime = now;
-      stepCascade(dt);
-      drawScene(now);
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadLevel(currentLevelNum);
+    loadCourse(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
