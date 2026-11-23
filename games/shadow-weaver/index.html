@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shadow Weaver — 500 3D Silhouette Puzzle Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 relaxing 3D shadow puzzles in Shadow Weaver. Rotate abstract sculptures in a warm gallery spotlight until their cast shadows reveal hidden silhouettes on the wall." />
+  <title>Shadow Weaver — Free 500-Level 3D Shadow Silhouette Puzzle Game | ZinPlay</title>
+  <meta name="description" content="Play Shadow Weaver free online with no download. Rotate abstract 3D wooden sculptures in front of a warm gallery spotlight to cast 500 hidden shadow silhouettes on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Shadow Weaver",
+    "url": "https://zinplay.io/games/shadow-weaver/",
+    "genre": ["Puzzle", "Spatial Art", "Relaxing Brain Teaser"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top Gallery HUD */
+    /* Top Gallery Studio HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #110e17;
-      color: #f3ede4;
-      border-bottom: 1px solid #2a2236;
+      background: #171310;
+      color: #fef3c7;
+      border-bottom: 1px solid #30261e;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #d4a373;
-      font-weight: 600;
+      color: #f59e0b;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -69,67 +82,70 @@
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
     .hud-pill.done-pill {
       background: rgba(34, 197, 94, 0.16);
       border-color: rgba(74, 222, 128, 0.4);
       color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Shadow Alignment Resonance Meter */
-    .match-bar-wrap {
+    /* Alignment Resonance Dots Strip (Shadowmatic-Style Proximity Meter) */
+    .align-strip {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
       padding: 9px 14px;
-      background: #191422;
-      border-bottom: 1px solid #2b2338;
-      color: #e2d9c8;
+      background: #1f1915;
+      border-bottom: 1px solid #352a21;
+      color: #e7e5e4;
       font-size: 0.75rem;
       font-weight: 800;
     }
-    .match-label {
-      min-width: 96px;
-      color: #fbbf24;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .align-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
     }
-    .match-track {
-      flex: 1;
-      height: 10px;
-      background: #0b0910;
-      border-radius: 999px;
-      border: 1px solid #382e47;
-      overflow: hidden;
+    .a-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #120e0b;
+      border: 1.5px solid #574535;
+      transition: all 0.18s ease;
     }
-    .match-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #6366f1 0%, #f59e0b 65%, #34d399 100%);
-      transition: width 0.08s ease-out;
+    .a-dot.lit {
+      background: #fbbf24;
+      border-color: #fef08a;
+      box-shadow: 0 0 9px rgba(251, 191, 36, 0.75);
     }
-    .match-pct {
-      min-width: 46px;
-      text-align: right;
+    .a-dot.locked {
+      background: #22c55e;
+      border-color: #86efac;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+    }
+    .category-clue {
+      color: #fcd34d;
       font-family: monospace;
-      font-size: 0.84rem;
-      color: #fef3c7;
+      font-size: 0.74rem;
     }
 
-    /* Spotlight Stage Canvas */
+    /* Warm Spotlight Gallery Canvas Stage */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 450px;
-      background: radial-gradient(circle at 50% 34%, #2d2538 0%, #120e1a 100%);
+      height: 445px;
+      background: radial-gradient(circle at 50% 34%, #3b2d22 0%, #16110e 100%);
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 495px;
+        height: 485px;
       }
     }
     #shadowCanvas {
@@ -143,67 +159,46 @@
       cursor: grabbing;
     }
 
-    /* Sculpture Switcher & Roll Controls Dock */
-    .sculpt-dock {
+    /* Piece Selector & Roll Control Dock (Ch. 3–5) */
+    .studio-dock {
       display: flex;
-      flex-direction: column;
-      gap: 9px;
-      padding: 11px 14px;
-      background: #14101d;
-      border-top: 1px solid #2b2338;
-      color: #e2d9c8;
-    }
-    .piece-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      justify-content: center;
       gap: 8px;
+      padding: 10px 12px;
+      background: #1a1512;
+      border-top: 1px solid #33281f;
+      flex-wrap: wrap;
     }
-    .piece-tab-btn {
-      min-height: 38px;
+    .studio-btn {
+      min-height: 40px;
+      padding: 0 13px;
       border-radius: 10px;
-      border: 1.5px solid #352b45;
-      background: #1e182b;
-      color: #a89bb8;
+      border: 1.5px solid #443529;
+      background: #261e19;
+      color: #e7e5e4;
       font-size: 0.8rem;
       font-weight: 800;
       cursor: pointer;
-      transition: 0.14s ease;
-    }
-    .piece-tab-btn.active {
-      border-color: #f59e0b;
-      background: rgba(245, 158, 11, 0.2);
-      color: #fef3c7;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.22);
-    }
-    .roll-row {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease;
     }
-    .roll-btn {
-      min-height: 38px;
-      padding: 0 12px;
-      border-radius: 10px;
-      border: 1.5px solid #352b45;
-      background: #1e182b;
-      color: #f3ede4;
-      font-size: 0.82rem;
-      font-weight: 800;
-      cursor: pointer;
+    .studio-btn:active { transform: scale(0.96); }
+    .studio-btn.active {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.22);
+      color: #fef08a;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.28);
     }
-    .roll-btn:active {
-      transform: scale(0.96);
+    .studio-btn.piece-ok {
+      border-color: #22c55e;
+      color: #86efac;
     }
-    .roll-slider {
-      flex: 1;
-      accent-color: #f59e0b;
-      height: 6px;
-      cursor: pointer;
-    }
-    .dock-tip {
-      text-align: center;
+    .dock-hint-txt {
       font-size: 0.74rem;
-      color: #a89bb8;
+      color: #a8a29e;
       font-weight: 600;
     }
 
@@ -212,8 +207,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(17, 14, 23, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.68);
+      background: rgba(23, 19, 16, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -227,14 +222,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(12, 9, 18, 0.8);
+      background: rgba(18, 14, 11, 0.8);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -258,15 +251,8 @@
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -307,9 +293,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -406,6 +390,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #171310;
+      border: 1px solid rgba(217, 119, 6, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #171310;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #1c1612 0%, #3b2617 100%);
+      color: #fef3c7;
+    }
+    .game-seo-banner.slate-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #1e293b 0%, #451a03 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fde68a;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .guide-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .guide-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .guide-table th, .guide-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .guide-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .guide-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -418,7 +482,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -431,74 +495,67 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Sculptures &bull; 3D Shadow Puzzle</span>
+      <span class="cat-tag">500 Sculptures &bull; 3D Shadow Art Puzzle</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Shadow Weaver</h1>
-      <p>Rotate suspended wooden sculptures inside the gallery spotlight until their shadow on the wall forms a hidden silhouette.</p>
+      <p>Rotate floating 3D wooden sculptures in front of a warm gallery spotlight until their cast wall shadow snaps into a hidden silhouette.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Shadow Weaver 3D Shadow Puzzle">
+    <section class="game-wrapper" aria-label="Shadow Weaver 3D Silhouette Puzzle">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Warm Gallery</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Single-Axis Gallery</span>
           <span id="levelTitle">Sculpture #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="cluePill">Clue: Silhouette</span>
+          <span class="hud-pill" id="alignPill">Focus: 0%</span>
           <span class="hud-pill done-pill" id="solvedCounter">Revealed: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Live Silhouette Match Meter -->
-      <div class="match-bar-wrap">
-        <span id="matchLabel" class="match-label">✦ ALIGNMENT</span>
-        <div class="match-track">
-          <div id="matchFill" class="match-fill"></div>
+      <!-- Proximity Resonance Dots & Category Hint -->
+      <div class="align-strip">
+        <div id="alignDots" class="align-dots" aria-label="Shadow Alignment Proximity">
+          <span class="a-dot"></span><span class="a-dot"></span><span class="a-dot"></span>
+          <span class="a-dot"></span><span class="a-dot"></span><span class="a-dot"></span>
         </div>
-        <span id="matchPct" class="match-pct">0%</span>
+        <span id="categoryClue" class="category-clue">Clue: Maritime &amp; Travel</span>
       </div>
 
-      <!-- Gallery Wall & 3D Sculpture Stage -->
+      <!-- Warm Gallery Spotlight Canvas -->
       <div class="canvas-container">
         <canvas id="shadowCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Revealed Win Overlay -->
+        <!-- Revealed Artwork Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div id="winIcon" style="font-size:2.3rem; margin-bottom:6px;">✨</div>
-            <h2 id="winHeading">Shadow Revealed!</h2>
-            <p id="winText">The sculpture aligned cleanly in the spotlight.</p>
+            <div style="font-size:2.3rem; margin-bottom:6px;">🔦</div>
+            <h2 id="winHeading">Silhouette Revealed!</h2>
+            <p id="winText">The spotlight aligned every floating timber into a crisp work of art.</p>
             <button id="nextLevelBtn" class="btn-primary" type="button">Next Sculpture →</button>
           </div>
         </div>
       </div>
 
-      <!-- Active Sculpture Controls (Twin Tabs + Roll Axis for Ch. 3+) -->
-      <div class="sculpt-dock">
-        <div id="pieceTabs" class="piece-tabs" style="display:none;">
-          <button id="piece0Btn" class="piece-tab-btn active" type="button">Sculpture A (Left)</button>
-          <button id="piece1Btn" class="piece-tab-btn" type="button">Sculpture B (Right)</button>
-        </div>
-
-        <div id="rollRow" class="roll-row" style="display:none;">
-          <button id="rollLeftBtn" class="roll-btn" type="button" aria-label="Roll Left">⟲</button>
-          <input id="rollSlider" class="roll-slider" type="range" min="-180" max="180" value="0" aria-label="Roll Rotation" />
-          <button id="rollRightBtn" class="roll-btn" type="button" aria-label="Roll Right">⟳</button>
-        </div>
-
-        <div id="dockTip" class="dock-tip">👆 Drag anywhere on the canvas to rotate the 3D sculpture in the spotlight</div>
+      <!-- Dynamic Piece & Roll Studio Controls -->
+      <div id="studioDock" class="studio-dock">
+        <span id="dockHintTxt" class="dock-hint-txt">👆 Drag Left or Right to spin the 3D wooden sculpture</span>
+        <button id="pieceABtn" class="studio-btn active" type="button" style="display:none;">🪵 Piece A</button>
+        <button id="pieceBBtn" class="studio-btn" type="button" style="display:none;">🪵 Piece B</button>
+        <button id="rollLBtn" class="studio-btn" type="button" style="display:none;">⟲ Roll -15°</button>
+        <button id="rollRBtn" class="studio-btn" type="button" style="display:none;">⟳ Roll +15°</button>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Scramble</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Re-Scramble</button>
           <button id="hintBtn" class="btn-outline" type="button">💡 Shadow Hint</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
@@ -513,51 +570,146 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 840+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/shadow-weaver-banner-1.jpg"
+            alt="Shadow Weaver 3D wooden sculpture rotating in a warm art gallery spotlight to cast a crisp sailboat shadow silhouette"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Cozy 3D Shadow Silhouettes — Pure Browser Canvas</h3>
+          <p>Turn abstract floating walnut timbers in warm gallery light until depth aligns and recognizable art emerges on the plaster wall.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Shadow Weaver (500 3D Shadow Puzzles)</h2>
-        <p>Shadow Weaver is a meditative spatial-perception puzzle inspired by theatrical shadowplay. Floating inside a warm gallery spotlight is an abstract 3D sculpture built from carved wood and brass blocks scattered in depth. From most angles it looks completely unrecognizable—until you rotate it into the exact hidden angle where every piece aligns to cast a crisp, familiar silhouette onto the illuminated wall above.</p>
+        <h2>What Is Shadow Weaver? A Relaxing 3D Shadow Silhouette Puzzle Online</h2>
+        <p><strong>Shadow Weaver</strong> is a free <strong>3D shadow silhouette browser game</strong> inspired by beloved spatial-art experiences like <em>Shadowmatic</em>, engineered to run instantaneously inside any mobile or desktop web browser with zero downloads. Each exhibit suspends an abstract cluster of carved wooden blocks above a warm studio spotlight. From random viewing angles the floating fragments appear completely unrelated—yet when rotated into the exact orthographic perspective, their cast shadows fuse together on the gallery wall to reveal a crisp silhouette such as a sailboat, vintage key, crescent moon, rocket ship, royal crown, or acoustic guitar.</p>
+        <p>Built as a calm, <strong>no-download spatial perception puzzle for smartphones, iPads, and Chromebooks</strong>, Shadow Weaver features zero countdown timers, soothing wooden chime feedback via the <strong>Web Audio API</strong>, and a real-time <strong>6-dot Resonance Alignment Meter</strong> that glows progressively brighter as you get warmer—turning abstract 3D visualization into a meditative art break.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>How to Read 3D Shadows Like a Sculptor (Mastery Guide)</h2>
+        <p>Rotating multi-axis 3D sculptures in Chapters 2 through 5 can feel wonderfully tricky at first. Use these four visual perception techniques to lock onto hidden shapes smoothly without guessing blindly:</p>
+
+        <div class="guide-table-wrap">
+          <table class="guide-table">
+            <thead>
+              <tr>
+                <th>Chapter &amp; Control Mode</th>
+                <th>Key Visual Cue</th>
+                <th>Best Alignment Strategy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Chapter 1: Single-Axis Spin</strong> (Levels 1–100)</td>
+                <td>Pieces spread horizontally when off-angle and compress cleanly at the sweet spot.</td>
+                <td>Sweep slowly left or right while watching the <strong>Focus %</strong> and golden resonance dots light up!</td>
+              </tr>
+              <tr>
+                <td><strong>Chapter 2: 2-Axis Free Orbit</strong> (Levels 101–200)</td>
+                <td>Flat wooden slabs appear razor-thin when viewed edge-on.</td>
+                <td>First lock horizontal spin until vertical edges stack neatly, then tilt smoothly up or down to refine pitch.</td>
+              </tr>
+              <tr>
+                <td><strong>Chapter 3: Twin Sculptures</strong> (Levels 201–300)</td>
+                <td><strong>Piece A</strong> (warm walnut) and <strong>Piece B</strong> (golden maple) combine into one unified shadow.</td>
+                <td>Align Piece A first until its button turns green (✓), then switch to Piece B to finish the composite artwork!</td>
+              </tr>
+              <tr>
+                <td><strong>Chapters 4–5: Full 3-Axis + Roll</strong> (Levels 301–500)</td>
+                <td>Shape looks recognizable on the wall, yet tilted sideways or upside-down.</td>
+                <td>Once the shadow outline looks sharp, tap <strong>⟲ Roll</strong> or <strong>⟳ Roll</strong> (or press <code>Q</code>/<code>E</code>) to level it upright!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;">Curious what shape is hiding inside the abstract timber cluster? Check the <strong>Category Clue</strong> in the top-right bar (such as <em>Sky &amp; Space</em>, <em>Nature</em>, or <em>Everyday Objects</em>)—or tap <strong>💡 Shadow Hint</strong> to briefly project a golden dotted silhouette outline onto the gallery wall and nudge the sculpture closer to focus.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner slate-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/shadow-weaver-banner-2.jpg"
+            alt="Twin rotating wooden and brass 3D sculptures casting key, bird, and crown shadows on a gallery wall in Shadow Weaver"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>24 Handcrafted Silhouette Artworks Across 500 Unique 3D Arrangements</h3>
+          <p>Every stage scrambles depth offsets, lighting moods, and multi-piece splits so no two sculptures rotate the exact same way.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Why Shadow &amp; Perspective Puzzles Sharpen Spatial Intelligence</h2>
+        <p>Cognitive psychologists call the skill of picturing how a 3D object looks from a different viewpoint <strong>mental rotation</strong>—one of the strongest foundations of architectural design, mechanical engineering, and visual art. Shadow Weaver trains this skill naturally across <strong>500 escalating exhibits</strong>:</p>
         <ul>
-          <li><strong>Intuitive 3D Rotation:</strong> Drag left, right, up, or down anywhere on the gallery stage (or use Arrow keys / <code>WASD</code> on desktop) to spin the 3D sculpture freely while watching its shadow morph in real time on the wall.</li>
-          <li><strong>Unlock 3-Axis Roll &amp; Twin Sculptures:</strong> Chapters 1 and 2 focus on smooth 2-axis discovery. Starting in Chapter 3 (Level 201), the <strong>Roll (⟲ / ⟳)</strong> dial unlocks full 3-axis alignment. Chapters 4 and 5 (Levels 301–500) suspend <strong>two separate sculptures</strong> side-by-side—switch between Sculpture A and B to compose paired shadow scenes!</li>
-          <li><strong>Watch the Alignment Bar &amp; Listen:</strong> As your cast shadow approaches the true silhouette, the Alignment Bar rises smoothly toward 100%, the wall warms with golden light, and soft harmonic notes chime to let you know you're getting close.</li>
+          <li><strong>Zero Visual Clutter:</strong> The warm gallery wall displays your cast shadow completely unobstructed in the upper frame while the 3D carved sculpture floats cleanly over the spotlight pedestal below, so your thumb never covers the silhouette while dragging on mobile.</li>
+          <li><strong>Fair Symmetry Detection:</strong> Symmetrical silhouettes like stars, hearts, pine trees, crowns, and hourglasses automatically accept clean mirror-aligned angles so you are never penalized when a shadow looks visually identical.</li>
+          <li><strong>Instant Local Gallery Saves:</strong> Every revealed exhibit from Sculpture #1 to #500 is stored automatically inside private browser <code>localStorage</code> with zero login screens or app store downloads required.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Shadow Puzzle Topics">
+          <span class="kw-pill">Shadow Silhouette Puzzle Online</span>
+          <span class="kw-pill">Shadowmatic Style Web Game</span>
+          <span class="kw-pill">3D Perspective Brain Teaser</span>
+          <span class="kw-pill">Relaxing Art Gallery Browser Game</span>
+          <span class="kw-pill">Mental Rotation Spatial Puzzle</span>
+          <span class="kw-pill">500-Level No-Download HTML5 Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Shadow Weaver FAQ</h2>
         <details class="faq-item">
-          <summary>How does the Shadow Hint (💡) button help without spoiling the fun?</summary>
-          <div class="faq-answer">The first tap projects a faint golden chalk outline of the target silhouette onto the gallery wall. Tapping Shadow Hint again smoothly glides the active sculpture halfway closer to its solved orientation!</div>
+          <summary>How do I know if I'm getting closer to the hidden shadow shape?</summary>
+          <div class="faq-answer">Watch the <strong>6 golden Resonance Dots</strong> and the <strong>Focus %</strong> pill above the gallery wall! As you rotate toward the true viewing angle, more dots light up in warm gold and the wall shadow sharpens.</div>
         </details>
         <details class="faq-item">
-          <summary>Why do symmetric shapes like hearts or pine trees snap into place from either side?</summary>
-          <div class="faq-answer">Shadow Weaver measures real-time pixel-mask silhouette overlap (IoU) on the wall—so any 3D orientation that produces the exact same recognizable shadow is accepted cleanly!</div>
+          <summary>How do Twin Sculptures (Piece A &amp; Piece B) work in Chapters 3 and 5?</summary>
+          <div class="faq-answer">Some exhibits split a hidden silhouette across two separate wooden clusters! Tap <strong>🪵 Piece A</strong> or <strong>🪵 Piece B</strong> beneath the spotlight to switch which cluster you are rotating—as soon as one piece locks near its sweet spot, its button highlights green so you can finish the second piece!</div>
+        </details>
+        <details class="faq-item">
+          <summary>What does the Shadow Hint (💡) button show?</summary>
+          <div class="faq-answer">Tapping Shadow Hint flashes a faint golden dotted silhouette blueprint on the gallery wall for three seconds and gently glides the active wooden piece partway toward its correct 3D angle.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I play Shadow Weaver on Android, iPhone, and Chromebook?</summary>
+          <div class="faq-answer">Yes! Simply drag anywhere on the canvas with your finger or mouse to spin the 3D wooden sculpture smoothly at 60 FPS—plus use <code>Q</code> and <code>E</code> on desktop keyboards for quick roll turns in Chapters 4–5.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🏛️</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Daily Visual Paradox</h3>
+        <p>Rotate impossible isometric monuments and slide brass walkways to forge Escher optical bridges.</p>
+        <a href="/games/visual-paradox/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">📄</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Fold &amp; Reveal</h3>
+        <p>Fold scrambled paper sheets from the right edges like origami to line up hidden messages and art.</p>
+        <a href="/games/fold-reveal/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
         <h3>Prism &amp; Lasers</h3>
-        <p>Place mirrors and split laser beams through prisms across 500 dark-mode optical puzzles.</p>
+        <p>Rotate mirrors and split laser beams through optical prisms in a sleek dark-mode grid.</p>
         <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🕰️</div><span class="cat-tag">ASMR</span></div>
-        <h3>Antique Restorer</h3>
-        <p>Scrub rust, fit interlocking brass gears, and polish 500 vintage relics back to life.</p>
-        <a href="/games/antique-restorer/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🥷</div><span class="cat-tag">Strategy</span></div>
-        <h3>Heist Blueprint Planner</h3>
-        <p>Plot routes and timed waits on museum blueprints to slip past lasers and cameras.</p>
-        <a href="/games/heist-planner/" class="card-link">Play Game →</a>
       </article>
     </section>
 
@@ -567,12 +719,12 @@
   <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Sculpture">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Sculpture (1 – 500)</h3>
+        <h3>Choose Gallery Exhibit (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to sculpture (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to exhibit (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -595,8 +747,8 @@
           <ul>
             <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
             <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
             <li><a href="/games/shadow-weaver/">Shadow Weaver</a></li>
+            <li><a href="/games/visual-paradox/">Daily Visual Paradox</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -605,7 +757,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -638,257 +790,272 @@
     }
 
     // ==============================================
-    // SILHOUETTE ARCHETYPES & 3D SCULPTURE ENGINE
+    // 24 ICONIC SILHOUETTES & 3D SCULPTURE ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
     const WORLD_W = 420;
     const WORLD_H = 460;
     const WALL_CX = WORLD_W / 2;
-    const WALL_CY = 158;
-    const SCULPT_Y = 368;
-    const MASK_SZ = 64;
+    const WALL_CY = 144;
+    const SCULPT_CX = WORLD_W / 2;
+    const SCULPT_CY = 368;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Warm Gallery", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Blind Shadows", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Three-Axis Sculptures", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Twin Shadowplay", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Grand Silhouette Master", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Single-Axis Gallery", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • 2-Axis Sculptor", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Twin Sculptures", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Full 3-Axis Tilt", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Shadow Atelier", range: "401–500", start: 401, end: 500 }
     ];
 
-    // 20 Recognizable Silhouette Templates (2D Primitives in [-68..68] -> Extruded into 3D!)
-    const SHAPES = {
-      cat: {
-        name: "Seated Cat", clue: "Feline Friend", icon: "🐱",
+    // 24 Crisp Recognizable Silhouettes Built From Extrudable 2D Primitives:
+    // { t:'box', x, y, w, h, a?, g? } | { t:'tri', x, y, w, h, a?, g? } | { t:'disc', x, y, r, g? }
+    // `g` (0 or 1) splits dual-sculpture levels cleanly into Piece A & Piece B!
+    const SILHOUETTES = [
+      {
+        name: "Sailboat", cat: "Maritime & Travel", symX: false,
         parts: [
-          { t: "sphere", x: -4, y: -32, r: 22 },
-          { t: "tri", pts: [[-22, -42], [-18, -66], [-4, -48]] },
-          { t: "tri", pts: [[14, -42], [10, -66], [-4, -48]] },
-          { t: "sphere", x: -2, y: 18, r: 30 },
-          { t: "box", x: -2, y: 34, w: 54, h: 28 },
-          { t: "box", x: 34, y: 24, w: 14, h: 48 },
-          { t: "sphere", x: 38, y: -2, r: 9 }
+          { t: "box", x: 0, y: 42, w: 96, h: 18, g: 0 },
+          { t: "tri", x: -48, y: 42, w: 22, h: 18, a: Math.PI, g: 0 },
+          { t: "tri", x: 48, y: 42, w: 22, h: 18, a: Math.PI, g: 0 },
+          { t: "box", x: -4, y: -12, w: 7, h: 94, g: 0 },
+          { t: "tri", x: 24, y: -12, w: 50, h: 74, a: 0, g: 1 },
+          { t: "tri", x: -24, y: -2, w: 34, h: 56, a: 0, g: 1 }
         ]
       },
-      house: {
-        name: "Cozy Cottage", clue: "Home Sweet Home", icon: "🏠",
+      {
+        name: "Pine Cabin", cat: "Architecture", symX: true,
         parts: [
-          { t: "box", x: 0, y: 20, w: 86, h: 58 },
-          { t: "tri", pts: [[-58, -6], [58, -6], [0, -62]] },
-          { t: "box", x: 26, y: -40, w: 16, h: 36 }
+          { t: "box", x: 0, y: 24, w: 86, h: 54, g: 0 },
+          { t: "tri", x: 0, y: -26, w: 112, h: 50, g: 1 },
+          { t: "box", x: 26, y: -38, w: 14, h: 28, g: 1 }
         ]
       },
-      tree: {
-        name: "Alpine Pine", clue: "Evergreen", icon: "🌲",
+      {
+        name: "Vintage Key", cat: "Everyday Objects", symX: false,
         parts: [
-          { t: "box", x: 0, y: 46, w: 22, h: 32 },
-          { t: "tri", pts: [[-54, 34], [54, 34], [0, -14]] },
-          { t: "tri", pts: [[-44, 6], [44, 6], [0, -40]] },
-          { t: "tri", pts: [[-32, -20], [32, -20], [0, -64]] }
+          { t: "disc", x: -42, y: 0, r: 24, g: 0 },
+          { t: "box", x: 14, y: 0, w: 86, h: 12, g: 0 },
+          { t: "box", x: 34, y: 14, w: 10, h: 20, g: 1 },
+          { t: "box", x: 50, y: 16, w: 10, h: 24, g: 1 },
+          { t: "disc", x: -42, y: -26, r: 9, g: 1 }
         ]
       },
-      rocket: {
-        name: "Space Rocket", clue: "Blast Off", icon: "🚀",
+      {
+        name: "Royal Crown", cat: "Treasures", symX: true,
         parts: [
-          { t: "box", x: 0, y: 2, w: 34, h: 76 },
-          { t: "tri", pts: [[-18, -34], [18, -34], [0, -68]] },
-          { t: "tri", pts: [[-16, 12], [-44, 48], [-16, 42]] },
-          { t: "tri", pts: [[16, 12], [44, 48], [16, 42]] },
-          { t: "tri", pts: [[-12, 40], [12, 40], [0, 64]] }
+          { t: "box", x: 0, y: 30, w: 98, h: 24, g: 0 },
+          { t: "tri", x: -34, y: -6, w: 34, h: 54, g: 0 },
+          { t: "tri", x: 0, y: -14, w: 40, h: 68, g: 1 },
+          { t: "tri", x: 34, y: -6, w: 34, h: 54, g: 1 },
+          { t: "disc", x: -34, y: -36, r: 7, g: 0 },
+          { t: "disc", x: 0, y: -50, r: 8, g: 1 },
+          { t: "disc", x: 34, y: -36, r: 7, g: 1 }
         ]
       },
-      key: {
-        name: "Antique Key", clue: "Unlocks Secrets", icon: "🗝️",
+      {
+        name: "Rocket Ship", cat: "Sky & Space", symX: true,
         parts: [
-          { t: "sphere", x: -38, y: 0, r: 24 },
-          { t: "box", x: 10, y: 0, w: 78, h: 14 },
-          { t: "box", x: 30, y: 16, w: 12, h: 24 },
-          { t: "box", x: 48, y: 18, w: 12, h: 28 }
+          { t: "box", x: 0, y: 4, w: 36, h: 72, g: 0 },
+          { t: "tri", x: 0, y: -48, w: 42, h: 36, g: 0 },
+          { t: "tri", x: -26, y: 26, w: 24, h: 36, g: 1 },
+          { t: "tri", x: 26, y: 26, w: 24, h: 36, g: 1 },
+          { t: "tri", x: 0, y: 52, w: 24, h: 26, a: Math.PI, g: 1 }
         ]
       },
-      sailboat: {
-        name: "Tall Sailboat", clue: "Ocean Breeze", icon: "⛵",
+      {
+        name: "Pine Tree", cat: "Nature", symX: true,
         parts: [
-          { t: "tri", pts: [[-56, 28], [56, 28], [36, 54]] },
-          { t: "tri", pts: [[-56, 28], [36, 54], [-38, 54]] },
-          { t: "box", x: -4, y: -12, w: 8, h: 86 },
-          { t: "tri", pts: [[2, -56], [2, 20], [50, 20]] },
-          { t: "tri", pts: [[-8, -42], [-8, 20], [-44, 20]] }
+          { t: "box", x: 0, y: 46, w: 18, h: 30, g: 0 },
+          { t: "tri", x: 0, y: 14, w: 94, h: 44, g: 0 },
+          { t: "tri", x: 0, y: -12, w: 74, h: 42, g: 1 },
+          { t: "tri", x: 0, y: -38, w: 52, h: 38, g: 1 }
         ]
       },
-      crown: {
-        name: "Royal Crown", clue: "Monarch's Emblem", icon: "👑",
+      {
+        name: "Curiosity Cat", cat: "Animals", symX: true,
         parts: [
-          { t: "box", x: 0, y: 28, w: 104, h: 28 },
-          { t: "tri", pts: [[-52, 16], [-18, 16], [-46, -34]] },
-          { t: "tri", pts: [[-24, 16], [24, 16], [0, -48]] },
-          { t: "tri", pts: [[18, 16], [52, 16], [46, -34]] },
-          { t: "sphere", x: -46, y: -38, r: 8 },
-          { t: "sphere", x: 0, y: -52, r: 9 },
-          { t: "sphere", x: 46, y: -38, r: 8 }
+          { t: "disc", x: 0, y: 10, r: 40, g: 0 },
+          { t: "tri", x: -24, y: -32, w: 28, h: 38, a: -0.22, g: 1 },
+          { t: "tri", x: 24, y: -32, w: 28, h: 38, a: 0.22, g: 1 },
+          { t: "box", x: -50, y: 12, w: 34, h: 5, a: -0.1, g: 0 },
+          { t: "box", x: 50, y: 12, w: 34, h: 5, a: 0.1, g: 1 }
         ]
       },
-      bird: {
-        name: "Soaring Dove", clue: "Winged Flight", icon: "🕊️",
+      {
+        name: "Hourglass", cat: "Time & Science", symX: true,
         parts: [
-          { t: "sphere", x: 4, y: 10, r: 22 },
-          { t: "sphere", x: 30, y: -6, r: 14 },
-          { t: "tri", pts: [[40, -12], [58, -6], [40, 0]] },
-          { t: "tri", pts: [[-10, 6], [-56, -42], [18, -14]] },
-          { t: "tri", pts: [[-8, 16], [-52, 34], [-24, 6]] }
+          { t: "box", x: 0, y: -50, w: 80, h: 12, g: 0 },
+          { t: "box", x: 0, y: 50, w: 80, h: 12, g: 0 },
+          { t: "tri", x: 0, y: -22, w: 68, h: 48, a: Math.PI, g: 1 },
+          { t: "tri", x: 0, y: 22, w: 68, h: 48, a: 0, g: 1 }
         ]
       },
-      teapot: {
-        name: "Classic Teapot", clue: "Afternoon Brew", icon: "🫖",
+      {
+        name: "Desert Cactus", cat: "Nature", symX: false,
         parts: [
-          { t: "sphere", x: 0, y: 10, r: 36 },
-          { t: "sphere", x: 0, y: -30, r: 10 },
-          { t: "box", x: 0, y: -22, w: 40, h: 12 },
-          { t: "tri", pts: [[26, 12], [60, -18], [46, 20]] },
-          { t: "box", x: -42, y: 6, w: 12, h: 38 },
-          { t: "box", x: -34, y: -10, w: 22, h: 10 },
-          { t: "box", x: -34, y: 22, w: 22, h: 10 }
+          { t: "box", x: 0, y: 2, w: 24, h: 102, g: 0 },
+          { t: "disc", x: 0, y: -48, r: 12, g: 0 },
+          { t: "box", x: -26, y: 6, w: 34, h: 16, g: 1 },
+          { t: "box", x: -36, y: -14, w: 16, h: 44, g: 1 },
+          { t: "box", x: 26, y: -8, w: 34, h: 16, g: 1 },
+          { t: "box", x: 36, y: -26, w: 16, h: 40, g: 1 }
         ]
       },
-      cactus: {
-        name: "Desert Saguaro", clue: "Desert Flora", icon: "🌵",
+      {
+        name: "Acoustic Guitar", cat: "Music & Art", symX: true,
         parts: [
-          { t: "box", x: 0, y: 4, w: 24, h: 108 },
-          { t: "sphere", x: 0, y: -50, r: 12 },
-          { t: "box", x: -26, y: 8, w: 32, h: 16 },
-          { t: "box", x: -36, y: -12, w: 16, h: 40 },
-          { t: "sphere", x: -36, y: -32, r: 8 },
-          { t: "box", x: 26, y: -4, w: 32, h: 16 },
-          { t: "box", x: 36, y: -24, w: 16, h: 38 },
-          { t: "sphere", x: 36, y: -43, r: 8 }
+          { t: "disc", x: 0, y: 34, r: 30, g: 0 },
+          { t: "disc", x: 0, y: 4, r: 22, g: 0 },
+          { t: "box", x: 0, y: -36, w: 11, h: 52, g: 1 },
+          { t: "box", x: 0, y: -62, w: 20, h: 16, g: 1 }
         ]
       },
-      guitar: {
-        name: "Acoustic Guitar", clue: "Musical Strings", icon: "🎸",
+      {
+        name: "Ship Anchor", cat: "Maritime & Travel", symX: true,
         parts: [
-          { t: "sphere", x: 0, y: 34, r: 28 },
-          { t: "sphere", x: 0, y: 4, r: 21 },
-          { t: "box", x: 0, y: -32, w: 12, h: 52 },
-          { t: "box", x: 0, y: -58, w: 20, h: 18 }
+          { t: "box", x: 0, y: 0, w: 14, h: 98, g: 0 },
+          { t: "disc", x: 0, y: -48, r: 14, g: 0 },
+          { t: "box", x: 0, y: -22, w: 54, h: 11, g: 1 },
+          { t: "box", x: 0, y: 42, w: 80, h: 14, g: 0 },
+          { t: "tri", x: -40, y: 26, w: 22, h: 32, a: -0.35, g: 1 },
+          { t: "tri", x: 40, y: 26, w: 22, h: 32, a: 0.35, g: 1 }
         ]
       },
-      umbrella: {
-        name: "Rain Umbrella", clue: "Storm Shelter", icon: "☂️",
+      {
+        name: "Heart Emblem", cat: "Symbols", symX: true,
         parts: [
-          { t: "tri", pts: [[-58, -4], [58, -4], [0, -56]] },
-          { t: "sphere", x: -24, y: -14, r: 24 },
-          { t: "sphere", x: 24, y: -14, r: 24 },
-          { t: "sphere", x: 0, y: -28, r: 24 },
-          { t: "box", x: 0, y: 20, w: 10, h: 68 },
-          { t: "box", x: -12, y: 52, w: 26, h: 10 },
-          { t: "box", x: -22, y: 44, w: 10, h: 18 }
+          { t: "disc", x: -24, y: -14, r: 28, g: 0 },
+          { t: "disc", x: 24, y: -14, r: 28, g: 1 },
+          { t: "tri", x: 0, y: 20, w: 94, h: 66, a: Math.PI, g: 0 }
         ]
       },
-      fish: {
-        name: "Tropical Fish", clue: "Coral Swimmer", icon: "🐠",
+      {
+        name: "Morning Mug", cat: "Everyday Objects", symX: false,
         parts: [
-          { t: "sphere", x: 10, y: 0, r: 30 },
-          { t: "tri", pts: [[18, -28], [58, 0], [18, 28]] },
-          { t: "tri", pts: [[-16, 0], [-56, -34], [-56, 34]] },
-          { t: "tri", pts: [[-8, -24], [18, -26], [-2, -52]] }
+          { t: "box", x: -8, y: 12, w: 68, h: 68, g: 0 },
+          { t: "box", x: 34, y: -6, w: 26, h: 11, g: 1 },
+          { t: "box", x: 34, y: 30, w: 26, h: 11, g: 1 },
+          { t: "box", x: 44, y: 12, w: 11, h: 46, g: 1 },
+          { t: "box", x: -20, y: -38, w: 8, h: 22, a: 0.2, g: 1 },
+          { t: "box", x: 4, y: -42, w: 8, h: 26, a: -0.2, g: 0 }
         ]
       },
-      castle: {
-        name: "Castle Keep", clue: "Stone Fortress", icon: "🏰",
+      {
+        name: "Lighthouse", cat: "Architecture", symX: true,
         parts: [
-          { t: "box", x: 0, y: 20, w: 96, h: 66 },
-          { t: "box", x: -38, y: -22, w: 24, h: 36 },
-          { t: "box", x: 38, y: -22, w: 24, h: 36 },
-          { t: "box", x: 0, y: -26, w: 28, h: 42 },
-          { t: "tri", pts: [[-18, -46], [18, -46], [0, -68]] }
+          { t: "box", x: 0, y: 50, w: 96, h: 16, g: 0 },
+          { t: "tri", x: 0, y: 8, w: 54, h: 86, g: 0 },
+          { t: "box", x: 0, y: -26, w: 34, h: 24, g: 1 },
+          { t: "tri", x: 0, y: -46, w: 42, h: 22, g: 1 },
+          { t: "box", x: 0, y: -14, w: 46, h: 8, g: 1 }
         ]
       },
-      heart: {
-        name: "Sculpted Heart", clue: "Pure Emblem", icon: "❤️",
+      {
+        name: "Butterfly", cat: "Animals", symX: true,
         parts: [
-          { t: "sphere", x: -24, y: -18, r: 28 },
-          { t: "sphere", x: 24, y: -18, r: 28 },
-          { t: "tri", pts: [[-50, -6], [50, -6], [0, 56]] }
+          { t: "box", x: 0, y: 4, w: 12, h: 74, g: 0 },
+          { t: "disc", x: -30, y: -16, r: 28, g: 0 },
+          { t: "disc", x: 30, y: -16, r: 28, g: 1 },
+          { t: "disc", x: -24, y: 24, r: 21, g: 0 },
+          { t: "disc", x: 24, y: 24, r: 21, g: 1 }
         ]
       },
-      owl: {
-        name: "Night Owl", clue: "Nocturnal Perch", icon: "🦉",
+      {
+        name: "Umbrella", cat: "Everyday Objects", symX: false,
         parts: [
-          { t: "sphere", x: 0, y: 18, r: 34 },
-          { t: "sphere", x: 0, y: -26, r: 24 },
-          { t: "tri", pts: [[-24, -36], [-22, -62], [-6, -44]] },
-          { t: "tri", pts: [[24, -36], [22, -62], [6, -44]] },
-          { t: "box", x: 0, y: 54, w: 88, h: 10 }
+          { t: "tri", x: 0, y: -24, w: 114, h: 48, g: 0 },
+          { t: "disc", x: -30, y: -14, r: 20, g: 0 },
+          { t: "disc", x: 30, y: -14, r: 20, g: 1 },
+          { t: "box", x: 0, y: 20, w: 9, h: 68, g: 1 },
+          { t: "box", x: 12, y: 50, w: 28, h: 9, g: 1 }
         ]
       },
-      anchor: {
-        name: "Naval Anchor", clue: "Harbor Hold", icon: "⚓",
+      {
+        name: "Tropical Fish", cat: "Animals", symX: false,
         parts: [
-          { t: "sphere", x: 0, y: -46, r: 14 },
-          { t: "box", x: 0, y: -24, w: 54, h: 12 },
-          { t: "box", x: 0, y: 4, w: 14, h: 84 },
-          { t: "tri", pts: [[-48, 22], [0, 56], [-18, 34]] },
-          { t: "tri", pts: [[48, 22], [0, 56], [18, 34]] },
-          { t: "box", x: 0, y: 44, w: 72, h: 12 }
+          { t: "disc", x: -12, y: 0, r: 34, g: 0 },
+          { t: "tri", x: 36, y: 0, w: 46, h: 56, a: -Math.PI / 2, g: 1 },
+          { t: "tri", x: -12, y: -36, w: 34, h: 22, g: 1 },
+          { t: "tri", x: -12, y: 36, w: 28, h: 20, a: Math.PI, g: 0 }
         ]
       },
-      lamp: {
-        name: "Studio Lamp", clue: "Warm Light", icon: "🛋️",
+      {
+        name: "Lightning Bolt", cat: "Sky & Space", symX: false,
         parts: [
-          { t: "box", x: -14, y: 48, w: 62, h: 16 },
-          { t: "box", x: -28, y: 16, w: 12, h: 64 },
-          { t: "box", x: -4, y: -24, w: 58, h: 12 },
-          { t: "tri", pts: [[4, -26], [52, -26], [28, -56]] },
-          { t: "tri", pts: [[-2, 2], [58, 2], [28, -32]] }
+          { t: "tri", x: -8, y: -24, w: 44, h: 58, a: 0.42, g: 0 },
+          { t: "box", x: 0, y: 0, w: 48, h: 16, g: 0 },
+          { t: "tri", x: 8, y: 26, w: 44, h: 58, a: Math.PI + 0.42, g: 1 }
         ]
       },
-      butterfly: {
-        name: "Monarch Wing", clue: "Summer Flutter", icon: "🦋",
+      {
+        name: "Music Eighth Note", cat: "Music & Art", symX: false,
         parts: [
-          { t: "box", x: 0, y: 4, w: 12, h: 72 },
-          { t: "sphere", x: -30, y: -18, r: 26 },
-          { t: "sphere", x: 30, y: -18, r: 26 },
-          { t: "sphere", x: -24, y: 20, r: 20 },
-          { t: "sphere", x: 24, y: 20, r: 20 }
+          { t: "disc", x: -28, y: 34, r: 19, g: 0 },
+          { t: "disc", x: 24, y: 26, r: 19, g: 1 },
+          { t: "box", x: -14, y: -8, w: 11, h: 80, g: 0 },
+          { t: "box", x: 38, y: -14, w: 11, h: 78, g: 1 },
+          { t: "box", x: 12, y: -46, w: 62, h: 15, a: -0.14, g: 1 }
         ]
       },
-      hourglass: {
-        name: "Sand Hourglass", clue: "Passing Time", icon: "⏳",
+      {
+        name: "Crystal Diamond", cat: "Treasures", symX: true,
         parts: [
-          { t: "box", x: 0, y: -52, w: 86, h: 14 },
-          { t: "box", x: 0, y: 52, w: 86, h: 14 },
-          { t: "tri", pts: [[-38, -46], [38, -46], [0, 2]] },
-          { t: "tri", pts: [[-38, 46], [38, 46], [0, -2]] }
+          { t: "tri", x: 0, y: 18, w: 96, h: 68, a: Math.PI, g: 0 },
+          { t: "box", x: 0, y: -24, w: 72, h: 24, g: 1 },
+          { t: "tri", x: -36, y: -24, w: 28, h: 24, g: 1 },
+          { t: "tri", x: 36, y: -24, w: 28, h: 24, g: 1 }
+        ]
+      },
+      {
+        name: "Retro Glasses", cat: "Everyday Objects", symX: true,
+        parts: [
+          { t: "disc", x: -34, y: 6, r: 24, g: 0 },
+          { t: "disc", x: 34, y: 6, r: 24, g: 1 },
+          { t: "box", x: 0, y: -2, w: 28, h: 10, g: 0 },
+          { t: "box", x: -56, y: -8, w: 14, h: 10, g: 0 },
+          { t: "box", x: 56, y: -8, w: 14, h: 10, g: 1 }
+        ]
+      },
+      {
+        name: "Trophy Cup", cat: "Treasures", symX: true,
+        parts: [
+          { t: "box", x: 0, y: -18, w: 60, h: 52, g: 0 },
+          { t: "disc", x: 0, y: 6, r: 28, g: 0 },
+          { t: "box", x: 0, y: 34, w: 16, h: 30, g: 1 },
+          { t: "box", x: 0, y: 50, w: 54, h: 14, g: 1 },
+          { t: "disc", x: -38, y: -20, r: 14, g: 0 },
+          { t: "disc", x: 38, y: -20, r: 14, g: 1 }
+        ]
+      },
+      {
+        name: "Crescent Star", cat: "Sky & Space", symX: false,
+        parts: [
+          { t: "disc", x: -20, y: 0, r: 40, g: 0 },
+          { t: "tri", x: 30, y: -14, w: 32, h: 32, g: 1 },
+          { t: "tri", x: 30, y: -4, w: 32, h: 32, a: Math.PI, g: 1 },
+          { t: "disc", x: 26, y: 30, r: 10, g: 1 }
+        ]
+      },
+      {
+        name: "Snowman", cat: "Nature", symX: true,
+        parts: [
+          { t: "disc", x: 0, y: 30, r: 30, g: 0 },
+          { t: "disc", x: 0, y: -10, r: 22, g: 0 },
+          { t: "box", x: 0, y: -34, w: 46, h: 8, g: 1 },
+          { t: "box", x: 0, y: -48, w: 28, h: 24, g: 1 },
+          { t: "box", x: -32, y: -6, w: 28, h: 6, a: -0.45, g: 0 },
+          { t: "box", x: 32, y: -6, w: 28, h: 6, a: 0.45, g: 1 }
         ]
       }
-    };
-
-    const SHAPE_KEYS = Object.keys(SHAPES);
-
-    // Paired Iconic Diptych Scenes for Chapters 4 & 5 (Twin Sculptures!)
-    const TWIN_SCENES = [
-      { a: "house", b: "tree", title: "Cottage & Pine", clue: "Woodland Home", icon: "🏡" },
-      { a: "cat", b: "owl", title: "Midnight Companions", clue: "Night Watchers", icon: "🌙" },
-      { a: "sailboat", b: "anchor", title: "Harbor Departure", clue: "Nautical Pair", icon: "⚓" },
-      { a: "key", b: "heart", title: "Key to the Heart", clue: "Secret Emblem", icon: "💖" },
-      { a: "crown", b: "castle", title: "Royal Kingdom", clue: "Crown & Keep", icon: "🏰" },
-      { a: "bird", b: "tree", title: "Forest Songbird", clue: "Wing & Pine", icon: "🌲" },
-      { a: "rocket", b: "crown", title: "Star Sovereign", clue: "Cosmic Quest", icon: "🚀" },
-      { a: "teapot", b: "lamp", title: "Evening Study", clue: "Tea & Light", icon: "🫖" },
-      { a: "cactus", b: "house", title: "Desert Outpost", clue: "Warm Horizon", icon: "🌵" },
-      { a: "fish", b: "sailboat", title: "Deep Sea Voyage", clue: "Ocean Life", icon: "🐠" },
-      { a: "butterfly", b: "tree", title: "Meadow Breeze", clue: "Summer Garden", icon: "🦋" },
-      { a: "guitar", b: "heart", title: "Acoustic Ballad", clue: "Love Song", icon: "🎸" },
-      { a: "umbrella", b: "cat", title: "Rainy Day Stroll", clue: "Cozy Shelter", icon: "☂️" },
-      { a: "hourglass", b: "key", title: "Keeper of Time", clue: "Timeless Lock", icon: "⏳" }
     ];
 
-    const WOOD_PALETTES = [
-      { hi: "#e9c496", mid: "#c68b59", dark: "#7a4b2a", edge: "#4a2c16" },
-      { hi: "#f3d58d", mid: "#d4a037", dark: "#8c6115", edge: "#4f3409" },
-      { hi: "#cbd5e1", mid: "#8ea0b8", dark: "#4b5c73", edge: "#1e293b" },
-      { hi: "#e8b4a0", mid: "#c4745c", dark: "#7d3d2c", edge: "#451e14" },
-      { hi: "#c7d8c6", mid: "#84a586", dark: "#49694c", edge: "#243826" }
+    const GALLERY_THEMES = [
+      { wallHi: "#f6ebd4", wallMid: "#d9b98c", wallEdge: "#6e4e32", woodA: "#8b5a2b", woodB: "#c88a3b" },
+      { wallHi: "#f2e6dc", wallMid: "#cfa891", wallEdge: "#5e3c2e", woodA: "#7c422c", woodB: "#d49b54" },
+      { wallHi: "#e8f0ed", wallMid: "#aac2ba", wallEdge: "#38524c", woodA: "#6e4f34", woodB: "#c49449" },
+      { wallHi: "#eee8f5", wallMid: "#b8aacf", wallEdge: "#45375c", woodA: "#7a5233", woodB: "#d6a049" },
+      { wallHi: "#f7eedb", wallMid: "#d6b078", wallEdge: "#593b1f", woodA: "#6b3e26", woodB: "#dba24a" }
     ];
 
     function mulberry32(seed) {
@@ -901,183 +1068,117 @@
       };
     }
 
-    // Extrude 2D silhouette template into a mysterious 3D multi-depth sculpture!
-    function build3DSculpture(shapeKey, scale, rng, mirrorX = false) {
-      const tpl = SHAPES[shapeKey];
-      const primitives = [];
-      const flip = mirrorX ? -1 : 1;
-
-      tpl.parts.forEach((p, idx) => {
-        // Scatter parts across Z-depth [-36..+36] so off-angles look genuinely abstract!
-        const zOff = ((idx % 2 === 0 ? 1 : -1) * (10 + rng() * 24)) * scale;
-        const depth = (16 + rng() * 14) * scale;
-
-        if (p.t === "sphere") {
-          primitives.push({
-            type: "sphere",
-            x: p.x * scale * flip,
-            y: p.y * scale,
-            z: zOff,
-            r: p.r * scale
-          });
-        } else if (p.t === "box") {
-          const hw = (p.w * scale) / 2;
-          const hh = (p.h * scale) / 2;
-          const hd = depth / 2;
-          const cx = p.x * scale * flip;
-          const cy = p.y * scale;
-          const cz = zOff;
-          const verts = [
-            { x: cx - hw, y: cy - hh, z: cz - hd },
-            { x: cx + hw, y: cy - hh, z: cz - hd },
-            { x: cx + hw, y: cy + hh, z: cz - hd },
-            { x: cx - hw, y: cy + hh, z: cz - hd },
-            { x: cx - hw, y: cy - hh, z: cz + hd },
-            { x: cx + hw, y: cy - hh, z: cz + hd },
-            { x: cx + hw, y: cy + hh, z: cz + hd },
-            { x: cx - hw, y: cy + hh, z: cz + hd }
-          ];
-          const faces = [
-            [0, 1, 2, 3], [4, 5, 6, 7],
-            [0, 1, 5, 4], [2, 3, 7, 6],
-            [0, 3, 7, 4], [1, 2, 6, 5]
-          ];
-          primitives.push({ type: "poly", verts, faces });
-        } else if (p.t === "tri") {
-          const hd = depth / 2;
-          const cz = zOff;
-          const fPts = p.pts.map(([px, py]) => ({ x: px * scale * flip, y: py * scale, z: cz - hd }));
-          const bPts = p.pts.map(([px, py]) => ({ x: px * scale * flip, y: py * scale, z: cz + hd }));
-          const verts = [...fPts, ...bPts];
-          const faces = [
-            [0, 1, 2], [3, 4, 5],
-            [0, 1, 4, 3], [1, 2, 5, 4], [2, 0, 3, 5]
-          ];
-          primitives.push({ type: "poly", verts, faces });
-        }
-      });
-
-      return primitives;
-    }
-
     function wrapAngle(a) {
-      let x = a;
-      while (x > Math.PI) x -= Math.PI * 2;
-      while (x < -Math.PI) x += Math.PI * 2;
-      return x;
+      let r = ((a + Math.PI) % (Math.PI * 2) + (Math.PI * 2)) % (Math.PI * 2) - Math.PI;
+      return r;
     }
 
-    // 3D Rotation: R = Rz(roll) * Rx(pitch) * Ry(yaw)
-    function rotatePoint3D(v, yaw, pitch, roll) {
-      // 1. Yaw around Y
-      const cy = Math.cos(yaw), sy = Math.sin(yaw);
-      const x1 = v.x * cy + v.z * sy;
-      const y1 = v.y;
-      const z1 = -v.x * sy + v.z * cy;
+    // Build 3D Point Vertices for Any Silhouette Primitive Extruded into 3D Space at Depth `z`
+    function buildPartVertices3D(part, zOff) {
+      const a = part.a || 0;
+      const ca = Math.cos(a), sa = Math.sin(a);
+      const pts2 = [];
 
-      // 2. Pitch around X
-      const cx = Math.cos(pitch), sx = Math.sin(pitch);
-      const x2 = x1;
-      const y2 = y1 * cx - z1 * sx;
-      const z2 = y1 * sx + z1 * cx;
+      if (part.t === "box") {
+        const hw = part.w / 2, hh = part.h / 2;
+        [[-hw, -hh], [hw, -hh], [hw, hh], [-hw, hh]].forEach(([lx, ly]) => {
+          pts2.push([part.x + lx * ca - ly * sa, part.y + lx * sa + ly * ca]);
+        });
+      } else if (part.t === "tri") {
+        const hw = part.w / 2, hh = part.h / 2;
+        [[0, -hh], [hw, hh], [-hw, hh]].forEach(([lx, ly]) => {
+          pts2.push([part.x + lx * ca - ly * sa, part.y + lx * sa + ly * ca]);
+        });
+      } else {
+        // 10-sided smooth disc prism for circles
+        for (let i = 0; i < 10; i++) {
+          const th = (i * Math.PI * 2) / 10;
+          pts2.push([part.x + Math.cos(th) * part.r, part.y + Math.sin(th) * part.r]);
+        }
+      }
 
-      // 3. Roll around Z
-      const cz = Math.cos(roll), sz = Math.sin(roll);
+      const halfThick = 9;
       return {
-        x: x2 * cz - y2 * sz,
-        y: x2 * sz + y2 * cz,
+        front: pts2.map(([x, y]) => ({ x, y, z: zOff - halfThick })),
+        back:  pts2.map(([x, y]) => ({ x, y, z: zOff + halfThick })),
+        center: { x: part.x, y: part.y, z: zOff },
+        group: part.g || 0
+      };
+    }
+
+    // Rotate 3D point by (yaw around Y, pitch around X, roll around Z)
+    function rotate3D(p, yaw, pitch, roll) {
+      // 1. Yaw (Y-axis)
+      const cy = Math.cos(yaw), sy = Math.sin(yaw);
+      let x1 = p.x * cy + p.z * sy;
+      let y1 = p.y;
+      let z1 = -p.x * sy + p.z * cy;
+
+      // 2. Pitch (X-axis)
+      const cp = Math.cos(pitch), sp = Math.sin(pitch);
+      let x2 = x1;
+      let y2 = y1 * cp - z1 * sp;
+      let z2 = y1 * sp + z1 * cp;
+
+      // 3. Roll (Z-axis)
+      const cr = Math.cos(roll), sr = Math.sin(roll);
+      return {
+        x: x2 * cr - y2 * sr,
+        y: x2 * sr + y2 * cr,
         z: z2
       };
     }
 
-    function buildShadowLevel(levelNum) {
-      const rng = mulberry32(levelNum * 97213 + 314159);
-      const pal = WOOD_PALETTES[Math.floor(rng() * WOOD_PALETTES.length)];
+    function buildSculptureLevel(levelNum) {
+      const rng = mulberry32(levelNum * 173291 + 51809);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const theme = GALLERY_THEMES[chapIdx];
+      const sil = SILHOUETTES[(levelNum - 1 + Math.floor(levelNum / 24) * 5) % SILHOUETTES.length];
 
-      const allowRoll = levelNum >= 201;
-      const isTwin = levelNum >= 301;
-      const showStartOutline = levelNum <= 100;
-      const winThreshold = levelNum <= 100 ? 0.86 : (levelNum <= 300 ? 0.88 : 0.89);
+      const allowPitch = levelNum >= 101;
+      const dualPieces = (levelNum >= 201 && levelNum <= 300) || levelNum >= 401;
+      const allowRoll = levelNum >= 301;
+      const depthSpread = levelNum <= 100 ? 44 : (levelNum <= 300 ? 58 : 72);
+      const tolDeg = levelNum <= 100 ? 11 : (levelNum <= 300 ? 9.5 : 8.5);
 
-      const pickScramble = () => {
-        // Guaranteed scrambled orientation clearly away from 0
-        const yawSign = rng() < 0.5 ? 1 : -1;
-        const yaw = yawSign * (0.95 + rng() * 1.45);
-        const pitchSign = rng() < 0.5 ? 1 : -1;
-        const pitch = pitchSign * (0.42 + rng() * 0.65);
-        const roll = allowRoll
-          ? ((rng() < 0.5 ? 1 : -1) * (0.55 + rng() * 1.6))
-          : 0;
-        return { yaw: wrapAngle(yaw), pitch, roll: wrapAngle(roll) };
+      // Assign deterministic scattered Z-depths to each extruded wooden primitive
+      const blocks = sil.parts.map((pt, idx) => {
+        const zOff = (idx % 2 === 0 ? 1 : -1) * (14 + rng() * depthSpread);
+        const v3 = buildPartVertices3D(pt, zOff);
+        return {
+          ...v3,
+          pieceIdx: dualPieces ? (pt.g || 0) : 0,
+          shadeMod: (rng() - 0.5) * 18
+        };
+      });
+
+      // Ensure Piece B has at least 1 block if dualPieces active
+      if (dualPieces && !blocks.some((b) => b.pieceIdx === 1)) {
+        blocks[blocks.length - 1].pieceIdx = 1;
+      }
+
+      const pickScrambled = (usePitch, useRoll) => {
+        let yaw = (rng() < 0.5 ? 1 : -1) * (0.75 + rng() * 1.45);
+        // Avoid accidentally landing near symmetric 180° flip!
+        if (sil.symX && Math.abs(Math.abs(yaw) - Math.PI) < 0.55) yaw = 1.15;
+        const pitch = usePitch ? (rng() < 0.5 ? 1 : -1) * (0.45 + rng() * 0.72) : 0;
+        const roll = useRoll ? (rng() < 0.5 ? 1 : -1) * (Math.floor(2 + rng() * 6) * (Math.PI / 12)) : 0;
+        return { yaw: wrapAngle(yaw), pitch: wrapAngle(pitch), roll: wrapAngle(roll) };
       };
 
-      let title, clue, icon, sculptures;
-
-      if (!isTwin) {
-        const skey = SHAPE_KEYS[(levelNum - 1) % SHAPE_KEYS.length];
-        const shape = SHAPES[skey];
-        const mirror = levelNum > 20 && rng() < 0.4;
-        const initRot = pickScramble();
-        title = shape.name;
-        clue = shape.clue;
-        icon = shape.icon;
-
-        sculptures = [{
-          label: "Sculpture",
-          wallOffX: 0,
-          wallOffY: 0,
-          stageX: WORLD_W / 2,
-          primitives: build3DSculpture(skey, 1.0, rng, mirror),
-          initRot,
-          yaw: initRot.yaw,
-          pitch: initRot.pitch,
-          roll: initRot.roll
-        }];
-      } else {
-        const scene = TWIN_SCENES[(levelNum - 301) % TWIN_SCENES.length];
-        const rotA = pickScramble();
-        const rotB = pickScramble();
-        title = scene.title;
-        clue = scene.clue;
-        icon = scene.icon;
-
-        sculptures = [
-          {
-            label: "Sculpture A",
-            wallOffX: -64,
-            wallOffY: 2,
-            stageX: WORLD_W * 0.31,
-            primitives: build3DSculpture(scene.a, 0.72, rng, false),
-            initRot: rotA,
-            yaw: rotA.yaw,
-            pitch: rotA.pitch,
-            roll: rotA.roll
-          },
-          {
-            label: "Sculpture B",
-            wallOffX: 64,
-            wallOffY: 2,
-            stageX: WORLD_W * 0.69,
-            primitives: build3DSculpture(scene.b, 0.72, rng, rng() < 0.4),
-            initRot: rotB,
-            yaw: rotB.yaw,
-            pitch: rotB.pitch,
-            roll: rotB.roll
-          }
-        ];
-      }
+      const piecesInit = [pickScrambled(allowPitch, allowRoll)];
+      if (dualPieces) piecesInit.push(pickScrambled(allowPitch, allowRoll));
 
       return {
         levelNum,
-        pal,
-        title,
-        clue,
-        icon,
+        sil,
+        theme,
+        allowPitch,
+        dualPieces,
         allowRoll,
-        isTwin,
-        showStartOutline,
-        winThreshold,
-        sculptures
+        tolRad: (tolDeg * Math.PI) / 180,
+        blocks,
+        piecesInit
       };
     }
 
@@ -1086,12 +1187,11 @@
     }
 
     // ==============================================
-    // HARMONIC GALLERY WEB AUDIO ENGINE
+    // WARM WOODEN CHIME & GALLERY WEB AUDIO ENGINE
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
-    let lastRotTickMs = 0;
-    let lastChimeBand = 0;
+    let lastTickMs = 0;
 
     function initAudio() {
       if (!audioCtx) {
@@ -1101,7 +1201,7 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.1) {
+    function playTone(freq, dur, type = "sine", vol = 0.09) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
@@ -1111,7 +1211,7 @@
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
       g.gain.setValueAtTime(0.001, now);
-      g.gain.exponentialRampToValueAtTime(vol, now + 0.015);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.012);
       g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
       osc.connect(g);
       g.connect(audioCtx.destination);
@@ -1119,137 +1219,43 @@
       osc.stop(now + dur + 0.03);
     }
 
-    function sfxRotateWhisper() {
+    function sfxWoodTurn(focusRatio) {
       const ms = performance.now();
-      if (ms - lastRotTickMs < 90) return;
-      lastRotTickMs = ms;
-      playTone(180 + Math.random() * 50, 0.04, "triangle", 0.032);
+      if (ms - lastTickMs < 95) return;
+      lastTickMs = ms;
+      playTone(190 + focusRatio * 240, 0.045, "triangle", 0.035);
     }
 
-    function sfxWarmResonance(band) {
-      const notes = [392.0, 523.25, 659.25];
-      playTone(notes[Math.min(2, band - 1)], 0.35, "sine", 0.085);
+    function sfxPieceLock() {
+      playTone(587.33, 0.2, "sine", 0.11);
+      setTimeout(() => playTone(880.0, 0.25, "sine", 0.1), 65);
     }
 
-    function sfxRevealHarp() {
-      [261.63, 329.63, 392.0, 523.25, 659.25, 783.99].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.65, "sine", 0.12), i * 70);
+    function sfxRevealWin() {
+      [392.0, 493.88, 587.33, 783.99, 987.77].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.6, "sine", 0.12), i * 85);
       });
     }
 
     // ==============================================
-    // SILHOUETTE MASK IoU MATCHER (OFFSCREEN 64x64)
-    // ==============================================
-    const targetMaskCanvas = document.createElement("canvas");
-    targetMaskCanvas.width = MASK_SZ; targetMaskCanvas.height = MASK_SZ;
-    const targetMaskCtx = targetMaskCanvas.getContext("2d", { willReadFrequently: true });
-
-    const liveMaskCanvas = document.createElement("canvas");
-    liveMaskCanvas.width = MASK_SZ; liveMaskCanvas.height = MASK_SZ;
-    const liveMaskCtx = liveMaskCanvas.getContext("2d", { willReadFrequently: true });
-
-    let targetAlphaData = null;
-
-    function projectSculptureShadow(cctx, sc, cx, cy, scale, yaw, pitch, roll, fillStyle) {
-      cctx.fillStyle = fillStyle;
-      for (const p of sc.primitives) {
-        if (p.type === "sphere") {
-          const rp = rotatePoint3D(p, yaw, pitch, roll);
-          cctx.beginPath();
-          cctx.arc(cx + rp.x * scale, cy + rp.y * scale, p.r * scale, 0, Math.PI * 2);
-          cctx.fill();
-        } else {
-          const rVerts = p.verts.map((v) => rotatePoint3D(v, yaw, pitch, roll));
-          for (const face of p.faces) {
-            cctx.beginPath();
-            face.forEach((vi, k) => {
-              const px = cx + rVerts[vi].x * scale;
-              const py = cy + rVerts[vi].y * scale;
-              if (k === 0) cctx.moveTo(px, py);
-              else cctx.lineTo(px, py);
-            });
-            cctx.closePath();
-            cctx.fill();
-          }
-        }
-      }
-    }
-
-    function bakeTargetMask() {
-      targetMaskCtx.clearRect(0, 0, MASK_SZ, MASK_SZ);
-      const scFactor = MASK_SZ / 260;
-      const mcx = MASK_SZ / 2;
-      const mcy = MASK_SZ / 2;
-
-      for (const sc of level.sculptures) {
-        projectSculptureShadow(
-          targetMaskCtx, sc,
-          mcx + sc.wallOffX * scFactor,
-          mcy + sc.wallOffY * scFactor,
-          scFactor, 0, 0, 0, "#000000"
-        );
-      }
-      targetAlphaData = targetMaskCtx.getImageData(0, 0, MASK_SZ, MASK_SZ).data;
-    }
-
-    function computeLiveMatchIoU() {
-      liveMaskCtx.clearRect(0, 0, MASK_SZ, MASK_SZ);
-      const scFactor = MASK_SZ / 260;
-      const mcx = MASK_SZ / 2;
-      const mcy = MASK_SZ / 2;
-
-      for (const sc of level.sculptures) {
-        projectSculptureShadow(
-          liveMaskCtx, sc,
-          mcx + sc.wallOffX * scFactor,
-          mcy + sc.wallOffY * scFactor,
-          scFactor, sc.yaw, sc.pitch, sc.roll, "#000000"
-        );
-      }
-
-      const liveData = liveMaskCtx.getImageData(0, 0, MASK_SZ, MASK_SZ).data;
-      let inter = 0;
-      let union = 0;
-      for (let i = 3; i < liveData.length; i += 4) {
-        const a = targetAlphaData[i] > 80;
-        const b = liveData[i] > 80;
-        if (a && b) inter++;
-        if (a || b) union++;
-      }
-      const iou = union > 0 ? inter / union : 0;
-
-      // Also check direct angular closeness to canonical (0,0,0) so near-perfect angles always feel crisp
-      let maxAngErr = 0;
-      for (const sc of level.sculptures) {
-        const err = Math.hypot(wrapAngle(sc.yaw), sc.pitch, wrapAngle(sc.roll));
-        if (err > maxAngErr) maxAngErr = err;
-      }
-      const angScore = Math.max(0, 1 - maxAngErr / 1.8);
-      return { iou, maxAngErr, displayScore: Math.max(iou, angScore * 0.92) };
-    }
-
-    // ==============================================
-    // GAME STATE, POINTER & UI CONTROLLER
+    // GAME STATE, ALIGNMENT MATH & POINTER ROTATION
     // ==============================================
     const canvas = document.getElementById("shadowCanvas");
     const ctx = canvas.getContext("2d");
 
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const cluePill = document.getElementById("cluePill");
+    const alignPill = document.getElementById("alignPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const matchLabel = document.getElementById("matchLabel");
-    const matchFill = document.getElementById("matchFill");
-    const matchPct = document.getElementById("matchPct");
-    const pieceTabs = document.getElementById("pieceTabs");
-    const piece0Btn = document.getElementById("piece0Btn");
-    const piece1Btn = document.getElementById("piece1Btn");
-    const rollRow = document.getElementById("rollRow");
-    const rollSlider = document.getElementById("rollSlider");
-    const dockTip = document.getElementById("dockTip");
+    const alignDotsEl = document.getElementById("alignDots");
+    const categoryClue = document.getElementById("categoryClue");
+    const dockHintTxt = document.getElementById("dockHintTxt");
+    const pieceABtn = document.getElementById("pieceABtn");
+    const pieceBBtn = document.getElementById("pieceBBtn");
+    const rollLBtn = document.getElementById("rollLBtn");
+    const rollRBtn = document.getElementById("rollRBtn");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
-    const winIcon = document.getElementById("winIcon");
     const winHeading = document.getElementById("winHeading");
     const winText = document.getElementById("winText");
     const nextLevelBtn = document.getElementById("nextLevelBtn");
@@ -1265,146 +1271,113 @@
     } catch (e) {}
 
     let level = null;
-    let activeSculptIdx = 0;
-    let matchScore = 0;
-    let showWallGuide = false;
+    let pieceAngles = []; // [{ yaw, pitch, roll, locked }]
+    let activePieceIdx = 0;
     let levelWon = false;
-    let hintLerpTarget = null; // { idx, yaw, pitch, roll }
-    let revealGlow = 0;
-
-    // Drag & Dust Motes
     let isDragging = false;
-    let lastClientX = 0;
-    let lastClientY = 0;
-    let toastTimer = null;
-    const dustMotes = Array.from({ length: 26 }, () => ({
-      x: 60 + Math.random() * 300,
-      y: 40 + Math.random() * 340,
+    let lastPtr = null;
+    let hintOutlineTimer = 0;
+    let dustMotes = Array.from({ length: 24 }, () => ({
+      x: Math.random() * WORLD_W,
+      y: Math.random() * WORLD_H,
       r: 0.9 + Math.random() * 1.6,
-      vx: (Math.random() - 0.5) * 0.16,
-      vy: -0.08 - Math.random() * 0.15,
-      phase: Math.random() * Math.PI * 2
+      sp: 4 + Math.random() * 8,
+      ph: Math.random() * Math.PI * 2
     }));
+    let toastTimer = null;
 
-    function showToast(msg, ms = 2400) {
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function syncDockUI() {
-      pieceTabs.style.display = level.isTwin ? "grid" : "none";
-      rollRow.style.display = level.allowRoll ? "flex" : "none";
-
-      piece0Btn.classList.toggle("active", activeSculptIdx === 0);
-      piece1Btn.classList.toggle("active", activeSculptIdx === 1);
-
-      const sc = level.sculptures[activeSculptIdx];
-      if (sc && level.allowRoll) {
-        rollSlider.value = Math.round((wrapAngle(sc.roll) * 180) / Math.PI);
-      }
-
-      if (level.isTwin) {
-        dockTip.textContent = "👆 Drag to rotate active sculpture • Tap Sculpture A/B to switch pieces";
-      } else if (level.allowRoll) {
-        dockTip.textContent = "👆 Drag to rotate in 3D • Use Roll slider (⟲ / ⟳) to tilt cleanly";
-      } else {
-        dockTip.textContent = "👆 Drag anywhere on the canvas to rotate the 3D sculpture in the spotlight";
-      }
+    // Angular Error for a Single Piece (Supports Clean Horizontal Symmetry on Symmetric Shapes!)
+    function getPieceError(pa) {
+      const e0 = Math.hypot(
+        wrapAngle(pa.yaw),
+        wrapAngle(pa.pitch),
+        wrapAngle(pa.roll)
+      );
+      if (!level.sil.symX) return e0;
+      const eFlip = Math.hypot(
+        wrapAngle(pa.yaw - Math.PI),
+        wrapAngle(pa.pitch),
+        wrapAngle(pa.roll)
+      );
+      return Math.min(e0, eFlip);
     }
 
-    function updateMatchMeter() {
-      const pct = levelWon ? 100 : Math.min(99, Math.round(matchScore * 100));
-      matchFill.style.width = `${pct}%`;
-      matchPct.textContent = `${pct}%`;
+    function getBestTargetFor(pa) {
+      if (!level.sil.symX) return { yaw: 0, pitch: 0, roll: 0 };
+      const d0 = Math.abs(wrapAngle(pa.yaw));
+      const dPi = Math.abs(wrapAngle(pa.yaw - Math.PI));
+      return dPi < d0 ? { yaw: Math.PI, pitch: 0, roll: 0 } : { yaw: 0, pitch: 0, roll: 0 };
+    }
 
-      if (levelWon) {
-        matchLabel.textContent = "★ REVEALED";
-        matchLabel.style.color = "#4ade80";
-      } else if (pct >= 78) {
-        matchLabel.textContent = "✦ ALMOST THERE";
-        matchLabel.style.color = "#34d399";
-      } else if (pct >= 55) {
-        matchLabel.textContent = "✦ GETTING WARM";
-        matchLabel.style.color = "#fbbf24";
-      } else {
-        matchLabel.textContent = "✦ ALIGNMENT";
-        matchLabel.style.color = "#c4b5fd";
+    function getOverallFocus() {
+      let sum = 0;
+      for (const pa of pieceAngles) {
+        const err = getPieceError(pa);
+        const f = Math.max(0, 1 - err / 2.35);
+        sum += f;
       }
+      return sum / pieceAngles.length;
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
       levelTitle.textContent = `Sculpture #${currentLevelNum} / ${TOTAL_LEVELS}`;
-      cluePill.textContent = levelWon ? `${level.icon} ${level.title}` : `Clue: ${level.clue}`;
+      categoryClue.textContent = `Clue: ${level.sil.cat}`;
       solvedCounter.textContent = `Revealed: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Sculpture ${currentLevelNum} / 500 ▾`;
-      updateMatchMeter();
-      syncDockUI();
-    }
 
-    function evaluateAlignment() {
-      if (levelWon) return;
-      const res = computeLiveMatchIoU();
-      matchScore = res.displayScore;
+      const focus = levelWon ? 1 : getOverallFocus();
+      alignPill.textContent = `Focus: ${Math.round(focus * 100)}%`;
 
-      // Subtle harmonic chimes when crossing warm thresholds
-      const band = matchScore >= 0.80 ? 3 : (matchScore >= 0.68 ? 2 : (matchScore >= 0.55 ? 1 : 0));
-      if (band > lastChimeBand) {
-        sfxWarmResonance(band);
+      const dots = alignDotsEl.querySelectorAll(".a-dot");
+      const litCnt = levelWon ? 6 : Math.round(focus * 6);
+      dots.forEach((d, idx) => {
+        d.className = "a-dot" + (levelWon ? " locked" : (idx < litCnt ? " lit" : ""));
+      });
+
+      // Contextual Studio Dock Buttons
+      pieceABtn.style.display = level.dualPieces ? "inline-flex" : "none";
+      pieceBBtn.style.display = level.dualPieces ? "inline-flex" : "none";
+      rollLBtn.style.display = level.allowRoll ? "inline-flex" : "none";
+      rollRBtn.style.display = level.allowRoll ? "inline-flex" : "none";
+      dockHintTxt.style.display = (!level.dualPieces && !level.allowRoll) ? "inline" : "none";
+
+      if (!level.dualPieces && !level.allowRoll) {
+        dockHintTxt.textContent = level.allowPitch
+          ? "👆 Drag in ANY direction to orbit the 3D wooden sculpture"
+          : "👆 Drag Left or Right to spin the 3D wooden sculpture";
       }
-      lastChimeBand = band;
 
-      updateMatchMeter();
-
-      // Check Victory (True IoU Match OR tight angular lock!)
-      const winByIoU = res.iou >= level.winThreshold;
-      const winByAngle = res.maxAngErr <= 0.16;
-
-      if (winByIoU || winByAngle) {
-        levelWon = true;
-        isDragging = false;
-        hintLerpTarget = null;
-        revealGlow = 0.01;
-        canvas.classList.remove("dragging");
-
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_shadow_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-
-        sfxRevealHarp();
-        updateHUD();
-
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        winIcon.textContent = level.icon;
-        winHeading.textContent = isLast ? "All 500 Shadows Revealed!" : level.title;
-        winText.textContent = `Sculpture #${currentLevelNum} aligned in warm gallery harmony.`;
-        nextLevelBtn.textContent = isLast ? "Replay Sculpture #1" : `Next Sculpture (#${currentLevelNum + 1}) →`;
-        setTimeout(() => winOverlay.classList.add("show"), 780);
+      if (level.dualPieces) {
+        const okA = getPieceError(pieceAngles[0]) <= level.tolRad;
+        const okB = getPieceError(pieceAngles[1]) <= level.tolRad;
+        pieceABtn.className = "studio-btn" + (activePieceIdx === 0 ? " active" : "") + (okA ? " piece-ok" : "");
+        pieceBBtn.className = "studio-btn" + (activePieceIdx === 1 ? " active" : "") + (okB ? " piece-ok" : "");
+        pieceABtn.textContent = okA ? "🪵 Piece A ✓" : "🪵 Piece A";
+        pieceBBtn.textContent = okB ? "🪵 Piece B ✓" : "🪵 Piece B";
       }
     }
 
     function loadLevel(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      level = buildShadowLevel(currentLevelNum);
-      activeSculptIdx = 0;
-      showWallGuide = level.showStartOutline;
+      level = buildSculptureLevel(currentLevelNum);
+      pieceAngles = level.piecesInit.map((p) => ({ ...p, lockedNotified: false }));
+      activePieceIdx = 0;
       levelWon = false;
-      hintLerpTarget = null;
-      revealGlow = 0;
-      lastChimeBand = 0;
       isDragging = false;
+      lastPtr = null;
+      hintOutlineTimer = 0;
 
-      canvas.classList.remove("dragging");
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
-
-      bakeTargetMask();
-      const initCheck = computeLiveMatchIoU();
-      matchScore = initCheck.displayScore;
 
       try {
         localStorage.setItem("zinplay_shadow_500_last", String(currentLevelNum));
@@ -1413,7 +1386,48 @@
       updateHUD();
     }
 
-    // Viewport Helpers
+    function checkAlignmentWin() {
+      if (levelWon) return;
+
+      // Softly notify when 1 of 2 dual pieces locks into place!
+      if (level.dualPieces) {
+        pieceAngles.forEach((pa, idx) => {
+          if (!pa.lockedNotified && getPieceError(pa) <= level.tolRad) {
+            pa.lockedNotified = true;
+            sfxPieceLock();
+            const other = idx === 0 ? "Piece B" : "Piece A";
+            if (pieceAngles.some((x) => getPieceError(x) > level.tolRad)) {
+              showToast(`✨ Piece ${idx === 0 ? "A" : "B"} aligned! Now switch to ${other}!`, 2200);
+            }
+          }
+        });
+      }
+
+      const allAligned = pieceAngles.every((pa) => getPieceError(pa) <= level.tolRad);
+      if (allAligned) {
+        levelWon = true;
+        isDragging = false;
+        canvas.classList.remove("dragging");
+
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_shadow_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+
+        sfxRevealWin();
+        updateHUD();
+
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winHeading.textContent = `"${level.sil.name}" Revealed!`;
+        winText.textContent = isLast
+          ? "All 500 shadow gallery sculptures illuminated in master perspective!"
+          : `Exhibit #${currentLevelNum} (${level.sil.cat}) aligned in crisp spotlight harmony.`;
+        nextLevelBtn.textContent = isLast ? "Replay Exhibit #1" : `Next Sculpture (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 780);
+      }
+    }
+
+    // Viewport & Smooth Trackball Dragging
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1430,167 +1444,90 @@
       return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    // Pointer 3D Rotation (Direct Drag + Auto-Select Twin Piece if Tapped Directly)
     canvas.addEventListener("pointerdown", (e) => {
       if (levelWon) return;
       initAudio();
-      hintLerpTarget = null;
-
-      // In Twin levels, tapping near Left or Right sculpture directly selects it!
-      if (level.isTwin) {
-        const rect = canvas.getBoundingClientRect();
-        const vp = getViewport();
-        const wx = (e.clientX - rect.left - vp.offsetX) / vp.scale;
-        const wy = (e.clientY - rect.top - vp.offsetY) / vp.scale;
-        if (wy > 280) {
-          activeSculptIdx = wx < WORLD_W / 2 ? 0 : 1;
-          syncDockUI();
-        }
-      }
-
       isDragging = true;
-      lastClientX = e.clientX;
-      lastClientY = e.clientY;
+      lastPtr = { x: e.clientX, y: e.clientY };
       canvas.classList.add("dragging");
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
     canvas.addEventListener("pointermove", (e) => {
-      if (!isDragging || levelWon) return;
-      const dx = e.clientX - lastClientX;
-      const dy = e.clientY - lastClientY;
-      lastClientX = e.clientX;
-      lastClientY = e.clientY;
+      if (!isDragging || !lastPtr || levelWon) return;
+      const dx = e.clientX - lastPtr.x;
+      const dy = e.clientY - lastPtr.y;
+      lastPtr = { x: e.clientX, y: e.clientY };
 
-      if (Math.hypot(dx, dy) < 0.4) return;
+      const pa = pieceAngles[activePieceIdx];
+      pa.yaw = wrapAngle(pa.yaw + dx * 0.0115);
+      if (level.allowPitch) {
+        pa.pitch = wrapAngle(pa.pitch + dy * 0.0115);
+      }
 
-      const sc = level.sculptures[activeSculptIdx];
-      sc.yaw = wrapAngle(sc.yaw + dx * 0.0115);
-      sc.pitch = Math.max(-1.42, Math.min(1.42, sc.pitch + dy * 0.0115));
-
-      sfxRotateWhisper();
-      evaluateAlignment();
+      const focus = getOverallFocus();
+      if (Math.hypot(dx, dy) > 2.2) sfxWoodTurn(focus);
+      updateHUD();
+      checkAlignmentWin();
     });
 
-    function stopDrag() {
+    const endDrag = () => {
       isDragging = false;
+      lastPtr = null;
       canvas.classList.remove("dragging");
+    };
+    canvas.addEventListener("pointerup", endDrag);
+    canvas.addEventListener("pointercancel", endDrag);
+
+    // Piece & Roll Studio Buttons
+    pieceABtn.addEventListener("click", () => { initAudio(); activePieceIdx = 0; updateHUD(); });
+    pieceBBtn.addEventListener("click", () => { initAudio(); activePieceIdx = 1; updateHUD(); });
+
+    function stepRoll(deltaRad) {
+      if (levelWon || !level.allowRoll) return;
+      initAudio();
+      const pa = pieceAngles[activePieceIdx];
+      pa.roll = wrapAngle(pa.roll + deltaRad);
+      sfxWoodTurn(getOverallFocus());
+      updateHUD();
+      checkAlignmentWin();
     }
-    canvas.addEventListener("pointerup", stopDrag);
-    canvas.addEventListener("pointercancel", stopDrag);
+    rollLBtn.addEventListener("click", () => stepRoll(-Math.PI / 12));
+    rollRBtn.addEventListener("click", () => stepRoll(Math.PI / 12));
 
-    // Dock Controls (Twin Switcher & Roll Slider)
-    piece0Btn.addEventListener("click", () => {
-      activeSculptIdx = 0;
-      syncDockUI();
-    });
-    piece1Btn.addEventListener("click", () => {
-      activeSculptIdx = 1;
-      syncDockUI();
-    });
-
-    rollSlider.addEventListener("input", () => {
-      if (levelWon || !level.allowRoll) return;
-      initAudio();
-      hintLerpTarget = null;
-      const sc = level.sculptures[activeSculptIdx];
-      sc.roll = (parseFloat(rollSlider.value) * Math.PI) / 180;
-      sfxRotateWhisper();
-      evaluateAlignment();
-    });
-
-    document.getElementById("rollLeftBtn").addEventListener("click", () => {
-      if (levelWon || !level.allowRoll) return;
-      initAudio();
-      const sc = level.sculptures[activeSculptIdx];
-      sc.roll = wrapAngle(sc.roll - Math.PI / 12);
-      syncDockUI();
-      sfxRotateWhisper();
-      evaluateAlignment();
-    });
-
-    document.getElementById("rollRightBtn").addEventListener("click", () => {
-      if (levelWon || !level.allowRoll) return;
-      initAudio();
-      const sc = level.sculptures[activeSculptIdx];
-      sc.roll = wrapAngle(sc.roll + Math.PI / 12);
-      syncDockUI();
-      sfxRotateWhisper();
-      evaluateAlignment();
-    });
-
-    // Keyboard Support (Desktop)
     window.addEventListener("keydown", (e) => {
       if (pickerModal.classList.contains("open") || levelWon) return;
-      const sc = level.sculptures[activeSculptIdx];
-      let changed = false;
-      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") { sc.yaw = wrapAngle(sc.yaw - 0.12); changed = true; }
-      else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") { sc.yaw = wrapAngle(sc.yaw + 0.12); changed = true; }
-      else if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") { sc.pitch = Math.max(-1.42, sc.pitch - 0.12); changed = true; }
-      else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") { sc.pitch = Math.min(1.42, sc.pitch + 0.12); changed = true; }
-      else if ((e.key === "q" || e.key === "Q") && level.allowRoll) { sc.roll = wrapAngle(sc.roll - 0.15); changed = true; }
-      else if ((e.key === "e" || e.key === "E") && level.allowRoll) { sc.roll = wrapAngle(sc.roll + 0.15); changed = true; }
-      else if (e.key === "Tab" && level.isTwin) {
+      if (e.key === "q" || e.key === "Q") stepRoll(-Math.PI / 12);
+      else if (e.key === "e" || e.key === "E") stepRoll(Math.PI / 12);
+      else if (e.key === "Tab" && level.dualPieces) {
         e.preventDefault();
-        activeSculptIdx = 1 - activeSculptIdx;
-        syncDockUI();
-      }
-      if (changed) {
-        initAudio();
-        syncDockUI();
-        sfxRotateWhisper();
-        evaluateAlignment();
+        activePieceIdx = 1 - activePieceIdx;
+        updateHUD();
       }
     });
 
-    // Progressive Shadow Hint Button
+    // Smart Shadow Hint (Flashes Wall Silhouette Blueprint + Nudges Active Piece Halfway!)
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (levelWon) return;
       initAudio();
-      if (!showWallGuide) {
-        showWallGuide = true;
-        showToast("Golden silhouette outline projected onto the wall!", 2400);
-        return;
-      }
+      hintOutlineTimer = 3.2;
 
-      // Gently nudge the most unaligned sculpture 50% closer to solved (0,0,0)!
-      let targetIdx = activeSculptIdx;
-      if (level.isTwin) {
-        const err0 = Math.hypot(wrapAngle(level.sculptures[0].yaw), level.sculptures[0].pitch, wrapAngle(level.sculptures[0].roll));
-        const err1 = Math.hypot(wrapAngle(level.sculptures[1].yaw), level.sculptures[1].pitch, wrapAngle(level.sculptures[1].roll));
-        targetIdx = err0 >= err1 ? 0 : 1;
-        activeSculptIdx = targetIdx;
-        syncDockUI();
-      }
+      const pa = pieceAngles[activePieceIdx];
+      const tgt = getBestTargetFor(pa);
+      pa.yaw = wrapAngle(pa.yaw + wrapAngle(tgt.yaw - pa.yaw) * 0.55);
+      if (level.allowPitch) pa.pitch = wrapAngle(pa.pitch + wrapAngle(tgt.pitch - pa.pitch) * 0.55);
+      if (level.allowRoll) pa.roll = wrapAngle(pa.roll + wrapAngle(tgt.roll - pa.roll) * 0.55);
 
-      const sc = level.sculptures[targetIdx];
-      hintLerpTarget = {
-        idx: targetIdx,
-        yaw: wrapAngle(sc.yaw) * 0.42,
-        pitch: sc.pitch * 0.42,
-        roll: wrapAngle(sc.roll) * 0.42
-      };
-      showToast("Nudging sculpture closer to its sweet spot...", 1800);
+      sfxPieceLock();
+      updateHUD();
+      showToast(`💡 Outline revealed (${level.sil.cat}) & sculpture nudged closer!`, 2800);
+      checkAlignmentWin();
     });
 
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      if (levelWon) {
-        loadLevel(currentLevelNum);
-        return;
-      }
-      level.sculptures.forEach((sc) => {
-        sc.yaw = sc.initRot.yaw;
-        sc.pitch = sc.initRot.pitch;
-        sc.roll = sc.initRot.roll;
-      });
-      hintLerpTarget = null;
-      syncDockUI();
-      evaluateAlignment();
-    });
-
+    document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
     nextLevelBtn.addEventListener("click", () => {
       loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
@@ -1602,7 +1539,7 @@
       if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
     });
 
-    // Level Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1661,92 +1598,18 @@
     });
 
     // ==============================================
-    // PAINTER'S 3D SCULPTURE & GALLERY WALL RENDERER
+    // GALLERY WALL SHADOW & 3D TIMBER RENDERER
     // ==============================================
-    function draw3DSculpturePreview(sc, cx, cy, scale, isSelected) {
-      const pal = level.pal;
-      const drawItems = [];
-
-      for (const p of sc.primitives) {
-        if (p.type === "sphere") {
-          const rp = rotatePoint3D(p, sc.yaw, sc.pitch, sc.roll);
-          drawItems.push({ kind: "sphere", z: rp.z, x: cx + rp.x * scale, y: cy + rp.y * scale, r: p.r * scale });
-        } else {
-          const rVerts = p.verts.map((v) => rotatePoint3D(v, sc.yaw, sc.pitch, sc.roll));
-          for (const face of p.faces) {
-            let avgZ = 0;
-            const pts = face.map((vi) => {
-              avgZ += rVerts[vi].z;
-              return rVerts[vi];
-            });
-            avgZ /= face.length;
-
-            // Compute face normal for directional warm spotlight shading
-            const u = { x: pts[1].x - pts[0].x, y: pts[1].y - pts[0].y, z: pts[1].z - pts[0].z };
-            const v = { x: pts[2].x - pts[0].x, y: pts[2].y - pts[0].y, z: pts[2].z - pts[0].z };
-            let nx = u.y * v.z - u.z * v.y;
-            let ny = u.z * v.x - u.x * v.z;
-            let nz = u.x * v.y - u.y * v.x;
-            const nLen = Math.max(0.0001, Math.hypot(nx, ny, nz));
-            nx /= nLen; ny /= nLen; nz /= nLen;
-
-            // Light from upper-front-left
-            const lum = Math.abs(nx * -0.35 + ny * -0.55 + nz * 0.75);
-            drawItems.push({
-              kind: "face",
-              z: avgZ,
-              lum,
-              pts: pts.map((pt) => ({ x: cx + pt.x * scale, y: cy + pt.y * scale }))
-            });
-          }
-        }
-      }
-
-      // Sort back-to-front (Painter's Algorithm)
-      drawItems.sort((a, b) => a.z - b.z);
-
-      ctx.save();
-      if (isSelected && level.isTwin && !levelWon) {
-        ctx.strokeStyle = "rgba(250, 204, 21, 0.55)";
-        ctx.lineWidth = 2;
-        ctx.setLineDash([5, 4]);
-        ctx.beginPath();
-        ctx.arc(cx, cy, 56, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
-
-      for (const item of drawItems) {
-        if (item.kind === "sphere") {
-          const g = ctx.createRadialGradient(
-            item.x - item.r * 0.3, item.y - item.r * 0.3, item.r * 0.1,
-            item.x, item.y, item.r
-          );
-          g.addColorStop(0, pal.hi);
-          g.addColorStop(0.55, pal.mid);
-          g.addColorStop(1, pal.dark);
-          ctx.fillStyle = g;
-          ctx.beginPath();
-          ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = pal.edge;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        } else {
-          ctx.beginPath();
-          item.pts.forEach((pt, idx) => {
-            if (idx === 0) ctx.moveTo(pt.x, pt.y);
-            else ctx.lineTo(pt.x, pt.y);
-          });
-          ctx.closePath();
-          ctx.fillStyle = item.lum > 0.65 ? pal.hi : (item.lum > 0.35 ? pal.mid : pal.dark);
-          ctx.fill();
-          ctx.strokeStyle = pal.edge;
-          ctx.lineWidth = 0.9;
-          ctx.stroke();
-        }
-      }
-      ctx.restore();
+    function drawPoly2D(pts, ox, oy, sc) {
+      ctx.beginPath();
+      pts.forEach((p, idx) => {
+        const sx = ox + p.x * sc;
+        const sy = oy + p.y * sc;
+        if (idx === 0) ctx.moveTo(sx, sy);
+        else ctx.lineTo(sx, sy);
+      });
+      ctx.closePath();
+      ctx.fill();
     }
 
     let lastTime = performance.now();
@@ -1755,35 +1618,17 @@
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
-      // Smooth Hint Lerp Animation
-      if (hintLerpTarget && !levelWon) {
-        const sc = level.sculptures[hintLerpTarget.idx];
-        sc.yaw = wrapAngle(sc.yaw + wrapAngle(hintLerpTarget.yaw - sc.yaw) * Math.min(1, dt * 8));
-        sc.pitch += (hintLerpTarget.pitch - sc.pitch) * Math.min(1, dt * 8);
-        sc.roll = wrapAngle(sc.roll + wrapAngle(hintLerpTarget.roll - sc.roll) * Math.min(1, dt * 8));
-
-        const rem = Math.hypot(
-          wrapAngle(hintLerpTarget.yaw - sc.yaw),
-          hintLerpTarget.pitch - sc.pitch,
-          wrapAngle(hintLerpTarget.roll - sc.roll)
-        );
-        syncDockUI();
-        evaluateAlignment();
-        if (rem < 0.015) hintLerpTarget = null;
-      }
-
-      // Smooth Victory Snap to Perfect Silhouette
+      // Smooth Magnetic Snap to Exact Zero Alignment on Victory!
       if (levelWon) {
-        revealGlow = Math.min(1, revealGlow + dt * 1.8);
-        // Only gently settle angles if already close to canonical 0
-        for (const sc of level.sculptures) {
-          if (Math.abs(wrapAngle(sc.yaw)) < 0.45 && Math.abs(sc.pitch) < 0.45 && Math.abs(wrapAngle(sc.roll)) < 0.45) {
-            sc.yaw *= Math.pow(0.04, dt);
-            sc.pitch *= Math.pow(0.04, dt);
-            sc.roll *= Math.pow(0.04, dt);
-          }
+        for (const pa of pieceAngles) {
+          const tgt = getBestTargetFor(pa);
+          pa.yaw += wrapAngle(tgt.yaw - pa.yaw) * Math.min(1, dt * 10);
+          pa.pitch += wrapAngle(tgt.pitch - pa.pitch) * Math.min(1, dt * 10);
+          pa.roll += wrapAngle(tgt.roll - pa.roll) * Math.min(1, dt * 10);
         }
       }
+
+      if (hintOutlineTimer > 0) hintOutlineTimer = Math.max(0, hintOutlineTimer - dt);
 
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
@@ -1792,126 +1637,149 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Warm Gallery Spotlight Projection Wall (Upper 64%)
-      const wallX = 24, wallY = 18, wallW = WORLD_W - 48, wallH = 266;
-      const warmBoost = levelWon ? 1 : Math.max(0, (matchScore - 0.5) * 1.6);
+      const th = level.theme;
+      const focus = levelWon ? 1 : getOverallFocus();
 
+      // 1. UPPER GALLERY PLASTER WALL & WARM SPOTLIGHT POOL
       ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.55)";
-      ctx.shadowBlur = 22;
+      const wallGrad = ctx.createRadialGradient(WALL_CX, WALL_CY, 18, WALL_CX, WALL_CY, 198);
+      wallGrad.addColorStop(0, th.wallHi);
+      wallGrad.addColorStop(0.58, th.wallMid);
+      wallGrad.addColorStop(1, th.wallEdge);
+      ctx.fillStyle = wallGrad;
       ctx.beginPath();
-      ctx.roundRect(wallX, wallY, wallW, wallH, 16);
-
-      const spotGrad = ctx.createRadialGradient(WALL_CX, WALL_CY, 12, WALL_CX, WALL_CY, 195);
-      spotGrad.addColorStop(0, levelWon ? "#fef3c7" : `rgb(${Math.round(246 + warmBoost * 8)}, ${Math.round(226 + warmBoost * 16)}, ${Math.round(188 + warmBoost * 10)})`);
-      spotGrad.addColorStop(0.58, "#c9a678");
-      spotGrad.addColorStop(1, "#3b2e3e");
-      ctx.fillStyle = spotGrad;
+      ctx.roundRect(16, 14, WORLD_W - 32, 258, 16);
       ctx.fill();
 
-      ctx.shadowBlur = 0;
-      ctx.lineWidth = levelWon ? 3.5 : 2;
-      ctx.strokeStyle = levelWon ? "#facc15" : "rgba(212, 163, 115, 0.35)";
+      // Gallery museum brass border frame
+      ctx.strokeStyle = levelWon ? "#facc15" : "rgba(251, 191, 36, 0.42)";
+      ctx.lineWidth = levelWon ? 3.2 : 2;
       ctx.stroke();
 
-      // Clip shadows & wall guide neatly inside the gallery wall frame
+      // Clip all wall shadows cleanly inside the gallery frame!
       ctx.clip();
 
-      // 2. Subtle Target Silhouette Guide (Always on in Ch. 1, or toggled via 💡 Hint)
-      if (showWallGuide && !levelWon) {
-        const wallScale = 1.24;
+      // Optional Golden Dotted Target Silhouette Blueprint (When Hint Active!)
+      if (hintOutlineTimer > 0 && !levelWon) {
         ctx.save();
-        ctx.globalAlpha = 0.22;
-        for (const sc of level.sculptures) {
-          projectSculptureShadow(
-            ctx, sc,
-            WALL_CX + sc.wallOffX * wallScale,
-            WALL_CY + sc.wallOffY * wallScale,
-            wallScale, 0, 0, 0, "#92400e"
-          );
+        ctx.globalAlpha = Math.min(0.65, hintOutlineTimer * 0.45);
+        ctx.strokeStyle = "#b45309";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 4]);
+        for (const b of level.blocks) {
+          ctx.beginPath();
+          b.front.forEach((p, i) => {
+            const sx = WALL_CX + p.x * 1.15;
+            const sy = WALL_CY + p.y * 1.15;
+            if (i === 0) ctx.moveTo(sx, sy);
+            else ctx.lineTo(sx, sy);
+          });
+          ctx.closePath();
+          ctx.stroke();
         }
         ctx.restore();
       }
 
-      // 3. Real-Time Cast Shadow on Gallery Wall!
-      {
-        const wallScale = 1.24;
-        ctx.save();
-        // Soft natural penumbra shadow blur
-        ctx.shadowColor = levelWon ? "rgba(245, 158, 11, 0.65)" : "rgba(15, 10, 24, 0.55)";
-        ctx.shadowBlur = levelWon ? 16 : 9;
+      // Compute Transformed 3D Geometry for All Wooden Sculpture Blocks
+      const transformed = level.blocks.map((b) => {
+        const pa = pieceAngles[b.pieceIdx];
+        const fPts = b.front.map((v) => rotate3D(v, pa.yaw, pa.pitch, pa.roll));
+        const bPts = b.back.map((v) => rotate3D(v, pa.yaw, pa.pitch, pa.roll));
+        const cPt = rotate3D(b.center, pa.yaw, pa.pitch, pa.roll);
+        return { b, fPts, bPts, cPt };
+      });
 
-        const shadowFill = levelWon ? "#181024" : "rgba(22, 16, 30, 0.88)";
-        for (const sc of level.sculptures) {
-          projectSculptureShadow(
-            ctx, sc,
-            WALL_CX + sc.wallOffX * wallScale,
-            WALL_CY + sc.wallOffY * wallScale,
-            wallScale, sc.yaw, sc.pitch, sc.roll, shadowFill
-          );
-        }
-        ctx.restore();
-      }
-
-      // Subtle poetic title plaque engraved on wall once revealed!
-      if (levelWon) {
-        ctx.fillStyle = `rgba(120, 53, 15, ${revealGlow * 0.9})`;
-        ctx.font = "900 13px serif";
-        ctx.textAlign = "center";
-        ctx.fillText(`✦  ${level.title.toUpperCase()}  ✦`, WALL_CX, wallY + wallH - 14);
-      }
-      ctx.restore(); // End wall clip
-
-      // 4. Subtle Volumetric Spotlight Cone Connecting Sculpture to Wall
+      // 2. CAST SHADOW SILHOUETTE ON THE WARM GALLERY WALL (Unobstructed Upper Frame!)
       ctx.save();
-      const beamGrad = ctx.createLinearGradient(WORLD_W / 2, WORLD_H, WORLD_W / 2, wallY + wallH);
-      beamGrad.addColorStop(0, "rgba(254, 243, 199, 0.14)");
-      beamGrad.addColorStop(1, "rgba(254, 243, 199, 0.0)");
-      ctx.fillStyle = beamGrad;
-      ctx.beginPath();
-      ctx.moveTo(WORLD_W / 2 - 42, WORLD_H);
-      ctx.lineTo(wallX + 18, wallY + wallH);
-      ctx.lineTo(wallX + wallW - 18, wallY + wallH);
-      ctx.lineTo(WORLD_W / 2 + 42, WORLD_H);
-      ctx.closePath();
-      ctx.fill();
+      ctx.fillStyle = levelWon ? "#140e0b" : "rgba(24, 17, 13, 0.84)";
+      ctx.shadowColor = levelWon ? "rgba(250, 204, 21, 0.72)" : "rgba(20, 12, 8, 0.45)";
+      ctx.shadowBlur = levelWon ? 16 : Math.max(2, (1 - focus) * 10);
+
+      const shadowScale = 1.15;
+      for (const item of transformed) {
+        drawPoly2D(item.fPts, WALL_CX, WALL_CY, shadowScale);
+        drawPoly2D(item.bPts, WALL_CX, WALL_CY, shadowScale);
+        // Connect front-to-back side quads so the 3D thickness casts a solid continuous shadow!
+        const n = item.fPts.length;
+        for (let i = 0; i < n; i++) {
+          const j = (i + 1) % n;
+          drawPoly2D([item.fPts[i], item.fPts[j], item.bPts[j], item.bPts[i]], WALL_CX, WALL_CY, shadowScale);
+        }
+      }
       ctx.restore();
 
-      // 5. Floating Ambient Gallery Dust Motes
-      for (const d of dustMotes) {
-        d.x += d.vx;
-        d.y += d.vy;
-        if (d.y < 24) { d.y = 430; d.x = 60 + Math.random() * 300; }
-        const a = 0.18 + 0.2 * Math.sin(now * 0.002 + d.phase);
-        ctx.fillStyle = `rgba(254, 243, 199, ${a})`;
+      // Revealed Art Title Plaque Inside Bottom of Wall Frame
+      if (levelWon) {
+        ctx.fillStyle = "rgba(20, 14, 11, 0.78)";
         ctx.beginPath();
-        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.roundRect(WALL_CX - 86, 240, 172, 24, 8);
+        ctx.fill();
+        ctx.fillStyle = "#fde68a";
+        ctx.font = "900 11px serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`✦ ${level.sil.name.toUpperCase()} ✦`, WALL_CX, 252);
+      }
+      ctx.restore(); // End Wall Frame Clip
+
+      // 3. LOWER SPOTLIGHT PEDESTAL & FLOATING 3D WOODEN SCULPTURE (Painter's Depth-Sorted!)
+      ctx.save();
+      // Subtle upward warm spotlight cone from pedestal base
+      const beamG = ctx.createRadialGradient(SCULPT_CX, 442, 8, SCULPT_CX, 355, 120);
+      beamG.addColorStop(0, "rgba(251, 191, 36, 0.24)");
+      beamG.addColorStop(1, "rgba(251, 191, 36, 0)");
+      ctx.fillStyle = beamG;
+      ctx.fillRect(40, 282, WORLD_W - 80, 172);
+
+      // Sleek Brass Turntable Ring Under Floating Sculpture
+      ctx.strokeStyle = "rgba(245, 158, 11, 0.32)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(SCULPT_CX, 434, 86, 14, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Depth-sort 3D wooden blocks back-to-front (smaller Z drawn first)
+      const sorted3D = transformed.slice().sort((a, b) => a.cPt.z - b.cPt.z);
+      const sculptScale = 0.62;
+
+      for (const item of sorted3D) {
+        const isPieceB = item.b.pieceIdx === 1;
+        const isActiveGroup = !level.dualPieces || item.b.pieceIdx === activePieceIdx;
+        const baseWood = isPieceB ? th.woodB : th.woodA;
+
+        // Draw extruded side walls first, then closer cap face on top for crisp 3D depth!
+        const n = item.fPts.length;
+        ctx.fillStyle = isPieceB ? "#7c4a15" : "#4a2c15";
+        ctx.strokeStyle = isActiveGroup ? "rgba(254, 240, 138, 0.35)" : "rgba(255, 255, 255, 0.12)";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < n; i++) {
+          const j = (i + 1) % n;
+          drawPoly2D([item.fPts[i], item.fPts[j], item.bPts[j], item.bPts[i]], SCULPT_CX, SCULPT_CY, sculptScale);
+        }
+
+        // Front/Back nearer wooden cap face
+        const avgFz = item.fPts.reduce((s, p) => s + p.z, 0) / n;
+        const avgBz = item.bPts.reduce((s, p) => s + p.z, 0) / n;
+        const nearCap = avgFz >= avgBz ? item.fPts : item.bPts;
+
+        ctx.fillStyle = baseWood;
+        ctx.strokeStyle = isActiveGroup ? "#fde68a" : "rgba(255, 255, 255, 0.25)";
+        ctx.lineWidth = isActiveGroup ? 1.4 : 0.9;
+        drawPoly2D(nearCap, SCULPT_CX, SCULPT_CY, sculptScale);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // 4. Floating Golden Dust Motes in Spotlight Air
+      for (const dm of dustMotes) {
+        dm.y -= dt * dm.sp;
+        if (dm.y < 14) dm.y = WORLD_H - 14;
+        const alpha = 0.16 + 0.22 * Math.sin(now * 0.002 + dm.ph);
+        ctx.fillStyle = `rgba(254, 243, 199, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(dm.x + Math.sin(now * 0.001 + dm.ph) * 6, dm.y, dm.r, 0, Math.PI * 2);
         ctx.fill();
       }
-
-      // 6. Suspended 3D Sculpture Pedestal Stage (Bottom Zone)
-      level.sculptures.forEach((sc, idx) => {
-        // Subtle brass halo base beneath floating sculpture
-        ctx.save();
-        const glow = ctx.createRadialGradient(sc.stageX, SCULPT_Y + 56, 4, sc.stageX, SCULPT_Y + 56, 48);
-        glow.addColorStop(0, idx === activeSculptIdx ? "rgba(245, 158, 11, 0.28)" : "rgba(148, 163, 184, 0.12)");
-        glow.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.ellipse(sc.stageX, SCULPT_Y + 56, 52, 14, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-
-        const previewScale = level.isTwin ? 0.62 : 0.72;
-        draw3DSculpturePreview(sc, sc.stageX, SCULPT_Y, previewScale, idx === activeSculptIdx);
-
-        if (level.isTwin) {
-          ctx.fillStyle = idx === activeSculptIdx ? "#fde68a" : "#94a3b8";
-          ctx.font = "800 10px sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText(idx === 0 ? "A" : "B", sc.stageX, SCULPT_Y + 64);
-        }
-      });
 
       ctx.restore();
       requestAnimationFrame(frame);
