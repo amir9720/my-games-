@@ -3,10 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gravity Stone Stacker — 500 Physics Balance Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free physics levels of Gravity Stone Stacker in your browser. Balance irregular geometric stones into a steady tower and hold it upright for five full seconds." />
+  <title>Gravity Stone Stacker — Free 500-Level Zen Physics Balancing Game | ZinPlay</title>
+  <meta name="description" content="Play Gravity Stone Stacker free online with no download. Stack irregular river stones, basalt wedges, and glacial ice blocks using real Matter.js 2D physics and hold your cairn steady for 5 seconds across 500 levels." />
   <link rel="stylesheet" href="/assets/css/style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Gravity Stone Stacker",
+    "url": "https://zinplay.io/games/stone-stacker/",
+    "genre": ["Physics", "Zen Puzzle", "Balancing Simulation"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,14 +43,16 @@
       font-size: 0.9rem;
       color: var(--muted);
     }
+
+    /* Top Zen Mountain HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0f172a;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #0d161f;
+      color: #f1f5f9;
+      border-bottom: 1px solid #1d2f40;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -50,8 +65,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #5eead4;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -62,30 +77,79 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(99, 102, 241, 0.22);
-      border: 1px solid rgba(129, 140, 248, 0.35);
-      color: #c7d2fe;
+      background: rgba(94, 234, 212, 0.16);
+      border: 1px solid rgba(94, 234, 212, 0.36);
+      color: #ccfbf1;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.wind {
-      background: rgba(56, 189, 248, 0.18);
-      border-color: rgba(56, 189, 248, 0.4);
+    .hud-pill.wind-pill {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(125, 211, 252, 0.42);
       color: #bae6fd;
     }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
+    }
+
+    /* 5-Second Hold Stability Strip */
+    .hold-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: #13202c;
+      border-bottom: 1px solid #22374a;
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .hold-label {
+      min-width: 118px;
+      color: #fde68a;
+      white-space: nowrap;
+    }
+    .hold-track {
+      flex: 1;
+      height: 10px;
+      background: #081018;
+      border-radius: 999px;
+      border: 1px solid #284157;
+      overflow: hidden;
+    }
+    .hold-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #38bdf8 0%, #fbbf24 55%, #22c55e 100%);
+      transition: width 0.08s linear;
+    }
+    .hold-time {
+      min-width: 48px;
+      text-align: right;
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: #ffffff;
+    }
+
+    /* Physics Viewport Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 460px;
-      background: linear-gradient(180deg, #0b132b 0%, #1c2541 55%, #2b3556 100%);
+      height: 430px;
+      background: #0c1721;
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 510px;
+        height: 470px;
       }
     }
     #stackCanvas {
@@ -93,75 +157,70 @@
       height: 100%;
       display: block;
       touch-action: none;
-      cursor: crosshair;
+      cursor: ew-resize;
     }
-    .hold-banner {
-      position: absolute;
-      top: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.9);
-      border: 2px solid #22c55e;
-      color: #dcfce7;
-      padding: 6px 16px;
-      border-radius: 999px;
-      font-size: 0.88rem;
-      font-weight: 900;
-      letter-spacing: 0.03em;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
-      display: none;
+
+    /* Bottom Precision Controls Dock */
+    .stack-dock {
+      display: flex;
       align-items: center;
       gap: 8px;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-    .hold-banner.show {
-      display: inline-flex;
-    }
-    .action-dock {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr 1fr;
-      gap: 8px;
-      padding: 12px 14px;
-      background: #131c33;
-      border-top: 1px solid #1e293b;
+      padding: 11px 12px;
+      background: #0e1822;
+      border-top: 1px solid #1f3245;
     }
     .dock-btn {
       min-height: 46px;
+      padding: 0 13px;
       border-radius: 12px;
-      border: 1.5px solid #334155;
-      background: #1e293b;
+      border: 1.5px solid #284057;
+      background: #172736;
       color: #f8fafc;
-      font-size: 0.9rem;
+      font-size: 0.84rem;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      transition: transform 0.08s ease, background 0.15s ease;
+      gap: 5px;
+      transition: transform 0.08s ease, background 0.14s ease, border-color 0.14s ease;
     }
-    .dock-btn:active {
-      transform: scale(0.97);
-    }
-    .dock-btn:disabled {
-      opacity: 0.45;
-      cursor: default;
-    }
+    .dock-btn:active { transform: scale(0.95); }
+    .dock-btn:disabled { opacity: 0.38; cursor: default; }
     .dock-btn.drop-main {
-      background: linear-gradient(135deg, #4f46e5, #6366f1);
-      border-color: #818cf8;
+      flex: 1;
+      background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
+      border-color: #5eead4;
       color: #ffffff;
-      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.38);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
+      box-shadow: 0 5px 16px rgba(16, 185, 129, 0.3);
     }
+    .dock-btn.drop-main.retry-mode {
+      background: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
+      border-color: #fde68a;
+      box-shadow: 0 5px 16px rgba(234, 88, 12, 0.32);
+    }
+
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #091119;
+      border-top: 1px solid #192938;
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+
     .status-toast {
       position: absolute;
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.94);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(9, 17, 25, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -175,13 +234,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
-    .stage-overlay {
+    .status-toast.show { opacity: 1; }
+
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(9, 13, 28, 0.8);
+      background: rgba(8, 15, 22, 0.8);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -189,31 +247,25 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.22s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 320px;
+      max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .overlay-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
+
     .controls-group {
       display: flex;
       gap: 6px;
@@ -240,6 +292,7 @@
       border-radius: 10px;
       cursor: pointer;
     }
+
     /* Level Picker Modal */
     .modal-backdrop {
       position: fixed;
@@ -252,9 +305,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -351,6 +402,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #0d161f;
+      border: 1px solid rgba(94, 234, 212, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #0d161f;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #0d161f 0%, #134e4a 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.dusk-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #1e293b 0%, #451a03 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .phys-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .phys-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .phys-table th, .phys-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .phys-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .phys-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -363,7 +494,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -376,62 +507,77 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Levels &bull; Physics</span>
+      <span class="cat-tag">500 Cairns &bull; Matter.js 2D Physics</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Gravity Stone Stacker</h1>
-      <p>Slide and rotate 5 to 10 irregular stones onto the pedestal, then hold your tower steady for 5 full seconds.</p>
+      <p>Slide and rotate irregular geometric stones over a cliffside plinth, stack every boulder without toppling, and keep your cairn balanced for 5 full seconds.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Gravity Stone Stacker Game">
+    <section class="game-wrapper" aria-label="Gravity Stone Stacker Physics Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Pebble Garden</span>
-          <span id="levelTitle">Level 1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Misty River Stones</span>
+          <span id="levelTitle">Cairn #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="stonesCounter">Stones: 0 / 5</span>
-          <span class="hud-pill wind" id="windPill" style="display:none;">🍃 Wind</span>
-          <span class="hud-pill" id="solvedCounter">Solved: 0 / 500</span>
+          <span class="hud-pill" id="stonesPill">Stones: 0 / 4</span>
+          <span class="hud-pill wind-pill" id="windPill" style="display:none;">💨 Calm</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Balanced: 0 / 500</span>
         </div>
       </div>
 
+      <!-- 5-Second Equilibrium Countdown Bar -->
+      <div class="hold-strip">
+        <span id="holdLabel" class="hold-label">🪨 Stack All Stones</span>
+        <div class="hold-track">
+          <div id="holdFill" class="hold-fill"></div>
+        </div>
+        <span id="holdTime" class="hold-time">0.0 / 5s</span>
+      </div>
+
+      <!-- Matter.js 2D Physics Canvas -->
       <div class="canvas-container">
         <canvas id="stackCanvas"></canvas>
-        <div id="holdBanner" class="hold-banner">⏱ HOLD STEADY: <span id="holdTimeText">5.0s</span></div>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Win / Collapse Overlay -->
-        <div id="stageOverlay" class="stage-overlay">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.2rem; margin-bottom:6px;">🪨</div>
-            <h2 id="ovHeading">Tower Balanced!</h2>
-            <p id="ovText">Your cairn held steady for 5 full seconds.</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Next Level →</button>
+        <!-- Balanced Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div style="font-size:2.3rem; margin-bottom:6px;">🪨</div>
+            <h2 id="winHeading">Cairn Balanced!</h2>
+            <p id="winText">Every irregular boulder held firm in gravity equilibrium for 5 full seconds.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Cairn →</button>
           </div>
         </div>
       </div>
 
-      <!-- Precision Touch & Keyboard Dock -->
-      <div class="action-dock">
-        <button id="rotLeftBtn" class="dock-btn" type="button" aria-label="Rotate Left">⟲ -15°</button>
-        <button id="dropBtn" class="dock-btn drop-main" type="button">⬇ DROP STONE</button>
-        <button id="rotRightBtn" class="dock-btn" type="button" aria-label="Rotate Right">⟳ +15°</button>
+      <!-- Precision Aim, Rotate & Drop Dock -->
+      <div class="stack-dock">
+        <button id="rotLBtn" class="dock-btn" type="button" aria-label="Rotate Stone Left">⟲ −15°</button>
+        <button id="dropBtn" class="dock-btn drop-main" type="button">🪨 DROP STONE</button>
+        <button id="rotRBtn" class="dock-btn" type="button" aria-label="Rotate Stone Right">+15° ⟳</button>
+      </div>
+
+      <div class="legend-strip">
+        <span>👆 Drag Anywhere on Sky to Aim Horizontally</span>
+        <span>⟲ / ⟳ Flatten Stone Base Before Dropping</span>
+        <span>🧊 Cyan Stones = Low-Friction Glacial Ice (Ch. 4+)</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Retry</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reset Cairn</button>
           <button id="hintBtn" class="btn-outline" type="button">💡 Balance Guide</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 ASMR ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Level 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Cairn 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -441,66 +587,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 840+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/stone-stacker-banner-1.jpg"
+            alt="Gravity Stone Stacker zen rock balancing physics game showing irregular basalt and river stones stacked on a misty cliff pedestal"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Real-Physics Zen Cairns — Powered by Matter.js</h3>
+          <p>Feel authentic center-of-gravity torque, surface friction, and soft mineral clacks as you balance irregular boulders for 5 peaceful seconds.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Gravity Stone Stacker (500 Levels)</h2>
-        <p>Gravity Stone Stacker is a pure 2D rigid-body physics puzzle powered by Matter.js. Each stage hands you between 5 and 10 irregular geometric stones—flat slabs, wedges, pentagons, and heavy basalt chunks. Your mission is simple to understand and thrilling to master: stack every stone onto the stone pedestal and keep the tower balanced for <strong>5 full seconds</strong> without a single piece tumbling off.</p>
+        <h2>What Is Gravity Stone Stacker? A Zen Rock Balancing Physics Game Online</h2>
+        <p><strong>Gravity Stone Stacker</strong> is a free <strong>zen stone stacking physics game online</strong> that recreates the quiet artistry of balancing coastal cairns directly inside your browser. Driven by real 2D rigid-body simulation (<strong>Matter.js</strong>), every pebble, jagged basalt shard, sandstone slab, and glacial ice block obeys true rotational inertia, center-of-mass torque, and surface friction. Slide each hovering rock into position above the cliffside pedestal, rotate its flattest facet downward, release it gently, and once the final stone settles, keep the entire tower standing cleanly for <strong>5 full seconds</strong> without a single boulder tumbling into the misty lake below.</p>
+        <p>Engineered as a lightweight, <strong>no-download physics brain teaser for smartphones, iPads, and Chromebooks</strong>, Gravity Stone Stacker pairs responsive touch aiming with live procedural <strong>Web Audio stone clacks and Tibetan singing-bowl chimes</strong>. Every balanced cairn across all <strong>500 unique stages</strong> saves automatically inside private local storage.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Real Center-of-Gravity Tricks to Balance Impossible Cairns</h2>
+        <p>Stacking symmetrical squares is easy—but balancing lopsided polygons, angled wedges, and slippery ice crystals rewards real structural physics intuition. Use these four proven <strong>rock-balancing techniques</strong> to conquer Chapters 3 through 5:</p>
+
+        <div class="phys-table-wrap">
+          <table class="phys-table">
+            <thead>
+              <tr>
+                <th>Physics Principle</th>
+                <th>What Happens on the Stack</th>
+                <th>How to Master It</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Broadest Flat Edge Down</strong></td>
+                <td>Pointy vertices act as unstable fulcrums that tip under tiny lateral shifts.</td>
+                <td>Tap <strong>⟲ −15° / +15° ⟳</strong> (or press <code>Q</code>/<code>E</code>) until the longest flat face sits parallel to the ledge beneath!</td>
+              </tr>
+              <tr>
+                <td><strong>2. Counterweight Balancing</strong></td>
+                <td>If your cairn leans slightly right, dropping dead-center worsens the tilt.</td>
+                <td>Offset the next stone slightly <em>left</em> of center so the combined center of mass returns directly over the pedestal!</td>
+              </tr>
+              <tr>
+                <td><strong>3. Taming Mountain Wind Gusts</strong> (Ch. 3 &amp; 5)</td>
+                <td>Periodic alpine breezes push tall, lightweight boulders sideways.</td>
+                <td>Watch the <strong>💨 Wind Pill</strong> &amp; drifting wind streaks—drop heavy flat stones first and release during calm lulls!</td>
+              </tr>
+              <tr>
+                <td><strong>4. Locking Glacial Ice Blocks</strong> (Ch. 4 &amp; 5)</td>
+                <td>Translucent cyan ice stones have ultra-low surface friction and love to slide.</td>
+                <td>Only set an ice block on a perfectly level horizontal surface—never on a tilted wedge!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;">Not sure where your tower's true balance point sits? Tap <strong>💡 Balance Guide</strong> to project a live golden <strong>Center-of-Mass Crosshair</strong> over your stacked cairn and automatically level your hovering stone onto its flattest landing edge!</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner dusk-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/stone-stacker-banner-2.jpg"
+            alt="Isometric alpine rock balancing cairns made of basalt granite, sandstone wedges, and glacial ice blocks in Gravity Stone Stacker"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Five Scenic Mountain Chapters &amp; Real Mineral Friction Physics</h3>
+          <p>Progress from broad riverside plinths to windy alpine ridges and slippery frosted cairns—every stage tuned for smooth 60 FPS touch control.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Scenic Chapters (500 Unique Physics Cairns)</h2>
+        <p>Every stage from Cairn #1 to Cairn #500 generates a unique sequence of convex stone polygons with balanced mass profiles so every single tower is genuinely buildable with patience and steady aim:</p>
         <ul>
-          <li><strong>Mobile &amp; Desktop Controls:</strong> Drag left or right anywhere on the sky to aim your hovering stone. Tap <strong>⟲ -15°</strong> or <strong>⟳ +15°</strong> (or press <code>Q</code>/<code>E</code> on a keyboard) to align its flat edge, then tap <strong>DROP STONE</strong> (or press <code>Space</code>) to release it gently.</li>
-          <li><strong>Watch Stone Weight &amp; Wind:</strong> Darker volcanic basalt stones are significantly heavier than pale sandstone blocks—use heavy stones near the base or to counterbalance a leaning stack. Starting in Chapter 4, mountain crosswinds push lightly against tall towers!</li>
-          <li><strong>Use the Balance Guide (💡):</strong> Tap <strong>Balance Guide</strong> to auto-level your current stone's flattest face downward and reveal your tower's live golden center-of-gravity plumb line.</li>
+          <li><strong>Chapter 1 (Cairns 1–100 — Misty River Stones):</strong> Generous mossy cliff pedestals, calm air, and 4 to 5 smooth high-friction river slabs—ideal for learning counterweight balance.</li>
+          <li><strong>Chapter 2 (Cairns 101–200 — Faceted Basalt Wedges):</strong> Introduces narrower volcanic plinths and 5 to 6 angular basalt trapezoids and wedges that demand careful pre-drop rotation.</li>
+          <li><strong>Chapter 3 (Cairns 201–300 — Alpine Wind Ridge):</strong> Adds rhythmic mountain breeze gusts visualized by drifting mist streaks and a live wind meter, testing low center-of-gravity construction.</li>
+          <li><strong>Chapter 4 (Cairns 301–400 — Glacial Frost Lake):</strong> Mixes heavy dark granite boulders with glossy low-friction <strong>Cyan Ice Stones</strong> across 6 to 7 stone stacks.</li>
+          <li><strong>Chapter 5 (Cairns 401–500 — Zen Master Summit):</strong> Narrow high-altitude pedestals, subtle plinth tilts, 7 to 8 diverse stone polygons, wind gusts, and glacial blocks—complete with an open 1–500 cairn selector and automatic local saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Physics Stacking Topics">
+          <span class="kw-pill">Zen Stone Stacking Game Online</span>
+          <span class="kw-pill">Rock Balancing Physics Simulator</span>
+          <span class="kw-pill">Matter.js Cairn Puzzle Browser</span>
+          <span class="kw-pill">Center of Gravity Brain Teaser</span>
+          <span class="kw-pill">500-Level Stacking Game No Download</span>
+          <span class="kw-pill">Relaxing Chromebook Physics Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Gravity Stone Stacker FAQ</h2>
         <details class="faq-item">
-          <summary>Why does the camera move upward while I stack?</summary>
-          <div class="faq-answer">As your tower grows taller across 8-to-10-stone levels, the camera smoothly glides upward so your drop zone always stays comfortably above the highest stone without going off screen.</div>
+          <summary>How do I aim and drop stones accurately on a smartphone?</summary>
+          <div class="faq-answer">Slide your finger left or right anywhere across the sky canvas to position the hovering stone along its vertical guide line, tap <strong>⟲ −15°</strong> or <strong>+15° ⟳</strong> to align its flattest face downward, then tap the large green <strong>🪨 DROP STONE</strong> button when ready!</div>
         </details>
         <details class="faq-item">
-          <summary>When does the 5-second countdown begin?</summary>
-          <div class="faq-answer">The 5.0-second stability timer starts as soon as your final stone touches the tower. If every stone stays balanced above the abyss until the timer hits 0.0s, you clear the level!</div>
+          <summary>Why do I have to wait 5 seconds after dropping the final stone?</summary>
+          <div class="faq-answer">A tower can sometimes lean slowly for two or three seconds before collapsing. Holding equilibrium for <strong>5 full seconds</strong> proves your cairn achieved true physical stability—and you'll hear a serene singing-bowl chime tick down each second!</div>
+        </details>
+        <details class="faq-item">
+          <summary>What makes the glossy blue stones different in Chapters 4 and 5?</summary>
+          <div class="faq-answer">Glossy cyan blocks are <strong>Glacial Ice Stones</strong> with very low surface friction. Place them carefully on flat horizontal slabs—or cap them gently on top of your cairn—so they don't slide off angled faces!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Are keyboard controls available on desktop and Chromebooks?</summary>
+          <div class="faq-answer">Yes! Use <code>Left/Right Arrows</code> or <code>A/D</code> (or simply move your mouse) to position the stone, <code>Q/E</code> to rotate, and <code>Space</code> or <code>Enter</code> to drop.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧳</div><span class="cat-tag">Strategy</span></div>
-        <h3>Baggage Routing Chaos</h3>
-        <p>Flip conveyor belt switches in real time across 500 airport shifts.</p>
-        <a href="/games/baggage-chaos/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🚢</div><span class="cat-tag">Physics</span></div>
+        <h3>Cargo Wave Balancer</h3>
+        <p>Drop and balance shipping containers on a swaying cargo vessel riding dynamic ocean waves.</p>
+        <a href="/games/cargo-balancer/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
-        <h3>Manual Bomb Defusal</h3>
-        <p>Decode the live technical manual and cut the exact right wire against the clock.</p>
-        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🧨</div><span class="cat-tag">Physics</span></div>
+        <h3>Controlled Demolition</h3>
+        <p>Place timed dynamite on load-bearing pillars to collapse towers straight inward safely.</p>
+        <a href="/games/controlled-demolition/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Prism &amp; Lasers</h3>
-        <p>Place mirrors and split laser beams through prisms across 500 dark-mode levels.</p>
-        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">⚙️</div><span class="cat-tag">Physics</span></div>
+        <h3>Rube Goldberg Sandbox</h3>
+        <p>Arrange ramps, springs, fans, and magnets to trigger a wild physics chain reaction.</p>
+        <a href="/games/rube-goldberg/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Level Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Level">
+  <!-- Cairn Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Cairn">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Level (1 – 500)</h3>
+        <h3>Choose Zen Cairn (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to level (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to cairn (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -519,12 +762,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Physics</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/stone-stacker/">Gravity Stone Stacker</a></li>
+            <li><a href="/games/cargo-balancer/">Cargo Wave Balancer</a></li>
+            <li><a href="/games/rube-goldberg/">Rube Goldberg Sandbox</a></li>
+            <li><a href="/games/domino-builder/">Infinite Domino Builder</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -533,7 +776,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -554,7 +797,7 @@
   </footer>
 
   <script>
-    // Mobile Menu
+    // Mobile Header Menu
     const menuBtn = document.getElementById("menuBtn");
     const navMenu = document.getElementById("navMenu");
     if (menuBtn && navMenu) {
@@ -566,30 +809,39 @@
     }
 
     // ==============================================
-    // CONSTANTS & DETERMINISTIC 500-LEVEL GENERATOR
+    // MATTER.JS 2D RIGID-BODY & 500-CAIRN GENERATOR
     // ==============================================
+    const { Engine, World, Bodies, Body, Events, Vertices } = Matter;
+
     const TOTAL_LEVELS = 500;
-    const HOLD_SECONDS = 5.0;
     const WORLD_W = 420;
-    const WORLD_H = 500;
-    const PEDESTAL_Y = 442;
-    const ABYSS_Y = 545;
+    const WORLD_H = 440;
+    const PEDESTAL_Y = 368;
+    const HOLD_TARGET = 5.0;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Pebble Garden", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • River Cairns", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Canyon Spires", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Windy Ridge", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Zen Summit", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Misty River Stones", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Faceted Basalt Wedges", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Alpine Wind Ridge", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Glacial Frost Lake", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Zen Master Summit", range: "401–500", start: 401, end: 500 }
     ];
 
-    const STONE_MATERIALS = [
-      { name: "Sandstone", fill: "#cbd5e1", edge: "#94a3b8", hi: "#f1f5f9", density: 0.0022 },
-      { name: "Slate",     fill: "#94a3b8", edge: "#64748b", hi: "#cbd5e1", density: 0.0028 },
-      { name: "Terracotta",fill: "#d6a488", edge: "#9a6b52", hi: "#f3d2be", density: 0.0025 },
-      { name: "Moss Rock", fill: "#86a797", edge: "#527062", hi: "#b7d3c5", density: 0.0026 },
-      { name: "Basalt",    fill: "#64748b", edge: "#334155", hi: "#94a3b8", density: 0.0040 }
+    const SCENES = [
+      { sky1: "#0f2027", sky2: "#2c5364", mtn: "#162b36", water: "#0a1a22", plinth: "#475569", moss: "#4d7c0f" },
+      { sky1: "#181826", sky2: "#4b384c", mtn: "#241d2e", water: "#11101c", plinth: "#52525b", moss: "#65a30d" },
+      { sky1: "#0d1b2a", sky2: "#415a77", mtn: "#1b263b", water: "#09131f", plinth: "#64748b", moss: "#15803d" },
+      { sky1: "#082032", sky2: "#2c74b3", mtn: "#144272", water: "#051424", plinth: "#475569", moss: "#bae6fd" },
+      { sky1: "#1c1326", sky2: "#b45309", mtn: "#3b1d2a", water: "#140d1c", plinth: "#57534e", moss: "#d97706" }
     ];
+
+    const STONE_MATERIALS = {
+      granite:   { fill: "#64748b", hi: "#94a3b8", dark: "#334155", fric: 0.85, density: 0.0032, rest: 0.04 },
+      sandstone: { fill: "#b48a64", hi: "#d6b594", dark: "#785336", fric: 0.90, density: 0.0028, rest: 0.03 },
+      basalt:    { fill: "#3f4452", hi: "#636b7e", dark: "#1f232b", fric: 0.82, density: 0.0036, rest: 0.05 },
+      slate:     { fill: "#4b6575", hi: "#7b9eb0", dark: "#283945", fric: 0.84, density: 0.0030, rest: 0.04 },
+      ice:       { fill: "#38bdf8", hi: "#bae6fd", dark: "#0369a1", fric: 0.14, density: 0.0024, rest: 0.08, isIce: true }
+    };
 
     function mulberry32(seed) {
       let a = seed >>> 0;
@@ -601,25 +853,20 @@
       };
     }
 
-    // Strict Convex Hull (Monotone Chain) — guarantees 100% glitch-free Matter.js polygons
-    function convexHull(points) {
-      const pts = points.slice().sort((a, b) => (a.x === b.x ? a.y - b.y : a.x - b.x));
+    // Strict 2D Convex Hull (Andrew's Monotone Chain) so Matter.js never needs external poly-decomp!
+    function makeConvexHull(points) {
+      const pts = points.slice().sort((a, b) => (a.x !== b.x ? a.x - b.x : a.y - b.y));
       if (pts.length <= 3) return pts;
       const cross = (o, a, b) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
-
       const lower = [];
       for (const p of pts) {
-        while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) {
-          lower.pop();
-        }
+        while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
         lower.push(p);
       }
       const upper = [];
       for (let i = pts.length - 1; i >= 0; i--) {
         const p = pts[i];
-        while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) {
-          upper.pop();
-        }
+        while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
         upper.push(p);
       }
       upper.pop();
@@ -627,170 +874,143 @@
       return lower.concat(upper);
     }
 
-    function centerPolygon(pts) {
-      let area = 0, cx = 0, cy = 0;
-      for (let i = 0; i < pts.length; i++) {
-        const p1 = pts[i], p2 = pts[(i + 1) % pts.length];
-        const cr = p1.x * p2.y - p2.x * p1.y;
-        area += cr;
-        cx += (p1.x + p2.x) * cr;
-        cy += (p1.y + p2.y) * cr;
-      }
-      area *= 0.5;
-      if (Math.abs(area) < 1e-3) return pts;
-      cx /= (6 * area);
-      cy /= (6 * area);
-      return pts.map((p) => ({ x: p.x - cx, y: p.y - cy }));
-    }
+    // Generate Organic Yet Stackable Convex Stone Polygons (River Slabs, Wedges, Trapezoids, Hex Boulders)
+    function createStoneShape(idx, total, chapterIdx, rng) {
+      const progress = idx / Math.max(1, total - 1);
+      // Gradually taper widths slightly from sturdy base stones to delicate crown pebbles
+      const baseW = 46 - progress * 14 + (rng() - 0.5) * 10;
+      const baseH = 16 + (rng() * 11) - progress * 2;
+      const w = Math.max(22, Math.min(54, baseW));
+      const h = Math.max(13, Math.min(26, baseH));
 
-    function makeIrregularStone(shapeType, scale, rng) {
-      let raw = [];
-      if (shapeType === "slab") {
-        // Wide flat stone with slight natural bevels
-        const hw = (42 + rng() * 14) * scale;
-        const hh = (14 + rng() * 5) * scale;
-        const topShift = (rng() - 0.5) * 10 * scale;
-        raw = [
-          { x: -hw, y: hh },
-          { x: hw, y: hh },
-          { x: hw * 0.88 + topShift, y: -hh },
-          { x: -hw * 0.88 + topShift, y: -hh }
-        ];
-      } else if (shapeType === "trapezoid") {
-        const bw = (34 + rng() * 14) * scale;
-        const tw = (18 + rng() * 12) * scale;
-        const hh = (17 + rng() * 6) * scale;
-        const skew = (rng() - 0.5) * 12 * scale;
-        raw = [
-          { x: -bw, y: hh },
-          { x: bw, y: hh },
-          { x: tw + skew, y: -hh },
-          { x: -tw + skew, y: -hh }
-        ];
-      } else if (shapeType === "wedge") {
-        const hw = (30 + rng() * 12) * scale;
-        const hh = (18 + rng() * 7) * scale;
-        const apexX = (rng() - 0.5) * hw * 0.9;
-        raw = [
-          { x: -hw, y: hh },
-          { x: hw, y: hh * (0.7 + rng() * 0.35) },
-          { x: apexX, y: -hh },
-          { x: -hw * 0.65, y: -hh * 0.25 }
-        ];
+      const raw = [];
+      const style = Math.floor(rng() * (chapterIdx === 0 ? 3 : 5));
+
+      if (style === 0) {
+        // Broad smooth river stone (6 vertices, flat top & bottom)
+        const tw = w * (0.68 + rng() * 0.22);
+        const bw = w * (0.76 + rng() * 0.22);
+        raw.push({ x: -tw, y: -h }, { x: tw, y: -h }, { x: w, y: (rng() - 0.5) * h * 0.35 },
+                 { x: bw, y: h }, { x: -bw, y: h }, { x: -w, y: (rng() - 0.5) * h * 0.35 });
+      } else if (style === 1) {
+        // Asymmetric sandstone trapezoid
+        const sk = (rng() - 0.5) * w * 0.36;
+        raw.push({ x: -w * 0.72 + sk, y: -h }, { x: w * 0.72 + sk, y: -h },
+                 { x: w, y: h }, { x: -w, y: h });
+      } else if (style === 2) {
+        // Organic 7-vertex river boulder
+        for (let k = 0; k < 7; k++) {
+          const a = (k * Math.PI * 2) / 7;
+          const rx = w * (0.82 + rng() * 0.22);
+          const ry = h * (0.82 + rng() * 0.22);
+          raw.push({ x: Math.cos(a) * rx, y: Math.sin(a) * ry });
+        }
+      } else if (style === 3) {
+        // Faceted basalt wedge (tapered crown)
+        const peakX = (rng() - 0.5) * w * 0.55;
+        raw.push({ x: peakX - w * 0.32, y: -h * 1.1 }, { x: peakX + w * 0.32, y: -h * 1.1 },
+                 { x: w, y: h * 0.85 }, { x: w * 0.75, y: h }, { x: -w * 0.75, y: h }, { x: -w, y: h * 0.85 });
       } else {
-        // Organic 5 to 7 sided rock
-        const sides = 5 + Math.floor(rng() * 3);
-        const rx = (28 + rng() * 14) * scale;
-        const ry = (18 + rng() * 11) * scale;
-        for (let i = 0; i < sides; i++) {
-          const a = (i * Math.PI * 2) / sides + (rng() - 0.5) * 0.32;
-          const rMod = 0.78 + rng() * 0.32;
-          raw.push({ x: Math.cos(a) * rx * rMod, y: Math.sin(a) * ry * rMod });
+        // Chunky angled mineral pentagon
+        raw.push({ x: -w * 0.6, y: -h }, { x: w * 0.85, y: -h * 0.65 }, { x: w * 0.9, y: h },
+                 { x: -w * 0.88, y: h }, { x: -w, y: -h * 0.15 });
+      }
+
+      const hull = makeConvexHull(raw);
+      // Center vertices around centroid
+      const c = Vertices.centre(hull);
+      const centered = hull.map((p) => ({ x: p.x - c.x, y: p.y - c.y }));
+
+      // Pick mineral material (Glacial Ice introduced in Ch. 4 & 5!)
+      let matKey;
+      const useIce = (chapterIdx >= 3) && idx > 0 && rng() < (chapterIdx === 3 ? 0.34 : 0.4);
+      if (useIce) {
+        matKey = "ice";
+      } else {
+        const normalMats = ["granite", "sandstone", "basalt", "slate"];
+        matKey = normalMats[Math.floor(rng() * normalMats.length)];
+      }
+
+      // Compute flattest edge angle so Hint button can auto-level the stone!
+      let bestEdgeLen = -1;
+      let flatAngle = 0;
+      for (let i = 0; i < centered.length; i++) {
+        const p1 = centered[i], p2 = centered[(i + 1) % centered.length];
+        const len = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+        if (len > bestEdgeLen) {
+          bestEdgeLen = len;
+          flatAngle = -Math.atan2(p2.y - p1.y, p2.x - p1.x);
         }
       }
 
-      const hull = convexHull(raw);
-      const centered = centerPolygon(hull);
+      // Start each stone at a playful non-flat angle in Ch. 2+ so rotating matters
+      const startAngle = chapterIdx === 0
+        ? (Math.floor(rng() * 3) - 1) * (Math.PI / 12)
+        : (Math.floor(rng() * 8) - 4) * (Math.PI / 12);
 
-      // Compute approximate bounding radius
-      let maxR = 20;
-      centered.forEach((p) => {
-        const d = Math.hypot(p.x, p.y);
-        if (d > maxR) maxR = d;
-      });
-      return { verts: centered, radius: maxR };
+      // Decorative speckles in local coordinates
+      const speckles = Array.from({ length: 6 }, () => ({
+        x: (rng() - 0.5) * w * 1.1,
+        y: (rng() - 0.5) * h * 1.1,
+        r: 1 + rng() * 1.8
+      }));
+
+      return {
+        verts: centered,
+        mat: STONE_MATERIALS[matKey],
+        matKey,
+        flatAngle,
+        startAngle,
+        speckles
+      };
     }
 
-    function getFlattestDownAngle(verts) {
-      let bestLen = -1;
-      let bestAngle = 0;
-      for (let i = 0; i < verts.length; i++) {
-        const p1 = verts[i];
-        const p2 = verts[(i + 1) % verts.length];
-        const dx = p2.x - p1.x;
-        const dy = p2.y - p1.y;
-        const len = Math.hypot(dx, dy);
-        if (len > bestLen) {
-          bestLen = len;
-          let ang = -Math.atan2(dy, dx);
-          // Ensure this edge sits on the bottom (rotated midpoint y > 0)
-          const mx = (p1.x + p2.x) * 0.5;
-          const my = (p1.y + p2.y) * 0.5;
-          const rotY = mx * Math.sin(ang) + my * Math.cos(ang);
-          if (rotY < 0) ang += Math.PI;
-          bestAngle = ang;
-        }
-      }
-      return bestAngle;
-    }
+    function buildCairnLevel(levelNum) {
+      const rng = mulberry32(levelNum * 214747 + 62911);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const scene = SCENES[chapIdx];
 
-    function buildLevel(levelNum) {
-      const rng = mulberry32(levelNum * 13397 + 55109);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1); // 0..1
-
-      // 5 to 10 stones scaling smoothly across 500 levels
-      const stoneCount = Math.min(10, 5 + Math.floor(p * 5.6));
-      // Pedestal width shrinks gradually (190px -> 112px)
-      const pedestalW = Math.round(190 - p * 78);
-      // Slight tilt on some Chapter 3-5 levels (max 3.5 degrees)
-      const pedestalTilt = levelNum > 220 && levelNum % 4 === 0
-        ? ((rng() < 0.5 ? -1 : 1) * (0.025 + rng() * 0.035))
-        : 0;
-
-      // Subtle breeze in Chapter 4 & 5
-      let windForce = 0;
-      if (levelNum > 300) {
-        const hasWind = levelNum > 400 || levelNum % 2 === 0;
-        if (hasWind) {
-          const dir = rng() < 0.5 ? -1 : 1;
-          windForce = dir * (0.000018 + (p - 0.6) * 0.000045);
-        }
+      let stoneCount, plinthW, plinthTilt, hasWind, windMax;
+      if (levelNum <= 100) {
+        stoneCount = levelNum <= 40 ? 4 : 5;
+        plinthW = levelNum <= 40 ? 156 : 138;
+        plinthTilt = 0;
+        hasWind = false; windMax = 0;
+      } else if (levelNum <= 200) {
+        stoneCount = levelNum <= 150 ? 5 : 6;
+        plinthW = 122;
+        plinthTilt = 0;
+        hasWind = false; windMax = 0;
+      } else if (levelNum <= 300) {
+        stoneCount = 6;
+        plinthW = 116;
+        plinthTilt = 0;
+        hasWind = true; windMax = 0.00055;
+      } else if (levelNum <= 400) {
+        stoneCount = levelNum <= 350 ? 6 : 7;
+        plinthW = 110;
+        plinthTilt = 0;
+        hasWind = false; windMax = 0;
+      } else {
+        stoneCount = levelNum > 450 ? 8 : 7;
+        plinthW = 102;
+        plinthTilt = (rng() - 0.5) * 0.065; // subtle natural cliff slope!
+        hasWind = true; windMax = 0.00068;
       }
 
       const stones = [];
       for (let i = 0; i < stoneCount; i++) {
-        // First 1-2 stones lean slightly broader for fair foundation building
-        let shapePool;
-        if (i === 0) {
-          shapePool = ["slab", "trapezoid"];
-        } else if (levelNum <= 100) {
-          shapePool = ["slab", "trapezoid", "organic"];
-        } else if (levelNum <= 250) {
-          shapePool = ["slab", "trapezoid", "organic", "wedge"];
-        } else {
-          shapePool = ["trapezoid", "organic", "wedge", "organic", "slab"];
-        }
-
-        const shapeType = shapePool[Math.floor(rng() * shapePool.length)];
-        const sizeScale = Math.max(0.76, 1.05 - i * 0.022 - p * 0.08);
-        const geo = makeIrregularStone(shapeType, sizeScale, rng);
-
-        const matPoolMax = levelNum > 200 ? STONE_MATERIALS.length : 4;
-        const mat = STONE_MATERIALS[Math.floor(rng() * matPoolMax)];
-        const initAngle = ((Math.floor(rng() * 12) - 6) * Math.PI) / 12;
-
-        // Decorative speckle dots stored in local coords
-        const speckles = Array.from({ length: 4 }, () => ({
-          x: (rng() - 0.5) * geo.radius * 0.8,
-          y: (rng() - 0.5) * geo.radius * 0.5,
-          r: 1.2 + rng() * 1.6
-        }));
-
-        stones.push({
-          verts: geo.verts,
-          radius: geo.radius,
-          mat,
-          initAngle,
-          speckles
-        });
+        stones.push(createStoneShape(i, stoneCount, chapIdx, rng));
       }
 
       return {
         levelNum,
-        stoneCount,
-        pedestalW,
-        pedestalTilt,
-        windForce,
+        chapIdx,
+        scene,
+        plinthW,
+        plinthTilt,
+        hasWind,
+        windMax,
         stones
       };
     }
@@ -800,10 +1020,11 @@
     }
 
     // ==============================================
-    // AUDIO ENGINE (PROCEDURAL STONE CLACKS)
+    // ASMR STONE CLACK & ZEN SINGING BOWL WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
+    let lastClackMs = 0;
 
     function initAudio() {
       if (!audioCtx) {
@@ -813,120 +1034,153 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.12) {
+    function sfxStoneClack(impactSpeed, isIce = false) {
+      if (!soundOn) return;
+      const nowMs = performance.now();
+      if (nowMs - lastClackMs < 65 || impactSpeed < 0.7) return;
+      lastClackMs = nowMs;
+      initAudio();
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const vol = Math.min(0.16, 0.03 + impactSpeed * 0.018);
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = isIce ? "sine" : "triangle";
+      const baseF = isIce ? (950 + Math.random() * 250) : (165 + Math.random() * 65);
+      osc.frequency.setValueAtTime(baseF, now);
+      osc.frequency.exponentialRampToValueAtTime(baseF * 0.48, now + 0.075);
+
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + 0.085);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.1);
+    }
+
+    function sfxBowlTick(step) {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const notes = [392.0, 440.0, 493.88, 587.33, 659.25];
+      const f = notes[step % notes.length];
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(f, now);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(0.09, now + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + 0.55);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.6);
+    }
+
+    function sfxSplashFail() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(vol, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      const g = audioCtx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(210, now);
+      osc.frequency.exponentialRampToValueAtTime(95, now + 0.24);
+      g.gain.setValueAtTime(0.1, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + dur + 0.02);
+      osc.stop(now + 0.28);
     }
 
-    function sfxStoneHit(intensity) {
-      if (!soundOn || intensity < 0.6) return;
+    function sfxZenWin() {
+      if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-      const clamped = Math.min(1, intensity / 7);
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(140 + clamped * 90, now);
-      osc.frequency.exponentialRampToValueAtTime(52, now + 0.09);
-      gain.gain.setValueAtTime(0.04 + clamped * 0.16, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + 0.12);
-    }
-
-    function sfxRotate() {
-      playTone(360, 0.04, "sine", 0.06);
-    }
-    function sfxTick() {
-      playTone(620, 0.05, "sine", 0.08);
-    }
-    function sfxWin() {
-      [392.0, 493.88, 587.33, 783.99].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.35, "sine", 0.13), i * 100);
+      [392.0, 523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+        setTimeout(() => {
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(f, now);
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.exponentialRampToValueAtTime(0.11, now + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.85);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.9);
+        }, i * 85);
       });
     }
-    function sfxFail() {
-      playTone(170, 0.24, "sawtooth", 0.14);
-      setTimeout(() => playTone(115, 0.32, "sawtooth", 0.14), 120);
-    }
 
     // ==============================================
-    // MATTER.JS PHYSICS & RENDER STATE
+    // GAME STATE, MATTER.JS WORLD & TOUCH AIMING
     // ==============================================
-    const { Engine, World, Bodies, Body, Events } = Matter;
-
     const canvas = document.getElementById("stackCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const stonesCounter = document.getElementById("stonesCounter");
+    const stonesPill = document.getElementById("stonesPill");
     const windPill = document.getElementById("windPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const holdBanner = document.getElementById("holdBanner");
-    const holdTimeText = document.getElementById("holdTimeText");
-    const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
-    const rotLeftBtn = document.getElementById("rotLeftBtn");
-    const rotRightBtn = document.getElementById("rotRightBtn");
+    const holdLabel = document.getElementById("holdLabel");
+    const holdFill = document.getElementById("holdFill");
+    const holdTime = document.getElementById("holdTime");
+    const rotLBtn = document.getElementById("rotLBtn");
+    const rotRBtn = document.getElementById("rotRBtn");
     const dropBtn = document.getElementById("dropBtn");
+    const statusToast = document.getElementById("statusToast");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
     let solvedSet = new Set();
     let currentLevelNum = 1;
     try {
-      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_stacker_500_solved") || "[]"));
-      const last = parseInt(localStorage.getItem("zinplay_stacker_500_last") || "1", 10);
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_stonestacker_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_stonestacker_500_last") || "1", 10);
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let engine = null;
     let level = null;
+    let engine = null;
     let pedestalBody = null;
-    let stackedBodies = []; // { body, spec }
+    let droppedBodies = []; // [{ body, spec }]
     let nextStoneIdx = 0;
 
-    let aimX = WORLD_W / 2;
-    let aimAngle = 0;
+    let hoverX = WORLD_W / 2;
+    let hoverAngle = 0;
     let dropCooldown = 0;
-    let cameraY = 0;
-    let targetCameraY = 0;
 
-    let gameState = "playing"; // playing | holding | won | lost
-    let holdLeft = HOLD_SECONDS;
-    let lastWholeSec = 5;
-    let finalStoneTouched = false;
-    let finalDropElapsed = 0;
-    let showGuide = false;
-    let isPointerDown = false;
+    let holdElapsed = 0;
+    let lastBowlSec = -1;
+    let towerToppled = false;
+    let levelWon = false;
+
+    let showBalanceGuide = false;
+    let guideTimer = 0;
+    let currentWindForce = 0;
+
+    let isPointerAiming = false;
     let toastTimer = null;
-    let dustPuffs = [];
-    const bgStars = Array.from({ length: 34 }, () => ({
+    let windMotes = Array.from({ length: 18 }, () => ({
       x: Math.random() * WORLD_W,
-      y: Math.random() * 260,
-      r: 0.7 + Math.random() * 1.2
+      y: 40 + Math.random() * 310,
+      len: 14 + Math.random() * 22
     }));
 
-    function showToast(msg, ms = 2400) {
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
@@ -936,205 +1190,151 @@
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Level ${currentLevelNum} / ${TOTAL_LEVELS}`;
-      stonesCounter.textContent = `Stones: ${nextStoneIdx} / ${level.stoneCount}`;
-      solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Level ${currentLevelNum} / 500 ▾`;
+      levelTitle.textContent = `Cairn #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      stonesPill.textContent = `Stones: ${nextStoneIdx} / ${level.stones.length}`;
+      solvedCounter.textContent = `Balanced: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Cairn ${currentLevelNum} / 500 ▾`;
 
-      if (Math.abs(level.windForce) > 0) {
-        windPill.style.display = "inline-block";
-        windPill.textContent = level.windForce > 0 ? "🍃 Wind →" : "← Wind 🍃";
+      windPill.style.display = level.hasWind ? "inline-flex" : "none";
+
+      const allDropped = nextStoneIdx >= level.stones.length;
+      rotLBtn.disabled = levelWon || towerToppled || allDropped;
+      rotRBtn.disabled = levelWon || towerToppled || allDropped;
+
+      if (towerToppled) {
+        dropBtn.disabled = false;
+        dropBtn.className = "dock-btn drop-main retry-mode";
+        dropBtn.textContent = "↺ TOWER TOPPLED — RETRY";
+      } else if (levelWon) {
+        dropBtn.disabled = true;
+        dropBtn.className = "dock-btn drop-main";
+        dropBtn.textContent = "✓ CAIRN BALANCED";
+      } else if (allDropped) {
+        dropBtn.disabled = true;
+        dropBtn.className = "dock-btn drop-main";
+        dropBtn.textContent = `⏳ HOLDING BALANCE (${Math.max(0, HOLD_TARGET - holdElapsed).toFixed(1)}s)`;
       } else {
-        windPill.style.display = "none";
+        dropBtn.disabled = dropCooldown > 0;
+        dropBtn.className = "dock-btn drop-main";
+        const curSpec = level.stones[nextStoneIdx];
+        dropBtn.textContent = curSpec.mat.isIce ? "🧊 DROP ICE STONE" : "🪨 DROP STONE";
       }
 
-      const canAct = gameState === "playing" && nextStoneIdx < level.stoneCount && dropCooldown <= 0;
-      rotLeftBtn.disabled = !canAct;
-      rotRightBtn.disabled = !canAct;
-      dropBtn.disabled = !canAct;
-    }
-
-    function getHighestY() {
-      let minY = PEDESTAL_Y - 14;
-      for (const item of stackedBodies) {
-        if (item.body.bounds.min.y < minY) {
-          minY = item.body.bounds.min.y;
-        }
+      if (towerToppled) {
+        holdLabel.textContent = "💥 Stone Fell Off!";
+        holdFill.style.width = "0%";
+        holdTime.textContent = "0.0 / 5s";
+      } else if (levelWon) {
+        holdLabel.textContent = "✨ Balanced 5.0s!";
+        holdFill.style.width = "100%";
+        holdTime.textContent = "5.0 / 5s";
+      } else if (allDropped) {
+        holdLabel.textContent = "⏳ Hold Steady...";
+        holdFill.style.width = `${Math.min(100, (holdElapsed / HOLD_TARGET) * 100).toFixed(1)}%`;
+        holdTime.textContent = `${holdElapsed.toFixed(1)} / 5s`;
+      } else {
+        holdLabel.textContent = `🪨 Stone ${nextStoneIdx + 1} of ${level.stones.length}`;
+        holdFill.style.width = "0%";
+        holdTime.textContent = "0.0 / 5s";
       }
-      return minY;
     }
 
-    function getDropWorldY() {
-      const highest = getHighestY();
-      const curSpec = level.stones[nextStoneIdx];
-      const r = curSpec ? curSpec.radius : 30;
-      return Math.min(highest - r - 58, PEDESTAL_Y - 140);
-    }
-
-    function initLevel(num) {
-      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      level = buildLevel(currentLevelNum);
-
-      if (engine) {
-        World.clear(engine.world, false);
-        Engine.clear(engine);
-      }
+    function initPhysicsWorld() {
       engine = Engine.create({
-        gravity: { x: 0, y: 1.15 },
+        gravity: { x: 0, y: 1.05 },
         positionIterations: 10,
         velocityIterations: 8
       });
 
-      // Pedestal
-      pedestalBody = Bodies.rectangle(WORLD_W / 2, PEDESTAL_Y, level.pedestalW, 24, {
+      pedestalBody = Bodies.rectangle(WORLD_W / 2, PEDESTAL_Y + 18, level.plinthW, 36, {
         isStatic: true,
-        angle: level.pedestalTilt,
-        friction: 0.95,
-        frictionStatic: 1.4,
+        angle: level.plinthTilt,
+        friction: 0.92,
         restitution: 0.02,
         label: "pedestal"
       });
-      World.add(engine.world, pedestalBody);
+      World.add(engine.world, [pedestalBody]);
 
-      // Collision audio & final stone landing detection
       Events.on(engine, "collisionStart", (ev) => {
         for (const pair of ev.pairs) {
-          const speed = Math.hypot(
-            pair.bodyA.velocity.x - pair.bodyB.velocity.x,
-            pair.bodyA.velocity.y - pair.bodyB.velocity.y
-          );
-          if (speed > 0.8) {
-            sfxStoneHit(speed);
-            if (pair.collision.supports && pair.collision.supports[0]) {
-              const pt = pair.collision.supports[0];
-              for (let k = 0; k < 4; k++) {
-                dustPuffs.push({
-                  x: pt.x + (Math.random() - 0.5) * 10,
-                  y: pt.y,
-                  vx: (Math.random() - 0.5) * 1.4,
-                  vy: -0.4 - Math.random() * 0.9,
-                  alpha: 0.75,
-                  r: 2 + Math.random() * 2.5
-                });
-              }
-            }
-          }
-          if (gameState === "holding" && !finalStoneTouched) {
-            const lastItem = stackedBodies[stackedBodies.length - 1];
-            if (lastItem && (pair.bodyA === lastItem.body || pair.bodyB === lastItem.body)) {
-              finalStoneTouched = true;
-            }
-          }
+          const vA = pair.bodyA.velocity, vB = pair.bodyB.velocity;
+          const relSpd = Math.hypot(vA.x - vB.x, vA.y - vB.y);
+          const isIce = pair.bodyA.isIceStone || pair.bodyB.isIceStone;
+          sfxStoneClack(relSpd, isIce);
         }
       });
+    }
 
-      stackedBodies = [];
+    function loadLevel(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      level = buildCairnLevel(currentLevelNum);
+
+      droppedBodies = [];
       nextStoneIdx = 0;
-      aimX = WORLD_W / 2;
-      aimAngle = level.stones[0].initAngle;
+      hoverX = WORLD_W / 2;
+      hoverAngle = level.stones[0].startAngle;
       dropCooldown = 0;
-      cameraY = 0;
-      targetCameraY = 0;
-      gameState = "playing";
-      holdLeft = HOLD_SECONDS;
-      lastWholeSec = 5;
-      finalStoneTouched = false;
-      finalDropElapsed = 0;
-      showGuide = false;
-      dustPuffs = [];
+      holdElapsed = 0;
+      lastBowlSec = -1;
+      towerToppled = false;
+      levelWon = false;
+      showBalanceGuide = false;
+      guideTimer = 0;
+      currentWindForce = 0;
 
-      holdBanner.classList.remove("show");
-      stageOverlay.classList.remove("show");
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
+      initPhysicsWorld();
+
       try {
-        localStorage.setItem("zinplay_stacker_500_last", String(currentLevelNum));
+        localStorage.setItem("zinplay_stonestacker_500_last", String(currentLevelNum));
       } catch (e) {}
 
       updateHUD();
+    }
+
+    // Dynamic Hover Height Automatically Rises Safely Above Tall Towers!
+    function getHoverY() {
+      let topY = PEDESTAL_Y;
+      for (const item of droppedBodies) {
+        if (item.body.bounds.min.y < topY) topY = item.body.bounds.min.y;
+      }
+      return Math.max(54, Math.min(118, topY - 78));
     }
 
     function dropCurrentStone() {
-      if (gameState !== "playing" || nextStoneIdx >= level.stoneCount || dropCooldown > 0) return;
+      if (towerToppled) {
+        loadLevel(currentLevelNum);
+        return;
+      }
+      if (levelWon || dropCooldown > 0 || nextStoneIdx >= level.stones.length) return;
       initAudio();
 
       const spec = level.stones[nextStoneIdx];
-      const dropY = getDropWorldY();
-
-      let body = Bodies.fromVertices(aimX, dropY, [spec.verts], {
-        friction: 0.88,
-        frictionStatic: 1.35,
+      const spawnY = getHoverY();
+      const body = Bodies.fromVertices(hoverX, spawnY, [spec.verts], {
+        friction: spec.mat.fric,
+        frictionStatic: spec.mat.isIce ? 0.16 : 0.95,
         frictionAir: 0.012,
-        restitution: 0.04,
-        density: spec.mat.density,
-        label: "stone"
+        restitution: spec.mat.rest,
+        density: spec.mat.density
       });
+      body.isIceStone = !!spec.mat.isIce;
+      Body.setAngle(body, hoverAngle);
 
-      if (!body) {
-        body = Bodies.polygon(aimX, dropY, 6, spec.radius * 0.8, {
-          friction: 0.88,
-          frictionStatic: 1.35,
-          restitution: 0.04,
-          density: spec.mat.density,
-          label: "stone"
-        });
-      }
-
-      Body.setAngle(body, aimAngle);
       World.add(engine.world, body);
-      stackedBodies.push({ body, spec });
+      droppedBodies.push({ body, spec });
 
       nextStoneIdx++;
-      dropCooldown = 0.52;
-
-      if (nextStoneIdx < level.stoneCount) {
-        aimAngle = level.stones[nextStoneIdx].initAngle;
-      } else {
-        // All stones dropped -> enter 5-second balance phase
-        gameState = "holding";
-        holdLeft = HOLD_SECONDS;
-        lastWholeSec = 5;
-        finalStoneTouched = false;
-        finalDropElapsed = 0;
-        holdTimeText.textContent = "5.0s";
-        holdBanner.classList.add("show");
+      dropCooldown = 0.55;
+      if (nextStoneIdx < level.stones.length) {
+        hoverAngle = level.stones[nextStoneIdx].startAngle;
       }
       updateHUD();
     }
 
-    function triggerFail(reason) {
-      if (gameState === "won" || gameState === "lost") return;
-      gameState = "lost";
-      holdBanner.classList.remove("show");
-      sfxFail();
-      ovIcon.textContent = "💥";
-      ovHeading.textContent = "Tower Collapsed!";
-      ovText.textContent = reason;
-      ovActionBtn.textContent = "↺ Try Again";
-      stageOverlay.classList.add("show");
-      updateHUD();
-    }
-
-    function triggerWin() {
-      if (gameState === "won" || gameState === "lost") return;
-      gameState = "won";
-      holdBanner.classList.remove("show");
-      solvedSet.add(currentLevelNum);
-      try {
-        localStorage.setItem("zinplay_stacker_500_solved", JSON.stringify([...solvedSet]));
-      } catch (e) {}
-      sfxWin();
-
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      ovIcon.textContent = "🪨";
-      ovHeading.textContent = isLast ? "All 500 Cairns Mastered!" : `Level ${currentLevelNum} Balanced!`;
-      ovText.textContent = `All ${level.stoneCount} stones held steady for 5 full seconds.`;
-      ovActionBtn.textContent = isLast ? "Replay Level 1" : `Play Level ${currentLevelNum + 1} →`;
-      stageOverlay.classList.add("show");
-      updateHUD();
-    }
-
-    // Viewport Transform Helpers
+    // Viewport & Smooth Touch / Mouse Horizontal Aiming
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1151,94 +1351,79 @@
       return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    function updateAimFromClientX(clientX) {
+    function setAimFromClientX(clientX) {
+      if (levelWon || towerToppled || nextStoneIdx >= level.stones.length) return;
       const rect = canvas.getBoundingClientRect();
       const vp = getViewport();
       const wx = (clientX - rect.left - vp.offsetX) / vp.scale;
-      aimX = Math.max(46, Math.min(WORLD_W - 46, wx));
+      hoverX = Math.max(58, Math.min(WORLD_W - 58, wx));
     }
 
-    // Pointer Aiming
     canvas.addEventListener("pointerdown", (e) => {
       initAudio();
-      if (gameState !== "playing") return;
-      isPointerDown = true;
-      canvas.setPointerCapture(e.pointerId);
-      updateAimFromClientX(e.clientX);
+      isPointerAiming = true;
+      setAimFromClientX(e.clientX);
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
     canvas.addEventListener("pointermove", (e) => {
-      if (!isPointerDown || gameState !== "playing") return;
-      updateAimFromClientX(e.clientX);
+      if (isPointerAiming || e.pointerType === "mouse") {
+        setAimFromClientX(e.clientX);
+      }
     });
-    const endPointer = () => { isPointerDown = false; };
-    canvas.addEventListener("pointerup", endPointer);
-    canvas.addEventListener("pointercancel", endPointer);
+    const endAim = () => { isPointerAiming = false; };
+    canvas.addEventListener("pointerup", endAim);
+    canvas.addEventListener("pointercancel", endAim);
 
-    // Dock Buttons & Keyboard
-    rotLeftBtn.addEventListener("click", () => {
-      if (gameState !== "playing") return;
-      initAudio();
-      aimAngle -= Math.PI / 12;
-      sfxRotate();
-    });
-    rotRightBtn.addEventListener("click", () => {
-      if (gameState !== "playing") return;
-      initAudio();
-      aimAngle += Math.PI / 12;
-      sfxRotate();
-    });
+    rotLBtn.addEventListener("click", () => { initAudio(); hoverAngle -= Math.PI / 12; });
+    rotRBtn.addEventListener("click", () => { initAudio(); hoverAngle += Math.PI / 12; });
     dropBtn.addEventListener("click", dropCurrentStone);
 
     window.addEventListener("keydown", (e) => {
-      if (pickerModal.classList.contains("open")) return;
-      if (gameState !== "playing") return;
+      if (pickerModal.classList.contains("open") || levelWon) return;
       if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
-        aimX = Math.max(46, aimX - 14);
+        hoverX = Math.max(58, hoverX - 10);
       } else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
-        aimX = Math.min(WORLD_W - 46, aimX + 14);
+        hoverX = Math.min(WORLD_W - 58, hoverX + 10);
       } else if (e.key === "q" || e.key === "Q") {
-        aimAngle -= Math.PI / 12; sfxRotate();
+        hoverAngle -= Math.PI / 12;
       } else if (e.key === "e" || e.key === "E") {
-        aimAngle += Math.PI / 12; sfxRotate();
+        hoverAngle += Math.PI / 12;
       } else if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
         dropCurrentStone();
       }
     });
 
-    // Balance Guide Hint Button
+    // Smart Center-of-Gravity Balance Guide Hint
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (gameState !== "playing" && gameState !== "holding") return;
-      showGuide = true;
-      if (gameState === "playing" && nextStoneIdx < level.stoneCount) {
-        aimAngle = getFlattestDownAngle(level.stones[nextStoneIdx].verts);
-        sfxRotate();
-        showToast("Flattest edge leveled + golden Center of Gravity enabled!", 2800);
+      if (levelWon || towerToppled) return;
+      initAudio();
+      showBalanceGuide = true;
+      guideTimer = 8.0;
+      if (nextStoneIdx < level.stones.length) {
+        hoverAngle = level.stones[nextStoneIdx].flatAngle;
+        showToast("💡 Stone leveled onto its flattest edge & Center-of-Mass guide enabled!", 2800);
       } else {
-        showToast("Golden Center of Gravity guide enabled!", 2200);
+        showToast("💡 Center-of-Mass plumb crosshair active!", 2200);
       }
     });
 
-    document.getElementById("resetBtn").addEventListener("click", () => initLevel(currentLevelNum));
+    document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 ASMR ON" : "🔇 OFF";
     });
-    ovActionBtn.addEventListener("click", () => {
-      if (gameState === "won") {
-        initLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      } else {
-        initLevel(currentLevelNum);
-      }
+    nextLevelBtn.addEventListener("click", () => {
+      loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) initLevel(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) initLevel(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
     });
 
-    // Level Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1269,7 +1454,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          initLevel(n);
+          loadLevel(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1291,76 +1476,143 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        initLevel(val);
+        loadLevel(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // FIXED-TIMESTEP PHYSICS & CANVAS RENDER LOOP
+    // SERENE ZEN MOUNTAIN & MINERAL STONE RENDERER
     // ==============================================
-    let lastTime = performance.now();
-    let accumulator = 0;
-    const FIXED_STEP = 1000 / 60;
-
-    function stepPhysics(now) {
-      // Gentle wind breeze in higher chapters
-      if (Math.abs(level.windForce) > 0 && (gameState === "playing" || gameState === "holding")) {
-        const gust = 0.7 + 0.3 * Math.sin(now * 0.0022);
-        for (const item of stackedBodies) {
-          Body.applyForce(item.body, item.body.position, {
-            x: level.windForce * gust * item.body.mass,
-            y: 0
-          });
-        }
-      }
-
-      Engine.update(engine, FIXED_STEP);
-
-      // Check if any stone tumbled off the pedestal
-      if (gameState === "playing" || gameState === "holding") {
-        for (const item of stackedBodies) {
-          if (item.body.position.y > ABYSS_Y || item.body.position.x < -80 || item.body.position.x > WORLD_W + 80) {
-            triggerFail("A stone slipped off the pedestal! Try leveling flat edges at the base.");
-            return;
-          }
-        }
-      }
-    }
-
-    function drawStonePolygon(verts, mat, speckles, alpha = 1, dashed = false) {
+    function drawStonePolygon(verts, mat, speckles, pos, angle, isGhost = false) {
       ctx.save();
-      ctx.globalAlpha = alpha;
-      ctx.beginPath();
-      ctx.moveTo(verts[0].x, verts[0].y);
-      for (let i = 1; i < verts.length; i++) {
-        ctx.lineTo(verts[i].x, verts[i].y);
+      if (isGhost) {
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(angle);
+        ctx.globalAlpha = 0.88;
       }
+
+      ctx.beginPath();
+      verts.forEach((v, i) => {
+        if (i === 0) ctx.moveTo(v.x, v.y);
+        else ctx.lineTo(v.x, v.y);
+      });
       ctx.closePath();
 
       ctx.fillStyle = mat.fill;
       ctx.fill();
 
-      ctx.lineWidth = dashed ? 2 : 2.2;
-      ctx.strokeStyle = dashed ? "#38bdf8" : mat.edge;
-      if (dashed) ctx.setLineDash([5, 4]);
+      ctx.lineWidth = isGhost ? 2.2 : 1.8;
+      ctx.strokeStyle = isGhost ? "#fef08a" : mat.hi;
       ctx.stroke();
-      ctx.setLineDash([]);
 
-      // Top highlight edge
-      if (!dashed && verts.length >= 3) {
-        ctx.strokeStyle = mat.hi;
-        ctx.lineWidth = 1.6;
-        ctx.globalAlpha = alpha * 0.55;
-        ctx.beginPath();
-        ctx.moveTo(verts[0].x, verts[0].y);
-        ctx.lineTo(verts[1].x, verts[1].y);
-        ctx.stroke();
+      // Inner geological grain / crystalline ice sheen
+      ctx.save();
+      ctx.clip();
+      if (mat.isIce) {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+        if (isGhost) {
+          ctx.fillRect(-40, -25, 32, 50);
+        } else {
+          ctx.fillRect(pos.x - 40, pos.y - 25, 28, 50);
+        }
+      } else if (speckles) {
+        ctx.fillStyle = mat.dark;
+        ctx.globalAlpha = isGhost ? 0.3 : 0.38;
+        for (const sp of speckles) {
+          const sx = isGhost ? sp.x : (pos.x + sp.x * Math.cos(angle) - sp.y * Math.sin(angle));
+          const sy = isGhost ? sp.y : (pos.y + sp.x * Math.sin(angle) + sp.y * Math.cos(angle));
+          ctx.beginPath();
+          ctx.arc(sx, sy, sp.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
+      ctx.restore();
+
       ctx.restore();
     }
 
-    function drawScene(now) {
+    let lastTime = performance.now();
+
+    function frame(now) {
+      const dt = Math.min(0.033, (now - lastTime) / 1000);
+      lastTime = now;
+
+      if (dropCooldown > 0) {
+        dropCooldown = Math.max(0, dropCooldown - dt);
+        if (dropCooldown === 0) updateHUD();
+      }
+      if (guideTimer > 0) {
+        guideTimer = Math.max(0, guideTimer - dt);
+        if (guideTimer === 0) showBalanceGuide = false;
+      }
+
+      // Apply gentle periodic Alpine Wind Gusts in Chapters 3 & 5!
+      if (level.hasWind && !levelWon && !towerToppled) {
+        const wave = Math.sin(now * 0.0014);
+        currentWindForce = Math.abs(wave) > 0.35 ? wave * level.windMax : 0;
+        const windLabel = Math.abs(currentWindForce) < 0.0001
+          ? "💨 Calm"
+          : (currentWindForce > 0 ? "💨 Wind →" : "💨 ← Wind");
+        windPill.textContent = windLabel;
+
+        if (currentWindForce !== 0) {
+          for (const item of droppedBodies) {
+            Body.applyForce(item.body, item.body.position, { x: currentWindForce * item.body.mass, y: 0 });
+          }
+        }
+      }
+
+      // Step Matter.js Physics Engine
+      if (engine && !levelWon) {
+        Engine.update(engine, dt * 1000);
+      }
+
+      // Check if any stone tumbled off the cliff into the lake!
+      if (!towerToppled && !levelWon) {
+        for (const item of droppedBodies) {
+          if (item.body.position.y > WORLD_H - 18 || item.body.position.x < -30 || item.body.position.x > WORLD_W + 30) {
+            towerToppled = true;
+            sfxSplashFail();
+            showToast("💥 A stone slipped into the lake! Tap Retry to rebuild.", 3000);
+            updateHUD();
+            break;
+          }
+        }
+      }
+
+      // Advance 5.0-Second Stability Countdown Once All Stones Are Dropped!
+      if (!towerToppled && !levelWon && nextStoneIdx >= level.stones.length) {
+        // Check stones aren't still falling rapidly from the top
+        const maxSpd = droppedBodies.reduce((m, it) => Math.max(m, Math.hypot(it.body.velocity.x, it.body.velocity.y)), 0);
+        if (maxSpd < 4.5) {
+          holdElapsed += dt;
+          const wholeSec = Math.floor(holdElapsed);
+          if (wholeSec > lastBowlSec && wholeSec < 5) {
+            lastBowlSec = wholeSec;
+            sfxBowlTick(wholeSec);
+          }
+          updateHUD();
+
+          if (holdElapsed >= HOLD_TARGET) {
+            levelWon = true;
+            solvedSet.add(currentLevelNum);
+            try {
+              localStorage.setItem("zinplay_stonestacker_500_solved", JSON.stringify([...solvedSet]));
+            } catch (e) {}
+            sfxZenWin();
+            updateHUD();
+
+            const isLast = currentLevelNum === TOTAL_LEVELS;
+            winHeading.textContent = isLast ? "All 500 Zen Cairns Balanced!" : `Cairn #${currentLevelNum} Balanced!`;
+            winText.textContent = `Stacked all ${level.stones.length} irregular stones in tranquil 5-second equilibrium.`;
+            nextLevelBtn.textContent = isLast ? "Replay Cairn #1" : `Next Cairn (#${currentLevelNum + 1}) →`;
+            setTimeout(() => winOverlay.classList.add("show"), 520);
+          }
+        }
+      }
+
+      // === RENDER SCENE ===
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
@@ -1368,236 +1620,162 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // Parallax Sky Stars & Distant Zen Mountains
-      bgStars.forEach((s, i) => {
-        const a = 0.25 + 0.35 * Math.sin(now * 0.002 + i);
-        ctx.fillStyle = `rgba(226, 232, 240, ${a})`;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y - cameraY * 0.15, s.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
+      const sc = level.scene;
 
-      // Soft Moon
-      ctx.fillStyle = "rgba(254, 249, 195, 0.14)";
+      // 1. Twilight Sky Gradient & Sun/Moon Disc
+      const skyG = ctx.createLinearGradient(0, 0, 0, WORLD_H);
+      skyG.addColorStop(0, sc.sky1);
+      skyG.addColorStop(0.75, sc.sky2);
+      skyG.addColorStop(1, sc.water);
+      ctx.fillStyle = skyG;
+      ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+
+      ctx.fillStyle = "rgba(254, 243, 199, 0.14)";
       ctx.beginPath();
-      ctx.arc(340, 82 - cameraY * 0.1, 34, 0, Math.PI * 2);
+      ctx.arc(WORLD_W * 0.72, 108, 46, 0, Math.PI * 2);
       ctx.fill();
 
-      // Distant mountains
-      ctx.fillStyle = "rgba(15, 23, 42, 0.45)";
+      // Distant Layered Zen Mountain Silhouettes
+      ctx.fillStyle = sc.mtn;
       ctx.beginPath();
-      ctx.moveTo(-200, WORLD_H + 100);
-      ctx.lineTo(60, 355 - cameraY * 0.3);
-      ctx.lineTo(185, 425 - cameraY * 0.3);
-      ctx.lineTo(310, 330 - cameraY * 0.3);
-      ctx.lineTo(WORLD_W + 200, WORLD_H + 100);
+      ctx.moveTo(0, 396);
+      ctx.lineTo(75, 270);
+      ctx.lineTo(155, 330);
+      ctx.lineTo(260, 232);
+      ctx.lineTo(355, 316);
+      ctx.lineTo(WORLD_W, 265);
+      ctx.lineTo(WORLD_W, 396);
       ctx.closePath();
       ctx.fill();
 
-      // Animated Wind Streaks (when wind active)
-      if (Math.abs(level.windForce) > 0) {
-        const dir = level.windForce > 0 ? 1 : -1;
-        ctx.strokeStyle = "rgba(186, 230, 253, 0.22)";
-        ctx.lineWidth = 1.5;
-        for (let i = 0; i < 6; i++) {
-          const t = ((now * 0.09 * dir + i * 85) % (WORLD_W + 120) + (WORLD_W + 120)) % (WORLD_W + 120) - 60;
-          const wy = 90 + i * 62;
+      // Calm Lake Water Surface at Bottom
+      ctx.fillStyle = sc.water;
+      ctx.fillRect(0, 394, WORLD_W, WORLD_H - 394);
+      ctx.strokeStyle = "rgba(186, 230, 253, 0.18)";
+      ctx.lineWidth = 1.4;
+      for (let wy = 404; wy < WORLD_H; wy += 11) {
+        const shift = Math.sin(now * 0.002 + wy) * 8;
+        ctx.beginPath();
+        ctx.moveTo(60 + shift, wy);
+        ctx.lineTo(WORLD_W - 60 + shift, wy);
+        ctx.stroke();
+      }
+
+      // Wind Gust Ribbons (Chapters 3 & 5)
+      if (level.hasWind && Math.abs(currentWindForce) > 0.0001) {
+        const dir = Math.sign(currentWindForce);
+        ctx.strokeStyle = "rgba(224, 242, 254, 0.28)";
+        ctx.lineWidth = 1.6;
+        for (const wm of windMotes) {
+          wm.x += dir * dt * 210;
+          if (wm.x > WORLD_W + 30) wm.x = -30;
+          if (wm.x < -30) wm.x = WORLD_W + 30;
           ctx.beginPath();
-          ctx.moveTo(t, wy);
-          ctx.lineTo(t + dir * 38, wy);
+          ctx.moveTo(wm.x, wm.y);
+          ctx.lineTo(wm.x + wm.len * dir, wm.y);
           ctx.stroke();
         }
       }
 
-      // === WORLD CAMERA TRANSFORM ===
-      ctx.save();
-      ctx.translate(0, -cameraY);
-
-      // Pedestal Base Pillar & Top Slab
+      // 2. Sculpted Stone Cliff Plinth Pedestal
       ctx.save();
       ctx.translate(pedestalBody.position.x, pedestalBody.position.y);
       ctx.rotate(pedestalBody.angle);
-      // Pillar going down
-      ctx.fillStyle = "#1e293b";
-      ctx.fillRect(-level.pedestalW * 0.36, 10, level.pedestalW * 0.72, 180);
-      // Main pedestal stone cap
-      ctx.fillStyle = "#475569";
+      ctx.fillStyle = sc.plinth;
       ctx.strokeStyle = "#94a3b8";
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.roundRect(-level.pedestalW / 2, -12, level.pedestalW, 24, 6);
+      ctx.roundRect(-level.plinthW / 2, -18, level.plinthW, 48, 8);
       ctx.fill();
       ctx.stroke();
-      // Pedestal center notch
-      ctx.fillStyle = "#38bdf8";
-      ctx.fillRect(-2, -12, 4, 6);
+
+      // Moss or Frost Cap along top edge of plinth
+      ctx.fillStyle = sc.moss;
+      ctx.beginPath();
+      ctx.roundRect(-level.plinthW / 2 + 2, -18, level.plinthW - 4, 6, 3);
+      ctx.fill();
       ctx.restore();
 
-      // Stacked Physics Stones
-      for (const item of stackedBodies) {
-        drawStonePolygon(item.body.vertices, item.spec.mat, item.spec.speckles, 1, false);
-        // Subtle texture speckles rotated with body
-        ctx.save();
-        ctx.translate(item.body.position.x, item.body.position.y);
-        ctx.rotate(item.body.angle);
-        ctx.fillStyle = "rgba(15, 23, 42, 0.22)";
-        for (const sp of item.spec.speckles) {
-          ctx.beginPath();
-          ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
+      // 3. Stacked Matter.js Stone Bodies
+      for (const item of droppedBodies) {
+        drawStonePolygon(item.body.vertices, item.spec.mat, item.spec.speckles, item.body.position, item.body.angle, false);
       }
 
-      // Dust Puffs
-      dustPuffs = dustPuffs.filter((d) => d.alpha > 0.04);
-      for (const d of dustPuffs) {
-        d.x += d.vx;
-        d.y += d.vy;
-        d.alpha *= 0.92;
-        ctx.fillStyle = `rgba(226, 232, 240, ${d.alpha})`;
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Optional Golden Center-of-Gravity Guide (Hint)
-      if (showGuide && stackedBodies.length > 0) {
-        let totalMass = 0, comX = 0, comY = 0;
-        for (const item of stackedBodies) {
-          totalMass += item.body.mass;
-          comX += item.body.position.x * item.body.mass;
-          comY += item.body.position.y * item.body.mass;
+      // 4. Optional Live Center-of-Mass Plumb Guide (When 💡 Balance Guide Active!)
+      if (showBalanceGuide && droppedBodies.length > 0 && !levelWon) {
+        let totalM = 0, comX = 0, comY = 0;
+        for (const it of droppedBodies) {
+          totalM += it.body.mass;
+          comX += it.body.position.x * it.body.mass;
+          comY += it.body.position.y * it.body.mass;
         }
-        comX /= totalMass;
-        comY /= totalMass;
+        comX /= totalM; comY /= totalM;
 
         ctx.save();
         ctx.strokeStyle = "rgba(250, 204, 21, 0.78)";
-        ctx.lineWidth = 2;
-        ctx.setLineDash([6, 5]);
+        ctx.lineWidth = 1.8;
+        ctx.setLineDash([4, 4]);
         ctx.beginPath();
-        ctx.moveTo(comX, cameraY + 10);
+        ctx.moveTo(comX, comY);
         ctx.lineTo(comX, PEDESTAL_Y);
         ctx.stroke();
         ctx.setLineDash([]);
 
         ctx.fillStyle = "#facc15";
+        ctx.shadowColor = "#facc15";
+        ctx.shadowBlur = 10;
         ctx.beginPath();
         ctx.arc(comX, comY, 5, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }
 
-      // Hovering Preview Stone & Drop Guide
-      if (gameState === "playing" && nextStoneIdx < level.stoneCount) {
+      // 5. Hovering Next Stone Preview & Vertical Drop Plumb-Line
+      if (!levelWon && !towerToppled && nextStoneIdx < level.stones.length) {
         const spec = level.stones[nextStoneIdx];
-        const dropY = getDropWorldY();
-        const cosA = Math.cos(aimAngle);
-        const sinA = Math.sin(aimAngle);
-        const worldVerts = spec.verts.map((v) => ({
-          x: aimX + v.x * cosA - v.y * sinA,
-          y: dropY + v.x * sinA + v.y * cosA
-        }));
+        const hy = getHoverY();
 
-        // Vertical aiming plumb line
         ctx.save();
-        ctx.strokeStyle = "rgba(56, 189, 248, 0.35)";
+        ctx.strokeStyle = "rgba(254, 240, 138, 0.34)";
         ctx.lineWidth = 1.5;
-        ctx.setLineDash([5, 6]);
+        ctx.setLineDash([5, 5]);
         ctx.beginPath();
-        ctx.moveTo(aimX, dropY);
-        ctx.lineTo(aimX, PEDESTAL_Y - 12);
+        ctx.moveTo(hoverX, hy + 18);
+        ctx.lineTo(hoverX, PEDESTAL_Y);
         ctx.stroke();
-        ctx.setLineDash([]);
         ctx.restore();
 
-        drawStonePolygon(worldVerts, spec.mat, spec.speckles, dropCooldown > 0 ? 0.35 : 0.88, true);
-
-        // Center dot on hovering stone
-        ctx.fillStyle = "#38bdf8";
-        ctx.beginPath();
-        ctx.arc(aimX, dropY, 3, 0, Math.PI * 2);
-        ctx.fill();
+        drawStonePolygon(spec.verts, spec.mat, spec.speckles, { x: hoverX, y: hy }, hoverAngle, true);
       }
 
-      ctx.restore(); // End world camera
-
-      // Mini "NEXT" Stone Preview Box (Top-Right)
-      if (gameState === "playing" && nextStoneIdx + 1 < level.stoneCount) {
-        const nxt = level.stones[nextStoneIdx + 1];
+      // 6. Floating Equilibrium Ring Aura During 5-Second Hold!
+      if (!towerToppled && nextStoneIdx >= level.stones.length && holdElapsed > 0) {
+        const pct = Math.min(1, holdElapsed / HOLD_TARGET);
         ctx.save();
-        ctx.fillStyle = "rgba(15, 23, 42, 0.72)";
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.3)";
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = levelWon ? "#4ade80" : "#facc15";
+        ctx.shadowColor = levelWon ? "#22c55e" : "#facc15";
+        ctx.shadowBlur = 12;
+        ctx.lineWidth = 4;
         ctx.beginPath();
-        ctx.roundRect(WORLD_W - 76, 12, 64, 58, 10);
-        ctx.fill();
+        ctx.arc(WORLD_W - 42, 42, 22, -Math.PI / 2, -Math.PI / 2 + pct * Math.PI * 2);
         ctx.stroke();
+        ctx.shadowBlur = 0;
 
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = "800 9px sans-serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 11px monospace";
         ctx.textAlign = "center";
-        ctx.fillText("NEXT", WORLD_W - 44, 24);
-
-        const miniScale = 0.42;
-        const miniVerts = nxt.verts.map((v) => ({
-          x: WORLD_W - 44 + v.x * miniScale,
-          y: 46 + v.y * miniScale
-        }));
-        drawStonePolygon(miniVerts, nxt.mat, [], 0.9, false);
+        ctx.textBaseline = "middle";
+        ctx.fillText(levelWon ? "ZEN" : `${Math.max(0, HOLD_TARGET - holdElapsed).toFixed(1)}s`, WORLD_W - 42, 42);
         ctx.restore();
       }
 
-      ctx.restore(); // End viewport scale
-    }
-
-    function frame(now) {
-      const rawDt = Math.min(50, now - lastTime);
-      lastTime = now;
-      const dtSec = rawDt / 1000;
-
-      if (dropCooldown > 0) {
-        dropCooldown = Math.max(0, dropCooldown - dtSec);
-        if (dropCooldown === 0) updateHUD();
-      }
-
-      // Smooth upward camera tracking for tall towers
-      const desiredTop = getDropWorldY() - 62;
-      targetCameraY = Math.min(0, desiredTop);
-      cameraY += (targetCameraY - cameraY) * Math.min(1, dtSec * 4.5);
-
-      // Fixed-timestep physics update
-      accumulator += rawDt;
-      while (accumulator >= FIXED_STEP) {
-        stepPhysics(now);
-        accumulator -= FIXED_STEP;
-      }
-
-      // 5-second balance hold countdown
-      if (gameState === "holding") {
-        finalDropElapsed += dtSec;
-        if (finalStoneTouched || finalDropElapsed >= 0.75) {
-          holdLeft = Math.max(0, holdLeft - dtSec);
-          holdTimeText.textContent = `${holdLeft.toFixed(1)}s`;
-          const whole = Math.ceil(holdLeft);
-          if (whole < lastWholeSec && whole > 0) {
-            lastWholeSec = whole;
-            sfxTick();
-          }
-          if (holdLeft <= 0) {
-            triggerWin();
-          }
-        }
-      }
-
-      drawScene(now);
+      ctx.restore();
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    initLevel(currentLevelNum);
+    loadLevel(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
