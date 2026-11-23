@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ASMR PowerWash — 500 Satisfying Pressure Washing Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 relaxing levels of ASMR PowerWash in your browser. Switch pressure nozzles and soap foam to blast mud, moss, and rust off rugs, vintage coins, and classic cars." />
+  <title>PowerWash ASMR — Free 500-Level Pressure Washing Simulator | ZinPlay</title>
+  <meta name="description" content="Play PowerWash ASMR free online with no download. Blast mud, green moss, and stubborn rust off 500 vintage objects and mosaic tiles with realistic Web Audio water-jet spray on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "PowerWash ASMR",
+    "url": "https://zinplay.io/games/powerwash-asmr/",
+    "genre": ["ASMR", "Cleaning Simulation", "Relaxation Game"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top HUD */
+    /* Top Wash Studio HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0c1729;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #081521;
+      color: #f8fafc;
+      border-bottom: 1px solid #163047;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #38bdf8;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -69,68 +82,70 @@
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
     .hud-pill.done-pill {
-      background: rgba(34, 197, 94, 0.18);
-      border-color: rgba(74, 222, 128, 0.42);
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
       color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Cleanliness Progress Strip */
-    .clean-bar-wrap {
+    /* Live Cleanliness Meter Strip */
+    .clean-strip {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 14px;
-      background: #122038;
-      border-bottom: 1px solid #1e293b;
-      color: #cbd5e1;
-      font-size: 0.76rem;
+      padding: 9px 14px;
+      background: #0d2033;
+      border-bottom: 1px solid #1b3a59;
+      color: #e2e8f0;
+      font-size: 0.75rem;
       font-weight: 800;
     }
-    .clean-label {
-      min-width: 78px;
+    .clean-lbl {
+      min-width: 124px;
       color: #7dd3fc;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .clean-track {
       flex: 1;
       height: 11px;
-      background: #070e1c;
+      background: #06101a;
       border-radius: 999px;
-      border: 1px solid #263957;
+      border: 1px solid #22486e;
       overflow: hidden;
     }
     .clean-fill {
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      background: linear-gradient(90deg, #0ea5e9 0%, #38bdf8 55%, #22c55e 100%);
-      transition: width 0.08s ease-out;
+      background: linear-gradient(90deg, #0ea5e9 0%, #22d3ee 55%, #34d399 100%);
+      transition: width 0.12s ease-out;
     }
     .clean-pct {
-      min-width: 44px;
+      min-width: 52px;
       text-align: right;
       font-family: monospace;
-      font-size: 0.84rem;
-      color: #e0f2fe;
+      font-size: 0.82rem;
+      color: #ffffff;
     }
 
-    /* Wash Bay Canvas */
+    /* Pressure Wash Stage Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 435px;
-      background: radial-gradient(circle at 50% 42%, #1e293b 0%, #0f172a 100%);
+      aspect-ratio: 1 / 1;
+      max-height: 495px;
+      background: #09131f;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
       -webkit-user-select: none;
-    }
-    @media (min-width: 640px) {
-      .canvas-container {
-        height: 485px;
-      }
     }
     #washCanvas {
       width: 100%;
@@ -140,21 +155,21 @@
       cursor: crosshair;
     }
 
-    /* Nozzle Selector Dock */
+    /* 3 Pressure Nozzle Selector Dock */
     .nozzle-dock {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 7px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
       padding: 11px 12px;
-      background: #0e192d;
-      border-top: 1px solid #1e293b;
+      background: #0b1929;
+      border-top: 1px solid #1a3552;
     }
     .nozzle-btn {
-      min-height: 52px;
-      padding: 6px 4px;
+      min-height: 54px;
+      padding: 6px 6px;
       border-radius: 12px;
-      border: 1.5px solid #263854;
-      background: #16243d;
+      border: 1.5px solid #224366;
+      background: #12263d;
       color: #cbd5e1;
       display: flex;
       flex-direction: column;
@@ -162,34 +177,37 @@
       justify-content: center;
       gap: 2px;
       cursor: pointer;
-      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
     }
-    .nozzle-btn:active {
-      transform: scale(0.96);
-    }
-    .nozzle-btn .nz-title {
-      font-size: 0.76rem;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-    .nozzle-btn .nz-sub {
-      font-size: 0.63rem;
-      color: #94a3b8;
-      font-weight: 600;
-    }
+    .nozzle-btn:active { transform: scale(0.95); }
     .nozzle-btn.active {
       border-color: #38bdf8;
       background: rgba(56, 189, 248, 0.22);
       color: #ffffff;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.28);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+    }
+    .nozzle-btn.active[data-nozzle="wide"] {
+      border-color: #34d399;
+      background: rgba(52, 211, 153, 0.2);
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.28);
+    }
+    .nozzle-btn.active[data-nozzle="turbo"] {
+      border-color: #fbbf24;
+      background: rgba(251, 191, 36, 0.22);
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.3);
+    }
+    .nz-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .nz-sub {
+      font-size: 0.62rem;
+      color: #94a3b8;
+      font-weight: 700;
     }
     .nozzle-btn.active .nz-sub {
-      color: #bae6fd;
-    }
-    .nozzle-btn.active.soap-active {
-      border-color: #f472b6;
-      background: rgba(244, 114, 182, 0.22);
-      box-shadow: 0 0 14px rgba(244, 114, 182, 0.3);
+      color: #e0f2fe;
     }
 
     .legend-strip {
@@ -199,18 +217,10 @@
       gap: 12px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #09111f;
-      border-top: 1px solid #162338;
+      background: #07101a;
+      border-top: 1px solid #152b42;
       font-size: 0.73rem;
       color: #94a3b8;
-    }
-    .leg-dot {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      vertical-align: middle;
-      margin-right: 4px;
     }
 
     .status-toast {
@@ -218,9 +228,9 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.94);
-      border: 1px solid rgba(250, 204, 21, 0.65);
-      color: #fef08a;
+      background: rgba(7, 16, 26, 0.96);
+      border: 1px solid rgba(56, 189, 248, 0.72);
+      color: #e0f2fe;
       padding: 7px 14px;
       border-radius: 999px;
       font-size: 0.78rem;
@@ -233,14 +243,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(8, 13, 26, 0.78);
+      background: rgba(6, 14, 24, 0.8);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -248,7 +256,7 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
     }
     .win-overlay.show {
       opacity: 1;
@@ -262,17 +270,10 @@
       text-align: center;
       max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -301,7 +302,7 @@
       cursor: pointer;
     }
 
-    /* Level Picker Modal */
+    /* Job Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -313,9 +314,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -412,6 +411,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #081521;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #081521;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #081521 0%, #0c4a6e 100%);
+      color: #e0f2fe;
+    }
+    .game-seo-banner.teal-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #bae6fd;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .wash-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .wash-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .wash-table th, .wash-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .wash-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .wash-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -424,7 +503,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -437,81 +516,78 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Jobs &bull; ASMR Pressure Wash</span>
+      <span class="cat-tag">500 Wash Jobs &bull; ASMR Pressure Washer</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
-      <h1>ASMR PowerWash</h1>
-      <p>Blast away mud, moss, and stubborn rust from Persian rugs, antique coins, and classic cars until every surface gleams.</p>
+      <h1>PowerWash ASMR</h1>
+      <p>Switch between wide fan, precision jet, and spinning turbo nozzles to strip mud, green moss, soot, and crusted rust off 500 sparkling artworks and vintage machines.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="ASMR PowerWash Game">
+    <section class="game-wrapper" aria-label="PowerWash ASMR Cleaning Simulator">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Muddy Rugs &amp; Signs</span>
-          <span id="levelTitle">Job #1 / 500 — Woven Persian Rug</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Sunlit Patio Tiles</span>
+          <span id="levelTitle">Job #1 / 500 — Moroccan Mosaic Patio</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="grimePill">Mud</span>
+          <span class="hud-pill" id="grimePill">Layer: Mud</span>
           <span class="hud-pill done-pill" id="solvedCounter">Cleaned: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Cleanliness Progress Gauge -->
-      <div class="clean-bar-wrap">
-        <span class="clean-label">✨ CLEAN</span>
+      <!-- Live Cleanliness Meter -->
+      <div class="clean-strip">
+        <span id="cleanLbl" class="clean-lbl">💦 Hold &amp; Spray Grime</span>
         <div class="clean-track">
           <div id="cleanFill" class="clean-fill"></div>
         </div>
-        <span id="cleanPct" class="clean-pct">0%</span>
+        <span id="cleanPct" class="clean-pct">0.0%</span>
       </div>
 
+      <!-- Interactive Dual-Layer Pressure Wash Canvas -->
       <div class="canvas-container">
         <canvas id="washCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Spotless Win Overlay -->
+        <!-- Sparkling Clean Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2.3rem; margin-bottom:6px;">💦</div>
-            <h2 id="winHeading">Spotless Shine!</h2>
-            <p id="winText">Every speck of mud and rust washed cleanly away.</p>
+            <div style="font-size:2.3rem; margin-bottom:6px;">✨</div>
+            <h2 id="winHeading">100% Spotless!</h2>
+            <p id="winText">Every speck of mud, moss, and rust vanished under crisp water pressure.</p>
             <button id="nextLevelBtn" class="btn-primary" type="button">Next Wash Job →</button>
           </div>
         </div>
       </div>
 
-      <!-- 4 Pressure Washer Nozzles & Soap -->
-      <div class="nozzle-dock" role="group" aria-label="Pressure Nozzles">
+      <!-- 3 Color-Coded Pressure Washer Nozzles -->
+      <div id="nozzleDock" class="nozzle-dock" role="group" aria-label="Pressure Washer Nozzles">
         <button class="nozzle-btn active" data-nozzle="wide" type="button">
-          <span class="nz-title">🌊 Wide 40°</span>
-          <span class="nz-sub">Fast Sweep</span>
+          <span class="nz-title">🟢 40° Wide Fan</span>
+          <span class="nz-sub">Fast Mud Sweep</span>
         </button>
         <button class="nozzle-btn" data-nozzle="jet" type="button">
-          <span class="nz-title">💨 Jet 15°</span>
-          <span class="nz-sub">Thick Moss</span>
+          <span class="nz-title">🔵 15° Jet Stream</span>
+          <span class="nz-sub">Cuts Thick Moss</span>
         </button>
         <button class="nozzle-btn" data-nozzle="turbo" type="button">
-          <span class="nz-title">⚡ Turbo 0°</span>
-          <span class="nz-sub">Heavy Rust</span>
-        </button>
-        <button class="nozzle-btn" data-nozzle="soap" type="button">
-          <span class="nz-title">🫧 Soap</span>
-          <span class="nz-sub">Softens All</span>
+          <span class="nz-title">🟡 0° Turbo Spin</span>
+          <span class="nz-sub">Blasts Hard Rust</span>
         </button>
       </div>
 
       <div class="legend-strip">
-        <span><i class="leg-dot" style="background:#784c2a"></i>Mud = Wide 40°</span>
-        <span><i class="leg-dot" style="background:#3f6212"></i>Moss = Jet 15°</span>
-        <span><i class="leg-dot" style="background:#9a3412"></i>Rust/Tar = Turbo 0° or Soap + Rinse!</span>
+        <span>👆 Hold &amp; Drag Anywhere to Blast Water</span>
+        <span>✨ Auto-Polishes Final 2% Micro-Specks</span>
+        <span>🎧 Dynamic Web Audio Spray Acoustics</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Re-Dirty</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Find Dirt</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Re-Grime</button>
+          <button id="radarBtn" class="btn-outline" type="button">💡 Spot Grime</button>
         </div>
         <button id="soundBtn" class="btn-outline" type="button">🔊 ASMR ON</button>
       </div>
@@ -528,57 +604,154 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 860+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/powerwash-asmr-banner-1.jpg"
+            alt="PowerWash ASMR online pressure washing simulator blasting mud and green moss off a colorful Moroccan patio and pastel scooter"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Satisfying Pressure Washing Jobs — Real-Time ASMR Water Spray</h3>
+          <p>Slice clean lines through thick mud, mossy limestone, and heavy rust crusts to uncover vibrant hidden illustrations beneath.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play ASMR PowerWash (500 Jobs)</h2>
-        <p>Unwind with 500 oddly satisfying pressure-washing restorations right in your browser. Drag your finger or mouse across muddy Persian rugs, tarnished antique coins, classic sports cars, ceramic patio tiles, and retro arcade marquees to strip away grime and watch vibrant hidden artwork shine through.</p>
+        <h2>What Is PowerWash ASMR? A Browser Pressure Washing Simulator Online</h2>
+        <p><strong>PowerWash ASMR</strong> is a free <strong>pressure washing simulator game online</strong> crafted for lovers of oddly satisfying cleaning videos, tactile transformation art, and soothing white-noise soundscapes. Every stage hands you a chrome high-pressure water lance pointed at a grimy patio mosaic, vintage scooter, retro arcade cabinet, garden fountain, or stained-glass rose window buried under realistic layers of mud, algae moss, soot, and flaky rust. Hold and glide your finger or mouse across the surface to carve razor-sharp clean lines until the entire scene gleams like new.</p>
+        <p>Built as a lightweight, <strong>no-download ASMR cleaning game for smartphones, iPads, and Chromebooks</strong>, PowerWash ASMR synthesizes its pressurized water hiss, rotary turbo purr, and scrubbing sizzle live inside the <strong>Web Audio API</strong>—zero heavy audio packs, zero countdown timers, and automatic private local storage saves across all <strong>500 cleaning jobs</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Nozzle Engineering Guide (Match the Right Tip to Every Grime Layer)</h2>
+        <p>Just like a real commercial pressure washer, picking the right brass nozzle tip cuts cleaning time in half and strips hardened crusts effortlessly. Switch tips anytime right below the canvas (or press <code>1</code>, <code>2</code>, <code>3</code> on desktop keyboards):</p>
+
+        <div class="wash-table-wrap">
+          <table class="wash-table">
+            <thead>
+              <tr>
+                <th>Nozzle Tip</th>
+                <th>Spray Width &amp; Pressure</th>
+                <th>Best Grime Layer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🟢 40° Wide Fan</strong> (Key <code>1</code>)</td>
+                <td>Extra-wide sweeping fan with soft water curtain sound</td>
+                <td>Clears broad <strong>Dust &amp; Light Mud</strong> surfaces rapidly in neat lawnmower rows!</td>
+              </tr>
+              <tr>
+                <td><strong>🔵 15° Jet Stream</strong> (Key <code>2</code>)</td>
+                <td>Focused medium beam with crisp high-pressure hiss</td>
+                <td>Cuts straight through <strong>Velvety Green Moss &amp; Sticky Soot</strong> in a single smooth pass.</td>
+              </tr>
+              <tr>
+                <td><strong>🟡 0° Turbo Spin</strong> (Key <code>3</code>)</td>
+                <td>Concentrated oscillating rotary pulse with rhythmic ASMR purr</td>
+                <td>Shatters <strong>Hardened Orange Rust &amp; Baked Tar Crusts</strong> (Chapters 3–5) that deflect wide fans!</td>
+              </tr>
+              <tr>
+                <td><strong>💡 Spot Grime Radar</strong></td>
+                <td>3.5-second glowing cyan/gold overlay pulse</td>
+                <td>Instantly exposes any sneaky 3% grime specks hiding along corners or dark seams!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Cleaning Zen Tip:</strong> Start every multi-layer job in Chapters 3 through 5 with the <strong>🟢 40° Wide Fan</strong> to wipe away all outer dust in seconds—this visually reveals the exact patches of stubborn green moss and orange rust underneath so you can target them cleanly with <strong>🔵 15° Jet</strong> and <strong>🟡 0° Turbo</strong>! Once you pass <strong>98% cleanliness</strong>, an automatic sparkling finish polishes away the final micro-specks so you never have to squint for invisible pixels.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner teal-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/powerwash-asmr-banner-2.jpg"
+            alt="Freshly washed retro arcade cabinet, garden owl fountain, and red fire hydrant alongside three color-coded pressure washer nozzles in PowerWash ASMR"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>12 Detailed Restoration Artworks &amp; Zero-Pixel-Hunt Auto-Shine</h3>
+          <p>Uncover Moroccan tiles, classic Vespas, diner jukeboxes, surfboards, and stained-glass rose windows across five escalating ASMR chapters.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Restoration Chapters (500 Unique Cleaning Jobs)</h2>
+        <p>Every stage from Job #1 to Job #500 pairs one of 12 bespoke vector illustrations with unique color palettes and multi-layered organic grime masks:</p>
         <ul>
-          <li><strong>Pick the Right Nozzle for the Grime:</strong> Use the <strong>Wide 40°</strong> fan nozzle to clear soft brown mud in huge satisfying sweeps. Switch to the <strong>Jet 15°</strong> nozzle to cut cleanly through thick green moss and caked clay.</li>
-          <li><strong>Conquer Stubborn Rust &amp; Tar (Chapter 3+):</strong> Baked-on orange rust and black oil tar resist wide sprays. Either slice right through them with the pinpoint <strong>Turbo 0°</strong> nozzle, or coat them in bubbly <strong>Soap Foam</strong> first so even your Wide 40° nozzle wipes them away in one effortless pass!</li>
-          <li><strong>Use Dirt Radar (💡 Find Dirt):</strong> Sitting at 97% and can't spot the last tiny smudge? Tap <strong>Find Dirt</strong> to flash all remaining dirty spots in glowing neon orange—and as soon as you reach <strong>98.5%</strong>, the job auto-completes with a sparkling polish sweep!</li>
+          <li><strong>Chapter 1 (Jobs 1–100 — Sunlit Patio Tiles):</strong> Light earthy mud and dusty grime that melt away instantly under the <strong>🟢 40° Wide Fan</strong> for pure low-effort relaxation.</li>
+          <li><strong>Chapter 2 (Jobs 101–200 — Mossy Garden Relics):</strong> Introduces thick emerald garden moss clinging to stone fountains, owl statues, and benches—ideal for crisp <strong>🔵 15° Jet</strong> precision lines.</li>
+          <li><strong>Chapter 3 (Jobs 201–300 — Vintage Vehicles &amp; Rust):</strong> Weathers classic scooters, cruisers, fire hydrants, and streetlamps with baked-on orange oxidation spots calling for the <strong>🟡 0° Turbo</strong> rotary nozzle.</li>
+          <li><strong>Chapter 4 (Jobs 301–400 — Soot &amp; Multi-Layer Grime):</strong> Stacks mud, moss, and dark workshop soot over retro arcade cabinets and diner jukeboxes, creating dramatic multi-stage before-and-after reveals.</li>
+          <li><strong>Chapter 5 (Jobs 401–500 — Master Restoration Studio):</strong> Heavy triple-layer industrial crusts covering intricate rose windows and grand facades—complete with an instant 1–500 job picker and private local browser saving.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Pressure Washing Topics">
+          <span class="kw-pill">PowerWash Simulator Online Free</span>
+          <span class="kw-pill">Pressure Washing ASMR Browser Game</span>
+          <span class="kw-pill">Oddly Satisfying Cleaning Game</span>
+          <span class="kw-pill">Web Audio White Noise Water Spray</span>
+          <span class="kw-pill">500-Level Restoration Simulator</span>
+          <span class="kw-pill">No-Download Chromebook Zen Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>PowerWash ASMR FAQ</h2>
         <details class="faq-item">
-          <summary>Why isn't the Wide 40° nozzle removing dark rust spots?</summary>
-          <div class="faq-answer">Heavy rust and oil tar require higher PSI! Switch to the <strong>⚡ Turbo 0°</strong> nozzle, or spray the area with <strong>🫧 Soap</strong> first to dissolve the crust before rinsing with Wide 40°.</div>
+          <summary>Why isn't the green 40° Wide Fan removing the orange rust patches quickly?</summary>
+          <div class="faq-answer">Heavy orange rust and baked tar crusts in Chapters 3–5 have triple durability! Switch to the <strong>🟡 0° Turbo Spin</strong> nozzle (or press key <code>3</code>) to blast right through stubborn rust patches in a single pass.</div>
         </details>
         <details class="faq-item">
-          <summary>Does ASMR PowerWash generate real-time spray audio?</summary>
-          <div class="faq-answer">Yes. Our Web Audio engine synthesizes pressurized water whooshes, high-PSI turbo jets, and foamy bubble crackles dynamically while you spray—no heavy audio downloads required.</div>
+          <summary>I'm stuck at 96% clean—how do I find the last tiny spots of dirt?</summary>
+          <div class="faq-answer">Tap the <strong>💡 Spot Grime</strong> button right below the nozzle dock! Every remaining uncleaned pixel glows bright neon cyan and yellow for 3.5 seconds so you can zap those final edges cleanly.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does PowerWash ASMR require 100.00% pixel-perfect scrubbing to finish a job?</summary>
+          <div class="faq-answer">No—as soon as you clean <strong>98.0%</strong> of the grime, PowerWash ASMR triggers an automatic sparkling polish sweep that clears the last microscopic specks and plays a victory chime!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does the water spray sound use a lot of mobile data?</summary>
+          <div class="faq-answer">Zero audio downloads! All three water-jet acoustic profiles (soft fan waterfall, crisp jet hiss, and pulsing rotary turbo) are synthesized procedurally by your browser's Web Audio API.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🏷️</div><span class="cat-tag">ASMR</span></div>
+        <div class="card-top"><div class="icon-box">🍊</div><span class="cat-tag">ASMR</span></div>
         <h3>The Perfect Peel</h3>
-        <p>Peel glossy screen protectors and sticky price tags cleanly without tearing across 500 levels.</p>
+        <p>Peel vibrant fruits and glossy protective films in one smooth, unbroken ribbon.</p>
         <a href="/games/perfect-peel/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🔐</div><span class="cat-tag">Zen</span></div>
-        <h3>The Zen Lockpicker</h3>
-        <p>Turn a dark minimalist safe dial slowly and listen for metallic clicks across 500 vaults.</p>
-        <a href="/games/zen-lockpicker/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🎟️</div><span class="cat-tag">ASMR</span></div>
+        <h3>The Perfect Tear</h3>
+        <p>Tear vintage tickets, receipts, and postage stamps cleanly along perforated lines.</p>
+        <a href="/games/perfect-tear/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🛍️</div><span class="cat-tag">Physics</span></div>
-        <h3>Grocery Bagging Physics</h3>
-        <p>Pack watermelons, eggs, chips, and cacti into one paper bag across 500 orders.</p>
-        <a href="/games/grocery-bagging/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🕰️</div><span class="cat-tag">ASMR</span></div>
+        <h3>Antique Restorer</h3>
+        <p>Scrub oxidation, polish brass, and fit tiny gears back into vintage pocket watches.</p>
+        <a href="/games/antique-restorer/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Job Picker Modal -->
+  <!-- Wash Job Picker Modal -->
   <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Wash Job">
     <div class="modal-box">
       <div class="modal-head">
@@ -606,12 +779,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top ASMR</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/powerwash-asmr/">PowerWash ASMR</a></li>
+            <li><a href="/games/perfect-peel/">The Perfect Peel</a></li>
+            <li><a href="/games/perfect-tear/">The Perfect Tear</a></li>
+            <li><a href="/games/satisfying-slicer/">Satisfying Slicer</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -620,7 +793,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -653,49 +826,49 @@
     }
 
     // ==============================================
-    // CONSTANTS, NOZZLES & 500-JOB GENERATOR
+    // DUAL-CANVAS PRESSURE WASHING ENGINE (500 JOBS)
     // ==============================================
     const TOTAL_LEVELS = 500;
     const WORLD_W = 420;
-    const WORLD_H = 440;
-    const GRID_W = 56;
-    const GRID_H = 58;
-    const CELL_W = WORLD_W / GRID_W;
-    const CELL_H = WORLD_H / GRID_H;
+    const WORLD_H = 420;
+    const GRID_N = 60; // 60x60 = 3,600 precision grime cells (7x7px each) -> silky 60 FPS!
+    const CELL_PX = WORLD_W / GRID_N;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Muddy Rugs & Signs", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Mossy Relics", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Rust & Tar Garage", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Antique Restoration", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Master Detailer", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Sunlit Patio Tiles", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Mossy Garden Relics", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Vintage Rust & Metal", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Soot & Multi-Layer Grime", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Restoration Studio", range: "401–500", start: 401, end: 500 }
     ];
 
     const NOZZLES = {
-      wide:  { name: "Wide 40°",  radius: 34, power: 1.05, maxHard: 1.8, freq: 1150, q: 1.1, isSoap: false, color: "#7dd3fc" },
-      jet:   { name: "Jet 15°",   radius: 21, power: 2.3,  maxHard: 2.5, freq: 2100, q: 1.7, isSoap: false, color: "#38bdf8" },
-      turbo: { name: "Turbo 0°",  radius: 12, power: 4.2,  maxHard: 4.0, freq: 3350, q: 2.6, isSoap: false, color: "#e0f2fe" },
-      soap:  { name: "Soap Foam", radius: 32, power: 0,    maxHard: 4.0, freq: 820,  q: 2.2, isSoap: true,  color: "#fbcfe8" }
+      wide:  { key: "wide",  radius: 34, power: 0.42, maxTierEff: 1.0, freq: 1350, q: 0.7, col: "#34d399" },
+      jet:   { key: "jet",   radius: 20, power: 0.95, maxTierEff: 2.0, freq: 2350, q: 1.4, col: "#38bdf8" },
+      turbo: { key: "turbo", radius: 13, power: 2.20, maxTierEff: 3.0, freq: 3100, q: 2.2, col: "#fbbf24" }
     };
 
-    const OBJECT_TYPES = [
-      { id: "rug",      name: "Woven Persian Rug" },
-      { id: "coin",     name: "Antique Gold Coin" },
-      { id: "car",      name: "Classic Sports Car" },
-      { id: "tile",     name: "Mosaic Patio Tile" },
-      { id: "sign",     name: "Vintage Highway Sign" },
-      { id: "deck",     name: "Pro Skateboard Deck" },
-      { id: "shield",   name: "Heraldic Steel Shield" },
-      { id: "arcade",   name: "Retro Arcade Marquee" }
+    const ART_SUBJECTS = [
+      { id: "mosaic",   name: "Moroccan Mosaic Patio" },
+      { id: "scooter",  name: "Vintage Pastel Scooter" },
+      { id: "fountain", name: "Garden Koi Fountain" },
+      { id: "arcade",   name: "Retro Arcade Cabinet" },
+      { id: "surf",     name: "Striped Retro Surfboard" },
+      { id: "jukebox",  name: "Classic Diner Jukebox" },
+      { id: "owl",      name: "Limestone Owl Statue" },
+      { id: "hydrant",  name: "Vintage Red Fire Hydrant" },
+      { id: "door",     name: "Sunburst Carved Doorway" },
+      { id: "rosewin",  name: "Stained-Glass Rose Window" },
+      { id: "bicycle",  name: "Classic Cruiser Bicycle" },
+      { id: "lantern",  name: "Victorian Courtyard Lantern" }
     ];
 
     const COLOR_SCHEMES = [
-      { p1: "#b91c1c", p2: "#f59e0b", p3: "#fef3c7", p4: "#1e3a8a" },
-      { p1: "#0f766e", p2: "#38bdf8", p3: "#f0fdfa", p4: "#134e4a" },
-      { p1: "#4f46e5", p2: "#f472b6", p3: "#eef2ff", p4: "#1e1b4b" },
-      { p1: "#c2410c", p2: "#facc15", p3: "#fff7ed", p4: "#431407" },
-      { p1: "#15803d", p2: "#a3e635", p3: "#f0fdf4", p4: "#052e16" },
-      { p1: "#7e22ce", p2: "#22d3ee", p3: "#faf5ff", p4: "#3b0764" }
+      { a: "#0284c7", b: "#f59e0b", c: "#fef3c7", bg1: "#e2e8f0", bg2: "#cbd5e1" },
+      { a: "#0d9488", b: "#f43f5e", c: "#fff1f2", bg1: "#f1f5f9", bg2: "#cbd5e1" },
+      { a: "#4f46e5", b: "#fbbf24", c: "#eef2ff", bg1: "#e0e7ff", bg2: "#c7d2fe" },
+      { a: "#dc2626", b: "#38bdf8", c: "#fef2f2", bg1: "#f8fafc", bg2: "#e2e8f0" },
+      { a: "#7c3aed", b: "#10b981", c: "#f5f3ff", bg1: "#f3e8ff", bg2: "#d8b4fe" }
     ];
 
     function mulberry32(seed) {
@@ -708,54 +881,338 @@
       };
     }
 
+    // Offscreen Clean Artwork Canvas + Live Textured Grime Canvas
+    const cleanCanvas = document.createElement("canvas");
+    cleanCanvas.width = WORLD_W; cleanCanvas.height = WORLD_H;
+    const cleanCtx = cleanCanvas.getContext("2d");
+
+    const dirtCanvas = document.createElement("canvas");
+    dirtCanvas.width = WORLD_W; dirtCanvas.height = WORLD_H;
+    const dirtCtx = dirtCanvas.getContext("2d");
+
+    // Draw 12 Crisp, Vibrant Hidden Restoration Artworks Beneath the Grime!
+    function renderCleanArtwork(subjectId, scheme, rng) {
+      const c = cleanCtx;
+      c.clearRect(0, 0, WORLD_W, WORLD_H);
+
+      // Sunlit Clean Stone Patio / Backdrop Tiles
+      const bgG = c.createLinearGradient(0, 0, WORLD_W, WORLD_H);
+      bgG.addColorStop(0, scheme.bg1);
+      bgG.addColorStop(1, scheme.bg2);
+      c.fillStyle = bgG;
+      c.fillRect(0, 0, WORLD_W, WORLD_H);
+
+      c.strokeStyle = "rgba(15, 23, 42, 0.08)";
+      c.lineWidth = 2;
+      for (let x = 0; x <= WORLD_W; x += 60) {
+        c.beginPath(); c.moveTo(x, 0); c.lineTo(x, WORLD_H); c.stroke();
+      }
+      for (let y = 0; y <= WORLD_H; y += 60) {
+        c.beginPath(); c.moveTo(0, y); c.lineTo(WORLD_W, y); c.stroke();
+      }
+
+      const cx = WORLD_W / 2, cy = WORLD_H / 2;
+      c.save();
+
+      if (subjectId === "mosaic") {
+        // Intricate Moroccan Geometric Tile Mandala
+        for (let r = 0; r < 6; r++) {
+          for (let col = 0; col < 6; col++) {
+            const tx = 30 + col * 60 + 30;
+            const ty = 30 + r * 60 + 30;
+            c.fillStyle = (r + col) % 2 === 0 ? scheme.a : scheme.c;
+            c.fillRect(tx - 28, ty - 28, 56, 56);
+            c.fillStyle = (r + col) % 2 === 0 ? scheme.b : scheme.a;
+            c.beginPath();
+            c.moveTo(tx, ty - 20); c.lineTo(tx + 20, ty);
+            c.lineTo(tx, ty + 20); c.lineTo(tx - 20, ty);
+            c.closePath(); c.fill();
+            c.fillStyle = "#ffffff";
+            c.beginPath(); c.arc(tx, ty, 6, 0, Math.PI * 2); c.fill();
+          }
+        }
+      } else if (subjectId === "scooter") {
+        // Pastel Vintage Vespa Scooter
+        c.fillStyle = "#1e293b";
+        c.beginPath(); c.arc(120, 290, 44, 0, Math.PI * 2); c.arc(300, 290, 44, 0, Math.PI * 2); c.fill();
+        c.fillStyle = "#f8fafc";
+        c.beginPath(); c.arc(120, 290, 28, 0, Math.PI * 2); c.arc(300, 290, 28, 0, Math.PI * 2); c.fill();
+        c.fillStyle = "#94a3b8";
+        c.beginPath(); c.arc(120, 290, 14, 0, Math.PI * 2); c.arc(300, 290, 14, 0, Math.PI * 2); c.fill();
+        // Curved pastel bodywork
+        c.fillStyle = scheme.a;
+        c.beginPath();
+        c.roundRect(82, 200, 152, 82, 34);
+        c.roundRect(160, 250, 142, 32, 12);
+        c.fill();
+        // Front shield & handlebars
+        c.fillStyle = scheme.a;
+        c.beginPath(); c.roundRect(262, 134, 42, 146, 18); c.fill();
+        // Brown leather seat
+        c.fillStyle = "#92400e";
+        c.beginPath(); c.roundRect(102, 178, 92, 26, 12); c.fill();
+        // Bright chrome headlight
+        c.fillStyle = "#fde047"; c.strokeStyle = "#cbd5e1"; c.lineWidth = 4;
+        c.beginPath(); c.arc(308, 132, 20, 0, Math.PI * 2); c.fill(); c.stroke();
+        // Racing stripe
+        c.fillStyle = scheme.b;
+        c.fillRect(94, 232, 128, 12);
+      } else if (subjectId === "fountain") {
+        // Carved Stone Koi Pond Fountain
+        c.fillStyle = "#cbd5e1"; c.strokeStyle = "#475569"; c.lineWidth = 5;
+        c.beginPath(); c.arc(cx, cy, 156, 0, Math.PI * 2); c.fill(); c.stroke();
+        const wg = c.createRadialGradient(cx, cy, 12, cx, cy, 134);
+        wg.addColorStop(0, "#67e8f9"); wg.addColorStop(1, "#0284c7");
+        c.fillStyle = wg;
+        c.beginPath(); c.arc(cx, cy, 132, 0, Math.PI * 2); c.fill();
+        // Bright Orange Koi Fish & Lily Pads
+        [0, 2.2, 4.2].forEach((a) => {
+          c.save(); c.translate(cx + Math.cos(a) * 78, cy + Math.sin(a) * 78); c.rotate(a + 1.4);
+          c.fillStyle = "#f97316";
+          c.beginPath(); c.ellipse(0, 0, 22, 9, 0, 0, Math.PI * 2); c.fill();
+          c.fillStyle = "#ffffff";
+          c.beginPath(); c.arc(6, 0, 5, 0, Math.PI * 2); c.fill();
+          c.restore();
+        });
+        c.fillStyle = "#f59e0b"; c.strokeStyle = "#fef08a"; c.lineWidth = 4;
+        c.beginPath(); c.arc(cx, cy, 32, 0, Math.PI * 2); c.fill(); c.stroke();
+      } else if (subjectId === "arcade") {
+        // Neon Retro Arcade Cabinet
+        c.fillStyle = "#1e1b4b"; c.strokeStyle = scheme.a; c.lineWidth = 5;
+        c.beginPath(); c.roundRect(102, 46, 216, 328, 18); c.fill(); c.stroke();
+        // Glowing Marquee
+        c.fillStyle = scheme.b;
+        c.beginPath(); c.roundRect(118, 62, 184, 44, 8); c.fill();
+        c.fillStyle = "#0f172a"; c.font = "900 22px monospace"; c.textAlign = "center";
+        c.fillText("ZIN ARCADE", cx, 92);
+        // CRT Screen
+        c.fillStyle = "#06b6d4";
+        c.beginPath(); c.roundRect(124, 122, 172, 122, 12); c.fill();
+        c.fillStyle = "#fde047";
+        c.beginPath(); c.arc(cx, 182, 26, 0.3, Math.PI * 1.85); c.lineTo(cx, 182); c.fill();
+        // Control Deck Buttons
+        c.fillStyle = "#334155";
+        c.fillRect(116, 260, 188, 44);
+        ["#ef4444", "#22c55e", "#facc15", "#ec4899"].forEach((bc, i) => {
+          c.fillStyle = bc;
+          c.beginPath(); c.arc(152 + i * 38, 282, 11, 0, Math.PI * 2); c.fill();
+        });
+      } else if (subjectId === "surf") {
+        // Striped Retro Surfboard
+        c.save(); c.translate(cx, cy); c.rotate(-0.28);
+        c.fillStyle = scheme.c; c.strokeStyle = scheme.a; c.lineWidth = 6;
+        c.beginPath(); c.ellipse(0, 0, 74, 168, 0, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.fillStyle = scheme.a; c.fillRect(-16, -162, 32, 324);
+        c.fillStyle = scheme.b; c.fillRect(-58, -28, 116, 24); c.fillRect(-58, 12, 116, 16);
+        c.fillStyle = "#f43f5e";
+        c.beginPath(); c.arc(0, -68, 22, 0, Math.PI * 2); c.fill();
+        c.fillStyle = "#fef08a";
+        c.beginPath(); c.arc(0, -68, 8, 0, Math.PI * 2); c.fill();
+        c.restore();
+      } else if (subjectId === "jukebox") {
+        // Glowing Classic Diner Jukebox
+        c.fillStyle = "#7c2d12"; c.strokeStyle = "#f59e0b"; c.lineWidth = 6;
+        c.beginPath(); c.arc(cx, 168, 118, Math.PI, 0); c.lineTo(cx + 118, 362); c.lineTo(cx - 118, 362); c.closePath(); c.fill(); c.stroke();
+        // Rainbow Neon Arch Tube
+        ["#ef4444", "#f59e0b", "#22c55e", "#38bdf8"].forEach((nc, i) => {
+          c.strokeStyle = nc; c.lineWidth = 8;
+          c.beginPath(); c.arc(cx, 168, 98 - i * 11, Math.PI, 0); c.stroke();
+        });
+        // Vinyl Display & Chrome Grille
+        c.fillStyle = "#0f172a";
+        c.beginPath(); c.arc(cx, 182, 46, 0, Math.PI * 2); c.fill();
+        c.fillStyle = scheme.b;
+        c.beginPath(); c.arc(cx, 182, 16, 0, Math.PI * 2); c.fill();
+        c.fillStyle = "#e2e8f0";
+        for (let gy = 252; gy <= 340; gy += 16) c.fillRect(cx - 82, gy, 164, 8);
+      } else if (subjectId === "owl") {
+        // Carved Stone Garden Owl Statue
+        c.fillStyle = "#94a3b8"; c.strokeStyle = "#475569"; c.lineWidth = 4;
+        c.beginPath(); c.roundRect(118, 326, 184, 34, 8); c.fill(); c.stroke();
+        c.fillStyle = "#f1f5f9";
+        c.beginPath(); c.ellipse(cx, 224, 82, 108, 0, 0, Math.PI * 2); c.fill(); c.stroke();
+        // Sculpted Feather Scales
+        c.fillStyle = scheme.a;
+        c.beginPath(); c.ellipse(cx - 72, 236, 26, 66, 0.2, 0, Math.PI * 2); c.fill();
+        c.beginPath(); c.ellipse(cx + 72, 236, 26, 66, -0.2, 0, Math.PI * 2); c.fill();
+        // Big Golden Eyes & Beak
+        c.fillStyle = "#facc15";
+        c.beginPath(); c.arc(cx - 30, 164, 24, 0, Math.PI * 2); c.arc(cx + 30, 164, 24, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.fillStyle = "#0f172a";
+        c.beginPath(); c.arc(cx - 30, 164, 10, 0, Math.PI * 2); c.arc(cx + 30, 164, 10, 0, Math.PI * 2); c.fill();
+        c.fillStyle = "#ea580c";
+        c.beginPath(); c.moveTo(cx - 12, 186); c.lineTo(cx + 12, 186); c.lineTo(cx, 212); c.closePath(); c.fill();
+      } else if (subjectId === "hydrant") {
+        // Bright Red Cast-Iron Fire Hydrant
+        c.fillStyle = "#dc2626"; c.strokeStyle = "#7f1d1d"; c.lineWidth = 5;
+        c.beginPath(); c.roundRect(128, 326, 164, 38, 8); c.fill(); c.stroke();
+        c.beginPath(); c.roundRect(154, 146, 112, 184, 14); c.fill(); c.stroke();
+        c.beginPath(); c.arc(cx, 146, 56, Math.PI, 0); c.fill(); c.stroke();
+        // Side Brass Hose Nozzles
+        c.fillStyle = "#facc15";
+        c.beginPath(); c.roundRect(114, 176, 40, 44, 8); c.roundRect(266, 176, 40, 44, 8); c.fill(); c.stroke();
+        c.beginPath(); c.arc(cx, 200, 26, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.fillRect(cx - 14, 72, 28, 22);
+      } else if (subjectId === "door") {
+        // Ornate Carved Doorway with Stained Glass Transom
+        c.fillStyle = "#92400e"; c.strokeStyle = "#451a03"; c.lineWidth = 6;
+        c.beginPath(); c.roundRect(98, 46, 224, 336, 18); c.fill(); c.stroke();
+        // Stained Glass Sunburst Arch
+        c.fillStyle = "#38bdf8";
+        c.beginPath(); c.arc(cx, 142, 86, Math.PI, 0); c.closePath(); c.fill();
+        c.fillStyle = "#facc15";
+        c.beginPath(); c.arc(cx, 142, 34, Math.PI, 0); c.closePath(); c.fill();
+        // Door Panels & Brass Knocker
+        c.fillStyle = scheme.a;
+        c.beginPath(); c.roundRect(122, 162, 176, 94, 10); c.roundRect(122, 272, 176, 90, 10); c.fill();
+        c.strokeStyle = "#fde047"; c.lineWidth = 5;
+        c.beginPath(); c.arc(cx, 208, 18, 0, Math.PI * 2); c.stroke();
+      } else if (subjectId === "rosewin") {
+        // Grand Stained-Glass Rose Window Mandala
+        c.fillStyle = "#1e293b";
+        c.beginPath(); c.arc(cx, cy, 168, 0, Math.PI * 2); c.fill();
+        const cols = ["#ef4444", "#f59e0b", "#10b981", "#38bdf8", "#a855f7", "#ec4899"];
+        for (let k = 0; k < 12; k++) {
+          const a0 = (k * Math.PI * 2) / 12;
+          const a1 = ((k + 1) * Math.PI * 2) / 12;
+          c.fillStyle = cols[k % cols.length];
+          c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, 152, a0, a1); c.closePath(); c.fill();
+          c.strokeStyle = "#0f172a"; c.lineWidth = 4; c.stroke();
+        }
+        c.fillStyle = "#fef08a";
+        c.beginPath(); c.arc(cx, cy, 44, 0, Math.PI * 2); c.fill(); c.stroke();
+      } else if (subjectId === "bicycle") {
+        // Retro Cruiser Bicycle
+        [114, 306].forEach((wx) => {
+          c.strokeStyle = "#0f172a"; c.lineWidth = 10;
+          c.beginPath(); c.arc(wx, 272, 58, 0, Math.PI * 2); c.stroke();
+          c.strokeStyle = "#94a3b8"; c.lineWidth = 2;
+          for (let s = 0; s < 8; s++) {
+            const a = (s * Math.PI) / 4;
+            c.beginPath(); c.moveTo(wx, 272); c.lineTo(wx + Math.cos(a) * 54, 272 + Math.sin(a) * 54); c.stroke();
+          }
+        });
+        c.strokeStyle = scheme.a; c.lineWidth = 10; c.lineCap = "round"; c.lineJoin = "round";
+        c.beginPath();
+        c.moveTo(114, 272); c.lineTo(192, 272); c.lineTo(276, 176); c.lineTo(164, 176); c.closePath();
+        c.moveTo(276, 176); c.lineTo(306, 272);
+        c.moveTo(276, 176); c.lineTo(266, 138); c.lineTo(240, 138);
+        c.stroke();
+        c.fillStyle = "#78350f";
+        c.beginPath(); c.roundRect(140, 154, 48, 16, 8); c.fill();
+      } else {
+        // Victorian Courtyard Streetlamp
+        c.fillStyle = "#1e293b";
+        c.fillRect(cx - 12, 224, 24, 158);
+        c.beginPath(); c.roundRect(cx - 46, 360, 92, 24, 8); c.fill();
+        // Glowing Golden Lantern Glass
+        c.fillStyle = "#fef08a"; c.strokeStyle = "#0f172a"; c.lineWidth = 6;
+        c.beginPath();
+        c.moveTo(cx - 56, 114); c.lineTo(cx + 56, 114);
+        c.lineTo(cx + 38, 224); c.lineTo(cx - 38, 224); c.closePath();
+        c.fill(); c.stroke();
+        // Ornate Cap Dome
+        c.fillStyle = scheme.a;
+        c.beginPath(); c.moveTo(cx - 68, 114); c.lineTo(cx, 54); c.lineTo(cx + 68, 114); c.closePath(); c.fill(); c.stroke();
+      }
+
+      c.restore();
+    }
+
+    // Build Multi-Tier Grime Mask (1=Mud, 2=Green Moss, 3=Hardened Rust/Tar)
     function buildWashJob(levelNum) {
-      const rng = mulberry32(levelNum * 61211 + 88773);
-      const obj = OBJECT_TYPES[(levelNum - 1) % OBJECT_TYPES.length];
-      const scheme = COLOR_SCHEMES[Math.floor(rng() * COLOR_SCHEMES.length)];
+      const rng = mulberry32(levelNum * 304517 + 72911);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const subject = ART_SUBJECTS[(levelNum - 1) % ART_SUBJECTS.length];
+      const scheme = COLOR_SCHEMES[(levelNum + chapIdx) % COLOR_SCHEMES.length];
 
-      // Dirt layers escalate cleanly by chapter
-      const hasMoss = levelNum >= 101;
-      const hasRust = levelNum >= 201;
-      const mossRatio = hasMoss ? Math.min(0.45, 0.22 + (levelNum - 100) / 900) : 0;
-      const rustRatio = hasRust ? Math.min(0.42, 0.16 + (levelNum - 200) / 700) : 0;
+      renderCleanArtwork(subject.id, scheme, rng);
 
-      // Generate organic dirt blobs (deterministic seeds for moss & rust patches)
-      const blobs = [];
-      const mossBlobs = hasMoss ? (3 + Math.floor(rng() * 4)) : 0;
-      const rustBlobs = hasRust ? (2 + Math.floor(rng() * 4) + (levelNum > 380 ? 2 : 0)) : 0;
+      const toughGrid = new Float32Array(GRID_N * GRID_N);
+      const tierGrid = new Uint8Array(GRID_N * GRID_N);
 
-      for (let i = 0; i < mossBlobs; i++) {
-        blobs.push({
-          type: 2,
-          x: 90 + rng() * 240,
-          y: 80 + rng() * 280,
-          r: 34 + rng() * 44
-        });
+      const mossWeight = chapIdx === 0 ? 0 : (chapIdx === 1 ? 0.48 : 0.34);
+      const rustWeight = chapIdx <= 1 ? 0 : (chapIdx === 2 ? 0.35 : 0.42);
+      const grimeLabel = chapIdx === 0 ? "Mud" : (chapIdx === 1 ? "Mud + Moss" : (chapIdx === 2 ? "Mud + Rust" : "Triple Crust"));
+
+      // Generate organic blotch centers for moss and hardened rust!
+      const mossBlobs = Array.from({ length: mossWeight > 0 ? 6 : 0 }, () => ({
+        x: 60 + rng() * 300, y: 60 + rng() * 300, r: 44 + rng() * 48
+      }));
+      const rustBlobs = Array.from({ length: rustWeight > 0 ? 6 : 0 }, () => ({
+        x: 60 + rng() * 300, y: 60 + rng() * 300, r: 36 + rng() * 44
+      }));
+
+      // Fill dirtCanvas with richly textured organic mud, mossy patches, and orange rust crusts
+      dirtCtx.clearRect(0, 0, WORLD_W, WORLD_H);
+
+      for (let r = 0; r < GRID_N; r++) {
+        for (let c = 0; c < GRID_N; c++) {
+          const idx = r * GRID_N + c;
+          const px = (c + 0.5) * CELL_PX;
+          const py = (r + 0.5) * CELL_PX;
+
+          let tier = 1; // Light Mud
+          if (mossBlobs.some((b) => Math.hypot(px - b.x, py - b.y) < b.r)) tier = 2; // Thick Moss
+          if (rustBlobs.some((b) => Math.hypot(px - b.x, py - b.y) < b.r)) tier = 3; // Hardened Rust
+
+          tierGrid[idx] = tier;
+          toughGrid[idx] = tier === 1 ? 0.9 : (tier === 2 ? 1.8 : 3.2);
+        }
       }
-      for (let i = 0; i < rustBlobs; i++) {
-        blobs.push({
-          type: 3,
-          x: 95 + rng() * 230,
-          y: 85 + rng() * 270,
-          r: 26 + rng() * 36
-        });
+
+      // Paint visually rich grime layers onto dirtCanvas!
+      // 1. Base Earthy Mud Layer
+      const mudBase = chapIdx >= 3 ? "#3f3834" : "#5c4938";
+      dirtCtx.fillStyle = mudBase;
+      dirtCtx.fillRect(0, 0, WORLD_W, WORLD_H);
+
+      // Organic mud splatters & grit texture
+      for (let i = 0; i < 220; i++) {
+        dirtCtx.fillStyle = i % 2 === 0 ? "rgba(41, 32, 24, 0.42)" : "rgba(120, 96, 72, 0.35)";
+        dirtCtx.beginPath();
+        dirtCtx.arc(rng() * WORLD_W, rng() * WORLD_H, 8 + rng() * 24, 0, Math.PI * 2);
+        dirtCtx.fill();
       }
 
-      let grimeDesc = "Mud";
-      if (hasRust) grimeDesc = "Mud + Moss + Rust";
-      else if (hasMoss) grimeDesc = "Mud + Thick Moss";
+      // 2. Velvety Green Moss Patches (Chapters 2+)
+      for (const b of mossBlobs) {
+        const mg = dirtCtx.createRadialGradient(b.x, b.y, b.r * 0.15, b.x, b.y, b.r);
+        mg.addColorStop(0, "rgba(42, 92, 36, 0.96)");
+        mg.addColorStop(0.75, "rgba(63, 118, 46, 0.88)");
+        mg.addColorStop(1, "rgba(63, 118, 46, 0)");
+        dirtCtx.fillStyle = mg;
+        dirtCtx.beginPath();
+        dirtCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        dirtCtx.fill();
+      }
+
+      // 3. Hardened Flaky Rust & Soot Crusts (Chapters 3+)
+      for (const b of rustBlobs) {
+        const rg = dirtCtx.createRadialGradient(b.x, b.y, b.r * 0.1, b.x, b.y, b.r);
+        rg.addColorStop(0, "rgba(124, 45, 18, 0.98)");
+        rg.addColorStop(0.72, "rgba(154, 52, 18, 0.92)");
+        rg.addColorStop(1, "rgba(124, 45, 18, 0)");
+        dirtCtx.fillStyle = rg;
+        dirtCtx.beginPath();
+        dirtCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        dirtCtx.fill();
+      }
+
+      // Fine gritty speckles across entire grime layer
+      for (let i = 0; i < 360; i++) {
+        dirtCtx.fillStyle = i % 3 === 0 ? "rgba(15, 23, 42, 0.35)" : "rgba(214, 211, 209, 0.18)";
+        dirtCtx.fillRect(rng() * WORLD_W, rng() * WORLD_H, 2.5, 2.5);
+      }
 
       return {
         levelNum,
-        obj,
-        scheme,
-        hasMoss,
-        hasRust,
-        mossRatio,
-        rustRatio,
-        blobs,
-        grimeDesc,
-        seed: levelNum * 997 + 13
+        chapIdx,
+        subject,
+        grimeLabel,
+        toughGrid,
+        tierGrid,
+        totalCells: GRID_N * GRID_N
       };
     }
 
@@ -764,354 +1221,11 @@
     }
 
     // ==============================================
-    // PROCEDURAL PRISTINE ARTWORK RENDERER (8 OBJECTS)
-    // ==============================================
-    function drawCleanObjectArtwork(cctx, job) {
-      const s = job.scheme;
-      const cx = WORLD_W / 2;
-      const cy = WORLD_H / 2;
-      cctx.clearRect(0, 0, WORLD_W, WORLD_H);
-
-      if (job.obj.id === "rug") {
-        // Ornate Woven Persian Rug with Tassels
-        const rw = 276, rh = 340;
-        const x = cx - rw / 2, y = cy - rh / 2;
-
-        // Top & bottom fringe tassels
-        cctx.strokeStyle = "#e2e8f0";
-        cctx.lineWidth = 3;
-        for (let tx = x + 8; tx <= x + rw - 8; tx += 9) {
-          cctx.beginPath();
-          cctx.moveTo(tx, y - 14); cctx.lineTo(tx, y);
-          cctx.moveTo(tx, y + rh); cctx.lineTo(tx, y + rh + 14);
-          cctx.stroke();
-        }
-
-        cctx.fillStyle = s.p1;
-        cctx.beginPath();
-        cctx.roundRect(x, y, rw, rh, 6);
-        cctx.fill();
-
-        // Outer & inner decorative borders
-        cctx.strokeStyle = s.p2;
-        cctx.lineWidth = 10;
-        cctx.strokeRect(x + 14, y + 14, rw - 28, rh - 28);
-        cctx.strokeStyle = s.p3;
-        cctx.lineWidth = 3;
-        cctx.strokeRect(x + 28, y + 28, rw - 56, rh - 56);
-
-        // Corner diamond accents
-        cctx.fillStyle = s.p4;
-        cctx.fillRect(x + 36, y + 36, rw - 72, rh - 72);
-
-        // Central Persian medallion
-        cctx.fillStyle = s.p2;
-        cctx.beginPath();
-        cctx.moveTo(cx, cy - 92);
-        cctx.lineTo(cx + 68, cy);
-        cctx.lineTo(cx, cy + 92);
-        cctx.lineTo(cx - 68, cy);
-        cctx.closePath();
-        cctx.fill();
-
-        cctx.fillStyle = s.p3;
-        cctx.beginPath();
-        cctx.moveTo(cx, cy - 52);
-        cctx.lineTo(cx + 38, cy);
-        cctx.lineTo(cx, cy + 52);
-        cctx.lineTo(cx - 38, cy);
-        cctx.closePath();
-        cctx.fill();
-
-        cctx.fillStyle = s.p1;
-        cctx.beginPath();
-        cctx.arc(cx, cy, 18, 0, Math.PI * 2);
-        cctx.fill();
-      } else if (job.obj.id === "coin") {
-        // Gleaming Antique Gold Medallion Coin
-        const R = 152;
-        const grad = cctx.createRadialGradient(cx - 45, cy - 45, 20, cx, cy, R);
-        grad.addColorStop(0, "#fef08a");
-        grad.addColorStop(0.55, "#eab308");
-        grad.addColorStop(1, "#a16207");
-
-        cctx.fillStyle = grad;
-        cctx.beginPath();
-        cctx.arc(cx, cy, R, 0, Math.PI * 2);
-        cctx.fill();
-
-        cctx.strokeStyle = "#fef9c3";
-        cctx.lineWidth = 7;
-        cctx.beginPath();
-        cctx.arc(cx, cy, R - 10, 0, Math.PI * 2);
-        cctx.stroke();
-
-        // Beaded milled ring
-        cctx.fillStyle = "#fef08a";
-        for (let i = 0; i < 32; i++) {
-          const a = (i * Math.PI * 2) / 32;
-          cctx.beginPath();
-          cctx.arc(cx + Math.cos(a) * (R - 24), cy + Math.sin(a) * (R - 24), 3.2, 0, Math.PI * 2);
-          cctx.fill();
-        }
-
-        // Embossed star & crown emblem
-        cctx.fillStyle = "#fde047";
-        cctx.strokeStyle = "#854d0e";
-        cctx.lineWidth = 3;
-        cctx.beginPath();
-        for (let i = 0; i < 10; i++) {
-          const a = -Math.PI / 2 + (i * Math.PI) / 5;
-          const rr = i % 2 === 0 ? 74 : 32;
-          const px = cx + Math.cos(a) * rr;
-          const py = cy + Math.sin(a) * rr;
-          if (i === 0) cctx.moveTo(px, py);
-          else cctx.lineTo(px, py);
-        }
-        cctx.closePath();
-        cctx.fill();
-        cctx.stroke();
-
-        cctx.fillStyle = "#713f12";
-        cctx.font = "900 22px serif";
-        cctx.textAlign = "center";
-        cctx.textBaseline = "middle";
-        cctx.fillText(String(1850 + (job.levelNum % 140)), cx, cy + 92);
-      } else if (job.obj.id === "car") {
-        // Top-Down Classic Racing Sports Car
-        const cw = 180, ch = 342;
-        const x = cx - cw / 2, y = cy - ch / 2;
-
-        // Tires sticking slightly out
-        cctx.fillStyle = "#1e293b";
-        [[x - 10, y + 44], [x + cw - 8, y + 44], [x - 10, y + ch - 96], [x + cw - 8, y + ch - 96]].forEach(([wx, wy]) => {
-          cctx.beginPath();
-          cctx.roundRect(wx, wy, 18, 52, 6);
-          cctx.fill();
-        });
-
-        // Glossy metallic body
-        const grad = cctx.createLinearGradient(x, y, x + cw, y);
-        grad.addColorStop(0, s.p4);
-        grad.addColorStop(0.5, s.p1);
-        grad.addColorStop(1, s.p4);
-        cctx.fillStyle = grad;
-        cctx.beginPath();
-        cctx.roundRect(x, y, cw, ch, 44);
-        cctx.fill();
-
-        // Twin racing stripes
-        cctx.fillStyle = s.p3;
-        cctx.fillRect(cx - 24, y + 6, 18, ch - 12);
-        cctx.fillRect(cx + 6, y + 6, 18, ch - 12);
-
-        // Front & rear windshields
-        cctx.fillStyle = "#0f172a";
-        cctx.strokeStyle = "#38bdf8";
-        cctx.lineWidth = 3;
-        cctx.beginPath();
-        cctx.roundRect(x + 22, y + 96, cw - 44, 54, 14);
-        cctx.fill();
-        cctx.stroke();
-
-        cctx.beginPath();
-        cctx.roundRect(x + 26, y + 216, cw - 52, 42, 12);
-        cctx.fill();
-        cctx.stroke();
-
-        // Roof panel
-        cctx.fillStyle = s.p1;
-        cctx.beginPath();
-        cctx.roundRect(x + 28, y + 150, cw - 56, 66, 10);
-        cctx.fill();
-
-        // Headlights & Taillights
-        cctx.fillStyle = "#fef08a";
-        cctx.beginPath();
-        cctx.ellipse(x + 34, y + 16, 16, 8, 0, 0, Math.PI * 2);
-        cctx.ellipse(x + cw - 34, y + 16, 16, 8, 0, 0, Math.PI * 2);
-        cctx.fill();
-
-        cctx.fillStyle = "#ef4444";
-        cctx.fillRect(x + 22, y + ch - 14, 34, 8);
-        cctx.fillRect(x + cw - 56, y + ch - 14, 34, 8);
-      } else if (job.obj.id === "tile") {
-        // Mediterranean Ceramic Mosaic Tile
-        const sz = 304;
-        const x = cx - sz / 2, y = cy - sz / 2;
-        cctx.fillStyle = s.p3;
-        cctx.beginPath();
-        cctx.roundRect(x, y, sz, sz, 16);
-        cctx.fill();
-
-        cctx.strokeStyle = s.p1;
-        cctx.lineWidth = 12;
-        cctx.strokeRect(x + 12, y + 12, sz - 24, sz - 24);
-
-        // 8-Petal Geometric Rosette
-        for (let i = 0; i < 8; i++) {
-          const a = (i * Math.PI) / 4;
-          cctx.save();
-          cctx.translate(cx, cy);
-          cctx.rotate(a);
-          cctx.fillStyle = i % 2 === 0 ? s.p1 : s.p2;
-          cctx.beginPath();
-          cctx.ellipse(68, 0, 52, 22, 0, 0, Math.PI * 2);
-          cctx.fill();
-          cctx.restore();
-        }
-        cctx.fillStyle = s.p4;
-        cctx.beginPath();
-        cctx.arc(cx, cy, 34, 0, Math.PI * 2);
-        cctx.fill();
-        cctx.fillStyle = s.p2;
-        cctx.beginPath();
-        cctx.arc(cx, cy, 16, 0, Math.PI * 2);
-        cctx.fill();
-      } else if (job.obj.id === "sign") {
-        // Retro Octagonal Highway / Diner Sign
-        const R = 152;
-        cctx.beginPath();
-        for (let i = 0; i < 8; i++) {
-          const a = Math.PI / 8 + (i * Math.PI) / 4;
-          const px = cx + Math.cos(a) * R;
-          const py = cy + Math.sin(a) * R;
-          if (i === 0) cctx.moveTo(px, py);
-          else cctx.lineTo(px, py);
-        }
-        cctx.closePath();
-        cctx.fillStyle = s.p1;
-        cctx.fill();
-        cctx.lineWidth = 10;
-        cctx.strokeStyle = s.p3;
-        cctx.stroke();
-
-        // Retro bold banner & route number
-        cctx.fillStyle = s.p2;
-        cctx.fillRect(cx - 108, cy - 38, 216, 76);
-        cctx.fillStyle = s.p4;
-        cctx.font = "900 44px sans-serif";
-        cctx.textAlign = "center";
-        cctx.textBaseline = "middle";
-        cctx.fillText(`RT ${10 + (job.levelNum % 89)}`, cx, cy + 2);
-
-        cctx.fillStyle = s.p3;
-        cctx.font = "800 16px sans-serif";
-        cctx.fillText("HISTORIC", cx, cy - 72);
-        cctx.fillText("HIGHWAY", cx, cy + 74);
-      } else if (job.obj.id === "deck") {
-        // Pro Skateboard Deck
-        const dw = 136, dh = 358;
-        const x = cx - dw / 2, y = cy - dh / 2;
-        cctx.fillStyle = s.p4;
-        cctx.beginPath();
-        cctx.roundRect(x, y, dw, dh, 68);
-        cctx.fill();
-
-        cctx.save();
-        cctx.beginPath();
-        cctx.roundRect(x + 6, y + 6, dw - 12, dh - 12, 62);
-        cctx.clip();
-
-        // Vibrant diagonal graphics
-        cctx.fillStyle = s.p1;
-        cctx.fillRect(x, y, dw, dh);
-        cctx.fillStyle = s.p2;
-        for (let k = -200; k < 450; k += 46) {
-          cctx.beginPath();
-          cctx.moveTo(x, y + k);
-          cctx.lineTo(x + dw, y + k - 60);
-          cctx.lineTo(x + dw, y + k - 36);
-          cctx.lineTo(x, y + k + 24);
-          cctx.closePath();
-          cctx.fill();
-        }
-        cctx.fillStyle = s.p3;
-        cctx.beginPath();
-        cctx.arc(cx, cy, 40, 0, Math.PI * 2);
-        cctx.fill();
-        cctx.restore();
-
-        // Truck mounting bolts
-        cctx.fillStyle = "#e2e8f0";
-        [y + 88, y + dh - 88].forEach((by) => {
-          [-16, 16].forEach((dx) => {
-            [-10, 10].forEach((dy) => {
-              cctx.beginPath();
-              cctx.arc(cx + dx, by + dy, 4, 0, Math.PI * 2);
-              cctx.fill();
-            });
-          });
-        });
-      } else if (job.obj.id === "shield") {
-        // Knight's Heraldic Metal Shield
-        cctx.beginPath();
-        cctx.moveTo(cx - 124, cy - 144);
-        cctx.lineTo(cx + 124, cy - 144);
-        cctx.lineTo(cx + 124, cy + 12);
-        cctx.quadraticCurveTo(cx + 120, cy + 116, cx, cy + 162);
-        cctx.quadraticCurveTo(cx - 120, cy + 116, cx - 124, cy + 12);
-        cctx.closePath();
-
-        cctx.save();
-        cctx.clip();
-        cctx.fillStyle = s.p1;
-        cctx.fillRect(cx - 140, cy - 160, 140, 160);
-        cctx.fillRect(cx, cy, 140, 180);
-        cctx.fillStyle = s.p4;
-        cctx.fillRect(cx, cy - 160, 140, 160);
-        cctx.fillRect(cx - 140, cy, 140, 180);
-
-        // Golden central cross
-        cctx.fillStyle = s.p2;
-        cctx.fillRect(cx - 16, cy - 160, 32, 340);
-        cctx.fillRect(cx - 140, cy - 16, 280, 32);
-        cctx.restore();
-
-        cctx.lineWidth = 10;
-        cctx.strokeStyle = "#e2e8f0";
-        cctx.stroke();
-      } else {
-        // Retro Arcade Marquee Banner
-        const mw = 330, mh = 216;
-        const x = cx - mw / 2, y = cy - mh / 2;
-        cctx.fillStyle = "#0f172a";
-        cctx.beginPath();
-        cctx.roundRect(x, y, mw, mh, 18);
-        cctx.fill();
-        cctx.lineWidth = 8;
-        cctx.strokeStyle = s.p2;
-        cctx.stroke();
-
-        // Retro neon synthwave stripes
-        const stripeCols = [s.p1, s.p2, "#38bdf8", "#a855f7"];
-        stripeCols.forEach((col, i) => {
-          cctx.fillStyle = col;
-          cctx.fillRect(x + 18, y + 26 + i * 16, mw - 36, 9);
-        });
-
-        cctx.fillStyle = "#ffffff";
-        cctx.font = "900 38px sans-serif";
-        cctx.textAlign = "center";
-        cctx.textBaseline = "middle";
-        cctx.fillText("ARCADE 88", cx, cy + 36);
-
-        cctx.fillStyle = s.p2;
-        cctx.font = "800 14px monospace";
-        cctx.fillText("★ INSERT COIN TO PLAY ★", cx, cy + 78);
-      }
-    }
-
-    // ==============================================
-    // CONTINUOUS ASMR WATER SPRAY WEB AUDIO ENGINE
+    // CONTINUOUS ASMR WATER-JET WEB AUDIO ENGINE
     // ==============================================
     let audioCtx = null;
-    let noiseBuf = null;
-    let spraySrc = null;
-    let sprayFilter = null;
-    let sprayGain = null;
     let soundOn = true;
-    let lastBubbleMs = 0;
+    let sprayNodes = null;
 
     function initAudio() {
       if (!audioCtx) {
@@ -1119,143 +1233,109 @@
         if (AC) audioCtx = new AC();
       }
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-
-      if (audioCtx && !noiseBuf) {
-        const len = audioCtx.sampleRate * 2;
-        noiseBuf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-        const d = noiseBuf.getChannelData(0);
-        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-      }
-
-      if (audioCtx && noiseBuf && !spraySrc) {
-        spraySrc = audioCtx.createBufferSource();
-        spraySrc.buffer = noiseBuf;
-        spraySrc.loop = true;
-
-        sprayFilter = audioCtx.createBiquadFilter();
-        sprayFilter.type = "bandpass";
-        sprayFilter.frequency.value = 1200;
-        sprayFilter.Q.value = 1.2;
-
-        sprayGain = audioCtx.createGain();
-        sprayGain.gain.value = 0.0001;
-
-        spraySrc.connect(sprayFilter);
-        sprayFilter.connect(sprayGain);
-        sprayGain.connect(audioCtx.destination);
-        spraySrc.start();
-      }
     }
 
-    function updateSprayAudio(active, nozzleObj, hittingDirt) {
-      if (!soundOn || !audioCtx || !sprayGain || !sprayFilter) return;
-      const now = audioCtx.currentTime;
-      if (!active) {
-        sprayGain.gain.setTargetAtTime(0.0001, now, 0.035);
+    function ensureSprayLoop() {
+      initAudio();
+      if (!audioCtx || sprayNodes) return;
+
+      // 2-Second Seamless Pink-Tinted White Noise Buffer for Pressurized Water Stream
+      const len = audioCtx.sampleRate * 2;
+      const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0;
+      for (let i = 0; i < len; i++) {
+        const w = Math.random() * 2 - 1;
+        b0 = 0.997 * b0 + w * 0.029;
+        b1 = 0.985 * b1 + w * 0.032;
+        b2 = 0.950 * b2 + w * 0.048;
+        data[i] = (b0 + b1 + b2 + w * 0.25) * 0.65;
+      }
+
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+
+      const bp = audioCtx.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.frequency.value = 1400;
+      bp.Q.value = 0.8;
+
+      const lfo = audioCtx.createOscillator();
+      lfo.type = "sine";
+      lfo.frequency.value = 16; // Rotary turbo purr!
+      const lfoGain = audioCtx.createGain();
+      lfoGain.gain.value = 0;
+      lfo.connect(lfoGain);
+      lfoGain.connect(bp.frequency);
+
+      const masterG = audioCtx.createGain();
+      masterG.gain.value = 0;
+
+      src.connect(bp);
+      bp.connect(masterG);
+      masterG.connect(audioCtx.destination);
+      src.start();
+      lfo.start();
+
+      sprayNodes = { bp, lfoGain, masterG };
+    }
+
+    function updateSprayAudio(active, nozzleKey, scrubbingDirt) {
+      if (!soundOn || !active) {
+        if (sprayNodes && audioCtx) {
+          sprayNodes.masterG.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.03);
+        }
         return;
       }
+      ensureSprayLoop();
+      if (!sprayNodes || !audioCtx) return;
 
-      const targetF = nozzleObj.freq * (hittingDirt ? 1.18 : 0.92);
-      const targetVol = nozzleObj.isSoap ? 0.06 : (hittingDirt ? 0.14 : 0.095);
-      sprayFilter.frequency.setTargetAtTime(targetF, now, 0.03);
-      sprayFilter.Q.setTargetAtTime(nozzleObj.q, now, 0.04);
-      sprayGain.gain.setTargetAtTime(targetVol, now, 0.03);
-
-      // Gentle bubble pops when spraying Soap Foam
-      if (nozzleObj.isSoap) {
-        const ms = performance.now();
-        if (ms - lastBubbleMs > 95) {
-          lastBubbleMs = ms;
-          const osc = audioCtx.createOscillator();
-          const g = audioCtx.createGain();
-          osc.type = "sine";
-          const f = 520 + Math.random() * 680;
-          osc.frequency.setValueAtTime(f, now);
-          osc.frequency.exponentialRampToValueAtTime(f * 1.6, now + 0.035);
-          g.gain.setValueAtTime(0.03, now);
-          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.04);
-          osc.connect(g);
-          g.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.045);
-        }
-      }
+      const nz = NOZZLES[nozzleKey];
+      const now = audioCtx.currentTime;
+      const targetFreq = nz.freq + (scrubbingDirt ? 480 : 0);
+      sprayNodes.bp.frequency.setTargetAtTime(targetFreq, now, 0.04);
+      sprayNodes.bp.Q.setTargetAtTime(nz.q, now, 0.04);
+      sprayNodes.lfoGain.gain.setTargetAtTime(nozzleKey === "turbo" ? 420 : 0, now, 0.04);
+      sprayNodes.masterG.gain.setTargetAtTime(scrubbingDirt ? 0.16 : 0.11, now, 0.03);
     }
 
-    function stopSprayAudio() {
-      if (audioCtx && sprayGain) {
-        sprayGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.03);
-      }
-    }
-
-    function sfxSpotlessDing() {
-      stopSprayAudio();
+    function sfxSpotlessChime() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-      [659.25, 880.0, 1046.5, 1318.5].forEach((f, i) => {
+      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => {
         setTimeout(() => {
           const now = audioCtx.currentTime;
           const osc = audioCtx.createOscillator();
           const g = audioCtx.createGain();
           osc.type = "sine";
           osc.frequency.setValueAtTime(f, now);
-          g.gain.setValueAtTime(0.13, now);
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.exponentialRampToValueAtTime(0.11, now + 0.015);
           g.gain.exponentialRampToValueAtTime(0.0008, now + 0.55);
           osc.connect(g);
           g.connect(audioCtx.destination);
           osc.start(now);
           osc.stop(now + 0.6);
-        }, i * 75);
+        }, i * 70);
       });
     }
 
-    function sfxRadarPing() {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx) return;
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(880, now);
-      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.14);
-      g.gain.setValueAtTime(0.1, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
-      osc.connect(g);
-      g.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + 0.18);
-    }
-
     // ==============================================
-    // DUAL-LAYER OFFSCREEN ENGINE & WASH CONTROLLER
+    // GAME STATE, SPRAY PHYSICS & SPARKLE CONTROLLER
     // ==============================================
     const canvas = document.getElementById("washCanvas");
     const ctx = canvas.getContext("2d");
-
-    // Offscreen Clean Art, Grime Layer, and Soap Foam Layer
-    const cleanCanvas = document.createElement("canvas");
-    cleanCanvas.width = WORLD_W;
-    cleanCanvas.height = WORLD_H;
-    const cleanCtx = cleanCanvas.getContext("2d");
-
-    const dirtCanvas = document.createElement("canvas");
-    dirtCanvas.width = WORLD_W;
-    dirtCanvas.height = WORLD_H;
-    const dirtCtx = dirtCanvas.getContext("2d");
-
-    const foamCanvas = document.createElement("canvas");
-    foamCanvas.width = WORLD_W;
-    foamCanvas.height = WORLD_H;
-    const foamCtx = foamCanvas.getContext("2d");
 
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
     const grimePill = document.getElementById("grimePill");
     const solvedCounter = document.getElementById("solvedCounter");
+    const cleanLbl = document.getElementById("cleanLbl");
     const cleanFill = document.getElementById("cleanFill");
     const cleanPct = document.getElementById("cleanPct");
+    const nozzleDock = document.getElementById("nozzleDock");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
     const winHeading = document.getElementById("winHeading");
@@ -1263,7 +1343,6 @@
     const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
-    const nozzleBtns = document.querySelectorAll(".nozzle-btn");
 
     let solvedSet = new Set();
     let currentLevelNum = 1;
@@ -1274,22 +1353,14 @@
     } catch (e) {}
 
     let job = null;
-    let activeNozzleKey = "wide";
-    let objectMask = new Uint8Array(GRID_W * GRID_H);
-    let dirtHealth = new Float32Array(GRID_W * GRID_H);
-    let dirtMaxHealth = new Float32Array(GRID_W * GRID_H);
-    let soapedMask = new Uint8Array(GRID_W * GRID_H);
-    let totalDirtyCells = 1;
-    let cleanedCells = 0;
-
+    let activeNozzle = "wide";
+    let cleanRatio = 0;
+    let jobWon = false;
     let isSpraying = false;
-    let aimPos = { x: WORLD_W / 2, y: WORLD_H / 2 };
-    let lastSprayPos = null;
-    let levelWon = false;
+    let sprayPt = { x: WORLD_W / 2, y: WORLD_H / 2 };
     let radarTimer = 0;
-    let shineAnim = 0;
-    let rustHintShown = false;
-    let droplets = [];
+
+    let mistParticles = [];
     let sparkles = [];
     let toastTimer = null;
 
@@ -1300,115 +1371,152 @@
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function updateProgressUI() {
-      const pct = levelWon ? 100 : Math.min(99, Math.floor((cleanedCells / Math.max(1, totalDirtyCells)) * 100));
-      cleanFill.style.width = `${pct}%`;
-      cleanPct.textContent = `${pct}%`;
+    function recomputeCleanPercent() {
+      let cleanCnt = 0;
+      const g = job.toughGrid;
+      for (let i = 0; i < g.length; i++) {
+        if (g[i] <= 0.05) cleanCnt++;
+      }
+      cleanRatio = cleanCnt / job.totalCells;
+      return cleanRatio;
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Job #${currentLevelNum} / ${TOTAL_LEVELS} — ${job.obj.name}`;
-      grimePill.textContent = job.grimeDesc;
+      levelTitle.textContent = `Job #${currentLevelNum} / ${TOTAL_LEVELS} — ${job.subject.name}`;
+      grimePill.textContent = `Layer: ${job.grimeLabel}`;
       solvedCounter.textContent = `Cleaned: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Job ${currentLevelNum} / 500 ▾`;
-      updateProgressUI();
+
+      const pct = jobWon ? 100 : Math.min(99.9, cleanRatio * 100);
+      cleanLbl.textContent = jobWon ? "✨ 100% Spotless!" : `💦 ${job.subject.name}`;
+      cleanFill.style.width = `${pct.toFixed(1)}%`;
+      cleanPct.textContent = `${pct.toFixed(1)}%`;
     }
 
-    function generateDirtLayers() {
-      const rng = mulberry32(job.seed * 1337 + 99);
+    function applyWaterSpray(wx, wy, dt) {
+      const nz = NOZZLES[activeNozzle];
+      const rad = nz.radius;
+      let removedAny = false;
+      let deflectedRust = false;
 
-      // 1. Sample cleanCanvas alpha once to build exact silhouette mask
-      const imgData = cleanCtx.getImageData(0, 0, WORLD_W, WORLD_H).data;
-      objectMask.fill(0);
-      dirtHealth.fill(0);
-      dirtMaxHealth.fill(0);
-      soapedMask.fill(0);
-      totalDirtyCells = 0;
-      cleanedCells = 0;
+      // Update toughness grid & punch matching transparent craters into dirtCanvas
+      const cMin = Math.max(0, Math.floor((wx - rad) / CELL_PX));
+      const cMax = Math.min(GRID_N - 1, Math.floor((wx + rad) / CELL_PX));
+      const rMin = Math.max(0, Math.floor((wy - rad) / CELL_PX));
+      const rMax = Math.min(GRID_N - 1, Math.floor((wy + rad) / CELL_PX));
 
-      dirtCtx.clearRect(0, 0, WORLD_W, WORLD_H);
-      foamCtx.clearRect(0, 0, WORLD_W, WORLD_H);
+      dirtCtx.save();
+      dirtCtx.globalCompositeOperation = "destination-out";
 
-      for (let gy = 0; gy < GRID_H; gy++) {
-        for (let gx = 0; gx < GRID_W; gx++) {
-          const px = Math.min(WORLD_W - 1, Math.floor((gx + 0.5) * CELL_W));
-          const py = Math.min(WORLD_H - 1, Math.floor((gy + 0.5) * CELL_H));
-          const alpha = imgData[(py * WORLD_W + px) * 4 + 3];
-          const idx = gy * GRID_W + gx;
+      for (let r = rMin; r <= rMax; r++) {
+        for (let c = cMin; c <= cMax; c++) {
+          const idx = r * GRID_N + c;
+          const prev = job.toughGrid[idx];
+          if (prev <= 0.05) continue;
 
-          if (alpha > 110) {
-            objectMask[idx] = 1;
-            totalDirtyCells++;
+          const cx = (c + 0.5) * CELL_PX;
+          const cy = (r + 0.5) * CELL_PX;
+          const dist = Math.hypot(cx - wx, cy - wy);
+          if (dist > rad) continue;
 
-            // Determine dirt type for this cell (1=mud, 2=moss, 3=rust/tar)
-            let dType = 1;
-            for (const b of job.blobs) {
-              const dist = Math.hypot(px - b.x, py - b.y);
-              const wobble = 0.8 + 0.35 * Math.sin(gx * 0.65 + gy * 0.55);
-              if (dist < b.r * wobble) {
-                if (b.type > dType) dType = b.type;
-              }
-            }
-
-            const hp = dType === 1 ? 1.0 : (dType === 2 ? 2.0 : 3.2);
-            dirtHealth[idx] = hp;
-            dirtMaxHealth[idx] = hp;
-
-            // Paint rich organic grime texture onto offscreen dirtCanvas
-            const jx = (rng() - 0.5) * 2.5;
-            const jy = (rng() - 0.5) * 2.5;
-            const rr = Math.max(CELL_W, CELL_H) * (0.85 + rng() * 0.35);
-
-            if (dType === 1) {
-              const tones = ["#6b4423", "#784c2a", "#5c3a1e", "#855832"];
-              dirtCtx.fillStyle = tones[Math.floor(rng() * tones.length)];
-            } else if (dType === 2) {
-              const tones = ["#365314", "#3f6212", "#4d7c0f", "#2f4a12"];
-              dirtCtx.fillStyle = tones[Math.floor(rng() * tones.length)];
-            } else {
-              const tones = ["#7c2d12", "#9a3412", "#431407", "#292524"];
-              dirtCtx.fillStyle = tones[Math.floor(rng() * tones.length)];
-            }
-            dirtCtx.beginPath();
-            dirtCtx.arc(px + jx, py + jy, rr, 0, Math.PI * 2);
-            dirtCtx.fill();
-
-            // Subtle gritty speckles
-            if (rng() < 0.4) {
-              dirtCtx.fillStyle = dType === 3 ? "rgba(234, 88, 12, 0.45)" : "rgba(15, 23, 42, 0.28)";
-              dirtCtx.fillRect(px + jx - 1, py + jy - 1, 2.5, 2.5);
-            }
+          const tier = job.tierGrid[idx];
+          // High-tier rust resists the gentle 40° Wide Fan so nozzle selection feels authentically meaningful!
+          let eff = 1.0;
+          if (tier > nz.maxTierEff) {
+            eff = tier - nz.maxTierEff >= 2 ? 0.14 : 0.35;
+            if (tier === 3 && activeNozzle === "wide") deflectedRust = true;
           }
+
+          const falloff = 1 - (dist / rad) * 0.45;
+          const delta = nz.power * eff * falloff * (dt * 60) * 0.34;
+          const next = Math.max(0, prev - delta);
+          job.toughGrid[idx] = next;
+          removedAny = true;
+
+          // Visually strip dirt cleanly from dirtCanvas!
+          const eraseAlpha = next <= 0.05 ? 1.0 : Math.min(0.65, delta / Math.max(0.25, prev));
+          dirtCtx.fillStyle = `rgba(0, 0, 0, ${eraseAlpha})`;
+          dirtCtx.beginPath();
+          dirtCtx.arc(cx, cy, CELL_PX * 0.92, 0, Math.PI * 2);
+          dirtCtx.fill();
         }
       }
-
-      // Clip dirtCanvas cleanly to the exact silhouette of the object!
-      dirtCtx.save();
-      dirtCtx.globalCompositeOperation = "destination-in";
-      dirtCtx.drawImage(cleanCanvas, 0, 0);
       dirtCtx.restore();
+
+      // Spawn crisp water spray mist & soap foam bubbles!
+      const pCount = activeNozzle === "wide" ? 5 : 4;
+      for (let i = 0; i < pCount; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const spd = 1.0 + Math.random() * (activeNozzle === "turbo" ? 3.2 : 2.1);
+        mistParticles.push({
+          x: wx + (Math.random() - 0.5) * rad * 0.6,
+          y: wy + (Math.random() - 0.5) * rad * 0.6,
+          vx: Math.cos(a) * spd,
+          vy: Math.sin(a) * spd - 0.4,
+          r: 1.8 + Math.random() * 2.8,
+          color: removedAny ? "#e0f2fe" : "#7dd3fc",
+          alpha: 0.85
+        });
+      }
+
+      if (deflectedRust && Math.random() < 0.04) {
+        showToast("🟡 Stubborn orange rust! Switch to 0° Turbo Spin for instant blasting.", 2200);
+      }
+
+      recomputeCleanPercent();
+      updateHUD();
+
+      // Auto-Sparkle Finish at >= 98.0% (Eliminates annoying 0.4% pixel hunting!)
+      if (cleanRatio >= 0.98 && !jobWon) {
+        jobWon = true;
+        isSpraying = false;
+        updateSprayAudio(false, activeNozzle, false);
+        dirtCtx.clearRect(0, 0, WORLD_W, WORLD_H);
+        job.toughGrid.fill(0);
+        cleanRatio = 1;
+
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_powerwash_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+
+        sfxSpotlessChime();
+        for (let k = 0; k < 28; k++) {
+          sparkles.push({
+            x: 34 + Math.random() * (WORLD_W - 68),
+            y: 34 + Math.random() * (WORLD_H - 68),
+            size: 5 + Math.random() * 7,
+            alpha: 1,
+            phase: Math.random() * Math.PI * 2
+          });
+        }
+        updateHUD();
+
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winHeading.textContent = isLast ? "All 500 Jobs Spotless!" : `${job.subject.name} Restored!`;
+        winText.textContent = `Job #${currentLevelNum} gleaming 100% clean and spotless!`;
+        nextLevelBtn.textContent = isLast ? "Replay Job #1" : `Next Wash Job (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 780);
+      }
+
+      return removedAny;
     }
 
     function loadJob(num) {
-      stopSprayAudio();
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
       job = buildWashJob(currentLevelNum);
-      levelWon = false;
+      cleanRatio = 0;
+      jobWon = false;
       isSpraying = false;
-      lastSprayPos = null;
       radarTimer = 0;
-      shineAnim = 0;
-      rustHintShown = false;
-      droplets = [];
+      mistParticles = [];
       sparkles = [];
+      updateSprayAudio(false, activeNozzle, false);
 
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
-
-      drawCleanObjectArtwork(cleanCtx, job);
-      generateDirtLayers();
 
       try {
         localStorage.setItem("zinplay_powerwash_500_last", String(currentLevelNum));
@@ -1417,196 +1525,7 @@
       updateHUD();
     }
 
-    function selectNozzle(key) {
-      activeNozzleKey = key;
-      nozzleBtns.forEach((b) => {
-        const isMatch = b.getAttribute("data-nozzle") === key;
-        b.classList.toggle("active", isMatch);
-        b.classList.toggle("soap-active", isMatch && key === "soap");
-      });
-    }
-
-    nozzleBtns.forEach((b) => {
-      b.addEventListener("click", () => {
-        initAudio();
-        selectNozzle(b.getAttribute("data-nozzle"));
-      });
-    });
-
-    function triggerWin() {
-      if (levelWon) return;
-      levelWon = true;
-      isSpraying = false;
-      cleanedCells = totalDirtyCells;
-      dirtHealth.fill(0);
-      dirtCtx.clearRect(0, 0, WORLD_W, WORLD_H);
-      foamCtx.clearRect(0, 0, WORLD_W, WORLD_H);
-      shineAnim = 0.01;
-      sfxSpotlessDing();
-
-      solvedSet.add(currentLevelNum);
-      try {
-        localStorage.setItem("zinplay_powerwash_500_solved", JSON.stringify([...solvedSet]));
-      } catch (e) {}
-
-      for (let i = 0; i < 24; i++) {
-        sparkles.push({
-          x: 70 + Math.random() * 280,
-          y: 60 + Math.random() * 320,
-          size: 4 + Math.random() * 6,
-          alpha: 1,
-          phase: Math.random() * Math.PI * 2
-        });
-      }
-
-      updateHUD();
-
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      winHeading.textContent = isLast ? "All 500 Wash Jobs Cleared!" : `Job #${currentLevelNum} Gleaming!`;
-      winText.textContent = `${job.obj.name} restored to 100% spotless shine.`;
-      nextLevelBtn.textContent = isLast ? "Replay Job #1" : `Next Wash Job (#${currentLevelNum + 1}) →`;
-      setTimeout(() => winOverlay.classList.add("show"), 700);
-    }
-
-    // Apply Pressure Wash or Soap Foam at World Point (wx, wy)
-    function applySprayPoint(wx, wy, dtFactor = 1) {
-      if (levelWon) return false;
-      const nz = NOZZLES[activeNozzleKey];
-      const rad = nz.radius;
-      const minGx = Math.max(0, Math.floor((wx - rad) / CELL_W));
-      const maxGx = Math.min(GRID_W - 1, Math.ceil((wx + rad) / CELL_W));
-      const minGy = Math.max(0, Math.floor((wy - rad) / CELL_H));
-      const maxGy = Math.min(GRID_H - 1, Math.ceil((wy + rad) / CELL_H));
-
-      let hitActiveDirt = false;
-      let hitHardRust = false;
-
-      if (nz.isSoap) {
-        // Coat dirty areas in bubbly white soap foam that softens heavy rust & moss!
-        let appliedSoap = false;
-        for (let gy = minGy; gy <= maxGy; gy++) {
-          for (let gx = minGx; gx <= maxGx; gx++) {
-            const idx = gy * GRID_W + gx;
-            if (!objectMask[idx] || dirtHealth[idx] <= 0) continue;
-            const cx = (gx + 0.5) * CELL_W;
-            const cy = (gy + 0.5) * CELL_H;
-            if (Math.hypot(cx - wx, cy - wy) <= rad) {
-              if (!soapedMask[idx]) {
-                soapedMask[idx] = 1;
-                appliedSoap = true;
-              }
-              hitActiveDirt = true;
-            }
-          }
-        }
-        if (appliedSoap || hitActiveDirt) {
-          foamCtx.save();
-          foamCtx.fillStyle = "rgba(255, 255, 255, 0.32)";
-          for (let k = 0; k < 5; k++) {
-            const a = Math.random() * Math.PI * 2;
-            const d = Math.random() * (rad * 0.78);
-            foamCtx.beginPath();
-            foamCtx.arc(wx + Math.cos(a) * d, wy + Math.sin(a) * d, 4 + Math.random() * 6, 0, Math.PI * 2);
-            foamCtx.fill();
-          }
-          foamCtx.globalCompositeOperation = "destination-in";
-          foamCtx.drawImage(cleanCanvas, 0, 0);
-          foamCtx.restore();
-        }
-        return hitActiveDirt;
-      }
-
-      // Water Pressure Blasting
-      dirtCtx.save();
-      dirtCtx.globalCompositeOperation = "destination-out";
-
-      // Also rinse away soap foam visually
-      foamCtx.save();
-      foamCtx.globalCompositeOperation = "destination-out";
-      foamCtx.fillStyle = "rgba(0,0,0,0.85)";
-      foamCtx.beginPath();
-      foamCtx.arc(wx, wy, rad * 1.05, 0, Math.PI * 2);
-      foamCtx.fill();
-      foamCtx.restore();
-
-      for (let gy = minGy; gy <= maxGy; gy++) {
-        for (let gx = minGx; gx <= maxGx; gx++) {
-          const idx = gy * GRID_W + gx;
-          if (!objectMask[idx] || dirtHealth[idx] <= 0) continue;
-
-          const cx = (gx + 0.5) * CELL_W;
-          const cy = (gy + 0.5) * CELL_H;
-          const dist = Math.hypot(cx - wx, cy - wy);
-          if (dist > rad) continue;
-
-          hitActiveDirt = true;
-          const falloff = 1 - (dist / rad) * 0.45;
-          const isSoaped = soapedMask[idx] === 1;
-          const maxH = dirtMaxHealth[idx];
-
-          // Check if nozzle PSI is strong enough (unless pre-soaped!)
-          if (!isSoaped && maxH > nz.maxHard + 0.1) {
-            hitHardRust = true;
-            // Tiny chip wear so player feels resistance
-            dirtHealth[idx] = Math.max(0.45, dirtHealth[idx] - 0.04 * dtFactor);
-            continue;
-          }
-
-          const dmg = (isSoaped ? Math.max(nz.power, 3.6) : nz.power) * falloff * dtFactor;
-          dirtHealth[idx] -= dmg;
-
-          if (dirtHealth[idx] <= 0) {
-            dirtHealth[idx] = 0;
-            soapedMask[idx] = 0;
-            cleanedCells++;
-            dirtCtx.fillStyle = "rgba(0,0,0,1)";
-            dirtCtx.beginPath();
-            dirtCtx.arc(cx, cy, Math.max(CELL_W, CELL_H) * 0.92, 0, Math.PI * 2);
-            dirtCtx.fill();
-          } else {
-            // Partially thin out thick grime visually
-            dirtCtx.fillStyle = "rgba(0,0,0,0.28)";
-            dirtCtx.beginPath();
-            dirtCtx.arc(cx, cy, Math.max(CELL_W, CELL_H) * 0.78, 0, Math.PI * 2);
-            dirtCtx.fill();
-          }
-        }
-      }
-      dirtCtx.restore();
-
-      if (hitHardRust && !rustHintShown) {
-        rustHintShown = true;
-        showToast("Tough rust! Switch to ⚡ Turbo 0° or soften it with 🫧 Soap first!", 3000);
-      }
-
-      updateProgressUI();
-
-      // Auto-complete at 98.5% for peak ASMR satisfaction!
-      if (cleanedCells / Math.max(1, totalDirtyCells) >= 0.985) {
-        triggerWin();
-      }
-      return hitActiveDirt;
-    }
-
-    function spawnSprayDroplets(wx, wy, nz) {
-      const count = nz.isSoap ? 3 : 5;
-      for (let i = 0; i < count; i++) {
-        const ang = Math.random() * Math.PI * 2;
-        const spd = nz.isSoap ? (0.6 + Math.random() * 1.4) : (1.5 + Math.random() * 3.8);
-        droplets.push({
-          x: wx + (Math.random() - 0.5) * nz.radius * 0.6,
-          y: wy + (Math.random() - 0.5) * nz.radius * 0.6,
-          vx: Math.cos(ang) * spd,
-          vy: Math.sin(ang) * spd - 0.6,
-          r: nz.isSoap ? (3 + Math.random() * 3.5) : (1.4 + Math.random() * 2.2),
-          color: nz.color,
-          alpha: 0.9,
-          isBubble: nz.isSoap
-        });
-      }
-    }
-
-    // Viewport & Pointer Controls
+    // Viewport & Pointer Spray Handling
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1627,72 +1546,70 @@
       const rect = canvas.getBoundingClientRect();
       const vp = getViewport();
       return {
-        x: (clientX - rect.left - vp.offsetX) / vp.scale,
-        y: (clientY - rect.top - vp.offsetY) / vp.scale
+        x: Math.max(0, Math.min(WORLD_W, (clientX - rect.left - vp.offsetX) / vp.scale)),
+        y: Math.max(0, Math.min(WORLD_H, (clientY - rect.top - vp.offsetY) / vp.scale))
       };
     }
 
     canvas.addEventListener("pointerdown", (e) => {
-      if (levelWon) return;
+      if (jobWon) return;
       initAudio();
       isSpraying = true;
+      sprayPt = clientToWorld(e.clientX, e.clientY);
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-      const pt = clientToWorld(e.clientX, e.clientY);
-      aimPos = pt;
-      lastSprayPos = pt;
-      const hit = applySprayPoint(pt.x, pt.y, 1);
-      spawnSprayDroplets(pt.x, pt.y, NOZZLES[activeNozzleKey]);
-      updateSprayAudio(true, NOZZLES[activeNozzleKey], hit);
     });
 
     canvas.addEventListener("pointermove", (e) => {
       const pt = clientToWorld(e.clientX, e.clientY);
-      aimPos = pt;
-      if (!isSpraying || levelWon) return;
-
-      // Smooth linear interpolation so fast swipes never leave gaps!
-      const prev = lastSprayPos || pt;
-      const dist = Math.hypot(pt.x - prev.x, pt.y - prev.y);
-      const stepSize = Math.max(4, NOZZLES[activeNozzleKey].radius * 0.28);
-      const steps = Math.max(1, Math.ceil(dist / stepSize));
-
-      let hitAny = false;
-      for (let i = 1; i <= steps; i++) {
-        const t = i / steps;
-        const ix = prev.x + (pt.x - prev.x) * t;
-        const iy = prev.y + (pt.y - prev.y) * t;
-        if (applySprayPoint(ix, iy, 0.72)) hitAny = true;
+      if (isSpraying || e.pointerType === "mouse") {
+        sprayPt = pt;
       }
-      lastSprayPos = pt;
-      spawnSprayDroplets(pt.x, pt.y, NOZZLES[activeNozzleKey]);
-      updateSprayAudio(true, NOZZLES[activeNozzleKey], hitAny);
     });
 
-    function stopSpraying() {
+    const stopSpray = () => {
       isSpraying = false;
-      lastSprayPos = null;
-      stopSprayAudio();
+      updateSprayAudio(false, activeNozzle, false);
+    };
+    canvas.addEventListener("pointerup", stopSpray);
+    canvas.addEventListener("pointercancel", stopSpray);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stopSpray(); });
+
+    // Nozzle Selector Dock & Keyboard Hotkeys (1 / 2 / 3)
+    function selectNozzle(key) {
+      if (!NOZZLES[key]) return;
+      activeNozzle = key;
+      nozzleDock.querySelectorAll(".nozzle-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.nozzle === key);
+      });
     }
-    canvas.addEventListener("pointerup", stopSpraying);
-    canvas.addEventListener("pointercancel", stopSpraying);
-    window.addEventListener("blur", stopSpraying);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) stopSpraying();
+
+    nozzleDock.querySelectorAll(".nozzle-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        initAudio();
+        selectNozzle(btn.dataset.nozzle);
+      });
     });
 
-    // Buttons & Dirt Radar Hint
-    document.getElementById("resetBtn").addEventListener("click", () => loadJob(currentLevelNum));
-    document.getElementById("hintBtn").addEventListener("click", () => {
-      if (levelWon) return;
-      initAudio();
-      radarTimer = 2.6;
-      sfxRadarPing();
-      showToast("Dirt Radar active — glowing orange marks remaining grime!", 2200);
+    window.addEventListener("keydown", (e) => {
+      if (pickerModal.classList.contains("open")) return;
+      if (e.key === "1") selectNozzle("wide");
+      else if (e.key === "2") selectNozzle("jet");
+      else if (e.key === "3") selectNozzle("turbo");
     });
+
+    // Spot Grime Radar Button
+    document.getElementById("radarBtn").addEventListener("click", () => {
+      if (jobWon) return;
+      initAudio();
+      radarTimer = 3.6;
+      showToast("💡 Grime Radar active! Remaining dirt highlighted in bright cyan/gold.", 2500);
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => loadJob(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
       soundBtn.textContent = soundOn ? "🔊 ASMR ON" : "🔇 OFF";
-      if (!soundOn) stopSprayAudio();
+      if (!soundOn) updateSprayAudio(false, activeNozzle, false);
     });
     nextLevelBtn.addEventListener("click", () => {
       loadJob(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
@@ -1704,7 +1621,7 @@
       if (currentLevelNum < TOTAL_LEVELS) loadJob(currentLevelNum + 1);
     });
 
-    // Job Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1763,23 +1680,20 @@
     });
 
     // ==============================================
-    // MAIN 60FPS WASH BAY RENDER LOOP
+    // MAIN 60 FPS COMPOSITOR & WATER SPRAY RENDERER
     // ==============================================
     let lastTime = performance.now();
 
-    function drawScene(now) {
-      const dt = Math.min(0.05, (now - lastTime) / 1000);
+    function frame(now) {
+      const dt = Math.min(0.04, (now - lastTime) / 1000);
       lastTime = now;
 
-      // Continuous spraying while holding still on stubborn moss/rust
-      if (isSpraying && !levelWon) {
-        const hit = applySprayPoint(aimPos.x, aimPos.y, dt * 16);
-        if (Math.random() < 0.65) spawnSprayDroplets(aimPos.x, aimPos.y, NOZZLES[activeNozzleKey]);
-        updateSprayAudio(true, NOZZLES[activeNozzleKey], hit);
-      }
-
       if (radarTimer > 0) radarTimer = Math.max(0, radarTimer - dt);
-      if (levelWon && shineAnim > 0 && shineAnim < 1.35) shineAnim += dt * 1.4;
+
+      if (isSpraying && !jobWon) {
+        const scrubbed = applyWaterSpray(sprayPt.x, sprayPt.y, dt);
+        updateSprayAudio(true, activeNozzle, scrubbed);
+      }
 
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
@@ -1788,170 +1702,132 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Subtle Wash Bay Stone Drain Grid Background
-      ctx.strokeStyle = "rgba(148, 163, 184, 0.08)";
-      ctx.lineWidth = 1;
-      for (let x = 20; x < WORLD_W; x += 36) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, WORLD_H); ctx.stroke();
-      }
-      for (let y = 20; y < WORLD_H; y += 36) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WORLD_W, y); ctx.stroke();
-      }
-
-      // 2. Clean Pristine Object Layer (with soft elevation shadow)
-      ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-      ctx.shadowBlur = 22;
-      ctx.shadowOffsetY = 8;
+      // 1. Gleaming Clean Restoration Artwork Layer
       ctx.drawImage(cleanCanvas, 0, 0);
-      ctx.restore();
 
-      // 3. Remaining Dirt & Grime Layer
+      // 2. Remaining Textured Grime Layer
       ctx.drawImage(dirtCanvas, 0, 0);
 
-      // 4. Bubbly Soap Foam Layer
-      ctx.drawImage(foamCanvas, 0, 0);
-
-      // 5. Optional Dirt Radar Highlight Flash (Hint)
-      if (radarTimer > 0 && !levelWon) {
-        const pulse = (0.35 + 0.55 * Math.abs(Math.sin(now * 0.012))) * Math.min(1, radarTimer);
+      // 3. Optional Spot-Grime Radar Overlay (Highlights Remaining Dirt Specks!)
+      if (radarTimer > 0 && !jobWon) {
+        const pulse = 0.45 + 0.4 * Math.sin(now * 0.015);
         ctx.save();
-        ctx.fillStyle = `rgba(249, 115, 22, ${pulse})`;
-        for (let gy = 0; gy < GRID_H; gy++) {
-          for (let gx = 0; gx < GRID_W; gx++) {
-            const idx = gy * GRID_W + gx;
-            if (objectMask[idx] && dirtHealth[idx] > 0) {
-              ctx.fillRect(gx * CELL_W, gy * CELL_H, CELL_W + 0.5, CELL_H + 0.5);
+        for (let r = 0; r < GRID_N; r++) {
+          for (let c = 0; c < GRID_N; c++) {
+            const idx = r * GRID_N + c;
+            if (job.toughGrid[idx] > 0.05) {
+              ctx.fillStyle = job.tierGrid[idx] === 3
+                ? `rgba(250, 204, 21, ${pulse * 0.72})`
+                : `rgba(34, 211, 238, ${pulse * 0.65})`;
+              ctx.fillRect(c * CELL_PX, r * CELL_PX, CELL_PX, CELL_PX);
             }
           }
         }
         ctx.restore();
       }
 
-      // 6. Victory Gloss Shine Sweep
-      if (levelWon && shineAnim > 0 && shineAnim < 1.3) {
-        const sx = -80 + shineAnim * (WORLD_W + 160);
-        ctx.save();
-        const grad = ctx.createLinearGradient(sx - 50, 0, sx + 50, 90);
-        grad.addColorStop(0, "rgba(255,255,255,0)");
-        grad.addColorStop(0.5, "rgba(255,255,255,0.5)");
-        grad.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, WORLD_W, WORLD_H);
-        ctx.restore();
-      }
+      // 4. Active Chrome Pressure Washer Wand & Pressurized Water Jet Cone!
+      const nz = NOZZLES[activeNozzle];
+      if (!jobWon) {
+        if (isSpraying) {
+          const wandX = WORLD_W * 0.5 + (sprayPt.x - WORLD_W * 0.5) * 0.42;
+          const wandY = WORLD_H + 14;
 
-      // 7. Pressurized Water Stream & Nozzle Cone Visual
-      const nz = NOZZLES[activeNozzleKey];
-      if (isSpraying && !levelWon) {
-        const gunX = WORLD_W * 0.78;
-        const gunY = WORLD_H + 24;
+          // Pressurized Translucent Water Spray Cone from Lance Tip -> Contact Circle!
+          ctx.save();
+          const jetG = ctx.createLinearGradient(wandX, wandY - 50, sprayPt.x, sprayPt.y);
+          jetG.addColorStop(0, "rgba(255, 255, 255, 0.72)");
+          jetG.addColorStop(0.6, "rgba(186, 230, 253, 0.46)");
+          jetG.addColorStop(1, "rgba(224, 242, 254, 0.18)");
+          ctx.fillStyle = jetG;
+          ctx.beginPath();
+          ctx.moveTo(wandX - 5, wandY - 52);
+          ctx.lineTo(wandX + 5, wandY - 52);
+          ctx.lineTo(sprayPt.x + nz.radius * 0.85, sprayPt.y);
+          ctx.lineTo(sprayPt.x - nz.radius * 0.85, sprayPt.y);
+          ctx.closePath();
+          ctx.fill();
 
-        ctx.save();
-        // Translucent high-pressure fan cone from nozzle to target
-        const coneGrad = ctx.createLinearGradient(gunX, gunY, aimPos.x, aimPos.y);
-        coneGrad.addColorStop(0, nz.isSoap ? "rgba(251, 207, 232, 0.72)" : "rgba(224, 242, 254, 0.75)");
-        coneGrad.addColorStop(1, nz.isSoap ? "rgba(255, 255, 255, 0.14)" : "rgba(56, 189, 248, 0.16)");
-
-        const dx = aimPos.x - gunX;
-        const dy = aimPos.y - gunY;
-        const len = Math.max(1, Math.hypot(dx, dy));
-        const perpX = (-dy / len) * (nz.radius * 0.78);
-        const perpY = (dx / len) * (nz.radius * 0.78);
-
-        ctx.fillStyle = coneGrad;
-        ctx.beginPath();
-        ctx.moveTo(gunX - 4, gunY);
-        ctx.lineTo(aimPos.x - perpX, aimPos.y - perpY);
-        ctx.lineTo(aimPos.x + perpX, aimPos.y + perpY);
-        ctx.lineTo(gunX + 4, gunY);
-        ctx.closePath();
-        ctx.fill();
-
-        // Bright pressurized water core stream
-        ctx.strokeStyle = nz.isSoap ? "rgba(255, 255, 255, 0.65)" : "rgba(224, 242, 254, 0.85)";
-        ctx.lineWidth = activeNozzleKey === "turbo" ? 3.5 : 2;
-        ctx.beginPath();
-        ctx.moveTo(gunX, gunY);
-        ctx.lineTo(aimPos.x, aimPos.y);
-        ctx.stroke();
-
-        // Impact splash ring
-        ctx.strokeStyle = nz.color;
-        ctx.lineWidth = 2;
-        ctx.globalAlpha = 0.75;
-        ctx.beginPath();
-        ctx.arc(aimPos.x, aimPos.y, nz.radius, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-      } else if (!levelWon) {
-        // Subtle nozzle size preview ring when hovering
-        ctx.save();
-        ctx.strokeStyle = "rgba(186, 230, 253, 0.45)";
-        ctx.lineWidth = 1.6;
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath();
-        ctx.arc(aimPos.x, aimPos.y, nz.radius, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // 8. Water Spray Droplets & Soap Bubbles
-      droplets = droplets.filter((d) => d.alpha > 0.04);
-      for (const d of droplets) {
-        d.x += d.vx;
-        d.y += d.vy;
-        d.vy += d.isBubble ? -0.02 : 0.14;
-        d.alpha *= d.isBubble ? 0.94 : 0.9;
-        ctx.save();
-        ctx.globalAlpha = d.alpha;
-        if (d.isBubble) {
+          // White Splash Impact Ring (Rotating Spiral for 0° Turbo!)
           ctx.strokeStyle = "#ffffff";
-          ctx.fillStyle = "rgba(251, 207, 232, 0.35)";
-          ctx.lineWidth = 1.2;
+          ctx.lineWidth = 2.4;
           ctx.beginPath();
-          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.arc(sprayPt.x, sprayPt.y, nz.radius * (activeNozzle === "turbo" ? (0.85 + 0.2 * Math.sin(now * 0.06)) : 0.92), 0, Math.PI * 2);
           ctx.stroke();
-        } else {
-          ctx.fillStyle = d.color;
+
+          // Gleaming Chrome Lance Barrel Aiming at Contact Point
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 9;
+          ctx.lineCap = "round";
           ctx.beginPath();
-          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.moveTo(wandX, wandY);
+          ctx.lineTo(wandX + (sprayPt.x - wandX) * 0.18, wandY + (sprayPt.y - wandY) * 0.18);
+          ctx.stroke();
+          ctx.strokeStyle = nz.col;
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(wandX + (sprayPt.x - wandX) * 0.14, wandY + (sprayPt.y - wandY) * 0.14);
+          ctx.lineTo(wandX + (sprayPt.x - wandX) * 0.19, wandY + (sprayPt.y - wandY) * 0.19);
+          ctx.stroke();
+          ctx.restore();
+        } else {
+          // Subtle Nozzle Aim Reticle
+          ctx.save();
+          ctx.strokeStyle = nz.col;
+          ctx.globalAlpha = 0.65;
+          ctx.lineWidth = 1.8;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.arc(sprayPt.x, sprayPt.y, nz.radius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
         }
-        ctx.restore();
       }
 
-      // 9. Spotless Celebration Sparkles
-      sparkles = sparkles.filter((sp) => sp.alpha > 0.03);
+      // 5. Flying Water Mist & Foam Droplets
+      mistParticles = mistParticles.filter((m) => m.alpha > 0.04);
+      for (const m of mistParticles) {
+        m.vy += 0.08;
+        m.x += m.vx;
+        m.y += m.vy;
+        m.alpha *= 0.9;
+        ctx.fillStyle = m.color;
+        ctx.globalAlpha = m.alpha;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // 6. Victory Spotless Starlight Sparkles!
+      sparkles = sparkles.filter((sp) => sp.alpha > 0.04);
       for (const sp of sparkles) {
-        sp.alpha *= 0.965;
-        const sc = sp.size * (0.7 + 0.3 * Math.sin(now * 0.014 + sp.phase));
+        sp.alpha *= 0.97;
+        const sc = sp.size * (0.7 + 0.35 * Math.sin(now * 0.012 + sp.phase));
         ctx.save();
         ctx.translate(sp.x, sp.y);
-        ctx.fillStyle = `rgba(254, 249, 195, ${sp.alpha})`;
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#38bdf8";
+        ctx.shadowBlur = 10;
+        ctx.globalAlpha = sp.alpha;
         ctx.beginPath();
-        ctx.moveTo(0, -sc);
-        ctx.lineTo(sc * 0.28, -sc * 0.28);
-        ctx.lineTo(sc, 0);
-        ctx.lineTo(sc * 0.28, sc * 0.28);
-        ctx.lineTo(0, sc);
-        ctx.lineTo(-sc * 0.28, sc * 0.28);
-        ctx.lineTo(-sc, 0);
-        ctx.lineTo(-sc * 0.28, -sc * 0.28);
+        ctx.moveTo(0, -sc); ctx.lineTo(sc * 0.28, -sc * 0.28);
+        ctx.lineTo(sc, 0); ctx.lineTo(sc * 0.28, sc * 0.28);
+        ctx.lineTo(0, sc); ctx.lineTo(-sc * 0.28, sc * 0.28);
+        ctx.lineTo(-sc, 0); ctx.lineTo(-sc * 0.28, -sc * 0.28);
         ctx.closePath();
         ctx.fill();
         ctx.restore();
       }
 
       ctx.restore();
-      requestAnimationFrame(drawScene);
+      requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
     loadJob(currentLevelNum);
-    requestAnimationFrame(drawScene);
+    requestAnimationFrame(frame);
   </script>
 
 </body>
