@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Un-Builder — 500 Retro Disassembly Puzzle Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free mechanical teardown puzzles in Un-Builder. Disassemble retro radios, cameras, cassette players, and engines step by step in exact reverse order." />
+  <title>Un-Builder — Free 500-Level Retro Disassembly &amp; Screw Puzzle Game | ZinPlay</title>
+  <meta name="description" content="Play Un-Builder free online with no download. Unscrew fasteners, unclip ribbon cables, wrench hex bolts, and disassemble 500 retro radios, vintage cameras, and engines in exact reverse order on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Un-Builder",
+    "url": "https://zinplay.io/games/un-builder/",
+    "genre": ["Puzzle", "Mechanical Logic", "ASMR Simulation"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -178,9 +191,7 @@
       cursor: pointer;
       transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
     }
-    .tool-btn:active {
-      transform: scale(0.96);
-    }
+    .tool-btn:active { transform: scale(0.96); }
     .tool-btn.active {
       border-color: #38bdf8;
       background: rgba(56, 189, 248, 0.22);
@@ -239,9 +250,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
@@ -275,15 +284,8 @@
       letter-spacing: 0.14em;
       margin-bottom: 6px;
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -324,9 +326,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -423,6 +423,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #0b1320;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #0b1320;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #0b1320 0%, #172554 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.brass-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #1c1917 0%, #451a03 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .teardown-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .teardown-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .teardown-table th, .teardown-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .teardown-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .teardown-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -435,7 +515,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -524,29 +604,125 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 840+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/un-builder-banner-1.jpg"
+            alt="Un-Builder retro mechanical teardown puzzle showing vintage 35mm camera and transistor radio disassembled on an anti-static repair mat"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Retro Gadget Teardowns — Reverse-Engineering Logic</h3>
+          <p>Strip vintage transistor radios, 35mm cameras, cassette decks, and twin-valve engines down to the bare stamped chassis with tactile ASMR tool audio.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Un-Builder (500 Mechanical Teardowns)</h2>
-        <p>Un-Builder celebrates the oddly satisfying logic of reverse engineering. Spread across an anti-static repair mat are 500 retro gadgets—from 1970s transistor radios and twin-lens film cameras to cassette Walkmans, handheld consoles, brass desk clocks, and twin-cylinder engines. Every single component is physically held down by fasteners, brackets, cables, or outer covers above it.</p>
+        <h2>What Is Un-Builder? A Mechanical Disassembly &amp; Screw Puzzle Online</h2>
+        <p><strong>Un-Builder</strong> is a free <strong>mechanical disassembly puzzle game online</strong> crafted for anyone who has ever wondered what sits inside a vintage cassette player, brass alarm clock, or classic SLR camera. Spread across an anti-static blue ESD workbench are <strong>500 layered retro devices</strong>. Just like a real repair teardown, every metal shield, ribbon cable, copper coil, and circuit board is physically locked down by fasteners or brackets sitting above it—meaning you must pick the matching tool and strip each machine strictly from the outside in.</p>
+        <p>Engineered as a lightweight, <strong>no-download reverse-engineering brain teaser for phones, tablets, and Chromebooks</strong>, Un-Builder runs at a smooth 60 FPS with live procedural <strong>Web Audio ratchet clicks, screwdriver spins, and metallic clunks</strong>. There are no harsh timers or paywalled toolkits—just calm, methodical mechanical deduction and a 3-star clean-teardown score for zero-jam precision.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Workbench Tool Belt &amp; Zero-Jam Teardown Strategy</h2>
+        <p>To earn a <strong>⭐⭐⭐ Zero-Jam Teardown</strong> on multi-layer prototypes, match each hardware type to its exact tool and inspect physical overlaps before pulling a panel:</p>
+
+        <div class="teardown-table-wrap">
+          <table class="teardown-table">
+            <thead>
+              <tr>
+                <th>Workbench Tool</th>
+                <th>Target Hardware</th>
+                <th>When to Use It in the Sequence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🪛 Driver</strong> (Ch. 1+)</td>
+                <td>Chrome Phillips &amp; slotted chassis screws</td>
+                <td>Always clear outer faceplate screws first, then watch for hidden inner board screws underneath covers!</td>
+              </tr>
+              <tr>
+                <td><strong>✂️ Unclip</strong> (Ch. 2+)</td>
+                <td>Colored power wires, ribbon leads &amp; pink safety latches</td>
+                <td>Disconnect exterior plastic latches early, and always unclip internal wires linking two PCBs before lifting either module.</td>
+              </tr>
+              <tr>
+                <td><strong>🔧 Wrench</strong> (Ch. 3+)</td>
+                <td>Heavy golden M6 hex bolts &amp; inner anchor nuts</td>
+                <td>Unbolt cross-locking steel brackets first—those brackets physically trap multiple shield covers beneath them.</td>
+              </tr>
+              <tr>
+                <td><strong>🧤 Lift</strong> (Ch. 1+)</td>
+                <td>Steel brackets, access covers, PCBs, gears, coils &amp; lenses</td>
+                <td>Pull away completely unfastened layers from top to bottom until the stamped chassis reads <code>EMPTY</code>!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Pro Tip:</strong> If you accidentally tap a locked plate or circuit board too early, watch the flashing <strong>red-orange dashed dependency lines</strong>—they point straight to the exact screw, wire, or cross-bracket still holding that piece down! Or tap <strong>💡 Next Part</strong> anytime to spotlight a guaranteed free component in gold and auto-select its matching tool.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner brass-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/un-builder-banner-2.jpg"
+            alt="Knolling layout of cleanly disassembled vintage cassette player and brass clockwork parts in Un-Builder browser game"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Live Blocker Detection &amp; Tactile Ratchet Web Audio</h3>
+          <p>Every screw spins upward as it loosens, hex bolts clack with a metallic socket ratchet, and zero-jam teardowns reward master technician stars.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>6 Classic Retro Machines Across 5 Escalating Workshop Chapters</h2>
+        <p>Every single unit from #1 to #500 is generated forward from the deep chassis core outward as a strict acyclic dependency tree—mathematically guaranteeing that <strong>zero deadlocks or unsolvable jams</strong> ever occur:</p>
         <ul>
-          <li><strong>Work Outside-In:</strong> Start by choosing the matching tool on the belt below and clearing top-layer fasteners. Use the <strong>🪛 Driver</strong> on slotted/Phillips screws, the <strong>✂️ Clip Tool</strong> on colored wires, ribbons, and fuses (Chapter 2+), the <strong>🔧 Wrench</strong> on heavy hex nuts and steel clamps (Chapter 3+), and <strong>🧤 Lift</strong> to pull away unbolted metal plates, gears, coils, and circuit boards.</li>
-          <li><strong>Inspect Live Mechanical Blockers:</strong> Trying to pull a plate or circuit board before it's free causes a dull metallic clunk—and immediately flashes bright orange-red outlines around the exact screws, cables, or overlapping panels still locking it in place!</li>
-          <li><strong>Aim for a 3-Star Clean Teardown:</strong> Stripping the entire device down to the bare chassis with zero blocked jams earns a 3-star master technician rating.</li>
+          <li><strong>Chapter 1 (Units 1–100 — Pocket Electronics):</strong> Introduces the <strong>🪛 Driver</strong> and <strong>🧤 Lift</strong> gloves on 1970s transistor radios, vintage 35mm cameras, and 8-bit handhelds with clean 2-to-3 layer housings.</li>
+          <li><strong>Chapter 2 (Units 101–200 — Wired Assemblies):</strong> Unlocks the <strong>✂️ Unclip</strong> tool to detach multi-colored ribbon leads, power harnesses, and spring latch clips bridging internal battery packs and circuit boards.</li>
+          <li><strong>Chapter 3 (Units 201–300 — Heavy Mechanics):</strong> Unlocks the <strong>🔧 Wrench</strong> for heavy M6 hex bolts and introduces cross-locking steel retaining straps across twin-valve engines and brass mechanical clocks.</li>
+          <li><strong>Chapter 4 &amp; 5 (Units 301–500 — Layered Prototypes &amp; Master Teardown):</strong> Deep 5-layer retro assemblies with up to four core bays, cascading access hatches, internal anchor nuts, and interlocking brackets—complete with an instant 1–500 unit picker and private browser local storage saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Disassembly Puzzle Topics">
+          <span class="kw-pill">Mechanical Disassembly Game Online</span>
+          <span class="kw-pill">Retro Gadget Teardown Simulator</span>
+          <span class="kw-pill">Screw and Bolt Puzzle Browser</span>
+          <span class="kw-pill">Reverse Engineering Logic Game</span>
+          <span class="kw-pill">ASMR Screwdriver Web Audio</span>
+          <span class="kw-pill">No-Download Chromebook Brain Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Un-Builder FAQ</h2>
         <details class="faq-item">
           <summary>Are all 500 retro devices guaranteed to be 100% disassemblable without deadlocks?</summary>
-          <div class="faq-answer">Yes! Every device is built forward from the deep chassis core outward layer-by-layer (forming a strict acyclic dependency tree), guaranteeing there is always at least one completely free fastener or part to remove at every step.</div>
+          <div class="faq-answer">Yes! Every device is assembled programmatically from Layer 0 (deep core modules) outward to Layer 4 (surface fasteners), forming a strict acyclic dependency tree so at least one completely free part is always accessible.</div>
         </details>
         <details class="faq-item">
-          <summary>What does the Next Part (💡) hint button do?</summary>
-          <div class="faq-answer">Tapping Next Part highlights a currently unblocked component in glowing gold on the workbench and automatically switches your tool belt to the exact tool required to remove it.</div>
+          <summary>Why did a cover plate clunk and flash red lines when I tapped it?</summary>
+          <div class="faq-answer">That means another fastener, cross-bracket, or clip is still mechanically locking that plate down! Follow the glowing red dashed lines to see the exact screws or brackets you need to remove first.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What happens if I tap a free screw while holding the wrong tool?</summary>
+          <div class="faq-answer">No jam penalty is added for holding the wrong tool—Un-Builder simply highlights the required tool on your bottom belt in glowing gold so you can switch with one quick tap!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does Un-Builder work smoothly on Android phones, iPhones, and Chromebooks?</summary>
+          <div class="faq-answer">Yes. Every screw, hex nut, wire, and latch uses generous mobile touch hitboxes and crisp top-down layer prioritization so small fasteners are easy to unscrew without zooming or app downloads.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
@@ -682,12 +858,12 @@
     ];
 
     const PLATE_COLORS = [
-      { fill: "#475569", hi: "#64748b", stroke: "#cbd5e1" }, // Brushed Steel
-      { fill: "#b45309", hi: "#d97706", stroke: "#fde68a" }, // Warm Brass
-      { fill: "#0f766e", hi: "#14b8a6", stroke: "#99f6e4" }, // Bakelite Teal
-      { fill: "#991b1b", hi: "#dc2626", stroke: "#fca5a5" }, // Crimson Enamel
-      { fill: "#3730a3", hi: "#4f46e5", stroke: "#c7d2fe" }, // Indigo Metal
-      { fill: "#57534e", hi: "#78716c", stroke: "#d6d3d1" }  // Gunmetal
+      { fill: "#475569", hi: "#64748b", stroke: "#cbd5e1" },
+      { fill: "#b45309", hi: "#d97706", stroke: "#fde68a" },
+      { fill: "#0f766e", hi: "#14b8a6", stroke: "#99f6e4" },
+      { fill: "#991b1b", hi: "#dc2626", stroke: "#fca5a5" },
+      { fill: "#3730a3", hi: "#4f46e5", stroke: "#c7d2fe" },
+      { fill: "#57534e", hi: "#78716c", stroke: "#d6d3d1" }
     ];
 
     const MODULE_TYPES = [
@@ -718,7 +894,6 @@
       );
     }
 
-    // Build a 100% Solvable Layered Mechanical DAG (Layer 0 -> Layer 4)
     function buildDeviceLevel(levelNum) {
       const rng = mulberry32(levelNum * 141913 + 8191);
       const dev = DEVICES[(levelNum - 1) % DEVICES.length];
@@ -732,7 +907,7 @@
       const addPart = (p) => {
         p.id = parts.length;
         p.removed = false;
-        p.anim = 0; // 0 = seated, 0..1 = removing animation
+        p.anim = 0;
         p.shake = 0;
         p.blockedFlash = 0;
         p.blockers = p.blockers || [];
@@ -742,17 +917,14 @@
 
       const innerW = dev.bodyW - 36;
       const innerH = dev.bodyH - 40;
-      const leftBound = CX - innerW / 2;
-      const topBound = CY - innerH / 2;
 
-      // Determine complexity smoothly across 500 levels
       const modCount = levelNum <= 45 ? 2 : (levelNum <= 180 ? 3 : 4);
-      const coverCount = levelNum <= 60 ? 1 : (levelNum <= 260 ? 2 : (levelNum <= 400 ? 3 : 3));
+      const coverCount = levelNum <= 60 ? 1 : (levelNum <= 260 ? 2 : 3);
       const wireCount = levelNum < 101 ? 0 : (levelNum <= 250 ? 1 : (levelNum <= 380 ? 2 : 3));
       const useWrench = levelNum >= 201;
       const addCrossBridge = levelNum >= 260;
 
-      // === LAYER 0: Deep Core Modules (2 to 4 non-overlapping bays inside chassis) ===
+      // === LAYER 0: Deep Core Modules ===
       const slots = [];
       if (modCount === 2) {
         slots.push({ x: CX - innerW * 0.24, y: CY, w: innerW * 0.44, h: innerH * 0.72 });
@@ -790,8 +962,7 @@
         layer0Mods.push(mod);
       });
 
-      // === LAYER 1: Internal Fasteners & Wires Directly Locking Layer-0 Modules ===
-      // Give 1–2 inner modules a retaining wire or internal anchor bolt so peeling a cover reveals inner work!
+      // === LAYER 1: Internal Fasteners & Wires ===
       const layer1Parts = [];
       for (let i = 0; i < Math.min(wireCount, layer0Mods.length); i++) {
         const mA = layer0Mods[i];
@@ -819,7 +990,6 @@
         layer1Parts.push(wire);
       }
 
-      // Add an internal retaining screw/nut on 1 or 2 inner modules in Ch. 2+
       if (levelNum >= 80) {
         const anchorCnt = levelNum >= 320 ? 2 : 1;
         for (let k = 0; k < Math.min(anchorCnt, layer0Mods.length); k++) {
@@ -841,22 +1011,18 @@
         }
       }
 
-      // === LAYER 2: Metal Shield Plates & Outer Covers Overlapping Inner Modules ===
+      // === LAYER 2: Metal Shield Plates & Outer Covers ===
       const layer2Covers = [];
       const plateLayouts = [
-        // 1 big center shield
         [{ x: CX, y: CY, w: innerW * 0.72, h: innerH * 0.62, name: "Main Access Cover" }],
-        // 2 side-by-side panels
         [
           { x: CX - innerW * 0.22, y: CY - 6, w: innerW * 0.48, h: innerH * 0.78, name: "Left Housing Plate" },
           { x: CX + innerW * 0.22, y: CY + 6, w: innerW * 0.48, h: innerH * 0.78, name: "Right Access Shield" }
         ],
-        // 2 top/bottom panels
         [
           { x: CX, y: CY - innerH * 0.22, w: innerW * 0.84, h: innerH * 0.42, name: "Upper Faceplate" },
           { x: CX, y: CY + innerH * 0.22, w: innerW * 0.84, h: innerH * 0.42, name: "Lower Deck Cover" }
         ],
-        // 3 cascading panels (left, right, center-bottom)
         [
           { x: CX - innerW * 0.25, y: CY - innerH * 0.14, w: innerW * 0.44, h: innerH * 0.58, name: "Primary Shield Plate" },
           { x: CX + innerW * 0.25, y: CY - innerH * 0.14, w: innerW * 0.44, h: innerH * 0.58, name: "Auxiliary Cover" },
@@ -887,7 +1053,6 @@
           blockers: []
         });
 
-        // Any Layer-0 module or Layer-1 part overlapped by this cover is mechanically blocked by it!
         for (const m of layer0Mods) {
           if (rectsOverlap(plate, m, -8)) m.blockers.push(plate.id);
         }
@@ -903,7 +1068,7 @@
         layer2Covers.push(plate);
       });
 
-      // === LAYER 3: Optional Cross-Locking Clamp Bar / Dial Bridge (Ch. 3+) ===
+      // === LAYER 3: Optional Cross-Locking Clamp Bar ===
       const layer3Bars = [];
       if (addCrossBridge) {
         const horiz = rng() < 0.65;
@@ -927,13 +1092,12 @@
         layer3Bars.push(bar);
       }
 
-      // === LAYER 4: Surface Fasteners (Screws, Hex Bolts & Exterior Safety Clips) ===
+      // === LAYER 4: Surface Fasteners ===
       const usedFastenerPos = [];
       const canPlaceFastener = (fx, fy) => {
         return !usedFastenerPos.some((p) => Math.hypot(p.x - fx, p.y - fy) < 25);
       };
 
-      // Fasten every Layer-2 plate with 2–3 distinct corner screws/bolts
       layer2Covers.forEach((pl, pIdx) => {
         const padX = Math.min(18, pl.w * 0.28);
         const padY = Math.min(16, pl.h * 0.28);
@@ -949,8 +1113,6 @@
         for (const c of corners) {
           if (placed >= wantCnt) break;
           if (!canPlaceFastener(c.x, c.y)) continue;
-
-          // Ensure surface fastener isn't hidden under a Layer-3 cross bracket
           if (layer3Bars.some((bar) => rectsOverlap(bar, { x: c.x, y: c.y, w: 20, h: 20 }, 2))) continue;
 
           const isHex = useWrench && ((placed + pIdx + levelNum) % 2 === 1);
@@ -971,7 +1133,6 @@
         }
       });
 
-      // Fasten Layer-3 Cross Brackets with heavy Hex Bolts or Safety Clips
       layer3Bars.forEach((bar) => {
         const horiz = bar.w > bar.h;
         const pts = horiz
@@ -996,7 +1157,6 @@
         });
       });
 
-      // Add 1 exterior safety clip on a plate in Ch. 2+ if none placed yet
       if (levelNum >= 101 && layer2Covers.length > 0 && !parts.some((p) => p.tool === "clip")) {
         const pl = layer2Covers[0];
         const cx = pl.x;
@@ -1017,7 +1177,6 @@
         }
       }
 
-      // Deduplicate blocker lists
       parts.forEach((p) => {
         p.blockers = [...new Set(p.blockers)];
       });
@@ -1068,13 +1227,11 @@
     }
 
     function sfxUnscrew() {
-      // Crisp 3-click ratchet / screwdriver spin
       [620, 740, 880].forEach((f, i) => {
         setTimeout(() => playTone(f, 0.045, "triangle", 0.09), i * 38);
       });
     }
     function sfxWrench() {
-      // Heavier metallic socket ratchet clack
       [290, 360, 440].forEach((f, i) => {
         setTimeout(() => playTone(f, 0.06, "sawtooth", 0.075), i * 48);
       });
@@ -1135,7 +1292,7 @@
     let levelWon = false;
     let hintPartId = -1;
     let hintToolKey = null;
-    let blockLines = []; // [{ x1, y1, x2, y2, alpha }]
+    let blockLines = [];
     let sparks = [];
     let toastTimer = null;
 
@@ -1241,7 +1398,6 @@
       }
     }
 
-    // Viewport & Accurate Top-Down Hit-Testing
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1268,7 +1424,6 @@
 
     function hitTestPart(p, wx, wy) {
       if (p.shape === "screw" || p.shape === "hex" || p.shape === "clip") {
-        // Generous mobile fingertip padding for fasteners!
         return Math.hypot(wx - p.x, wy - p.y) <= (p.r || 11) + 11;
       }
       if (p.shape === "wire") {
@@ -1289,7 +1444,6 @@
       const wx = (e.clientX - rect.left - vp.offsetX) / vp.scale;
       const wy = (e.clientY - rect.top - vp.offsetY) / vp.scale;
 
-      // Test strictly from TOPMOST layer down to Layer 0 so screws on top of plates always register first!
       const activeParts = unit.parts
         .filter((p) => !p.removed)
         .sort((a, b) => (b.layer - a.layer) || (b.id - a.id));
@@ -1303,7 +1457,6 @@
       }
       if (!hit) return;
 
-      // 1. Check Mechanical Dependencies First
       const blockers = getActiveBlockers(hit);
       if (blockers.length > 0) {
         hit.shake = 1.0;
@@ -1322,7 +1475,6 @@
         return;
       }
 
-      // 2. Check Selected Tool
       if (hit.tool !== activeTool) {
         const req = TOOLS[hit.tool];
         hit.shake = 0.7;
@@ -1333,7 +1485,6 @@
         return;
       }
 
-      // 3. Clean Mechanical Removal!
       hit.removed = true;
       hit.anim = 0.01;
       lastRemovedName = hit.name;
@@ -1362,7 +1513,6 @@
       checkWin();
     });
 
-    // Smart Hint Button (Finds highest-layer unblocked part + selects its tool)
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (levelWon) return;
       initAudio();
@@ -1396,7 +1546,6 @@
       if (currentLevelNum < TOTAL_LEVELS) loadUnit(currentLevelNum + 1);
     });
 
-    // Unit Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1462,9 +1611,7 @@
       const y = CY - dev.bodyH / 2;
 
       ctx.save();
-      // Device-specific external silhouettes (antenna, lens knobs, engine fins, buttons)
       if (dev.id === "radio") {
-        // Telescoping chrome antenna top-left
         ctx.strokeStyle = "#cbd5e1";
         ctx.lineWidth = 4;
         ctx.beginPath();
@@ -1476,7 +1623,6 @@
         ctx.arc(x + 12, y - 44, 5, 0, Math.PI * 2);
         ctx.fill();
       } else if (dev.id === "camera") {
-        // Top shutter button & viewfinder hump
         ctx.fillStyle = "#94a3b8";
         ctx.beginPath();
         ctx.roundRect(CX - 46, y - 24, 92, 28, 8);
@@ -1484,14 +1630,12 @@
         ctx.fillStyle = "#e2e8f0";
         ctx.fillRect(x + dev.bodyW - 58, y - 16, 26, 16);
       } else if (dev.id === "engine") {
-        // Cast-iron cooling fins along left & right sides
         ctx.fillStyle = "#475569";
         for (let fy = y + 26; fy < y + dev.bodyH - 22; fy += 18) {
           ctx.fillRect(x - 10, fy, 12, 8);
           ctx.fillRect(x + dev.bodyW - 2, fy, 12, 8);
         }
       } else if (dev.id === "clock") {
-        // Twin brass alarm bells on top
         ctx.fillStyle = "#d97706";
         ctx.beginPath();
         ctx.arc(x + 68, y - 4, 28, Math.PI, 0);
@@ -1499,7 +1643,6 @@
         ctx.fill();
       }
 
-      // Main Retro Device Outer Shell
       ctx.shadowColor = "rgba(0, 0, 0, 0.55)";
       ctx.shadowBlur = 24;
       ctx.shadowOffsetY = 10;
@@ -1514,7 +1657,6 @@
       ctx.strokeStyle = dev.trimCol;
       ctx.stroke();
 
-      // Recessed Bare Chassis Interior Cavity
       const ix = x + 16, iy = y + 18, iw = dev.bodyW - 32, ih = dev.bodyH - 36;
       ctx.fillStyle = dev.innerCol;
       ctx.beginPath();
@@ -1524,7 +1666,6 @@
       ctx.strokeStyle = "rgba(255, 255, 255, 0.14)";
       ctx.stroke();
 
-      // Stamped Serial Model Watermark Inside Empty Chassis
       ctx.fillStyle = "rgba(148, 163, 184, 0.22)";
       ctx.font = "900 13px monospace";
       ctx.textAlign = "center";
@@ -1536,7 +1677,7 @@
     function drawPart(p, now) {
       if (p.removed && p.anim >= 1) return;
 
-      const t = p.anim; // 0..1 removal animation
+      const t = p.anim;
       const alpha = p.removed ? Math.max(0, 1 - t) : 1;
       const liftY = p.removed ? -t * 42 : 0;
       const spinRot = p.removed && (p.shape === "screw" || p.shape === "hex") ? t * Math.PI * 3.5 : 0;
@@ -1549,7 +1690,6 @@
       ctx.save();
       ctx.globalAlpha = alpha;
 
-      // Wire draws in world coordinates directly between endpoints
       if (p.shape === "wire") {
         ctx.translate(shakeX, liftY);
         const mx = (p.x1 + p.x2) * 0.5;
@@ -1575,8 +1715,7 @@
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // Connector terminal plugs at both ends
-        [ [p.x1, p.y1], [p.x2, p.y2] ].forEach(([ex, ey]) => {
+        [[p.x1, p.y1], [p.x2, p.y2]].forEach(([ex, ey]) => {
           ctx.fillStyle = "#e2e8f0";
           ctx.strokeStyle = "#1e293b";
           ctx.lineWidth = 1.6;
@@ -1603,7 +1742,6 @@
       }
 
       if (p.shape === "module") {
-        // Layer-0 Rectangular Core Module (PCB / Battery / Induction Coil)
         const hw = p.w / 2, hh = p.h / 2;
         ctx.fillStyle = p.fill;
         ctx.strokeStyle = isAlert ? "#ef4444" : (isHint ? "#facc15" : p.stroke);
@@ -1615,7 +1753,6 @@
         ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
 
         if (p.modKind === "pcb") {
-          // Gold circuit traces & black IC chip
           ctx.strokeStyle = "rgba(250, 204, 21, 0.55)";
           ctx.lineWidth = 1.4;
           ctx.beginPath();
@@ -1635,7 +1772,6 @@
           ctx.textBaseline = "middle";
           ctx.fillText("9V CELL", 0, 5);
         } else {
-          // Copper winding coils
           ctx.strokeStyle = p.accent;
           ctx.lineWidth = 2.4;
           for (let wx = -hw + 12; wx <= hw - 12; wx += 8) {
@@ -1646,7 +1782,6 @@
           }
         }
       } else if (p.shape === "circle") {
-        // Circular Core Module (Gear / Speaker / Optical Lens)
         const r = p.r;
         ctx.fillStyle = p.fill;
         ctx.strokeStyle = isAlert ? "#ef4444" : (isHint ? "#facc15" : p.stroke);
@@ -1679,7 +1814,6 @@
           ctx.arc(0, 0, r * 0.7, 0, Math.PI * 2);
           ctx.fill();
         } else {
-          // Speaker mesh rings
           ctx.strokeStyle = "rgba(226, 232, 240, 0.35)";
           ctx.lineWidth = 1.6;
           ctx.beginPath();
@@ -1688,7 +1822,6 @@
           ctx.stroke();
         }
       } else if (p.shape === "plate" || p.shape === "clamp") {
-        // Metal Cover Plate or Cross-Locking Steel Bracket
         const hw = p.w / 2, hh = p.h / 2;
         const grad = ctx.createLinearGradient(-hw, -hh, hw, hh);
         grad.addColorStop(0, p.hi);
@@ -1702,7 +1835,6 @@
         ctx.stroke();
         ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
 
-        // Ventilation louver slots or structural ribs
         if (p.shape === "plate") {
           ctx.fillStyle = "rgba(15, 23, 42, 0.32)";
           const slotW = Math.min(54, p.w * 0.42);
@@ -1717,7 +1849,6 @@
           ctx.strokeRect(-hw + 4, -hh + 4, p.w - 8, p.h - 8);
         }
       } else if (p.shape === "screw") {
-        // Phillips / Slotted Chrome Screw (Driver Tool)
         const r = p.r;
         const sg = ctx.createRadialGradient(-3, -3, 1, 0, 0, r);
         sg.addColorStop(0, "#ffffff");
@@ -1732,7 +1863,6 @@
         ctx.stroke();
         ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
 
-        // Crisp Phillips cross groove
         ctx.strokeStyle = "#1e293b";
         ctx.lineWidth = 2.4;
         ctx.beginPath();
@@ -1740,7 +1870,6 @@
         ctx.moveTo(0, -r * 0.52); ctx.lineTo(0, r * 0.52);
         ctx.stroke();
       } else if (p.shape === "hex") {
-        // Heavy Brass/Steel Hex Nut (Wrench Tool)
         const r = p.r;
         ctx.beginPath();
         for (let i = 0; i < 6; i++) {
@@ -1761,7 +1890,6 @@
         ctx.arc(0, 0, r * 0.42, 0, Math.PI * 2);
         ctx.fill();
       } else if (p.shape === "clip") {
-        // Spring Retaining Latch Clip (Unclip Tool)
         ctx.fillStyle = "#ec4899";
         ctx.strokeStyle = isAlert ? "#ef4444" : (isHint ? "#facc15" : "#fdf2f8");
         ctx.lineWidth = isHint || isAlert ? 2.8 : 1.8;
@@ -1784,7 +1912,6 @@
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
-      // Update Part Animations & Flash Decays
       for (const p of unit.parts) {
         if (p.removed && p.anim < 1) {
           p.anim = Math.min(1, p.anim + dt * 3.4);
@@ -1800,7 +1927,6 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Anti-Static ESD Repair Mat Grid & Ruler Markings
       ctx.strokeStyle = "rgba(56, 189, 248, 0.08)";
       ctx.lineWidth = 1;
       for (let x = 20; x < WORLD_W; x += 24) {
@@ -1810,7 +1936,6 @@
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WORLD_W, y); ctx.stroke();
       }
 
-      // Top magnetic screw-tray header bar graphic
       ctx.fillStyle = "rgba(11, 19, 32, 0.72)";
       ctx.strokeStyle = "rgba(56, 189, 248, 0.22)";
       ctx.lineWidth = 1.4;
@@ -1830,16 +1955,13 @@
       ctx.fillStyle = remParts === 0 ? "#4ade80" : "#fde68a";
       ctx.fillText(remParts === 0 ? "STRIPPED CLEAN ✓" : `${remParts} PARTS LEFT`, WORLD_W - 30, 27);
 
-      // 2. Retro Device Outer Casing & Bare Chassis
       drawDeviceChassis(unit.dev);
 
-      // 3. Render All Mechanical Layers Strictly Bottom-to-Top (Layer 0 -> Layer 4)
       const drawOrder = unit.parts.slice().sort((a, b) => (a.layer - b.layer) || (a.id - b.id));
       for (const p of drawOrder) {
         drawPart(p, now);
       }
 
-      // 4. Blocker Dependency Warning Lines (Flashes when tapping a locked part!)
       blockLines = blockLines.filter((l) => l.alpha > 0.04);
       for (const l of blockLines) {
         l.alpha -= dt * 1.3;
@@ -1854,7 +1976,6 @@
         ctx.restore();
       }
 
-      // 5. Mechanical Removal Sparks
       sparks = sparks.filter((s) => s.alpha > 0.04);
       for (const s of sparks) {
         s.x += s.vx;
