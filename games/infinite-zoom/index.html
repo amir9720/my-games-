@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Infinite Zoom Hidden Object — 500 Nested World Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free infinite zoom puzzles in Infinite Zoom Hidden Object. Dive smoothly through nested illustrated vector worlds to discover three hidden artifacts." />
+  <title>Infinite Zoom Hidden Object — Free 500-Level Nested World Puzzle | ZinPlay</title>
+  <meta name="description" content="Play Infinite Zoom Hidden Object free online with no download. Dive smoothly up to 65,000x deep through 500 nested illustrated vector worlds to spot three hidden artifacts on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Infinite Zoom Hidden Object",
+    "url": "https://zinplay.io/games/infinite-zoom/",
+    "genre": ["Puzzle", "Hidden Object", "Visual Exploration"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -158,7 +171,7 @@
       cursor: zoom-in;
     }
 
-    /* Layer Badge Overlay (Top-Left of Viewport) */
+    /* Layer Badge Overlay */
     .layer-hud-badge {
       position: absolute;
       top: 10px;
@@ -258,9 +271,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
@@ -289,15 +300,8 @@
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -338,9 +342,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -437,6 +439,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #0b0e1e;
+      border: 1px solid rgba(129, 140, 248, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #0b0e1e;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #0b0e1e 0%, #312e81 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.teal-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f172a 0%, #155e75 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .zoom-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .zoom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .zoom-table th, .zoom-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .zoom-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .zoom-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -449,7 +531,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -543,29 +625,126 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 840+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/infinite-zoom-banner-1.jpg"
+            alt="Infinite Zoom Hidden Object online nested portal art puzzle showing starry observatory, forest, coral reef, and steampunk realms"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Infinite Zoom Worlds — Razor-Sharp Vector Art Up to 65,000×</h3>
+          <p>Glide effortlessly through endless Droste-effect portal frames without pixelation and uncover three cleverly tucked artifacts on every expedition.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Infinite Zoom Hidden Object (500 Worlds)</h2>
-        <p>Infinite Zoom Hidden Object uses procedural vector scaling so every nested illustration—from starry observatories and sunken coral reefs to steampunk clocktowers and cyberpunk alleys—stays crystal-clear even at <strong>65,000× magnification</strong>. Hidden across different depths of each infinite tunnel are <strong>three unique artifacts</strong> waiting to be spotted.</p>
+        <h2>What Is Infinite Zoom Hidden Object? A Fractal Seek-and-Find Puzzle Online</h2>
+        <p><strong>Infinite Zoom Hidden Object</strong> is a free <strong>infinite zoom art puzzle game online</strong> inspired by viral Zoomquilt illustrations and classic seek-and-find picture books, engineered in pure mathematical HTML5 vector graphics. Instead of peering at a single flat bitmap that blurs as soon as you magnify it, every stage nests between <strong>5 and 13 richly illustrated worlds</strong> inside one another's central portal windows—keeping every star, clockwork gear, coral branch, and miniature collectible razor-sharp even at <strong>65,000× magnification</strong>.</p>
+        <p>Designed as a calm, <strong>no-download visual observation game for phones, iPads, and Chromebooks</strong>, Infinite Zoom Hidden Object gives you total camera control: use two-finger pinch gestures on mobile, scroll your mouse wheel on desktop, tap keyboard arrows, or glide the one-handed <strong>Zoom Depth Slider</strong> to travel smoothly through <strong>500 unique nested worlds</strong> with automatic private browser saving.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>How to Spot Tiny Hidden Treasures Quickly (Depth-Scanning Strategy)</h2>
+        <p>By Chapters 4 and 5, nested tunnels stretch 11 to 13 layers deep and scatter geometric background decoys across every border. Use these four sharp-eyed <strong>hidden object scanning techniques</strong> to clear deep fractal worlds effortlessly:</p>
+
+        <div class="zoom-table-wrap">
+          <table class="zoom-table">
+            <thead>
+              <tr>
+                <th>Expedition Skill</th>
+                <th>What to Watch For</th>
+                <th>Why It Works</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Pause at Whole Layers (1.0, 2.0, 3.0...)</strong></td>
+                <td>Check the <strong>LAYER</strong> readout below the slider and stop neatly on integer depths.</td>
+                <td>Each realm's border ring fills the screen cleanly at its exact integer depth, making hidden artifacts largest and easiest to tap!</td>
+              </tr>
+              <tr>
+                <td><strong>2. Match Colors &amp; Silhouettes from the Hunt Bar</strong></td>
+                <td>Study the 3 exact vector icons displayed above the canvas before diving in.</td>
+                <td>Every real collectible has a subtle dark contrast halo and crisp multi-color silhouette—unlike flat translucent scenic decoys.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Sweep Clockwise Around the Portal Frame</strong></td>
+                <td>Scan Top → Right → Bottom → Left edges outside the central framed doorway.</td>
+                <td>Artifacts never hide inside the center portal window; sweeping the outer picture frame ensures zero blind spots!</td>
+              </tr>
+              <tr>
+                <td><strong>4. Remember: One Treasure Per Layer Max</strong></td>
+                <td>As soon as you collect an artifact on a layer, dive deeper right away!</td>
+                <td>Every world distributes its 3 hidden objects across 3 <em>distinct</em> depth layers—so you never need to re-search a cleared realm.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;">Still hunting for the final elusive relic in a 13-layer labyrinth? Tap <strong>💡 Depth Radar</strong> once to learn the exact depth layer of an unfound treasure—or tap it a second time to glide the camera automatically to that exact depth and pulse a glowing golden radar ring around the artifact.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner teal-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/infinite-zoom-banner-2.jpg"
+            alt="Magnifying glass hovering over miniature storybook realms and sparkling hidden collectibles in Infinite Zoom Hidden Object"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>12 Distinct Illustrated Realms &amp; 16 Handcrafted Collectibles</h3>
+          <p>Journey through Starry Observatories, Steampunk Clocktowers, Neon Cyber Alleys, and Cozy Grand Libraries while hunting for keys, crowns, potions, and hourglasses.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore 5 Escalating Chapters (500 Nested Vector Worlds)</h2>
+        <p>Every expedition combines shuffled portals from 12 vibrant illustrated themes—including <em>Sunken Coral Reefs</em>, <em>Desert Sun Temples</em>, <em>Botanical Glasshouses</em>, <em>Arctic Aurora Ridges</em>, and <em>Alchemist Sanctums</em>—paired with soft ambient Web Audio depth chimes:</p>
         <ul>
-          <li><strong>Dive Effortlessly on Any Device:</strong> Use two-finger pinch gestures on mobile, scroll your mouse wheel on desktop, or glide the smooth <strong>Zoom Depth Slider</strong> (and holdable <code>🔍−</code> / <code>🔍+</code> buttons) to travel seamlessly through every portal frame.</li>
-          <li><strong>Scan the Borders &amp; Corners:</strong> Hidden artifacts tuck themselves around bookshelves, coral branches, clouds, clock gears, and temple pillars surrounding each center portal. Tap or click directly on a matching artifact to collect it!</li>
-          <li><strong>Use the Depth Radar (💡):</strong> Stuck searching a 13-layer fractal tunnel? Tap <strong>Depth Radar</strong> once to reveal the exact layer depth of an unfound treasure—or tap again to glide smoothly right to that layer and pulse a golden radar ring around it.</li>
+          <li><strong>Chapter 1 (Worlds 1–100 — Shallow Realms):</strong> Accessible 5-layer nested worlds with larger artifact icons and lighter scenic decor for smooth onboarding.</li>
+          <li><strong>Chapter 2 (Worlds 101–200 — Deep Tunnels):</strong> Expands to 7 illustrated depth layers with richer geometric decoys tucked around bookshelves, trees, and gears.</li>
+          <li><strong>Chapter 3 (Worlds 201–300 — Micro Expeditions):</strong> 9-layer zoom tunnels surpassing <strong>2,000× magnification</strong>, testing visual focus and color contrast recognition.</li>
+          <li><strong>Chapter 4 (Worlds 301–400 — Fractal Labyrinths):</strong> 11 intricate nested worlds exceeding <strong>10,000× zoom</strong> with finer artifact scales tucked neatly near ornate portal studs.</li>
+          <li><strong>Chapter 5 (Worlds 401–500 — The Abyssal Quilt):</strong> Monumental 13-layer vector journeys reaching over <strong>65,000× magnification</strong> down to the rotating Abyssal Core—complete with an instant 1–500 world selector and zero-login browser saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Infinite Zoom Topics">
+          <span class="kw-pill">Infinite Zoom Hidden Object Online</span>
+          <span class="kw-pill">Zoom Quilt Art Puzzle Browser</span>
+          <span class="kw-pill">Vector Seek and Find Game Free</span>
+          <span class="kw-pill">500-Level Nested Worlds Game</span>
+          <span class="kw-pill">Relaxing Observation Brain Teaser</span>
+          <span class="kw-pill">No-Download Chromebook Hidden Object</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Infinite Zoom Hidden Object FAQ</h2>
         <details class="faq-item">
-          <summary>Why doesn't the artwork get blurry even when zoomed 50,000× deep?</summary>
-          <div class="faq-answer">Unlike raster bitmap images, every single nested realm, portal arch, and artifact in Infinite Zoom Hidden Object is rendered mathematically in real-time HTML5 vector graphics at 60 FPS!</div>
+          <summary>Why doesn't the artwork get pixelated even when zoomed 65,000× deep?</summary>
+          <div class="faq-answer">Unlike raster JPEG or PNG zoom games, every single portal frame, illustrated background, and collectible icon in Infinite Zoom Hidden Object is drawn mathematically in real-time HTML5 vector graphics at 60 FPS!</div>
         </details>
         <details class="faq-item">
-          <summary>Can two artifacts hide on the same depth layer?</summary>
-          <div class="faq-answer">No—every level spreads its three hidden artifacts across three distinct depth layers so you always get a rewarding journey through the infinite artwork.</div>
+          <summary>Can two hidden artifacts ever appear on the exact same depth layer?</summary>
+          <div class="faq-answer">No—every level strictly places its three target treasures on three completely separate depth layers, so once you collect an item on Layer 4, you can immediately zoom on to another depth.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What is the easiest way to zoom on a smartphone with one hand?</summary>
+          <div class="faq-answer">While two-finger pinch-to-zoom works directly on the canvas, you can also slide the smooth <strong>Zoom Depth Slider</strong> or press and hold the large <strong>🔍+</strong> and <strong>🔍−</strong> buttons right below the viewport with your thumb!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Is there a countdown timer or penalty for tapping the wrong spot?</summary>
+          <div class="faq-answer">Never! Infinite Zoom Hidden Object is built for calm visual exploration—tapping an empty prop creates a soft ripple with zero penalties or game-over screens.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
@@ -584,10 +763,10 @@
         <a href="/games/un-builder/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🔦</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Shadow Perspective</h3>
-        <p>Rotate abstract 3D sculptures in front of a spotlight until their wall shadow reveals art.</p>
-        <a href="/games/shadow-weaver/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🌍</div><span class="cat-tag">Mystery</span></div>
+        <h3>OSINT Geo-Sleuth</h3>
+        <p>Zoom into photo clues—wall outlets, menus, and skylines—to pinpoint exact cities on a map.</p>
+        <a href="/games/geo-sleuth/" class="card-link">Play Game →</a>
       </article>
     </section>
 
@@ -635,7 +814,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -675,7 +854,6 @@
     const WORLD_H = 420;
     const CX = WORLD_W / 2;
     const CY = WORLD_H / 2;
-    // Exact seamless nested scale ratio: 226 / 2.35 ≈ 96.17 matches PORTAL_H = 96!
     const BASE = 2.35;
     const PORTAL_H = 96;
 
@@ -740,7 +918,6 @@
       return copy;
     }
 
-    // Crisp Vector Artifact Drawer (renders identically in HUD badges AND inside nested worlds!)
     function drawArtifactIcon(cctx, key, x, y, r, rot = 0) {
       cctx.save();
       cctx.translate(x, y);
@@ -750,7 +927,6 @@
       cctx.lineJoin = "round";
       cctx.lineCap = "round";
 
-      // Soft contrast halo behind every artifact so it reads crisply against any realm color
       cctx.fillStyle = "rgba(15, 23, 42, 0.42)";
       cctx.beginPath();
       cctx.arc(0, 0, 15.5, 0, Math.PI * 2);
@@ -845,7 +1021,6 @@
         cctx.beginPath(); cctx.arc(0, 0, 10.5, 0.5, Math.PI * 1.85);
         cctx.arc(4, -2, 8.2, Math.PI * 1.75, 0.65, true); cctx.closePath(); cctx.fill(); cctx.stroke();
       } else {
-        // Temple Bell
         cctx.fillStyle = "#fbbf24"; cctx.strokeStyle = "#78350f"; cctx.lineWidth = 1.8;
         cctx.beginPath(); cctx.moveTo(-10, 8); cctx.quadraticCurveTo(-8, -10, 0, -11);
         cctx.quadraticCurveTo(8, -10, 10, 8); cctx.closePath(); cctx.fill(); cctx.stroke();
@@ -855,7 +1030,6 @@
       cctx.restore();
     }
 
-    // Generate Safe Coordinate Inside Layer's Visible Ring (outside portal [-96..96], inside [-186..186])
     function pickRingCoord(rng, avoidList = []) {
       for (let tries = 0; tries < 40; tries++) {
         const side = Math.floor(rng() * 4);
@@ -874,7 +1048,6 @@
 
     function buildZoomLevel(levelNum) {
       const rng = mulberry32(levelNum * 155921 + 60711);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1);
 
       let layerCount, artScale, decoyCount;
       if (levelNum <= 100) {
@@ -889,7 +1062,6 @@
         layerCount = 13; artScale = 12.6; decoyCount = 13;
       }
 
-      // Assign varied non-repeating realms across all nested layers
       const realmPool = shuffle(REALMS, rng);
       const layers = [];
       for (let i = 0; i < layerCount; i++) {
@@ -914,7 +1086,6 @@
         });
       }
 
-      // Pick 3 distinct hidden artifacts spread across 3 distinct depth layers!
       const chosenArts = shuffle(ARTIFACT_CATALOG, rng).slice(0, 3);
       const layerIndices = shuffle(Array.from({ length: layerCount }, (_, i) => i), rng).slice(0, 3).sort((a, b) => a - b);
 
@@ -1046,9 +1217,9 @@
     } catch (e) {}
 
     let level = null;
-    let zoomZ = 0;         // Live smooth zoom depth [0 .. maxZoom]
-    let targetZ = 0;       // Target zoom depth
-    let holdDir = 0;       // -1 = holding zoomOut, +1 = holding zoomIn
+    let zoomZ = 0;
+    let targetZ = 0;
+    let holdDir = 0;
     let levelWon = false;
     let hintArtId = -1;
     let hintRadarTimer = 0;
@@ -1056,7 +1227,6 @@
     let sparkles = [];
     let toastTimer = null;
 
-    // Multi-touch Pinch Zoom tracking
     const activePointers = new Map();
     let lastPinchDist = null;
     let pointerDownPt = null;
@@ -1163,7 +1333,6 @@
       }
     }
 
-    // Viewport Helpers
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1195,7 +1364,6 @@
       for (const art of level.artifacts) {
         if (art.found) continue;
         const s = Math.pow(BASE, zoomZ - art.layer);
-        // Clickable whenever clearly visible on screen
         if (s < 0.34 || s > 2.45) continue;
 
         const sx = CX + art.x * s;
@@ -1246,12 +1414,10 @@
         }
       }
 
-      // Gentle ripple on empty tap
       sfxMissTap();
       ripples.push({ x: wx, y: wy, r: 6, alpha: 0.65, color: "#94a3b8" });
     }
 
-    // Pointer Events (Pinch-to-Zoom + Tap-to-Collect)
     canvas.addEventListener("pointerdown", (e) => {
       initAudio();
       activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -1300,7 +1466,6 @@
       lastPinchDist = null;
     });
 
-    // Mouse Wheel Infinite Zoom (Desktop)
     canvas.addEventListener("wheel", (e) => {
       e.preventDefault();
       initAudio();
@@ -1308,7 +1473,6 @@
       setTargetZ(targetZ + delta);
     }, { passive: false });
 
-    // Slider & Holdable Zoom Buttons (One-Handed Mobile UX!)
     zoomSlider.addEventListener("input", () => {
       initAudio();
       setTargetZ(parseFloat(zoomSlider.value) / 100);
@@ -1338,7 +1502,6 @@
       }
     });
 
-    // Smart Depth Radar Hint
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (levelWon) return;
       initAudio();
@@ -1378,7 +1541,6 @@
       if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
     });
 
-    // World Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1443,17 +1605,14 @@
       const r = layer.realm;
       const rng = mulberry32(layer.seed);
 
-      // 1. Rich Radial Realm Background (covers [-232..+232] so corners never gap!)
       const bg = ctx.createRadialGradient(0, 0, PORTAL_H * 0.85, 0, 0, 260);
       bg.addColorStop(0, r.bg2);
       bg.addColorStop(1, r.bg1);
       ctx.fillStyle = bg;
       ctx.fillRect(-234, -234, 468, 468);
 
-      // 2. Realm-Specific Scenic Vector Illustration Around the Central Portal!
       ctx.save();
       if (r.id === "observatory" || r.id === "aurora") {
-        // Twinkling constellation lines & starfields
         ctx.strokeStyle = "rgba(186, 230, 253, 0.22)";
         ctx.lineWidth = 1.4;
         ctx.beginPath();
@@ -1472,7 +1631,6 @@
         }
         ctx.globalAlpha = 1;
       } else if (r.id === "forest" || r.id === "greenhouse") {
-        // Lush stylized pine silhouettes & botanical leaves radiating around border
         for (let k = 0; k < 12; k++) {
           const a = (k * Math.PI * 2) / 12 + 0.2;
           ctx.save();
@@ -1487,7 +1645,6 @@
           ctx.restore();
         }
       } else if (r.id === "clocktower") {
-        // Interlocking decorative clockwork gears & Roman dial ticks
         ctx.strokeStyle = "rgba(251, 191, 36, 0.25)";
         ctx.lineWidth = 2;
         for (let t = 0; t < 24; t++) {
@@ -1497,7 +1654,6 @@
           ctx.lineTo(Math.cos(a) * (t % 2 === 0 ? 142 : 130), Math.sin(a) * (t % 2 === 0 ? 142 : 130));
           ctx.stroke();
         }
-        // 4 corner brass gears
         [[-158, -158], [158, -158], [158, 158], [-158, 158]].forEach(([gx, gy], gi) => {
           ctx.save();
           ctx.translate(gx, gy);
@@ -1511,7 +1667,6 @@
           ctx.restore();
         });
       } else if (r.id === "cyberpunk") {
-        // Neon synthwave perspective grid rays & glowing city signage blocks
         ctx.strokeStyle = "rgba(236, 72, 153, 0.24)";
         ctx.lineWidth = 1.5;
         for (let k = 0; k < 16; k++) {
@@ -1525,7 +1680,6 @@
         ctx.strokeRect(-146, -146, 292, 292);
         ctx.strokeRect(-186, -186, 372, 372);
       } else if (r.id === "library") {
-        // Wooden bookshelf slats & colorful antique book spines around border
         ctx.fillStyle = "rgba(146, 64, 14, 0.32)";
         ctx.fillRect(-220, -172, 440, 8);
         ctx.fillRect(-220, 164, 440, 8);
@@ -1539,7 +1693,6 @@
         }
         ctx.globalAlpha = 1;
       } else {
-        // Sunburst / Coral / Temple / Cloud decorative architectural frame tiles
         ctx.strokeStyle = r.acc1;
         ctx.globalAlpha = 0.2;
         ctx.lineWidth = 2;
@@ -1561,7 +1714,6 @@
         ctx.globalAlpha = 1;
       }
 
-      // 3. Environmental Scenic Props & Subtle Visual Decoys
       for (const pr of layer.props) {
         ctx.save();
         ctx.translate(pr.x, pr.y);
@@ -1569,32 +1721,26 @@
         ctx.fillStyle = pr.tone;
         ctx.globalAlpha = 0.34;
         if (pr.kind === 0) {
-          // Diamond ornament
           ctx.beginPath();
           ctx.moveTo(0, -pr.size); ctx.lineTo(pr.size * 0.7, 0);
           ctx.lineTo(0, pr.size); ctx.lineTo(-pr.size * 0.7, 0);
           ctx.closePath(); ctx.fill();
         } else if (pr.kind === 1) {
-          // Concentric ring prop
           ctx.strokeStyle = pr.tone; ctx.lineWidth = 2.5;
           ctx.beginPath(); ctx.arc(0, 0, pr.size * 0.75, 0, Math.PI * 2); ctx.stroke();
         } else if (pr.kind === 2) {
-          // Triangle crystal / tree prop
           ctx.beginPath();
           ctx.moveTo(0, -pr.size); ctx.lineTo(pr.size * 0.85, pr.size * 0.7); ctx.lineTo(-pr.size * 0.85, pr.size * 0.7);
           ctx.closePath(); ctx.fill();
         } else {
-          // Rounded relic box prop
           ctx.beginPath(); ctx.roundRect(-pr.size * 0.7, -pr.size * 0.5, pr.size * 1.4, pr.size, 4); ctx.fill();
         }
         ctx.restore();
       }
 
-      // 4. Hidden Artifact (If One Lives on This Layer & Still Unfound!)
       for (const art of level.artifacts) {
         if (art.layer !== layer.idx || art.found) continue;
 
-        // Radar golden pulse ring if active hint points to this artifact
         if (hintArtId === art.id && hintRadarTimer > 0) {
           const pulse = 1 + 0.35 * Math.sin(now * 0.012);
           ctx.save();
@@ -1611,8 +1757,6 @@
         drawArtifactIcon(ctx, art.key, art.x, art.y, art.r, art.rot);
       }
 
-      // 5. Ornate Central Portal Frame Border Around [-PORTAL_H .. +PORTAL_H]
-      // (Layer i+1 renders cleanly inside this exact portal window!)
       ctx.strokeStyle = r.frame;
       ctx.lineWidth = 10;
       ctx.beginPath();
@@ -1625,7 +1769,6 @@
       ctx.roundRect(-PORTAL_H - 1, -PORTAL_H - 1, (PORTAL_H + 1) * 2, (PORTAL_H + 1) * 2, 13);
       ctx.stroke();
 
-      // Corner decorative studs on portal frame
       const stud = PORTAL_H + 4;
       ctx.fillStyle = r.frameHi;
       [[-stud, -stud], [stud, -stud], [stud, stud], [-stud, stud]].forEach(([sx, sy]) => {
@@ -1634,7 +1777,6 @@
         ctx.fill();
       });
 
-      // Tiny Depth Plaque on Top Portal Arch
       ctx.fillStyle = "rgba(9, 13, 28, 0.85)";
       ctx.beginPath();
       ctx.roundRect(-36, -PORTAL_H - 14, 72, 16, 6);
@@ -1654,12 +1796,10 @@
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
-      // Holdable Zoom Button Acceleration
       if (holdDir !== 0 && !levelWon) {
         setTargetZ(targetZ + holdDir * dt * 1.45);
       }
 
-      // Smooth Exponential Zoom Camera Easing
       const dz = targetZ - zoomZ;
       if (Math.abs(dz) > 0.0005) {
         zoomZ += dz * Math.min(1, dt * 11);
@@ -1677,13 +1817,10 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // Clip entire stage strictly to [0..WORLD_W, 0..WORLD_H]
       ctx.beginPath();
       ctx.rect(0, 0, WORLD_W, WORLD_H);
       ctx.clip();
 
-      // Draw Visible Nested Layers Strictly Outermost -> Innermost
-      // Each layer i+1 fits seamlessly inside layer i's central portal!
       const minLayer = Math.max(0, Math.floor(zoomZ) - 1);
       const maxLayer = Math.min(level.layerCount - 1, Math.ceil(zoomZ) + 4);
 
@@ -1694,7 +1831,6 @@
         ctx.save();
         ctx.translate(CX, CY);
 
-        // Clip inner layer cleanly to its parent's portal window!
         if (i > 0) {
           const parentS = Math.pow(BASE, zoomZ - (i - 1));
           const clipH = PORTAL_H * parentS;
@@ -1708,7 +1844,6 @@
         ctx.restore();
       }
 
-      // Core Abyssal Heart inside the deepest final layer's portal!
       const lastIdx = level.layerCount - 1;
       const lastS = Math.pow(BASE, zoomZ - lastIdx);
       if (lastS > 0.06) {
@@ -1726,7 +1861,6 @@
         ctx.fillStyle = coreG;
         ctx.fillRect(-innerH, -innerH, innerH * 2, innerH * 2);
 
-        // Rotating core compass rose emblem at the bottom of the universe
         ctx.rotate(now * 0.0008);
         ctx.strokeStyle = "rgba(165, 180, 252, 0.45)";
         ctx.lineWidth = Math.max(1, 2 * lastS);
@@ -1742,7 +1876,6 @@
         ctx.restore();
       }
 
-      // Tap Ripples & Collection Sparkles
       ripples = ripples.filter((rp) => rp.alpha > 0.04);
       for (const rp of ripples) {
         rp.r += 1.8;
