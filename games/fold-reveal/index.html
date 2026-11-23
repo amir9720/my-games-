@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fold &amp; Reveal — 500 Origami Paper Folding Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free origami puzzles in Fold & Reveal. Fold paper edges and diagonal corners in the exact right order to line up hidden messages and layered artwork." />
+  <title>Fold &amp; Reveal — Free 500-Level Origami Paper Folding Puzzle Game | ZinPlay</title>
+  <meta name="description" content="Play Fold &amp; Reveal free online with no download. Fold colorful washi paper edges and 45-degree diagonal corners in exact layer order across 500 origami puzzles with ASMR paper sounds on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Fold & Reveal",
+    "url": "https://zinplay.io/games/fold-reveal/",
+    "genre": ["Puzzle", "Origami", "Spatial Brain Teaser"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -205,9 +218,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
@@ -236,15 +247,8 @@
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -285,9 +289,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -384,6 +386,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #171625;
+      border: 1px solid rgba(165, 180, 252, 0.25);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #171625;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #171625 0%, #312e81 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.teal-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #134e4a 0%, #1e1b4b 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .fold-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .fold-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .fold-table th, .fold-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .fold-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .fold-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -396,7 +478,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -486,51 +568,148 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 830+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/fold-reveal-banner-1.jpg"
+            alt="Fold and Reveal online origami paper folding puzzle with vibrant Japanese washi flaps folding into a layered star crest"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Tactile Washi Origami Puzzles — Pure Browser Play</h3>
+          <p>Tap or swipe colorful paper edges and diagonal corners inward with smooth 3D trigonometric folding physics and soothing ASMR paper rustles.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Fold &amp; Reveal (500 Origami Levels)</h2>
-        <p>Fold &amp; Reveal is a crisp spatial layering puzzle inspired by traditional Japanese paper folding. Each stage spreads an unfolded sheet of colorful washi paper across the crafting desk, with painted shapes, ribbons, and secret message badges printed on its flaps. Your goal is to fold every flap inward in the exact bottom-to-top sequence needed to recreate the <strong>Target Artwork</strong>.</p>
+        <h2>What Is Fold &amp; Reveal? A Relaxing Origami Paper Folding Puzzle Online</h2>
+        <p><strong>Fold &amp; Reveal</strong> is a free <strong>paper folding puzzle game online</strong> inspired by classic origami logic apps like <em>Paper Fold 3D</em>, built natively in lightweight HTML5 Canvas so you can play immediately on any phone, tablet, or Chromebook with zero downloads. Spread across a minimalist dark crafting mat is an unfolded sheet of patterned Japanese washi paper. Each outer edge and 45-degree corner carries painted symbols, geometric crests, or hidden message plaques that overlap when creased toward the center square.</p>
+        <p>Because real paper stacks physically from bottom to top, <strong>folding order determines the final image</strong>. Every flap you crease later covers parts of the flaps folded earlier. Paired with live procedural <strong>ASMR paper-crease audio</strong> synthesized via the Web Audio API, Fold &amp; Reveal turns spatial layer deduction into a calm, screen-friendly craft break across <strong>500 distinct origami sheets</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>How to Solve Any Multi-Layer Origami Sheet (Reverse-Layer Strategy)</h2>
+        <p>When a Chapter 4 or Chapter 5 star sheet displays seven or eight overlapping flaps at once, guessing randomly can leave one motif trapped underneath the wrong color. Use this simple <strong>top-down reverse inspection method</strong> to solve even the densest origami crests on your very first try:</p>
+
+        <div class="fold-table-wrap">
+          <table class="fold-table">
+            <thead>
+              <tr>
+                <th>Visual Inspection Step</th>
+                <th>What to Check on the Target Card</th>
+                <th>Folding Order Rule</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Spot the Completely Uncovered Flap</strong></td>
+                <td>Find the painted shape or secret word badge sitting 100% intact with zero edges cutting over it.</td>
+                <td>Save this flap for <strong>VERY LAST</strong>—it sits on top of every other layer!</td>
+              </tr>
+              <tr>
+                <td><strong>2. Find the Deepest Background Base</strong></td>
+                <td>Look for the widest colored flap whose edges tuck behind two or more overlapping neighbors.</td>
+                <td>Fold this background layer <strong>FIRST</strong> right onto the blank cream square.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Trace Overlap Chains</strong></td>
+                <td>Check where any two flaps touch—whichever color cleanly crosses over the seam folds <em>after</em> the one underneath.</td>
+                <td>Fold the covered flap before the covering flap; non-touching flaps can fold in any order!</td>
+              </tr>
+              <tr>
+                <td><strong>4. Read Translucent Print-Through</strong></td>
+                <td>Before folding an open flap, inspect the faint symbol visible through its pastel back side.</td>
+                <td>Match that motif and color to the Target Card so you never confuse opposite sides!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;">If all flaps are down and the finished picture doesn't quite match, simply tap anywhere on the center paper (or tap <strong>← Unfold</strong>) to peel back your last crease effortlessly—or tap <strong>💡 Fold Hint</strong> to automatically undo any misplaced fold and highlight the exact next flap in glowing gold.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner teal-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/fold-reveal-banner-2.jpg"
+            alt="Completed multi-layered origami star medallions and diagonal corner paper folds on a craft desk in Fold and Reveal"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Exact Pixel-Equivalence Checking &amp; Hidden Message Plaques</h3>
+          <p>Any valid folding order that recreates the exact Target Artwork is accepted immediately—no artificial move limits or countdown stress.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Origami Chapters (500 Verified Washi Sheets)</h2>
+        <p>Every single sheet in Fold &amp; Reveal is verified by an offscreen layer-visibility checker before appearing on your desk, ensuring every colored flap stays visibly readable in the Target Artwork so every level is 100% logically deducible:</p>
         <ul>
-          <li><strong>Tap or Swipe to Fold:</strong> Tap any open edge or corner flap—or swipe it smoothly toward the center square—to crease it flat over the paper base. Look closely at the faint print-through on each open flap to recognize which motif it carries!</li>
-          <li><strong>Layer Order Is Everything:</strong> Just like real paper, whichever flap you fold <em>later</em> covers the flaps underneath it. Inspect the Target Artwork in the top-left corner: find which colored flap sits completely uncovered on top (save it for last!) and which larger base flap sits tucked behind everything (fold it first!).</li>
-          <li><strong>Master Corner Creases &amp; Hidden Words:</strong> Chapter 2 introduces 45° diagonal corner folds, Chapter 3 weaves hidden secret words into the overlapping paper layers, and Chapters 4–5 combine up to 8 interlocking edge and corner flaps into intricate origami stars.</li>
+          <li><strong>Chapter 1 (Levels 1–100 — Classic Origami):</strong> Clean 3-to-4 edge folds teaching basic bottom-to-top stacking and translucent print-through recognition.</li>
+          <li><strong>Chapter 2 (Levels 101–200 — Diagonal Corners):</strong> Introduces crisp <strong>45-degree corner flaps</strong> that fold diagonally across straight edge banners to create intricate paper crests.</li>
+          <li><strong>Chapter 3 (Levels 201–300 — Hidden Messages):</strong> Weaves bold upright secret words (such as <code>STAR</code>, <code>GOLD</code>, <code>WAVE</code>, and <code>SILK</code>) into overlapping layered emblems that snap cleanly into place on the final crease.</li>
+          <li><strong>Chapter 4 (Levels 301–400 — Interwoven Art):</strong> Expands to 6 and 7 simultaneous edge-and-corner flaps with subtle overlapping ribbons, crescents, and chevrons.</li>
+          <li><strong>Chapter 5 (Levels 401–500 — Origami Master Star):</strong> Full 7-to-8 flap master sheets combining all four perimeter edges and all four diagonal corners—complete with an instant 1–500 sheet picker and private local browser saving.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Origami Puzzle Topics">
+          <span class="kw-pill">Origami Paper Folding Puzzle Online</span>
+          <span class="kw-pill">Paper Fold Browser Game Free</span>
+          <span class="kw-pill">Layered Order Brain Teaser</span>
+          <span class="kw-pill">ASMR Paper Crease Web Audio</span>
+          <span class="kw-pill">500-Level Washi Craft Puzzle</span>
+          <span class="kw-pill">No-Download Chromebook Logic Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Fold &amp; Reveal FAQ</h2>
         <details class="faq-item">
-          <summary>What if I fold all flaps, but the picture doesn't match?</summary>
-          <div class="faq-answer">Simply tap the center paper (or tap <strong>← Unfold</strong>) to peel back your last fold smoothly—no game-over penalties! You can also tap <strong>💡 Fold Hint</strong> to glow the exact next flap in golden light.</div>
+          <summary>What if I fold all flaps, but the artwork doesn't match the Target card?</summary>
+          <div class="faq-answer">Simply tap the center folded paper (or press <strong>← Unfold</strong>) to peel back your last crease smoothly with zero penalties! You can also tap <strong>💡 Fold Hint</strong> to glow the exact next flap in gold.</div>
         </details>
         <details class="faq-item">
-          <summary>If two flaps don't overlap each other, does their order matter?</summary>
-          <div class="faq-answer">No! Fold &amp; Reveal compares the exact final assembled image against the Target Artwork, so any valid folding sequence that produces the exact same layered result is accepted instantly.</div>
+          <summary>If two flaps never touch each other, does their folding order matter?</summary>
+          <div class="faq-answer">No! Fold &amp; Reveal compares your finished assembled artwork pixel-for-pixel against the Target Card, so any valid folding sequence that builds the exact same layered image wins immediately.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I play by swiping flaps inward on mobile touchscreens?</summary>
+          <div class="faq-answer">Yes! Both quick taps on any open paper flap and smooth inward swipes toward the center square trigger crisp 3D folding animations on Android Chrome and iOS Safari.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does Fold &amp; Reveal save my solved sheets without signing up?</summary>
+          <div class="faq-answer">Yes. All completed origami sheets across Levels 1 to 500 are saved automatically inside your browser's private local storage with no login or app installation required.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🔧</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Un-Builder</h3>
+        <p>Disassemble retro radios, cameras, and engines step by step in exact reverse order.</p>
+        <a href="/games/un-builder/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🔦</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Shadow Weaver</h3>
+        <p>Rotate floating 3D wooden sculptures in front of a spotlight to reveal hidden wall shadows.</p>
+        <a href="/games/shadow-weaver/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🎟️</div><span class="cat-tag">ASMR</span></div>
         <h3>The Perfect Tear</h3>
         <p>Tear vintage tickets, receipts, and stamps cleanly along perforated lines at a 45° rhythm.</p>
         <a href="/games/perfect-tear/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🪢</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Tangle Master</h3>
-        <p>Move colorful rope pins across pegboard sockets until every braided knot lies flat.</p>
-        <a href="/games/tangle-master/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Prism &amp; Lasers</h3>
-        <p>Rotate mirrors and split laser beams through optical prisms across 500 dark-mode grids.</p>
-        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
       </article>
     </section>
 
@@ -568,7 +747,7 @@
           <ul>
             <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
             <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
+            <li><a href="/games/shadow-weaver/">Shadow Weaver</a></li>
             <li><a href="/games/fold-reveal/">Fold &amp; Reveal</a></li>
           </ul>
         </div>
@@ -578,7 +757,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -618,7 +797,7 @@
     const WORLD_H = 420;
     const CX = WORLD_W / 2;
     const CY = WORLD_H / 2;
-    const HALF_S = 78; // Central square is 156x156
+    const HALF_S = 78;
 
     const CHAPTERS = [
       { title: "Chapter 1 • Classic Origami", range: "1–100", start: 1, end: 100 },
@@ -628,7 +807,6 @@
       { title: "Chapter 5 • Origami Master Star", range: "401–500", start: 401, end: 500 }
     ];
 
-    // 8 Perimeter Crease Slots (4 Edges + 4 Diagonal 45° Corners)
     const SLOT_DEFS = {
       T:  { id: "T",  kind: "edge",   ax: 0,   ay: -HALF_S, angle: -Math.PI / 2, baseHalf: 68 },
       R:  { id: "R",  kind: "edge",   ax: HALF_S, ay: 0,    angle: 0,            baseHalf: 68 },
@@ -644,16 +822,15 @@
     const CORNER_IDS = ["TR", "BR", "BL", "TL"];
     const ALL_SLOT_IDS = ["T", "R", "B", "L", "TR", "BR", "BL", "TL"];
 
-    // Distinct High-Contrast Washi Origami Color Swatches
     const WASHI_COLORS = [
-      { front: "#ef4444", back: "#fca5a5", trim: "#991b1b", ink: "#fef2f2" }, // Crimson
-      { front: "#f59e0b", back: "#fde68a", trim: "#92400e", ink: "#451a03" }, // Gold
-      { front: "#10b981", back: "#a7f3d0", trim: "#065f46", ink: "#ecfdf5" }, // Emerald
-      { front: "#3b82f6", back: "#bfdbfe", trim: "#1e3a8a", ink: "#eff6ff" }, // Cobalt
-      { front: "#8b5cf6", back: "#ddd6fe", trim: "#4c1d95", ink: "#f5f3ff" }, // Violet
-      { front: "#ec4899", back: "#fbcfe8", trim: "#831843", ink: "#fdf2f8" }, // Sakura
-      { front: "#06b6d4", back: "#a5f3fc", trim: "#155e75", ink: "#ecfeff" }, // Teal
-      { front: "#f97316", back: "#fed7aa", trim: "#7c2d12", ink: "#fff7ed" }  // Tangerine
+      { front: "#ef4444", back: "#fca5a5", trim: "#991b1b", ink: "#fef2f2" },
+      { front: "#f59e0b", back: "#fde68a", trim: "#92400e", ink: "#451a03" },
+      { front: "#10b981", back: "#a7f3d0", trim: "#065f46", ink: "#ecfdf5" },
+      { front: "#3b82f6", back: "#bfdbfe", trim: "#1e3a8a", ink: "#eff6ff" },
+      { front: "#8b5cf6", back: "#ddd6fe", trim: "#4c1d95", ink: "#f5f3ff" },
+      { front: "#ec4899", back: "#fbcfe8", trim: "#831843", ink: "#fdf2f8" },
+      { front: "#06b6d4", back: "#a5f3fc", trim: "#155e75", ink: "#ecfeff" },
+      { front: "#f97316", back: "#fed7aa", trim: "#7c2d12", ink: "#fff7ed" }
     ];
 
     const SECRET_WORDS = [
@@ -684,14 +861,12 @@
       return copy;
     }
 
-    // Build flap polygon in crease-local coordinates (u >= 0 is outward, v is along crease)
     function getFlapPolygon(flap) {
       const r = flap.reach;
       const bw = flap.halfW;
       const sh = flap.shape;
 
       if (flap.kind === "corner") {
-        // Pointed diamond / kite or stepped corner fold reaching cleanly across center
         if (sh === "pointed" || sh === "arch") {
           return [
             { u: 0, v: -bw },
@@ -710,7 +885,6 @@
         ];
       }
 
-      // Edge flap silhouettes
       if (sh === "pointed") {
         return [
           { u: 0, v: -bw },
@@ -750,7 +924,6 @@
           { u: 0, v: bw * 0.88 }
         ];
       }
-      // Classic origami tapered banner
       return [
         { u: 0, v: -bw },
         { u: r, v: -bw * 0.68 },
@@ -759,7 +932,6 @@
       ];
     }
 
-    // Offscreen 64x64 Canvas for Exact Visual Layer Equivalence Check!
     const CMP_SZ = 64;
     const targetCmpCanvas = document.createElement("canvas");
     targetCmpCanvas.width = CMP_SZ; targetCmpCanvas.height = CMP_SZ;
@@ -780,7 +952,6 @@
       cctx.fillStyle = col.ink;
       cctx.strokeStyle = col.ink;
 
-      // Decorative trim border line along flap edge
       cctx.lineWidth = 2;
       const poly = flap.poly;
       cctx.beginPath();
@@ -796,9 +967,7 @@
 
       cctx.globalAlpha = isRevealedSide ? 0.92 : 0.45;
       if (flap.wordBadge) {
-        // Bold Hidden Message Plaque (renders upright when folded!)
         cctx.translate(mu, mv);
-        // Compensate for flap rotation + fold reflection so text reads crisply horizontal!
         cctx.scale(-1, 1);
         cctx.rotate(-flap.angle);
         cctx.fillStyle = "rgba(15, 23, 42, 0.82)";
@@ -877,7 +1046,6 @@
         cctx.arc(mu, mv, 7, 0, Math.PI * 2);
         cctx.stroke();
       } else {
-        // Bold origami chevron bars
         cctx.lineWidth = 4;
         cctx.lineCap = "round";
         for (let off = -8; off <= 8; off += 14) {
@@ -892,7 +1060,6 @@
       cctx.restore();
     }
 
-    // Render any ordered sequence of folded flaps onto a square center canvas
     function renderFoldedArtwork(cctx, sizePx, baseBg, flapsList, orderIndices) {
       const sc = sizePx / (HALF_S * 2);
       cctx.save();
@@ -900,7 +1067,6 @@
       cctx.fillStyle = baseBg;
       cctx.fillRect(0, 0, sizePx, sizePx);
 
-      // Subtle central square watermark circle
       cctx.strokeStyle = "rgba(15, 23, 42, 0.08)";
       cctx.lineWidth = 2;
       cctx.beginPath();
@@ -912,7 +1078,7 @@
         cctx.save();
         cctx.translate(sizePx / 2 + flap.ax * sc, sizePx / 2 + flap.ay * sc);
         cctx.rotate(flap.angle);
-        cctx.scale(-sc, sc); // Folded flat inward (t = 1 -> cos = -1)
+        cctx.scale(-sc, sc);
 
         cctx.beginPath();
         flap.poly.forEach((pt, k) => {
@@ -937,7 +1103,6 @@
       cctx.restore();
     }
 
-    // Verify every flap remains clearly visible in final target artwork so puzzle is 100% deducible
     function verifyFlapVisibility(flapsList, orderIndices) {
       const idCanvas = document.createElement("canvas");
       idCanvas.width = 48; idCanvas.height = 48;
@@ -945,7 +1110,6 @@
       const sc = 48 / (HALF_S * 2);
       ictx.clearRect(0, 0, 48, 48);
 
-      // Paint each flap with unique color code (r = (fi+1)*25)
       for (const fi of orderIndices) {
         const flap = flapsList[fi];
         ictx.save();
@@ -971,7 +1135,6 @@
           if (idx >= 0 && idx < counts.length) counts[idx]++;
         }
       }
-      // Every flap must have at least 38 visible pixels on the 48x48 target!
       return counts.every((c) => c >= 38);
     }
 
@@ -1006,13 +1169,10 @@
         const colors = shuffle(WASHI_COLORS, rng);
         const motifs = shuffle(MOTIFS, rng);
 
-        // Build flaps ordered from BOTTOM (index 0 in solutionOrder) to TOP (last in solutionOrder)
-        // Larger flaps generally fold earlier and smaller accent flaps fold later for clean visibility!
         const flaps = chosenSlots.map((slotId, orderRank) => {
           const def = SLOT_DEFS[slotId];
-          const progressRank = orderRank / Math.max(1, chosenSlots.length - 1); // 0 = bottom, 1 = top
+          const progressRank = orderRank / Math.max(1, chosenSlots.length - 1);
 
-          // Gently taper reach/width toward upper layers so every lower layer peeks out clearly!
           const reach = def.kind === "edge"
             ? Math.round(124 - progressRank * 30 + (rng() - 0.5) * 10)
             : Math.round(108 - progressRank * 18 + (rng() - 0.5) * 8);
@@ -1041,7 +1201,6 @@
           return fObj;
         });
 
-        // Shuffle flap display array while keeping `solutionOrder` referencing their indices
         const indexed = flaps.map((f, origRank) => ({ f, origRank }));
         const mixed = shuffle(indexed, rng);
         const finalFlaps = mixed.map((x) => x.f);
@@ -1130,7 +1289,6 @@
       src.start(now);
       src.stop(now + 0.18);
 
-      // Subtle tactile crease pat at end of fold
       if (!isUnfold) {
         const osc = audioCtx.createOscillator();
         const go = audioCtx.createGain();
@@ -1199,7 +1357,6 @@
     const flapsPill = document.getElementById("flapsPill");
     const solvedCounter = document.getElementById("solvedCounter");
     const targetTitle = document.getElementById("targetTitle");
-    const targetSub = document.getElementById("targetSub");
     const foldDots = document.getElementById("foldDots");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
@@ -1218,8 +1375,8 @@
     } catch (e) {}
 
     let level = null;
-    let flapStates = []; // [{ t: 0, targetT: 0, order: -1 }]
-    let foldedStack = []; // chronological list of folded flap indices
+    let flapStates = [];
+    let foldedStack = [];
     let levelWon = false;
     let hintFlapIdx = -1;
     let shakeTimer = 0;
@@ -1228,7 +1385,6 @@
     let sparkles = [];
     let toastTimer = null;
 
-    // Swipe / Tap detection
     let ptrDownPos = null;
     let ptrDownFlapIdx = -1;
 
@@ -1361,7 +1517,6 @@
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
-      // Bake Target Preview Card & 64x64 Exact Match Reference
       renderFoldedArtwork(targetPreviewCtx, 136, level.baseBg, level.flaps, level.solutionOrder);
       renderFoldedArtwork(targetCmpCtx, CMP_SZ, level.baseBg, level.flaps, level.solutionOrder);
       targetPixels = targetCmpCtx.getImageData(0, 0, CMP_SZ, CMP_SZ).data;
@@ -1373,7 +1528,6 @@
       updateHUD();
     }
 
-    // Viewport & Flap Hit-Testing
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1452,10 +1606,8 @@
 
       if (ptrDownFlapIdx !== -1) {
         if (dragDist < 16) {
-          // Crisp Tap on open flap -> Fold!
           foldFlap(ptrDownFlapIdx);
         } else {
-          // Swipe inward toward center -> Fold!
           const toCenterX = CX - ptrDownPos.x;
           const toCenterY = CY - ptrDownPos.y;
           if (dx * toCenterX + dy * toCenterY > 0) {
@@ -1463,7 +1615,6 @@
           }
         }
       } else if (dragDist < 18) {
-        // Tapped inside central square -> Unfold last folded flap!
         if (Math.abs(pt.x - CX) <= HALF_S + 8 && Math.abs(pt.y - CY) <= HALF_S + 8) {
           if (foldedStack.length > 0) {
             unfoldLastFlap();
@@ -1475,12 +1626,10 @@
       ptrDownFlapIdx = -1;
     });
 
-    // Smart Origami Hint Button
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (levelWon) return;
       initAudio();
 
-      // Check how much of current foldedStack matches the canonical solutionOrder prefix
       let mismatchAt = -1;
       for (let i = 0; i < foldedStack.length; i++) {
         if (foldedStack[i] !== level.solutionOrder[i]) {
@@ -1490,7 +1639,6 @@
       }
 
       if (mismatchAt !== -1) {
-        // Unfold back to the point before the mistake and highlight the right flap!
         while (foldedStack.length > mismatchAt) {
           const idx = foldedStack.pop();
           flapStates[idx].targetT = 0;
@@ -1508,7 +1656,6 @@
       }
     });
 
-    // Controls & Picker Modal
     document.getElementById("undoBtn").addEventListener("click", unfoldLastFlap);
     document.getElementById("resetBtn").addEventListener("click", unfoldAll);
     soundBtn.addEventListener("click", () => {
@@ -1592,7 +1739,7 @@
       const isHint = idx === hintFlapIdx && st.targetT === 0;
 
       const cosA = Math.cos(t * Math.PI);
-      const liftSin = Math.sin(t * Math.PI); // peaks at 1.0 mid-fold!
+      const liftSin = Math.sin(t * Math.PI);
       const showingRevealed = t >= 0.5;
       const safeScale = Math.abs(cosA) < 0.02 ? (cosA >= 0 ? 0.02 : -0.02) : cosA;
 
@@ -1600,7 +1747,6 @@
       ctx.translate(CX + flap.ax, CY + flap.ay);
       ctx.rotate(flap.angle);
 
-      // Subtle dynamic shadow cast beneath lifting/folding flap
       if (liftSin > 0.02) {
         ctx.save();
         ctx.scale(safeScale, 1);
@@ -1617,7 +1763,6 @@
         ctx.restore();
       }
 
-      // Main Animated Paper Flap Surface
       ctx.save();
       ctx.scale(safeScale, 1);
 
@@ -1640,12 +1785,10 @@
       ctx.strokeStyle = isHint ? "#facc15" : flap.color.trim;
       ctx.stroke();
 
-      // Clip & Draw Flap Motif (Translucent print-through when open, vivid when folded!)
       ctx.save();
       ctx.clip();
       drawMotifLocal(ctx, flap, showingRevealed);
 
-      // Realistic directional lighting shade as flap turns vertical toward light
       if (liftSin > 0.04) {
         ctx.fillStyle = showingRevealed
           ? `rgba(255, 255, 255, ${liftSin * 0.24})`
@@ -1654,7 +1797,6 @@
       }
       ctx.restore();
 
-      // Subtle inward fold arrow cue on open flaps
       if (t < 0.08 && !levelWon) {
         const ax = flap.reach * 0.84;
         ctx.strokeStyle = isHint ? "#facc15" : "rgba(15, 23, 42, 0.38)";
@@ -1670,7 +1812,6 @@
 
       ctx.restore();
 
-      // Crisp dashed origami fold crease line
       ctx.strokeStyle = "rgba(15, 23, 42, 0.28)";
       ctx.lineWidth = 1.4;
       ctx.setLineDash([4, 4]);
@@ -1689,7 +1830,6 @@
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
-      // Animate all flap fold angles smoothly
       let allSettled = true;
       for (let i = 0; i < flapStates.length; i++) {
         const st = flapStates[i];
@@ -1702,7 +1842,6 @@
         }
       }
 
-      // Trigger Exact Pixel Check once the final flap finishes folding flat!
       if (!levelWon && foldedStack.length === level.flaps.length && allSettled && !evaluatedFull) {
         evaluatedFull = true;
         checkFinalMatch();
@@ -1719,7 +1858,6 @@
       ctx.translate(vp.offsetX + shakeX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Subtle Craft Mat Dot Grid
       ctx.fillStyle = "rgba(165, 180, 252, 0.1)";
       for (let x = 22; x < WORLD_W; x += 26) {
         for (let y = 22; y < WORLD_H; y += 26) {
@@ -1727,7 +1865,6 @@
         }
       }
 
-      // 2. Central Origami Base Square Sheet
       ctx.save();
       ctx.shadowColor = "rgba(0, 0, 0, 0.45)";
       ctx.shadowBlur = 22;
@@ -1741,7 +1878,6 @@
       ctx.lineWidth = levelWon ? 3.5 : 2;
       ctx.strokeRect(CX - HALF_S, CY - HALF_S, HALF_S * 2, HALF_S * 2);
 
-      // Subtle watermark ring in center
       ctx.strokeStyle = "rgba(15, 23, 42, 0.08)";
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -1749,7 +1885,6 @@
       ctx.stroke();
       ctx.restore();
 
-      // 3. Draw Open Flaps First (Corners behind Edges cleanly), then Folded Flaps in EXACT Fold Stack Order!
       const openIndices = [];
       const foldedIndices = [];
       for (let i = 0; i < level.flaps.length; i++) {
@@ -1760,19 +1895,16 @@
         }
       }
 
-      // Draw open corner flaps first, then open edge flaps
       openIndices.sort((a, b) => (level.flaps[a].kind === "corner" ? 0 : 1) - (level.flaps[b].kind === "corner" ? 0 : 1));
       for (const idx of openIndices) {
         drawFlapAnimated(idx, now);
       }
 
-      // Draw folded (and currently folding) flaps strictly in chronological fold stack order!
       foldedIndices.sort((a, b) => flapStates[a].order - flapStates[b].order);
       for (const idx of foldedIndices) {
         drawFlapAnimated(idx, now);
       }
 
-      // 4. Victory Sparkles
       sparkles = sparkles.filter((sp) => sp.alpha > 0.04);
       for (const sp of sparkles) {
         sp.x += sp.vx;
