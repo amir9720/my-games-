@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Minimalist Logic Gates — 500 Digital Circuit Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free digital logic puzzles in Minimalist Logic Gates. Snap AND, OR, NOT, XOR, NAND, and NOR gates into glowing circuit boards to satisfy every signal test." />
+  <title>Minimalist Logic Gates — Free 500-Level Boolean Circuit Puzzle Game | ZinPlay</title>
+  <meta name="description" content="Play Minimalist Logic Gates free online with no download. Snap AND, OR, NOT, XOR, NAND, and NOR gates into glowing circuit boards across 500 Boolean logic puzzles on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Minimalist Logic Gates",
+    "url": "https://zinplay.io/games/logic-gates/",
+    "genre": ["Puzzle", "Logic", "STEM Electronics"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top Circuit HUD */
+    /* Top Circuit Lab HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #070c18;
-      color: #e2e8f0;
-      border-bottom: 1px solid #17233b;
+      background: #07111a;
+      color: #f1f5f9;
+      border-bottom: 1px solid #162b3d;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #38bdf8;
-      font-weight: 600;
+      color: #22d3ee;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -63,9 +76,9 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #bae6fd;
+      background: rgba(34, 211, 238, 0.16);
+      border: 1px solid rgba(34, 211, 238, 0.36);
+      color: #a5f3fc;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
@@ -78,71 +91,19 @@
       font-family: inherit;
     }
 
-    /* Live Signal Test Vector Switcher Bar */
-    .tests-strip {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 9px 12px;
-      background: #0c1426;
-      border-bottom: 1px solid #1b2a47;
-      flex-wrap: wrap;
-    }
-    .test-tab-btn {
-      min-height: 34px;
-      padding: 4px 12px;
-      border-radius: 999px;
-      border: 1.5px solid #263859;
-      background: #121e36;
-      color: #94a3b8;
-      font-size: 0.76rem;
-      font-weight: 800;
-      font-family: monospace;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: 0.14s ease;
-    }
-    .test-tab-btn.active {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.2);
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.26);
-    }
-    .test-badge {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.68rem;
-      font-weight: 900;
-    }
-    .test-badge.pass {
-      background: #16a34a;
-      color: #ffffff;
-    }
-    .test-badge.fail {
-      background: #7f1d1d;
-      color: #fecaca;
-    }
-
-    /* PCB Canvas Stage */
+    /* Dark PCB Circuit Board Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 390px;
-      background: radial-gradient(circle at 50% 45%, #101b33 0%, #070b15 100%);
+      height: 395px;
+      background: radial-gradient(circle at 50% 45%, #0e2233 0%, #050c14 100%);
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 430px;
+        height: 435px;
       }
     }
     #logicCanvas {
@@ -153,72 +114,76 @@
       cursor: pointer;
     }
 
-    /* Selected Gate Truth Rule Banner */
-    .gate-rule-bar {
-      text-align: center;
-      padding: 7px 12px;
-      background: #09101f;
-      border-top: 1px solid #17233b;
-      font-size: 0.76rem;
-      color: #94a3b8;
-      font-weight: 600;
-    }
-    .gate-rule-bar strong {
-      color: #38bdf8;
-      font-family: monospace;
-    }
-
-    /* Gate Components Tray */
-    .gate-tray {
+    /* Gate Chip Tray Dock */
+    .gate-dock {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 7px;
-      padding: 11px 12px;
-      background: #0d1629;
-      border-top: 1px solid #1b2a47;
       flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      background: #091521;
+      border-top: 1px solid #162b3d;
     }
-    .gate-tool-btn {
-      min-width: 64px;
-      min-height: 46px;
-      padding: 6px 11px;
-      border-radius: 11px;
-      border: 1.5px solid #263859;
-      background: #142038;
-      color: #cbd5e1;
+    .gate-chip-btn {
+      min-width: 72px;
+      min-height: 52px;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #1e3a52;
+      background: #0f2336;
+      color: #e2e8f0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 2px;
       cursor: pointer;
-      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
     }
-    .gate-tool-btn:active {
-      transform: scale(0.96);
+    .gate-chip-btn:active {
+      transform: scale(0.95);
     }
-    .gate-tool-btn.active {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.22);
+    .gate-chip-btn.active {
+      border-color: #22d3ee;
+      background: rgba(34, 211, 238, 0.22);
       color: #ffffff;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.28);
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.3);
     }
-    .gate-tool-btn.hint-glow {
+    .gate-chip-btn.hint-glow {
       border-color: #facc15;
-      box-shadow: 0 0 16px rgba(250, 204, 21, 0.5);
+      box-shadow: 0 0 16px rgba(250, 204, 21, 0.6);
+      background: rgba(250, 204, 21, 0.16);
     }
-    .gt-code {
+    .gate-chip-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+    .g-code {
       font-family: monospace;
-      font-size: 0.86rem;
+      font-size: 0.88rem;
       font-weight: 900;
       letter-spacing: 0.04em;
     }
-    .gt-arity {
-      font-size: 0.6rem;
-      color: #7dd3fc;
-      text-transform: uppercase;
+    .g-sub {
+      font-size: 0.62rem;
+      color: #94a3b8;
       font-weight: 700;
+    }
+    .gate-chip-btn.active .g-sub {
+      color: #a5f3fc;
+    }
+
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #060e17;
+      border-top: 1px solid #132536;
+      font-size: 0.73rem;
+      color: #94a3b8;
     }
 
     .status-toast {
@@ -226,8 +191,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(7, 12, 24, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.68);
+      background: rgba(6, 14, 23, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -241,14 +206,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(6, 10, 22, 0.8);
+      background: rgba(5, 11, 18, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -256,7 +219,7 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
     }
     .win-overlay.show {
       opacity: 1;
@@ -272,15 +235,8 @@
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -321,9 +277,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -420,6 +374,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #07111a;
+      border: 1px solid rgba(34, 211, 238, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #07111a;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #07111a 0%, #164e63 100%);
+      color: #e2e8f0;
+    }
+    .game-seo-banner.teal-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #064e3b 0%, #1e1b4b 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .truth-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .truth-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      text-align: left;
+    }
+    .truth-table th, .truth-table td {
+      padding: 9px 11px;
+      border-bottom: 1px solid var(--border);
+    }
+    .truth-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .truth-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -432,7 +466,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -445,60 +479,58 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Circuits &bull; Digital Logic</span>
+      <span class="cat-tag">500 Circuits &bull; Boolean Logic Puzzle</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Minimalist Logic Gates</h1>
-      <p>Snap AND, OR, NOT, XOR, NAND, and NOR gates into empty sockets so the circuit produces the exact target output across every test case.</p>
+      <p>Snap AND, OR, NOT, XOR, NAND, and NOR chips into open PCB sockets to route live binary signals and match every target output LED.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Minimalist Logic Gates Puzzle">
+    <section class="game-wrapper" aria-label="Minimalist Logic Gates Circuit Puzzle">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Basic Gates</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Basic AND / OR / NOT</span>
           <span id="levelTitle">Circuit #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="testsPill">Tests: 0 / 2</span>
+          <span class="hud-pill" id="ledsPill">LEDs: 0 / 1</span>
           <span class="hud-pill done-pill" id="solvedCounter">Solved: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Live Input Vector Test Tabs -->
-      <div id="testTabsBar" class="tests-strip" role="tablist" aria-label="Circuit Test Cases"></div>
-
-      <!-- Glowing PCB Canvas -->
+      <!-- Dark PCB Circuit Canvas -->
       <div class="canvas-container">
         <canvas id="logicCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Circuit Verified Overlay -->
+        <!-- Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2.3rem; margin-bottom:6px;">⚡</div>
+            <div style="font-size:2.3rem; margin-bottom:6px;">🔌</div>
             <h2 id="winHeading">Circuit Verified!</h2>
-            <p id="winText">All logic outputs matched across every test case.</p>
+            <p id="winText">Every logic gate and binary trace locked into exact truth alignment.</p>
             <button id="nextLevelBtn" class="btn-primary" type="button">Next Circuit →</button>
           </div>
         </div>
       </div>
 
-      <!-- Quick Truth Rule Line -->
-      <div id="gateRuleBar" class="gate-rule-bar">
-        <strong>AND</strong>: Outputs 1 only when BOTH inputs are 1.
-      </div>
+      <!-- Gate Chip Inventory Dock -->
+      <div id="gateDock" class="gate-dock" role="group" aria-label="Available Logic Gate Chips"></div>
 
-      <!-- Gate Components Tray -->
-      <div id="gateTray" class="gate-tray" role="group" aria-label="Logic Gates"></div>
+      <div class="legend-strip">
+        <span>⚡ Cyan Trace = 1 (HIGH)</span>
+        <span>🌑 Dim Trace = 0 (LOW)</span>
+        <span>👆 Select Gate Chip → Tap Open Socket (Tap Filled Socket to Clear)</span>
+      </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
           <button id="resetBtn" class="btn-outline" type="button">↺ Clear Board</button>
           <button id="hintBtn" class="btn-outline" type="button">💡 Circuit Hint</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
@@ -513,51 +545,165 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 850+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/logic-gates-banner-1.jpg"
+            alt="Minimalist Logic Gates online Boolean circuit puzzle showing glowing cyan AND, OR, NOT, and XOR logic gates on a dark PCB"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Interactive Boolean Circuits — Live Signal Flow Simulation</h3>
+          <p>Snap digital logic chips into glowing motherboard sockets and watch real-time 1 and 0 pulses travel down copper traces toward target LEDs.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Minimalist Logic Gates (500 Circuits)</h2>
-        <p>Minimalist Logic Gates transforms real computer-science Boolean algebra into a sleek, visual dark-mode puzzle across 500 escalating circuit boards. Glowing cyan traces carry a <strong>HIGH (1)</strong> signal, while dark slate wires carry a <strong>LOW (0)</strong> signal. Fill each dashed socket with the right gate so every output LED matches its target across all signal test cases simultaneously.</p>
+        <h2>What Is Minimalist Logic Gates? A Boolean Circuit Puzzle Game Online</h2>
+        <p><strong>Minimalist Logic Gates</strong> is a free <strong>online logic gate puzzle game</strong> that turns digital computer science fundamentals into a sleek, tactile circuit-building experience. Every board feeds fixed binary input pins (<strong>1 HIGH</strong> in glowing electric cyan and <strong>0 LOW</strong> in muted slate) through cascading layers of open microchip sockets toward one or more target output LEDs on the right. Your job is to select the right Boolean logic chips from your workbench tray and snap them into the board until every target LED lights up to match its exact required state (<code>REQ 1</code> or <code>REQ 0</code>).</p>
+        <p>Built as a lightweight, <strong>no-download STEM brain teaser for students, programmers, and Chromebook users</strong>, Minimalist Logic Gates evaluates every trace instantaneously at 60 FPS with crisp electronic relay audio via the <strong>Web Audio API</strong>. There are zero timers, zero paywalls, and automatic private progress saving across all <strong>500 verified circuits</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Complete Boolean Logic Gate Truth Table Cheat Sheet</h2>
+        <p>New to digital electronics or brushing up for a computer science class? Keep this quick <strong>6-Gate Truth Table Reference</strong> handy as you unlock <code>XOR</code> in Chapter 2 and universal <code>NAND</code> / <code>NOR</code> gates in Chapter 3:</p>
+
+        <div class="truth-table-wrap">
+          <table class="truth-table">
+            <thead>
+              <tr>
+                <th>Gate Chip</th>
+                <th>Inputs</th>
+                <th>When Output Equals 1 (HIGH)</th>
+                <th>Quick Mental Shortcut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>AND</strong></td>
+                <td>2 Pins</td>
+                <td>Only when <strong>BOTH</strong> inputs are <code>1</code> (<code>1 &amp; 1 → 1</code>)</td>
+                <td>Strict agreement—if either wire is <code>0</code>, output stays <code>0</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>OR</strong></td>
+                <td>2 Pins</td>
+                <td>When <strong>AT LEAST ONE</strong> input is <code>1</code> (<code>1|0</code>, <code>0|1</code>, <code>1|1 → 1</code>)</td>
+                <td>Only outputs <code>0</code> when both wires are <code>0</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>NOT</strong></td>
+                <td>1 Pin</td>
+                <td>Only when its single input is <code>0</code> (<code>0 → 1</code>, <code>1 → 0</code>)</td>
+                <td>Pure inverter—flips whatever signal enters it!</td>
+              </tr>
+              <tr>
+                <td><strong>XOR</strong></td>
+                <td>2 Pins</td>
+                <td>When inputs are <strong>DIFFERENT</strong> (<code>1^0 → 1</code>, <code>0^1 → 1</code>)</td>
+                <td>"Exclusive OR"—outputs <code>0</code> if both inputs match (<code>0,0</code> or <code>1,1</code>).</td>
+              </tr>
+              <tr>
+                <td><strong>NAND</strong></td>
+                <td>2 Pins</td>
+                <td>Always <code>1</code> <strong>EXCEPT</strong> when both inputs are <code>1</code> (<code>1&amp;1 → 0</code>)</td>
+                <td>Exact opposite of <strong>AND</strong> (inverted AND gate).</td>
+              </tr>
+              <tr>
+                <td><strong>NOR</strong></td>
+                <td>2 Pins</td>
+                <td>Only when <strong>BOTH</strong> inputs are <code>0</code> (<code>0,0 → 1</code>)</td>
+                <td>Exact opposite of <strong>OR</strong> (inverted OR gate).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Circuit Engineer Tip:</strong> Notice the shape of each empty socket on the PCB! Compact <strong>1-pin triangular sockets</strong> accept single-input chips (<code>NOT</code> or straight <code>PASS</code> buffers), whereas wider <strong>2-pin rectangular sockets</strong> accept dual-input chips (<code>AND</code>, <code>OR</code>, <code>XOR</code>, <code>NAND</code>, <code>NOR</code>).</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner teal-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/logic-gates-banner-2.jpg"
+            alt="Modular translucent logic gate chips snapped into a glowing motherboard socket grid in Minimalist Logic Gates"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Multi-Output Truth Boards, Universal Gates &amp; Smart Circuit Hints</h3>
+          <p>Work backward from final output LEDs or test live signal paths in real time—complete with an instant 1–500 circuit picker.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Circuit Chapters (500 Verified Logic Boards)</h2>
+        <p>Every board in Minimalist Logic Gates is synthesized forward from valid binary input combinations before clearing its sockets—guaranteeing 100% mathematical solvability across all 500 levels:</p>
         <ul>
-          <li><strong>Tap to Place or Cycle:</strong> Select any gate in the tray below and tap a matching dashed socket (<code>2-IN</code> for binary gates, <code>1-IN</code> for <code>NOT</code> / <code>PASS</code>). Tap an already-placed socket with the same gate to remove it, or tap with a new gate to swap instantly.</li>
-          <li><strong>Inspect Every Test Vector:</strong> Tap the <strong>Test 1 / Test 2 / Test 3 / Test 4</strong> pills above the board to switch live input combinations and trace signals through your circuit. A circuit is solved the instant every test pill turns green (<code>✓</code>)!</li>
-          <li><strong>Master All 6 Logic Gates:</strong> Start with <code>AND</code>, <code>OR</code>, and <code>NOT</code> in Chapter 1, unlock <code>XOR</code> (outputs 1 when inputs differ) in Chapter 2, <code>NAND</code> in Chapter 3, and <code>NOR</code> in Chapters 4–5. Any logically equivalent gate combination that passes all tests wins!</li>
+          <li><strong>Chapter 1 (Circuits 1–100 — Digital Foundations):</strong> Clean 1-to-2 stage networks using <code>AND</code>, <code>OR</code>, and <code>NOT</code> gates to light up a single target LED.</li>
+          <li><strong>Chapter 2 (Circuits 101–200 — Exclusive Parity):</strong> Introduces the <code>XOR</code> gate across 2-to-3 stage diamond circuits, rewarding parity and difference detection.</li>
+          <li><strong>Chapter 3 (Circuits 201–300 — Universal Logic):</strong> Unlocks <code>NAND</code> and <code>NOR</code> universal gates—the exact building blocks used inside real silicon processors.</li>
+          <li><strong>Chapter 4 (Circuits 301–400 — Dual-Output Synthesis):</strong> Adds <strong>two simultaneous target LEDs</strong> (such as <code>REQ 1</code> and <code>REQ 0</code>) fed by shared intermediate wires, requiring every gate choice to satisfy both outputs at once!</li>
+          <li><strong>Chapter 5 (Circuits 401–500 — Master Silicon Architect):</strong> Dense 3-layer, 4-to-5 socket boards combining dual/triple output LEDs, shared signal fan-outs, and universal gates—plus a built-in <strong>💡 Circuit Hint</strong> button that snaps the exact right chip into place whenever you want a nudge.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Logic Gate Topics">
+          <span class="kw-pill">Logic Gates Puzzle Game Online</span>
+          <span class="kw-pill">Boolean Algebra Interactive Practice</span>
+          <span class="kw-pill">AND OR XOR NAND NOR Simulator</span>
+          <span class="kw-pill">STEM Computer Science Browser Game</span>
+          <span class="kw-pill">Digital Circuit Brain Teaser</span>
+          <span class="kw-pill">No-Download Chromebook Logic Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Minimalist Logic Gates FAQ</h2>
         <details class="faq-item">
-          <summary>Why do some circuits accept more than one gate arrangement?</summary>
-          <div class="faq-answer">Just like real digital chip design, Boolean circuits can often be simplified or built in equivalent ways. As long as your completed circuit matches the target outputs across every single Test Case, it passes!</div>
+          <summary>How do I place or remove a logic gate chip on the circuit board?</summary>
+          <div class="faq-answer">Tap any available gate chip (such as <strong>AND</strong>, <strong>OR</strong>, or <strong>NOT</strong>) in the bottom tray to select it, then tap an empty socket on the board to snap it in. To remove a placed gate and return it to your tray, simply tap that socket again!</div>
         </details>
         <details class="faq-item">
-          <summary>What is the difference between NOT and PASS on a 1-input socket?</summary>
-          <div class="faq-answer"><code>NOT</code> is an inverter—it flips <code>1 → 0</code> and <code>0 → 1</code>. <code>PASS</code> is a direct buffer wire that keeps the signal unchanged (<code>1 → 1</code>, <code>0 → 0</code>).</div>
+          <summary>Why do some circuits have both REQ 1 and REQ 0 target LEDs?</summary>
+          <div class="faq-answer">In Chapters 4 and 5, a circuit is only solved when <strong>every</strong> target LED matches its label simultaneously—meaning a <code>REQ 1</code> LED must receive a glowing cyan <code>1</code> signal while a <code>REQ 0</code> LED must receive a dark <code>0</code> signal!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Is this game helpful for learning computer science and digital electronics?</summary>
+          <div class="faq-answer">Yes! Seeing live <code>1</code> and <code>0</code> pulses propagate through <code>AND</code>, <code>OR</code>, <code>NOT</code>, <code>XOR</code>, <code>NAND</code>, and <code>NOR</code> gates builds intuitive Boolean reasoning used in programming, FPGA design, and discrete math.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does Minimalist Logic Gates work on Chromebooks and mobile phones without login?</summary>
+          <div class="faq-answer">Yes. All 500 circuit levels run 100% client-side in HTML5 Canvas with zero downloads, and your solved progress saves automatically in your browser's local storage.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
-        <h3>Blackout Grid Operator</h3>
-        <p>Balance solar, wind, batteries, and turbines to keep city grid frequency locked at 50 Hz.</p>
-        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
         <h3>Prism &amp; Lasers</h3>
-        <p>Place mirrors and split laser beams through prisms across 500 dark-mode optical puzzles.</p>
+        <p>Rotate mirrors and split laser beams through optical prisms in a sleek dark-mode grid.</p>
         <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">⚗️</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Color Alchemy Lab</h3>
-        <p>Blend artist paint pigments inside an animated glass flask across 500 color formulas.</p>
-        <a href="/games/color-alchemy/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
+        <h3>Blackout Grid Operator</h3>
+        <p>Balance solar, wind, and backup power plants across a 24-hour cycle to hold 50 Hz.</p>
+        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
+        <h3>Manual Bomb Defusal</h3>
+        <p>Decode the live technical manual against the ticking clock and cut the exact right wire.</p>
+        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
       </article>
     </section>
 
@@ -595,8 +741,8 @@
           <ul>
             <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
             <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/logic-gates/">Minimalist Logic Gates</a></li>
             <li><a href="/games/color-alchemy/">Color Alchemy Lab</a></li>
+            <li><a href="/games/logic-gates/">Minimalist Logic Gates</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -605,7 +751,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -638,173 +784,27 @@
     }
 
     // ==============================================
-    // LOGIC GATE DEFINITIONS & CIRCUIT TEMPLATES
+    // BOOLEAN LOGIC GATE ENGINE & 500-CIRCUIT GENERATOR
     // ==============================================
     const TOTAL_LEVELS = 500;
-    const WORLD_W = 460;
-    const WORLD_H = 380;
+    const WORLD_W = 440;
+    const WORLD_H = 390;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Basic Gates (AND / OR / NOT)", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Exclusive Logic (+ XOR)", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Inverted Gates (+ NAND)", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Full Gate Library (+ NOR)", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Silicon Architect", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Basic AND / OR / NOT", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Exclusive XOR Logic", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Universal NAND / NOR", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Multi-Output Truths", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Silicon Architect", range: "401–500", start: 401, end: 500 }
     ];
 
-    const GATES = {
-      AND:  { key: "AND",  arity: 2, color: "#38bdf8", rule: "Outputs 1 ONLY when both inputs are 1.",       fn: (a, b) => (a & b) },
-      OR:   { key: "OR",   arity: 2, color: "#a855f7", rule: "Outputs 1 when AT LEAST ONE input is 1.",      fn: (a, b) => (a | b) },
-      XOR:  { key: "XOR",  arity: 2, color: "#f59e0b", rule: "Outputs 1 ONLY when the two inputs DIFFER.",   fn: (a, b) => (a ^ b) },
-      NAND: { key: "NAND", arity: 2, color: "#f43f5e", rule: "Opposite of AND: outputs 0 only if both = 1.", fn: (a, b) => (a & b) ? 0 : 1 },
-      NOR:  { key: "NOR",  arity: 2, color: "#14b8a6", rule: "Opposite of OR: outputs 1 only if both = 0.",  fn: (a, b) => (a | b) ? 0 : 1 },
-      NOT:  { key: "NOT",  arity: 1, color: "#ec4899", rule: "Inverter (1-IN): flips 0 → 1 and 1 → 0.",      fn: (a) => (a ? 0 : 1) },
-      PASS: { key: "PASS", arity: 1, color: "#64748b", rule: "Direct Wire (1-IN): passes signal unchanged.", fn: (a) => a }
-    };
-
-    // Clean, Zero-Overlap PCB Schematic Topologies (Evaluated left-to-right)
-    const TOPOLOGIES = {
-      single2: {
-        inputs: [
-          { id: "A", x: 52, y: 132 },
-          { id: "B", x: 52, y: 248 }
-        ],
-        gates: [
-          { id: "G1", x: 230, y: 190, inIds: ["A", "B"], arity: 2 }
-        ],
-        outputs: [
-          { id: "Q1", x: 404, y: 190, src: "G1" }
-        ]
-      },
-      invertAnd: {
-        inputs: [
-          { id: "A", x: 48, y: 128 },
-          { id: "B", x: 48, y: 252 }
-        ],
-        gates: [
-          { id: "G1", x: 162, y: 128, inIds: ["A"], arity: 1 },
-          { id: "G2", x: 292, y: 190, inIds: ["G1", "B"], arity: 2 }
-        ],
-        outputs: [
-          { id: "Q1", x: 410, y: 190, src: "G2" }
-        ]
-      },
-      cascade3in: {
-        inputs: [
-          { id: "A", x: 48, y: 92 },
-          { id: "B", x: 48, y: 190 },
-          { id: "C", x: 48, y: 288 }
-        ],
-        gates: [
-          { id: "G1", x: 170, y: 140, inIds: ["A", "B"], arity: 2 },
-          { id: "G2", x: 294, y: 214, inIds: ["G1", "C"], arity: 2 }
-        ],
-        outputs: [
-          { id: "Q1", x: 410, y: 214, src: "G2" }
-        ]
-      },
-      dualOut2: {
-        inputs: [
-          { id: "A", x: 48, y: 94 },
-          { id: "B", x: 48, y: 190 },
-          { id: "C", x: 48, y: 286 }
-        ],
-        gates: [
-          { id: "G1", x: 224, y: 132, inIds: ["A", "B"], arity: 2 },
-          { id: "G2", x: 224, y: 248, inIds: ["B", "C"], arity: 2 }
-        ],
-        outputs: [
-          { id: "Q1", x: 406, y: 132, src: "G1" },
-          { id: "Q2", x: 406, y: 248, src: "G2" }
-        ]
-      },
-      funnel3: {
-        inputs: [
-          { id: "A", x: 46, y: 84 },
-          { id: "B", x: 46, y: 190 },
-          { id: "C", x: 46, y: 296 }
-        ],
-        gates: [
-          { id: "G1", x: 168, y: 124, inIds: ["A", "B"], arity: 2 },
-          { id: "G2", x: 168, y: 256, inIds: ["B", "C"], arity: 2 },
-          { id: "G3", x: 296, y: 190, inIds: ["G1", "G2"], arity: 2 }
-        ],
-        outputs: [
-          { id: "Q1", x: 412, y: 190, src: "G3" }
-        ]
-      },
-      invFunnel3: {
-        inputs: [
-          { id: "A", x: 46, y: 88 },
-          { id: "B", x: 46, y: 190 },
-          { id: "C", x: 46, y: 292 }
-        ],
-        gates: [
-          { id: "G1", x: 164, y: 130, inIds: ["A", "B"], arity: 2 },
-          { id: "G2", x: 164, y: 268, inIds: ["C"], arity: 1 },
-          { id: "G3", x: 294, y: 196, inIds: ["G1", "G2"], arity: 2 }
-        ],
-        outputs: [
-          { id: "Q1", x: 412, y: 196, src: "G3" }
-        ]
-      },
-      quadTree4: {
-        inputs: [
-          { id: "A", x: 44, y: 64 },
-          { id: "B", x: 44, y: 148 },
-          { id: "C", x: 44, y: 232 },
-          { id: "D", x: 44, y: 316 }
-        ],
-        gates: [
-          { id: "G1", x: 160, y: 106, inIds: ["A", "B"], arity: 2 },
-          { id: "G2", x: 160, y: 274, inIds: ["C", "D"], arity: 2 },
-          { id: "G3", x: 290, y: 138, inIds: ["G1", "C"], arity: 2 },
-          { id: "G4", x: 290, y: 248, inIds: ["G1", "G2"], arity: 2 }
-        ],
-        outputs: [
-          { id: "Q1", x: 412, y: 138, src: "G3" },
-          { id: "Q2", x: 412, y: 248, src: "G4" }
-        ]
-      },
-      bus5: {
-        inputs: [
-          { id: "A", x: 42, y: 64 },
-          { id: "B", x: 42, y: 148 },
-          { id: "C", x: 42, y: 232 },
-          { id: "D", x: 42, y: 316 }
-        ],
-        gates: [
-          { id: "G1", x: 142, y: 106, inIds: ["A", "B"], arity: 2 },
-          { id: "G2", x: 142, y: 274, inIds: ["C", "D"], arity: 2 },
-          { id: "G3", x: 242, y: 190, inIds: ["B", "C"], arity: 2 },
-          { id: "G4", x: 326, y: 122, inIds: ["G1", "G3"], arity: 2 },
-          { id: "G5", x: 326, y: 258, inIds: ["G3", "G2"], arity: 2 }
-        ],
-        outputs: [
-          { id: "Q1", x: 418, y: 122, src: "G4" },
-          { id: "Q2", x: 418, y: 258, src: "G5" }
-        ]
-      },
-      architect6: {
-        inputs: [
-          { id: "A", x: 40, y: 62 },
-          { id: "B", x: 40, y: 146 },
-          { id: "C", x: 40, y: 234 },
-          { id: "D", x: 40, y: 318 }
-        ],
-        gates: [
-          { id: "G1", x: 132, y: 104, inIds: ["A", "B"], arity: 2 },
-          { id: "G2", x: 132, y: 190, inIds: ["B"], arity: 1 },
-          { id: "G3", x: 132, y: 276, inIds: ["C", "D"], arity: 2 },
-          { id: "G4", x: 234, y: 144, inIds: ["G1", "G2"], arity: 2 },
-          { id: "G5", x: 234, y: 244, inIds: ["G2", "G3"], arity: 2 },
-          { id: "G6", x: 330, y: 190, inIds: ["G4", "G5"], arity: 2 }
-        ],
-        outputs: [
-          { id: "Q1", x: 420, y: 120, src: "G4" },
-          { id: "Q2", x: 420, y: 190, src: "G6" }
-        ]
-      }
+    const GATE_DEFS = {
+      AND:  { code: "AND",  arity: 2, sub: "Both 1",  col: "#0284c7", fn: (a, b) => (a & b) },
+      OR:   { code: "OR",   arity: 2, sub: "Any 1",   col: "#0d9488", fn: (a, b) => (a | b) },
+      XOR:  { code: "XOR",  arity: 2, sub: "Diff",    col: "#7c3aed", fn: (a, b) => (a ^ b) },
+      NAND: { code: "NAND", arity: 2, sub: "Not And", col: "#d97706", fn: (a, b) => (a & b) ? 0 : 1 },
+      NOR:  { code: "NOR",  arity: 2, sub: "Both 0",  col: "#db2777", fn: (a, b) => (a | b) ? 0 : 1 },
+      NOT:  { code: "NOT",  arity: 1, sub: "Invert",  col: "#e11d48", fn: (a) => (a ? 0 : 1) }
     };
 
     function mulberry32(seed) {
@@ -826,189 +826,218 @@
       return copy;
     }
 
-    // Evaluate a circuit given gate assignments & an input map ({ A: 0|1, B: 0|1, ... })
-    function evaluateCircuit(topo, gateMap, inputVals) {
-      const vals = { ...inputVals };
-      for (const g of topo.gates) {
-        const typeKey = gateMap[g.id];
-        if (!typeKey) {
-          vals[g.id] = null;
-          continue;
+    // Evaluate live binary values across inputs -> sockets -> output LEDs
+    function evaluateCircuit(lvl, placedGates) {
+      const sockVals = new Array(lvl.sockets.length).fill(null);
+
+      const getSrcVal = (src) => {
+        if (src.kind === "in") return lvl.inputs[src.idx].val;
+        return sockVals[src.idx];
+      };
+
+      // Sockets are ordered left-to-right topologically by column
+      lvl.sockets.forEach((s, idx) => {
+        const gCode = placedGates[idx];
+        if (!gCode) {
+          sockVals[idx] = null;
+          return;
         }
-        const inVals = g.inIds.map((id) => vals[id]);
-        if (inVals.some((v) => v === null || v === undefined)) {
-          vals[g.id] = null;
-          continue;
+        const def = GATE_DEFS[gCode];
+        if (!def || def.arity !== s.arity) {
+          sockVals[idx] = null;
+          return;
         }
-        vals[g.id] = GATES[typeKey].fn(inVals[0], inVals[1]);
-      }
-      const outs = {};
-      for (const o of topo.outputs) {
-        outs[o.id] = vals[o.src];
-      }
-      return { vals, outs };
-    }
-
-    // Curated First 5 Intro Circuits for Smooth Hands-On Onboarding
-    const INTRO_LEVELS = {
-      1: {
-        topoKey: "single2",
-        unlocked: ["AND", "OR"],
-        solution: { G1: "AND" },
-        fixedIds: [],
-        vectors: [{ A: 1, B: 0 }, { A: 1, B: 1 }]
-      },
-      2: {
-        topoKey: "single2",
-        unlocked: ["AND", "OR"],
-        solution: { G1: "OR" },
-        fixedIds: [],
-        vectors: [{ A: 0, B: 0 }, { A: 1, B: 0 }]
-      },
-      3: {
-        topoKey: "invertAnd",
-        unlocked: ["AND", "OR", "NOT", "PASS"],
-        solution: { G1: "NOT", G2: "AND" },
-        fixedIds: [],
-        vectors: [{ A: 0, B: 1 }, { A: 1, B: 1 }, { A: 0, B: 0 }]
-      },
-      4: {
-        topoKey: "cascade3in",
-        unlocked: ["AND", "OR", "NOT", "PASS"],
-        solution: { G1: "OR", G2: "AND" },
-        fixedIds: [],
-        vectors: [{ A: 1, B: 0, C: 1 }, { A: 0, B: 0, C: 1 }, { A: 1, B: 0, C: 0 }]
-      },
-      5: {
-        topoKey: "dualOut2",
-        unlocked: ["AND", "OR", "NOT", "PASS"],
-        solution: { G1: "AND", G2: "OR" },
-        fixedIds: [],
-        vectors: [{ A: 1, B: 0, C: 1 }, { A: 1, B: 1, C: 0 }, { A: 0, B: 0, C: 0 }]
-      }
-    };
-
-    function buildCircuitLevel(levelNum) {
-      if (INTRO_LEVELS[levelNum]) {
-        const spec = INTRO_LEVELS[levelNum];
-        const topo = TOPOLOGIES[spec.topoKey];
-        const tests = spec.vectors.map((inp) => ({
-          inputs: inp,
-          expected: evaluateCircuit(topo, spec.solution, inp).outs
-        }));
-        return {
-          levelNum,
-          topo,
-          unlocked: spec.unlocked,
-          solution: spec.solution,
-          fixedSet: new Set(spec.fixedIds),
-          tests
-        };
-      }
-
-      const rng = mulberry32(levelNum * 112909 + 51507);
-
-      let unlocked2, unlocked1, topoPool, testCount, fixedCount;
-      if (levelNum <= 100) {
-        unlocked2 = ["AND", "OR"];
-        unlocked1 = ["NOT", "PASS"];
-        topoPool = levelNum <= 45
-          ? ["invertAnd", "cascade3in", "dualOut2"]
-          : ["cascade3in", "dualOut2", "funnel3", "invFunnel3"];
-        testCount = 3;
-        fixedCount = 0;
-      } else if (levelNum <= 200) {
-        unlocked2 = ["AND", "OR", "XOR"];
-        unlocked1 = ["NOT", "PASS"];
-        topoPool = ["cascade3in", "dualOut2", "funnel3", "invFunnel3", "quadTree4"];
-        testCount = 3;
-        fixedCount = levelNum > 160 ? 1 : 0;
-      } else if (levelNum <= 300) {
-        unlocked2 = ["AND", "OR", "XOR", "NAND"];
-        unlocked1 = ["NOT", "PASS"];
-        topoPool = ["funnel3", "invFunnel3", "quadTree4", "bus5"];
-        testCount = 3;
-        fixedCount = 1;
-      } else if (levelNum <= 400) {
-        unlocked2 = ["AND", "OR", "XOR", "NAND", "NOR"];
-        unlocked1 = ["NOT", "PASS"];
-        topoPool = ["quadTree4", "bus5", "architect6"];
-        testCount = levelNum > 350 ? 4 : 3;
-        fixedCount = 1;
-      } else {
-        unlocked2 = ["AND", "OR", "XOR", "NAND", "NOR"];
-        unlocked1 = ["NOT", "PASS"];
-        topoPool = ["bus5", "architect6"];
-        testCount = 4;
-        fixedCount = levelNum > 450 ? 0 : 1;
-      }
-
-      const topoKey = topoPool[Math.floor(rng() * topoPool.length)];
-      const topo = TOPOLOGIES[topoKey];
-      const hasUnary = topo.gates.some((g) => g.arity === 1);
-      const unlocked = hasUnary ? [...unlocked2, ...unlocked1] : [...unlocked2];
-
-      // Assign deterministic ground-truth gates (favoring chapter-newest gates for flavor!)
-      const solution = {};
-      topo.gates.forEach((g, idx) => {
-        if (g.arity === 1) {
-          solution[g.id] = rng() < 0.72 ? "NOT" : "PASS";
+        const v0 = getSrcVal(s.inSources[0]);
+        if (v0 === null) {
+          sockVals[idx] = null;
+          return;
+        }
+        if (s.arity === 1) {
+          sockVals[idx] = def.fn(v0);
         } else {
-          // Ensure newest unlocked gate appears regularly in its chapter
-          if (idx === 0 && levelNum > 100 && rng() < 0.6) {
-            solution[g.id] = unlocked2[unlocked2.length - 1];
-          } else {
-            solution[g.id] = unlocked2[Math.floor(rng() * unlocked2.length)];
-          }
+          const v1 = getSrcVal(s.inSources[1]);
+          sockVals[idx] = v1 === null ? null : def.fn(v0, v1);
         }
       });
 
-      // Optionally lock 1 gate as a fixed schematic reference chip
-      const fixedSet = new Set();
-      if (fixedCount > 0 && topo.gates.length >= 4) {
-        const pickFixed = topo.gates[Math.floor(rng() * topo.gates.length)];
-        fixedSet.add(pickFixed.id);
+      const outVals = lvl.outputs.map((o) => getSrcVal(o.src));
+      let matchedCount = 0;
+      lvl.outputs.forEach((o, i) => {
+        if (outVals[i] !== null && outVals[i] === o.reqVal) matchedCount++;
+      });
+
+      const allPlaced = placedGates.every((g) => g !== null);
+      const allSolved = allPlaced && matchedCount === lvl.outputs.length;
+
+      return { sockVals, outVals, matchedCount, allPlaced, allSolved };
+    }
+
+    // Constructive 500-Circuit PCB Generator
+    function buildCircuitLevel(levelNum) {
+      const rng = mulberry32(levelNum * 182411 + 50923);
+
+      let gatePool2, allowNot, topology;
+      if (levelNum <= 100) {
+        gatePool2 = ["AND", "OR"];
+        allowNot = levelNum >= 25;
+        topology = levelNum <= 35 ? "single" : "two_stage";
+      } else if (levelNum <= 200) {
+        gatePool2 = ["AND", "OR", "XOR"];
+        allowNot = true;
+        topology = "two_stage";
+      } else if (levelNum <= 300) {
+        gatePool2 = ["AND", "OR", "XOR", "NAND", "NOR"];
+        allowNot = true;
+        topology = "two_stage";
+      } else if (levelNum <= 400) {
+        gatePool2 = ["AND", "OR", "XOR", "NAND", "NOR"];
+        allowNot = true;
+        topology = "dual_out";
+      } else {
+        gatePool2 = ["AND", "OR", "XOR", "NAND", "NOR"];
+        allowNot = true;
+        topology = "master_3layer";
       }
 
-      // Generate all possible input vectors and pick the most informative `testCount` subset
-      const nIn = topo.inputs.length;
-      const allVecs = [];
-      for (let mask = 0; mask < (1 << nIn); mask++) {
-        const inp = {};
-        topo.inputs.forEach((pin, idx) => {
-          inp[pin.id] = (mask >> idx) & 1;
-        });
-        const evalRes = evaluateCircuit(topo, solution, inp);
-        const outSig = topo.outputs.map((o) => evalRes.outs[o.id]).join("");
-        allVecs.push({ inputs: inp, expected: evalRes.outs, outSig });
+      // Curated Intro Circuits 1–3 for crystal-clear onboarding
+      if (levelNum === 1) {
+        return {
+          levelNum: 1,
+          inputs: [
+            { id: 0, label: "A", val: 1, x: 52, y: 135 },
+            { id: 1, label: "B", val: 0, x: 52, y: 255 }
+          ],
+          sockets: [
+            { id: 0, arity: 2, x: 220, y: 195, inSources: [{ kind: "in", idx: 0 }, { kind: "in", idx: 1 }], solGate: "OR" }
+          ],
+          outputs: [
+            { id: 0, label: "OUT", reqVal: 1, x: 386, y: 195, src: { kind: "sock", idx: 0 } }
+          ],
+          trayChips: ["AND", "OR"]
+        };
+      }
+      if (levelNum === 2) {
+        return {
+          levelNum: 2,
+          inputs: [
+            { id: 0, label: "A", val: 1, x: 52, y: 135 },
+            { id: 1, label: "B", val: 1, x: 52, y: 255 }
+          ],
+          sockets: [
+            { id: 0, arity: 2, x: 220, y: 195, inSources: [{ kind: "in", idx: 0 }, { kind: "in", idx: 1 }], solGate: "AND" }
+          ],
+          outputs: [
+            { id: 0, label: "OUT", reqVal: 1, x: 386, y: 195, src: { kind: "sock", idx: 0 } }
+          ],
+          trayChips: ["AND", "OR"]
+        };
       }
 
-      // Greedily pick diverse vectors spanning different output signatures & input patterns
-      const shuffledVecs = shuffle(allVecs, rng);
-      const chosen = [];
-      const seenSigs = new Set();
+      const inputs = [];
+      const sockets = [];
+      const outputs = [];
 
-      // Pass 1: maximize distinct output states (mix of 0s and 1s!)
-      for (const v of shuffledVecs) {
-        if (chosen.length >= testCount) break;
-        if (!seenSigs.has(v.outSig)) {
-          seenSigs.add(v.outSig);
-          chosen.push(v);
+      const pick2 = () => gatePool2[Math.floor(rng() * gatePool2.length)];
+
+      if (topology === "single") {
+        inputs.push(
+          { id: 0, label: "A", val: rng() < 0.5 ? 1 : 0, x: 52, y: 135 },
+          { id: 1, label: "B", val: rng() < 0.5 ? 1 : 0, x: 52, y: 255 }
+        );
+        const useNot = allowNot && rng() < 0.45;
+        if (useNot) {
+          sockets.push(
+            { id: 0, arity: 1, x: 168, y: 135, inSources: [{ kind: "in", idx: 0 }], solGate: "NOT" },
+            { id: 1, arity: 2, x: 284, y: 195, inSources: [{ kind: "sock", idx: 0 }, { kind: "in", idx: 1 }], solGate: pick2() }
+          );
+          outputs.push({ id: 0, label: "OUT", reqVal: 1, x: 392, y: 195, src: { kind: "sock", idx: 1 } });
+        } else {
+          sockets.push(
+            { id: 0, arity: 2, x: 220, y: 195, inSources: [{ kind: "in", idx: 0 }, { kind: "in", idx: 1 }], solGate: pick2() }
+          );
+          outputs.push({ id: 0, label: "OUT", reqVal: 1, x: 386, y: 195, src: { kind: "sock", idx: 0 } });
         }
+      } else if (topology === "two_stage") {
+        // 3 Inputs -> 2 Stage-1 Sockets -> 1 Final Stage-2 Socket -> 1 Output LED
+        inputs.push(
+          { id: 0, label: "A", val: rng() < 0.5 ? 1 : 0, x: 48, y: 88 },
+          { id: 1, label: "B", val: rng() < 0.5 ? 1 : 0, x: 48, y: 195 },
+          { id: 2, label: "C", val: rng() < 0.5 ? 1 : 0, x: 48, y: 302 }
+        );
+        const topIsNot = allowNot && rng() < 0.35;
+        if (topIsNot) {
+          sockets.push(
+            { id: 0, arity: 1, x: 164, y: 108, inSources: [{ kind: "in", idx: 0 }], solGate: "NOT" },
+            { id: 1, arity: 2, x: 164, y: 266, inSources: [{ kind: "in", idx: 1 }, { kind: "in", idx: 2 }], solGate: pick2() },
+            { id: 2, arity: 2, x: 288, y: 195, inSources: [{ kind: "sock", idx: 0 }, { kind: "sock", idx: 1 }], solGate: pick2() }
+          );
+        } else {
+          sockets.push(
+            { id: 0, arity: 2, x: 164, y: 124, inSources: [{ kind: "in", idx: 0 }, { kind: "in", idx: 1 }], solGate: pick2() },
+            { id: 1, arity: 2, x: 164, y: 266, inSources: [{ kind: "in", idx: 1 }, { kind: "in", idx: 2 }], solGate: pick2() },
+            { id: 2, arity: 2, x: 288, y: 195, inSources: [{ kind: "sock", idx: 0 }, { kind: "sock", idx: 1 }], solGate: pick2() }
+          );
+        }
+        outputs.push({ id: 0, label: "OUT", reqVal: 1, x: 392, y: 195, src: { kind: "sock", idx: 2 } });
+      } else if (topology === "dual_out") {
+        // 3 Inputs -> 3 Interconnected Sockets -> 2 Output LEDs (OUT 1 & OUT 2)
+        inputs.push(
+          { id: 0, label: "A", val: rng() < 0.5 ? 1 : 0, x: 48, y: 88 },
+          { id: 1, label: "B", val: rng() < 0.5 ? 1 : 0, x: 48, y: 195 },
+          { id: 2, label: "C", val: rng() < 0.5 ? 1 : 0, x: 48, y: 302 }
+        );
+        sockets.push(
+          { id: 0, arity: 2, x: 162, y: 125, inSources: [{ kind: "in", idx: 0 }, { kind: "in", idx: 1 }], solGate: pick2() },
+          { id: 1, arity: 1, x: 162, y: 278, inSources: [{ kind: "in", idx: 2 }], solGate: "NOT" },
+          { id: 2, arity: 2, x: 284, y: 245, inSources: [{ kind: "sock", idx: 0 }, { kind: "sock", idx: 1 }], solGate: pick2() }
+        );
+        outputs.push(
+          { id: 0, label: "OUT 1", reqVal: 1, x: 390, y: 125, src: { kind: "sock", idx: 0 } },
+          { id: 1, label: "OUT 2", reqVal: 1, x: 390, y: 245, src: { kind: "sock", idx: 2 } }
+        );
+      } else {
+        // Master 3-Layer Architecture: 4 Inputs -> 4 Sockets -> 2 Output LEDs
+        inputs.push(
+          { id: 0, label: "A", val: rng() < 0.5 ? 1 : 0, x: 44, y: 74 },
+          { id: 1, label: "B", val: rng() < 0.5 ? 1 : 0, x: 44, y: 154 },
+          { id: 2, label: "C", val: rng() < 0.5 ? 1 : 0, x: 44, y: 236 },
+          { id: 3, label: "D", val: rng() < 0.5 ? 1 : 0, x: 44, y: 316 }
+        );
+        sockets.push(
+          { id: 0, arity: 2, x: 154, y: 114, inSources: [{ kind: "in", idx: 0 }, { kind: "in", idx: 1 }], solGate: pick2() },
+          { id: 1, arity: 2, x: 154, y: 276, inSources: [{ kind: "in", idx: 2 }, { kind: "in", idx: 3 }], solGate: pick2() },
+          { id: 2, arity: 1, x: 274, y: 114, inSources: [{ kind: "sock", idx: 0 }], solGate: "NOT" },
+          { id: 3, arity: 2, x: 274, y: 235, inSources: [{ kind: "sock", idx: 0 }, { kind: "sock", idx: 1 }], solGate: pick2() }
+        );
+        outputs.push(
+          { id: 0, label: "OUT 1", reqVal: 1, x: 390, y: 114, src: { kind: "sock", idx: 2 } },
+          { id: 1, label: "OUT 2", reqVal: 1, x: 390, y: 235, src: { kind: "sock", idx: 3 } }
+        );
       }
-      // Pass 2: fill remaining test slots with distinct input vectors
-      for (const v of shuffledVecs) {
-        if (chosen.length >= testCount) break;
-        if (!chosen.includes(v)) chosen.push(v);
+
+      // Compute exact target LED outputs from canonical solution gates!
+      const tempLvl = { inputs, sockets, outputs };
+      const solGates = sockets.map((s) => s.solGate);
+      const solEval = evaluateCircuit(tempLvl, solGates);
+      outputs.forEach((o, i) => {
+        o.reqVal = solEval.outVals[i];
+      });
+
+      // Build clean tray palette containing all needed gate types + helpful distractors
+      const chipSet = new Set(solGates);
+      for (const g of shuffle(gatePool2, rng)) {
+        if (chipSet.size >= Math.min(5, gatePool2.length + (allowNot ? 1 : 0))) break;
+        chipSet.add(g);
       }
+      const orderRef = ["AND", "OR", "NOT", "XOR", "NAND", "NOR"];
+      const trayChips = orderRef.filter((code) => chipSet.has(code));
 
       return {
         levelNum,
-        topo,
-        unlocked,
-        solution,
-        fixedSet,
-        tests: chosen.map((c) => ({ inputs: c.inputs, expected: c.expected }))
+        inputs,
+        sockets,
+        outputs,
+        trayChips
       };
     }
 
@@ -1025,7 +1054,7 @@
     }
 
     // ==============================================
-    // ELECTRONIC RELAY & SYNTH WEB AUDIO ENGINE
+    // ELECTRONIC RELAY & DIGITAL CHIME WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
@@ -1038,7 +1067,7 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.1) {
+    function playTone(freq, dur, type = "sine", vol = 0.09) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
@@ -1048,7 +1077,7 @@
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
       g.gain.setValueAtTime(0.001, now);
-      g.gain.exponentialRampToValueAtTime(vol, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.008);
       g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
       osc.connect(g);
       g.connect(audioCtx.destination);
@@ -1056,33 +1085,29 @@
       osc.stop(now + dur + 0.02);
     }
 
-    function sfxSnapGate(passedMore) {
-      playTone(390, 0.05, "triangle", 0.1);
-      if (passedMore) {
-        setTimeout(() => playTone(659.25, 0.16, "sine", 0.11), 45);
-      }
+    function sfxSnapChip(litMore) {
+      playTone(540, 0.045, "triangle", 0.09);
+      if (litMore) setTimeout(() => playTone(880, 0.18, "sine", 0.1), 40);
     }
-    function sfxClearGate() { playTone(240, 0.055, "sine", 0.08); }
-    function sfxSwitchTest() { playTone(520, 0.04, "sine", 0.06); }
+    function sfxRemoveChip() { playTone(310, 0.05, "triangle", 0.07); }
+    function sfxWrongArity() { playTone(165, 0.11, "sawtooth", 0.09); }
     function sfxCircuitWin() {
       [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.34, "sine", 0.12), i * 80);
+        setTimeout(() => playTone(f, 0.38, "sine", 0.12), i * 75);
       });
     }
 
     // ==============================================
-    // GAME STATE, INTERACTION & EVALUATION
+    // GAME STATE, SOCKET INTERACTION & PCB RENDERER
     // ==============================================
     const canvas = document.getElementById("logicCanvas");
     const ctx = canvas.getContext("2d");
 
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const testsPill = document.getElementById("testsPill");
+    const ledsPill = document.getElementById("ledsPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const testTabsBar = document.getElementById("testTabsBar");
-    const gateRuleBar = document.getElementById("gateRuleBar");
-    const gateTray = document.getElementById("gateTray");
+    const gateDock = document.getElementById("gateDock");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
     const winHeading = document.getElementById("winHeading");
@@ -1094,156 +1119,84 @@
     let solvedSet = new Set();
     let currentLevelNum = 1;
     try {
-      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_logic_500_solved") || "[]"));
-      const last = parseInt(localStorage.getItem("zinplay_logic_500_last") || "1", 10);
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_logicgates_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_logicgates_500_last") || "1", 10);
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
     let level = null;
-    let placedGates = {}; // { G1: "AND", ... }
-    let selectedTool = "AND";
-    let activeTestIdx = 0;
-    let testResults = []; // [{ vals, outs, passed }]
+    let placedGates = []; // [null | 'AND' | ...]
+    let selectedChip = "AND";
+    let evalState = null;
     let levelWon = false;
-    let hintSocketId = null;
-    let hintGateKey = null;
+    let hintSocketIdx = -1;
+    let hintChipCode = null;
     let sparks = [];
     let toastTimer = null;
 
-    function showToast(msg, ms = 2400) {
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function renderTestTabs() {
-      testTabsBar.innerHTML = "";
-      testResults.forEach((res, idx) => {
+    function renderGateDock() {
+      gateDock.innerHTML = "";
+      level.trayChips.forEach((code) => {
+        const def = GATE_DEFS[code];
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "test-tab-btn" + (idx === activeTestIdx ? " active" : "");
-        btn.innerHTML = `<span>Test ${idx + 1}</span><span class="test-badge ${res.passed ? "pass" : "fail"}">${res.passed ? "✓" : "✕"}</span>`;
-        btn.addEventListener("click", () => {
-          initAudio();
-          activeTestIdx = idx;
-          sfxSwitchTest();
-          renderTestTabs();
-        });
-        testTabsBar.appendChild(btn);
-      });
-    }
-
-    function renderGateTray() {
-      gateTray.innerHTML = "";
-      level.unlocked.forEach((key) => {
-        const g = GATES[key];
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "gate-tool-btn"
-          + (selectedTool === key ? " active" : "")
-          + (hintGateKey === key ? " hint-glow" : "");
+        btn.className = "gate-chip-btn"
+          + (selectedChip === code ? " active" : "")
+          + (hintChipCode === code ? " hint-glow" : "");
+        btn.disabled = levelWon;
         btn.innerHTML = `
-          <span class="gt-code" style="color:${g.color}">${g.key}</span>
-          <span class="gt-arity">${g.arity}-IN</span>
+          <span class="g-code" style="color:${selectedChip === code ? "#ffffff" : def.col};">${def.code}</span>
+          <span class="g-sub">${def.arity === 1 ? "1-Pin • " : ""}${def.sub}</span>
         `;
         btn.addEventListener("click", () => {
           initAudio();
-          selectedTool = key;
-          updateRuleBar();
-          renderGateTray();
+          selectedChip = code;
+          if (hintChipCode === code) hintChipCode = null;
+          renderGateDock();
         });
-        gateTray.appendChild(btn);
+        gateDock.appendChild(btn);
       });
-      updateRuleBar();
-    }
-
-    function updateRuleBar() {
-      const g = GATES[selectedTool] || GATES.AND;
-      gateRuleBar.innerHTML = `<strong style="color:${g.color}">${g.key}</strong>: ${g.rule}`;
-    }
-
-    function evaluateAllTests(playSfx = false, prevPassedCount = 0) {
-      testResults = level.tests.map((tc) => {
-        const ev = evaluateCircuit(level.topo, placedGates, tc.inputs);
-        const passed = level.topo.outputs.every((o) => ev.outs[o.id] === tc.expected[o.id]);
-        return { vals: ev.vals, outs: ev.outs, expected: tc.expected, passed };
-      });
-
-      const passedCount = testResults.filter((r) => r.passed).length;
-
-      // Auto-focus first failing test if active test just passed (super helpful!)
-      if (playSfx && passedCount < testResults.length && testResults[activeTestIdx].passed) {
-        const nextFail = testResults.findIndex((r) => !r.passed);
-        if (nextFail !== -1) activeTestIdx = nextFail;
-      }
-
-      if (playSfx) {
-        sfxSnapGate(passedCount > prevPassedCount);
-      }
-
-      updateHUD();
-
-      if (passedCount === testResults.length && !levelWon) {
-        levelWon = true;
-        hintSocketId = null;
-        hintGateKey = null;
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_logic_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        updateHUD();
-        sfxCircuitWin();
-
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        winHeading.textContent = isLast ? "All 500 Circuits Verified!" : `Circuit #${currentLevelNum} Verified!`;
-        winText.textContent = `Passed all ${testResults.length} signal tests with clean logic.`;
-        nextLevelBtn.textContent = isLast ? "Replay Circuit #1" : `Next Circuit (#${currentLevelNum + 1}) →`;
-        setTimeout(() => winOverlay.classList.add("show"), 520);
-      }
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
       levelTitle.textContent = `Circuit #${currentLevelNum} / ${TOTAL_LEVELS}`;
-      const passedCount = testResults.filter((r) => r.passed).length;
-      testsPill.textContent = `Tests: ${passedCount} / ${level.tests.length}`;
+      ledsPill.textContent = `LEDs: ${evalState.matchedCount} / ${level.outputs.length}`;
       solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Circuit ${currentLevelNum} / 500 ▾`;
-      renderTestTabs();
-      renderGateTray();
+      renderGateDock();
     }
 
     function loadLevel(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
       level = getLevel(currentLevelNum);
-
-      placedGates = {};
-      level.topo.gates.forEach((g) => {
-        if (level.fixedSet.has(g.id)) {
-          placedGates[g.id] = level.solution[g.id];
-        }
-      });
-
-      selectedTool = level.unlocked[0];
-      activeTestIdx = 0;
+      placedGates = new Array(level.sockets.length).fill(null);
+      selectedChip = level.trayChips[0] || "AND";
       levelWon = false;
-      hintSocketId = null;
-      hintGateKey = null;
+      hintSocketIdx = -1;
+      hintChipCode = null;
       sparks = [];
 
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
+      evalState = evaluateCircuit(level, placedGates);
+
       try {
-        localStorage.setItem("zinplay_logic_500_last", String(currentLevelNum));
+        localStorage.setItem("zinplay_logicgates_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      evaluateAllTests(false, 0);
+      updateHUD();
     }
 
-    // Viewport Helpers
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1260,111 +1213,112 @@
       return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    // Tap/Click Socket Placement
+    function clientToWorld(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const vp = getViewport();
+      return {
+        x: (clientX - rect.left - vp.offsetX) / vp.scale,
+        y: (clientY - rect.top - vp.offsetY) / vp.scale
+      };
+    }
+
     canvas.addEventListener("pointerdown", (e) => {
       if (levelWon) return;
       initAudio();
 
-      const rect = canvas.getBoundingClientRect();
-      const vp = getViewport();
-      const wx = (e.clientX - rect.left - vp.offsetX) / vp.scale;
-      const wy = (e.clientY - rect.top - vp.offsetY) / vp.scale;
+      const pt = clientToWorld(e.clientX, e.clientY);
+      let hitIdx = -1;
+      let bestD = 38;
+      level.sockets.forEach((s, idx) => {
+        const d = Math.hypot(pt.x - s.x, pt.y - s.y);
+        if (d < bestD) { bestD = d; hitIdx = idx; }
+      });
+      if (hitIdx === -1) return;
 
-      let hitGate = null;
-      let bestDist = 40;
-      for (const g of level.topo.gates) {
-        const d = Math.hypot(wx - g.x, wy - g.y);
-        if (d < bestDist) {
-          bestDist = d;
-          hitGate = g;
+      const sock = level.sockets[hitIdx];
+
+      // If socket already holds the selected chip (or player taps to clear), toggle it off!
+      if (placedGates[hitIdx] !== null) {
+        if (placedGates[hitIdx] === selectedChip) {
+          placedGates[hitIdx] = null;
+          sfxRemoveChip();
+          evalState = evaluateCircuit(level, placedGates);
+          updateHUD();
+          return;
         }
       }
-      if (!hitGate) return;
 
-      if (level.fixedSet.has(hitGate.id)) {
-        showToast(`Fixed ${placedGates[hitGate.id]} chip — solve around it!`, 1800);
+      // Check arity match (1-pin NOT socket vs 2-pin logic socket)
+      const chipDef = GATE_DEFS[selectedChip];
+      if (!chipDef || chipDef.arity !== sock.arity) {
+        sfxWrongArity();
+        if (sock.arity === 1) {
+          selectedChip = "NOT";
+          renderGateDock();
+          showToast("1-Pin Inverter Socket! Switched to NOT chip — tap socket again to snap.", 2400);
+        } else {
+          showToast("2-Pin Socket! Select AND, OR, XOR, NAND, or NOR from the tray.", 2300);
+        }
         return;
       }
 
-      const prevPassed = testResults.filter((r) => r.passed).length;
-      const current = placedGates[hitGate.id];
-      const toolDef = GATES[selectedTool];
-
-      let nextType = null;
-      if (toolDef.arity === hitGate.arity) {
-        // Place selected gate, or clear if tapping same gate again
-        nextType = current === selectedTool ? null : selectedTool;
-      } else {
-        // Frictionless auto-smart fallback when arity differs!
-        if (hitGate.arity === 1) {
-          nextType = current === "NOT" ? "PASS" : (current === "PASS" ? null : "NOT");
-          if (nextType) selectedTool = nextType;
-        } else {
-          // Pick first 2-in gate
-          const twoGates = level.unlocked.filter((k) => GATES[k].arity === 2);
-          const idx = twoGates.indexOf(current);
-          nextType = idx === -1 ? twoGates[0] : (idx + 1 < twoGates.length ? twoGates[idx + 1] : null);
-          if (nextType) selectedTool = nextType;
-        }
+      const prevMatch = evalState.matchedCount;
+      placedGates[hitIdx] = selectedChip;
+      if (hintSocketIdx === hitIdx) {
+        hintSocketIdx = -1;
+        hintChipCode = null;
       }
 
-      if (nextType) {
-        placedGates[hitGate.id] = nextType;
-        sparks.push({ x: hitGate.x, y: hitGate.y, r: 16, alpha: 0.9, color: GATES[nextType].color });
-      } else {
-        delete placedGates[hitGate.id];
-        sfxClearGate();
+      evalState = evaluateCircuit(level, placedGates);
+      sfxSnapChip(evalState.matchedCount > prevMatch);
+
+      for (let k = 0; k < 8; k++) {
+        const a = Math.random() * Math.PI * 2;
+        sparks.push({ x: sock.x, y: sock.y, vx: Math.cos(a) * 1.8, vy: Math.sin(a) * 1.8, r: 2.2, color: "#22d3ee", alpha: 0.95 });
       }
 
-      if (hintSocketId === hitGate.id && nextType === hintGateKey) {
-        hintSocketId = null;
-        hintGateKey = null;
-      }
+      updateHUD();
 
-      evaluateAllTests(!!nextType, prevPassed);
+      if (evalState.allSolved) {
+        levelWon = true;
+        hintSocketIdx = -1;
+        hintChipCode = null;
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_logicgates_500_solved", JSON.stringify([...solvedSet]));
+        } catch (err) {}
+        updateHUD();
+        sfxCircuitWin();
+
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winHeading.textContent = isLast ? "All 500 Circuits Solved!" : `Circuit #${currentLevelNum} Verified!`;
+        winText.textContent = `Routed every binary signal cleanly using ${level.sockets.length} logic gate${level.sockets.length === 1 ? "" : "s"}.`;
+        nextLevelBtn.textContent = isLast ? "Replay Circuit #1" : `Next Circuit (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 560);
+      }
     });
 
-    // Smart Hint Button
+    // Smart Circuit Hint Button
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (levelWon) return;
       initAudio();
 
-      let targetGate = null;
-      for (const g of level.topo.gates) {
-        if (level.fixedSet.has(g.id)) continue;
-        if (placedGates[g.id] !== level.solution[g.id]) {
-          targetGate = g;
-          break;
+      for (let i = 0; i < level.sockets.length; i++) {
+        if (placedGates[i] !== level.sockets[i].solGate) {
+          hintSocketIdx = i;
+          hintChipCode = level.sockets[i].solGate;
+          selectedChip = hintChipCode;
+          renderGateDock();
+          showToast(`💡 Snap the glowing golden ${hintChipCode} chip into the highlighted socket!`, 2600);
+          return;
         }
       }
-
-      if (targetGate) {
-        const rightKey = level.solution[targetGate.id];
-        hintSocketId = targetGate.id;
-        hintGateKey = rightKey;
-        selectedTool = rightKey;
-        renderGateTray();
-        showToast(`💡 Place ${rightKey} into the glowing golden socket!`, 2800);
-      }
     });
 
-    // Utility & Navigation Buttons
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      if (levelWon) { loadLevel(currentLevelNum); return; }
-      initAudio();
-      placedGates = {};
-      level.topo.gates.forEach((g) => {
-        if (level.fixedSet.has(g.id)) placedGates[g.id] = level.solution[g.id];
-      });
-      hintSocketId = null;
-      hintGateKey = null;
-      sfxClearGate();
-      evaluateAllTests(false, 0);
-    });
-
+    document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
     nextLevelBtn.addEventListener("click", () => {
       loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
@@ -1376,7 +1330,7 @@
       if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
     });
 
-    // Circuit Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1435,195 +1389,70 @@
     });
 
     // ==============================================
-    // GLOWING PCB SCHEMATIC & ELECTRON PULSE RENDERER
+    // PRINTED CIRCUIT BOARD & LIVE PULSE RENDERER
     // ==============================================
-    function drawSignalWire(x1, y1, x2, y2, val, time) {
-      const mx = (x1 + x2) * 0.5;
+    function getSourceAnchor(src) {
+      if (src.kind === "in") {
+        const inp = level.inputs[src.idx];
+        return { x: inp.x + 22, y: inp.y, val: inp.val };
+      }
+      const sock = level.sockets[src.idx];
+      const outOff = sock.arity === 1 ? 26 : 34;
+      return { x: sock.x + outOff, y: sock.y, val: evalState.sockVals[src.idx] };
+    }
+
+    function drawOrthogonalTrace(x1, y1, x2, y2, val, now) {
+      const midX = (x1 + x2) * 0.5;
+      const isHigh = val === 1;
+      const isLow = val === 0;
+
       ctx.save();
+      ctx.lineJoin = "round";
       ctx.lineCap = "round";
 
-      if (val === 1) {
-        // Active HIGH neon cyan signal trace
-        ctx.strokeStyle = "#22d3ee";
+      ctx.strokeStyle = isHigh ? "#22d3ee" : (isLow ? "#334155" : "#1e293b");
+      if (isHigh) {
         ctx.shadowColor = "#22d3ee";
         ctx.shadowBlur = 12;
-        ctx.lineWidth = 3.8;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.bezierCurveTo(mx, y1, mx, y2, x2, y2);
-        ctx.stroke();
-
-        // Crisp bright core
-        ctx.shadowBlur = 0;
-        ctx.strokeStyle = "#e0f2fe";
-        ctx.lineWidth = 1.4;
-        ctx.stroke();
-
-        // Flowing electron energy dot along cubic bezier
-        const t = (time * 0.00095) % 1;
-        const u = 1 - t;
-        const px = u*u*u*x1 + 3*u*u*t*mx + 3*u*t*t*mx + t*t*t*x2;
-        const py = u*u*u*y1 + 3*u*u*t*y1 + 3*u*t*t*y2 + t*t*t*y2;
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(px, py, 3, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (val === 0) {
-        // Active LOW steel trace
-        ctx.strokeStyle = "#334155";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.bezierCurveTo(mx, y1, mx, y2, x2, y2);
-        ctx.stroke();
-      } else {
-        // Unconnected / Floating dashed wire
-        ctx.strokeStyle = "rgba(100, 116, 139, 0.35)";
-        ctx.lineWidth = 2.2;
-        ctx.setLineDash([5, 5]);
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.bezierCurveTo(mx, y1, mx, y2, x2, y2);
-        ctx.stroke();
-        ctx.setLineDash([]);
       }
-      ctx.restore();
-    }
-
-    function drawGateSymbol(g, placedKey, outVal, isFixed, isHint, time) {
-      const x = g.x, y = g.y;
-      const w = 52, h = 40;
-      const hw = w / 2, hh = h / 2;
-
-      ctx.save();
-      ctx.translate(x, y);
-
-      if (!placedKey) {
-        // Empty Dashed Socket Ready for Placement
-        const pulse = 0.55 + 0.45 * Math.sin(time * 0.008);
-        ctx.fillStyle = isHint ? `rgba(250, 204, 21, ${pulse * 0.22})` : "rgba(15, 23, 42, 0.85)";
-        ctx.strokeStyle = isHint ? "#facc15" : "rgba(56, 189, 248, 0.55)";
-        if (isHint) {
-          ctx.shadowColor = "#facc15";
-          ctx.shadowBlur = 16;
-        }
-        ctx.lineWidth = isHint ? 2.8 : 2;
-        ctx.setLineDash([5, 4]);
-        ctx.beginPath();
-        ctx.roundRect(-hw, -hh, w, h, 10);
-        ctx.fill();
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.shadowBlur = 0;
-
-        ctx.fillStyle = isHint ? "#fef08a" : "#7dd3fc";
-        ctx.font = "900 14px monospace";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("?", 0, -4);
-
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = "800 8.5px sans-serif";
-        ctx.fillText(`${g.arity}-IN`, 0, 11);
-        ctx.restore();
-        return;
-      }
-
-      const def = GATES[placedKey];
-      const activeHigh = outVal === 1;
-
-      if (isHint) {
-        ctx.strokeStyle = "#facc15";
-        ctx.shadowColor = "#facc15";
-        ctx.shadowBlur = 16;
-        ctx.lineWidth = 2.6;
-        ctx.beginPath();
-        ctx.roundRect(-hw - 5, -hh - 5, w + 10, h + 10, 13);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-
-      // Draw Iconic Gate Silhouette
-      ctx.fillStyle = activeHigh ? "#132a46" : "#0e1729";
-      ctx.strokeStyle = isFixed ? "#94a3b8" : def.color;
-      ctx.shadowColor = activeHigh ? def.color : "transparent";
-      ctx.shadowBlur = activeHigh ? 14 : 0;
-      ctx.lineWidth = 2.4;
+      ctx.lineWidth = isHigh ? 3.8 : 2.8;
 
       ctx.beginPath();
-      if (placedKey === "AND" || placedKey === "NAND") {
-        // Classic D-shape
-        ctx.moveTo(-hw, -hh);
-        ctx.lineTo(0, -hh);
-        ctx.arc(0, 0, hh, -Math.PI / 2, Math.PI / 2);
-        ctx.lineTo(-hw, hh);
-        ctx.closePath();
-      } else if (placedKey === "OR" || placedKey === "NOR" || placedKey === "XOR") {
-        // Classic curved shield
-        ctx.moveTo(-hw, -hh);
-        ctx.quadraticCurveTo(4, -hh, hw, 0);
-        ctx.quadraticCurveTo(4, hh, -hw, hh);
-        ctx.quadraticCurveTo(-hw + 11, 0, -hw, -hh);
-        ctx.closePath();
-      } else if (placedKey === "NOT") {
-        // Inverter triangle
-        ctx.moveTo(-hw + 4, -hh + 2);
-        ctx.lineTo(hw - 4, 0);
-        ctx.lineTo(-hw + 4, hh - 2);
-        ctx.closePath();
-      } else {
-        // PASS direct buffer hexagon
-        ctx.moveTo(-hw + 6, -hh + 4);
-        ctx.lineTo(hw - 8, -hh + 4);
-        ctx.lineTo(hw + 2, 0);
-        ctx.lineTo(hw - 8, hh - 4);
-        ctx.lineTo(-hw + 6, hh - 4);
-        ctx.closePath();
-      }
-      ctx.fill();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(midX, y1);
+      ctx.lineTo(midX, y2);
+      ctx.lineTo(x2, y2);
       ctx.stroke();
-      ctx.shadowBlur = 0;
 
-      // Extra arc for XOR
-      if (placedKey === "XOR") {
-        ctx.strokeStyle = def.color;
-        ctx.lineWidth = 2;
+      // Animated traveling signal pulse dot along HIGH (1) wires!
+      if (isHigh) {
+        ctx.shadowBlur = 0;
+        const t = (now * 0.0014) % 1;
+        const seg1 = Math.abs(midX - x1);
+        const seg2 = Math.abs(y2 - y1);
+        const seg3 = Math.abs(x2 - midX);
+        const total = Math.max(1, seg1 + seg2 + seg3);
+        let d = t * total;
+        let px = x1, py = y1;
+        if (d <= seg1) {
+          px = x1 + Math.sign(midX - x1) * d;
+        } else if (d <= seg1 + seg2) {
+          px = midX;
+          py = y1 + Math.sign(y2 - y1) * (d - seg1);
+        } else {
+          px = midX + Math.sign(x2 - midX) * (d - seg1 - seg2);
+          py = y2;
+        }
+        ctx.fillStyle = "#ffffff";
         ctx.beginPath();
-        ctx.moveTo(-hw - 5, -hh + 2);
-        ctx.quadraticCurveTo(-hw + 6, 0, -hw - 5, hh - 2);
-        ctx.stroke();
-      }
-
-      // Inversion bubble on output tip for NOT / NAND / NOR
-      if (placedKey === "NOT" || placedKey === "NAND" || placedKey === "NOR") {
-        ctx.fillStyle = activeHigh ? "#22d3ee" : "#0e1729";
-        ctx.strokeStyle = isFixed ? "#94a3b8" : def.color;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(hw + 3, 0, 4.5, 0, Math.PI * 2);
+        ctx.arc(px, py, 3.2, 0, Math.PI * 2);
         ctx.fill();
-        ctx.stroke();
-      }
-
-      // Crisp Gate Label inside body
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "900 10.5px monospace";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      const labelX = placedKey === "NOT" ? -6 : (placedKey === "XOR" || placedKey === "OR" || placedKey === "NOR" ? -3 : -2);
-      ctx.fillText(placedKey, labelX, 1);
-
-      // Tiny lock dot if Fixed Reference Gate
-      if (isFixed) {
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = "800 8px sans-serif";
-        ctx.fillText("LOCK", 0, -hh - 7);
       }
 
       ctx.restore();
     }
 
-    function drawScene(time) {
+    function frame(now) {
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
@@ -1631,139 +1460,225 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Subtle PCB Blueprint Dot Grid
-      ctx.fillStyle = "rgba(56, 189, 248, 0.12)";
+      // 1. Subtle Silicon PCB Solder Grid
+      ctx.strokeStyle = "rgba(34, 211, 238, 0.07)";
+      ctx.lineWidth = 1;
       for (let x = 20; x < WORLD_W; x += 24) {
-        for (let y = 20; y < WORLD_H; y += 24) {
-          ctx.fillRect(x, y, 1.4, 1.4);
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, WORLD_H); ctx.stroke();
+      }
+      for (let y = 20; y < WORLD_H; y += 24) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WORLD_W, y); ctx.stroke();
+      }
+
+      // 2. Draw Orthogonal Copper/Neon PCB Traces From Sources -> Sockets & Sockets -> Outputs
+      level.sockets.forEach((s) => {
+        if (s.arity === 1) {
+          const srcA = getSourceAnchor(s.inSources[0]);
+          drawOrthogonalTrace(srcA.x, srcA.y, s.x - 26, s.y, srcA.val, now);
+        } else {
+          const src0 = getSourceAnchor(s.inSources[0]);
+          const src1 = getSourceAnchor(s.inSources[1]);
+          drawOrthogonalTrace(src0.x, src0.y, s.x - 34, s.y - 12, src0.val, now);
+          drawOrthogonalTrace(src1.x, src1.y, s.x - 34, s.y + 12, src1.val, now);
         }
-      }
+      });
 
-      const curRes = testResults[activeTestIdx] || { vals: {}, outs: {}, expected: {} };
-      const nodeCoords = {};
-      level.topo.inputs.forEach((p) => { nodeCoords[p.id] = { x: p.x + 18, y: p.y }; });
-      level.topo.gates.forEach((g) => { nodeCoords[g.id] = { x: g.x + 28, y: g.y }; });
+      level.outputs.forEach((o) => {
+        const srcA = getSourceAnchor(o.src);
+        drawOrthogonalTrace(srcA.x, srcA.y, o.x - 24, o.y, srcA.val, now);
+      });
 
-      // 2. Draw Connecting Signal Wires (Inputs/Gates -> Gates -> Outputs)
-      for (const g of level.topo.gates) {
-        g.inIds.forEach((srcId, i) => {
-          const srcPos = nodeCoords[srcId];
-          const destX = g.x - 26;
-          const destY = g.arity === 1 ? g.y : (i === 0 ? g.y - 10 : g.y + 10);
-          drawSignalWire(srcPos.x, srcPos.y, destX, destY, curRes.vals[srcId], time);
-        });
-      }
-
-      for (const o of level.topo.outputs) {
-        const srcPos = nodeCoords[o.src];
-        drawSignalWire(srcPos.x, srcPos.y, o.x - 22, o.y, curRes.outs[o.id], time);
-      }
-
-      // 3. Draw Input Pins (Left Column)
-      for (const pin of level.topo.inputs) {
-        const val = curRes.vals[pin.id];
-        const isHigh = val === 1;
-
+      // 3. Draw Binary Input Source Nodes (Left Column)
+      for (const inp of level.inputs) {
+        const isHigh = inp.val === 1;
         ctx.save();
+        ctx.translate(inp.x, inp.y);
         ctx.fillStyle = isHigh ? "#083344" : "#0f172a";
         ctx.strokeStyle = isHigh ? "#22d3ee" : "#475569";
         ctx.shadowColor = isHigh ? "#22d3ee" : "transparent";
         ctx.shadowBlur = isHigh ? 14 : 0;
-        ctx.lineWidth = 2.5;
+        ctx.lineWidth = 2.6;
         ctx.beginPath();
-        ctx.roundRect(pin.x - 18, pin.y - 18, 36, 36, 9);
+        ctx.roundRect(-22, -20, 44, 40, 10);
         ctx.fill();
         ctx.stroke();
 
         ctx.shadowBlur = 0;
-        ctx.fillStyle = isHigh ? "#e0f2fe" : "#94a3b8";
+        ctx.fillStyle = isHigh ? "#ffffff" : "#94a3b8";
         ctx.font = "900 15px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(String(val), pin.x, pin.y + 1);
+        ctx.fillText(String(inp.val), 0, 1);
 
         ctx.fillStyle = "#64748b";
-        ctx.font = "800 9px sans-serif";
-        ctx.fillText(pin.id, pin.x, pin.y - 25);
+        ctx.font = "800 9px monospace";
+        ctx.fillText(`IN ${inp.label}`, 0, -29);
         ctx.restore();
       }
 
-      // 4. Draw Gate Sockets & Placed Logic Gates
-      for (const g of level.topo.gates) {
-        drawGateSymbol(
-          g,
-          placedGates[g.id] || null,
-          curRes.vals[g.id],
-          level.fixedSet.has(g.id),
-          hintSocketId === g.id,
-          time
-        );
-      }
-
-      // 5. Draw Target Output LEDs (Right Column)
-      for (const o of level.topo.outputs) {
-        const liveVal = curRes.outs[o.id];
-        const expVal = curRes.expected[o.id];
-        const matched = liveVal === expVal;
+      // 4. Draw Gate Sockets & Snapped Logic Chips (Middle Columns)
+      level.sockets.forEach((s, idx) => {
+        const gCode = placedGates[idx];
+        const isHint = idx === hintSocketIdx && !levelWon;
+        const val = evalState.sockVals[idx];
 
         ctx.save();
-        // Outer LED Ring
-        ctx.fillStyle = liveVal === 1 ? "#064e3b" : "#0f172a";
-        ctx.strokeStyle = matched ? "#22c55e" : (liveVal === null ? "#475569" : "#ef4444");
-        ctx.shadowColor = matched ? "#22c55e" : (liveVal === null ? "transparent" : "#ef4444");
-        ctx.shadowBlur = matched ? 16 : 8;
+        ctx.translate(s.x, s.y);
+
+        if (isHint) {
+          const pulse = 0.55 + 0.45 * Math.sin(now * 0.011);
+          ctx.strokeStyle = `rgba(250, 204, 21, ${pulse})`;
+          ctx.shadowColor = "#facc15";
+          ctx.shadowBlur = 16;
+          ctx.lineWidth = 2.8;
+          ctx.beginPath();
+          ctx.roundRect(-40, -30, 80, 60, 14);
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+
+        if (s.arity === 1) {
+          // 1-Pin Triangular Inverter Socket / Placed NOT Chip
+          ctx.beginPath();
+          ctx.moveTo(-24, -22);
+          ctx.lineTo(22, 0);
+          ctx.lineTo(-24, 22);
+          ctx.closePath();
+
+          if (gCode) {
+            const def = GATE_DEFS[gCode];
+            ctx.fillStyle = def.col;
+            ctx.strokeStyle = "#ffffff";
+            ctx.shadowColor = def.col;
+            ctx.shadowBlur = 12;
+            ctx.lineWidth = 2.2;
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "900 10px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("NOT", -7, 1);
+          } else {
+            ctx.fillStyle = "#081420";
+            ctx.strokeStyle = isHint ? "#facc15" : "#38bdf8";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.fill();
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.fillStyle = "#64748b";
+            ctx.font = "800 9px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("1-PIN", -7, 1);
+          }
+          // Inverter bubble tip
+          ctx.fillStyle = val === 1 ? "#22d3ee" : "#1e293b";
+          ctx.strokeStyle = "#94a3b8";
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.arc(25, 0, 4.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        } else {
+          // 2-Pin Logic Chip Socket / Placed Gate
+          ctx.beginPath();
+          ctx.roundRect(-34, -24, 68, 48, 11);
+
+          if (gCode) {
+            const def = GATE_DEFS[gCode];
+            ctx.fillStyle = def.col;
+            ctx.strokeStyle = "#ffffff";
+            ctx.shadowColor = def.col;
+            ctx.shadowBlur = 14;
+            ctx.lineWidth = 2.4;
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "900 13px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(gCode, 0, 1);
+          } else {
+            ctx.fillStyle = "#081420";
+            ctx.strokeStyle = isHint ? "#facc15" : "#38bdf8";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 4]);
+            ctx.fill();
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = "#64748b";
+            ctx.font = "800 9.5px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("SOCKET", 0, 1);
+          }
+        }
+        ctx.restore();
+      });
+
+      // 5. Draw Target Output LEDs (Right Column)
+      level.outputs.forEach((o, i) => {
+        const actual = evalState.outVals[i];
+        const matched = actual !== null && actual === o.reqVal;
+        const reqHigh = o.reqVal === 1;
+
+        ctx.save();
+        ctx.translate(o.x, o.y);
+
+        ctx.fillStyle = matched
+          ? (reqHigh ? "#10b981" : "#064e3b")
+          : "#09131f";
+        ctx.strokeStyle = matched ? "#4ade80" : (reqHigh ? "#38bdf8" : "#94a3b8");
+        ctx.shadowColor = matched ? "#22c55e" : "transparent";
+        ctx.shadowBlur = matched ? 18 : 0;
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(o.x, o.y, 21, 0, Math.PI * 2);
+        ctx.arc(0, 0, 23, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
         ctx.shadowBlur = 0;
-        ctx.fillStyle = liveVal === 1 ? "#86efac" : (liveVal === 0 ? "#cbd5e1" : "#64748b");
-        ctx.font = "900 15px monospace";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 14px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(liveVal === null ? "–" : String(liveVal), o.x, o.y + 1);
+        ctx.fillText(actual === null ? "?" : String(actual), 0, 1);
 
-        // Required Target Pill Directly Beneath LED
-        const badgeColor = matched ? "#16a34a" : "#991b1b";
-        ctx.fillStyle = badgeColor;
-        ctx.beginPath();
-        ctx.roundRect(o.x - 24, o.y + 26, 48, 17, 5);
-        ctx.fill();
-
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "800 9.5px monospace";
-        ctx.fillText(`GOAL:${expVal}`, o.x, o.y + 35);
-
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = "800 9px sans-serif";
-        ctx.fillText(o.id, o.x, o.y - 28);
+        // Required Target Label Above LED
+        ctx.fillStyle = matched ? "#86efac" : "#fde68a";
+        ctx.font = "900 9.5px monospace";
+        ctx.fillText(`REQ: ${o.reqVal}${matched ? " ✓" : ""}`, 0, -33);
         ctx.restore();
-      }
+      });
 
-      // 6. Placement Sparks
+      // 6. Chip Snap Sparks
       sparks = sparks.filter((s) => s.alpha > 0.04);
       for (const s of sparks) {
-        s.r += 1.6;
-        s.alpha *= 0.89;
-        ctx.strokeStyle = s.color;
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha *= 0.91;
+        ctx.fillStyle = s.color;
         ctx.globalAlpha = s.alpha;
-        ctx.lineWidth = 2.2;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.stroke();
+        ctx.fill();
         ctx.globalAlpha = 1;
       }
 
       ctx.restore();
-      requestAnimationFrame(drawScene);
+      requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
     loadLevel(currentLevelNum);
-    requestAnimationFrame(drawScene);
+    requestAnimationFrame(frame);
   </script>
 
 </body>
