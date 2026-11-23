@@ -3,10 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Controlled Demolition — 500 Physics Implosion Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free physics levels of Controlled Demolition in your browser. Place timed dynamite waves on load-bearing pillars to collapse towers inward without hitting neighboring buildings." />
+  <title>Controlled Demolition — Free 500-Level Building Implosion Physics Game | ZinPlay</title>
+  <meta name="description" content="Play Controlled Demolition free online with no download. Place timed dynamite charges on load-bearing concrete pillars to implode 500 urban towers below the clearance line without damaging neighboring buildings." />
   <link rel="stylesheet" href="/assets/css/style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Controlled Demolition",
+    "url": "https://zinplay.io/games/controlled-demolition/",
+    "genre": ["Physics", "Strategy Puzzle", "Engineering Simulation"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -31,15 +44,15 @@
       color: var(--muted);
     }
 
-    /* Top Mission HUD */
+    /* Top Demolition Site HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0f172a;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #131115;
+      color: #f8fafc;
+      border-bottom: 1px solid #2e262c;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -52,8 +65,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #fb923c;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -64,37 +77,84 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(249, 115, 22, 0.18);
+      background: rgba(251, 146, 60, 0.16);
       border: 1px solid rgba(251, 146, 60, 0.4);
       color: #fed7aa;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.status-ok {
-      background: rgba(34, 197, 94, 0.18);
-      border-color: rgba(74, 222, 128, 0.42);
-      color: #bbf7d0;
+    .hud-pill.safe-pill {
+      background: rgba(16, 185, 129, 0.16);
+      border-color: rgba(52, 211, 153, 0.42);
+      color: #a7f3d0;
     }
-    .hud-pill.status-warn {
+    .hud-pill.fail-pill {
       background: rgba(239, 68, 68, 0.22);
-      border-color: rgba(248, 113, 113, 0.48);
+      border-color: rgba(248, 113, 113, 0.55);
       color: #fecaca;
     }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
+    }
 
-    /* Canvas Stage */
+    /* Clearance Status Strip */
+    .status-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: #1b181f;
+      border-bottom: 1px solid #322b38;
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .status-lbl {
+      min-width: 122px;
+      color: #fde68a;
+      white-space: nowrap;
+    }
+    .status-track {
+      flex: 1;
+      height: 10px;
+      background: #0b0a0e;
+      border-radius: 999px;
+      border: 1px solid #3c3345;
+      overflow: hidden;
+    }
+    .status-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #f97316 0%, #facc15 55%, #22c55e 100%);
+      transition: width 0.1s linear;
+    }
+    .status-val {
+      min-width: 58px;
+      text-align: right;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: #ffffff;
+    }
+
+    /* Demolition Physics Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 445px;
-      background: linear-gradient(180deg, #0c1428 0%, #1a2642 58%, #263452 100%);
+      height: 430px;
+      background: #0d111a;
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 495px;
+        height: 470px;
       }
     }
     #demoCanvas {
@@ -105,93 +165,95 @@
       cursor: crosshair;
     }
 
-    /* Wave Timer & Detonator Dock */
-    .detonator-dock {
+    /* Timed Fuse Selector & Detonator Dock */
+    .demo-dock {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      padding: 12px 14px;
-      background: #11182c;
-      border-top: 1px solid #1e293b;
+      gap: 9px;
+      padding: 11px 12px;
+      background: #141118;
+      border-top: 1px solid #2d2533;
     }
-    .wave-row {
+    .fuse-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 7px;
     }
-    .wave-btn {
+    .fuse-btn {
       min-height: 40px;
+      padding: 0 8px;
       border-radius: 10px;
-      border: 1.5px solid #2c3a57;
-      background: #19243d;
+      border: 1.5px solid #382e42;
+      background: #1e1924;
       color: #cbd5e1;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 800;
+      font-family: monospace;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      transition: 0.14s ease;
+      gap: 4px;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease;
     }
-    .wave-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .wave-btn.active-w1 {
-      border-color: #ef4444;
-      background: rgba(239, 68, 68, 0.22);
+    .fuse-btn:active { transform: scale(0.96); }
+    .fuse-btn.active {
+      border-color: #f97316;
+      background: rgba(249, 115, 22, 0.22);
       color: #ffffff;
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.3);
     }
-    .wave-btn.active-w2 {
-      border-color: #f59e0b;
-      background: rgba(245, 158, 11, 0.22);
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
-    }
-    .wave-btn.active-w3 {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.22);
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    .fuse-btn:disabled { opacity: 0.35; cursor: default; }
+
+    .detonate-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
     .detonate-btn {
-      width: 100%;
+      flex: 1;
       min-height: 48px;
       border-radius: 12px;
-      border: 2px solid #fca5a5;
+      border: 1.5px solid #fca5a5;
       background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
       color: #ffffff;
-      font-size: 1rem;
+      font-size: 0.94rem;
       font-weight: 900;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.03em;
       cursor: pointer;
-      box-shadow: 0 8px 22px rgba(220, 38, 38, 0.42);
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.35);
       transition: transform 0.08s ease, opacity 0.15s ease;
     }
-    .detonate-btn:active {
-      transform: scale(0.98);
+    .detonate-btn:active { transform: scale(0.97); }
+    .detonate-btn:disabled { opacity: 0.42; cursor: default; box-shadow: none; }
+    .detonate-btn.retry-mode {
+      border-color: #fde68a;
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
     }
-    .detonate-btn:disabled {
-      opacity: 0.45;
-      cursor: default;
-      box-shadow: none;
+    .clear-charges-btn {
+      min-height: 48px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1.5px solid #3c3347;
+      background: #211c29;
+      color: #e2e8f0;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
     }
+    .clear-charges-btn:disabled { opacity: 0.38; cursor: default; }
 
-    @media (min-width: 640px) {
-      .detonator-dock {
-        flex-direction: row;
-        align-items: center;
-      }
-      .wave-row {
-        flex: 1.3;
-      }
-      .detonate-btn {
-        flex: 0.85;
-      }
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #0d0b10;
+      border-top: 1px solid #241e29;
+      font-size: 0.73rem;
+      color: #94a3b8;
     }
 
     .status-toast {
@@ -199,8 +261,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.94);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(13, 11, 16, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -214,14 +276,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
-    .stage-overlay {
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(9, 13, 28, 0.82);
+      background: rgba(10, 9, 14, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -229,31 +289,24 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.22s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .overlay-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -294,9 +347,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -393,6 +444,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #131115;
+      border: 1px solid rgba(251, 146, 60, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #131115;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #1c1412 0%, #7c2d12 100%);
+      color: #ffedd5;
+    }
+    .game-seo-banner.blueprint-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fed7aa;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .demo-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .demo-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .demo-table th, .demo-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .demo-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .demo-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -405,7 +536,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -418,71 +549,83 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Jobs &bull; Demolition Physics</span>
+      <span class="cat-tag">500 Sites &bull; Implosion Physics</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Controlled Demolition</h1>
-      <p>Attach timed dynamite charges to load-bearing pillars so the tower implodes straight down below the green line—without scratching nearby buildings.</p>
+      <p>Plant timed dynamite charges on load-bearing concrete pillars to collapse old urban towers cleanly below the clearance line—without scratching neighboring glass buildings.</p>
     </div>
 
     <!-- Game Stage -->
     <section class="game-wrapper" aria-label="Controlled Demolition Physics Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Warehouse District</span>
-          <span id="levelTitle">Job #1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Open-Lot Teardowns</span>
+          <span id="levelTitle">Site #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="chargesCounter">🧨 Charges: 4 left</span>
-          <span class="hud-pill status-ok" id="statusPill">Ready to Wire</span>
-          <span class="hud-pill" id="solvedCounter">Cleared: 0 / 500</span>
+          <span class="hud-pill" id="chargesPill">TNT: 0 / 4</span>
+          <span class="hud-pill safe-pill" id="neighborPill">Neighbors: SAFE</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Cleared: 0 / 500</span>
         </div>
       </div>
 
+      <!-- Clearance & Settle Progress Strip -->
+      <div class="status-strip">
+        <span id="statusLbl" class="status-lbl">🧨 Tap Pillars to Arm</span>
+        <div class="status-track">
+          <div id="statusFill" class="status-fill"></div>
+        </div>
+        <span id="statusVal" class="status-val">READY</span>
+      </div>
+
+      <!-- Matter.js 2D Demolition Physics Canvas -->
       <div class="canvas-container">
         <canvas id="demoCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Win / Fail Overlay -->
-        <div id="stageOverlay" class="stage-overlay">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.3rem; margin-bottom:6px;">🧨</div>
-            <h2 id="ovHeading">Clean Implosion!</h2>
-            <p id="ovText">All rubble dropped safely below the clearance line.</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Next Job →</button>
+        <!-- Clean Implosion Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div style="font-size:2.3rem; margin-bottom:6px;">🧨</div>
+            <h2 id="winHeading">Clean Implosion!</h2>
+            <p id="winText">The entire tower dropped straight below the clearance line with zero collateral damage.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Site →</button>
           </div>
         </div>
       </div>
 
-      <!-- Wave Timer Selector & Big Red Detonator -->
-      <div class="detonator-dock">
-        <div class="wave-row" role="group" aria-label="Detonation Wave Delay">
-          <button id="wave1Btn" class="wave-btn active-w1" type="button">
-            <span class="wave-dot" style="background:#ef4444"></span>T1 • 0.0s
-          </button>
-          <button id="wave2Btn" class="wave-btn" type="button">
-            <span class="wave-dot" style="background:#f59e0b"></span>T2 • 0.35s
-          </button>
-          <button id="wave3Btn" class="wave-btn" type="button">
-            <span class="wave-dot" style="background:#38bdf8"></span>T3 • 0.70s
-          </button>
+      <!-- Fuse Delay Selector (Ch. 3+) & Detonator Dock -->
+      <div class="demo-dock">
+        <div id="fuseRow" class="fuse-row" style="display:none;" role="group" aria-label="Fuse Delay Timing">
+          <button class="fuse-btn active" data-delay="0" type="button">⚡ 0.0s First</button>
+          <button class="fuse-btn" data-delay="0.4" type="button">⏱️ 0.4s Mid</button>
+          <button class="fuse-btn" data-delay="0.8" type="button">⏳ 0.8s Late</button>
         </div>
-        <button id="detonateBtn" class="detonate-btn" type="button">🧨 DETONATE</button>
+        <div class="detonate-row">
+          <button id="clearChargesBtn" class="clear-charges-btn" type="button">Clear TNT</button>
+          <button id="detonateBtn" class="detonate-btn" type="button" disabled>🧨 DETONATE CHARGES</button>
+        </div>
+      </div>
+
+      <div class="legend-strip">
+        <span>👆 Tap Any Concrete Pillar to Place / Remove TNT</span>
+        <span>📉 Bring ALL Debris Below the Dashed Line</span>
+        <span>🛡️ Keep Emerald Neighbor Buildings Untouched</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="clearChargesBtn" class="btn-outline" type="button">✕ Clear TNT</button>
-          <button id="resetBtn" class="btn-outline" type="button">↺ Rebuild</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Blueprint Hint</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Rebuild Tower</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Blast Plan</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Job 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Site 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -492,29 +635,126 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 850+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/controlled-demolition-banner-1.jpg"
+            alt="Controlled Demolition building implosion physics game showing a concrete tower collapsing straight inward between protected emerald glass neighbors"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Real-Physics Building Implosions — Zero Collateral Damage</h3>
+          <p>Drop aging skyscrapers cleanly below the target clearance line using authentic Matter.js gravity, pancake-crush physics, and timed detonation fuses.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Controlled Demolition (500 Jobs)</h2>
-        <p>Controlled Demolition is a structural engineering physics game powered by Matter.js. Each city block features an aging high-rise surrounded by protected neighboring landmarks—such as hospitals, schools, museums, and cafes. Your objective is to bring the entire tower down below the dashed <strong>Green Clearance Line</strong> without letting a single falling beam strike a neighbor.</p>
+        <h2>What Is Controlled Demolition? A Structural Implosion Physics Game Online</h2>
+        <p><strong>Controlled Demolition</strong> is a free <strong>building demolition physics game online</strong> that puts you in the hard hat of a master explosives engineer. Rather than recklessly blowing up blocks in every direction, real urban demolition requires surgical precision: you must study each weathered concrete tower's center of mass, attach a limited budget of dynamite charges to key load-bearing columns, and hit <strong>DETONATE</strong> so the entire structure folds straight inward below the <strong>Target Clearance Line</strong> without grazing the gleaming emerald glass neighbor buildings flanking the construction site.</p>
+        <p>Powered by live 2D rigid-body simulation (<strong>Matter.js</strong>) and procedural deep-bass <strong>Web Audio blasts and crumbling concrete audio</strong>, Controlled Demolition runs smoothly at 60 FPS across phones, tablets, and Chromebooks with zero downloads and automatic private local storage saves across all <strong>500 demolition sites</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Real Demolition Engineering Techniques (How to Implode Straight Inward)</h2>
+        <p>Why does a tall concrete skyscraper topple sideways like a felled tree in one attempt, yet pancake neatly inside its own footprint in the next? Mastering these four <strong>real-world structural implosion tactics</strong> will let you clear even tight Chapter 5 downtown lots on your first blast:</p>
+
+        <div class="demo-table-wrap">
+          <table class="demo-table">
+            <thead>
+              <tr>
+                <th>Implosion Technique</th>
+                <th>Best Site Layout</th>
+                <th>How to Wire Your Charges</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Symmetrical Pancake Drop</strong></td>
+                <td>Balanced tower flanked by protected buildings on <em>both</em> sides.</td>
+                <td>Blast every ground-floor pillar simultaneously (<code>0.0s</code>) so gravity drops the upper floors straight down and crushes mid-level columns!</td>
+              </tr>
+              <tr>
+                <td><strong>2. Center-First Inward Fold</strong> (Ch. 3–5)</td>
+                <td>Wide 3-column or 4-column skyscrapers wedged tightly between two neighbors.</td>
+                <td>Set the <strong>center support pillar(s) to <code>0.0s</code></strong> and the <strong>outer edge columns to <code>0.4s</code></strong>—the collapsing core pulls the outer walls safely inward!</td>
+              </tr>
+              <tr>
+                <td><strong>3. Directional Tree-Fell</strong></td>
+                <td>One neighbor sits close on one side while the opposite side is an open lot.</td>
+                <td>Place charges primarily on the <strong>open-lot side</strong> so the building leans cleanly away from the protected glass tower!</td>
+              </tr>
+              <tr>
+                <td><strong>4. Upper Wing Counter-Blast</strong> (Ch. 4–5)</td>
+                <td>Asymmetric stepped towers with a tall overhang on one side.</td>
+                <td>Blast the upper wing's supports at <code>0.0s</code> so the overhanging mass drops early before blasting the ground piers at <code>0.4s</code>!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;">Want a quick structural consultation on a tricky tight-lot skyscraper? Tap <strong>💡 Blast Plan</strong> anytime before detonating—our engineering guide highlights the exact recommended pillars and optimal fuse delays directly on the tower in glowing gold.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner blueprint-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/controlled-demolition-banner-2.jpg"
+            alt="Cutaway structural demolition blueprint showing red dynamite charges, amber fuse timers, and emerald neighbor safety shields in Controlled Demolition"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Sequential Fuse Delays &amp; Authentic Pancake-Crush Physics</h3>
+          <p>Watch heavy upper concrete floor slabs drop onto weakened columns below, snapping brittle supports cleanly into compact rubble piles.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Urban Demolition Chapters (500 Unique Sites)</h2>
+        <p>Every demolition lot from Site #1 to Site #500 features calibrated TNT budgets, realistic gravity torque, and verified structural blast plans:</p>
         <ul>
-          <li><strong>The Secret of Real Inward Implosions:</strong> On wide 3-column and 4-column towers, wire the <strong>center support columns</strong> to Wave <strong>T1 (0.0s)</strong> and the <strong>outer columns</strong> to Wave <strong>T2 (0.35s)</strong>. When the core vanishes first, the floor slabs fold inward toward the middle before dropping straight down!</li>
-          <li><strong>Tap to Wire &amp; Edit:</strong> Select a timing wave (<code>T1</code>, <code>T2</code>, or <code>T3</code>) and tap any light concrete column to attach dynamite. Tap an already-wired column to update its wave or remove it. Dark riveted steel columns cannot be wired directly—bring them down by collapsing the floors underneath.</li>
-          <li><strong>Quick Tweak Retries:</strong> If your first blast tips slightly sideways or stays too tall, tapping <strong>Edit &amp; Retry</strong> rebuilds the tower with your previous charges still attached so you can adjust just one pillar or delay in seconds.</li>
+          <li><strong>Chapter 1 (Sites 1–100 — Open-Lot Teardowns):</strong> Sturdy 3-to-4 story warehouses and apartment blocks with generous lot margins—ideal for learning symmetrical drops and directional tipping.</li>
+          <li><strong>Chapter 2 (Sites 101–200 — Neighbor Protection):</strong> Introduces gleaming emerald protected buildings positioned along one or both flanks of the demolition zone, demanding controlled vertical collapses.</li>
+          <li><strong>Chapter 3 (Sites 201–300 — Timed Delay Fuses):</strong> Unlocks <strong>⚡ 0.0s</strong>, <strong>⏱️ 0.4s</strong>, and <strong>⏳ 0.8s</strong> sequential detonators on wide 3-column structures so you can fold towers inward like a true demolition crew.</li>
+          <li><strong>Chapter 4 (Sites 301–400 — Stepped Skyscrapers):</strong> Introduces lopsided L-shaped and stepped concrete towers whose off-center weight naturally wants to tip unless counter-blasted cleanly.</li>
+          <li><strong>Chapter 5 (Sites 401–500 — Master Downtown Implosion):</strong> Tall 5-to-6 story urban landmarks boxed tightly between dual glass skyscrapers with lean TNT budgets—complete with an instant 1–500 site selector and private local saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Demolition Physics Topics">
+          <span class="kw-pill">Controlled Demolition Game Online</span>
+          <span class="kw-pill">Building Implosion Physics Simulator</span>
+          <span class="kw-pill">Timed Dynamite Destruction Puzzle</span>
+          <span class="kw-pill">Matter.js Tower Collapse Game</span>
+          <span class="kw-pill">Structural Engineering Brain Teaser</span>
+          <span class="kw-pill">No-Download Chromebook Physics Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Controlled Demolition FAQ</h2>
         <details class="faq-item">
-          <summary>Why did my building tip sideways into a neighboring hospital?</summary>
-          <div class="faq-answer">Blowing columns unevenly—like blasting only the left pillar first—removes support on one side and makes gravity lever the upper floors outward. Use simultaneous blasts on 2-column towers or center-first timed waves on wider towers.</div>
+          <summary>How do I win a level in Controlled Demolition?</summary>
+          <div class="faq-answer">Plant dynamite charges on load-bearing pillars, press <strong>🧨 DETONATE CHARGES</strong>, and wait roughly 2.5 seconds for the rubble to settle. If <strong>100% of the target tower's debris lies below the dashed Target Clearance Line</strong> and zero protected neighbor buildings were struck, you clear the site!</div>
         </details>
         <details class="faq-item">
-          <summary>How does the Blueprint Hint (💡) work?</summary>
-          <div class="faq-answer">Tapping Blueprint Hint overlays golden wave numbers (1 or 2) onto the exact load-bearing pillars verified to fold the tower neatly inward beneath the green clearance line.</div>
+          <summary>Why do upper pillars crush automatically after I blast the ground floor?</summary>
+          <div class="faq-answer">Just like real-world progressive collapse ("pancaking"), when massive upper concrete slabs drop rapidly onto weakened vertical columns below, the impact force shatters those brittle columns into compact rubble—saving you dynamite!</div>
+        </details>
+        <details class="faq-item">
+          <summary>How do timed delay fuses (0.0s, 0.4s, 0.8s) work in Chapters 3–5?</summary>
+          <div class="faq-answer">Select a fuse timing button below the site before tapping a pillar. For wide towers sandwiched between two neighbors, wire the inner center pillars to <code>0.0s</code> and the outer pillars to <code>0.4s</code> so the structure folds inward instead of spilling outward!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I adjust or remove a dynamite charge before pressing Detonate?</summary>
+          <div class="faq-answer">Yes! Tap any armed pillar again to disarm and reclaim that TNT charge, or tap <strong>Clear TNT</strong> to remove all planted charges before blasting.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
@@ -523,35 +763,35 @@
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
         <h3>Gravity Stone Stacker</h3>
-        <p>Balance irregular geometric stones into a steady tower across 500 physics levels.</p>
+        <p>Stack irregular geometric stones into a balanced tower and hold it standing for 5 seconds.</p>
         <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🪢</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Tangle Master</h3>
-        <p>Move colorful rope pins across pegboard sockets until every braided knot lies flat.</p>
-        <a href="/games/tangle-master/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🚢</div><span class="cat-tag">Physics</span></div>
+        <h3>Cargo Wave Balancer</h3>
+        <p>Drop and balance shipping containers on a swaying cargo vessel riding dynamic ocean waves.</p>
+        <a href="/games/cargo-balancer/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
-        <h3>Manual Bomb Defusal</h3>
-        <p>Decode the live technical manual and cut the exact right wire against the clock.</p>
-        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">⚙️</div><span class="cat-tag">Physics</span></div>
+        <h3>Rube Goldberg Sandbox</h3>
+        <p>Arrange ramps, springs, fans, and magnets to trigger a wild physics chain reaction.</p>
+        <a href="/games/rube-goldberg/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Job Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Job">
+  <!-- Site Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Demolition Site">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Demolition Job (1 – 500)</h3>
+        <h3>Choose Demolition Site (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to job (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to site (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -570,12 +810,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Physics</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/stone-stacker/">Gravity Stone Stacker</a></li>
+            <li><a href="/games/controlled-demolition/">Controlled Demolition</a></li>
+            <li><a href="/games/cargo-balancer/">Cargo Wave Balancer</a></li>
+            <li><a href="/games/rube-goldberg/">Rube Goldberg Sandbox</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -584,7 +824,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -617,30 +857,33 @@
     }
 
     // ==============================================
-    // CONSTANTS & 500-JOB STRUCTURAL GENERATOR
+    // MATTER.JS DEMOLITION & 500-SITE LEVEL ENGINE
     // ==============================================
-    const TOTAL_LEVELS = 500;
-    const WORLD_W = 460;
-    const WORLD_H = 490;
-    const GROUND_Y = 444;
+    const { Engine, World, Bodies, Body, Events } = Matter;
 
-    const WAVE_DELAYS = { 1: 0.05, 2: 0.38, 3: 0.72 };
-    const WAVE_COLORS = { 1: "#ef4444", 2: "#f59e0b", 3: "#38bdf8" };
+    const TOTAL_LEVELS = 500;
+    const WORLD_W = 420;
+    const WORLD_H = 440;
+    const GROUND_Y = 390;
+    const PILLAR_H = 38;
+    const PILLAR_W = 16;
+    const SLAB_H = 12;
+    const FLOOR_H = PILLAR_H + SLAB_H;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Warehouse District", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Mid-Rise Corridors", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Steel-Capped Towers", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Tight City Blocks", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Skyscraper Implosions", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Open-Lot Teardowns", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Neighbor Protection", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Timed Delay Fuses", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Stepped Skyscrapers", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Urban Implosion", range: "401–500", start: 401, end: 500 }
     ];
 
-    const NEIGHBOR_TYPES = [
-      { name: "HOSPITAL", icon: "🏥", body: "#334155", trim: "#ef4444", win: "#fef08a" },
-      { name: "SCHOOL",   icon: "🏫", body: "#3f3f46", trim: "#f59e0b", win: "#fde68a" },
-      { name: "MUSEUM",   icon: "🏛️", body: "#374151", trim: "#38bdf8", win: "#bae6fd" },
-      { name: "CAFE",     icon: "☕", body: "#44403c", trim: "#fb923c", win: "#fed7aa" },
-      { name: "LIBRARY",  icon: "📚", body: "#334155", trim: "#a855f7", win: "#e9d5ff" }
+    const SKY_THEMES = [
+      { sky1: "#0f172a", sky2: "#334155", city: "#1e293b" },
+      { sky1: "#181529", sky2: "#4c2c4a", city: "#241b35" },
+      { sky1: "#0c1926", sky2: "#1e4b63", city: "#13293d" },
+      { sky1: "#1e1612", sky2: "#7c3a1d", city: "#2c1e18" },
+      { sky1: "#090d16", sky2: "#1e293b", city: "#111827" }
     ];
 
     function mulberry32(seed) {
@@ -653,157 +896,154 @@
       };
     }
 
-    function buildJob(levelNum) {
-      const rng = mulberry32(levelNum * 37181 + 90210);
+    function buildSiteLevel(levelNum) {
+      const rng = mulberry32(levelNum * 226117 + 71023);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const sky = SKY_THEMES[chapIdx];
+      const useFuses = levelNum >= 201;
 
-      let floors, cols, blastFloors, gapPx, steelTop;
-      if (levelNum <= 40) {
-        floors = 3; cols = 2; blastFloors = 2; gapPx = 86; steelTop = false;
-      } else if (levelNum <= 100) {
-        floors = 4; cols = levelNum % 2 === 0 ? 3 : 2; blastFloors = 2; gapPx = 80; steelTop = false;
+      let floors, cols, neighborMode, steppedSide, clearancePad;
+      if (levelNum <= 100) {
+        floors = levelNum <= 45 ? 3 : 4;
+        cols = levelNum <= 60 ? 2 : 3;
+        neighborMode = levelNum <= 35 ? "none" : (rng() < 0.5 ? "left" : "right");
+        steppedSide = 0;
+        clearancePad = 38;
       } else if (levelNum <= 200) {
-        floors = levelNum > 150 ? 5 : 4; cols = 3; blastFloors = floors === 5 ? 3 : 2; gapPx = 72; steelTop = false;
+        floors = levelNum <= 150 ? 4 : 5;
+        cols = levelNum <= 140 ? 2 : 3;
+        neighborMode = levelNum <= 145 ? (rng() < 0.5 ? "left" : "right") : "both";
+        steppedSide = 0;
+        clearancePad = 34;
       } else if (levelNum <= 300) {
-        floors = 5; cols = 3; blastFloors = 3; gapPx = 64; steelTop = true;
+        floors = 5;
+        cols = 3;
+        neighborMode = "both";
+        steppedSide = 0;
+        clearancePad = 30;
       } else if (levelNum <= 400) {
-        floors = levelNum > 350 ? 6 : 5; cols = levelNum % 2 === 0 ? 4 : 3; blastFloors = 3; gapPx = 58; steelTop = true;
+        floors = 5;
+        cols = 3;
+        neighborMode = "both";
+        steppedSide = rng() < 0.5 ? -1 : 1; // stepped upper penthouse wing!
+        clearancePad = 28;
       } else {
-        floors = levelNum > 450 ? 7 : 6; cols = 4; blastFloors = floors === 7 ? 4 : 3; gapPx = 52; steelTop = true;
+        floors = levelNum > 450 ? 6 : 5;
+        cols = levelNum % 3 === 0 ? 4 : 3;
+        neighborMode = "both";
+        steppedSide = rng() < 0.45 ? (rng() < 0.5 ? -1 : 1) : 0;
+        clearancePad = 26;
       }
 
-      const cx = WORLD_W / 2;
-      const pillarW = cols === 4 ? 12 : 14;
-      const pillarH = floors >= 6 ? 31 : (floors === 5 ? 35 : 40);
-      const slabH = floors >= 6 ? 10 : 12;
-      const storyH = pillarH + slabH;
-      const colSpan = cols === 2 ? 92 : (cols === 3 ? 62 : 46);
-      const towerWidth = (cols - 1) * colSpan + pillarW + 14;
-      const origHeight = floors * storyH;
+      const towerW = cols === 2 ? 114 : (cols === 3 ? 148 : 168);
+      const towerCX = WORLD_W / 2;
 
-      // Column X coordinates centered symmetrically at cx
-      const colXs = [];
-      const leftMostX = cx - ((cols - 1) * colSpan) / 2;
-      for (let c = 0; c < cols; c++) {
-        colXs.push(leftMostX + c * colSpan);
-      }
+      const pillarsSpec = [];
+      const slabsSpec = [];
 
-      // Build Pillars & Segmented Floor Slabs (segmented slabs allow authentic inward folding!)
-      const pillarSpecs = [];
-      const slabSpecs = [];
-      const blueprint = []; // Verified inward implosion plan: { pillarId, wave }
-
-      let pid = 0;
       for (let f = 0; f < floors; f++) {
-        const py = GROUND_Y - f * storyH - pillarH / 2;
-        const sy = GROUND_Y - f * storyH - pillarH - slabH / 2;
+        const floorBotY = GROUND_Y - f * FLOOR_H;
+        const pillarCY = floorBotY - PILLAR_H / 2;
+        const slabCY = floorBotY - PILLAR_H - SLAB_H / 2;
 
-        // Steel-reinforced columns appear ONLY on upper non-blueprint floors so every level is 100% clearable
-        const isUpperSteelFloor = steelTop && f >= blastFloors && (f === floors - 1 || rng() < 0.55);
+        // Stepped top floors in Chapter 4 & 5
+        const isSteppedTop = steppedSide !== 0 && f >= floors - 2;
+        let curCols = cols;
+        let curW = towerW;
+        let curCX = towerCX;
 
-        for (let c = 0; c < cols; c++) {
-          const isInner = cols >= 3 && c > 0 && c < cols - 1;
-          const steel = isUpperSteelFloor && (!isInner || rng() < 0.5);
-          pillarSpecs.push({
-            id: pid,
+        if (isSteppedTop && cols >= 3) {
+          curCols = cols - 1;
+          curW = towerW * (curCols / cols);
+          curCX = towerCX + steppedSide * (towerW - curW) * 0.5;
+        }
+
+        const spanX = curW - 22;
+        for (let c = 0; c < curCols; c++) {
+          const frac = curCols === 1 ? 0.5 : c / (curCols - 1);
+          const px = curCX - spanX / 2 + frac * spanX;
+          const isInner = curCols >= 3 && c > 0 && c < curCols - 1;
+          pillarsSpec.push({
+            id: pillarsSpec.length,
             floor: f,
             col: c,
-            x: colXs[c],
-            y: py,
-            w: pillarW,
-            h: pillarH,
-            steel
+            totalCols: curCols,
+            isInner,
+            x: px,
+            y: pillarCY,
+            w: PILLAR_W,
+            h: PILLAR_H
           });
-
-          // Blueprint Plan: blast bottom `blastFloors` inward-first!
-          if (f < blastFloors) {
-            let wave = 1;
-            if (cols === 2) {
-              // Simultaneous drop on 2-column towers
-              wave = 1;
-            } else {
-              // Inner pillars blow Wave 1 (0.0s), Outer pillars blow Wave 2 (0.35s) -> pulls slabs INWARD!
-              wave = isInner ? 1 : 2;
-            }
-            blueprint.push({ pillarId: pid, wave });
-          }
-          pid++;
         }
 
-        // Floor Slabs spanning between adjacent columns (small 2px expansion joint for realistic hinge folding)
-        for (let s = 0; s < cols - 1; s++) {
-          const xL = colXs[s] - (s === 0 ? pillarW / 2 + 5 : 0) + (s > 0 ? 1.2 : 0);
-          const xR = colXs[s + 1] + (s === cols - 2 ? pillarW / 2 + 5 : 0) - (s < cols - 2 ? 1.2 : 0);
-          slabSpecs.push({
-            floor: f,
-            seg: s,
-            x: (xL + xR) / 2,
-            y: sy,
-            w: xR - xL,
-            h: slabH
-          });
+        // Split wide floor slabs cleanly into 2 aligned segments on 3+ col buildings so center-first blasts fold INWARD like real implosions!
+        if (curCols >= 3) {
+          const halfW = curW / 2 - 1;
+          slabsSpec.push({ floor: f, x: curCX - halfW / 2 - 0.5, y: slabCY, w: halfW, h: SLAB_H, isRoof: f === floors - 1 });
+          slabsSpec.push({ floor: f, x: curCX + halfW / 2 + 0.5, y: slabCY, w: halfW, h: SLAB_H, isRoof: f === floors - 1 });
+        } else {
+          slabsSpec.push({ floor: f, x: curCX, y: slabCY, w: curW, h: SLAB_H, isRoof: f === floors - 1 });
         }
       }
 
-      // Clearance Line: guaranteed comfortably above collapsed height of Blueprint Plan,
-      // yet strictly below what happens if you fail to demolish enough floors!
-      const collapsedEstimate = (floors - blastFloors) * storyH + blastFloors * slabH;
-      const clearanceFromGround = Math.min(origHeight - 28, collapsedEstimate + 34);
-      const clearanceY = GROUND_Y - clearanceFromGround;
-
-      // Protected Neighbor Buildings on Left and/or Right
+      // Build Protected Neighbor Buildings (Emerald Glass Safe Zones)
       const neighbors = [];
-      const hasLeft = levelNum > 10 || levelNum % 2 === 1;
-      const hasRight = levelNum > 10 || levelNum % 2 === 0;
-      const leftType = NEIGHBOR_TYPES[Math.floor(rng() * NEIGHBOR_TYPES.length)];
-      let rightType = NEIGHBOR_TYPES[Math.floor(rng() * NEIGHBOR_TYPES.length)];
-      if (rightType.name === leftType.name) rightType = NEIGHBOR_TYPES[(NEIGHBOR_TYPES.indexOf(leftType) + 1) % NEIGHBOR_TYPES.length];
-
-      const towerLeftEdge = cx - towerWidth / 2;
-      const towerRightEdge = cx + towerWidth / 2;
-
-      if (hasLeft) {
-        const rightEdge = Math.max(46, towerLeftEdge - gapPx);
-        const w = Math.min(82, rightEdge - 8);
-        const h = 115 + Math.floor(rng() * 85);
-        neighbors.push({
-          side: "left",
-          x: rightEdge - w / 2,
-          y: GROUND_Y - h / 2,
-          w, h,
-          style: leftType,
-          damaged: false
-        });
+      const gap = levelNum <= 200 ? 46 : (levelNum <= 350 ? 38 : 34);
+      const nW = 68;
+      if (neighborMode === "left" || neighborMode === "both") {
+        const nH = 128 + Math.floor(rng() * 64);
+        const nx = Math.max(38, towerCX - towerW / 2 - gap - nW / 2);
+        neighbors.push({ side: "left", x: nx, y: GROUND_Y - nH / 2, w: nW, h: nH });
       }
-      if (hasRight) {
-        const leftEdge = Math.min(WORLD_W - 46, towerRightEdge + gapPx);
-        const w = Math.min(82, WORLD_W - 8 - leftEdge);
-        const h = 115 + Math.floor(rng() * 85);
-        neighbors.push({
-          side: "right",
-          x: leftEdge + w / 2,
-          y: GROUND_Y - h / 2,
-          w, h,
-          style: rightType,
-          damaged: false
-        });
+      if (neighborMode === "right" || neighborMode === "both") {
+        const nH = 128 + Math.floor(rng() * 64);
+        const nx = Math.min(WORLD_W - 38, towerCX + towerW / 2 + gap + nW / 2);
+        neighbors.push({ side: "right", x: nx, y: GROUND_Y - nH / 2, w: nW, h: nH });
       }
 
-      // Spare charge cushion in early chapters, tight precision budget later
-      const extraCharges = levelNum <= 100 ? 2 : (levelNum <= 250 ? 1 : 0);
-      const budget = blueprint.length + extraCharges;
+      // Build Verified Engineering Hint Plan (Symmetrical or Center-First Inward Implosion!)
+      const hintPlan = [];
+      const blastFloors = floors >= 5 ? [0, 1] : [0];
+      for (const p of pillarsSpec) {
+        if (!blastFloors.includes(p.floor)) continue;
+        let delay = 0;
+        if (useFuses && p.totalCols >= 3) {
+          // Center columns blow first (0.0s), outer walls follow (0.4s) to fold straight inward!
+          delay = p.isInner ? 0 : 0.4;
+        } else if (useFuses && p.floor === 1) {
+          delay = 0.4;
+        }
+        hintPlan.push({ pillarId: p.id, delay });
+      }
+
+      // If stepped wing exists, also include the upper wing support at 0.0s to drop overhang early!
+      if (steppedSide !== 0) {
+        const wingP = pillarsSpec.find((p) => p.floor === floors - 2);
+        if (wingP) hintPlan.push({ pillarId: wingP.id, delay: 0 });
+      }
+
+      const extraTNT = levelNum <= 100 ? 2 : (levelNum <= 300 ? 1 : 1);
+      const maxCharges = hintPlan.length + extraTNT;
+
+      // Calibrated Clearance Line: rubble must drop well below ~55% of original tower height!
+      const stackedSlabsH = floors * SLAB_H + clearancePad + (floors >= 5 ? 16 : 8);
+      const clearY = GROUND_Y - stackedSlabsH;
 
       return {
         levelNum,
+        chapIdx,
+        sky,
         floors,
         cols,
-        cx,
-        origHeight,
-        clearanceY,
-        budget,
-        pillarSpecs,
-        slabSpecs,
-        blueprint,
-        neighbors
+        useFuses,
+        towerW,
+        towerCX,
+        pillarsSpec,
+        slabsSpec,
+        neighbors,
+        hintPlan,
+        maxCharges,
+        clearY
       };
     }
 
@@ -812,12 +1052,12 @@
     }
 
     // ==============================================
-    // AUDIO ENGINE (EXPLOSIONS, TRIGGERS & RUBBLE)
+    // DEEP EXPLOSION, FUSE & CONCRETE RUBBLE AUDIO
     // ==============================================
     let audioCtx = null;
-    let noiseBuffer = null;
+    let noiseBuf = null;
     let soundOn = true;
-    let lastRumbleTime = 0;
+    let lastClackMs = 0;
 
     function initAudio() {
       if (!audioCtx) {
@@ -825,117 +1065,156 @@
         if (AC) audioCtx = new AC();
       }
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-      if (audioCtx && !noiseBuffer) {
-        const len = Math.floor(audioCtx.sampleRate * 0.65);
-        noiseBuffer = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-        const d = noiseBuffer.getChannelData(0);
+      if (audioCtx && !noiseBuf) {
+        const len = Math.floor(audioCtx.sampleRate * 0.6);
+        noiseBuf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+        const d = noiseBuf.getChannelData(0);
         for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
       }
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.1) {
+    function sfxPlaceTNT(placed) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(vol, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      const g = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(placed ? 640 : 320, now);
+      osc.frequency.exponentialRampToValueAtTime(placed ? 860 : 210, now + 0.055);
+      g.gain.setValueAtTime(0.09, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + dur + 0.02);
+      osc.stop(now + 0.08);
     }
 
-    function sfxPlaceCharge(wave) {
-      playTone(420 + wave * 140, 0.07, "triangle", 0.11);
-    }
-    function sfxRemoveCharge() {
-      playTone(260, 0.06, "sine", 0.08);
-    }
-    function sfxBoom() {
+    function sfxBlastBoom() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
 
-      // Low-pass filtered explosion burst
-      if (noiseBuffer) {
+      // Sub-bass punch
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(115, now);
+      osc.frequency.exponentialRampToValueAtTime(28, now + 0.34);
+      g.gain.setValueAtTime(0.24, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.4);
+
+      // Filtered concrete debris crackle
+      if (noiseBuf) {
         const src = audioCtx.createBufferSource();
-        src.buffer = noiseBuffer;
-        const filt = audioCtx.createBiquadFilter();
-        filt.type = "lowpass";
-        filt.frequency.setValueAtTime(620, now);
-        filt.frequency.exponentialRampToValueAtTime(95, now + 0.48);
+        src.buffer = noiseBuf;
+        const lp = audioCtx.createBiquadFilter();
+        lp.type = "lowpass";
+        lp.frequency.setValueAtTime(950, now);
+        lp.frequency.exponentialRampToValueAtTime(180, now + 0.36);
         const gn = audioCtx.createGain();
-        gn.gain.setValueAtTime(0.32, now);
-        gn.gain.exponentialRampToValueAtTime(0.001, now + 0.52);
-        src.connect(filt);
-        filt.connect(gn);
+        gn.gain.setValueAtTime(0.2, now);
+        gn.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+        src.connect(lp);
+        lp.connect(gn);
         gn.connect(audioCtx.destination);
         src.start(now);
-        src.stop(now + 0.55);
+        src.stop(now + 0.4);
       }
-
-      // Sub-bass punch
-      const sub = audioCtx.createOscillator();
-      const gSub = audioCtx.createGain();
-      sub.type = "sine";
-      sub.frequency.setValueAtTime(115, now);
-      sub.frequency.exponentialRampToValueAtTime(34, now + 0.36);
-      gSub.gain.setValueAtTime(0.28, now);
-      gSub.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
-      sub.connect(gSub);
-      gSub.connect(audioCtx.destination);
-      sub.start(now);
-      sub.stop(now + 0.4);
     }
 
-    function sfxRubble(speed) {
-      if (!soundOn || speed < 1.2) return;
-      const nowMs = performance.now();
-      if (nowMs - lastRumbleTime < 70) return;
-      lastRumbleTime = nowMs;
-      const vol = Math.min(0.14, 0.03 + speed * 0.018);
-      playTone(95 + Math.random() * 45, 0.08, "triangle", vol);
+    function sfxConcreteCrunch(spd) {
+      if (!soundOn) return;
+      const ms = performance.now();
+      if (ms - lastClackMs < 75 || spd < 1.2) return;
+      lastClackMs = ms;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(140 + Math.random() * 55, now);
+      osc.frequency.exponentialRampToValueAtTime(55, now + 0.08);
+      g.gain.setValueAtTime(Math.min(0.12, spd * 0.016), now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.1);
     }
 
-    function sfxAlarm() {
-      playTone(210, 0.2, "sawtooth", 0.16);
-      setTimeout(() => playTone(150, 0.25, "sawtooth", 0.16), 130);
+    function sfxAlarmFail() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      [280, 210].forEach((f, i) => {
+        setTimeout(() => {
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(f, now);
+          g.gain.setValueAtTime(0.11, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        }, i * 130);
+      });
     }
 
-    function sfxWin() {
-      [392.0, 523.25, 659.25, 783.99].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.32, "sine", 0.13), i * 80);
+    function sfxDemoWin() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      [440, 554.37, 659.25, 880].forEach((f, i) => {
+        setTimeout(() => {
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(f, now);
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.exponentialRampToValueAtTime(0.12, now + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.45);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.5);
+        }, i * 80);
       });
     }
 
     // ==============================================
-    // MATTER.JS ENGINE & GAME CONTROLLER
+    // GAME STATE, MATTER.JS WORLD & BLAST CONTROLLER
     // ==============================================
-    const { Engine, World, Bodies, Body, Events } = Matter;
-
     const canvas = document.getElementById("demoCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const chargesCounter = document.getElementById("chargesCounter");
-    const statusPill = document.getElementById("statusPill");
+    const chargesPill = document.getElementById("chargesPill");
+    const neighborPill = document.getElementById("neighborPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
+    const statusLbl = document.getElementById("statusLbl");
+    const statusFill = document.getElementById("statusFill");
+    const statusVal = document.getElementById("statusVal");
+    const fuseRow = document.getElementById("fuseRow");
+    const clearChargesBtn = document.getElementById("clearChargesBtn");
     const detonateBtn = document.getElementById("detonateBtn");
-    const wave1Btn = document.getElementById("wave1Btn");
-    const wave2Btn = document.getElementById("wave2Btn");
-    const wave3Btn = document.getElementById("wave3Btn");
+    const statusToast = document.getElementById("statusToast");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
@@ -947,315 +1226,313 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
+    let level = null;
     let engine = null;
-    let job = null;
-    let pillars = []; // { spec, body, destroyed }
-    let slabs = [];   // { spec, body }
-    let neighbors = []; // { spec, body, flash }
-    let chargesMap = new Map(); // pillarId -> wave (1|2|3)
-    let savedPlan = new Map();
+    let pillarBodies = [];    // [{ id, body, spec, armedDelay: null|number, destroyed: false }]
+    let slabBodies = [];      // [{ body, spec }]
+    let neighborBodies = [];  // [{ body, spec, hitFlash: 0 }]
 
-    let selectedWave = 1;
-    let gameState = "planning"; // planning | detonating | won | lost
-    let detonateElapsed = 0;
-    let wavesFired = new Set();
-    let maxScheduledTime = 0;
-    let settleElapsed = 0;
-    let neighborHitTimer = 0;
-    let collateralFailed = false;
-    let showBlueprint = false;
+    let selectedDelay = 0;
+    let phase = "plan";       // 'plan' | 'blasting' | 'won' | 'failed'
+    let blastClock = 0;
+    let maxScheduledDelay = 0;
+    let settleTimer = 0;
+    let neighborDamaged = false;
+    let showHintPlan = false;
 
-    // VFX
-    let explosions = [];
-    let particles = [];
-    let shakeAmt = 0;
+    let screenShake = 0;
+    let shockwaves = [];
+    let dustPuffs = [];
+    let rubbleBits = [];
     let toastTimer = null;
-    const bgStars = Array.from({ length: 28 }, () => ({
-      x: Math.random() * WORLD_W,
-      y: Math.random() * 210,
-      r: 0.7 + Math.random() * 1.1
-    }));
 
-    function showToast(msg, ms = 2400) {
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function updateWaveButtons() {
-      wave1Btn.className = "wave-btn" + (selectedWave === 1 ? " active-w1" : "");
-      wave2Btn.className = "wave-btn" + (selectedWave === 2 ? " active-w2" : "");
-      wave3Btn.className = "wave-btn" + (selectedWave === 3 ? " active-w3" : "");
+    function getArmedCount() {
+      return pillarBodies.filter((p) => p.armedDelay !== null).length;
+    }
+
+    function spawnBlastVFX(x, y, scale = 1) {
+      shockwaves.push({ x, y, r: 6, maxR: 52 * scale, alpha: 0.95 });
+      for (let i = 0; i < 10; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const spd = 0.8 + Math.random() * 2.2;
+        dustPuffs.push({
+          x: x + (Math.random() - 0.5) * 14,
+          y: y + (Math.random() - 0.5) * 14,
+          vx: Math.cos(a) * spd,
+          vy: Math.sin(a) * spd - 0.6,
+          r: 7 + Math.random() * 11,
+          alpha: 0.72
+        });
+      }
+      for (let i = 0; i < 8; i++) {
+        const a = Math.random() * Math.PI * 2;
+        rubbleBits.push({
+          x, y,
+          vx: Math.cos(a) * (1.8 + Math.random() * 3.2),
+          vy: Math.sin(a) * (1.8 + Math.random() * 3.2) - 1.5,
+          sz: 3 + Math.random() * 4,
+          rot: Math.random() * 6,
+          vr: (Math.random() - 0.5) * 0.3,
+          alpha: 1
+        });
+      }
+    }
+
+    function destroyPillar(pItem, isExplosion) {
+      if (pItem.destroyed) return;
+      pItem.destroyed = true;
+      const pos = { x: pItem.body.position.x, y: pItem.body.position.y };
+      World.remove(engine.world, pItem.body);
+
+      if (isExplosion) {
+        screenShake = Math.min(1.0, screenShake + 0.55);
+        sfxBlastBoom();
+        spawnBlastVFX(pos.x, pos.y, 1.1);
+
+        // Apply subtle inward structural tension pull on nearby slabs so center-first blasts fold cleanly inward!
+        for (const sb of slabBodies) {
+          const dx = sb.body.position.x - pos.x;
+          const dy = sb.body.position.y - pos.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 95) {
+            const pullX = pItem.spec.isInner ? -Math.sign(dx) * 0.004 : 0;
+            Body.applyForce(sb.body, sb.body.position, { x: pullX, y: 0.002 });
+          }
+        }
+      } else {
+        // Pancake structural crush from heavy falling slab above!
+        sfxConcreteCrunch(4.5);
+        spawnBlastVFX(pos.x, pos.y, 0.55);
+      }
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Job #${currentLevelNum} / ${TOTAL_LEVELS}`;
-
-      const left = job.budget - chargesMap.size;
-      chargesCounter.textContent = `🧨 Charges: ${left} / ${job.budget}`;
+      levelTitle.textContent = `Site #${currentLevelNum} / ${TOTAL_LEVELS}`;
       solvedCounter.textContent = `Cleared: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Job ${currentLevelNum} / 500 ▾`;
+      openPickerBtn.textContent = `Site ${currentLevelNum} / 500 ▾`;
 
-      if (gameState === "planning") {
-        statusPill.textContent = chargesMap.size > 0 ? `${chargesMap.size} Wired` : "Tap Pillars";
-        statusPill.className = "hud-pill status-ok";
-      } else if (gameState === "detonating") {
-        statusPill.textContent = collateralFailed ? "NEIGHBOR HIT!" : "Imploding...";
-        statusPill.className = "hud-pill " + (collateralFailed ? "status-warn" : "");
-      } else if (gameState === "won") {
-        statusPill.textContent = "Approved ✓";
-        statusPill.className = "hud-pill status-ok";
+      const armed = getArmedCount();
+      chargesPill.textContent = `TNT: ${armed} / ${level.maxCharges}`;
+
+      if (neighborDamaged) {
+        neighborPill.textContent = "Neighbors: HIT ✕";
+        neighborPill.className = "hud-pill fail-pill";
+      } else if (level.neighbors.length === 0) {
+        neighborPill.textContent = "Open Lot";
+        neighborPill.className = "hud-pill safe-pill";
       } else {
-        statusPill.textContent = "Failed ✕";
-        statusPill.className = "hud-pill status-warn";
+        neighborPill.textContent = "Neighbors: SAFE ✓";
+        neighborPill.className = "hud-pill safe-pill";
       }
 
-      detonateBtn.disabled = gameState !== "planning" || chargesMap.size === 0;
+      fuseRow.style.display = level.useFuses ? "grid" : "none";
+      fuseRow.querySelectorAll(".fuse-btn").forEach((b) => {
+        b.disabled = phase !== "plan";
+      });
+
+      clearChargesBtn.disabled = phase !== "plan" || armed === 0;
+
+      if (phase === "failed") {
+        detonateBtn.disabled = false;
+        detonateBtn.className = "detonate-btn retry-mode";
+        detonateBtn.textContent = "↺ RETRY DEMOLITION";
+      } else if (phase === "won") {
+        detonateBtn.disabled = true;
+        detonateBtn.className = "detonate-btn";
+        detonateBtn.textContent = "✓ SITE CLEARED";
+      } else if (phase === "blasting") {
+        detonateBtn.disabled = true;
+        detonateBtn.className = "detonate-btn";
+        detonateBtn.textContent = "💥 IMPLODING...";
+      } else {
+        detonateBtn.disabled = armed === 0;
+        detonateBtn.className = "detonate-btn";
+        detonateBtn.textContent = armed > 0 ? `🧨 DETONATE (${armed} TNT)` : "🧨 TAP PILLARS TO ARM";
+      }
+
+      if (phase === "plan") {
+        statusLbl.textContent = "🧨 Arm Pillars & Detonate";
+        statusFill.style.width = "0%";
+        statusVal.textContent = "READY";
+      } else if (phase === "failed") {
+        statusLbl.textContent = neighborDamaged ? "🚨 Neighbor Damaged!" : "⚠️ Debris Too High!";
+        statusFill.style.width = "0%";
+        statusVal.textContent = "FAILED";
+      } else if (phase === "won") {
+        statusLbl.textContent = "✓ Below Clearance Line!";
+        statusFill.style.width = "100%";
+        statusVal.textContent = "CLEAR";
+      } else {
+        const pct = Math.min(100, (settleTimer / 2.2) * 100);
+        statusLbl.textContent = settleTimer > 0 ? "⏳ Verifying Rubble..." : "💥 Collapsing...";
+        statusFill.style.width = `${pct.toFixed(0)}%`;
+        statusVal.textContent = settleTimer > 0 ? `${Math.max(0, 2.2 - settleTimer).toFixed(1)}s` : "LIVE";
+      }
     }
 
-    function rebuildPhysicsWorld(preserveCharges = false) {
-      if (engine) {
-        World.clear(engine.world, false);
-        Engine.clear(engine);
-      }
-
+    function initPhysicsSite() {
       engine = Engine.create({
-        gravity: { x: 0, y: 1.35 },
+        gravity: { x: 0, y: 1.08 },
         positionIterations: 10,
         velocityIterations: 8
       });
 
-      // Solid Street Ground + invisible outer world walls
-      const ground = Bodies.rectangle(WORLD_W / 2, GROUND_Y + 30, WORLD_W + 200, 60, {
+      // Solid Demolition Pad Ground + Invisible Outer Safety Walls
+      const ground = Bodies.rectangle(WORLD_W / 2, GROUND_Y + 25, WORLD_W + 120, 50, {
         isStatic: true,
-        friction: 0.95,
-        restitution: 0.02,
+        friction: 0.92,
+        restitution: 0.04,
         label: "ground"
       });
-      World.add(engine.world, ground);
+      World.add(engine.world, [ground]);
 
-      // Neighbor Buildings (Protected)
-      neighbors = job.neighbors.map((nSpec) => {
-        const b = Bodies.rectangle(nSpec.x, nSpec.y, nSpec.w, nSpec.h, {
+      // Build Protected Neighbor Buildings
+      neighborBodies = level.neighbors.map((ns) => {
+        const b = Bodies.rectangle(ns.x, ns.y, ns.w, ns.h, {
           isStatic: true,
-          friction: 0.8,
-          restitution: 0.05,
           label: "neighbor"
         });
-        b.neighborRef = { spec: { ...nSpec, damaged: false }, body: b, flash: 0 };
+        b.neighborRef = { body: b, spec: ns, hitFlash: 0 };
         World.add(engine.world, b);
         return b.neighborRef;
       });
 
-      // Tower Pillars
-      pillars = job.pillarSpecs.map((pSpec) => {
-        const b = Bodies.rectangle(pSpec.x, pSpec.y, pSpec.w, pSpec.h, {
+      // Build Target Building Vertical Load-Bearing Pillars
+      pillarBodies = level.pillarsSpec.map((ps) => {
+        const b = Bodies.rectangle(ps.x, ps.y, ps.w, ps.h, {
+          friction: 0.85,
+          frictionStatic: 0.95,
+          restitution: 0.03,
+          density: 0.0028,
+          label: "pillar"
+        });
+        const item = { id: ps.id, body: b, spec: ps, armedDelay: null, destroyed: false };
+        b.pillarItem = item;
+        World.add(engine.world, b);
+        return item;
+      });
+
+      // Build Target Building Horizontal Concrete Floor Slabs
+      slabBodies = level.slabsSpec.map((ss) => {
+        const b = Bodies.rectangle(ss.x, ss.y, ss.w, ss.h, {
           friction: 0.88,
-          frictionStatic: 1.3,
-          restitution: 0.02,
-          density: pSpec.steel ? 0.0038 : 0.0024,
-          label: "tower-pillar"
+          frictionStatic: 0.95,
+          restitution: 0.03,
+          density: 0.0038,
+          label: "slab"
         });
-        const item = { spec: pSpec, body: b, destroyed: false };
-        b.pillarRef = item;
+        const item = { body: b, spec: ss };
         World.add(engine.world, b);
         return item;
       });
 
-      // Tower Slabs
-      slabs = job.slabSpecs.map((sSpec) => {
-        const b = Bodies.rectangle(sSpec.x, sSpec.y, sSpec.w, sSpec.h, {
-          friction: 0.92,
-          frictionStatic: 1.4,
-          restitution: 0.02,
-          density: 0.0034,
-          label: "tower-slab"
-        });
-        const item = { spec: sSpec, body: b };
-        World.add(engine.world, b);
-        return item;
-      });
-
-      // Collision listener for collateral damage & rubble audio
+      // Live Collision Handler: Neighbor Protection Sensor + Pancake Crush Physics!
+      const crushQueue = new Set();
       Events.on(engine, "collisionStart", (ev) => {
-        if (gameState !== "detonating") return;
+        if (phase !== "blasting") return;
         for (const pair of ev.pairs) {
-          const a = pair.bodyA;
-          const b = pair.bodyB;
-          const speed = Math.hypot(a.velocity.x - b.velocity.x, a.velocity.y - b.velocity.y);
+          const a = pair.bodyA, b = pair.bodyB;
+          const relSpd = Math.hypot(a.velocity.x - b.velocity.x, a.velocity.y - b.velocity.y);
 
-          // Check collateral hit on Neighbor Building
-          const isNeighborPair =
-            (a.label === "neighbor" && b.label.startsWith("tower-")) ||
-            (b.label === "neighbor" && a.label.startsWith("tower-"));
-
-          if (isNeighborPair && speed > 0.55) {
-            const nObj = a.label === "neighbor" ? a.neighborRef : b.neighborRef;
-            if (nObj && !collateralFailed) {
-              nObj.spec.damaged = true;
-              nObj.flash = 1.0;
-              collateralFailed = true;
-              neighborHitTimer = 0.55;
-              shakeAmt = 8;
-              sfxAlarm();
+          // 1. Check Protected Neighbor Impact!
+          if ((a.label === "neighbor" && (b.label === "slab" || b.label === "pillar")) ||
+              (b.label === "neighbor" && (a.label === "slab" || a.label === "pillar"))) {
+            const nRef = a.label === "neighbor" ? a.neighborRef : b.neighborRef;
+            nRef.hitFlash = 1.0;
+            if (!neighborDamaged) {
+              neighborDamaged = true;
+              phase = "failed";
+              sfxAlarmFail();
+              showToast("🚨 Protected neighbor building was struck! Try folding inward.", 3200);
               updateHUD();
             }
-          } else if (speed > 1.4) {
-            sfxRubble(speed);
+          }
+
+          // 2. Authentic Pancake Crush: Heavy falling slabs snap stressed lower/upper pillars!
+          if (relSpd > 2.35) {
+            if (a.label === "pillar" && a.pillarItem && !a.pillarItem.destroyed && b.label === "slab") {
+              crushQueue.add(a.pillarItem);
+            } else if (b.label === "pillar" && b.pillarItem && !b.pillarItem.destroyed && a.label === "slab") {
+              crushQueue.add(b.pillarItem);
+            }
+          }
+
+          if (relSpd > 1.4 && (a.label === "slab" || b.label === "slab")) {
+            sfxConcreteCrunch(relSpd);
           }
         }
+        if (crushQueue.size > 0) {
+          for (const pItem of crushQueue) destroyPillar(pItem, false);
+          crushQueue.clear();
+        }
       });
-
-      if (preserveCharges) {
-        chargesMap = new Map(savedPlan);
-      } else {
-        chargesMap = new Map();
-      }
-
-      gameState = "planning";
-      detonateElapsed = 0;
-      wavesFired = new Set();
-      maxScheduledTime = 0;
-      settleElapsed = 0;
-      neighborHitTimer = 0;
-      collateralFailed = false;
-      explosions = [];
-      particles = [];
-      shakeAmt = 0;
-
-      stageOverlay.classList.remove("show");
-      updateHUD();
     }
 
-    function loadJob(num) {
+    function loadSite(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      job = buildJob(currentLevelNum);
-      savedPlan = new Map();
-      showBlueprint = false;
-      selectedWave = 1;
-      updateWaveButtons();
+      level = buildSiteLevel(currentLevelNum);
+
+      selectedDelay = 0;
+      phase = "plan";
+      blastClock = 0;
+      maxScheduledDelay = 0;
+      settleTimer = 0;
+      neighborDamaged = false;
+      showHintPlan = false;
+      screenShake = 0;
+      shockwaves = [];
+      dustPuffs = [];
+      rubbleBits = [];
+
+      fuseRow.querySelectorAll(".fuse-btn").forEach((b) => {
+        b.classList.toggle("active", parseFloat(b.dataset.delay) === 0);
+      });
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
+
+      initPhysicsSite();
 
       try {
         localStorage.setItem("zinplay_demolition_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      rebuildPhysicsWorld(false);
+      updateHUD();
     }
 
-    function spawnExplosionVFX(x, y, waveColor) {
-      explosions.push({ x, y, r: 8, maxR: 48, alpha: 1.0, color: waveColor });
-      // Concrete rubble chunks + fire sparks + smoke puffs (pure visual particles)
-      for (let i = 0; i < 12; i++) {
-        const ang = Math.random() * Math.PI * 2;
-        const spd = 1.5 + Math.random() * 4.2;
-        particles.push({
-          x: x + (Math.random() - 0.5) * 8,
-          y: y + (Math.random() - 0.5) * 14,
-          vx: Math.cos(ang) * spd,
-          vy: Math.sin(ang) * spd - 1.2,
-          size: 2.5 + Math.random() * 4,
-          alpha: 1.0,
-          color: i < 5 ? "#facc15" : (i < 9 ? "#94a3b8" : "#475569"),
-          gravity: 0.14
-        });
+    function triggerDetonation() {
+      if (phase === "failed") {
+        loadSite(currentLevelNum);
+        return;
       }
-      for (let s = 0; s < 5; s++) {
-        particles.push({
-          x: x + (Math.random() - 0.5) * 14,
-          y: y + (Math.random() - 0.5) * 14,
-          vx: (Math.random() - 0.5) * 1.1,
-          vy: -0.6 - Math.random() * 1.2,
-          size: 10 + Math.random() * 10,
-          alpha: 0.52,
-          color: "#cbd5e1",
-          gravity: -0.015,
-          isSmoke: true
-        });
-      }
-    }
-
-    function triggerWave(waveNum) {
-      let firedAny = false;
-      const blastCenters = [];
-
-      for (const p of pillars) {
-        if (p.destroyed) continue;
-        if (chargesMap.get(p.spec.id) === waveNum) {
-          firedAny = true;
-          p.destroyed = true;
-          const pos = { x: p.body.position.x, y: p.body.position.y };
-          blastCenters.push(pos);
-          World.remove(engine.world, p.body);
-          spawnExplosionVFX(pos.x, pos.y, WAVE_COLORS[waveNum]);
-        }
-      }
-
-      if (firedAny) {
-        sfxBoom();
-        shakeAmt = Math.min(12, shakeAmt + 6.5);
-
-        // Subtle inward stress-relief nudge on directly adjacent floor slabs when interior pillars blow
-        for (const sl of slabs) {
-          for (const bc of blastCenters) {
-            const dist = Math.hypot(sl.body.position.x - bc.x, sl.body.position.y - bc.y);
-            if (dist < 62) {
-              const inward = Math.sign(job.cx - sl.body.position.x) * 0.0012;
-              Body.applyForce(sl.body, sl.body.position, {
-                x: inward * sl.body.mass,
-                y: 0.0022 * sl.body.mass
-              });
-            }
-          }
-        }
-      }
-    }
-
-    function startDetonation() {
-      if (gameState !== "planning" || chargesMap.size === 0) return;
+      if (phase !== "plan" || getArmedCount() === 0) return;
       initAudio();
-      savedPlan = new Map(chargesMap);
-      gameState = "detonating";
-      detonateElapsed = 0;
-      wavesFired = new Set();
-      settleElapsed = 0;
-      collateralFailed = false;
-      showBlueprint = false;
 
-      let highestWave = 1;
-      chargesMap.forEach((w) => { if (w > highestWave) highestWave = w; });
-      maxScheduledTime = WAVE_DELAYS[highestWave];
+      phase = "blasting";
+      blastClock = 0;
+      settleTimer = 0;
+      showHintPlan = false;
+      maxScheduledDelay = pillarBodies.reduce((m, p) => (p.armedDelay !== null ? Math.max(m, p.armedDelay) : m), 0);
 
-      playTone(880, 0.06, "square", 0.09);
-      updateHUD();
-    }
-
-    function endJob(won, icon, title, msg, btnLabel) {
-      if (gameState === "won" || gameState === "lost") return;
-      gameState = won ? "won" : "lost";
-
-      if (won) {
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_demolition_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        sfxWin();
-      } else {
-        sfxAlarm();
+      // Fire 0.0s instant charges immediately!
+      for (const p of pillarBodies) {
+        if (p.armedDelay === 0) {
+          p.armedDelay = null;
+          destroyPillar(p, true);
+        }
       }
-
       updateHUD();
-      ovIcon.textContent = icon;
-      ovHeading.textContent = title;
-      ovText.textContent = msg;
-      ovActionBtn.textContent = btnLabel;
-      stageOverlay.classList.add("show");
     }
 
-    // Viewport Helpers
+    // Viewport & Pillar Tap Placement
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1272,9 +1549,8 @@
       return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    // Tap/Click to Wire Dynamite onto Pillars
     canvas.addEventListener("pointerdown", (e) => {
-      if (gameState !== "planning") return;
+      if (phase !== "plan") return;
       initAudio();
 
       const rect = canvas.getBoundingClientRect();
@@ -1282,100 +1558,83 @@
       const wx = (e.clientX - rect.left - vp.offsetX) / vp.scale;
       const wy = (e.clientY - rect.top - vp.offsetY) / vp.scale;
 
-      // Find closest pillar within generous touch margin
-      let bestP = null;
-      let bestDist = 30;
-      for (const p of pillars) {
-        const dx = Math.abs(wx - p.spec.x);
-        const dy = Math.abs(wy - p.spec.y);
-        if (dx <= p.spec.w / 2 + 17 && dy <= p.spec.h / 2 + 7) {
-          const d = Math.hypot(wx - p.spec.x, wy - p.spec.y);
-          if (d < bestDist) {
-            bestDist = d;
-            bestP = p;
-          }
-        }
+      let best = null;
+      let bestD = 28; // generous touch hitbox around pillars
+      for (const p of pillarBodies) {
+        const d = Math.hypot(wx - p.body.position.x, wy - p.body.position.y);
+        if (d < bestD) { bestD = d; best = p; }
       }
+      if (!best) return;
 
-      if (!bestP) return;
-
-      if (bestP.spec.steel) {
-        playTone(150, 0.1, "sawtooth", 0.1);
-        showToast("Reinforced steel pillar — blast the concrete pillars below it!", 2100);
-        return;
-      }
-
-      const pid = bestP.spec.id;
-      const existing = chargesMap.get(pid);
-
-      if (existing === selectedWave) {
-        chargesMap.delete(pid);
-        sfxRemoveCharge();
-      } else if (existing !== undefined) {
-        chargesMap.set(pid, selectedWave);
-        sfxPlaceCharge(selectedWave);
+      if (best.armedDelay !== null) {
+        best.armedDelay = null;
+        sfxPlaceTNT(false);
       } else {
-        if (chargesMap.size >= job.budget) {
-          playTone(170, 0.12, "sawtooth", 0.1);
-          showToast("No dynamite left! Tap a wired pillar to remove it.", 2100);
+        if (getArmedCount() >= level.maxCharges) {
+          showToast(`TNT limit (${level.maxCharges}) reached! Tap an armed pillar to disarm it.`, 2200);
           return;
         }
-        chargesMap.set(pid, selectedWave);
-        sfxPlaceCharge(selectedWave);
+        best.armedDelay = level.useFuses ? selectedDelay : 0;
+        sfxPlaceTNT(true);
       }
-
       updateHUD();
     });
 
-    // Wave Selector & Control Buttons
-    wave1Btn.addEventListener("click", () => { selectedWave = 1; updateWaveButtons(); });
-    wave2Btn.addEventListener("click", () => { selectedWave = 2; updateWaveButtons(); });
-    wave3Btn.addEventListener("click", () => { selectedWave = 3; updateWaveButtons(); });
-    detonateBtn.addEventListener("click", startDetonation);
-
-    document.getElementById("clearChargesBtn").addEventListener("click", () => {
-      savedPlan = new Map();
-      rebuildPhysicsWorld(false);
-    });
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      rebuildPhysicsWorld(savedPlan.size > 0);
+    // Fuse Buttons
+    fuseRow.querySelectorAll(".fuse-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (phase !== "plan") return;
+        initAudio();
+        selectedDelay = parseFloat(btn.dataset.delay);
+        fuseRow.querySelectorAll(".fuse-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
     });
 
+    clearChargesBtn.addEventListener("click", () => {
+      if (phase !== "plan") return;
+      initAudio();
+      pillarBodies.forEach((p) => { p.armedDelay = null; });
+      sfxPlaceTNT(false);
+      updateHUD();
+    });
+
+    detonateBtn.addEventListener("click", triggerDetonation);
+
+    // Smart Structural Blast Plan Hint
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (gameState !== "planning") {
-        rebuildPhysicsWorld(false);
+      if (phase !== "plan") {
+        loadSite(currentLevelNum);
       }
-      showBlueprint = !showBlueprint;
-      if (showBlueprint) {
-        const msg = job.cols === 2
-          ? "Blueprint shown: Wire golden pillars with T1 (0.0s) for a straight drop!"
-          : "Blueprint shown: Wire golden 1s with T1 (center) and 2s with T2 (outer)!";
-        showToast(msg, 3400);
+      initAudio();
+      showHintPlan = true;
+      // Auto-arm the recommended engineering blast plan cleanly!
+      pillarBodies.forEach((p) => { p.armedDelay = null; });
+      for (const step of level.hintPlan) {
+        const targetP = pillarBodies.find((p) => p.id === step.pillarId);
+        if (targetP) targetP.armedDelay = step.delay;
       }
+      sfxPlaceTNT(true);
+      updateHUD();
+      showToast("💡 Recommended engineering blast plan armed! Press 🧨 DETONATE to test it.", 3000);
     });
 
+    document.getElementById("resetBtn").addEventListener("click", () => loadSite(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
-
-    ovActionBtn.addEventListener("click", () => {
-      if (gameState === "won") {
-        loadJob(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      } else {
-        // Restore tower with player's previous charges for effortless tweaking
-        rebuildPhysicsWorld(true);
-      }
+    nextLevelBtn.addEventListener("click", () => {
+      loadSite(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
-
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadJob(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadSite(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadJob(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadSite(currentLevelNum + 1);
     });
 
-    // Job Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1406,7 +1665,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadJob(n);
+          loadSite(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1428,356 +1687,299 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadJob(val);
+        loadSite(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // FIXED-TIMESTEP SIMULATION & CANVAS RENDERER
+    // URBAN DEMOLITION SITE & EXPLOSION VFX RENDERER
     // ==============================================
-    let lastTime = performance.now();
-    let accumulator = 0;
-    const FIXED_STEP = 1000 / 60;
-
-    function updateDetonationStep(dtSec) {
-      if (gameState !== "detonating") return;
-
-      detonateElapsed += dtSec;
-
-      // Trigger Scheduled Dynamite Waves
-      [1, 2, 3].forEach((w) => {
-        if (!wavesFired.has(w) && detonateElapsed >= WAVE_DELAYS[w]) {
-          wavesFired.add(w);
-          triggerWave(w);
-        }
+    function drawBodyPoly(body, fill, stroke, lineW = 1.6) {
+      ctx.beginPath();
+      body.vertices.forEach((v, i) => {
+        if (i === 0) ctx.moveTo(v.x, v.y);
+        else ctx.lineTo(v.x, v.y);
       });
-
-      Engine.update(engine, FIXED_STEP);
-
-      // Handle Neighbor Collateral Failure after brief dramatic visual
-      if (collateralFailed) {
-        neighborHitTimer -= dtSec;
-        if (neighborHitTimer <= 0) {
-          endJob(
-            false,
-            "🚨",
-            "Collateral Damage!",
-            "Falling debris struck a protected neighbor building! Try blasting center pillars first (T1) and outer pillars second (T2).",
-            "↺ Edit & Retry"
-          );
-        }
-        return;
-      }
-
-      // Check Rubble Settlement Once All Waves Have Fired
-      if (detonateElapsed >= maxScheduledTime + 0.55) {
-        settleElapsed += dtSec;
-
-        let highestY = GROUND_Y;
-        let maxSpeed = 0;
-        const activeBodies = [];
-        for (const p of pillars) if (!p.destroyed) activeBodies.push(p.body);
-        for (const s of slabs) activeBodies.push(s.body);
-
-        for (const b of activeBodies) {
-          if (b.bounds.min.y < highestY) highestY = b.bounds.min.y;
-          const spd = Math.hypot(b.velocity.x, b.velocity.y);
-          if (spd > maxSpeed) maxSpeed = spd;
-        }
-
-        const underLine = highestY >= job.clearanceY - 3;
-
-        if (underLine && (maxSpeed < 0.5 || settleElapsed > 2.6)) {
-          const isLast = currentLevelNum === TOTAL_LEVELS;
-          endJob(
-            true,
-            "🏗️",
-            isLast ? "All 500 Jobs Completed!" : `Job #${currentLevelNum} Approved!`,
-            `Textbook inward implosion using ${chargesMap.size} charge${chargesMap.size === 1 ? "" : "s"} with zero neighbor damage.`,
-            isLast ? "Replay Job #1" : `Next Job (#${currentLevelNum + 1}) →`
-          );
-        } else if (!underLine && ((maxSpeed < 0.25 && settleElapsed > 1.2) || settleElapsed > 4.2)) {
-          endJob(
-            false,
-            "📏",
-            "Above Clearance Line!",
-            "The remaining structure is still too tall. Place charges on lower load-bearing floors to drop it further.",
-            "↺ Edit & Retry"
-          );
-        }
-      }
-    }
-
-    function drawBodyRect(body, w, h, fill, stroke, drawExtra) {
-      ctx.save();
-      ctx.translate(body.position.x, body.position.y);
-      ctx.rotate(body.angle);
+      ctx.closePath();
       ctx.fillStyle = fill;
-      ctx.strokeStyle = stroke;
-      ctx.lineWidth = 1.6;
-      ctx.fillRect(-w / 2, -h / 2, w, h);
-      ctx.strokeRect(-w / 2, -h / 2, w, h);
-      if (drawExtra) drawExtra();
-      ctx.restore();
+      ctx.fill();
+      if (stroke) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = lineW;
+        ctx.stroke();
+      }
     }
 
-    function drawScene(now) {
+    let lastTime = performance.now();
+
+    function frame(now) {
+      const dt = Math.min(0.033, (now - lastTime) / 1000);
+      lastTime = now;
+
+      if (screenShake > 0) screenShake = Math.max(0, screenShake - dt * 2.8);
+      for (const n of neighborBodies) {
+        if (n.hitFlash > 0) n.hitFlash = Math.max(0, n.hitFlash - dt * 1.8);
+      }
+
+      // Live Physics & Timed Detonation Logic
+      if (phase === "blasting") {
+        blastClock += dt;
+
+        // Fire delayed fuse charges on schedule!
+        for (const p of pillarBodies) {
+          if (!p.destroyed && p.armedDelay !== null && blastClock >= p.armedDelay) {
+            p.armedDelay = null;
+            destroyPillar(p, true);
+          }
+        }
+
+        Engine.update(engine, dt * 1000);
+
+        // Snap heavily tilted collapsing pillars during active demolition
+        for (const p of pillarBodies) {
+          if (!p.destroyed && Math.abs(p.body.angle) > 0.78) {
+            destroyPillar(p, false);
+          }
+        }
+
+        // Evaluate Debris Height & Settling After All Fuses Have Detonated
+        if (blastClock > maxScheduledDelay + 0.45 && !neighborDamaged) {
+          let highestY = GROUND_Y;
+          let maxSpd = 0;
+
+          for (const sb of slabBodies) {
+            if (sb.body.bounds.min.y < highestY) highestY = sb.body.bounds.min.y;
+            maxSpd = Math.max(maxSpd, Math.hypot(sb.body.velocity.x, sb.body.velocity.y));
+          }
+          for (const pb of pillarBodies) {
+            if (pb.destroyed) continue;
+            if (pb.body.bounds.min.y < highestY) highestY = pb.body.bounds.min.y;
+            maxSpd = Math.max(maxSpd, Math.hypot(pb.body.velocity.x, pb.body.velocity.y));
+          }
+
+          const allBelowLine = highestY >= level.clearY - 3;
+
+          if (allBelowLine) {
+            settleTimer += dt;
+            updateHUD();
+            if (settleTimer >= 2.2) {
+              phase = "won";
+              solvedSet.add(currentLevelNum);
+              try {
+                localStorage.setItem("zinplay_demolition_500_solved", JSON.stringify([...solvedSet]));
+              } catch (e) {}
+              sfxDemoWin();
+              updateHUD();
+
+              const isLast = currentLevelNum === TOTAL_LEVELS;
+              winHeading.textContent = isLast ? "All 500 Sites Demolished!" : `Site #${currentLevelNum} Cleared!`;
+              winText.textContent = "Perfect inward implosion—all rubble packed below the clearance line with neighbors unharmed.";
+              nextLevelBtn.textContent = isLast ? "Replay Site #1" : `Next Site (#${currentLevelNum + 1}) →`;
+              setTimeout(() => winOverlay.classList.add("show"), 420);
+            }
+          } else if (maxSpd < 0.25 && blastClock > maxScheduledDelay + 2.4) {
+            phase = "failed";
+            sfxAlarmFail();
+            showToast("⚠️ Remaining structure is still above the Clearance Line! Tap Retry.", 3200);
+            updateHUD();
+          }
+        }
+      }
+
+      // === RENDER SCENE ===
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
-      if (shakeAmt > 0) shakeAmt *= 0.88;
-      const sx = shakeAmt > 0.2 ? (Math.random() - 0.5) * shakeAmt : 0;
-      const sy = shakeAmt > 0.2 ? (Math.random() - 0.5) * shakeAmt : 0;
+      const shakeX = screenShake > 0 ? (Math.random() - 0.5) * screenShake * 11 : 0;
+      const shakeY = screenShake > 0 ? (Math.random() - 0.5) * screenShake * 11 : 0;
 
       ctx.save();
-      ctx.translate(vp.offsetX + sx, vp.offsetY + sy);
+      ctx.translate(vp.offsetX + shakeX, vp.offsetY + shakeY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Night Sky Stars & Distant City Skyline
-      bgStars.forEach((st, i) => {
-        const a = 0.2 + 0.3 * Math.sin(now * 0.002 + i);
-        ctx.fillStyle = `rgba(226, 232, 240, ${a})`;
-        ctx.beginPath();
-        ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
-        ctx.fill();
+      // 1. Dusk Urban Sky & Background Skyline
+      const skyG = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+      skyG.addColorStop(0, level.sky.sky1);
+      skyG.addColorStop(1, level.sky.sky2);
+      ctx.fillStyle = skyG;
+      ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+
+      // Distant city silhouette blocks
+      ctx.fillStyle = level.sky.city;
+      [[10, 95, 36], [52, 135, 32], [95, 80, 40], [295, 115, 38], [342, 148, 36], [384, 88, 32]].forEach(([bx, bh, bw]) => {
+        ctx.fillRect(bx, GROUND_Y - bh, bw, bh);
       });
 
-      ctx.fillStyle = "rgba(15, 23, 42, 0.52)";
-      [
-        [12, 310, 44, 134], [64, 280, 52, 164], [128, 330, 46, 114],
-        [286, 320, 48, 124], [346, 274, 54, 170], [408, 305, 42, 139]
-      ].forEach(([bx, by, bw, bh]) => ctx.fillRect(bx, by, bw, bh));
+      // 2. Demolition Hazard Pad Ground
+      ctx.fillStyle = "#1c1917";
+      ctx.fillRect(0, GROUND_Y, WORLD_W, WORLD_H - GROUND_Y);
+      // Yellow/Black Construction Caution Stripe Band
+      ctx.fillStyle = "#eab308";
+      ctx.fillRect(0, GROUND_Y, WORLD_W, 8);
+      ctx.fillStyle = "#0f172a";
+      for (let sx = 0; sx < WORLD_W; sx += 24) {
+        ctx.fillRect(sx, GROUND_Y, 12, 8);
+      }
 
-      // 2. Green Clearance Height Line
+      // 3. Target Clearance Line (Glowing Dashed Line)
+      const isLineClear = phase === "won" || (phase === "blasting" && settleTimer > 0);
       ctx.save();
-      ctx.strokeStyle = "rgba(34, 197, 94, 0.82)";
+      ctx.strokeStyle = isLineClear ? "#4ade80" : "rgba(56, 189, 248, 0.72)";
       ctx.lineWidth = 2;
-      ctx.setLineDash([8, 6]);
+      ctx.setLineDash([7, 5]);
       ctx.beginPath();
-      ctx.moveTo(8, job.clearanceY);
-      ctx.lineTo(WORLD_W - 8, job.clearanceY);
+      ctx.moveTo(12, level.clearY);
+      ctx.lineTo(WORLD_W - 12, level.clearY);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.fillStyle = "rgba(21, 128, 61, 0.92)";
+      ctx.fillStyle = isLineClear ? "rgba(22, 101, 52, 0.88)" : "rgba(15, 23, 42, 0.85)";
       ctx.beginPath();
-      ctx.roundRect(WORLD_W / 2 - 64, job.clearanceY - 19, 128, 17, 5);
+      ctx.roundRect(WORLD_W / 2 - 74, level.clearY - 19, 148, 16, 5);
       ctx.fill();
-      ctx.fillStyle = "#dcfce7";
-      ctx.font = "800 9.5px sans-serif";
+      ctx.fillStyle = isLineClear ? "#bbf7d0" : "#7dd3fc";
+      ctx.font = "900 8.5px monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("▼ CLEARANCE LINE ▼", WORLD_W / 2, job.clearanceY - 10);
+      ctx.fillText(isLineClear ? "✓ CLEARANCE MET" : "▼ CLEARANCE LINE ▼", WORLD_W / 2, level.clearY - 11);
       ctx.restore();
 
-      // 3. Protected Neighbor Buildings
-      for (const nb of neighbors) {
+      // 4. Protected Emerald Neighbor Buildings
+      for (const nb of neighborBodies) {
         const s = nb.spec;
-        if (nb.flash > 0) nb.flash *= 0.92;
+        const damaged = nb.hitFlash > 0.05 || neighborDamaged;
+        const x0 = s.x - s.w / 2, y0 = s.y - s.h / 2;
 
         ctx.save();
-        const x = s.x - s.w / 2;
-        const y = s.y - s.h / 2;
+        ctx.fillStyle = damaged ? "#7f1d1d" : "#064e3b";
+        ctx.strokeStyle = damaged ? "#ef4444" : "#34d399";
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.roundRect(x0, y0, s.w, s.h, 5);
+        ctx.fill();
+        ctx.stroke();
 
-        ctx.fillStyle = s.damaged ? "#7f1d1d" : s.style.body;
-        ctx.strokeStyle = s.damaged ? "#ef4444" : s.style.trim;
-        ctx.lineWidth = s.damaged ? 3 : 2;
-        ctx.fillRect(x, y, s.w, s.h);
-        ctx.strokeRect(x, y, s.w, s.h);
-
-        // Roof trim cap
-        ctx.fillStyle = s.damaged ? "#ef4444" : s.style.trim;
-        ctx.fillRect(x - 2, y - 4, s.w + 4, 6);
-
-        // Warm lit windows grid
-        const colsW = Math.max(2, Math.floor((s.w - 14) / 18));
-        const rowsW = Math.max(2, Math.floor((s.h - 42) / 22));
-        const gapX = (s.w - 14) / colsW;
-        for (let r = 0; r < rowsW; r++) {
-          for (let c = 0; c < colsW; c++) {
-            ctx.fillStyle = s.damaged ? "rgba(239, 68, 68, 0.4)" : s.style.win;
-            ctx.globalAlpha = 0.78;
-            ctx.fillRect(x + 9 + c * gapX, y + 34 + r * 22, 9, 12);
+        // Lit Glass Office Windows
+        ctx.fillStyle = damaged ? "rgba(254, 202, 202, 0.45)" : "rgba(167, 243, 208, 0.42)";
+        for (let wy = y0 + 14; wy < GROUND_Y - 16; wy += 20) {
+          for (let wx = x0 + 10; wx < x0 + s.w - 14; wx += 18) {
+            ctx.fillRect(wx, wy, 10, 11);
           }
         }
-        ctx.globalAlpha = 1;
 
-        // Landmark badge at top of neighbor
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "800 9px sans-serif";
+        // Shield Badge on Roof
+        ctx.fillStyle = damaged ? "#ef4444" : "#10b981";
+        ctx.font = "900 8.5px monospace";
         ctx.textAlign = "center";
-        ctx.fillText(`${s.style.icon} ${s.style.name}`, s.x, y + 17);
-
-        // Shield protection outline
-        ctx.strokeStyle = s.damaged ? "rgba(239, 68, 68, 0.8)" : "rgba(56, 189, 248, 0.32)";
-        ctx.setLineDash([4, 4]);
-        ctx.lineWidth = 1.4;
-        ctx.strokeRect(x - 4, y - 6, s.w + 8, s.h + 6);
+        ctx.fillText(damaged ? "✕ HIT" : "🛡️ SAFE", s.x, y0 - 8);
         ctx.restore();
       }
 
-      // 4. Target Tower Floor Slabs
-      for (const sl of slabs) {
-        drawBodyRect(sl.body, sl.spec.w, sl.spec.h, "#94a3b8", "#475569", () => {
-          // Subtle concrete seam line
-          ctx.fillStyle = "rgba(255,255,255,0.22)";
-          ctx.fillRect(-sl.spec.w / 2 + 1, -sl.spec.h / 2 + 1, sl.spec.w - 2, 2.5);
-        });
+      // 5. Target Building Concrete Floor Slabs
+      for (const sb of slabBodies) {
+        drawBodyPoly(sb.body, sb.spec.isRoof ? "#64748b" : "#94a3b8", "#334155", 1.6);
       }
 
-      // 5. Target Tower Load-Bearing Pillars + Attached Dynamite Charges
-      for (const p of pillars) {
+      // 6. Target Building Load-Bearing Concrete Pillars & Armed TNT Charges!
+      for (const p of pillarBodies) {
         if (p.destroyed) continue;
-        const fill = p.spec.steel ? "#334155" : "#cbd5e1";
-        const stroke = p.spec.steel ? "#64748b" : "#64748b";
+        const isArmed = p.armedDelay !== null;
+        const isHintP = showHintPlan && level.hintPlan.some((h) => h.pillarId === p.id);
 
-        drawBodyRect(p.body, p.spec.w, p.spec.h, fill, stroke, () => {
-          if (p.spec.steel) {
-            // Steel cross-brace rivets
-            ctx.strokeStyle = "#94a3b8";
-            ctx.lineWidth = 1.2;
-            ctx.beginPath();
-            ctx.moveTo(-p.spec.w / 2 + 2, -p.spec.h / 2 + 2);
-            ctx.lineTo(p.spec.w / 2 - 2, p.spec.h / 2 - 2);
-            ctx.moveTo(p.spec.w / 2 - 2, -p.spec.h / 2 + 2);
-            ctx.lineTo(-p.spec.w / 2 + 2, p.spec.h / 2 - 2);
-            ctx.stroke();
-          }
-        });
+        drawBodyPoly(
+          p.body,
+          isArmed ? "#7c2d12" : "#cbd5e1",
+          isHintP ? "#facc15" : (isArmed ? "#fb923c" : "#475569"),
+          isArmed || isHintP ? 2.2 : 1.5
+        );
 
-        // Draw Wired Dynamite Pack (during Planning or before its wave fires)
-        const wave = chargesMap.get(p.spec.id);
-        if (wave && (gameState === "planning" || !wavesFired.has(wave))) {
-          const bx = p.body.position.x;
-          const by = p.body.position.y;
-          const col = WAVE_COLORS[wave];
-          const blink = gameState === "detonating" ? (0.5 + 0.5 * Math.sin(now * 0.04)) : 1;
-
+        // Draw Red Dynamite Bundle + Fuse Delay Tag on Armed Pillars!
+        if (isArmed) {
+          const px = p.body.position.x;
+          const py = p.body.position.y;
           ctx.save();
-          ctx.translate(bx, by);
+          ctx.translate(px, py);
           ctx.rotate(p.body.angle);
 
-          ctx.fillStyle = col;
-          ctx.strokeStyle = "#ffffff";
-          ctx.shadowColor = col;
-          ctx.shadowBlur = 10 * blink;
-          ctx.lineWidth = 1.6;
+          ctx.fillStyle = "#ef4444";
+          ctx.strokeStyle = "#fef08a";
+          ctx.lineWidth = 1.4;
           ctx.beginPath();
-          ctx.roundRect(-9, -9, 18, 18, 5);
+          ctx.roundRect(-7, -9, 14, 18, 3);
           ctx.fill();
           ctx.stroke();
 
-          ctx.shadowBlur = 0;
-          ctx.fillStyle = "#ffffff";
-          ctx.font = "900 11px sans-serif";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(String(wave), 0, 1);
-          ctx.restore();
-        }
-      }
-
-      // 6. Optional Blueprint Hint Overlay (Planning Phase Only)
-      if (showBlueprint && gameState === "planning") {
-        const pulse = 0.65 + 0.35 * Math.sin(now * 0.009);
-        for (const bp of job.blueprint) {
-          const p = pillars[bp.pillarId];
-          if (!p) continue;
-          const curWave = chargesMap.get(bp.pillarId);
-          const matched = curWave === bp.wave;
-
-          ctx.save();
-          ctx.strokeStyle = matched ? "#22c55e" : `rgba(250, 204, 21, ${pulse})`;
-          ctx.fillStyle = matched ? "rgba(34, 197, 94, 0.2)" : "rgba(250, 204, 21, 0.22)";
-          ctx.lineWidth = 2.2;
+          // Blinking Spark Tip
+          const sparkOn = Math.sin(now * 0.025) > 0;
+          ctx.fillStyle = sparkOn ? "#fef08a" : "#f97316";
           ctx.beginPath();
-          ctx.arc(p.spec.x, p.spec.y, 13, 0, Math.PI * 2);
+          ctx.arc(0, -11, sparkOn ? 3.5 : 2.2, 0, Math.PI * 2);
           ctx.fill();
-          ctx.stroke();
 
-          if (!curWave) {
-            ctx.fillStyle = "#fef08a";
-            ctx.font = "900 11px sans-serif";
+          if (level.useFuses) {
+            ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+            ctx.beginPath();
+            ctx.roundRect(-14, 3, 28, 12, 3);
+            ctx.fill();
+            ctx.fillStyle = p.armedDelay === 0 ? "#fde047" : (p.armedDelay === 0.4 ? "#fb923c" : "#38bdf8");
+            ctx.font = "900 7.5px monospace";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText(`T${bp.wave}`, p.spec.x, p.spec.y + 0.5);
+            ctx.fillText(`${p.armedDelay}s`, 0, 9);
           }
           ctx.restore();
         }
       }
 
-      // 7. Street Asphalt Ground & Demolition Footprint Markers
-      ctx.fillStyle = "#1e293b";
-      ctx.fillRect(-40, GROUND_Y, WORLD_W + 80, 60);
-      ctx.fillStyle = "#475569";
-      ctx.fillRect(-40, GROUND_Y, WORLD_W + 80, 4);
-
-      // Yellow caution hazard stripes under target tower
-      const hazardW = job.cols * 54 + 20;
-      ctx.fillStyle = "#facc15";
-      ctx.fillRect(job.cx - hazardW / 2, GROUND_Y + 4, hazardW, 5);
-
-      // 8. Explosion Shockwaves & Rubble/Smoke Particles
-      explosions = explosions.filter((ex) => ex.alpha > 0.04);
-      for (const ex of explosions) {
-        ex.r += 3.2;
-        ex.alpha *= 0.86;
+      // 7. Shockwaves, Dust Clouds & Flying Concrete Rubble VFX
+      shockwaves = shockwaves.filter((sw) => sw.alpha > 0.04);
+      for (const sw of shockwaves) {
+        sw.r += dt * 150;
+        sw.alpha *= 0.87;
         ctx.save();
-        ctx.fillStyle = `rgba(254, 240, 138, ${ex.alpha * 0.7})`;
-        ctx.beginPath();
-        ctx.arc(ex.x, ex.y, ex.r * 0.65, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = ex.color;
-        ctx.globalAlpha = ex.alpha;
+        ctx.strokeStyle = `rgba(253, 224, 71, ${sw.alpha})`;
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(ex.x, ex.y, ex.r, 0, Math.PI * 2);
+        ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
         ctx.stroke();
         ctx.restore();
       }
 
-      particles = particles.filter((pt) => pt.alpha > 0.03);
-      for (const pt of particles) {
-        pt.x += pt.vx;
-        pt.y += pt.vy;
-        pt.vy += pt.gravity;
-        pt.alpha *= pt.isSmoke ? 0.955 : 0.94;
-        if (pt.isSmoke) pt.size += 0.32;
-        ctx.save();
-        ctx.globalAlpha = pt.alpha;
-        ctx.fillStyle = pt.color;
+      dustPuffs = dustPuffs.filter((d) => d.alpha > 0.03);
+      for (const d of dustPuffs) {
+        d.x += d.vx;
+        d.y += d.vy;
+        d.r += dt * 18;
+        d.alpha *= 0.94;
+        ctx.fillStyle = `rgba(203, 213, 225, ${d.alpha * 0.5})`;
         ctx.beginPath();
-        if (pt.isSmoke) {
-          ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
-        } else {
-          ctx.rect(pt.x - pt.size / 2, pt.y - pt.size / 2, pt.size, pt.size);
-        }
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
         ctx.fill();
+      }
+
+      rubbleBits = rubbleBits.filter((rb) => rb.alpha > 0.04 && rb.y < GROUND_Y + 6);
+      for (const rb of rubbleBits) {
+        rb.vy += 0.16;
+        rb.x += rb.vx;
+        rb.y += rb.vy;
+        rb.rot += rb.vr;
+        rb.alpha *= 0.96;
+        ctx.save();
+        ctx.translate(rb.x, rb.y);
+        ctx.rotate(rb.rot);
+        ctx.fillStyle = `rgba(148, 163, 184, ${rb.alpha})`;
+        ctx.fillRect(-rb.sz / 2, -rb.sz / 2, rb.sz, rb.sz);
         ctx.restore();
       }
 
-      ctx.restore(); // End viewport scale
-    }
-
-    function frame(now) {
-      const rawDt = Math.min(50, now - lastTime);
-      lastTime = now;
-
-      accumulator += rawDt;
-      while (accumulator >= FIXED_STEP) {
-        updateDetonationStep(FIXED_STEP / 1000);
-        accumulator -= FIXED_STEP;
-      }
-
-      drawScene(now);
+      ctx.restore();
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadJob(currentLevelNum);
+    loadSite(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
