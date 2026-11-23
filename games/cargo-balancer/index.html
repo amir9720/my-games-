@@ -3,10 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cargo Wave Balancer — 500 Ocean Physics Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free physics levels of Cargo Wave Balancer in your browser. Drop and balance shipping containers of varying weights onto a swaying cargo vessel riding dynamic ocean waves." />
+  <title>Cargo Wave Balancer — Free 500-Level Ship Physics &amp; Container Game | ZinPlay</title>
+  <meta name="description" content="Play Cargo Wave Balancer free online with no download. Lower heavy steel freight, wide 40ft boxes, and slippery reefer containers onto a rocking cargo vessel riding dynamic ocean waves across 500 Matter.js physics voyages." />
   <link rel="stylesheet" href="/assets/css/style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Cargo Wave Balancer",
+    "url": "https://zinplay.io/games/cargo-balancer/",
+    "genre": ["Physics", "Maritime Simulation", "Balancing Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -31,15 +44,15 @@
       color: var(--muted);
     }
 
-    /* Top HUD */
+    /* Top Maritime Bridge HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0a1628;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #081524;
+      color: #f1f5f9;
+      border-bottom: 1px solid #16304d;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -52,8 +65,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #38bdf8;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -70,31 +83,73 @@
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.tilt-warn {
-      background: rgba(239, 68, 68, 0.22);
-      border-color: rgba(248, 113, 113, 0.5);
-      color: #fecaca;
+    .hud-pill.warn-pill {
+      background: rgba(244, 63, 94, 0.22);
+      border-color: rgba(251, 113, 133, 0.55);
+      color: #fecdd3;
     }
-    .hud-pill.wind-pill {
-      background: rgba(250, 204, 21, 0.16);
-      border-color: rgba(250, 204, 21, 0.4);
-      color: #fef08a;
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Canvas Stage */
+    /* 5-Second Sea Trial Stability Strip */
+    .trial-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: #0e2036;
+      border-bottom: 1px solid #1d3c61;
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .trial-label {
+      min-width: 122px;
+      color: #fde68a;
+      white-space: nowrap;
+    }
+    .trial-track {
+      flex: 1;
+      height: 10px;
+      background: #06101c;
+      border-radius: 999px;
+      border: 1px solid #224773;
+      overflow: hidden;
+    }
+    .trial-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0ea5e9 0%, #fbbf24 55%, #22c55e 100%);
+      transition: width 0.08s linear;
+    }
+    .trial-time {
+      min-width: 52px;
+      text-align: right;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: #ffffff;
+    }
+
+    /* Ocean & Vessel Physics Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 455px;
-      background: linear-gradient(180deg, #0b1930 0%, #153156 58%, #0e3a5c 100%);
+      height: 430px;
+      background: #071729;
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 505px;
+        height: 470px;
       }
     }
     #cargoCanvas {
@@ -105,67 +160,45 @@
       cursor: ew-resize;
     }
 
-    .hold-banner {
-      position: absolute;
-      top: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(10, 22, 40, 0.92);
-      border: 2px solid #22c55e;
-      color: #dcfce7;
-      padding: 6px 16px;
-      border-radius: 999px;
-      font-size: 0.86rem;
-      font-weight: 900;
-      letter-spacing: 0.03em;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
-      display: none;
+    /* Port Gantry Crane Control Dock */
+    .crane-dock {
+      display: flex;
       align-items: center;
       gap: 8px;
-      pointer-events: none;
-      white-space: nowrap;
+      padding: 11px 12px;
+      background: #0a1829;
+      border-top: 1px solid #1a3554;
     }
-    .hold-banner.show {
-      display: inline-flex;
-    }
-
-    /* Crane Controls Dock */
-    .crane-dock {
-      display: grid;
-      grid-template-columns: 0.72fr 1.65fr 0.72fr 0.95fr;
-      gap: 7px;
-      padding: 12px 14px;
-      background: #0d1b30;
-      border-top: 1px solid #1e293b;
-    }
-    .dock-btn {
-      min-height: 46px;
+    .crane-btn {
+      min-height: 48px;
+      padding: 0 13px;
       border-radius: 12px;
-      border: 1.5px solid #293e5c;
-      background: #162640;
+      border: 1.5px solid #24476e;
+      background: #122942;
       color: #f8fafc;
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 5px;
-      transition: transform 0.08s ease, background 0.15s ease;
+      transition: transform 0.08s ease, background 0.14s ease, border-color 0.14s ease;
     }
-    .dock-btn:active {
-      transform: scale(0.97);
-    }
-    .dock-btn:disabled {
-      opacity: 0.42;
-      cursor: default;
-    }
-    .dock-btn.drop-main {
-      background: linear-gradient(135deg, #0284c7, #4f46e5);
+    .crane-btn:active { transform: scale(0.95); }
+    .crane-btn:disabled { opacity: 0.38; cursor: default; }
+    .crane-btn.drop-main {
+      flex: 1;
+      background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
       border-color: #7dd3fc;
       color: #ffffff;
-      box-shadow: 0 6px 18px rgba(14, 165, 233, 0.35);
       font-size: 0.92rem;
+      box-shadow: 0 5px 16px rgba(14, 165, 233, 0.3);
+    }
+    .crane-btn.drop-main.retry-mode {
+      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+      border-color: #fca5a5;
+      box-shadow: 0 5px 16px rgba(220, 38, 38, 0.34);
     }
 
     .legend-strip {
@@ -175,19 +208,10 @@
       gap: 12px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #091322;
-      border-top: 1px solid #162338;
-      font-size: 0.74rem;
+      background: #06101c;
+      border-top: 1px solid #142a42;
+      font-size: 0.73rem;
       color: #94a3b8;
-    }
-    .w-badge {
-      display: inline-block;
-      padding: 1px 6px;
-      border-radius: 5px;
-      font-weight: 800;
-      font-size: 0.7rem;
-      color: #ffffff;
-      margin-right: 3px;
     }
 
     .status-toast {
@@ -195,8 +219,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 18, 34, 0.94);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(6, 16, 28, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -210,14 +234,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
-    .stage-overlay {
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(8, 15, 29, 0.82);
+      background: rgba(6, 14, 24, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -225,31 +247,24 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.22s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .overlay-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -290,9 +305,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -389,6 +402,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #081524;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #081524;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #081524 0%, #0c4a6e 100%);
+      color: #e0f2fe;
+    }
+    .game-seo-banner.storm-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f172a 0%, #134e4a 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #bae6fd;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .cargo-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .cargo-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .cargo-table th, .cargo-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cargo-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .cargo-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -401,7 +494,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -419,62 +512,67 @@
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Cargo Wave Balancer</h1>
-      <p>Load shipping containers of different weights onto a floating vessel riding ocean waves, then keep it upright for 5 seconds.</p>
+      <p>Steer the port gantry crane, counterbalance heavy steel freight and slippery reefer boxes across a swaying vessel, and survive a 5-second ocean swell without capsizing.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Cargo Wave Balancer Game">
+    <section class="game-wrapper" aria-label="Cargo Wave Balancer Ship Physics Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Calm Harbor</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Calm Harbor Loading</span>
           <span id="levelTitle">Voyage #1 / 500</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="cargoCounter">Cargo: 0 / 5</span>
-          <span class="hud-pill" id="tiltPill">Tilt: 0° / 38°</span>
-          <span class="hud-pill wind-pill" id="windPill" style="display:none;">🌬️ Gust</span>
-          <span class="hud-pill" id="solvedCounter">Cleared: 0 / 500</span>
+          <span class="hud-pill" id="cargoPill">Cargo: 0 / 5</span>
+          <span class="hud-pill" id="tiltPill">List: 0°</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Sailed: 0 / 500</span>
         </div>
       </div>
 
+      <!-- 5-Second Sea Trial Countdown Strip -->
+      <div class="trial-strip">
+        <span id="trialLabel" class="trial-label">⚓ Load All Containers</span>
+        <div class="trial-track">
+          <div id="trialFill" class="trial-fill"></div>
+        </div>
+        <span id="trialTime" class="trial-time">0.0 / 5s</span>
+      </div>
+
+      <!-- Matter.js Buoyant Ship & Ocean Canvas -->
       <div class="canvas-container">
         <canvas id="cargoCanvas"></canvas>
-        <div id="holdBanner" class="hold-banner">⚓ SEA TRIAL: <span id="holdTimeText">5.0s</span></div>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Win / Capsize Overlay -->
-        <div id="stageOverlay" class="stage-overlay">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.3rem; margin-bottom:6px;">🚢</div>
-            <h2 id="ovHeading">Voyage Cleared!</h2>
-            <p id="ovText">All containers stayed balanced across the waves.</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Next Voyage →</button>
+        <!-- Safe Voyage Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div style="font-size:2.3rem; margin-bottom:6px;">🚢</div>
+            <h2 id="winHeading">Voyage Cleared!</h2>
+            <p id="winText">The cargo freighter rode the ocean swell cleanly with zero containers lost overboard.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Voyage →</button>
           </div>
         </div>
       </div>
 
-      <!-- Crane Control Dock -->
+      <!-- Port Crane Nudge & Release Dock -->
       <div class="crane-dock">
-        <button id="leftBtn" class="dock-btn" type="button" aria-label="Move Crane Left">◀</button>
-        <button id="dropBtn" class="dock-btn drop-main" type="button">⬇ DROP CARGO</button>
-        <button id="rightBtn" class="dock-btn" type="button" aria-label="Move Crane Right">▶</button>
-        <button id="flipBtn" class="dock-btn" type="button" aria-label="Rotate Container 90 Degrees">⟳ 90°</button>
+        <button id="nudgeLBtn" class="crane-btn" type="button" aria-label="Move Crane Left">◀ Port</button>
+        <button id="dropBtn" class="crane-btn drop-main" type="button">📦 DROP CONTAINER</button>
+        <button id="nudgeRBtn" class="crane-btn" type="button" aria-label="Move Crane Right">Stbd ▶</button>
       </div>
 
-      <!-- Cargo Weight Key -->
       <div class="legend-strip">
-        <span><i class="w-badge" style="background:#0ea5e9">2t</i>Light</span>
-        <span><i class="w-badge" style="background:#f97316">4t</i>Standard</span>
-        <span><i class="w-badge" style="background:#10b981">6t</i>Long</span>
-        <span><i class="w-badge" style="background:#475569">8t</i>Heavy Steel</span>
+        <span>👆 Drag Across Sky to Steer Crane Trolley</span>
+        <span>⚖️ Heavy Steel (24T) Tilts Ship Twice as Hard</span>
+        <span>❄️ Cyan Reefer = Low-Friction Ice Box (Ch. 4+)</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
           <button id="resetBtn" class="btn-outline" type="button">↺ Reload Ship</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Balance Guide</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Trim Guide</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
@@ -489,51 +587,148 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 850+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/cargo-balancer-banner-1.jpg"
+            alt="Cargo Wave Balancer ship physics game showing a container vessel riding turquoise ocean waves beneath a yellow port gantry crane"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Buoyant Sea Voyages — Real Archimedes Ship Physics</h3>
+          <p>Lower 20-ton steel freight, wide 40-foot boxes, and frosty reefers onto a dynamically rolling hull and keep your manifest afloat through rising swells.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Cargo Wave Balancer (500 Voyages)</h2>
-        <p>Cargo Wave Balancer challenges your instinct for weight distribution and timing on a live Matter.js buoyancy engine. As your harbor crane lowers shipping containers onto the cargo ship, the vessel physically dips deeper into the water and rolls with every passing ocean swell. Load the entire manifest and keep every container dry for <strong>5 full seconds</strong> without tilting past 38°.</p>
+        <h2>What Is Cargo Wave Balancer? A Ship Loading Physics Game Online</h2>
+        <p><strong>Cargo Wave Balancer</strong> is a free <strong>cargo ship balancing physics game online</strong> that puts you in command of a bustling harbor gantry crane over live ocean swells. Driven by real 2D rigid-body dynamics (<strong>Matter.js</strong>) paired with multi-point Archimedes hull buoyancy, every container you release onto the deck physically lowers the ship's draft and shifts its heel angle toward Port (left) or Starboard (right). Load your manifest unevenly—or drop a massive 24-ton steel box too far off-center—and the vessel rolls dangerously past its safe stability limit, sending containers tumbling into the sea!</p>
+        <p>Crafted as a lightweight, <strong>no-download maritime physics puzzle for smartphones, tablets, and Chromebooks</strong>, Cargo Wave Balancer runs smoothly at 60 FPS with responsive thumb-drag crane steering and procedural <strong>Web Audio metallic container clanks, splashes, and harbor departure horns</strong>. Every cleared manifest across all <strong>500 voyages</strong> saves automatically inside private local storage.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Maritime Cargo Manifest Guide (Weight, Friction &amp; Ship Trim)</h2>
+        <p>Real naval architects and dockyard stowage planners balance ships by loading the heaviest containers lowest and closest to the centerline keel. Study these four <strong>shipping container classes</strong> to ace Chapters 2 through 5:</p>
+
+        <div class="cargo-table-wrap">
+          <table class="cargo-table">
+            <thead>
+              <tr>
+                <th>Container Class</th>
+                <th>Visual Marker &amp; Mass</th>
+                <th>Best Deck Stowage Strategy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Standard Dry Cargo</strong> (Ch. 1+)</td>
+                <td>Red, Blue, Teal, or Amber ribbed box (<strong>10T</strong>)</td>
+                <td>Dependable high-friction workhorse—alternate Port and Starboard to keep the hull flat near <code>0°</code>!</td>
+              </tr>
+              <tr>
+                <td><strong>Heavy Steel Freight</strong> (Ch. 2–5)</td>
+                <td>Dark Charcoal box with golden caution stripes (<strong>24T</strong>)</td>
+                <td>More than double normal weight! Place directly over the <strong>center keel</strong> or pair immediately with another heavy box opposite it.</td>
+              </tr>
+              <tr>
+                <td><strong>Wide 40ft Express</strong> (Ch. 3–5)</td>
+                <td>Extra-long emerald or crimson freight unit (<strong>16T</strong>)</td>
+                <td>Bridges cleanly across two lower boxes to lock a shaky deck stack together like a structural lintel!</td>
+              </tr>
+              <tr>
+                <td><strong>Glacial Reefer Unit</strong> (Ch. 4–5)</td>
+                <td>Frosted Cyan/White refrigerated container (<strong>12T</strong>)</td>
+                <td>Ultra-low icy friction! Nest it between two standard dry boxes or drop it only when the ship deck passes through <code>0°</code> level!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Harbor Master Pro Tip:</strong> Watch the rolling ocean wave rhythm before tapping <strong>📦 DROP CONTAINER</strong>! Releasing a container right as the vessel crests gently flat prevents sideways deck sliding—and if you aren't sure which side needs counterweight, tap <strong>💡 Trim Guide</strong> to snap the crane trolley directly over the optimal counter-balancing drop zone!</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner storm-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/cargo-balancer-banner-2.jpg"
+            alt="Cross-section of a cargo freighter balancing heavy steel containers and frosted cyan reefer boxes over layered ocean waves in Cargo Wave Balancer"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Live Heel-Angle Telemetry &amp; 5-Second Sea Trial Challenges</h3>
+          <p>Every voyage ends with a 5-second open-water swell test—proving your cargo stack is genuinely seaworthy before sounding the victory foghorn.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Maritime Chapters (500 Unique Sea Voyages)</h2>
+        <p>Every voyage from #1 to #500 generates a balanced, stowable manifest matched to vessel beam width and ocean swell height—scaling cleanly from peaceful harbor sunsets to roaring North Atlantic storms:</p>
         <ul>
-          <li><strong>Mobile &amp; Desktop Controls:</strong> Drag left or right anywhere across the sky to glide the overhead crane trolley—or use the <strong>◀ / ▶</strong> buttons and keyboard arrow keys. Tap <strong>⟳ 90°</strong> (or press <code>R</code>) to stand a container upright when deck space gets tight, then tap <strong>DROP CARGO</strong> (or <code>Space</code>) to release the hooks.</li>
-          <li><strong>Respect Heavy Steel (8t) Cargo:</strong> Dark steel containers weigh four times as much as light blue boxes! Place heavy <code>8t</code> cargo directly near the centerline of the ship—or drop it on the high side to immediately level out a leaning deck.</li>
-          <li><strong>Time the Waves:</strong> In Chapters 4 and 5, steep rolling swells rock the hull constantly. Release containers right as the deck swings level so they seat flat instead of sliding downhill!</li>
+          <li><strong>Chapter 1 (Voyages 1–100 — Calm Harbor Loading):</strong> Wide merchant vessels, gentle harbor ripples, and 4 to 5 standard dry containers to master crisp left-right counterweight balance.</li>
+          <li><strong>Chapter 2 (Voyages 101–200 — Heavy Steel Freight):</strong> Introduces dense <strong>24T Steel Coil Containers</strong> that noticeably sink the vessel's Plimsoll waterline and tilt the deck hard if placed off-center.</li>
+          <li><strong>Chapter 3 (Voyages 201–300 — Rolling Ocean Swells):</strong> Larger rhythmic ocean waves pitch the deck dynamically while mixing wide 40-foot containers and compact 20-foot cubes across 6 to 7 lifts.</li>
+          <li><strong>Chapter 4 (Voyages 301–400 — Frosty Reefer Runs):</strong> Adds glossy low-friction <strong>Cyan Refrigerated Containers</strong> that slide across tilted decks unless wedged securely between heavier cargo stacks.</li>
+          <li><strong>Chapter 5 (Voyages 401–500 — Stormy Cape Crossing):</strong> Narrower high-seas feeder hulls, brisk storm swells, and 7 to 9 mixed steel, 40ft, and reefer containers—complete with an instant 1–500 voyage picker and private local saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Maritime Physics Topics">
+          <span class="kw-pill">Cargo Ship Balancing Game Online</span>
+          <span class="kw-pill">Container Crane Physics Browser</span>
+          <span class="kw-pill">Ocean Wave Buoyancy Simulator</span>
+          <span class="kw-pill">Matter.js Boat Stacking Puzzle</span>
+          <span class="kw-pill">500-Level Freight Balance Game</span>
+          <span class="kw-pill">No-Download Chromebook Physics Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Cargo Wave Balancer FAQ</h2>
         <details class="faq-item">
-          <summary>What causes a voyage to fail?</summary>
-          <div class="faq-answer">A voyage fails immediately if any shipping container splashes overboard into the ocean or if the cargo vessel lists beyond the 38° capsize limit.</div>
+          <summary>Why did my voyage fail when the ship tilted too far sideways?</summary>
+          <div class="faq-answer">A real cargo freighter capsizes if its roll angle (<strong>List</strong>) exceeds <strong>34°</strong>, or if any shipping container slides past the deck bulkheads into the ocean. Counterbalance heavy boxes immediately on the opposite side to bring the List back near <code>0°</code>!</div>
         </details>
         <details class="faq-item">
-          <summary>How does the Balance Guide (💡) help?</summary>
-          <div class="faq-answer">Tapping Balance Guide calculates the ship's real-time weight distribution and displays a glowing golden drop marker showing the ideal horizontal spot to counteract any lean.</div>
+          <summary>How do I stop cyan Reefer containers from sliding off the deck in Chapters 4 and 5?</summary>
+          <div class="faq-answer">Cyan Reefer boxes have frosted low-friction steel runners. Wedge them snugly between two high-friction standard boxes—or drop them on top of a flat, centered 40ft container—so ocean swells can't push them overboard!</div>
+        </details>
+        <details class="faq-item">
+          <summary>What happens during the 5-second Sea Trial after the last box lands?</summary>
+          <div class="faq-answer">Once your final container settles on deck, ocean waves swell slightly stronger for <strong>5 full seconds</strong> to test your stowage stability. Keep every box aboard and the hull upright to sound the harbor victory horn!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I control the port gantry crane with both touchscreens and keyboards?</summary>
+          <div class="faq-answer">Yes! Drag your finger left or right anywhere across the sky canvas (or tap <strong>◀ Port / Stbd ▶</strong>) on mobile, or use <code>A/D</code> / <code>Arrow Keys</code> + <code>Spacebar</code> on desktop and Chromebooks.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧨</div><span class="cat-tag">Physics</span></div>
-        <h3>Controlled Demolition</h3>
-        <p>Wire timed dynamite waves on load-bearing pillars to collapse towers inward safely.</p>
-        <a href="/games/controlled-demolition/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
         <h3>Gravity Stone Stacker</h3>
-        <p>Balance irregular geometric stones into a steady tower across 500 physics levels.</p>
+        <p>Stack irregular geometric stones into a balanced tower and hold it standing for 5 seconds.</p>
         <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧳</div><span class="cat-tag">Strategy</span></div>
-        <h3>Baggage Routing Chaos</h3>
-        <p>Flip conveyor belt switches in real time across 500 airport shifts.</p>
-        <a href="/games/baggage-chaos/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🧨</div><span class="cat-tag">Physics</span></div>
+        <h3>Controlled Demolition</h3>
+        <p>Place timed dynamite on load-bearing pillars to collapse towers straight inward safely.</p>
+        <a href="/games/controlled-demolition/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">⚙️</div><span class="cat-tag">Physics</span></div>
+        <h3>Rube Goldberg Sandbox</h3>
+        <p>Arrange ramps, springs, fans, and magnets to trigger a wild physics chain reaction.</p>
+        <a href="/games/rube-goldberg/" class="card-link">Play Game →</a>
       </article>
     </section>
 
@@ -543,7 +738,7 @@
   <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Voyage">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Voyage (1 – 500)</h3>
+        <h3>Choose Sea Voyage (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
@@ -567,12 +762,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Physics</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/stone-stacker/">Gravity Stone Stacker</a></li>
+            <li><a href="/games/controlled-demolition/">Controlled Demolition</a></li>
+            <li><a href="/games/cargo-balancer/">Cargo Wave Balancer</a></li>
+            <li><a href="/games/rube-goldberg/">Rube Goldberg Sandbox</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -581,7 +776,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -614,46 +809,40 @@
     }
 
     // ==============================================
-    // CONSTANTS & 500-VOYAGE DETERMINISTIC GENERATOR
+    // MATTER.JS ARCHIMEDES BUOYANCY & 500-VOYAGE ENGINE
     // ==============================================
+    const { Engine, World, Bodies, Body, Events } = Matter;
+
     const TOTAL_LEVELS = 500;
-    const WORLD_W = 440;
-    const WORLD_H = 500;
-    const WATER_Y = 398;
-    const HOLD_SECONDS = 5.0;
-    const CAPSIZE_DEG = 38;
-    const CAPSIZE_RAD = (CAPSIZE_DEG * Math.PI) / 180;
+    const WORLD_W = 420;
+    const WORLD_H = 440;
+    const WATER_Y = 356;
+    const TRIAL_TARGET = 5.0;
+    const MAX_LIST_DEG = 34;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Calm Harbor", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Coastal Swells", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Open Sea", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Storm Front", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Typhoon Crossing", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Calm Harbor Loading", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Heavy Steel Freight", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Rolling Ocean Swells", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Frosty Reefer Runs", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Stormy Cape Crossing", range: "401–500", start: 401, end: 500 }
     ];
 
-    const CONTAINER_TYPES = {
-      light: {
-        label: "2t", w: 38, h: 22, density: 0.0014,
-        fill: "#0ea5e9", dark: "#0369a1", stripe: "#7dd3fc"
-      },
-      standard: {
-        label: "4t", w: 48, h: 24, density: 0.0022,
-        fill: "#f97316", dark: "#9a3412", stripe: "#fdba74"
-      },
-      long: {
-        label: "6t", w: 70, h: 22, density: 0.0023,
-        fill: "#10b981", dark: "#065f46", stripe: "#6ee7b7"
-      },
-      heavy: {
-        label: "8t", w: 46, h: 26, density: 0.0040,
-        fill: "#475569", dark: "#1e293b", stripe: "#facc15"
-      },
-      crimson: {
-        label: "5t", w: 44, h: 28, density: 0.0026,
-        fill: "#e11d48", dark: "#881337", stripe: "#fda4af"
-      }
-    };
+    const SEA_THEMES = [
+      { sky1: "#0c2440", sky2: "#e07a5f", sea1: "#0284c7", sea2: "#082f49", hull: "#b91c1c", hullTrim: "#1e293b" },
+      { sky1: "#111827", sky2: "#3b5998", sea1: "#0369a1", sea2: "#0c1f38", hull: "#c2410c", hullTrim: "#0f172a" },
+      { sky1: "#0f2936", sky2: "#2c7a7b", sea1: "#0d9488", sea2: "#042f2e", hull: "#991b1b", hullTrim: "#1e293b" },
+      { sky1: "#09182e", sky2: "#2b6cb0", sea1: "#0284c7", sea2: "#082032", hull: "#1d4ed8", hullTrim: "#0f172a" },
+      { sky1: "#0b1120", sky2: "#334155", sea1: "#155e75", sea2: "#020617", hull: "#9f1239", hullTrim: "#0f172a" }
+    ];
+
+    const DRY_COLORS = [
+      { fill: "#dc2626", hi: "#f87171", dark: "#7f1d1d" },
+      { fill: "#2563eb", hi: "#60a5fa", dark: "#1e3a8a" },
+      { fill: "#059669", hi: "#34d399", dark: "#064e3b" },
+      { fill: "#d97706", hi: "#fbbf24", dark: "#78350f" },
+      { fill: "#7c3aed", hi: "#a78bfa", dark: "#4c1d95" }
+    ];
 
     function mulberry32(seed) {
       let a = seed >>> 0;
@@ -665,54 +854,115 @@
       };
     }
 
-    function buildVoyage(levelNum) {
-      const rng = mulberry32(levelNum * 41957 + 71209);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1); // 0..1
+    function buildVoyageLevel(levelNum) {
+      const rng = mulberry32(levelNum * 239813 + 81953);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const theme = SEA_THEMES[chapIdx];
 
-      // 5 to 10 containers scaling smoothly
-      const cargoCount = Math.min(10, 5 + Math.floor(p * 5.6));
-      // Hull width narrows gracefully from 220px to 164px
-      const hullW = Math.round(220 - p * 56);
-      // Wave height & speed escalate by chapter
-      const waveAmp = 5.5 + p * 11.5;
-      const waveSpeed = 1.15 + p * 1.15;
-      const waveTiltInfluence = 0.65 + p * 0.65;
+      let deckW, cargoCount, waveAmp, waveFreq;
+      if (levelNum <= 100) {
+        deckW = levelNum <= 45 ? 216 : 204;
+        cargoCount = levelNum <= 45 ? 4 : 5;
+        waveAmp = 3.2 + (levelNum / 100) * 2.2;
+        waveFreq = 0.0018;
+      } else if (levelNum <= 200) {
+        deckW = 198;
+        cargoCount = levelNum <= 150 ? 5 : 6;
+        waveAmp = 5.5 + ((levelNum - 100) / 100) * 2.2;
+        waveFreq = 0.0021;
+      } else if (levelNum <= 300) {
+        deckW = 192;
+        cargoCount = 6;
+        waveAmp = 8.0 + ((levelNum - 200) / 100) * 2.5;
+        waveFreq = 0.0024;
+      } else if (levelNum <= 400) {
+        deckW = 186;
+        cargoCount = levelNum <= 350 ? 6 : 7;
+        waveAmp = 9.0 + ((levelNum - 300) / 100) * 2.6;
+        waveFreq = 0.0025;
+      } else {
+        deckW = 180;
+        cargoCount = levelNum > 450 ? 8 : 7;
+        waveAmp = 11.2 + ((levelNum - 400) / 100) * 2.8;
+        waveFreq = 0.0027;
+      }
 
-      // Crosswind gusts in Chapter 4 & 5
-      let windForce = 0;
-      if (levelNum > 300) {
-        const hasWind = levelNum > 400 || levelNum % 2 === 0;
-        if (hasWind) {
-          const dir = rng() < 0.5 ? -1 : 1;
-          windForce = dir * (0.000018 + (p - 0.6) * 0.000038);
+      const manifest = [];
+      for (let i = 0; i < cargoCount; i++) {
+        const r = rng();
+        let kind = "dry";
+        if (chapIdx >= 1 && r < 0.28) kind = "heavy";
+        else if (chapIdx >= 3 && r >= 0.28 && r < 0.54) kind = "reefer";
+        else if (chapIdx >= 2 && r >= 0.54 && r < 0.78) kind = "wide";
+
+        if (kind === "heavy") {
+          manifest.push({
+            kind: "heavy",
+            label: "24T STEEL",
+            w: 44,
+            h: 26,
+            density: 0.0052,
+            fric: 0.90,
+            fill: "#334155",
+            hi: "#fbbf24",
+            dark: "#0f172a"
+          });
+        } else if (kind === "reefer") {
+          manifest.push({
+            kind: "reefer",
+            label: "❄️ 12T ICE",
+            w: 46,
+            h: 25,
+            density: 0.0027,
+            fric: 0.16,
+            fill: "#06b6d4",
+            hi: "#cffafe",
+            dark: "#155e75"
+          });
+        } else if (kind === "wide") {
+          const col = DRY_COLORS[Math.floor(rng() * DRY_COLORS.length)];
+          manifest.push({
+            kind: "wide",
+            label: "40FT • 16T",
+            w: 72,
+            h: 22,
+            density: 0.0024,
+            fric: 0.86,
+            fill: col.fill,
+            hi: col.hi,
+            dark: col.dark
+          });
+        } else {
+          const col = DRY_COLORS[(i + levelNum) % DRY_COLORS.length];
+          manifest.push({
+            kind: "dry",
+            label: "20FT • 10T",
+            w: 46,
+            h: 24,
+            density: 0.0024,
+            fric: 0.86,
+            fill: col.fill,
+            hi: col.hi,
+            dark: col.dark
+          });
         }
       }
 
-      // Build Cargo Manifest
-      const manifest = [];
-      for (let i = 0; i < cargoCount; i++) {
-        let pool;
-        if (levelNum <= 60) {
-          pool = ["light", "standard", "standard", "long"];
-        } else if (levelNum <= 150) {
-          pool = ["light", "standard", "long", "heavy"];
-        } else if (levelNum <= 300) {
-          pool = ["light", "standard", "long", "heavy", "crimson"];
-        } else {
-          pool = ["standard", "long", "heavy", "heavy", "crimson", "light"];
-        }
-        const key = pool[Math.floor(rng() * pool.length)];
-        manifest.push({ ...CONTAINER_TYPES[key], typeKey: key });
+      // Ensure signature chapter container types appear at least once per voyage
+      if (chapIdx === 1 && !manifest.some((m) => m.kind === "heavy")) {
+        manifest[1] = { kind: "heavy", label: "24T STEEL", w: 44, h: 26, density: 0.0052, fric: 0.90, fill: "#334155", hi: "#fbbf24", dark: "#0f172a" };
+      }
+      if (chapIdx >= 3 && !manifest.some((m) => m.kind === "reefer")) {
+        manifest[manifest.length - 1] = { kind: "reefer", label: "❄️ 12T ICE", w: 46, h: 25, density: 0.0027, fric: 0.16, fill: "#06b6d4", hi: "#cffafe", dark: "#155e75" };
       }
 
       return {
         levelNum,
-        cargoCount,
-        hullW,
+        chapIdx,
+        theme,
+        deckW,
         waveAmp,
-        waveSpeed,
-        waveTiltInfluence,
-        windForce,
+        waveFreq,
         manifest
       };
     }
@@ -722,11 +972,11 @@
     }
 
     // ==============================================
-    // AUDIO ENGINE (METAL CLANK, SPLASH & FOGHORN)
+    // NAUTICAL CLANK, SPLASH & FOGHORN WEB AUDIO
     // ==============================================
     let audioCtx = null;
-    let noiseBuffer = null;
     let soundOn = true;
+    let lastClankMs = 0;
 
     function initAudio() {
       if (!audioCtx) {
@@ -734,133 +984,128 @@
         if (AC) audioCtx = new AC();
       }
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-      if (audioCtx && !noiseBuffer) {
-        const len = Math.floor(audioCtx.sampleRate * 0.5);
-        noiseBuffer = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-        const d = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-      }
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.12) {
+    function sfxSteelClank(spd, isHeavy = false) {
       if (!soundOn) return;
+      const ms = performance.now();
+      if (ms - lastClankMs < 75 || spd < 0.8) return;
+      lastClankMs = ms;
       initAudio();
       if (!audioCtx) return;
+
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(vol, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + dur + 0.02);
-    }
-
-    function sfxClank(intensity) {
-      if (!soundOn || intensity < 0.7) return;
-      initAudio();
-      if (!audioCtx) return;
-      const c = Math.min(1, intensity / 7);
-      const now = audioCtx.currentTime;
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(195 + c * 90, now);
-      osc.frequency.exponentialRampToValueAtTime(68, now + 0.11);
-      gain.gain.setValueAtTime(0.05 + c * 0.16, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + 0.14);
-    }
-
-    function sfxSplash() {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx || !noiseBuffer) return;
-      const now = audioCtx.currentTime;
-      const src = audioCtx.createBufferSource();
-      src.buffer = noiseBuffer;
-      const bp = audioCtx.createBiquadFilter();
-      bp.type = "bandpass";
-      bp.frequency.setValueAtTime(950, now);
-      bp.frequency.exponentialRampToValueAtTime(280, now + 0.42);
-      bp.Q.value = 1.4;
       const g = audioCtx.createGain();
-      g.gain.setValueAtTime(0.26, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-      src.connect(bp);
-      bp.connect(g);
+      osc.type = isHeavy ? "sawtooth" : "triangle";
+      const baseF = isHeavy ? 115 : 195 + Math.random() * 55;
+      osc.frequency.setValueAtTime(baseF, now);
+      osc.frequency.exponentialRampToValueAtTime(baseF * 0.45, now + 0.09);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(Math.min(0.14, 0.03 + spd * 0.016), now + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + 0.1);
+      osc.connect(g);
       g.connect(audioCtx.destination);
-      src.start(now);
-      src.stop(now + 0.48);
+      osc.start(now);
+      osc.stop(now + 0.12);
+    }
+
+    function sfxReleaseCrane() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(520, now);
+      osc.frequency.exponentialRampToValueAtTime(280, now + 0.07);
+      g.gain.setValueAtTime(0.075, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.09);
+    }
+
+    function sfxOceanSplash() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.exponentialRampToValueAtTime(75, now + 0.28);
+      g.gain.setValueAtTime(0.11, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.32);
     }
 
     function sfxFoghornWin() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-      // Warm maritime horn + bright success chord
       const now = audioCtx.currentTime;
-      [130.81, 196.0].forEach((f) => {
+      // Warm twin-tone harbor departure horn + bright chime
+      [146.83, 220.0].forEach((freq) => {
         const osc = audioCtx.createOscillator();
-        const filt = audioCtx.createBiquadFilter();
+        const lp = audioCtx.createBiquadFilter();
         const g = audioCtx.createGain();
         osc.type = "sawtooth";
-        osc.frequency.setValueAtTime(f, now);
-        filt.type = "lowpass";
-        filt.frequency.value = 420;
+        osc.frequency.setValueAtTime(freq, now);
+        lp.type = "lowpass";
+        lp.frequency.setValueAtTime(420, now);
         g.gain.setValueAtTime(0.001, now);
         g.gain.linearRampToValueAtTime(0.09, now + 0.08);
-        g.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
-        osc.connect(filt);
-        filt.connect(g);
+        g.gain.exponentialRampToValueAtTime(0.0008, now + 0.85);
+        osc.connect(lp);
+        lp.connect(g);
         g.connect(audioCtx.destination);
         osc.start(now);
-        osc.stop(now + 0.7);
+        osc.stop(now + 0.9);
       });
-      [523.25, 659.25, 783.99].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.3, "sine", 0.11), 160 + i * 85);
-      });
-    }
-
-    function sfxFlip() { playTone(440, 0.05, "sine", 0.08); }
-    function sfxTick() { playTone(660, 0.05, "sine", 0.08); }
-    function sfxCapsize() {
-      playTone(170, 0.24, "sawtooth", 0.15);
-      setTimeout(() => playTone(120, 0.32, "sawtooth", 0.15), 130);
+      setTimeout(() => {
+        const t2 = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(587.33, t2);
+        g.gain.setValueAtTime(0.09, t2);
+        g.gain.exponentialRampToValueAtTime(0.001, t2 + 0.55);
+        osc.connect(g);
+        g.connect(audioCtx.destination);
+        osc.start(t2);
+        osc.stop(t2 + 0.6);
+      }, 280);
     }
 
     // ==============================================
-    // MATTER.JS BUOYANCY ENGINE & GAME STATE
+    // GAME STATE, MATTER.JS VESSEL & CRANE CONTROLLER
     // ==============================================
-    const { Engine, World, Bodies, Body, Events } = Matter;
-
     const canvas = document.getElementById("cargoCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const cargoCounter = document.getElementById("cargoCounter");
+    const cargoPill = document.getElementById("cargoPill");
     const tiltPill = document.getElementById("tiltPill");
-    const windPill = document.getElementById("windPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const holdBanner = document.getElementById("holdBanner");
-    const holdTimeText = document.getElementById("holdTimeText");
-    const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
-    const leftBtn = document.getElementById("leftBtn");
-    const rightBtn = document.getElementById("rightBtn");
+    const trialLabel = document.getElementById("trialLabel");
+    const trialFill = document.getElementById("trialFill");
+    const trialTime = document.getElementById("trialTime");
+    const nudgeLBtn = document.getElementById("nudgeLBtn");
+    const nudgeRBtn = document.getElementById("nudgeRBtn");
     const dropBtn = document.getElementById("dropBtn");
-    const flipBtn = document.getElementById("flipBtn");
+    const statusToast = document.getElementById("statusToast");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
@@ -872,187 +1117,153 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
+    let level = null;
     let engine = null;
-    let voyage = null;
     let shipBody = null;
-    let containers = []; // { body, spec, w, h, splashed }
-    let nextIdx = 0;
+    let deckLocalY = 0;
+    let cargoBodies = []; // [{ body, spec }]
+    let nextCargoIdx = 0;
 
     let craneX = WORLD_W / 2;
-    let flipped = false;
     let dropCooldown = 0;
-    let cameraY = 0;
-    let simTime = 0;
+    let trialElapsed = 0;
+    let voyageFailed = false;
+    let voyageWon = false;
 
-    let gameState = "playing"; // playing | holding | won | lost
-    let holdLeft = HOLD_SECONDS;
-    let lastWholeSec = 5;
-    let finalLanded = false;
-    let finalElapsed = 0;
-    let showGuide = false;
-    let isPointerDown = false;
+    let showTrimGuide = false;
+    let trimGuideTimer = 0;
     let splashes = [];
+    let isPointerDragging = false;
     let toastTimer = null;
 
-    const bgStars = Array.from({ length: 26 }, () => ({
-      x: Math.random() * WORLD_W,
-      y: Math.random() * 220,
-      r: 0.7 + Math.random() * 1.1
-    }));
-
-    function showToast(msg, ms = 2400) {
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function getWaterY(x, t) {
-      const a = voyage.waveAmp;
-      const s = voyage.waveSpeed;
-      return (
-        WATER_Y +
-        Math.sin(x * 0.017 + t * s) * a +
-        Math.sin(x * 0.031 - t * s * 1.35) * (a * 0.32)
-      );
+    function getWaveY(x, now, ampScale = 1) {
+      return WATER_Y
+        + Math.sin(now * level.waveFreq + x * 0.017) * (level.waveAmp * ampScale)
+        + Math.cos(now * level.waveFreq * 0.65 - x * 0.011) * (level.waveAmp * 0.35 * ampScale);
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
       levelTitle.textContent = `Voyage #${currentLevelNum} / ${TOTAL_LEVELS}`;
-      cargoCounter.textContent = `Cargo: ${nextIdx} / ${voyage.cargoCount}`;
-      solvedCounter.textContent = `Cleared: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      cargoPill.textContent = `Cargo: ${nextCargoIdx} / ${level.manifest.length}`;
+      solvedCounter.textContent = `Sailed: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Voyage ${currentLevelNum} / 500 ▾`;
 
-      if (Math.abs(voyage.windForce) > 0) {
-        windPill.style.display = "inline-block";
-        windPill.textContent = voyage.windForce > 0 ? "🌬️ Wind →" : "← Wind 🌬️";
+      const deg = shipBody ? Math.round((shipBody.angle * 180) / Math.PI) : 0;
+      const absDeg = Math.abs(deg);
+      tiltPill.textContent = `List: ${deg > 0 ? "+" : ""}${deg}°`;
+      tiltPill.className = "hud-pill" + (absDeg >= 22 || voyageFailed ? " warn-pill" : "");
+
+      const allLoaded = nextCargoIdx >= level.manifest.length;
+      nudgeLBtn.disabled = voyageWon || voyageFailed || allLoaded;
+      nudgeRBtn.disabled = voyageWon || voyageFailed || allLoaded;
+
+      if (voyageFailed) {
+        dropBtn.disabled = false;
+        dropBtn.className = "crane-btn drop-main retry-mode";
+        dropBtn.textContent = "↺ OVERBOARD — RELOAD SHIP";
+      } else if (voyageWon) {
+        dropBtn.disabled = true;
+        dropBtn.className = "crane-btn drop-main";
+        dropBtn.textContent = "✓ SAFE HARBOR DEPARTURE";
+      } else if (allLoaded) {
+        dropBtn.disabled = true;
+        dropBtn.className = "crane-btn drop-main";
+        dropBtn.textContent = `🌊 SEA TRIAL (${Math.max(0, TRIAL_TARGET - trialElapsed).toFixed(1)}s)`;
       } else {
-        windPill.style.display = "none";
+        dropBtn.disabled = dropCooldown > 0;
+        dropBtn.className = "crane-btn drop-main";
+        const cur = level.manifest[nextCargoIdx];
+        dropBtn.textContent = `📦 DROP ${cur.label}`;
       }
 
-      const canAct = gameState === "playing" && nextIdx < voyage.cargoCount && dropCooldown <= 0;
-      leftBtn.disabled = !canAct;
-      rightBtn.disabled = !canAct;
-      dropBtn.disabled = !canAct;
-      flipBtn.disabled = !canAct;
-    }
-
-    function getHighestDeckY() {
-      let minY = shipBody ? shipBody.position.y - 26 : WATER_Y - 26;
-      for (const c of containers) {
-        if (c.body.bounds.min.y < minY) {
-          minY = c.body.bounds.min.y;
-        }
-      }
-      return minY;
-    }
-
-    function getCraneCargoY() {
-      const topY = getHighestDeckY();
-      const spec = voyage.manifest[nextIdx];
-      const halfH = spec ? (flipped ? spec.w : spec.h) * 0.5 : 16;
-      return Math.min(topY - halfH - 64, WATER_Y - 175);
-    }
-
-    function spawnSplash(x, y, count = 16) {
-      for (let i = 0; i < count; i++) {
-        const ang = -Math.PI * 0.15 - Math.random() * Math.PI * 0.7;
-        const spd = 2.2 + Math.random() * 4.5;
-        splashes.push({
-          x: x + (Math.random() - 0.5) * 22,
-          y,
-          vx: Math.cos(ang) * spd,
-          vy: Math.sin(ang) * spd,
-          r: 2.5 + Math.random() * 3.5,
-          alpha: 0.95
-        });
+      if (voyageFailed) {
+        trialLabel.textContent = "🌊 Capsized / Lost Cargo!";
+        trialFill.style.width = "0%";
+        trialTime.textContent = "0.0 / 5s";
+      } else if (voyageWon) {
+        trialLabel.textContent = "⚓ Sea Trial Passed!";
+        trialFill.style.width = "100%";
+        trialTime.textContent = "5.0 / 5s";
+      } else if (allLoaded) {
+        trialLabel.textContent = "🌊 Riding Ocean Swell...";
+        trialFill.style.width = `${Math.min(100, (trialElapsed / TRIAL_TARGET) * 100).toFixed(1)}%`;
+        trialTime.textContent = `${trialElapsed.toFixed(1)} / 5s`;
+      } else {
+        trialLabel.textContent = `📦 Box ${nextCargoIdx + 1} of ${level.manifest.length}`;
+        trialFill.style.width = "0%";
+        trialTime.textContent = "0.0 / 5s";
       }
     }
 
-    function initVoyage(num) {
-      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      voyage = buildVoyage(currentLevelNum);
-
-      if (engine) {
-        World.clear(engine.world, false);
-        Engine.clear(engine);
-      }
-
+    function initOceanPhysics() {
       engine = Engine.create({
         gravity: { x: 0, y: 1.0 },
         positionIterations: 10,
         velocityIterations: 8
       });
 
-      // Compound Floating Cargo Ship Hull (Main Deck + Left/Right Raised Gunwale Lips)
-      const hw = voyage.hullW;
-      const hullH = 34;
-      const shipY = WATER_Y - 4;
-      const deckBase = Bodies.rectangle(WORLD_W / 2, shipY, hw, hullH, {
-        friction: 0.95,
-        frictionStatic: 1.5,
-        restitution: 0.02,
-        density: 0.0044
-      });
-      const leftLip = Bodies.rectangle(WORLD_W / 2 - hw / 2 + 5, shipY - hullH / 2 - 5, 10, 10, {
-        friction: 0.9,
-        restitution: 0.02,
-        density: 0.002
-      });
-      const rightLip = Bodies.rectangle(WORLD_W / 2 + hw / 2 - 5, shipY - hullH / 2 - 5, 10, 10, {
-        friction: 0.9,
-        restitution: 0.02,
-        density: 0.002
-      });
+      // Compound Buoyant Ship Hull: Flat Cargo Deck + Weighted Lower Keel + Raised Bow/Stern Coaming Lips
+      const cx = WORLD_W / 2;
+      const cy = WATER_Y - 12;
+      const dw = level.deckW;
+
+      const deck = Bodies.rectangle(cx, cy, dw, 18, { friction: 0.88, frictionStatic: 0.96, restitution: 0.03 });
+      const keel = Bodies.rectangle(cx, cy + 16, dw * 0.72, 18, { friction: 0.88, restitution: 0.03 });
+      const lipL = Bodies.rectangle(cx - dw / 2 + 5, cy - 13, 10, 12, { friction: 0.85, restitution: 0.04 });
+      const lipR = Bodies.rectangle(cx + dw / 2 - 5, cy - 13, 10, 12, { friction: 0.85, restitution: 0.04 });
 
       shipBody = Body.create({
-        parts: [deckBase, leftLip, rightLip],
-        friction: 0.95,
-        frictionStatic: 1.5,
-        frictionAir: 0.012,
-        restitution: 0.02,
+        parts: [deck, keel, lipL, lipR],
+        friction: 0.88,
+        frictionStatic: 0.96,
+        frictionAir: 0.015,
+        restitution: 0.03,
+        density: 0.0038,
         label: "ship"
       });
-      World.add(engine.world, shipBody);
 
-      // Collision audio & final container touch trigger
+      // Remember exact local Y of deck center relative to compound centroid for crisp visual alignment!
+      deckLocalY = cy - shipBody.position.y;
+      World.add(engine.world, [shipBody]);
+
       Events.on(engine, "collisionStart", (ev) => {
         for (const pair of ev.pairs) {
-          const spd = Math.hypot(
-            pair.bodyA.velocity.x - pair.bodyB.velocity.x,
-            pair.bodyA.velocity.y - pair.bodyB.velocity.y
-          );
-          if (spd > 0.85) sfxClank(spd);
-
-          if (gameState === "holding" && !finalLanded && containers.length > 0) {
-            const lastC = containers[containers.length - 1].body;
-            if (pair.bodyA === lastC || pair.bodyB === lastC) {
-              finalLanded = true;
-            }
-          }
+          const vA = pair.bodyA.velocity, vB = pair.bodyB.velocity;
+          const spd = Math.hypot(vA.x - vB.x, vA.y - vB.y);
+          const isHeavy = pair.bodyA.isHeavyCargo || pair.bodyB.isHeavyCargo;
+          sfxSteelClank(spd, isHeavy);
         }
       });
+    }
 
-      containers = [];
-      nextIdx = 0;
+    function loadVoyage(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      level = buildVoyageLevel(currentLevelNum);
+
+      cargoBodies = [];
+      nextCargoIdx = 0;
       craneX = WORLD_W / 2;
-      flipped = false;
       dropCooldown = 0;
-      cameraY = 0;
-      simTime = 0;
-      gameState = "playing";
-      holdLeft = HOLD_SECONDS;
-      lastWholeSec = 5;
-      finalLanded = false;
-      finalElapsed = 0;
-      showGuide = false;
+      trialElapsed = 0;
+      voyageFailed = false;
+      voyageWon = false;
+      showTrimGuide = false;
+      trimGuideTimer = 0;
       splashes = [];
 
-      holdBanner.classList.remove("show");
-      stageOverlay.classList.remove("show");
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
+
+      initOceanPhysics();
 
       try {
         localStorage.setItem("zinplay_cargo_500_last", String(currentLevelNum));
@@ -1061,77 +1272,44 @@
       updateHUD();
     }
 
-    function dropCargo() {
-      if (gameState !== "playing" || nextIdx >= voyage.cargoCount || dropCooldown > 0) return;
+    function getCraneDropY() {
+      let topY = WATER_Y - 30;
+      for (const c of cargoBodies) {
+        if (c.body.bounds.min.y < topY) topY = c.body.bounds.min.y;
+      }
+      return Math.max(66, Math.min(126, topY - 76));
+    }
+
+    function dropCurrentContainer() {
+      if (voyageFailed) {
+        loadVoyage(currentLevelNum);
+        return;
+      }
+      if (voyageWon || dropCooldown > 0 || nextCargoIdx >= level.manifest.length) return;
       initAudio();
 
-      const spec = voyage.manifest[nextIdx];
-      const w = flipped ? spec.h : spec.w;
-      const h = flipped ? spec.w : spec.h;
-      const dropY = getCraneCargoY();
-
-      const box = Bodies.rectangle(craneX, dropY, w, h, {
-        friction: 0.94,
-        frictionStatic: 1.55,
-        frictionAir: 0.015,
-        restitution: 0.02,
+      const spec = level.manifest[nextCargoIdx];
+      const spawnY = getCraneDropY();
+      const box = Bodies.rectangle(craneX, spawnY, spec.w, spec.h, {
+        friction: spec.fric,
+        frictionStatic: spec.kind === "reefer" ? 0.18 : 0.94,
+        frictionAir: 0.012,
+        restitution: 0.04,
         density: spec.density,
         chamfer: { radius: 2 },
         label: "cargo"
       });
+      box.isHeavyCargo = spec.kind === "heavy";
       World.add(engine.world, box);
-      containers.push({ body: box, spec, w, h, splashed: false });
+      cargoBodies.push({ body: box, spec });
 
-      nextIdx++;
+      sfxReleaseCrane();
+      nextCargoIdx++;
       dropCooldown = 0.52;
-      flipped = false;
-
-      if (nextIdx >= voyage.cargoCount) {
-        gameState = "holding";
-        holdLeft = HOLD_SECONDS;
-        lastWholeSec = 5;
-        finalLanded = false;
-        finalElapsed = 0;
-        holdTimeText.textContent = "5.0s";
-        holdBanner.classList.add("show");
-      }
-
       updateHUD();
     }
 
-    function triggerFail(icon, title, msg) {
-      if (gameState === "won" || gameState === "lost") return;
-      gameState = "lost";
-      holdBanner.classList.remove("show");
-      sfxCapsize();
-      ovIcon.textContent = icon;
-      ovHeading.textContent = title;
-      ovText.textContent = msg;
-      ovActionBtn.textContent = "↺ Try Voyage Again";
-      stageOverlay.classList.add("show");
-      updateHUD();
-    }
-
-    function triggerWin() {
-      if (gameState === "won" || gameState === "lost") return;
-      gameState = "won";
-      holdBanner.classList.remove("show");
-      solvedSet.add(currentLevelNum);
-      try {
-        localStorage.setItem("zinplay_cargo_500_solved", JSON.stringify([...solvedSet]));
-      } catch (e) {}
-      sfxFoghornWin();
-
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      ovIcon.textContent = "🚢";
-      ovHeading.textContent = isLast ? "All 500 Voyages Cleared!" : `Voyage #${currentLevelNum} Cleared!`;
-      ovText.textContent = `All ${voyage.cargoCount} shipping containers rode the ocean swells safely!`;
-      ovActionBtn.textContent = isLast ? "Replay Voyage #1" : `Next Voyage (#${currentLevelNum + 1}) →`;
-      stageOverlay.classList.add("show");
-      updateHUD();
-    }
-
-    // Viewport Helpers
+    // Viewport & Smooth Touch / Mouse Crane Trolley Control
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1149,93 +1327,91 @@
     }
 
     function setCraneFromClientX(clientX) {
+      if (voyageWon || voyageFailed || nextCargoIdx >= level.manifest.length) return;
       const rect = canvas.getBoundingClientRect();
       const vp = getViewport();
       const wx = (clientX - rect.left - vp.offsetX) / vp.scale;
-      const minX = WORLD_W / 2 - voyage.hullW * 0.56;
-      const maxX = WORLD_W / 2 + voyage.hullW * 0.56;
-      craneX = Math.max(minX, Math.min(maxX, wx));
+      const halfLim = level.deckW * 0.44;
+      craneX = Math.max(WORLD_W / 2 - halfLim, Math.min(WORLD_W / 2 + halfLim, wx));
     }
 
-    // Pointer Aiming
     canvas.addEventListener("pointerdown", (e) => {
       initAudio();
-      if (gameState !== "playing") return;
-      isPointerDown = true;
-      canvas.setPointerCapture(e.pointerId);
+      isPointerDragging = true;
       setCraneFromClientX(e.clientX);
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
     canvas.addEventListener("pointermove", (e) => {
-      if (!isPointerDown || gameState !== "playing") return;
-      setCraneFromClientX(e.clientX);
+      if (isPointerDragging || e.pointerType === "mouse") {
+        setCraneFromClientX(e.clientX);
+      }
     });
-    const endPtr = () => { isPointerDown = false; };
-    canvas.addEventListener("pointerup", endPtr);
-    canvas.addEventListener("pointercancel", endPtr);
+    const endDrag = () => { isPointerDragging = false; };
+    canvas.addEventListener("pointerup", endDrag);
+    canvas.addEventListener("pointercancel", endDrag);
 
-    // Dock Buttons & Keyboard
-    leftBtn.addEventListener("click", () => {
-      if (gameState !== "playing") return;
+    nudgeLBtn.addEventListener("click", () => {
       initAudio();
-      craneX = Math.max(WORLD_W / 2 - voyage.hullW * 0.56, craneX - 14);
+      const halfLim = level.deckW * 0.44;
+      craneX = Math.max(WORLD_W / 2 - halfLim, craneX - 16);
     });
-    rightBtn.addEventListener("click", () => {
-      if (gameState !== "playing") return;
+    nudgeRBtn.addEventListener("click", () => {
       initAudio();
-      craneX = Math.min(WORLD_W / 2 + voyage.hullW * 0.56, craneX + 14);
+      const halfLim = level.deckW * 0.44;
+      craneX = Math.min(WORLD_W / 2 + halfLim, craneX + 16);
     });
-    flipBtn.addEventListener("click", () => {
-      if (gameState !== "playing") return;
-      initAudio();
-      flipped = !flipped;
-      sfxFlip();
-    });
-    dropBtn.addEventListener("click", dropCargo);
+    dropBtn.addEventListener("click", dropCurrentContainer);
 
     window.addEventListener("keydown", (e) => {
-      if (pickerModal.classList.contains("open") || gameState !== "playing") return;
+      if (pickerModal.classList.contains("open") || voyageWon) return;
+      const halfLim = level.deckW * 0.44;
       if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
-        craneX = Math.max(WORLD_W / 2 - voyage.hullW * 0.56, craneX - 14);
+        craneX = Math.max(WORLD_W / 2 - halfLim, craneX - 12);
       } else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
-        craneX = Math.min(WORLD_W / 2 + voyage.hullW * 0.56, craneX + 14);
-      } else if (e.key === "r" || e.key === "R" || e.key === "ArrowUp") {
-        flipped = !flipped;
-        sfxFlip();
+        craneX = Math.min(WORLD_W / 2 + halfLim, craneX + 12);
       } else if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
-        dropCargo();
+        dropCurrentContainer();
       }
     });
 
-    // Balance Guide Hint
+    // Smart Trim Balance Guide Hint (Positions Crane Directly on Ideal Counterweight Side!)
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (gameState !== "playing" && gameState !== "holding") return;
-      showGuide = !showGuide;
-      if (showGuide) {
-        showToast("Golden deck arrow shows the ideal counterweight drop spot!", 2600);
+      if (voyageWon || voyageFailed) return;
+      initAudio();
+      showTrimGuide = true;
+      trimGuideTimer = 7.0;
+
+      if (nextCargoIdx < level.manifest.length) {
+        // Compute current cargo torque relative to ship center
+        let netMoment = 0;
+        for (const c of cargoBodies) {
+          netMoment += (c.body.position.x - shipBody.position.x) * c.body.mass;
+        }
+        const halfLim = level.deckW * 0.36;
+        const idealOffset = Math.max(-halfLim, Math.min(halfLim, -netMoment * 0.14));
+        craneX = shipBody.position.x + idealOffset;
+        const sideMsg = Math.abs(idealOffset) < 12 ? "dead center over the keel" : (idealOffset < 0 ? "toward Port (Left) to counterbalance" : "toward Starboard (Right) to counterbalance");
+        showToast(`💡 Trim Guide aligned crane ${sideMsg}!`, 2800);
       }
     });
 
-    document.getElementById("resetBtn").addEventListener("click", () => initVoyage(currentLevelNum));
+    document.getElementById("resetBtn").addEventListener("click", () => loadVoyage(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
-    ovActionBtn.addEventListener("click", () => {
-      if (gameState === "won") {
-        initVoyage(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      } else {
-        initVoyage(currentLevelNum);
-      }
+    nextLevelBtn.addEventListener("click", () => {
+      loadVoyage(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) initVoyage(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadVoyage(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) initVoyage(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadVoyage(currentLevelNum + 1);
     });
 
-    // Voyage Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1266,7 +1442,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          initVoyage(n);
+          loadVoyage(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1288,175 +1464,173 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        initVoyage(val);
+        loadVoyage(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // BUOYANCY & WAVE PHYSICS STEP (FIXED 60HZ)
+    // OCEAN SWELL, CARGO SHIP & CONTAINER RENDERER
     // ==============================================
-    let lastTime = performance.now();
-    let accumulator = 0;
-    const FIXED_STEP = 1000 / 60;
-
-    function computeIdealCounterweightX() {
-      if (!shipBody) return WORLD_W / 2;
-      let moment = 0;
-      for (const c of containers) {
-        moment += (c.body.position.x - shipBody.position.x) * c.body.mass;
-      }
-      const nextSpec = voyage.manifest[nextIdx];
-      const nextMass = nextSpec ? (nextSpec.w * nextSpec.h * nextSpec.density) : 2.5;
-      const offset = -moment / Math.max(1.5, nextMass);
-      const maxLim = voyage.hullW * 0.36;
-      return shipBody.position.x + Math.max(-maxLim, Math.min(maxLim, offset));
-    }
-
-    function stepPhysics() {
-      simTime += FIXED_STEP / 1000;
-
-      // 1. Ship Heave Buoyancy (Keeps vessel floating & sinking deeper under heavier loads)
-      const waterCenter = getWaterY(shipBody.position.x, simTime);
-      const draft = shipBody.position.y - (waterCenter - 10);
-      const scaleM = shipBody.mass / 30;
-
-      const heaveForceY = -Math.max(-20, draft) * 0.00145 * scaleM - shipBody.velocity.y * 0.011 * scaleM;
-      // Gentle horizontal mooring to keep ship centered inside the viewport
-      const mooringX = (WORLD_W / 2 - shipBody.position.x) * 0.0008 * scaleM - shipBody.velocity.x * 0.012 * scaleM;
-
-      Body.applyForce(shipBody, shipBody.position, { x: mooringX, y: heaveForceY });
-
-      // 2. Dynamic Ocean Wave Slope & Hull Roll Stability Torque
-      const yL = getWaterY(shipBody.position.x - 68, simTime);
-      const yR = getWaterY(shipBody.position.x + 68, simTime);
-      const waveSlope = Math.atan2(yR - yL, 136) * voyage.waveTiltInfluence;
-
-      const angleDiff = shipBody.angle - waveSlope;
-      const rollStiffness = 1.65 * (voyage.hullW / 200);
-      const rollDamping = 24 * (voyage.hullW / 200);
-      shipBody.torque += -angleDiff * rollStiffness - shipBody.angularVelocity * rollDamping;
-
-      // 3. Optional Storm Crosswinds on Airborne/Stacked Containers
-      if (Math.abs(voyage.windForce) > 0 && (gameState === "playing" || gameState === "holding")) {
-        const gust = 0.65 + 0.35 * Math.sin(simTime * 2.1);
-        for (const c of containers) {
-          Body.applyForce(c.body, c.body.position, {
-            x: voyage.windForce * gust * c.body.mass,
-            y: 0
-          });
-        }
-      }
-
-      Engine.update(engine, FIXED_STEP);
-
-      // 4. Check Capsize & Overboard Splash Conditions
-      const tiltDeg = Math.abs((shipBody.angle * 180) / Math.PI);
-      tiltPill.textContent = `Tilt: ${tiltDeg.toFixed(0)}° / ${CAPSIZE_DEG}°`;
-      tiltPill.className = "hud-pill" + (tiltDeg > 24 ? " tilt-warn" : "");
-
-      if (gameState === "playing" || gameState === "holding") {
-        if (Math.abs(shipBody.angle) > CAPSIZE_RAD) {
-          triggerFail(
-            "🌊",
-            "Vessel Capsized!",
-            `Ship tilted past ${CAPSIZE_DEG}°! Place heavy 8t containers closer to the center or counterweight the high side.`
-          );
-          return;
-        }
-
-        for (const c of containers) {
-          const wy = getWaterY(c.body.position.x, simTime);
-          if (!c.splashed && c.body.position.y > wy + 22) {
-            c.splashed = true;
-            sfxSplash();
-            spawnSplash(c.body.position.x, wy, 20);
-            triggerFail(
-              "💦",
-              "Cargo Overboard!",
-              "A shipping container plunged into the sea! Drop cargo cleanly when the deck swings level."
-            );
-            return;
-          }
-        }
-      }
-    }
-
-    // ==============================================
-    // MARITIME CANVAS RENDERER
-    // ==============================================
-    function drawWaveLayer(yOffset, ampScale, speedMult, phaseOff, color, strokeColor) {
-      ctx.beginPath();
-      ctx.moveTo(-60, WORLD_H + 140);
-      for (let x = -60; x <= WORLD_W + 60; x += 14) {
-        const baseY =
-          WATER_Y + yOffset +
-          Math.sin(x * 0.017 + simTime * voyage.waveSpeed * speedMult + phaseOff) * (voyage.waveAmp * ampScale) +
-          Math.sin(x * 0.031 - simTime * voyage.waveSpeed * 1.35 * speedMult + phaseOff) * (voyage.waveAmp * ampScale * 0.32);
-        ctx.lineTo(x, baseY);
-      }
-      ctx.lineTo(WORLD_W + 60, WORLD_H + 140);
-      ctx.closePath();
-      ctx.fillStyle = color;
-      ctx.fill();
-
-      if (strokeColor) {
-        ctx.strokeStyle = strokeColor;
-        ctx.lineWidth = 2.2;
-        ctx.stroke();
-      }
-    }
-
-    function drawContainerRect(x, y, w, h, angle, spec, alpha = 1, dashed = false) {
+    function drawContainerBox(x, y, angle, spec, isGhost = false) {
       ctx.save();
-      ctx.globalAlpha = alpha;
       ctx.translate(x, y);
       ctx.rotate(angle);
+      if (isGhost) ctx.globalAlpha = 0.92;
 
-      // Main corrugated steel container body
+      const hw = spec.w / 2, hh = spec.h / 2;
       ctx.fillStyle = spec.fill;
-      ctx.strokeStyle = dashed ? "#38bdf8" : spec.dark;
-      ctx.lineWidth = dashed ? 2 : 2;
-      if (dashed) ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = isGhost ? "#fef08a" : spec.hi;
+      ctx.lineWidth = isGhost ? 2 : 1.6;
       ctx.beginPath();
-      ctx.roundRect(-w / 2, -h / 2, w, h, 3);
+      ctx.roundRect(-hw, -hh, spec.w, spec.h, 3);
       ctx.fill();
       ctx.stroke();
-      ctx.setLineDash([]);
 
-      // Corrugated vertical steel ribs
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.2)";
+      // Corrugated Vertical Steel Ribs
+      ctx.strokeStyle = spec.dark;
       ctx.lineWidth = 1.4;
-      const step = 7;
-      for (let rx = -w / 2 + 6; rx < w / 2 - 4; rx += step) {
+      for (let rx = -hw + 7; rx < hw - 5; rx += 7) {
         ctx.beginPath();
-        ctx.moveTo(rx, -h / 2 + 3);
-        ctx.lineTo(rx, h / 2 - 3);
+        ctx.moveTo(rx, -hh + 3);
+        ctx.lineTo(rx, hh - 3);
         ctx.stroke();
       }
 
-      // Accent top trim stripe
-      ctx.fillStyle = spec.stripe;
-      ctx.globalAlpha = alpha * 0.85;
-      ctx.fillRect(-w / 2 + 2, -h / 2 + 2, w - 4, 3);
-
-      // Crisp Weight Badge (2t / 4t / 6t / 8t)
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = "rgba(15, 23, 42, 0.72)";
-      ctx.beginPath();
-      ctx.roundRect(-12, -7, 24, 15, 4);
-      ctx.fill();
-
-      ctx.fillStyle = spec.typeKey === "heavy" ? "#facc15" : "#ffffff";
-      ctx.font = "900 9.5px sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(spec.label, 0, 1);
-
+      // Distinctive Markings by Container Class
+      if (spec.kind === "heavy") {
+        ctx.fillStyle = "#fbbf24";
+        ctx.fillRect(-hw + 2, hh - 5, spec.w - 4, 3);
+        ctx.fillStyle = "#fef08a";
+        ctx.font = "900 7.5px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("24T", 0, -1);
+      } else if (spec.kind === "reefer") {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+        ctx.fillRect(-hw + 3, -hh + 2, spec.w - 6, 5);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 8px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("❄️", 0, 1);
+      }
       ctx.restore();
     }
 
-    function drawScene(now) {
+    function spawnSplash(x, y) {
+      for (let i = 0; i < 12; i++) {
+        splashes.push({
+          x: x + (Math.random() - 0.5) * 20,
+          y,
+          vx: (Math.random() - 0.5) * 3.4,
+          vy: -2.2 - Math.random() * 3.2,
+          r: 2.5 + Math.random() * 3.5,
+          alpha: 0.9
+        });
+      }
+    }
+
+    let lastTime = performance.now();
+
+    function frame(now) {
+      const dt = Math.min(0.025, (now - lastTime) / 1000);
+      lastTime = now;
+
+      if (dropCooldown > 0) {
+        dropCooldown = Math.max(0, dropCooldown - dt);
+        if (dropCooldown === 0) updateHUD();
+      }
+      if (trimGuideTimer > 0) {
+        trimGuideTimer = Math.max(0, trimGuideTimer - dt);
+        if (trimGuideTimer === 0) showTrimGuide = false;
+      }
+
+      const inSeaTrial = !voyageFailed && !voyageWon && nextCargoIdx >= level.manifest.length;
+      const swellMult = inSeaTrial ? 1.32 : 1.0;
+
+      // === ARCHIMEDES MULTI-PONTOON SHIP BUOYANCY PHYSICS ===
+      if (engine && shipBody && !voyageWon) {
+        const ca = Math.cos(shipBody.angle);
+        const sa = Math.sin(shipBody.angle);
+        const halfSpan = level.deckW * 0.38;
+        const restDraft = 24;
+        const kBuoy = (shipBody.mass * 0.001) / (3 * restDraft);
+        const kDrag = shipBody.mass * 0.00019;
+
+        [-halfSpan, 0, halfSpan].forEach((lx) => {
+          const ly = 6;
+          const px = shipBody.position.x + lx * ca - ly * sa;
+          const py = shipBody.position.y + lx * sa + ly * ca;
+          const surfY = getWaveY(px, now, swellMult);
+          const depth = py - surfY;
+
+          if (depth > -restDraft) {
+            const fUp = Math.max(0, depth + restDraft) * kBuoy;
+            const vyPt = shipBody.velocity.y + shipBody.angularVelocity * (px - shipBody.position.x);
+            const fDamp = -vyPt * kDrag;
+            Body.applyForce(shipBody, { x: px, y: py }, { x: 0, y: -fUp + fDamp });
+          }
+        });
+
+        // Gentle Harbor Anchor Station-Keeping Along Horizontal Center
+        const fxKeep = ((WORLD_W / 2 - shipBody.position.x) * 0.00012 - shipBody.velocity.x * 0.0016) * shipBody.mass;
+        Body.applyForce(shipBody, shipBody.position, { x: fxKeep, y: 0 });
+
+        Engine.update(engine, dt * 1000);
+      }
+
+      // Check Capsize Angle or Any Container Lost Overboard!
+      if (!voyageFailed && !voyageWon) {
+        const listDeg = Math.abs((shipBody.angle * 180) / Math.PI);
+        if (listDeg > MAX_LIST_DEG) {
+          voyageFailed = true;
+          sfxOceanSplash();
+          spawnSplash(shipBody.position.x, WATER_Y);
+          showToast(`🌊 Vessel listed past ${MAX_LIST_DEG}° and capsized! Reload to rebalance.`, 3200);
+          updateHUD();
+        } else {
+          for (const c of cargoBodies) {
+            const surfAtBox = getWaveY(c.body.position.x, now, swellMult);
+            if (c.body.position.y > surfAtBox + 10) {
+              voyageFailed = true;
+              sfxOceanSplash();
+              spawnSplash(c.body.position.x, surfAtBox);
+              showToast("🌊 Container fell overboard into the sea! Tap Reload Ship.", 3000);
+              updateHUD();
+              break;
+            }
+          }
+        }
+      }
+
+      // Advance 5-Second Sea Trial Timer Once All Containers Are Loaded!
+      if (inSeaTrial) {
+        const maxBoxSpd = cargoBodies.reduce((m, c) => Math.max(m, Math.hypot(c.body.velocity.x, c.body.velocity.y)), 0);
+        if (maxBoxSpd < 4.5) {
+          trialElapsed += dt;
+          if (trialElapsed >= TRIAL_TARGET) {
+            voyageWon = true;
+            solvedSet.add(currentLevelNum);
+            try {
+              localStorage.setItem("zinplay_cargo_500_solved", JSON.stringify([...solvedSet]));
+            } catch (e) {}
+            sfxFoghornWin();
+            updateHUD();
+
+            const isLast = currentLevelNum === TOTAL_LEVELS;
+            winHeading.textContent = isLast ? "All 500 Voyages Cleared!" : `Voyage #${currentLevelNum} Cleared!`;
+            winText.textContent = `Balanced all ${level.manifest.length} containers through live ocean waves!`;
+            nextLevelBtn.textContent = isLast ? "Replay Voyage #1" : `Next Voyage (#${currentLevelNum + 1}) →`;
+            setTimeout(() => winOverlay.classList.add("show"), 560);
+          }
+        }
+      }
+
+      // Keep List Angle HUD Crisp
+      if (!voyageWon) updateHUD();
+
+      // === RENDER MARITIME SCENE ===
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
@@ -1464,180 +1638,170 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Night / Twilight Maritime Sky & Stars
-      bgStars.forEach((st, i) => {
-        const a = 0.22 + 0.35 * Math.sin(now * 0.002 + i);
-        ctx.fillStyle = `rgba(226, 232, 240, ${a})`;
-        ctx.beginPath();
-        ctx.arc(st.x, st.y - cameraY * 0.12, st.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
+      const th = level.theme;
 
-      // Soft Moon Glow
-      ctx.fillStyle = "rgba(254, 249, 195, 0.12)";
+      // 1. Nautical Horizon Sky & Sunset Glow
+      const skyG = ctx.createLinearGradient(0, 0, 0, WATER_Y);
+      skyG.addColorStop(0, th.sky1);
+      skyG.addColorStop(1, th.sky2);
+      ctx.fillStyle = skyG;
+      ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+
+      ctx.fillStyle = "rgba(254, 243, 199, 0.16)";
       ctx.beginPath();
-      ctx.arc(76, 86 - cameraY * 0.08, 30, 0, Math.PI * 2);
+      ctx.arc(WORLD_W * 0.24, 148, 42, 0, Math.PI * 2);
       ctx.fill();
 
-      // Storm wind streaks (Chapter 4-5)
-      if (Math.abs(voyage.windForce) > 0) {
-        const dir = voyage.windForce > 0 ? 1 : -1;
-        ctx.strokeStyle = "rgba(186, 230, 253, 0.24)";
-        ctx.lineWidth = 1.5;
-        for (let i = 0; i < 6; i++) {
-          const t = ((now * 0.11 * dir + i * 90) % (WORLD_W + 120) + (WORLD_W + 120)) % (WORLD_W + 120) - 60;
-          ctx.beginPath();
-          ctx.moveTo(t, 75 + i * 52);
-          ctx.lineTo(t + dir * 42, 75 + i * 52);
-          ctx.stroke();
-        }
+      // Overhead Yellow Port Gantry Crane Rail Beam
+      ctx.fillStyle = "#ca8a04";
+      ctx.fillRect(0, 14, WORLD_W, 12);
+      ctx.fillStyle = "#1e293b";
+      for (let gx = 0; gx < WORLD_W; gx += 28) {
+        ctx.fillRect(gx, 14, 14, 12);
       }
 
-      // === WORLD CAMERA TRANSFORM ===
+      // 2. Back Ocean Swell Layer
+      ctx.fillStyle = th.sea2;
+      ctx.beginPath();
+      ctx.moveTo(0, WORLD_H);
+      for (let wx = 0; wx <= WORLD_W; wx += 14) {
+        ctx.lineTo(wx, getWaveY(wx, now - 400, swellMult * 0.85) - 6);
+      }
+      ctx.lineTo(WORLD_W, WORLD_H);
+      ctx.closePath();
+      ctx.fill();
+
+      // 3. Buoyant Cargo Freighter Ship Hull & Bridge
       ctx.save();
-      ctx.translate(0, -cameraY);
+      ctx.translate(shipBody.position.x, shipBody.position.y);
+      ctx.rotate(shipBody.angle);
 
-      // 2. Back Ocean Swell Layer (Behind Ship)
-      drawWaveLayer(-4, 0.85, 0.85, 1.4, "rgba(12, 74, 110, 0.65)", null);
+      const dw = level.deckW;
+      const dy = deckLocalY;
 
-      // 3. Cargo Ship Vessel (Drawn cleanly around shipBody)
-      if (shipBody) {
-        const hw = voyage.hullW;
-        const deckBase = shipBody.parts[1]; // main deck rect
-        ctx.save();
-        ctx.translate(deckBase.position.x, deckBase.position.y);
-        ctx.rotate(shipBody.angle);
+      // Subtle White Superstructure Bridge Cabin Behind Aft Deck
+      ctx.fillStyle = "#e2e8f0";
+      ctx.fillRect(dw * 0.18, dy - 38, 28, 30);
+      ctx.fillStyle = "#0ea5e9";
+      ctx.fillRect(dw * 0.18 + 4, dy - 33, 20, 8);
+      ctx.fillStyle = "#ef4444";
+      ctx.fillRect(dw * 0.18 + 18, dy - 47, 7, 10);
 
-        // Background Ship Bridge Tower (purely decorative behind cargo)
-        ctx.fillStyle = "rgba(226, 232, 240, 0.18)";
-        ctx.strokeStyle = "rgba(226, 232, 240, 0.35)";
-        ctx.lineWidth = 1.4;
-        ctx.fillRect(-20, -44, 40, 28);
-        ctx.strokeRect(-20, -44, 40, 28);
-        ctx.fillStyle = "rgba(250, 204, 21, 0.65)";
-        ctx.fillRect(-13, -38, 26, 7);
+      // Sleek Tapered Steel Ship Hull Below Deck
+      ctx.beginPath();
+      ctx.moveTo(-dw / 2 - 12, dy - 6);
+      ctx.lineTo(dw / 2 + 12, dy - 6);
+      ctx.lineTo(dw / 2 - 10, dy + 32);
+      ctx.lineTo(-dw / 2 + 10, dy + 32);
+      ctx.closePath();
+      ctx.fillStyle = th.hull;
+      ctx.fill();
+      ctx.strokeStyle = "#f8fafc";
+      ctx.lineWidth = 1.6;
+      ctx.stroke();
 
-        // Hull Trapezoid (Upper Dark Navy + Lower Red Antifouling Keel)
-        ctx.beginPath();
-        ctx.moveTo(-hw / 2 - 14, -17);
-        ctx.lineTo(hw / 2 + 16, -17);
-        ctx.lineTo(hw / 2 + 4, 17);
-        ctx.lineTo(-hw / 2 - 4, 17);
-        ctx.closePath();
-        ctx.fillStyle = "#1e293b";
-        ctx.fill();
-        ctx.strokeStyle = "#64748b";
-        ctx.lineWidth = 2;
-        ctx.stroke();
+      // Dark Top Deck Plate + Raised Left & Right Coaming Lips
+      ctx.fillStyle = th.hullTrim;
+      ctx.fillRect(-dw / 2, dy - 9, dw, 16);
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(-dw / 2, dy - 19, 10, 13);
+      ctx.fillRect(dw / 2 - 10, dy - 19, 10, 13);
 
-        // Lower Maritime Red Hull Paint
-        ctx.beginPath();
-        ctx.moveTo(-hw / 2 - 8, 2);
-        ctx.lineTo(hw / 2 + 9, 2);
-        ctx.lineTo(hw / 2 + 4, 17);
-        ctx.lineTo(-hw / 2 - 4, 17);
-        ctx.closePath();
-        ctx.fillStyle = "#b91c1c";
-        ctx.fill();
+      // Centerline Keel Balance Marker Triangle
+      ctx.fillStyle = "#38bdf8";
+      ctx.beginPath();
+      ctx.moveTo(0, dy - 9);
+      ctx.lineTo(5, dy - 2);
+      ctx.lineTo(-5, dy - 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
 
-        // Steel Deck Surface & Raised End Gunwale Lips
-        ctx.fillStyle = "#475569";
-        ctx.fillRect(-hw / 2, -17, hw, 5);
-        ctx.fillStyle = "#94a3b8";
-        ctx.fillRect(-hw / 2, -27, 10, 10);
-        ctx.fillRect(hw / 2 - 10, -27, 10, 10);
-
-        // Centerline Balance Target Notch
-        ctx.fillStyle = "#38bdf8";
-        ctx.fillRect(-2, -17, 4, 7);
-
-        // Porthole windows
-        ctx.fillStyle = "#fef08a";
-        for (let px = -hw * 0.34; px <= hw * 0.34; px += 28) {
-          ctx.beginPath();
-          ctx.arc(px, -6, 3.2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
+      // 4. Stacked Shipping Containers On Deck
+      for (const c of cargoBodies) {
+        drawContainerBox(c.body.position.x, c.body.position.y, c.body.angle, c.spec, false);
       }
 
-      // 4. Stacked Shipping Containers
-      for (const c of containers) {
-        drawContainerRect(c.body.position.x, c.body.position.y, c.w, c.h, c.body.angle, c.spec, 1, false);
-      }
-
-      // 5. Optional Golden Counterweight Guide (Hint)
-      if (showGuide && (gameState === "playing" || gameState === "holding")) {
-        const idealX = computeIdealCounterweightX();
+      // 5. Optional Live Trim Centerline Guide (When 💡 Trim Guide Active!)
+      if (showTrimGuide && !voyageWon && !voyageFailed) {
         ctx.save();
         ctx.strokeStyle = "rgba(250, 204, 21, 0.85)";
-        ctx.lineWidth = 2.2;
-        ctx.setLineDash([6, 5]);
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
         ctx.beginPath();
-        ctx.moveTo(idealX, cameraY + 24);
-        ctx.lineTo(idealX, WATER_Y - 12);
+        ctx.moveTo(craneX, 26);
+        ctx.lineTo(craneX, WATER_Y);
         ctx.stroke();
-        ctx.setLineDash([]);
+        ctx.restore();
+      }
 
+      // 6. Active Overhead Gantry Crane Trolley, Cables & Next Hanging Container
+      if (!voyageWon && !voyageFailed && nextCargoIdx < level.manifest.length) {
+        const spec = level.manifest[nextCargoIdx];
+        const hy = getCraneDropY();
+
+        // Trolley Carriage on Overhead Rail
         ctx.fillStyle = "#facc15";
+        ctx.strokeStyle = "#1e293b";
+        ctx.lineWidth = 1.8;
         ctx.beginPath();
-        ctx.moveTo(idealX, WATER_Y - 26);
-        ctx.lineTo(idealX - 7, WATER_Y - 38);
-        ctx.lineTo(idealX + 7, WATER_Y - 38);
-        ctx.closePath();
+        ctx.roundRect(craneX - 18, 12, 36, 18, 4);
         ctx.fill();
-        ctx.restore();
-      }
+        ctx.stroke();
 
-      // 6. Overhead Crane Rail, Trolley & Hanging Cargo Container
-      if (gameState === "playing" && nextIdx < voyage.cargoCount) {
-        const spec = voyage.manifest[nextIdx];
-        const w = flipped ? spec.h : spec.w;
-        const h = flipped ? spec.w : spec.h;
-        const cargoY = getCraneCargoY();
-        const railY = cargoY - h / 2 - 34;
-
-        // Horizontal steel gantry rail
-        ctx.fillStyle = "#334155";
-        ctx.fillRect(-30, railY - 5, WORLD_W + 60, 7);
-        ctx.fillStyle = "#facc15";
-        ctx.fillRect(craneX - 20, railY - 7, 40, 11);
-
-        // Twin steel crane cables
+        // Steel Hoist Cables + Faint Drop Alignment Guide
         ctx.strokeStyle = "#cbd5e1";
-        ctx.lineWidth = 1.6;
+        ctx.lineWidth = 1.8;
         ctx.beginPath();
-        ctx.moveTo(craneX - 10, railY + 4);
-        ctx.lineTo(craneX - w * 0.34, cargoY - h / 2);
-        ctx.moveTo(craneX + 10, railY + 4);
-        ctx.lineTo(craneX + w * 0.34, cargoY - h / 2);
+        ctx.moveTo(craneX - 10, 30); ctx.lineTo(craneX - spec.w * 0.34, hy - spec.h / 2);
+        ctx.moveTo(craneX + 10, 30); ctx.lineTo(craneX + spec.w * 0.34, hy - spec.h / 2);
         ctx.stroke();
 
-        // Vertical drop guide line
         ctx.save();
-        ctx.strokeStyle = "rgba(125, 211, 252, 0.34)";
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([5, 6]);
+        ctx.strokeStyle = "rgba(254, 240, 138, 0.28)";
+        ctx.lineWidth = 1.4;
+        ctx.setLineDash([5, 5]);
         ctx.beginPath();
-        ctx.moveTo(craneX, cargoY + h / 2);
-        ctx.lineTo(craneX, WATER_Y - 14);
+        ctx.moveTo(craneX, hy + spec.h / 2 + 4);
+        ctx.lineTo(craneX, WATER_Y - 12);
         ctx.stroke();
-        ctx.setLineDash([]);
         ctx.restore();
 
-        drawContainerRect(craneX, cargoY, w, h, 0, spec, dropCooldown > 0 ? 0.35 : 0.92, true);
+        drawContainerBox(craneX, hy, 0, spec, true);
       }
 
-      // 7. Foreground Translucent Ocean Waves & Foam Crest
-      drawWaveLayer(4, 1.0, 1.0, 0, "rgba(2, 132, 199, 0.56)", "rgba(186, 230, 253, 0.65)");
-      drawWaveLayer(22, 1.15, 1.25, 2.3, "rgba(7, 89, 133, 0.78)", "rgba(125, 211, 252, 0.35)");
+      // 7. Foreground Translucent Rolling Ocean Waves + White Sea Foam Crest!
+      ctx.save();
+      const seaG = ctx.createLinearGradient(0, WATER_Y - 14, 0, WORLD_H);
+      seaG.addColorStop(0, th.sea1 + "cc");
+      seaG.addColorStop(1, th.sea2 + "f5");
+      ctx.fillStyle = seaG;
+      ctx.beginPath();
+      ctx.moveTo(0, WORLD_H);
+      for (let wx = 0; wx <= WORLD_W; wx += 12) {
+        ctx.lineTo(wx, getWaveY(wx, now, swellMult));
+      }
+      ctx.lineTo(WORLD_W, WORLD_H);
+      ctx.closePath();
+      ctx.fill();
 
-      // 8. Water Splash Droplets
+      ctx.strokeStyle = "rgba(224, 242, 254, 0.65)";
+      ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      for (let wx = 0; wx <= WORLD_W; wx += 12) {
+        const wy = getWaveY(wx, now, swellMult);
+        if (wx === 0) ctx.moveTo(wx, wy);
+        else ctx.lineTo(wx, wy);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // 8. Ocean Splash Droplets
       splashes = splashes.filter((s) => s.alpha > 0.04);
       for (const s of splashes) {
+        s.vy += 0.16;
         s.x += s.vx;
         s.y += s.vy;
-        s.vy += 0.16;
         s.alpha *= 0.94;
         ctx.fillStyle = `rgba(224, 242, 254, ${s.alpha})`;
         ctx.beginPath();
@@ -1645,120 +1809,34 @@
         ctx.fill();
       }
 
-      ctx.restore(); // End world camera
-
-      // 9. Mini "NEXT CARGO" Manifest Preview (Top-Right)
-      if (gameState === "playing" && nextIdx + 1 < voyage.cargoCount) {
-        const nxt = voyage.manifest[nextIdx + 1];
+      // 9. Sea Trial Countdown Dial Badge
+      if (inSeaTrial && trialElapsed > 0) {
+        const pct = Math.min(1, trialElapsed / TRIAL_TARGET);
         ctx.save();
-        ctx.fillStyle = "rgba(10, 22, 40, 0.78)";
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.32)";
-        ctx.lineWidth = 1.4;
+        ctx.strokeStyle = voyageWon ? "#4ade80" : "#38bdf8";
+        ctx.shadowColor = "#38bdf8";
+        ctx.shadowBlur = 12;
+        ctx.lineWidth = 4;
         ctx.beginPath();
-        ctx.roundRect(WORLD_W - 84, 12, 72, 54, 10);
-        ctx.fill();
+        ctx.arc(WORLD_W - 42, 56, 21, -Math.PI / 2, -Math.PI / 2 + pct * Math.PI * 2);
         ctx.stroke();
+        ctx.shadowBlur = 0;
 
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = "800 9px sans-serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 10.5px monospace";
         ctx.textAlign = "center";
-        ctx.fillText("NEXT", WORLD_W - 48, 24);
-
-        const miniScale = Math.min(0.7, 52 / nxt.w);
-        drawContainerRect(WORLD_W - 48, 44, nxt.w * miniScale, nxt.h * miniScale, 0, nxt, 0.95, false);
+        ctx.textBaseline = "middle";
+        ctx.fillText(`${Math.max(0, TRIAL_TARGET - trialElapsed).toFixed(1)}s`, WORLD_W - 42, 56);
         ctx.restore();
       }
 
-      // 10. Mini Tilt Inclinometer Arc (Top-Left)
-      if (shipBody) {
-        ctx.save();
-        const ix = 42, iy = 42;
-        ctx.fillStyle = "rgba(10, 22, 40, 0.76)";
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.3)";
-        ctx.lineWidth = 1.4;
-        ctx.beginPath();
-        ctx.arc(ix, iy, 24, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        // Danger red zones beyond +-38 deg
-        ctx.strokeStyle = "rgba(239, 68, 68, 0.65)";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(ix, iy, 19, -Math.PI / 2 - 1.0, -Math.PI / 2 - CAPSIZE_RAD);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(ix, iy, 19, -Math.PI / 2 + CAPSIZE_RAD, -Math.PI / 2 + 1.0);
-        ctx.stroke();
-
-        // Live needle
-        const tiltWarn = Math.abs(shipBody.angle) > 0.42;
-        ctx.save();
-        ctx.translate(ix, iy);
-        ctx.rotate(shipBody.angle);
-        ctx.strokeStyle = tiltWarn ? "#ef4444" : "#38bdf8";
-        ctx.lineWidth = 2.6;
-        ctx.beginPath();
-        ctx.moveTo(0, 4);
-        ctx.lineTo(0, -17);
-        ctx.stroke();
-        ctx.restore();
-
-        ctx.fillStyle = "#e2e8f0";
-        ctx.beginPath();
-        ctx.arc(ix, iy, 3, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      ctx.restore(); // End viewport scale
-    }
-
-    function frame(now) {
-      const rawDt = Math.min(50, now - lastTime);
-      lastTime = now;
-      const dtSec = rawDt / 1000;
-
-      if (dropCooldown > 0) {
-        dropCooldown = Math.max(0, dropCooldown - dtSec);
-        if (dropCooldown === 0) updateHUD();
-      }
-
-      // Smooth upward camera follow for tall container stacks
-      const desiredTop = getCraneCargoY() - 56;
-      const targetCamY = Math.min(0, desiredTop);
-      cameraY += (targetCamY - cameraY) * Math.min(1, dtSec * 4.5);
-
-      accumulator += rawDt;
-      while (accumulator >= FIXED_STEP) {
-        stepPhysics();
-        accumulator -= FIXED_STEP;
-      }
-
-      // 5-Second Sea Trial Stability Countdown
-      if (gameState === "holding") {
-        finalElapsed += dtSec;
-        if (finalLanded || finalElapsed >= 0.8) {
-          holdLeft = Math.max(0, holdLeft - dtSec);
-          holdTimeText.textContent = `${holdLeft.toFixed(1)}s`;
-          const whole = Math.ceil(holdLeft);
-          if (whole < lastWholeSec && whole > 0) {
-            lastWholeSec = whole;
-            sfxTick();
-          }
-          if (holdLeft <= 0) {
-            triggerWin();
-          }
-        }
-      }
-
-      drawScene(now);
+      ctx.restore();
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    initVoyage(currentLevelNum);
+    loadVoyage(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
