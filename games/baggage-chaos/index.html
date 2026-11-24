@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Baggage Routing Chaos — 500 Airport Conveyor Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free levels of Baggage Routing Chaos in your browser. Flip airport conveyor switches in real time to route colored suitcases to the right flight gates." />
+  <title>Baggage Routing Chaos — Free 500-Shift Airport Conveyor Strategy Game | ZinPlay</title>
+  <meta name="description" content="Play Baggage Routing Chaos free online with no download. Flip pivoting airport conveyor diverters in real time to route suitcases, VIP express trunks, and X-ray flagged bags to the right departure gates across 500 shifts." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Baggage Routing Chaos",
+    "url": "https://zinplay.io/games/baggage-chaos/",
+    "genre": ["Strategy", "Logistics Simulation", "Reflex Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -29,14 +42,16 @@
       font-size: 0.9rem;
       color: var(--muted);
     }
+
+    /* Top Airport Terminal HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0b1120;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #0b111e;
+      color: #f8fafc;
+      border-bottom: 1px solid #1d2b45;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -49,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #38bdf8;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -62,45 +77,192 @@
     }
     .hud-pill {
       background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      border: 1px solid rgba(56, 189, 248, 0.36);
       color: #bae6fd;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.lives {
-      background: rgba(239, 68, 68, 0.16);
-      border-color: rgba(248, 113, 113, 0.38);
-      color: #fecaca;
+    .hud-pill.life-pill {
+      background: rgba(244, 63, 94, 0.16);
+      border-color: rgba(251, 113, 133, 0.42);
+      color: #fecdd3;
     }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
+    }
+
+    /* Live Shift Progress Strip */
+    .shift-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: #111b2e;
+      border-bottom: 1px solid #223457;
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .shift-lbl {
+      min-width: 126px;
+      color: #fde68a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .shift-track {
+      flex: 1;
+      height: 10px;
+      background: #070d17;
+      border-radius: 999px;
+      border: 1px solid #283f69;
+      overflow: hidden;
+    }
+    .shift-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #38bdf8 0%, #facc15 55%, #22c55e 100%);
+      transition: width 0.14s ease-out;
+    }
+    .shift-cnt {
+      min-width: 56px;
+      text-align: right;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: #ffffff;
+    }
+
+    /* Airport Conveyor Network Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 470px;
-      background: radial-gradient(circle at 50% 25%, #16213e 0%, #0a0f1f 100%);
+      aspect-ratio: 1 / 1;
+      max-height: 495px;
+      background: radial-gradient(circle at 50% 45%, #16233a 0%, #090e19 100%);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
       -webkit-user-select: none;
-    }
-    @media (min-width: 640px) {
-      .canvas-container {
-        height: 520px;
-      }
     }
     #baggageCanvas {
       width: 100%;
       height: 100%;
       display: block;
-      touch-action: none;
+      touch-action: manipulation;
       cursor: pointer;
     }
+
+    /* Tactile Diverter Switch Control Dock */
+    .switch-dock-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 11px 12px;
+      background: #0d1524;
+      border-top: 1px solid #1d2d4a;
+    }
+    .switch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+    .switch-grid.cols-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .sw-btn {
+      min-height: 48px;
+      padding: 5px 6px;
+      border-radius: 11px;
+      border: 1.5px solid #2a3f66;
+      background: #15233b;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      cursor: pointer;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
+    }
+    .sw-btn:active { transform: scale(0.95); }
+    .sw-btn.dir-right {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.16);
+    }
+    .sw-btn.dir-left {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.16);
+    }
+    .sw-btn.hint-glow {
+      border-color: #facc15;
+      box-shadow: 0 0 16px rgba(250, 204, 21, 0.6);
+      background: rgba(250, 204, 21, 0.24);
+    }
+    .sw-name {
+      font-family: monospace;
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+    .sw-dir {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #cbd5e1;
+    }
+    .shift-action-row {
+      display: flex;
+      gap: 8px;
+    }
+    .shift-main-btn {
+      flex: 1;
+      min-height: 44px;
+      border-radius: 11px;
+      border: 1.5px solid #86efac;
+      background: linear-gradient(135deg, #16a34a 0%, #0d9488 100%);
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 5px 16px rgba(22, 163, 74, 0.28);
+    }
+    .shift-main-btn.pause-mode {
+      border-color: #fde68a;
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      box-shadow: 0 5px 14px rgba(217, 119, 6, 0.28);
+    }
+    .shift-main-btn.retry-mode {
+      border-color: #fca5a5;
+      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+    }
+
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #080e18;
+      border-top: 1px solid #182640;
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+
     .status-toast {
       position: absolute;
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.94);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(8, 14, 24, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -114,13 +276,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
-    .stage-overlay {
+    .status-toast.show { opacity: 1; }
+
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(9, 13, 28, 0.8);
+      background: rgba(8, 13, 24, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -128,40 +289,29 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.22s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .overlay-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
+
     .controls-group {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-    }
-    .btn-outline.active-toggle {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
     }
     .level-nav-bar {
       display: flex;
@@ -184,7 +334,8 @@
       border-radius: 10px;
       cursor: pointer;
     }
-    /* Level Picker Modal */
+
+    /* Shift Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -196,9 +347,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -295,6 +444,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #0b111e;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #0b111e;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #0b111e 0%, #1e3a5f 100%);
+      color: #e0f2fe;
+    }
+    .game-seo-banner.purple-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #17152e 0%, #4c1d95 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #bae6fd;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .bag-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .bag-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .bag-table th, .bag-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .bag-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .bag-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -307,7 +536,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -320,51 +549,72 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Shifts &bull; Strategy</span>
+      <span class="cat-tag">500 Shifts &bull; Real-Time Airport Logistics</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Baggage Routing Chaos</h1>
-      <p>Tap track switches on the conveyor network to route every colored suitcase to its matching departure gate.</p>
+      <p>Flip pivoting airport conveyor diverters in real time to steer color-coded suitcases, fast VIP express trunks, and X-ray flagged luggage cleanly to their matching flight gates.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Baggage Routing Chaos Game">
+    <section class="game-wrapper" aria-label="Baggage Routing Chaos Airport Logistics Game">
       <div class="hud-strip">
         <div class="hud-left">
           <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Regional Terminal</span>
-          <span id="levelTitle">Shift 1 / 500</span>
+          <span id="levelTitle">Shift #1 / 500 — 4-Gate Sorting Tree</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="bagsCounter">Bags: 0 / 12</span>
-          <span class="hud-pill lives" id="livesCounter">Errors: 0 / 3</span>
-          <span class="hud-pill" id="solvedCounter">Cleared: 0 / 500</span>
+          <span class="hud-pill life-pill" id="livesPill">❤️❤️❤️</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Shifts: 0 / 500</span>
         </div>
       </div>
 
+      <!-- Shift Delivery Progress Bar -->
+      <div class="shift-strip">
+        <span id="shiftLbl" class="shift-lbl">✈️ Ready for Takeoff</span>
+        <div class="shift-track">
+          <div id="shiftFill" class="shift-fill"></div>
+        </div>
+        <span id="shiftCnt" class="shift-cnt">0 / 10</span>
+      </div>
+
+      <!-- Interactive Conveyor Sorting Canvas -->
       <div class="canvas-container">
         <canvas id="baggageCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Start / Pause / Win / Lose Overlay -->
-        <div id="stageOverlay" class="stage-overlay show">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.2rem; margin-bottom:6px;">🧳</div>
-            <h2 id="ovHeading">Shift 1 Ready</h2>
-            <p id="ovText">Tap the glowing round switches to flip conveyor tracks and send each suitcase to its matching gate.</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Start Shift ▶</button>
+        <!-- Shift Cleared Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div style="font-size:2.3rem; margin-bottom:6px;">✈️</div>
+            <h2 id="winHeading">All Flights Loaded!</h2>
+            <p id="winText">Every suitcase reached its departure gate on time with zero baggage jams.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Shift →</button>
           </div>
         </div>
       </div>
 
+      <!-- Big Tactile Diverter Switch Dock + Start/Pause Bar -->
+      <div class="switch-dock-wrap">
+        <div id="switchGrid" class="switch-grid" role="group" aria-label="Conveyor Diverter Switches"></div>
+        <div class="shift-action-row">
+          <button id="shiftMainBtn" class="shift-main-btn" type="button">▶ START CONVEYORS</button>
+        </div>
+      </div>
+
+      <div class="legend-strip">
+        <span>👆 Tap Switches on Belt or Buttons (Keys 1–4)</span>
+        <span>⚡ Gold VIP Bags Move Faster (Ch. 2+)</span>
+        <span>🔍 X-Ray Alert Bags → Center Purple SEC Gate (Ch. 4+)</span>
+      </div>
+
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="pauseBtn" class="btn-outline" type="button">⏸ Pause</button>
-          <button id="resetBtn" class="btn-outline" type="button">↺ Restart</button>
-          <button id="speedBtn" class="btn-outline" type="button">⚡ 1.5x</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Hint</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Restart Shift</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Auto-Route 1</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Terminal Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
@@ -379,61 +629,158 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 860+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/baggage-chaos-banner-1.jpg"
+            alt="Baggage Routing Chaos online airport conveyor strategy game showing colorful suitcases branching across illuminated diverter gates and an X-ray scanner"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Live Airport Shifts — Real-Time Conveyor Routing Strategy</h3>
+          <p>Read overlapping luggage streams, flip mechanical diverters on the beat, and divert security alerts into the X-ray bay before flights depart.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Baggage Routing Chaos (500 Shifts)</h2>
-        <p>Take command of the airport's automated baggage sorting deck across 500 escalating shifts. Suitcases roll out from the intake chutes at the top and travel down conveyor belts toward the departure gates below. Your sole control is flipping the circular track switches at each junction—one tap instantly redirects the active belt.</p>
+        <h2>What Is Baggage Routing Chaos? An Airport Conveyor Strategy Game Online</h2>
+        <p><strong>Baggage Routing Chaos</strong> is a free <strong>airport luggage sorting strategy game online</strong> that puts you inside the high-energy control room beneath an international terminal. Hard-shell suitcases tagged for <strong>TYO (Red)</strong>, <strong>LON (Blue)</strong>, <strong>NYC (Green)</strong>, and <strong>PAR (Amber)</strong> pour continuously down animated rubber conveyor belts toward branching mechanical diverter switches. Tap any glowing junction directly on the belt—or press its numbered control button (<code>1</code>–<code>4</code>)—to swing the steel arm cleanly Left or Right and guide every bag into its matching departure chute before three misrouted bags cancel the shift!</p>
+        <p>Built as a snappy, <strong>no-download multitasking reflex game for phones, iPads, and Chromebooks</strong>, Baggage Routing Chaos runs natively at 60 FPS with crisp procedural <strong>Web Audio metallic switch clacks, optical gate-scanner pings, X-ray security alarms, and soothing airport boarding chimes</strong>. Every cleared shift across all <strong>500 terminal levels</strong> saves automatically inside private local storage.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Terminal Controller Playbook (VIP Bags, Dual Intakes &amp; X-Ray Alerts)</h2>
+        <p>Early regional shifts feel calm and rhythmic, yet by Chapter 5 you're juggling dual check-in chutes converging onto a shared 5-gate hub while golden VIP trunks overtake standard luggage! Master these four <strong>air-traffic logistics rules</strong> to stay cool under pressure:</p>
+
+        <div class="bag-table-wrap">
+          <table class="bag-table">
+            <thead>
+              <tr>
+                <th>Terminal Element</th>
+                <th>Visual Signal on Belt</th>
+                <th>Winning Dispatch Strategy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🔀 Pivoting Diverters</strong> (<code>S1</code>–<code>S4</code>)</td>
+                <td>Glowing golden/cyan junction disc showing active <code>↙</code> or <code>↘</code> belt path.</td>
+                <td>Flip each junction <em>right after</em> the leading bag clears its center pin—never wait until the next bag is already halfway past!</td>
+              </tr>
+              <tr>
+                <td><strong>⚡ VIP Priority Trunks</strong> (Ch. 2–5)</td>
+                <td>Gleaming gold-banded suitcase with a pulsing <code>⚡</code> badge.</td>
+                <td>Travels <strong>30% faster</strong> than standard luggage and can overtake slower bags ahead—prioritize switching its junction first!</td>
+              </tr>
+              <tr>
+                <td><strong>🔍 X-Ray Scanner Arch</strong> (Ch. 4–5)</td>
+                <td>Translucent purple security laser arch mounted above the upper belts.</td>
+                <td>Mystery grey bags stay unmarked until passing under the purple laser beam—if it flashes <strong>⚠️ SEC</strong>, divert straight into the center <strong>Purple Security Chute</strong>!</td>
+              </tr>
+              <tr>
+                <td><strong>💡 Auto-Route Assist</strong></td>
+                <td>Instant switch alignment for the nearest incoming bag.</td>
+                <td>Feeling overwhelmed during a rush burst? Tap <strong>⏸ PAUSE</strong> to read the belt calmly, or tap <strong>💡 Auto-Route 1</strong> to snap the switches for the closest bag automatically!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Dispatcher Pro Tip:</strong> On laptops and Chromebooks, rest four fingers over keys <code>1</code>, <code>2</code>, <code>3</code>, and <code>4</code>—you can flip any diverter junction instantaneously without moving your mouse! On mobile phones, the wide bottom switch dock mirrors the exact left-to-right layout of the junctions so your thumbs never cover incoming suitcases.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner purple-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/baggage-chaos-banner-2.jpg"
+            alt="Symmetrical airport luggage conveyor tree with neon arrow switches, VIP trunks, and a glowing purple X-ray tunnel in Baggage Routing Chaos"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Zero-Conflict Scheduling &amp; 5 Escalating Terminal Architectures</h3>
+          <p>Every shift calculates guaranteed safe spacing between diverging suitcases—so every victory comes down to crisp focus and clean split-second rhythm.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Terminal Chapters (500 Unique Routing Shifts)</h2>
+        <p>Every shift from #1 to #500 increases belt tempo, luggage volume, and architectural complexity across five iconic airport hubs:</p>
         <ul>
-          <li><strong>Read the Glowing Track:</strong> The bright glowing path leaving each circular switch shows where the next suitcase will turn. Inactive branches stay dimmed so you can scan the whole terminal in a split second.</li>
-          <li><strong>Watch for Express Suitcases (⚡):</strong> Starting in Chapter 2, priority express bags marked with a lightning bolt travel 35% faster than standard luggage—prioritize their switches first!</li>
-          <li><strong>Color + Letter Coding:</strong> Every suitcase and airplane gate displays both a distinct color and its first letter (<code>R</code> Red, <code>B</code> Blue, <code>G</code> Green, <code>Y</code> Yellow, <code>P</code> Purple, <code>O</code> Orange) for crisp visibility on mobile screens.</li>
+          <li><strong>Chapter 1 (Shifts 1–100 — Regional Terminal):</strong> Clean 1-intake, 3-switch binary sorting tree feeding 4 color-coded flight gates (`TYO`, `LON`, `NYC`, `PAR`) at an approachable tempo.</li>
+          <li><strong>Chapter 2 (Shifts 101–200 — International VIP Hub):</strong> Accelerates conveyor speed and mixes in gleaming <strong>⚡ VIP Priority Suitcases</strong> that race down the chutes ahead of economy bags.</li>
+          <li><strong>Chapter 3 (Shifts 201–300 — Dual-Intake Rush):</strong> Opens <strong>two simultaneous check-in belts</strong> converging through a shared center diverter (`S3`), challenging you to weave left and right streams cleanly!</li>
+          <li><strong>Chapter 4 (Shifts 301–400 — X-Ray Security Terminal):</strong> Installs live purple <strong>🔍 X-Ray Scanner Arches</strong> over both check-in lanes—unmasking mystery luggage mid-transit and routing flagged contraband into the center Purple Security Bay.</li>
+          <li><strong>Chapter 5 (Shifts 401–500 — Mega-Hub 5-Gate Chaos):</strong> Full 2-intake, 4-switch, 5-gate international super-hub combining high belt velocities, rapid VIP bursts, and mid-belt X-ray reveals—complete with an instant 1–500 shift picker and private local saving.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Airport Strategy Topics">
+          <span class="kw-pill">Airport Baggage Routing Game Online</span>
+          <span class="kw-pill">Conveyor Belt Sorting Puzzle Free</span>
+          <span class="kw-pill">Logistics Multitasking Browser Game</span>
+          <span class="kw-pill">Real-Time Switch Strategy Web</span>
+          <span class="kw-pill">500-Level Airport Terminal Simulator</span>
+          <span class="kw-pill">No-Download Chromebook Reflex Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Baggage Routing Chaos FAQ</h2>
         <details class="faq-item">
-          <summary>Can I change a switch right before a suitcase reaches it?</summary>
-          <div class="faq-answer">Yes! The routing decision happens the exact moment a suitcase reaches the center of a switch junction. You can flip switches as fast as needed to separate back-to-back bags.</div>
+          <summary>How many misrouted suitcases are allowed before a shift fails?</summary>
+          <div class="faq-answer">You start every shift with <strong>3 Hearts (❤️❤️❤️)</strong>. If a suitcase enters the wrong color flight gate—or an X-ray flagged contraband bag slips into a passenger flight—you lose one heart. Deliver all remaining bags on the manifest before losing your third heart to clear the shift!</div>
         </details>
         <details class="faq-item">
-          <summary>What happens when I tap the Hint button during a busy shift?</summary>
-          <div class="faq-answer">Hint scans the closest incoming suitcase and pulses a golden ring around the exact switch you need to flip so it reaches its matching gate.</div>
+          <summary>How do mystery X-Ray bags work in Chapters 4 and 5?</summary>
+          <div class="faq-answer">Mystery bags enter the belt in neutral silver with a <code>?</code> tag. The instant they pass beneath the glowing purple <strong>🔍 X-Ray Scanner Arch</strong>, their true destination pops into view—either a standard flight color OR a flashing purple <strong>⚠️ SEC</strong> badge that must be diverted to the center Security Gate!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I pause mid-shift to check where every suitcase is headed?</summary>
+          <div class="faq-answer">Yes! Tap the <strong>⏸ PAUSE BELTS</strong> button (or press <code>Space</code> on your keyboard) anytime to freeze the conveyors and even flip switches safely while paused!</div>
+        </details>
+        <details class="faq-item">
+          <summary>What are the fastest controls on desktop and Chromebooks?</summary>
+          <div class="faq-answer">Press number keys <code>1</code>, <code>2</code>, <code>3</code>, and <code>4</code> to toggle switches <code>S1</code> through <code>S4</code> instantly, and tap <code>Space</code> to start or pause the shift. On mobile, tap either the glowing junctions directly or the thumb-friendly dock buttons below the canvas!</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🛒</div><span class="cat-tag">Strategy</span></div>
+        <h3>Grocery Bagging Simulator</h3>
+        <p>Pack heavy milk, eggs, frozen ice cream, and dish soap neatly into kraft bags without crushing fragile goods.</p>
+        <a href="/games/grocery-bagging/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
+        <h3>Blackout Grid Operator</h3>
+        <p>Balance solar, wind, and backup power plants across a 24-hour demand curve to hold 50 Hz.</p>
+        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
         <h3>Manual Bomb Defusal</h3>
-        <p>Read the technical manual against the ticking clock and cut the exact right wire.</p>
+        <p>Decode the live technical manual against the ticking clock and cut the exact right wire.</p>
         <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Prism &amp; Lasers</h3>
-        <p>Place mirrors and split laser beams through prisms across 500 dark-mode optical puzzles.</p>
-        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
-        <h3>Gravity Stone Stacker</h3>
-        <p>Stack irregular geometric stones into a balanced tower for five full seconds.</p>
-        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
   <!-- Shift Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Shift">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Airport Shift">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Shift (1 – 500)</h3>
+        <h3>Choose Airport Shift (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
@@ -457,21 +804,21 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Strategy</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/grocery-bagging/">Grocery Bagging</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Top Strategy</h4>
+          <h4>Top Mystery</h4>
           <ul>
-            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
-            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
             <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -504,127 +851,26 @@
     }
 
     // ==============================================
-    // CONSTANTS, PALETTE & TRACK TOPOLOGIES
+    // AIRPORT CONVEYOR NETWORK & 500-SHIFT ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
+    const WORLD_W = 420;
+    const WORLD_H = 420;
+
     const CHAPTERS = [
       { title: "Chapter 1 • Regional Terminal", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Domestic Hub", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • International Concourse", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Mega Airport", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Holiday Rush", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 2 • International VIP Hub", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Dual-Intake Rush", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • X-Ray Security Hub", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Mega-Hub 5-Gate Chaos", range: "401–500", start: 401, end: 500 }
     ];
 
-    const PALETTE = [
-      { name: "Red", code: "R", hex: "#ef4444", dark: "#991b1b", text: "#ffffff" },
-      { name: "Blue", code: "B", hex: "#38bdf8", dark: "#0369a1", text: "#082f49" },
-      { name: "Green", code: "G", hex: "#22c55e", dark: "#166534", text: "#052e16" },
-      { name: "Yellow", code: "Y", hex: "#facc15", dark: "#a16207", text: "#422006" },
-      { name: "Purple", code: "P", hex: "#c084fc", dark: "#6b21a8", text: "#2e1065" },
-      { name: "Orange", code: "O", hex: "#fb923c", dark: "#9a3412", text: "#431407" }
-    ];
-
-    // 7 Clean, Mobile-Optimized Airport Conveyor Blueprints (Top -> Bottom)
-    const LAYOUTS = {
-      // 3 Gates, 2 Switches (Right-heavy)
-      triRight: {
-        nodes: {
-          s0: { type: "spawn", x: 0.50, y: 0.08, next: "w0" },
-          w0: { type: "switch", x: 0.50, y: 0.34, outs: ["g0", "w1"] },
-          w1: { type: "switch", x: 0.70, y: 0.60, outs: ["g1", "g2"] },
-          g0: { type: "gate", x: 0.18, y: 0.89 },
-          g1: { type: "gate", x: 0.50, y: 0.89 },
-          g2: { type: "gate", x: 0.82, y: 0.89 }
-        }
-      },
-      // 3 Gates, 2 Switches (Left-heavy)
-      triLeft: {
-        nodes: {
-          s0: { type: "spawn", x: 0.50, y: 0.08, next: "w0" },
-          w0: { type: "switch", x: 0.50, y: 0.34, outs: ["w1", "g2"] },
-          w1: { type: "switch", x: 0.30, y: 0.60, outs: ["g0", "g1"] },
-          g0: { type: "gate", x: 0.18, y: 0.89 },
-          g1: { type: "gate", x: 0.50, y: 0.89 },
-          g2: { type: "gate", x: 0.82, y: 0.89 }
-        }
-      },
-      // 4 Gates, 3 Switches (Balanced Binary Tree)
-      quadTree: {
-        nodes: {
-          s0: { type: "spawn", x: 0.50, y: 0.08, next: "w0" },
-          w0: { type: "switch", x: 0.50, y: 0.29, outs: ["w1", "w2"] },
-          w1: { type: "switch", x: 0.26, y: 0.58, outs: ["g0", "g1"] },
-          w2: { type: "switch", x: 0.74, y: 0.58, outs: ["g2", "g3"] },
-          g0: { type: "gate", x: 0.14, y: 0.89 },
-          g1: { type: "gate", x: 0.38, y: 0.89 },
-          g2: { type: "gate", x: 0.62, y: 0.89 },
-          g3: { type: "gate", x: 0.86, y: 0.89 }
-        }
-      },
-      // 4 Gates, 3 Switches, 2 Spawns (Diamond Center Merge)
-      twinDiamond: {
-        nodes: {
-          s0: { type: "spawn", x: 0.26, y: 0.08, next: "w0" },
-          s1: { type: "spawn", x: 0.74, y: 0.08, next: "w1" },
-          w0: { type: "switch", x: 0.26, y: 0.31, outs: ["g0", "w2"] },
-          w1: { type: "switch", x: 0.74, y: 0.31, outs: ["w2", "g3"] },
-          w2: { type: "switch", x: 0.50, y: 0.58, outs: ["g1", "g2"] },
-          g0: { type: "gate", x: 0.14, y: 0.89 },
-          g1: { type: "gate", x: 0.38, y: 0.89 },
-          g2: { type: "gate", x: 0.62, y: 0.89 },
-          g3: { type: "gate", x: 0.86, y: 0.89 }
-        }
-      },
-      // 4 Gates, 4 Switches, 2 Spawns (Full X-Crossover Hub)
-      crossHub: {
-        nodes: {
-          s0: { type: "spawn", x: 0.26, y: 0.08, next: "w0" },
-          s1: { type: "spawn", x: 0.74, y: 0.08, next: "w1" },
-          w0: { type: "switch", x: 0.26, y: 0.28, outs: ["w2", "w3"] },
-          w1: { type: "switch", x: 0.74, y: 0.28, outs: ["w2", "w3"] },
-          w2: { type: "switch", x: 0.26, y: 0.60, outs: ["g0", "g1"] },
-          w3: { type: "switch", x: 0.74, y: 0.60, outs: ["g2", "g3"] },
-          g0: { type: "gate", x: 0.14, y: 0.89 },
-          g1: { type: "gate", x: 0.38, y: 0.89 },
-          g2: { type: "gate", x: 0.62, y: 0.89 },
-          g3: { type: "gate", x: 0.86, y: 0.89 }
-        }
-      },
-      // 5 Gates, 5 Switches, 2 Spawns (Mega Fan Terminal)
-      pentaFan: {
-        nodes: {
-          s0: { type: "spawn", x: 0.32, y: 0.08, next: "w0" },
-          s1: { type: "spawn", x: 0.68, y: 0.08, next: "w1" },
-          w0: { type: "switch", x: 0.32, y: 0.28, outs: ["w2", "w3"] },
-          w1: { type: "switch", x: 0.68, y: 0.28, outs: ["w3", "w4"] },
-          w2: { type: "switch", x: 0.19, y: 0.58, outs: ["g0", "g1"] },
-          w3: { type: "switch", x: 0.50, y: 0.56, outs: ["g1", "g2"] },
-          w4: { type: "switch", x: 0.81, y: 0.58, outs: ["g3", "g4"] },
-          g0: { type: "gate", x: 0.10, y: 0.89 },
-          g1: { type: "gate", x: 0.30, y: 0.89 },
-          g2: { type: "gate", x: 0.50, y: 0.89 },
-          g3: { type: "gate", x: 0.70, y: 0.89 },
-          g4: { type: "gate", x: 0.90, y: 0.89 }
-        }
-      },
-      // 6 Gates, 5 Switches, 2 Spawns (Grand International Concourse)
-      hexaGrand: {
-        nodes: {
-          s0: { type: "spawn", x: 0.30, y: 0.08, next: "w0" },
-          s1: { type: "spawn", x: 0.70, y: 0.08, next: "w1" },
-          w0: { type: "switch", x: 0.30, y: 0.27, outs: ["w2", "w3"] },
-          w1: { type: "switch", x: 0.70, y: 0.27, outs: ["w3", "w4"] },
-          w2: { type: "switch", x: 0.17, y: 0.57, outs: ["g0", "g1"] },
-          w3: { type: "switch", x: 0.50, y: 0.55, outs: ["g2", "g3"] },
-          w4: { type: "switch", x: 0.83, y: 0.57, outs: ["g4", "g5"] },
-          g0: { type: "gate", x: 0.09, y: 0.89 },
-          g1: { type: "gate", x: 0.254, y: 0.89 },
-          g2: { type: "gate", x: 0.418, y: 0.89 },
-          g3: { type: "gate", x: 0.582, y: 0.89 },
-          g4: { type: "gate", x: 0.746, y: 0.89 },
-          g5: { type: "gate", x: 0.91, y: 0.89 }
-        }
-      }
+    const GATE_PAL = {
+      red:    { code: "TYO", fill: "#dc2626", hi: "#fca5a5", dark: "#7f1d1d" },
+      blue:   { code: "LON", fill: "#2563eb", hi: "#93c5fd", dark: "#1e3a8a" },
+      green:  { code: "NYC", fill: "#16a34a", hi: "#86efac", dark: "#14532d" },
+      amber:  { code: "PAR", fill: "#d97706", hi: "#fde68a", dark: "#78350f" },
+      sec:    { code: "SEC", fill: "#9333ea", hi: "#e9d5ff", dark: "#4c1d95", isSec: true }
     };
 
     function mulberry32(seed) {
@@ -637,138 +883,170 @@
       };
     }
 
-    function shuffle(arr, rng) {
-      const copy = arr.slice();
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-      }
-      return copy;
-    }
-
-    // BFS to find all gate IDs reachable from a given node
-    function getReachableGates(nodes, startId) {
-      const found = new Set();
-      const q = [startId];
-      const vis = new Set([startId]);
-      while (q.length > 0) {
-        const cur = q.shift();
-        const n = nodes[cur];
-        if (!n) continue;
-        if (n.type === "gate") {
-          found.add(cur);
-        } else if (n.type === "spawn") {
-          if (!vis.has(n.next)) { vis.add(n.next); q.push(n.next); }
-        } else if (n.type === "switch") {
-          for (const nxt of n.outs) {
-            if (!vis.has(nxt)) { vis.add(nxt); q.push(nxt); }
-          }
-        }
-      }
-      return [...found];
-    }
-
-    // Build deterministic shift config for Levels 1..500
-    function buildShift(levelNum) {
-      const rng = mulberry32(levelNum * 11213 + 777123);
-
-      // Select topology by chapter
-      let layoutKey;
-      if (levelNum <= 40) {
-        layoutKey = levelNum % 2 === 1 ? "triRight" : "triLeft";
-      } else if (levelNum <= 100) {
-        layoutKey = levelNum % 3 === 0 ? "quadTree" : (levelNum % 2 === 0 ? "triRight" : "triLeft");
-      } else if (levelNum <= 200) {
-        layoutKey = levelNum % 2 === 0 ? "twinDiamond" : "quadTree";
-      } else if (levelNum <= 300) {
-        layoutKey = ["twinDiamond", "crossHub", "quadTree"][levelNum % 3];
-      } else if (levelNum <= 400) {
-        layoutKey = ["crossHub", "pentaFan", "twinDiamond"][levelNum % 3];
-      } else {
-        layoutKey = ["hexaGrand", "pentaFan", "crossHub"][levelNum % 3];
-      }
-
-      // Clone blueprint nodes
-      const template = LAYOUTS[layoutKey];
-      const nodes = {};
-      Object.keys(template.nodes).forEach((id) => {
-        const src = template.nodes[id];
-        nodes[id] = {
-          id,
-          type: src.type,
-          x: src.x,
-          y: src.y,
-          next: src.next || null,
-          outs: src.outs ? src.outs.slice() : null
+    // Build Clean Planar Conveyor Networks Scaling Across Chapters 1–5!
+    function buildTerminalTopology(chapIdx) {
+      if (chapIdx <= 1) {
+        // 1 Intake -> 3 Diverters (S1, S2, S3) -> 4 Departure Gates
+        const nodes = [
+          { id: 0, kind: "intake", x: 210, y: 34, next: 1 },
+          { id: 1, kind: "switch", label: "S1", key: "1", x: 210, y: 124, left: 2, right: 3, dir: 0 },
+          { id: 2, kind: "switch", label: "S2", key: "2", x: 112, y: 238, left: 4, right: 5, dir: 0 },
+          { id: 3, kind: "switch", label: "S3", key: "3", x: 308, y: 238, left: 6, right: 7, dir: 1 },
+          { id: 4, kind: "gate", x: 60,  y: 368, pal: GATE_PAL.red },
+          { id: 5, kind: "gate", x: 162, y: 368, pal: GATE_PAL.blue },
+          { id: 6, kind: "gate", x: 258, y: 368, pal: GATE_PAL.green },
+          { id: 7, kind: "gate", x: 360, y: 368, pal: GATE_PAL.amber }
+        ];
+        return {
+          name: "4-Gate Sorting Tree",
+          nodes,
+          intakes: [0],
+          switches: [1, 2, 3],
+          gates: [4, 5, 6, 7],
+          xrayY: null,
+          reachByIntake: { 0: [4, 5, 6, 7] }
         };
-      });
+      }
 
-      // Assign unique shuffled colors to gates
-      const gateIds = Object.keys(nodes).filter((id) => nodes[id].type === "gate");
-      const colorOrder = shuffle([0, 1, 2, 3, 4, 5], rng);
-      gateIds.forEach((gid, idx) => {
-        nodes[gid].colorIdx = colorOrder[idx];
-        nodes[gid].flash = 0;
-        nodes[gid].flashColor = "#22c55e";
-      });
+      if (chapIdx === 2) {
+        // Dual Intakes -> 3 Diverters (S1, S2, Shared S3) -> 4 Departure Gates!
+        const nodes = [
+          { id: 0, kind: "intake", x: 112, y: 34, next: 2 },
+          { id: 1, kind: "intake", x: 308, y: 34, next: 3 },
+          { id: 2, kind: "switch", label: "S1", key: "1", x: 112, y: 132, left: 5, right: 4, dir: 0 },
+          { id: 3, kind: "switch", label: "S2", key: "2", x: 308, y: 132, left: 4, right: 8, dir: 1 },
+          { id: 4, kind: "switch", label: "S3", key: "3", x: 210, y: 242, left: 6, right: 7, dir: 0 },
+          { id: 5, kind: "gate", x: 58,  y: 368, pal: GATE_PAL.red },
+          { id: 6, kind: "gate", x: 160, y: 368, pal: GATE_PAL.blue },
+          { id: 7, kind: "gate", x: 260, y: 368, pal: GATE_PAL.green },
+          { id: 8, kind: "gate", x: 362, y: 368, pal: GATE_PAL.amber }
+        ];
+        return {
+          name: "Dual-Intake Terminal",
+          nodes,
+          intakes: [0, 1],
+          switches: [2, 3, 4],
+          gates: [5, 6, 7, 8],
+          xrayY: null,
+          reachByIntake: { 0: [5, 6, 7], 1: [6, 7, 8] }
+        };
+      }
 
-      // Initial switch states
-      const switchIds = Object.keys(nodes).filter((id) => nodes[id].type === "switch");
-      const initSwitches = {};
-      switchIds.forEach((wid) => {
-        initSwitches[wid] = rng() < 0.5 ? 0 : 1;
-      });
+      // Chapters 4 & 5: Dual Intakes + Purple X-Ray Scanner Arch + 4 Diverters -> 5 Gates (Center = Purple SEC Gate!)
+      const nodes = [
+        { id: 0, kind: "intake", x: 110, y: 30, next: 2 },
+        { id: 1, kind: "intake", x: 310, y: 30, next: 3 },
+        { id: 2, kind: "switch", label: "S1", key: "1", x: 110, y: 126, left: 6, right: 4, dir: 0 },
+        { id: 3, kind: "switch", label: "S2", key: "2", x: 310, y: 126, left: 5, right: 10, dir: 1 },
+        { id: 4, kind: "switch", label: "S3", key: "3", x: 156, y: 236, left: 7, right: 8, dir: 0 },
+        { id: 5, kind: "switch", label: "S4", key: "4", x: 264, y: 236, left: 8, right: 9, dir: 1 },
+        { id: 6, kind: "gate", x: 46,  y: 368, pal: GATE_PAL.red },
+        { id: 7, kind: "gate", x: 128, y: 368, pal: GATE_PAL.blue },
+        { id: 8, kind: "gate", x: 210, y: 368, pal: GATE_PAL.sec },
+        { id: 9, kind: "gate", x: 292, y: 368, pal: GATE_PAL.green },
+        { id: 10,kind: "gate", x: 374, y: 368, pal: GATE_PAL.amber }
+      ];
+      return {
+        name: chapIdx === 3 ? "X-Ray 5-Gate Hub" : "Mega-Hub 5-Gate Chaos",
+        nodes,
+        intakes: [0, 1],
+        switches: [2, 3, 4, 5],
+        gates: [6, 7, 8, 9, 10],
+        xrayY: 78,
+        reachByIntake: { 0: [6, 7, 8], 1: [8, 9, 10] }
+      };
+    }
 
-      // Pre-compute reachable gate colors per spawn chute
-      const spawnIds = Object.keys(nodes).filter((id) => nodes[id].type === "spawn");
-      const spawnPools = {};
-      spawnIds.forEach((sid) => {
-        const reachable = getReachableGates(nodes, sid);
-        spawnPools[sid] = reachable.map((gid) => nodes[gid].colorIdx);
-      });
+    function buildShiftLevel(levelNum) {
+      const rng = mulberry32(levelNum * 401237 + 53911);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const topo = buildTerminalTopology(chapIdx);
 
-      // Difficulty parameters across 500 shifts
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1); // 0..1
-      const totalBags = Math.round(10 + p * 32); // 10 bags on L1 -> 42 bags on L500
-      const baseSpeed = 0.165 + p * 0.145; // normalized units per second
-      const baseInterval = Math.max(0.95, 2.35 - p * 1.32); // seconds between spawns
-      const expressChance = levelNum < 50 ? 0 : Math.min(0.32, (levelNum - 40) / 1100);
-      const maxErrors = levelNum <= 400 ? 3 : 2;
+      let totalBags, baseSpd, spawnInterval, vipChance, mysteryChance;
+      if (chapIdx === 0) {
+        totalBags = levelNum <= 45 ? 8 : 10;
+        baseSpd = 74 + (levelNum / 100) * 16;
+        spawnInterval = 2.65 - (levelNum / 100) * 0.35;
+        vipChance = 0; mysteryChance = 0;
+      } else if (chapIdx === 1) {
+        totalBags = 12;
+        baseSpd = 90 + ((levelNum - 100) / 100) * 16;
+        spawnInterval = 2.25 - ((levelNum - 100) / 100) * 0.25;
+        vipChance = 0.34; mysteryChance = 0;
+      } else if (chapIdx === 2) {
+        totalBags = 14;
+        baseSpd = 94 + ((levelNum - 200) / 100) * 14;
+        spawnInterval = 2.15 - ((levelNum - 200) / 100) * 0.25;
+        vipChance = 0.28; mysteryChance = 0;
+      } else if (chapIdx === 3) {
+        totalBags = 15;
+        baseSpd = 96 + ((levelNum - 300) / 100) * 14;
+        spawnInterval = 2.1 - ((levelNum - 300) / 100) * 0.2;
+        vipChance = 0.25; mysteryChance = 0.45;
+      } else {
+        totalBags = levelNum > 450 ? 18 : 16;
+        baseSpd = 108 + ((levelNum - 400) / 100) * 16;
+        spawnInterval = 1.88 - ((levelNum - 400) / 100) * 0.22;
+        vipChance = 0.38; mysteryChance = 0.55;
+      }
 
-      // Pre-generate deterministic suitcase wave queue
-      const queue = [];
-      let nextTime = 0.7;
+      // Generate Fair, Well-Spaced Luggage Manifest Guaranteeing Human-Solvable Gaps!
+      const manifest = [];
+      let tCursor = 0.45;
       for (let i = 0; i < totalBags; i++) {
-        const sid = spawnIds[Math.floor(rng() * spawnIds.length)];
-        const pool = spawnPools[sid];
-        const colorIdx = pool[Math.floor(rng() * pool.length)];
-        const express = rng() < expressChance;
+        const intakeId = topo.intakes[i % topo.intakes.length];
+        const choices = topo.reachByIntake[intakeId];
+        const targetGateId = choices[Math.floor(rng() * choices.length)];
+        const isSecBag = topo.nodes[targetGateId].pal.isSec === true;
+        const isVip = !isSecBag && rng() < vipChance;
+        const isMystery = topo.xrayY !== null && (isSecBag || rng() < mysteryChance);
 
-        queue.push({
-          spawnId: sid,
-          colorIdx,
-          express,
-          time: nextTime
+        manifest.push({
+          id: i,
+          spawnTime: tCursor,
+          intakeId,
+          targetGateId,
+          pal: topo.nodes[targetGateId].pal,
+          isVip,
+          isMystery,
+          speed: baseSpd * (isVip ? 1.28 : 1.0)
         });
 
-        // Slight rhythm variation while guaranteeing fair human reaction gap
-        const jitter = (rng() - 0.5) * 0.32 * baseInterval;
-        const gap = Math.max(0.82, baseInterval + jitter);
-        nextTime += gap;
+        // Slight organic timing jitter while preserving safe gap
+        tCursor += spawnInterval * (0.9 + rng() * 0.24);
       }
 
       return {
         levelNum,
-        nodes,
-        gateIds,
-        switchIds,
-        spawnIds,
-        initSwitches,
+        chapIdx,
+        topo,
         totalBags,
-        baseSpeed,
-        maxErrors,
-        queue
+        manifest
       };
+    }
+
+    // BFS Shortest Switch Settings Required to Route a Bag From Node `fromId` -> `targetGateId`
+    function findRequiredSwitches(topo, fromId, targetGateId) {
+      const q = [{ id: fromId, plan: [] }];
+      const seen = new Set([fromId]);
+      while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.id === targetGateId) return cur.plan;
+        const nd = topo.nodes[cur.id];
+        if (nd.kind === "intake") {
+          if (!seen.has(nd.next)) { seen.add(nd.next); q.push({ id: nd.next, plan: cur.plan }); }
+        } else if (nd.kind === "switch") {
+          if (!seen.has(nd.left)) {
+            seen.add(nd.left);
+            q.push({ id: nd.left, plan: [...cur.plan, { swId: nd.id, wantDir: 0 }] });
+          }
+          if (!seen.has(nd.right)) {
+            seen.add(nd.right);
+            q.push({ id: nd.right, plan: [...cur.plan, { swId: nd.id, wantDir: 1 }] });
+          }
+        }
+      }
+      return [];
     }
 
     function getChapter(num) {
@@ -776,7 +1054,7 @@
     }
 
     // ==============================================
-    // AUDIO ENGINE (WEB AUDIO SYNTHESIS)
+    // MECHANICAL DIVERTER, SCANNER & BOARDING WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
@@ -789,59 +1067,70 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.12) {
+    function playTone(freq, dur, type = "sine", vol = 0.09) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      const g = audioCtx.createGain();
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(vol, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
       osc.stop(now + dur + 0.02);
     }
 
-    function sfxSwitch() {
-      playTone(340, 0.045, "triangle", 0.12);
-      setTimeout(() => playTone(510, 0.04, "sine", 0.08), 25);
+    function sfxSwitchClack(dir) {
+      playTone(dir === 0 ? 480 : 620, 0.042, "triangle", 0.1);
     }
-    function sfxDeliver(combo) {
-      const scale = [523.25, 587.33, 659.25, 783.99, 880.00];
-      playTone(scale[combo % scale.length], 0.16, "sine", 0.12);
+    function sfxXrayScan(isAlert) {
+      if (isAlert) {
+        playTone(920, 0.07, "sawtooth", 0.07);
+        setTimeout(() => playTone(1240, 0.09, "sawtooth", 0.07), 55);
+      } else {
+        playTone(1080, 0.05, "sine", 0.05);
+      }
     }
-    function sfxMiss() {
-      playTone(155, 0.22, "sawtooth", 0.16);
-      setTimeout(() => playTone(125, 0.22, "sawtooth", 0.14), 110);
+    function sfxGateDeliver() {
+      playTone(659.25, 0.1, "sine", 0.1);
+      setTimeout(() => playTone(987.77, 0.16, "sine", 0.09), 50);
     }
-    function sfxWin() {
+    function sfxWrongGate() {
+      playTone(190, 0.14, "sawtooth", 0.12);
+      setTimeout(() => playTone(135, 0.18, "sawtooth", 0.11), 85);
+    }
+    function sfxBoardingChimeWin() {
+      // Classic 4-Note International Airport Terminal Announcement Chime!
       [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.22, "sine", 0.13), i * 85);
+        setTimeout(() => playTone(f, 0.5, "sine", 0.11), i * 115);
       });
     }
 
     // ==============================================
-    // GAME STATE & LOOP
+    // GAME STATE, BELT SIMULATION & INPUT CONTROLLER
     // ==============================================
     const canvas = document.getElementById("baggageCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const bagsCounter = document.getElementById("bagsCounter");
-    const livesCounter = document.getElementById("livesCounter");
+    const livesPill = document.getElementById("livesPill");
     const solvedCounter = document.getElementById("solvedCounter");
+    const shiftLbl = document.getElementById("shiftLbl");
+    const shiftFill = document.getElementById("shiftFill");
+    const shiftCnt = document.getElementById("shiftCnt");
+    const switchGrid = document.getElementById("switchGrid");
+    const shiftMainBtn = document.getElementById("shiftMainBtn");
     const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
-    const pauseBtn = document.getElementById("pauseBtn");
-    const speedBtn = document.getElementById("speedBtn");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
@@ -854,21 +1143,20 @@
     } catch (e) {}
 
     let shift = null;
-    let switchStates = {};
-    let bags = [];
-    let spawnIdx = 0;
-    let elapsed = 0;
-    let delivered = 0;
-    let errors = 0;
-    let combo = 0;
-    let speedMult = 1;
-    let gameState = "ready"; // ready | running | paused | won | lost
-    let hintSwitchId = null;
+    let state = "ready"; // 'ready' | 'running' | 'paused' | 'won' | 'failed'
+    let simClock = 0;
+    let nextManifestIdx = 0;
+    let activeBags = [];
+    let deliveredCnt = 0;
+    let resolvedCnt = 0;
+    let lives = 3;
+    let hintSwId = -1;
     let hintTimer = 0;
-    let ripples = [];
-    let popups = [];
+
+    let gateFlashes = new Map();
+    let sparks = [];
+    let beltOffset = 0;
     let toastTimer = null;
-    let beltPhase = 0;
 
     function showToast(msg, ms = 2200) {
       statusToast.textContent = msg;
@@ -877,65 +1165,118 @@
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
+    function renderSwitchDock() {
+      const swIds = shift.topo.switches;
+      switchGrid.className = "switch-grid" + (swIds.length === 4 ? " cols-4" : "");
+      switchGrid.innerHTML = "";
+
+      swIds.forEach((id) => {
+        const nd = shift.topo.nodes[id];
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "sw-btn "
+          + (nd.dir === 0 ? "dir-left" : "dir-right")
+          + (hintSwId === id && hintTimer > 0 ? " hint-glow" : "");
+        btn.innerHTML = `
+          <span class="sw-name">[${nd.key}] ${nd.label}</span>
+          <span class="sw-dir">${nd.dir === 0 ? "↙ LEFT" : "RIGHT ↘"}</span>
+        `;
+        btn.addEventListener("click", () => toggleSwitch(id));
+        switchGrid.appendChild(btn);
+      });
+    }
+
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Shift ${currentLevelNum} / ${TOTAL_LEVELS}`;
-      bagsCounter.textContent = `Bags: ${delivered} / ${shift.totalBags}`;
-      livesCounter.textContent = `Errors: ${errors} / ${shift.maxErrors}`;
-      solvedCounter.textContent = `Cleared: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      levelTitle.textContent = `Shift #${currentLevelNum} / ${TOTAL_LEVELS} — ${shift.topo.name}`;
+      livesPill.textContent = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, 3 - lives));
+      solvedCounter.textContent = `Shifts: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Shift ${currentLevelNum} / 500 ▾`;
-      pauseBtn.textContent = gameState === "paused" ? "▶ Resume" : "⏸ Pause";
+
+      const pct = Math.round((resolvedCnt / shift.totalBags) * 100);
+      shiftFill.style.width = `${pct}%`;
+      shiftCnt.textContent = `${deliveredCnt} / ${shift.totalBags}`;
+
+      if (state === "ready") {
+        shiftLbl.textContent = "✈️ Ready — Inspect Gates";
+        shiftMainBtn.className = "shift-main-btn";
+        shiftMainBtn.textContent = "▶ START CONVEYORS";
+      } else if (state === "running") {
+        shiftLbl.textContent = "🧳 Routing Live Luggage...";
+        shiftMainBtn.className = "shift-main-btn pause-mode";
+        shiftMainBtn.textContent = "⏸ PAUSE BELTS";
+      } else if (state === "paused") {
+        shiftLbl.textContent = "⏸ Belts Paused (Can Switch)";
+        shiftMainBtn.className = "shift-main-btn";
+        shiftMainBtn.textContent = "▶ RESUME SHIFT";
+      } else if (state === "failed") {
+        shiftLbl.textContent = "🚨 3 Bags Misrouted!";
+        shiftMainBtn.className = "shift-main-btn retry-mode";
+        shiftMainBtn.textContent = "↺ RETRY SHIFT";
+      } else {
+        shiftLbl.textContent = "✓ Shift Cleared!";
+        shiftMainBtn.className = "shift-main-btn";
+        shiftMainBtn.textContent = "✈️ ALL FLIGHTS LOADED";
+      }
+
+      renderSwitchDock();
     }
 
-    function showOverlay(icon, title, text, btnText) {
-      ovIcon.textContent = icon;
-      ovHeading.textContent = title;
-      ovText.textContent = text;
-      ovActionBtn.textContent = btnText;
-      stageOverlay.classList.add("show");
+    function toggleSwitch(nodeId) {
+      if (state === "won" || state === "failed") return;
+      const nd = shift.topo.nodes[nodeId];
+      if (!nd || nd.kind !== "switch") return;
+      initAudio();
+      nd.dir = nd.dir === 0 ? 1 : 0;
+      if (hintSwId === nodeId) { hintSwId = -1; hintTimer = 0; }
+      sfxSwitchClack(nd.dir);
+      renderSwitchDock();
     }
 
-    function hideOverlay() {
-      stageOverlay.classList.remove("show");
+    function toggleRunState() {
+      initAudio();
+      if (state === "failed") {
+        loadShift(currentLevelNum);
+        state = "running";
+        updateHUD();
+        return;
+      }
+      if (state === "ready" || state === "paused") {
+        state = "running";
+        updateHUD();
+      } else if (state === "running") {
+        state = "paused";
+        updateHUD();
+      }
     }
 
-    function loadShift(num, autoStart = false) {
+    function loadShift(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      shift = buildShift(currentLevelNum);
-      switchStates = { ...shift.initSwitches };
-      bags = [];
-      spawnIdx = 0;
-      elapsed = 0;
-      delivered = 0;
-      errors = 0;
-      combo = 0;
-      hintSwitchId = null;
+      shift = buildShiftLevel(currentLevelNum);
+      state = "ready";
+      simClock = 0;
+      nextManifestIdx = 0;
+      activeBags = [];
+      deliveredCnt = 0;
+      resolvedCnt = 0;
+      lives = 3;
+      hintSwId = -1;
       hintTimer = 0;
-      ripples = [];
-      popups = [];
+      gateFlashes.clear();
+      sparks = [];
+
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
       try {
         localStorage.setItem("zinplay_baggage_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      if (autoStart) {
-        gameState = "running";
-        hideOverlay();
-      } else {
-        gameState = "ready";
-        const expressNote = shift.levelNum >= 50 ? " Watch out for ⚡ Express bags!" : "";
-        showOverlay(
-          "🧳",
-          `Shift ${currentLevelNum} Ready`,
-          `Route ${shift.totalBags} suitcases to ${shift.gateIds.length} gates (max ${shift.maxErrors} errors).${expressNote}`,
-          "Start Shift ▶"
-        );
-      }
       updateHUD();
     }
 
+    // Viewport & Direct Tap-on-Junction Controls
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -944,144 +1285,92 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function toScreen(nx, ny) {
+    function getViewport() {
       const rect = canvas.parentElement.getBoundingClientRect();
-      const padX = 16;
-      const padY = 16;
-      return {
-        x: padX + nx * (rect.width - padX * 2),
-        y: padY + ny * (rect.height - padY * 2)
-      };
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offsetX = (rect.width - WORLD_W * scale) / 2;
+      const offsetY = (rect.height - WORLD_H * scale) / 2;
+      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    // Handle Switch Tap
     canvas.addEventListener("pointerdown", (e) => {
+      if (state === "won" || state === "failed") return;
       initAudio();
-      if (gameState !== "running") return;
-
       const rect = canvas.getBoundingClientRect();
-      const px = e.clientX - rect.left;
-      const py = e.clientY - rect.top;
+      const vp = getViewport();
+      const wx = (e.clientX - rect.left - vp.offsetX) / vp.scale;
+      const wy = (e.clientY - rect.top - vp.offsetY) / vp.scale;
 
-      let bestId = null;
-      let bestDist = 42; // Generous mobile touch target
-      for (const wid of shift.switchIds) {
-        const n = shift.nodes[wid];
-        const pos = toScreen(n.x, n.y);
-        const d = Math.hypot(pos.x - px, pos.y - py);
-        if (d < bestDist) {
-          bestDist = d;
-          bestId = wid;
-        }
+      // Hit-test glowing diverter switch discs directly on the canvas!
+      let hitId = -1, bestD = 38;
+      for (const swId of shift.topo.switches) {
+        const nd = shift.topo.nodes[swId];
+        const d = Math.hypot(wx - nd.x, wy - nd.y);
+        if (d < bestD) { bestD = d; hitId = swId; }
       }
-
-      if (bestId) {
-        switchStates[bestId] = switchStates[bestId] === 0 ? 1 : 0;
-        const pos = toScreen(shift.nodes[bestId].x, shift.nodes[bestId].y);
-        ripples.push({ x: pos.x, y: pos.y, r: 16, alpha: 0.9, color: "#38bdf8" });
-        if (hintSwitchId === bestId) hintSwitchId = null;
-        sfxSwitch();
+      if (hitId !== -1) {
+        toggleSwitch(hitId);
+        // Auto-start belts if player clicks a switch while ready? Better to let them flip freely before starting!
+      } else if (state === "ready") {
+        toggleRunState();
       }
     });
 
-    // Hint: Find the first switch to flip for the closest active bag
-    function findSwitchHintForBag(bag) {
-      let curId = bag.toNode;
-      let safety = 0;
-      while (curId && safety < 10) {
-        safety++;
-        const node = shift.nodes[curId];
-        if (!node || node.type === "gate") return null;
-        if (node.type === "switch") {
-          const activeBranch = node.outs[switchStates[curId]];
-          const otherBranch = node.outs[1 - switchStates[curId]];
-          const activeCanReach = getReachableGates(shift.nodes, activeBranch)
-            .some((gid) => shift.nodes[gid].colorIdx === bag.colorIdx);
-          if (activeCanReach) {
-            curId = activeBranch;
-          } else {
-            const otherCanReach = getReachableGates(shift.nodes, otherBranch)
-              .some((gid) => shift.nodes[gid].colorIdx === bag.colorIdx);
-            if (otherCanReach) return curId;
-            return null;
-          }
-        } else {
-          curId = node.next;
-        }
-      }
-      return null;
-    }
+    shiftMainBtn.addEventListener("click", toggleRunState);
 
+    // Keyboard Controls: Keys 1-4 flip switches S1-S4, Space toggles Run/Pause!
+    window.addEventListener("keydown", (e) => {
+      if (pickerModal.classList.contains("open")) return;
+      const idx = ["1", "2", "3", "4"].indexOf(e.key);
+      if (idx !== -1 && idx < shift.topo.switches.length) {
+        toggleSwitch(shift.topo.switches[idx]);
+      } else if (e.key === " ") {
+        e.preventDefault();
+        toggleRunState();
+      }
+    });
+
+    // Auto-Route Hint: Aligns Required Diverters for the Lead Suitcase on the Belt!
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (gameState !== "running") return;
-      if (bags.length === 0) {
-        showToast("Wait for the next suitcase to appear!", 1800);
+      if (state === "won" || state === "failed") return;
+      initAudio();
+      if (activeBags.length === 0) {
+        showToast("▶ Start conveyors first—Auto-Route aligns switches for the leading bag!", 2300);
         return;
       }
-      // Sort bags by furthest progress down the terminal (highest y)
-      const sorted = bags.slice().sort((a, b) => b.y - a.y);
-      for (const b of sorted) {
-        const sw = findSwitchHintForBag(b);
-        if (sw) {
-          hintSwitchId = sw;
-          hintTimer = 3.5;
-          showToast(`Flip the golden switch for the ${PALETTE[b.colorIdx].name} bag!`, 2400);
-          return;
+      // Pick bag closest to bottom gates (highest Y)
+      const lead = activeBags.reduce((best, b) => (b.y > best.y ? b : best), activeBags[0]);
+      const plan = findRequiredSwitches(shift.topo, lead.toId, lead.targetGateId);
+      if (plan.length > 0) {
+        for (const step of plan) {
+          shift.topo.nodes[step.swId].dir = step.wantDir;
         }
-      }
-      showToast("All current bags are already routed correctly!", 2000);
-    });
-
-    // Control Buttons
-    ovActionBtn.addEventListener("click", () => {
-      initAudio();
-      if (gameState === "ready" || gameState === "paused") {
-        gameState = "running";
-        hideOverlay();
-        updateHUD();
-      } else if (gameState === "won") {
-        const next = currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1;
-        loadShift(next, true);
-      } else if (gameState === "lost") {
-        loadShift(currentLevelNum, true);
+        hintSwId = plan[0].swId;
+        hintTimer = 2.4;
+        sfxSwitchClack(plan[0].wantDir);
+        renderSwitchDock();
+        showToast(`💡 Auto-routed leading bag toward ${lead.pal.code} Gate!`, 1800);
+      } else {
+        showToast("Leading bag is already on its final gate chute!", 1700);
       }
     });
 
-    pauseBtn.addEventListener("click", () => {
-      if (gameState === "running") {
-        gameState = "paused";
-        showOverlay("⏸", "Shift Paused", "Take a breather—the conveyors are locked.", "Resume Shift ▶");
-        updateHUD();
-      } else if (gameState === "paused") {
-        gameState = "running";
-        hideOverlay();
-        updateHUD();
-      }
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      loadShift(currentLevelNum, true);
-    });
-
-    speedBtn.addEventListener("click", () => {
-      speedMult = speedMult === 1 ? 1.5 : 1;
-      speedBtn.classList.toggle("active-toggle", speedMult > 1);
-      speedBtn.textContent = speedMult > 1 ? "⚡ 1.5x ON" : "⚡ 1.5x";
-    });
-
+    document.getElementById("resetBtn").addEventListener("click", () => loadShift(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Terminal Audio ON" : "🔇 OFF";
     });
-
+    nextLevelBtn.addEventListener("click", () => {
+      loadShift(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
+    });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadShift(currentLevelNum - 1, false);
+      if (currentLevelNum > 1) loadShift(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadShift(currentLevelNum + 1, false);
+      if (currentLevelNum < TOTAL_LEVELS) loadShift(currentLevelNum + 1);
     });
 
-    // Level Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1112,7 +1401,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadShift(n, false);
+          loadShift(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1120,10 +1409,6 @@
     }
 
     openPickerBtn.addEventListener("click", () => {
-      if (gameState === "running") {
-        gameState = "paused";
-        updateHUD();
-      }
       activeChapterIdx = Math.floor((currentLevelNum - 1) / 100);
       jumpInput.value = "";
       renderPicker();
@@ -1131,409 +1416,399 @@
     });
     document.getElementById("closePickerBtn").addEventListener("click", () => {
       pickerModal.classList.remove("open");
-      if (gameState === "paused") {
-        showOverlay("⏸", "Shift Paused", "Resume whenever you're ready.", "Resume Shift ▶");
-      }
     });
     pickerModal.addEventListener("click", (e) => {
-      if (e.target === pickerModal) {
-        pickerModal.classList.remove("open");
-        if (gameState === "paused") {
-          showOverlay("⏸", "Shift Paused", "Resume whenever you're ready.", "Resume Shift ▶");
-        }
-      }
+      if (e.target === pickerModal) pickerModal.classList.remove("open");
     });
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadShift(val, false);
+        loadShift(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // SIMULATION UPDATE & CANVAS RENDERING
+    // CONVEYOR BELT SIMULATION & RENDERER
     // ==============================================
-    function updateSimulation(dt) {
-      if (gameState !== "running") return;
+    function stepLuggage(dt) {
+      if (state !== "running") return;
 
-      const effDt = dt * speedMult;
-      elapsed += effDt;
-      beltPhase = (beltPhase + effDt * 42) % 24;
+      simClock += dt;
+      beltOffset = (beltOffset + dt * 58) % 18;
 
-      if (hintTimer > 0) {
-        hintTimer -= dt;
-        if (hintTimer <= 0) hintSwitchId = null;
-      }
-
-      // Spawn due bags
-      while (spawnIdx < shift.queue.length && elapsed >= shift.queue[spawnIdx].time) {
-        const item = shift.queue[spawnIdx];
-        const spNode = shift.nodes[item.spawnId];
-        bags.push({
-          fromNode: item.spawnId,
-          toNode: spNode.next,
-          t: 0,
-          x: spNode.x,
-          y: spNode.y,
-          colorIdx: item.colorIdx,
-          express: item.express,
-          speed: shift.baseSpeed * (item.express ? 1.35 : 1)
+      // 1. Spawn Scheduled Suitcases From Check-In Intakes
+      while (nextManifestIdx < shift.manifest.length && simClock >= shift.manifest[nextManifestIdx].spawnTime) {
+        const m = shift.manifest[nextManifestIdx++];
+        const intakeNd = shift.topo.nodes[m.intakeId];
+        const nextNd = shift.topo.nodes[intakeNd.next];
+        activeBags.push({
+          ...m,
+          fromId: intakeNd.id,
+          toId: nextNd.id,
+          segT: 0,
+          x: intakeNd.x,
+          y: intakeNd.y,
+          revealed: !m.isMystery
         });
-        spawnIdx++;
       }
 
-      // Move active bags
-      for (let i = bags.length - 1; i >= 0; i--) {
-        const b = bags[i];
-        const n1 = shift.nodes[b.fromNode];
-        const n2 = shift.nodes[b.toNode];
-        const segLen = Math.max(0.08, Math.hypot(n2.x - n1.x, n2.y - n1.y));
-        b.t += (b.speed * effDt) / segLen;
+      // 2. Advance All Active Suitcases Along Conveyor Edges
+      const surviving = [];
+      for (const b of activeBags) {
+        const a = shift.topo.nodes[b.fromId];
+        const c = shift.topo.nodes[b.toId];
+        const segLen = Math.max(1, Math.hypot(c.x - a.x, c.y - a.y));
+        b.segT += (b.speed * dt) / segLen;
 
-        if (b.t >= 1) {
-          const arrived = shift.nodes[b.toNode];
-          if (arrived.type === "switch") {
-            const overshootDist = (b.t - 1) * segLen;
-            const nextId = arrived.outs[switchStates[arrived.id]];
-            const nNext = shift.nodes[nextId];
-            const nextLen = Math.max(0.08, Math.hypot(nNext.x - arrived.x, nNext.y - arrived.y));
-            b.fromNode = arrived.id;
-            b.toNode = nextId;
-            b.t = Math.min(0.95, overshootDist / nextLen);
-          } else if (arrived.type === "gate") {
-            const gPos = toScreen(arrived.x, arrived.y);
-            if (arrived.colorIdx === b.colorIdx) {
-              delivered++;
-              combo++;
-              arrived.flash = 1;
-              arrived.flashColor = "#22c55e";
-              sfxDeliver(combo);
-              popups.push({ x: gPos.x, y: gPos.y - 22, text: "✓", color: "#4ade80", alpha: 1 });
+        if (b.segT >= 1) {
+          if (c.kind === "switch") {
+            const nxtId = c.dir === 0 ? c.left : c.right;
+            b.fromId = c.id;
+            b.toId = nxtId;
+            b.segT = 0;
+            b.x = c.x;
+            b.y = c.y;
+            surviving.push(b);
+          } else if (c.kind === "gate") {
+            resolvedCnt++;
+            const correct = c.id === b.targetGateId;
+            if (correct) {
+              deliveredCnt++;
+              sfxGateDeliver();
+              gateFlashes.set(c.id, { col: "#4ade80", t: 1.0 });
+              for (let k = 0; k < 10; k++) {
+                const ang = Math.random() * Math.PI * 2;
+                sparks.push({ x: c.x, y: c.y - 14, vx: Math.cos(ang) * 2.1, vy: Math.sin(ang) * 2.1, r: 2.3, color: b.pal.hi, alpha: 1 });
+              }
             } else {
-              errors++;
-              combo = 0;
-              arrived.flash = 1;
-              arrived.flashColor = "#ef4444";
-              sfxMiss();
-              popups.push({ x: gPos.x, y: gPos.y - 22, text: "✕", color: "#f87171", alpha: 1 });
-              if (errors >= shift.maxErrors) {
-                bags.splice(i, 1);
-                gameState = "lost";
+              lives--;
+              sfxWrongGate();
+              gateFlashes.set(c.id, { col: "#ef4444", t: 1.0 });
+              showToast(`🚨 Wrong Gate! ${b.pal.code} suitcase sent to ${c.pal.code}!`, 2000);
+              if (lives <= 0) {
+                state = "failed";
                 updateHUD();
-                showOverlay(
-                  "🚨",
-                  "Terminal Jammed!",
-                  `Too many misrouted bags (${errors}/${shift.maxErrors}). Delivered ${delivered}/${shift.totalBags}.`,
-                  "↺ Retry Shift"
-                );
                 return;
               }
             }
-            bags.splice(i, 1);
             updateHUD();
-            continue;
           }
+        } else {
+          b.x = a.x + (c.x - a.x) * b.segT;
+          b.y = a.y + (c.y - a.y) * b.segT;
+
+          // Trigger X-Ray Scanner Reveal as Bag Passes Beneath Purple Security Arch!
+          if (!b.revealed && shift.topo.xrayY !== null && b.y >= shift.topo.xrayY) {
+            b.revealed = true;
+            sfxXrayScan(b.pal.isSec);
+            for (let k = 0; k < 8; k++) {
+              const ang = Math.random() * Math.PI * 2;
+              sparks.push({ x: b.x, y: b.y, vx: Math.cos(ang) * 1.8, vy: Math.sin(ang) * 1.8, r: 2, color: b.pal.isSec ? "#e879f9" : "#38bdf8", alpha: 0.95 });
+            }
+          }
+          surviving.push(b);
         }
-
-        const p1 = shift.nodes[b.fromNode];
-        const p2 = shift.nodes[b.toNode];
-        b.x = p1.x + (p2.x - p1.x) * b.t;
-        b.y = p1.y + (p2.y - p1.y) * b.t;
       }
+      activeBags = surviving;
 
-      // Check shift win
-      if (spawnIdx >= shift.queue.length && bags.length === 0 && gameState === "running") {
-        gameState = "won";
+      // 3. Check Shift Cleared Once All Bags Have Resolved!
+      if (state === "running" && nextManifestIdx >= shift.manifest.length && activeBags.length === 0) {
+        state = "won";
         solvedSet.add(currentLevelNum);
         try {
           localStorage.setItem("zinplay_baggage_500_solved", JSON.stringify([...solvedSet]));
         } catch (e) {}
+        sfxBoardingChimeWin();
         updateHUD();
-        sfxWin();
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        showOverlay(
-          "✈️",
-          isLast ? "All 500 Shifts Mastered!" : `Shift ${currentLevelNum} Cleared!`,
-          `Routed ${delivered} of ${shift.totalBags} suitcases safely with ${errors} error${errors === 1 ? "" : "s"}.`,
-          isLast ? "Replay Shift 1" : `Next Shift (${currentLevelNum + 1}) →`
-        );
-      }
 
-      // Decay gate flashes
-      shift.gateIds.forEach((gid) => {
-        if (shift.nodes[gid].flash > 0) {
-          shift.nodes[gid].flash = Math.max(0, shift.nodes[gid].flash - dt * 2.8);
-        }
-      });
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winHeading.textContent = isLast ? "All 500 Shifts Completed!" : `Shift #${currentLevelNum} Cleared!`;
+        winText.textContent = `Successfully sorted ${deliveredCnt} / ${shift.totalBags} suitcases to their departure gates!`;
+        nextLevelBtn.textContent = isLast ? "Replay Shift #1" : `Next Shift (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 520);
+      }
     }
 
-    function drawBelt(p1, p2, active) {
-      const dx = p2.x - p1.x;
-      const dy = p2.y - p1.y;
-      const len = Math.hypot(dx, dy);
-      const ang = Math.atan2(dy, dx);
-
+    function drawConveyorSegment(x1, y1, x2, y2, activeBranch) {
       ctx.save();
-      // Conveyor housing
-      ctx.strokeStyle = active ? "#1e293b" : "#111827";
-      ctx.lineWidth = 22;
       ctx.lineCap = "round";
+
+      // Steel Belt Side Rails
+      ctx.strokeStyle = activeBranch ? "#475569" : "#26344a";
+      ctx.lineWidth = 28;
       ctx.beginPath();
-      ctx.moveTo(p1.x, p1.y);
-      ctx.lineTo(p2.x, p2.y);
+      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
       ctx.stroke();
 
-      // Inner active glow track
-      ctx.strokeStyle = active ? "#38bdf8" : "#334155";
-      ctx.lineWidth = active ? 4 : 2;
-      ctx.globalAlpha = active ? 0.9 : 0.45;
+      // Dark Rubber Conveyor Belt Surface
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 22;
       ctx.beginPath();
-      ctx.moveTo(p1.x, p1.y);
-      ctx.lineTo(p2.x, p2.y);
+      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
       ctx.stroke();
 
-      // Animated directional chevrons on active belts
-      if (active) {
-        ctx.strokeStyle = "rgba(186, 230, 253, 0.72)";
-        ctx.lineWidth = 2;
-        ctx.globalAlpha = 1;
-        for (let d = beltPhase; d < len - 14; d += 24) {
-          if (d < 14) continue;
-          const cx = p1.x + Math.cos(ang) * d;
-          const cy = p1.y + Math.sin(ang) * d;
-          ctx.save();
-          ctx.translate(cx, cy);
-          ctx.rotate(ang);
-          ctx.beginPath();
-          ctx.moveTo(-4, -5);
-          ctx.lineTo(2, 0);
-          ctx.lineTo(-4, 5);
-          ctx.stroke();
-          ctx.restore();
-        }
+      // Animated Scrolling Conveyor Treads / Chevrons!
+      ctx.strokeStyle = activeBranch ? "rgba(56, 189, 248, 0.5)" : "rgba(148, 163, 184, 0.16)";
+      ctx.lineWidth = activeBranch ? 3 : 2;
+      ctx.setLineDash([4, 14]);
+      ctx.lineDashOffset = -beltOffset;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
+
+    function drawSuitcase(b, now) {
+      ctx.save();
+      ctx.translate(b.x, b.y);
+
+      const fill = b.revealed ? b.pal.fill : "#64748b";
+      const stroke = b.isVip ? "#fde047" : (b.revealed ? b.pal.hi : "#cbd5e1");
+
+      // Soft Belt Drop Shadow
+      ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+      ctx.beginPath();
+      ctx.roundRect(-13, -10, 28, 22, 5);
+      ctx.fill();
+
+      // Suitcase Top Handle
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(-5, -14, 10, 5, 2);
+      ctx.stroke();
+
+      // Hard-Shell Suitcase Body
+      ctx.fillStyle = fill;
+      ctx.strokeStyle = stroke;
+      if (b.isVip || (b.revealed && b.pal.isSec)) {
+        ctx.shadowColor = b.isVip ? "#facc15" : "#d946ef";
+        ctx.shadowBlur = 10;
+      }
+      ctx.lineWidth = b.isVip ? 2.4 : 1.8;
+      ctx.beginPath();
+      ctx.roundRect(-14, -11, 28, 20, 5);
+      ctx.fill();
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Center Label Tag / VIP Bolt / X-Ray Warning Badge
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 8px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      if (!b.revealed) {
+        ctx.fillText("?", 0, -1);
+      } else if (b.pal.isSec) {
+        ctx.fillStyle = Math.sin(now * 0.02) > 0 ? "#fde047" : "#ffffff";
+        ctx.fillText("SEC", 0, -1);
+      } else {
+        ctx.fillText(b.isVip ? `⚡${b.pal.code.slice(0, 2)}` : b.pal.code, 0, -1);
       }
       ctx.restore();
     }
 
-    function drawScene(time) {
-      const rect = canvas.parentElement.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
-      ctx.clearRect(0, 0, w, h);
+    let lastTime = performance.now();
 
-      // Subtle background grid
-      ctx.strokeStyle = "rgba(148, 163, 184, 0.05)";
+    function frame(now) {
+      const dt = Math.min(0.035, (now - lastTime) / 1000);
+      lastTime = now;
+
+      if (hintTimer > 0) {
+        hintTimer = Math.max(0, hintTimer - dt);
+        if (hintTimer === 0) { hintSwId = -1; renderSwitchDock(); }
+      }
+      for (const [gid, fl] of gateFlashes.entries()) {
+        fl.t -= dt * 2.5;
+        if (fl.t <= 0) gateFlashes.delete(gid);
+      }
+
+      stepLuggage(dt);
+
+      const vp = getViewport();
+      ctx.clearRect(0, 0, vp.w, vp.h);
+
+      ctx.save();
+      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.scale(vp.scale, vp.scale);
+
+      // 1. Industrial Terminal Floor Grid
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.06)";
       ctx.lineWidth = 1;
-      for (let x = 24; x < w; x += 32) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      for (let x = 20; x < WORLD_W; x += 28) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, WORLD_H); ctx.stroke();
       }
-      for (let y = 24; y < h; y += 32) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      for (let y = 20; y < WORLD_H; y += 28) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WORLD_W, y); ctx.stroke();
       }
 
-      // 1. Draw Inactive Belts First, Then Active Belts On Top
-      const inactiveEdges = [];
-      const activeEdges = [];
+      const nodes = shift.topo.nodes;
 
-      Object.values(shift.nodes).forEach((n) => {
-        const p1 = toScreen(n.x, n.y);
-        if (n.type === "spawn") {
-          const p2 = toScreen(shift.nodes[n.next].x, shift.nodes[n.next].y);
-          activeEdges.push([p1, p2]);
-        } else if (n.type === "switch") {
-          n.outs.forEach((outId, idx) => {
-            const p2 = toScreen(shift.nodes[outId].x, shift.nodes[outId].y);
-            if (switchStates[n.id] === idx) activeEdges.push([p1, p2]);
-            else inactiveEdges.push([p1, p2]);
-          });
+      // 2. Draw All Conveyor Belt Edges (Highlight Active Selected Switch Paths!)
+      for (const nd of nodes) {
+        if (nd.kind === "intake") {
+          const to = nodes[nd.next];
+          drawConveyorSegment(nd.x, nd.y, to.x, to.y, true);
+        } else if (nd.kind === "switch") {
+          const lNd = nodes[nd.left];
+          const rNd = nodes[nd.right];
+          drawConveyorSegment(nd.x, nd.y, lNd.x, lNd.y, nd.dir === 0);
+          drawConveyorSegment(nd.x, nd.y, rNd.x, rNd.y, nd.dir === 1);
         }
-      });
+      }
 
-      inactiveEdges.forEach(([p1, p2]) => drawBelt(p1, p2, false));
-      activeEdges.forEach(([p1, p2]) => drawBelt(p1, p2, true));
-
-      // 2. Draw Spawn Chutes (Top)
-      shift.spawnIds.forEach((sid) => {
-        const pos = toScreen(shift.nodes[sid].x, shift.nodes[sid].y);
+      // 3. Draw Check-In Intake Chutes (Top)
+      for (const id of shift.topo.intakes) {
+        const nd = nodes[id];
         ctx.save();
         ctx.fillStyle = "#1e293b";
         ctx.strokeStyle = "#64748b";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.roundRect(pos.x - 24, pos.y - 16, 48, 28, 8);
+        ctx.roundRect(nd.x - 28, nd.y - 18, 56, 28, 7);
         ctx.fill();
         ctx.stroke();
-
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = "800 10px sans-serif";
+        ctx.fillStyle = "#cbd5e1";
+        ctx.font = "900 8.5px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText("IN", pos.x, pos.y - 1);
+        ctx.fillText("CHECK-IN", nd.x, nd.y - 4);
         ctx.restore();
-      });
+      }
 
-      // 3. Draw Departure Gates (Bottom)
-      const gateW = Math.min(54, Math.floor((w - 28) / shift.gateIds.length) - 6);
-      const gateH = 44;
-      shift.gateIds.forEach((gid) => {
-        const g = shift.nodes[gid];
-        const pos = toScreen(g.x, g.y);
-        const col = PALETTE[g.colorIdx];
+      // 4. Draw Glowing Departure Flight Gates & Purple Security Bay (Bottom)
+      for (const gid of shift.topo.gates) {
+        const g = nodes[gid];
+        const fl = gateFlashes.get(gid);
+        const gw = shift.topo.gates.length === 5 ? 68 : 80;
 
         ctx.save();
-        if (g.flash > 0) {
-          ctx.shadowColor = g.flashColor;
-          ctx.shadowBlur = 22 * g.flash;
-        }
-        ctx.fillStyle = col.hex;
-        ctx.strokeStyle = g.flash > 0 ? g.flashColor : "#ffffff";
-        ctx.lineWidth = g.flash > 0 ? 3.5 : 2;
+        ctx.fillStyle = g.pal.fill;
+        ctx.strokeStyle = fl ? fl.col : g.pal.hi;
+        ctx.shadowColor = fl ? fl.col : g.pal.fill;
+        ctx.shadowBlur = fl ? 20 : 10;
+        ctx.lineWidth = fl ? 3.5 : 2.2;
         ctx.beginPath();
-        ctx.roundRect(pos.x - gateW / 2, pos.y - gateH / 2, gateW, gateH, 11);
+        ctx.roundRect(g.x - gw / 2, g.y - 18, gw, 44, 10);
         ctx.fill();
         ctx.stroke();
-
         ctx.shadowBlur = 0;
-        ctx.fillStyle = col.text;
-        ctx.font = "900 14px sans-serif";
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 13px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(`✈ ${col.code}`, pos.x, pos.y + 1);
-        ctx.restore();
-      });
+        ctx.fillText(g.pal.isSec ? "🔍 SEC" : g.pal.code, g.x, g.y - 1);
 
-      // 4. Draw Track Switches (Clickable Junctions)
-      shift.switchIds.forEach((wid) => {
-        const sw = shift.nodes[wid];
-        const pos = toScreen(sw.x, sw.y);
-        const targetNode = shift.nodes[sw.outs[switchStates[wid]]];
-        const targetPos = toScreen(targetNode.x, targetNode.y);
-        const ang = Math.atan2(targetPos.y - pos.y, targetPos.x - pos.x);
-        const isHint = hintSwitchId === wid;
+        ctx.fillStyle = "rgba(255, 255, 255, 0.78)";
+        ctx.font = "800 7.5px monospace";
+        ctx.fillText(g.pal.isSec ? "X-RAY BAY" : "GATE", g.x, g.y + 15);
+        ctx.restore();
+      }
+
+      // 5. Draw Mechanical Pivoting Diverter Junction Discs (Tappable!)
+      for (const swId of shift.topo.switches) {
+        const sw = nodes[swId];
+        const target = nodes[sw.dir === 0 ? sw.left : sw.right];
+        const ang = Math.atan2(target.y - sw.y, target.x - sw.x);
+        const isHint = swId === hintSwId && hintTimer > 0;
 
         ctx.save();
-        if (isHint) {
-          const pulseR = 26 + Math.sin(time * 0.012) * 5;
-          ctx.strokeStyle = "#facc15";
-          ctx.shadowColor = "#facc15";
-          ctx.shadowBlur = 14;
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(pos.x, pos.y, pulseR, 0, Math.PI * 2);
-          ctx.stroke();
-        }
+        ctx.translate(sw.x, sw.y);
 
-        // Outer switch hub
+        // Outer metallic ring housing
         ctx.fillStyle = "#0f172a";
-        ctx.strokeStyle = isHint ? "#facc15" : "#38bdf8";
-        ctx.shadowColor = isHint ? "#facc15" : "#38bdf8";
-        ctx.shadowBlur = 10;
+        ctx.strokeStyle = isHint ? "#facc15" : (sw.dir === 0 ? "#f59e0b" : "#38bdf8");
+        ctx.shadowColor = isHint ? "#facc15" : (sw.dir === 0 ? "#f59e0b" : "#38bdf8");
+        ctx.shadowBlur = isHint ? 18 : 10;
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 19, 0, Math.PI * 2);
+        ctx.arc(0, 0, 21, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
-
-        // Directional Arrow Inside Hub
         ctx.shadowBlur = 0;
-        ctx.translate(pos.x, pos.y);
-        ctx.rotate(ang);
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.moveTo(9, 0);
-        ctx.lineTo(-5, -6);
-        ctx.lineTo(-2, 0);
-        ctx.lineTo(-5, 6);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      });
 
-      // 5. Draw Moving Suitcases
-      bags.forEach((b) => {
-        const pos = toScreen(b.x, b.y);
-        const col = PALETTE[b.colorIdx];
-        const bw = 28;
-        const bh = 22;
-
+        // Rotating Neon Directional Pointer Arrow!
         ctx.save();
-        ctx.translate(pos.x, pos.y);
-
-        // Suitcase top handle
-        ctx.strokeStyle = "#cbd5e1";
-        ctx.lineWidth = 2.4;
+        ctx.rotate(ang);
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 3.2;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
         ctx.beginPath();
-        ctx.roundRect(-5, -bh / 2 - 4, 10, 5, 2);
+        ctx.moveTo(-7, 0); ctx.lineTo(8, 0);
+        ctx.moveTo(2, -5.5); ctx.lineTo(8, 0); ctx.lineTo(2, 5.5);
         ctx.stroke();
+        ctx.restore();
 
-        // Suitcase body
-        ctx.fillStyle = col.hex;
-        ctx.strokeStyle = b.express ? "#facc15" : "#0f172a";
-        ctx.lineWidth = b.express ? 2.8 : 2;
-        if (b.express) {
-          ctx.shadowColor = "#facc15";
-          ctx.shadowBlur = 10;
-        }
+        // Compact Switch Number Pill Above Disc
+        ctx.fillStyle = "rgba(11, 17, 30, 0.92)";
         ctx.beginPath();
-        ctx.roundRect(-bw / 2, -bh / 2, bw, bh, 6);
+        ctx.roundRect(-14, -33, 28, 13, 4);
         ctx.fill();
-        ctx.stroke();
-
-        // Center stripe + Letter/Express Icon
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = col.dark;
-        ctx.fillRect(-bw / 2 + 4, -bh / 2 + 1, 3, bh - 2);
-        ctx.fillRect(bw / 2 - 7, -bh / 2 + 1, 3, bh - 2);
-
-        ctx.fillStyle = col.text;
-        ctx.font = "900 11px sans-serif";
+        ctx.fillStyle = "#fde68a";
+        ctx.font = "900 8.5px monospace";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(b.express ? `⚡${col.code}` : col.code, 0, 1);
+        ctx.fillText(sw.label, 0, -26.5);
         ctx.restore();
-      });
+      }
 
-      // 6. Ripples & Popups
-      ripples = ripples.filter((r) => r.alpha > 0.04);
-      ripples.forEach((r) => {
-        r.r += 1.9;
-        r.alpha *= 0.89;
-        ctx.strokeStyle = r.color;
-        ctx.globalAlpha = r.alpha;
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-      });
+      // 6. Moving Suitcases Riding the Belts!
+      for (const b of activeBags) {
+        drawSuitcase(b, now);
+      }
 
-      popups = popups.filter((p) => p.alpha > 0.04);
-      popups.forEach((p) => {
-        p.y -= 0.9;
-        p.alpha *= 0.94;
+      // 7. Purple X-Ray Security Scanner Arch Over Upper Lanes (Chapters 4–5!)
+      if (shift.topo.xrayY !== null) {
+        const xy = shift.topo.xrayY;
+        const pulse = 0.55 + 0.35 * Math.sin(now * 0.01);
         ctx.save();
-        ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = p.color;
-        ctx.font = "900 18px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText(p.text, p.x, p.y);
-        ctx.restore();
-      });
-    }
+        for (const id of shift.topo.intakes) {
+          const ix = nodes[id].x;
+          ctx.fillStyle = `rgba(192, 132, 252, ${pulse * 0.35})`;
+          ctx.strokeStyle = "#d946ef";
+          ctx.shadowColor = "#c084fc";
+          ctx.shadowBlur = 12;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.roundRect(ix - 24, xy - 9, 48, 18, 5);
+          ctx.fill();
+          ctx.stroke();
+          ctx.shadowBlur = 0;
 
-    let lastTime = performance.now();
-    function frame(now) {
-      const dt = Math.min(0.05, (now - lastTime) / 1000);
-      lastTime = now;
-      updateSimulation(dt);
-      drawScene(now);
+          ctx.fillStyle = "#fae8ff";
+          ctx.font = "900 7.5px monospace";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("X-RAY", ix, xy);
+        }
+        ctx.restore();
+      }
+
+      // 8. Gate Delivery & Scanner Sparks
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha *= 0.91;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.restore();
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadShift(currentLevelNum, false);
+    loadShift(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
