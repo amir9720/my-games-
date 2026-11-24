@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blackout Grid Operator — 500 Power Grid Strategy Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free strategy shifts in Blackout Grid Operator. Balance solar, wind, battery storage, and backup turbines across a 24-hour cycle to hold city grid frequency at 50.0 Hz." />
+  <title>Blackout Grid Operator — Free 500-Day Power Grid Strategy Simulator | ZinPlay</title>
+  <meta name="description" content="Play Blackout Grid Operator free online with no download. Balance solar farms, wind turbines, hydro dams, gas peakers, and grid batteries across a live 24-hour cycle to hold 50.0 Hz and prevent city blackouts across 500 shifts." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Blackout Grid Operator",
+    "url": "https://zinplay.io/games/blackout-grid/",
+    "genre": ["Strategy", "Energy Simulation", "Resource Management"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top SCADA HUD */
+    /* Top SCADA Control Room HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #09111f;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #080f18;
+      color: #f8fafc;
+      border-bottom: 1px solid #17273b;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #facc15;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -64,12 +77,27 @@
     }
     .hud-pill {
       background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      border: 1px solid rgba(56, 189, 248, 0.36);
       color: #bae6fd;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
       font-family: monospace;
+    }
+    .hud-pill.hz-ok {
+      background: rgba(34, 197, 94, 0.18);
+      border-color: rgba(74, 222, 128, 0.45);
+      color: #86efac;
+    }
+    .hud-pill.hz-warn {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: rgba(251, 191, 36, 0.55);
+      color: #fef08a;
+    }
+    .hud-pill.hz-crit {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: rgba(248, 113, 113, 0.65);
+      color: #fecaca;
     }
     .hud-pill.done-pill {
       background: rgba(34, 197, 94, 0.16);
@@ -78,96 +106,63 @@
       font-family: inherit;
     }
 
-    /* Live Frequency & Grid Stability Telemetry Bar */
-    .telemetry-bar {
+    /* Grid Integrity & 24-Hour Clock Strip */
+    .telemetry-strip {
       display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      padding: 10px 14px;
-      background: #0f1a2e;
-      border-bottom: 1px solid #1e293b;
+      padding: 9px 14px;
+      background: #0d1826;
+      border-bottom: 1px solid #1b2f47;
       color: #e2e8f0;
+      font-size: 0.73rem;
+      font-weight: 800;
     }
-    .freq-readout {
-      font-family: "Courier New", Consolas, monospace;
-      font-size: 1.28rem;
-      font-weight: 900;
-      padding: 5px 10px;
-      border-radius: 10px;
-      background: #060b14;
-      border: 2px solid #22c55e;
-      color: #4ade80;
-      text-shadow: 0 0 10px rgba(74, 222, 128, 0.45);
-      min-width: 106px;
-      text-align: center;
-    }
-    .freq-readout.warn {
-      border-color: #f59e0b;
-      color: #facc15;
-      text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
-    }
-    .freq-readout.crit {
-      border-color: #ef4444;
-      color: #fb7185;
-      text-shadow: 0 0 12px rgba(239, 68, 68, 0.65);
-      animation: critBlink 0.45s infinite;
-    }
-    @keyframes critBlink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.65; }
-    }
-    .stab-wrap {
+    .tele-box {
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
-    .stab-top {
+    .tele-head {
       display: flex;
       justify-content: space-between;
-      font-size: 0.71rem;
-      font-weight: 800;
-      color: #94a3b8;
-      text-transform: uppercase;
+      align-items: center;
+      font-family: monospace;
     }
-    .stab-track {
-      height: 10px;
-      background: #060b14;
+    .tele-track {
+      width: 100%;
+      height: 9px;
+      background: #050a11;
       border-radius: 999px;
-      border: 1px solid #24344f;
+      border: 1px solid #213854;
       overflow: hidden;
     }
-    .stab-fill {
+    .tele-fill {
       height: 100%;
-      width: 100%;
+      width: 0%;
       border-radius: 999px;
-      background: linear-gradient(90deg, #ef4444 0%, #f59e0b 40%, #22c55e 100%);
-      transition: width 0.08s linear;
+      transition: width 0.1s linear;
     }
-    .mw-balance {
-      font-family: monospace;
-      font-size: 0.8rem;
-      font-weight: 800;
-      text-align: right;
-      min-width: 78px;
+    .stab-fill {
+      background: linear-gradient(90deg, #ef4444 0%, #f59e0b 45%, #22c55e 100%);
     }
-    .mw-bal-ok { color: #4ade80; }
-    .mw-bal-low { color: #fb7185; }
-    .mw-bal-high { color: #facc15; }
+    .day-fill {
+      background: linear-gradient(90deg, #38bdf8 0%, #facc15 55%, #a855f7 100%);
+    }
 
-    /* SCADA Monitor Canvas */
+    /* Live Skyline & SCADA Oscilloscope Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 295px;
-      background: #070d19;
+      height: 360px;
+      background: #060c14;
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 330px;
+        height: 395px;
       }
     }
     #gridCanvas {
@@ -176,197 +171,203 @@
       display: block;
     }
 
-    /* Power Plant Control Deck (Mobile-First Grid) */
-    .control-deck {
-      background: #0d1628;
-      border-top: 2px solid #1e293b;
-      padding: 12px;
-      display: grid;
-      grid-template-columns: 1fr;
+    /* Power Plant Dispatch Switchboard Dock */
+    .dispatch-wrap {
+      display: flex;
+      flex-direction: column;
       gap: 9px;
+      padding: 11px 12px;
+      background: #0b1420;
+      border-top: 1px solid #1b2d44;
     }
-    @media (min-width: 640px) {
-      .control-deck {
-        grid-template-columns: repeat(2, 1fr);
+    .plants-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 7px;
+    }
+    @media (min-width: 560px) {
+      .plants-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .plants-grid.has-5 {
+        grid-template-columns: repeat(5, 1fr);
       }
     }
     .plant-card {
-      background: #131f37;
-      border: 1.5px solid #263756;
+      padding: 8px 8px;
       border-radius: 12px;
-      padding: 10px 11px;
+      border: 1.5px solid #223854;
+      background: #111f30;
       color: #e2e8f0;
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      position: relative;
+      gap: 4px;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
+    }
+    .plant-card:active { transform: scale(0.96); }
+    .plant-card.on-clean {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.14);
+    }
+    .plant-card.on-gas {
+      border-color: #f97316;
+      background: rgba(249, 115, 22, 0.16);
+    }
+    .plant-card.on-charge {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.16);
+    }
+    .plant-card.on-discharge {
+      border-color: #facc15;
+      background: rgba(250, 204, 21, 0.18);
     }
     .plant-card.tripped {
       border-color: #ef4444;
-      background: #2b1420;
+      background: rgba(239, 68, 68, 0.22);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
     }
-    .plant-card.span-full {
-      grid-column: 1 / -1;
-    }
-    .plant-head {
+    .pc-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 6px;
-    }
-    .plant-name {
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
-    .plant-mw {
+    .pc-mw {
       font-family: monospace;
-      font-size: 0.84rem;
+      font-size: 0.78rem;
       font-weight: 900;
-      color: #38bdf8;
-    }
-    .plant-sub {
-      font-size: 0.68rem;
-      color: #94a3b8;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .mini-meter {
-      height: 6px;
-      background: #070d19;
-      border-radius: 999px;
-      overflow: hidden;
-      border: 1px solid #22324f;
-    }
-    .mini-meter-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: 999px;
-      transition: width 0.08s linear;
-    }
-    .plant-actions {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-    .scada-btn {
-      flex: 1;
-      min-height: 36px;
-      border-radius: 8px;
-      border: 1.5px solid #324669;
-      background: #1a2946;
-      color: #cbd5e1;
-      font-size: 0.74rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: 0.12s ease;
-    }
-    .scada-btn:active {
-      transform: scale(0.97);
-    }
-    .scada-btn.on-green {
-      background: rgba(34, 197, 94, 0.22);
-      border-color: #22c55e;
-      color: #dcfce7;
-    }
-    .scada-btn.on-amber {
-      background: rgba(245, 158, 11, 0.24);
-      border-color: #f59e0b;
-      color: #fef3c7;
-    }
-    .scada-btn.on-blue {
-      background: rgba(56, 189, 248, 0.22);
-      border-color: #38bdf8;
-      color: #e0f2fe;
-    }
-    .scada-btn.trip-btn {
-      background: #dc2626;
-      border-color: #fca5a5;
       color: #ffffff;
-      animation: critBlink 0.55s infinite;
     }
-    .step-readout {
-      min-width: 48px;
-      text-align: center;
+    .pc-sub {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .plant-card.on-clean .pc-sub { color: #86efac; }
+    .plant-card.on-gas .pc-sub { color: #fed7aa; }
+    .plant-card.on-charge .pc-sub { color: #bae6fd; }
+    .plant-card.on-discharge .pc-sub { color: #fef08a; }
+    .plant-card.tripped .pc-sub { color: #fecaca; }
+
+    .run-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .grid-main-btn {
+      flex: 1;
+      min-height: 44px;
+      border-radius: 11px;
+      border: 1.5px solid #86efac;
+      background: linear-gradient(135deg, #16a34a 0%, #0d9488 100%);
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(22, 163, 74, 0.28);
+    }
+    .grid-main-btn.pause-mode {
+      border-color: #fde68a;
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
+    .grid-main-btn.retry-mode {
+      border-color: #fca5a5;
+      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+    }
+    .speed-btn {
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 11px;
+      border: 1.5px solid #2b4566;
+      background: #142336;
+      color: #bae6fd;
       font-family: monospace;
       font-size: 0.82rem;
       font-weight: 900;
-      color: #f8fafc;
+      cursor: pointer;
+    }
+    .speed-btn.fast {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.22);
+      color: #ffffff;
     }
 
-    /* Toast & Stage Overlay */
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #060c14;
+      border-top: 1px solid #152438;
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+
     .status-toast {
       position: absolute;
-      bottom: 10px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 25;
-      background: rgba(9, 17, 31, 0.96);
-      border: 1px solid rgba(250, 204, 21, 0.7);
+      background: rgba(6, 12, 20, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
-      font-size: 0.77rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      text-align: center;
+      white-space: nowrap;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.2s ease;
-      max-width: 94%;
+      max-width: 92%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
-    .stage-overlay {
+    .status-toast.show { opacity: 1; }
+
+    .win-overlay {
       position: absolute;
       inset: 0;
-      z-index: 30;
-      background: rgba(6, 11, 22, 0.84);
+      background: rgba(6, 12, 20, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.22s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
-      padding: 22px 18px;
+      padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.28rem;
-      margin-bottom: 6px;
-    }
-    .overlay-card p {
-      font-size: 0.86rem;
-      color: #64748b;
-      margin-bottom: 15px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-    }
-    .btn-outline.active-toggle {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
     }
     .level-nav-bar {
       display: flex;
@@ -390,7 +391,7 @@
       cursor: pointer;
     }
 
-    /* Level Picker Modal */
+    /* Day Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -402,9 +403,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -501,6 +500,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #080f18;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #080f18;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #080f18 0%, #0c4a6e 100%);
+      color: #e0f2fe;
+    }
+    .game-seo-banner.amber-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #17152e 0%, #451a03 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #bae6fd;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .grid-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .grid-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .grid-table th, .grid-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .grid-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .grid-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -513,7 +592,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -526,162 +605,91 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Shifts &bull; Grid Strategy</span>
+      <span class="cat-tag">500 Shifts &bull; 50 Hz Power Grid Strategy</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Blackout Grid Operator</h1>
-      <p>Balance solar, wind, battery storage, and backup plants across a 24-hour cycle to keep city grid frequency locked near 50.00 Hz.</p>
+      <p>Dispatch solar arrays, wind turbines, hydroelectric dams, gas peakers, and grid megapack batteries across a live 24-hour cycle to keep city frequency locked near 50.0 Hz.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Blackout Grid Operator Game">
+    <section class="game-wrapper" aria-label="Blackout Grid Operator Electrical Strategy Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Sunny Suburbs</span>
-          <span id="levelTitle">Shift #1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Town Substation Basics</span>
+          <span id="levelTitle">Day #1 / 500 — Clear Spring Grid</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="clockPill">00:00 / 24:00</span>
-          <span class="hud-pill done-pill" id="solvedCounter">Cleared: 0 / 500</span>
+          <span class="hud-pill hz-ok" id="hzPill">50.00 Hz</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Days: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Frequency & Grid Integrity Bar -->
-      <div class="telemetry-bar">
-        <div id="freqReadout" class="freq-readout">50.00 Hz</div>
-        <div class="stab-wrap">
-          <div class="stab-top">
-            <span>Grid Stability</span>
-            <span id="stabPctText">100%</span>
+      <!-- Grid Stability & 24-Hour Shift Progress -->
+      <div class="telemetry-strip">
+        <div class="tele-box">
+          <div class="tele-head">
+            <span id="stabLbl" style="color:#86efac;">🛡️ GRID INTEGRITY</span>
+            <span id="stabPct">100%</span>
           </div>
-          <div class="stab-track">
-            <div id="stabFill" class="stab-fill"></div>
+          <div class="tele-track">
+            <div id="stabFill" class="tele-fill stab-fill" style="width:100%;"></div>
           </div>
         </div>
-        <div id="mwBalance" class="mw-balance mw-bal-ok">0 MW</div>
+        <div class="tele-box">
+          <div class="tele-head">
+            <span id="clockLbl" style="color:#7dd3fc;">🕒 SHIFT CLOCK</span>
+            <span id="clockTxt">00:00 / 24:00</span>
+          </div>
+          <div class="tele-track">
+            <div id="dayFill" class="tele-fill day-fill" style="width:0%;"></div>
+          </div>
+        </div>
       </div>
 
-      <!-- Live SCADA Graph & City Skyline -->
+      <!-- Live City Skyline & SCADA Supply/Demand Oscilloscope -->
       <div class="canvas-container">
         <canvas id="gridCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Start / Pause / Win / Blackout Overlay -->
-        <div id="stageOverlay" class="stage-overlay show">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.2rem; margin-bottom:6px;">⚡</div>
-            <h2 id="ovHeading">Shift #1 Ready</h2>
-            <p id="ovText">Match power generation to city demand across 24 hours. Keep frequency between 49.0 and 51.0 Hz!</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Start 24h Shift ▶</button>
+        <!-- 24-Hour Shift Cleared Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div style="font-size:2.3rem; margin-bottom:6px;">⚡</div>
+            <h2 id="winHeading">Zero Blackouts!</h2>
+            <p id="winText">You held city power steady at 50 Hz across the entire 24-hour demand curve.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Shift Day →</button>
           </div>
         </div>
       </div>
 
-      <!-- SCADA Generator Controls -->
-      <div class="control-deck" aria-label="Power Plant Controls">
-
-        <!-- 1. Solar Array -->
-        <div class="plant-card">
-          <div class="plant-head">
-            <span class="plant-name">☀️ Solar Array</span>
-            <span id="solarMw" class="plant-mw">0 MW</span>
-          </div>
-          <div class="plant-sub">
-            <span id="solarNote">Nighttime (06:00–19:00)</span>
-            <span id="solarCap">Max 120 MW</span>
-          </div>
-          <div class="mini-meter"><div id="solarBar" class="mini-meter-fill" style="background:#facc15;"></div></div>
-          <div class="plant-actions">
-            <button id="solarToggleBtn" class="scada-btn on-green" type="button">● ONLINE (Tap to Curtail)</button>
-          </div>
+      <!-- Live Power Plant Switchboard Dock -->
+      <div class="dispatch-wrap">
+        <div id="plantsGrid" class="plants-grid" role="group" aria-label="Power Plant Controls"></div>
+        <div class="run-row">
+          <button id="gridMainBtn" class="grid-main-btn" type="button">▶ START 24-HOUR SHIFT</button>
+          <button id="speedBtn" class="speed-btn" type="button" title="Toggle Simulation Speed">1× SPD</button>
         </div>
+      </div>
 
-        <!-- 2. Wind Farm -->
-        <div class="plant-card">
-          <div class="plant-head">
-            <span class="plant-name">💨 Wind Farm</span>
-            <span id="windMw" class="plant-mw">0 MW</span>
-          </div>
-          <div class="plant-sub">
-            <span id="windNote">Steady Breeze</span>
-            <span id="windCap">Max 100 MW</span>
-          </div>
-          <div class="mini-meter"><div id="windBar" class="mini-meter-fill" style="background:#38bdf8;"></div></div>
-          <div class="plant-actions">
-            <button id="windToggleBtn" class="scada-btn on-green" type="button">● ONLINE (Tap to Brake)</button>
-          </div>
-        </div>
-
-        <!-- 3. Fast Gas Peaker -->
-        <div id="gasCard" class="plant-card">
-          <div class="plant-head">
-            <span class="plant-name">🔥 Gas Peaker</span>
-            <span id="gasMw" class="plant-mw">0 MW</span>
-          </div>
-          <div class="plant-sub">
-            <span id="gasNote">Fast Ramp • Fuel: 100%</span>
-            <span id="gasCap">Max 180 MW</span>
-          </div>
-          <div class="mini-meter"><div id="gasBar" class="mini-meter-fill" style="background:#f97316;"></div></div>
-          <div id="gasActions" class="plant-actions">
-            <button id="gasDownBtn" class="scada-btn" type="button">− 25%</button>
-            <span id="gasTargetTxt" class="step-readout">50%</span>
-            <button id="gasUpBtn" class="scada-btn" type="button">+ 25%</button>
-          </div>
-        </div>
-
-        <!-- 4. Grid Battery Storage -->
-        <div class="plant-card">
-          <div class="plant-head">
-            <span class="plant-name">🔋 Battery Bank</span>
-            <span id="batMw" class="plant-mw">0 MW</span>
-          </div>
-          <div class="plant-sub">
-            <span id="batChargeTxt">Charge: 55%</span>
-            <span id="batCap">±90 MW</span>
-          </div>
-          <div class="mini-meter"><div id="batBar" class="mini-meter-fill" style="background:#22c55e;"></div></div>
-          <div class="plant-actions">
-            <button id="batChargeBtn" class="scada-btn" type="button">⚡ Charge</button>
-            <button id="batIdleBtn" class="scada-btn on-blue" type="button">Idle</button>
-            <button id="batDisBtn" class="scada-btn" type="button">▲ Boost</button>
-          </div>
-        </div>
-
-        <!-- 5. Heavy Hydro / Thermal Baseload (Unlocked Ch. 2+) -->
-        <div id="baseCard" class="plant-card span-full" style="display:none;">
-          <div class="plant-head">
-            <span class="plant-name">🏭 Hydro / Thermal Baseload</span>
-            <span id="baseMw" class="plant-mw">0 MW</span>
-          </div>
-          <div class="plant-sub">
-            <span id="baseNote">Slow Ramp (Plan Ahead for Peaks!)</span>
-            <span id="baseCap">Max 200 MW</span>
-          </div>
-          <div class="mini-meter"><div id="baseBar" class="mini-meter-fill" style="background:#a855f7;"></div></div>
-          <div id="baseActions" class="plant-actions">
-            <button id="baseDownBtn" class="scada-btn" type="button">− 25%</button>
-            <span id="baseTargetTxt" class="step-readout">50%</span>
-            <button id="baseUpBtn" class="scada-btn" type="button">+ 25%</button>
-          </div>
-        </div>
-
+      <div class="legend-strip">
+        <span>⚡ Match Supply MW ≈ Demand MW (Keep 49.0–51.0 Hz)</span>
+        <span>☀️ Solar Drops After 17:00 — Ramp Gas or Battery!</span>
+        <span>🔧 Tap Red Tripped Plant Quickly to Reset Breaker (Ch. 5)</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="pauseBtn" class="btn-outline" type="button">⏸ Pause</button>
-          <button id="resetBtn" class="btn-outline" type="button">↺ Restart</button>
-          <button id="speedBtn" class="btn-outline" type="button">⚡ 2x</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Grid Advisor</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Restart Day</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Auto-Dispatch</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 SCADA Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Shift 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Day 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -691,29 +699,131 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 860+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/blackout-grid-banner-1.jpg"
+            alt="Blackout Grid Operator electrical power grid strategy game showing solar panels, wind turbines, hydro dam, and high-voltage lines powering a twilight city"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Live 24-Hour Grid Shifts — Real 50 Hz Frequency Balancing</h3>
+          <p>Ride solar duck-curves, sudden storm fronts, and evening megawatt surges while keeping skyscraper windows glowing smoothly all night.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Blackout Grid Operator (500 Shifts)</h2>
-        <p>Step into the real-time dispatch room of a modern electric utility. Real power grids must balance electricity generation and consumption every single second—too little supply drags frequency below <strong>50.0 Hz</strong> toward a citywide brownout, while too much unchecked solar or wind drives frequency above <strong>50.0 Hz</strong> toward an overload trip. Survive all 24 hours from <code>00:00</code> to <code>24:00</code> without letting Grid Stability hit 0%.</p>
+        <h2>What Is Blackout Grid Operator? A Power Grid Strategy Simulator Online</h2>
+        <p><strong>Blackout Grid Operator</strong> is a free <strong>electrical power grid management game online</strong> that puts you at the SCADA dispatch console of a living city across a dynamic 24-hour cycle. On a real national electricity network, supply must match consumer demand every single second: generate too little power and grid frequency sags into a dangerous <strong>Brownout (&lt; 49.0 Hz)</strong>; pump too much excess energy into the wires and over-frequency spikes trigger a destructive <strong>Grid Surge (&gt; 51.0 Hz)</strong>! Your mission across <strong>500 unique dispatch days</strong> is to read the live megawatt demand curve, anticipate sunrise and sunset swings, and coordinate clean renewables, hydro dams, fast gas peakers, and grid batteries so the city completes a flawless 24:00 cycle.</p>
+        <p>Crafted as a sleek, <strong>no-download STEM energy strategy game for smartphones, iPads, and Chromebooks</strong>, Blackout Grid Operator renders a live day-to-night city skyline paired with a crisp real-time supply/demand oscilloscope and procedural <strong>Web Audio heavy breaker clunks, warning pulses, and shift-clear chimes</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>SCADA Power Plant Field Manual (Mastering the Duck Curve)</h2>
+        <p>Every energy source on your switchboard behaves like its real-world utility counterpart. Tap any plant card below the console (or press keys <code>1</code> through <code>5</code> on desktop keyboards) to step its output cleanly:</p>
+
+        <div class="grid-table-wrap">
+          <table class="grid-table">
+            <thead>
+              <tr>
+                <th>Grid Asset</th>
+                <th>Output Behavior</th>
+                <th>Smart Dispatch Tactic</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>☀️ Solar Farm</strong> (Key <code>1</code>)</td>
+                <td>Peaks strongly between <code>09:00–16:00</code>; drops to <code>0 MW</code> after sunset or during heavy storm clouds.</td>
+                <td>Leave ON during sunny midday hours—and watch the clock at <code>17:00</code> when solar plunges right as evening home demand spikes!</td>
+              </tr>
+              <tr>
+                <td><strong>💧 Hydro Dam</strong> (Key <code>2</code>)</td>
+                <td>Clean, rock-steady baseload stepping cleanly across <code>0 / 60 / 120 / 180 MW</code>.</td>
+                <td>Your dependable backbone—set Hydro high overnight and dial it down at noon if Solar + Wind create an over-frequency surge!</td>
+              </tr>
+              <tr>
+                <td><strong>🔥 Gas Peaker</strong> (Key <code>3</code>)</td>
+                <td>Fast dispatchable turbines stepping across <code>0 / 80 / 160 / 240 MW</code> on demand.</td>
+                <td>Fire up Gas Peakers instantly to cover evening dinner spikes (<code>18:00–21:00</code>) or sudden midday cloud fronts!</td>
+              </tr>
+              <tr>
+                <td><strong>💨 Wind Corridor</strong> (Ch. 2–5, Key <code>4</code>)</td>
+                <td>Clean gusts surging smoothly between <code>30–140 MW</code>; toggle OFF to curtail during over-generation!</td>
+                <td>Curtail Wind momentarily if a midnight wind gale pushes frequency above <code>50.8 Hz</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>🔋 Grid Megapack</strong> (Ch. 3–5, Key <code>5</code>)</td>
+                <td>Cycles between <strong>IDLE</strong>, <strong>⚡ CHARGE (-90 MW)</strong>, and <strong>🔋 DISCHARGE (+90 MW)</strong>.</td>
+                <td><strong>Pro Move:</strong> Switch Battery to <strong>CHARGE</strong> at sunny noon to soak up excess Solar MW, then flip to <strong>DISCHARGE</strong> at <code>19:00</code> to flatten the evening peak!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Grid Dispatcher Tip:</strong> Keep your eyes on the amber <strong>Demand Curve</strong> and cyan <strong>Supply Line</strong> inside the oscilloscope! As long as Supply tracks within roughly <code>±75 MW</code> of Demand, your frequency stays safely inside the green <strong>49.0–51.0 Hz</strong> band and Grid Integrity actively regenerates. Need an emergency save during a wild storm spike? Tap <strong>💡 Auto-Dispatch</strong> to immediately balance your hydro, gas, and battery breakers straight back to <code>50.00 Hz</code>!</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner amber-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/blackout-grid-banner-2.jpg"
+            alt="Isometric electrical power grid SCADA control diorama featuring solar farm, wind turbines, hydro plant, gas peaker, and mega-battery bank in Blackout Grid Operator"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Real-World Renewable Integration, Weather Fronts &amp; Breaker Trips</h3>
+          <p>Experience the exact physics grid engineers balance daily—from midday solar surpluses to sudden heatwave air-conditioning surges.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Utility Chapters (500 Unique Dispatch Days)</h2>
+        <p>Every shift from Day #1 to Day #500 generates a unique seasonal demand curve, cloud/wind weather forecast, and grid capacity profile saved privately inside your browser's local storage:</p>
         <ul>
-          <li><strong>Read the 24-Hour Forecast Curve:</strong> The dashed amber line on the SCADA monitor previews upcoming city demand and weather anomalies—like midday <strong>Cloud Fronts ☁️</strong>, <strong>Wind Lulls 💨</strong>, and evening <strong>Stadium Surges ⚽</strong>. Ramp up generators 1–2 hours before a spike arrives!</li>
-          <li><strong>Master the Battery Bank (🔋):</strong> During sunny midday hours when Solar surges, switch your Battery to <strong>Charge</strong> to soak up excess megawatts (keeping frequency safely at 50 Hz) and store free energy. Then flip it to <strong>Boost</strong> during the steep 18:00–21:00 evening rush!</li>
-          <li><strong>Handle Breaker Trips (Chapter 4+):</strong> Severe storm shifts can occasionally trip your Gas Peaker breaker offline. Watch for the flashing red <strong>⚡ RESET BREAKER</strong> button—tap it immediately and lean on Battery Boost while the turbine spins back up.</li>
+          <li><strong>Chapter 1 (Days 1–100 — Town Substation Basics):</strong> Calm 3-plant grid (Solar + Hydro + Gas Peaker) with gentle sunrise and evening demand curves—ideal for learning 50 Hz frequency balancing.</li>
+          <li><strong>Chapter 2 (Days 101–200 — Coastal Wind Corridor):</strong> Connects a gusty offshore <strong>💨 Wind Farm</strong> whose variable output demands quick Hydro curtailment and Gas Peaker fine-tuning.</li>
+          <li><strong>Chapter 3 (Days 201–300 — Megapack Battery Storage):</strong> Unlocks the giant <strong>🔋 Grid Battery</strong>—absorb cheap surplus sunshine at noon and discharge clean stored megawatts during the steep evening duck-curve ramp!</li>
+          <li><strong>Chapter 4 (Days 301–400 — Heatwaves &amp; Storm Fronts):</strong> Introduces live midday cloud eclipses and scorching afternoon AC heatwave spikes that test fast forecasting across all five assets.</li>
+          <li><strong>Chapter 5 (Days 401–500 — Metropolis 50 Hz Master):</strong> High-load megacity demand paired with surprise red <strong>🔧 Breaker Trips</strong>—tap a flashing red tripped plant immediately to reset its transformer while covering the gap with Battery Discharge!</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Power Grid Topics">
+          <span class="kw-pill">Power Grid Operator Game Online</span>
+          <span class="kw-pill">Electricity Balancing Simulator Free</span>
+          <span class="kw-pill">50Hz Frequency SCADA Browser Game</span>
+          <span class="kw-pill">Renewable Energy Strategy Puzzle</span>
+          <span class="kw-pill">500-Day Blackout Prevention Sim</span>
+          <span class="kw-pill">No-Download Chromebook STEM Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Blackout Grid Operator FAQ</h2>
         <details class="faq-item">
-          <summary>Why is my frequency shooting over 51.5 Hz at noon?</summary>
-          <div class="faq-answer">Midday solar output can temporarily exceed city demand! Lower your Gas Peaker throttle, switch your Battery Bank to <strong>⚡ Charge</strong> to absorb the surplus, or tap <strong>Solar / Wind Curtail</strong> to safely shed excess power.</div>
+          <summary>Why do I lose Grid Integrity when I generate TOO MUCH electricity?</summary>
+          <div class="faq-answer">Real alternating-current power grids spin synchronously at <strong>50.0 Hz</strong>. Generating far more megawatts than the city consumes accelerates generators past <strong>51.0 Hz</strong>, triggering protective surge relays! Dial down Hydro/Gas, switch the Battery to <strong>⚡ CHARGE</strong>, or curtail Wind/Solar to stay in the green band.</div>
         </details>
         <details class="faq-item">
-          <summary>What does the Grid Advisor (💡) button do?</summary>
-          <div class="faq-answer">Grid Advisor analyzes your exact live megawatt deficit or surplus and gives you a real-time dispatch recommendation—telling you precisely which turbine or battery mode will pull frequency back to 50.00 Hz.</div>
+          <summary>How does the Grid Megapack Battery work in Chapters 3–5?</summary>
+          <div class="faq-answer">Tap the Battery card to cycle through three modes: <strong>IDLE (0 MW)</strong>, <strong>⚡ CHARGE (-90 MW)</strong> to absorb surplus midday solar/wind into storage, and <strong>🔋 DISCHARGE (+90 MW)</strong> to inject clean backup megawatts during evening demand spikes!</div>
+        </details>
+        <details class="faq-item">
+          <summary>What should I do when a power plant flashes red with "TRIPPED" in Chapter 5?</summary>
+          <div class="faq-answer">A sudden storm surge tripped that plant's high-voltage circuit breaker, dropping its output temporarily to <code>0 MW</code>! Tap the flashing red plant card immediately to reset the breaker—and kick on Gas or Battery Discharge if frequency dips while resetting.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I speed up calm overnight hours or pause to inspect the demand curve?</summary>
+          <div class="faq-answer">Yes! Tap the <strong>1× SPD / 2× SPD</strong> button to cruise swiftly through calm periods, or tap <strong>⏸ PAUSE</strong> (or press <code>Space</code>) anytime to inspect the oscilloscope and adjust breakers safely while paused!</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
@@ -722,7 +832,7 @@
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🧳</div><span class="cat-tag">Strategy</span></div>
         <h3>Baggage Routing Chaos</h3>
-        <p>Flip airport conveyor belt switches in real time across 500 escalating terminal shifts.</p>
+        <p>Flip airport conveyor diverters in real time to route suitcases and X-ray alerts to the right gates.</p>
         <a href="/games/baggage-chaos/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
@@ -732,25 +842,25 @@
         <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🕰️</div><span class="cat-tag">ASMR</span></div>
-        <h3>Antique Restorer</h3>
-        <p>Scrub rust, fit interlocking brass gears, and polish 500 vintage relics back to life.</p>
-        <a href="/games/antique-restorer/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔌</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Minimalist Logic Gates</h3>
+        <p>Snap AND, OR, NOT, XOR, NAND, and NOR gates into glowing circuit boards across 500 tests.</p>
+        <a href="/games/logic-gates/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Shift Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Shift">
+  <!-- Shift Day Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Shift Day">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Dispatch Shift (1 – 500)</h3>
+        <h3>Choose Dispatch Day (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to shift (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to day (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -769,21 +879,21 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Strategy</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/grocery-bagging/">Grocery Bagging</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Top Strategy</h4>
+          <h4>Top Mystery</h4>
           <ul>
-            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
-            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
             <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -816,15 +926,24 @@
     }
 
     // ==============================================
-    // DETERMINISTIC 500-SHIFT POWER GRID GENERATOR
+    // 50 HZ POWER GRID SCADA & 500-DAY SHIFT ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
+    const WORLD_W = 420;
+    const WORLD_H = 365;
+    const HOURS_PER_SEC = 0.65; // ~37s calm real-time 24-hour cycle at 1x speed!
+
     const CHAPTERS = [
-      { title: "Chapter 1 • Sunny Suburbs", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Cloudburst Valley", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Industrial Metropolis", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Storm Grid", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Megacity Zero-Margin", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Town Substation Basics", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Coastal Wind Corridor", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Megapack Battery Storage", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Heatwaves & Storm Fronts", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Metropolis 50 Hz Master", range: "401–500", start: 401, end: 500 }
+    ];
+
+    const FORECASTS = [
+      "Clear Spring Grid", "Breezy Coastal Day", "Evening Duck-Curve",
+      "Summer AC Heatwave", "Passing Storm Front", "Winter Peak Load"
     ];
 
     function mulberry32(seed) {
@@ -837,185 +956,83 @@
       };
     }
 
-    function gauss(x, mu, sig) {
-      const z = (x - mu) / sig;
-      return Math.exp(-0.5 * z * z);
-    }
+    function buildDayShift(levelNum) {
+      const rng = mulberry32(levelNum * 417293 + 60149);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
 
-    function buildShift(levelNum) {
-      const rng = mulberry32(levelNum * 87119 + 50505);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1);
+      const hasWind = chapIdx >= 1;
+      const hasBattery = chapIdx >= 2;
+      const hasWeatherEvent = chapIdx >= 3;
+      const hasBreakerTrip = chapIdx >= 4;
 
-      const hasBaseload = levelNum >= 101;
-      const shiftDurationSec = Math.round(44 + p * 12); // 44s -> 56s at 1x speed
+      const baseNightMW = 120 + chapIdx * 22 + Math.round(rng() * 24);
+      const morningPeakMW = 90 + chapIdx * 20 + Math.round(rng() * 35);
+      const evePeakMW = 175 + chapIdx * 36 + Math.round(rng() * 45);
+      const heatwaveBump = hasWeatherEvent && rng() < 0.65 ? (55 + Math.round(rng() * 45)) : 0;
 
-      // Capacities scale cleanly with city size
-      const cityScale = 1.0 + p * 0.65;
-      const solarCap = Math.round((110 + rng() * 35) * cityScale);
-      const windCap = Math.round((85 + rng() * 35) * cityScale);
-      const gasCap = Math.round((hasBaseload ? 170 : 220) * cityScale);
-      const baseCap = hasBaseload ? Math.round(180 * cityScale) : 0;
-      const batPower = Math.round(85 * cityScale);
-      const batEnergyMax = batPower * 6.5; // enough MWh-equivalent for real peak shaving
+      const solarCap = 170 + chapIdx * 18;
+      const windCap = hasWind ? (125 + chapIdx * 12) : 0;
+      const hydroStep = 60;
+      const gasStep = 80;
 
-      // Demand Curve Parameters
-      const baseNightLoad = Math.round((85 + rng() * 25) * cityScale);
-      const morningPeak = Math.round((65 + rng() * 30) * cityScale);
-      const eveningPeak = Math.round((130 + rng() * 45) * cityScale);
+      // Cloud eclipse window (Ch. 4–5) & random breaker trip hour (Ch. 5)
+      const cloudStart = hasWeatherEvent ? (10.5 + rng() * 3.5) : -10;
+      const cloudDur = 2.6;
+      const tripHour = hasBreakerTrip ? (8 + rng() * 11) : -10;
       const windPhase = rng() * Math.PI * 2;
-      const windFreq = 0.35 + rng() * 0.3;
 
-      // Weather & Grid Events scheduled across the 24h day
-      const events = [];
-      if (levelNum >= 35) {
-        // Cloud front during midday solar hours (10:00 - 15:30)
-        if (levelNum >= 101 || levelNum % 2 === 0) {
-          events.push({
-            type: "clouds",
-            icon: "☁️",
-            label: "Cloud Front",
-            startH: 10.2 + rng() * 3.8,
-            durH: 2.2 + rng() * 1.4,
-            triggered: false
-          });
-        }
-      }
-      if (levelNum >= 150) {
-        // Demand surge (Stadium Lights / Factory Shift / Heatwave AC)
-        const isHeat = rng() < 0.5;
-        events.push({
-          type: "surge",
-          icon: isHeat ? "🔥" : "⚽",
-          label: isHeat ? "Heatwave AC" : "Stadium Surge",
-          startH: isHeat ? (13.0 + rng() * 3.0) : (18.2 + rng() * 2.5),
-          durH: 2.2 + rng() * 1.2,
-          extraMw: Math.round((45 + p * 40) * cityScale),
-          triggered: false
-        });
-      }
-      if (levelNum >= 201) {
-        // Sudden Wind Lull
-        events.push({
-          type: "windlull",
-          icon: "🍃",
-          label: "Wind Lull",
-          startH: 5.5 + rng() * 12.5,
-          durH: 2.5 + rng() * 1.5,
-          triggered: false
-        });
-      }
-      if (levelNum >= 301) {
-        // Storm Breaker Trip (Gas Peaker trips offline briefly until operator clicks Reset!)
-        const tripCount = levelNum > 430 ? 2 : 1;
-        for (let t = 0; t < tripCount; t++) {
-          events.push({
-            type: "trip",
-            icon: "⚡",
-            label: "Breaker Trip",
-            startH: t === 0 ? (7.5 + rng() * 5.5) : (16.5 + rng() * 4.5),
-            durH: 0.6,
-            triggered: false
-          });
-        }
-      }
-
-      // Compute Demand, Solar & Wind profiles at any hour h (0..24)
-      function getDemandAt(h) {
-        let d = baseNightLoad
-          + morningPeak * gauss(h, 9.2, 2.3)
-          + eveningPeak * gauss(h, 19.3, 2.5)
-          + (20 * cityScale) * gauss(h, 14.0, 2.8);
-        for (const ev of events) {
-          if (ev.type === "surge") {
-            const mid = ev.startH + ev.durH * 0.5;
-            d += ev.extraMw * gauss(h, mid, ev.durH * 0.42);
-          }
-        }
-        return Math.round(d);
-      }
-
-      function getSolarAvailAt(h) {
-        if (h <= 5.5 || h >= 19.5) return 0;
-        const sun = Math.sin(((h - 5.5) / 14.0) * Math.PI);
-        let out = solarCap * Math.pow(Math.max(0, sun), 1.25);
-        for (const ev of events) {
-          if (ev.type === "clouds") {
-            const mid = ev.startH + ev.durH * 0.5;
-            const drop = 0.72 * gauss(h, mid, ev.durH * 0.45);
-            out *= (1 - drop);
-          }
-        }
-        return out;
-      }
-
-      function getWindAvailAt(h) {
-        let wave = 0.52 + 0.34 * Math.sin(h * windFreq + windPhase) + 0.14 * Math.cos(h * 0.85 - windPhase);
-        let out = windCap * Math.max(0.08, Math.min(1, wave));
-        for (const ev of events) {
-          if (ev.type === "windlull") {
-            const mid = ev.startH + ev.durH * 0.5;
-            const drop = 0.8 * gauss(h, mid, ev.durH * 0.42);
-            out *= (1 - drop);
-          }
-        }
-        return out;
-      }
-
-      // Pre-sample 96 points (every 15 min) for crisp forecast chart rendering
-      const forecast = [];
-      let peakDemand = 100;
-      for (let i = 0; i <= 96; i++) {
-        const h = (i / 96) * 24;
-        const dm = getDemandAt(h);
-        if (dm > peakDemand) peakDemand = dm;
-        forecast.push({ h, demand: dm, solar: getSolarAvailAt(h), wind: getWindAvailAt(h) });
-      }
-      const chartMaxMw = Math.ceil((peakDemand * 1.28) / 50) * 50;
-
-      // Grid sensitivity & stability drain scale smoothly
-      const freqGain = 0.015 + p * 0.008;      // Hz drift per MW mismatch
-      const drainRate = 11.5 + p * 12.5;       // Stability %/sec drain when outside safe band
-      const gasFuelMax = 100;                  // Full tank; drains only at high throttle
-      const gasFuelBurn = 0.65 + p * 0.55;     // Gentle enough to always win with smart play
-
-      // Build deterministic city skyline silhouettes
-      const buildings = [];
-      const bCount = 17;
-      for (let i = 0; i < bCount; i++) {
-        const bh = 22 + Math.floor(rng() * 54);
-        const bw = Math.floor(420 / bCount) - 3;
-        buildings.push({
-          x: 8 + i * (404 / bCount),
-          w: bw,
-          h: bh,
-          cols: Math.max(2, Math.floor(bw / 7)),
-          rows: Math.max(2, Math.floor((bh - 8) / 10)),
-          seed: Math.floor(rng() * 1000)
-        });
-      }
+      const forecastName = heatwaveBump > 0
+        ? "Summer AC Heatwave"
+        : (hasBreakerTrip ? "Storm Surge Alert" : FORECASTS[(levelNum + chapIdx) % FORECASTS.length]);
 
       return {
         levelNum,
-        hasBaseload,
-        shiftDurationSec,
+        chapIdx,
+        forecastName,
+        hasWind,
+        hasBattery,
+        hasWeatherEvent,
+        hasBreakerTrip,
+        baseNightMW,
+        morningPeakMW,
+        evePeakMW,
+        heatwaveBump,
         solarCap,
         windCap,
-        gasCap,
-        baseCap,
-        batPower,
-        batEnergyMax,
-        events,
-        forecast,
-        chartMaxMw,
-        freqGain,
-        drainRate,
-        gasFuelMax,
-        gasFuelBurn,
-        buildings,
-        getDemandAt,
-        getSolarAvailAt,
-        getWindAvailAt
+        hydroStep,
+        gasStep,
+        cloudStart,
+        cloudDur,
+        tripHour,
+        windPhase
       };
+    }
+
+    // Smooth Realistic 24-Hour City Demand Curve (MW at hour h in 0..24)
+    function evalDemandMW(d, h) {
+      const morning = Math.exp(-Math.pow((h - 9.0) / 2.6, 2)) * d.morningPeakMW;
+      const heat = Math.exp(-Math.pow((h - 14.2) / 2.2, 2)) * d.heatwaveBump;
+      const evening = Math.exp(-Math.pow((h - 19.3) / 2.5, 2)) * d.evePeakMW;
+      const ripple = Math.sin(h * 1.3 + d.levelNum) * 9;
+      return Math.round(d.baseNightMW + morning + heat + evening + ripple);
+    }
+
+    // Solar Irradiance Output (Peaks at 12:30, dips under passing cloud front!)
+    function evalSolarPotential(d, h) {
+      if (h <= 5.5 || h >= 19.0) return 0;
+      let sun = Math.sin(((h - 5.5) / 13.5) * Math.PI);
+      if (d.hasWeatherEvent && h >= d.cloudStart && h <= d.cloudStart + d.cloudDur) {
+        const ct = Math.sin(((h - d.cloudStart) / d.cloudDur) * Math.PI);
+        sun *= (1 - ct * 0.72);
+      }
+      return Math.round(Math.max(0, sun * d.solarCap));
+    }
+
+    // Wind Turbine Output (Smooth gusts)
+    function evalWindPotential(d, h) {
+      if (!d.hasWind) return 0;
+      const gust = 0.52 + 0.36 * Math.sin(h * 0.58 + d.windPhase) + 0.12 * Math.cos(h * 1.45);
+      return Math.round(Math.max(15, gust * d.windCap));
     }
 
     function getChapter(num) {
@@ -1023,11 +1040,11 @@
     }
 
     // ==============================================
-    // SCADA WEB AUDIO SYNTHESIZER (CLICKS & ALARMS)
+    // SCADA BREAKER, ALARM & HARMONIC CHIME WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
-    let lastAlarmMs = 0;
+    let lastBeepMs = 0;
 
     function initAudio() {
       if (!audioCtx) {
@@ -1037,7 +1054,7 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.1) {
+    function playTone(freq, dur, type = "sine", vol = 0.09) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
@@ -1046,473 +1063,397 @@
       const g = audioCtx.createGain();
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
-      g.gain.setValueAtTime(vol, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
       osc.connect(g);
       g.connect(audioCtx.destination);
       osc.start(now);
       osc.stop(now + dur + 0.02);
     }
 
-    function sfxSwitch() {
-      playTone(540, 0.045, "triangle", 0.09);
-      setTimeout(() => playTone(760, 0.035, "sine", 0.06), 22);
+    function sfxBreakerClick(high = true) {
+      playTone(high ? 520 : 340, 0.048, "triangle", 0.11);
+      setTimeout(() => playTone(high ? 780 : 220, 0.04, "sine", 0.07), 22);
     }
-    function sfxAlarmPing(high) {
-      const now = performance.now();
-      if (now - lastAlarmMs < 620) return;
-      lastAlarmMs = now;
-      playTone(high ? 880 : 320, 0.14, "sawtooth", 0.09);
+
+    function sfxFreqAlarm(over) {
+      const ms = performance.now();
+      if (ms - lastBeepMs < 620) return;
+      lastBeepMs = ms;
+      playTone(over ? 920 : 280, 0.11, "sawtooth", 0.065);
     }
-    function sfxTrip() {
-      playTone(220, 0.22, "sawtooth", 0.16);
-      setTimeout(() => playTone(145, 0.26, "sawtooth", 0.15), 120);
+
+    function sfxTripBoom() {
+      playTone(150, 0.22, "sawtooth", 0.14);
+      setTimeout(() => playTone(95, 0.25, "triangle", 0.13), 75);
     }
-    function sfxBlackout() {
-      playTone(180, 0.35, "sawtooth", 0.18);
-      setTimeout(() => playTone(95, 0.5, "sawtooth", 0.18), 180);
-    }
+
     function sfxShiftWin() {
-      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.3, "sine", 0.12), i * 85);
+      [440.0, 554.37, 659.25, 880.0, 1108.73].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.45, "sine", 0.11), i * 80);
       });
     }
 
     // ==============================================
-    // GAME STATE & SCADA UI ELEMENTS
+    // GAME STATE, SWITCHBOARD DISPATCH & SCADA RENDERER
     // ==============================================
     const canvas = document.getElementById("gridCanvas");
     const ctx = canvas.getContext("2d");
 
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const clockPill = document.getElementById("clockPill");
+    const hzPill = document.getElementById("hzPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const freqReadout = document.getElementById("freqReadout");
-    const stabPctText = document.getElementById("stabPctText");
+    const stabLbl = document.getElementById("stabLbl");
+    const stabPct = document.getElementById("stabPct");
     const stabFill = document.getElementById("stabFill");
-    const mwBalance = document.getElementById("mwBalance");
-
-    const solarMwEl = document.getElementById("solarMw");
-    const solarNoteEl = document.getElementById("solarNote");
-    const solarCapEl = document.getElementById("solarCap");
-    const solarBarEl = document.getElementById("solarBar");
-    const solarToggleBtn = document.getElementById("solarToggleBtn");
-
-    const windMwEl = document.getElementById("windMw");
-    const windNoteEl = document.getElementById("windNote");
-    const windCapEl = document.getElementById("windCap");
-    const windBarEl = document.getElementById("windBar");
-    const windToggleBtn = document.getElementById("windToggleBtn");
-
-    const gasCard = document.getElementById("gasCard");
-    const gasMwEl = document.getElementById("gasMw");
-    const gasNoteEl = document.getElementById("gasNote");
-    const gasCapEl = document.getElementById("gasCap");
-    const gasBarEl = document.getElementById("gasBar");
-    const gasActions = document.getElementById("gasActions");
-
-    const batMwEl = document.getElementById("batMw");
-    const batChargeTxt = document.getElementById("batChargeTxt");
-    const batCapEl = document.getElementById("batCap");
-    const batBarEl = document.getElementById("batBar");
-    const batChargeBtn = document.getElementById("batChargeBtn");
-    const batIdleBtn = document.getElementById("batIdleBtn");
-    const batDisBtn = document.getElementById("batDisBtn");
-
-    const baseCard = document.getElementById("baseCard");
-    const baseMwEl = document.getElementById("baseMw");
-    const baseNoteEl = document.getElementById("baseNote");
-    const baseCapEl = document.getElementById("baseCap");
-    const baseBarEl = document.getElementById("baseBar");
-    const baseTargetTxt = document.getElementById("baseTargetTxt");
-
-    const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
-    const pauseBtn = document.getElementById("pauseBtn");
+    const clockTxt = document.getElementById("clockTxt");
+    const dayFill = document.getElementById("dayFill");
+    const plantsGrid = document.getElementById("plantsGrid");
+    const gridMainBtn = document.getElementById("gridMainBtn");
     const speedBtn = document.getElementById("speedBtn");
+    const statusToast = document.getElementById("statusToast");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
     let solvedSet = new Set();
     let currentLevelNum = 1;
     try {
-      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_grid_500_solved") || "[]"));
-      const last = parseInt(localStorage.getItem("zinplay_grid_500_last") || "1", 10);
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_blackout_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_blackout_500_last") || "1", 10);
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let shift = null;
-    let gameState = "ready"; // ready | running | paused | won | lost
-    let speedMult = 1;
-
-    // Live Grid Telemetry
-    let simHour = 0; // 0..24
+    let day = null;
+    let simState = "ready"; // 'ready' | 'running' | 'paused' | 'won' | 'failed'
+    let simSpeed = 1;
+    let hour = 0;           // 0..24
     let freqHz = 50.0;
-    let stability = 100; // 0..100
-    let supplyHistory = []; // { h, supply }
+    let integrity = 100;
 
-    // Generator Control States
-    let solarOnline = true;
-    let windOnline = true;
-    let gasTarget = 0.25; // 0, 0.25, 0.5, 0.75, 1.0
-    let gasActual = 0.25;
-    let gasFuel = 100;
-    let gasTripped = false;
+    // Live Switchboard States
+    let solarOn = true;
+    let windOn = true;
+    let hydroLevel = 2;     // 0..3 (*60 MW)
+    let gasLevel = 0;       // 0..3 (*80 MW)
+    let battMode = 0;       // 0=IDLE, 1=CHARGE (-90MW), 2=DISCHARGE (+90MW)
+    let battSoC = 55;       // 0..100 %
+    let trippedPlant = null;// 'hydro' | 'gas' | null
+    let tripTriggered = false;
+    let cloudWarned = false;
 
-    let baseTarget = 0.25;
-    let baseActual = 0.25;
-
-    let batMode = 0; // -1=Charge, 0=Idle, +1=Discharge
-    let batEnergy = 0;
-
-    // Live Snapshot Values
-    let curDemand = 100;
-    let curSupply = 100;
-    let curSolar = 0;
-    let curWind = 0;
-    let curGas = 0;
-    let curBase = 0;
-    let curBat = 0;
-    let wavePhase = 0;
+    let demandHist = [];
+    let supplyHist = [];
     let toastTimer = null;
 
-    function showToast(msg, ms = 2600) {
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function formatHour(h) {
-      const clamped = Math.max(0, Math.min(24, h));
-      const hh = Math.floor(clamped);
-      const mm = Math.floor((clamped - hh) * 60);
+    function getLiveOutputs(h) {
+      const solarMW = solarOn ? evalSolarPotential(day, h) : 0;
+      const windMW = (day.hasWind && windOn) ? evalWindPotential(day, h) : 0;
+      const hydroMW = trippedPlant === "hydro" ? 0 : hydroLevel * day.hydroStep;
+      const gasMW = trippedPlant === "gas" ? 0 : gasLevel * day.gasStep;
+      let battMW = 0;
+      if (day.hasBattery) {
+        if (battMode === 1 && battSoC < 99.5) battMW = -90;
+        else if (battMode === 2 && battSoC > 0.5) battMW = 90;
+      }
+      const totalSupply = solarMW + windMW + hydroMW + gasMW + battMW;
+      const demand = evalDemandMW(day, h);
+      return { solarMW, windMW, hydroMW, gasMW, battMW, totalSupply, demand };
+    }
+
+    function formatClock(h) {
+      const hh = Math.floor(h) % 24;
+      const mm = Math.floor((h - Math.floor(h)) * 60);
       return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
     }
 
-    function showOverlay(icon, title, text, btnText) {
-      ovIcon.textContent = icon;
-      ovHeading.textContent = title;
-      ovText.textContent = text;
-      ovActionBtn.textContent = btnText;
-      stageOverlay.classList.add("show");
-    }
+    function renderSwitchboard() {
+      const out = getLiveOutputs(hour);
+      const count = 3 + (day.hasWind ? 1 : 0) + (day.hasBattery ? 1 : 0);
+      plantsGrid.className = "plants-grid" + (count === 5 ? " has-5" : "");
+      plantsGrid.innerHTML = "";
 
-    function hideOverlay() {
-      stageOverlay.classList.remove("show");
-    }
-
-    function renderGasControls() {
-      gasCard.classList.toggle("tripped", gasTripped);
-      if (gasTripped) {
-        gasActions.innerHTML = `<button id="resetTripBtn" class="scada-btn trip-btn" type="button">⚡ BREAKER TRIPPED — TAP TO RESET!</button>`;
-        document.getElementById("resetTripBtn").addEventListener("click", () => {
-          if (gameState !== "running") return;
-          initAudio();
-          sfxSwitch();
-          gasTripped = false;
-          renderGasControls();
-          showToast("Gas Peaker breaker restored! Ramping back online...", 1800);
-        });
-      } else {
-        gasActions.innerHTML = `
-          <button id="gasDownBtn" class="scada-btn" type="button">− 25%</button>
-          <span id="gasTargetTxt" class="step-readout">${Math.round(gasTarget * 100)}%</span>
-          <button id="gasUpBtn" class="scada-btn" type="button">+ 25%</button>
+      const makeCard = (cls, title, mwTxt, subTxt, onClick) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "plant-card " + cls;
+        btn.innerHTML = `
+          <div class="pc-top"><span>${title}</span><span class="pc-mw">${mwTxt}</span></div>
+          <span class="pc-sub">${subTxt}</span>
         `;
-        document.getElementById("gasDownBtn").addEventListener("click", () => {
-          if (gameState !== "running" && gameState !== "ready") return;
+        btn.addEventListener("click", onClick);
+        plantsGrid.appendChild(btn);
+      };
+
+      // 1. Solar Array
+      makeCard(
+        solarOn && out.solarMW > 0 ? "on-clean" : "",
+        "☀️ Solar [1]",
+        `${out.solarMW} MW`,
+        solarOn ? (out.solarMW > 0 ? "ONLINE • Clean" : "NIGHT / DUSK") : "CURTAILED (OFF)",
+        () => {
+          if (simState === "won" || simState === "failed") return;
+          initAudio(); solarOn = !solarOn; sfxBreakerClick(solarOn); renderSwitchboard();
+        }
+      );
+
+      // 2. Hydro Dam
+      const hTripped = trippedPlant === "hydro";
+      makeCard(
+        hTripped ? "tripped" : (hydroLevel > 0 ? "on-clean" : ""),
+        "💧 Hydro [2]",
+        hTripped ? "TRIP!" : `${out.hydroMW} MW`,
+        hTripped ? "🔧 TAP TO RESET!" : `GATE ${hydroLevel}/3 • Tap`,
+        () => {
+          if (simState === "won" || simState === "failed") return;
           initAudio();
-          gasTarget = Math.max(0, Math.round((gasTarget - 0.25) * 4) / 4);
-          sfxSwitch();
-          document.getElementById("gasTargetTxt").textContent = `${Math.round(gasTarget * 100)}%`;
-        });
-        document.getElementById("gasUpBtn").addEventListener("click", () => {
-          if (gameState !== "running" && gameState !== "ready") return;
+          if (trippedPlant === "hydro") {
+            trippedPlant = null; sfxBreakerClick(true);
+            showToast("✓ Hydro Dam transformer breaker restored!", 1800);
+          } else {
+            hydroLevel = (hydroLevel + 1) % 4;
+            sfxBreakerClick(hydroLevel > 0);
+          }
+          renderSwitchboard();
+        }
+      );
+
+      // 3. Gas Peaker
+      const gTripped = trippedPlant === "gas";
+      makeCard(
+        gTripped ? "tripped" : (gasLevel > 0 ? "on-gas" : ""),
+        "🔥 Gas [3]",
+        gTripped ? "TRIP!" : `${out.gasMW} MW`,
+        gTripped ? "🔧 TAP TO RESET!" : `UNIT ${gasLevel}/3 • Fast`,
+        () => {
+          if (simState === "won" || simState === "failed") return;
           initAudio();
-          gasTarget = Math.min(1, Math.round((gasTarget + 0.25) * 4) / 4);
-          sfxSwitch();
-          document.getElementById("gasTargetTxt").textContent = `${Math.round(gasTarget * 100)}%`;
-        });
-      }
-    }
+          if (trippedPlant === "gas") {
+            trippedPlant = null; sfxBreakerClick(true);
+            showToast("✓ Gas Peaker breaker restored!", 1800);
+          } else {
+            gasLevel = (gasLevel + 1) % 4;
+            sfxBreakerClick(gasLevel > 0);
+          }
+          renderSwitchboard();
+        }
+      );
 
-    function updateControlDeckUI() {
-      // Solar
-      solarMwEl.textContent = `${Math.round(curSolar)} MW`;
-      solarCapEl.textContent = `Max ${shift.solarCap} MW`;
-      solarBarEl.style.width = `${Math.min(100, (curSolar / Math.max(1, shift.solarCap)) * 100)}%`;
-      const availS = shift.getSolarAvailAt(simHour);
-      solarNoteEl.textContent = !solarOnline
-        ? "Curtailed (Offline)"
-        : (availS < 2 ? "Nighttime (06:00–19:00)" : `Avail: ${Math.round(availS)} MW`);
-      solarToggleBtn.className = "scada-btn " + (solarOnline ? "on-green" : "on-amber");
-      solarToggleBtn.textContent = solarOnline ? "● ONLINE (Tap to Curtail)" : "○ CURTAILED (Tap to Restore)";
-
-      // Wind
-      windMwEl.textContent = `${Math.round(curWind)} MW`;
-      windCapEl.textContent = `Max ${shift.windCap} MW`;
-      windBarEl.style.width = `${Math.min(100, (curWind / Math.max(1, shift.windCap)) * 100)}%`;
-      const availW = shift.getWindAvailAt(simHour);
-      windNoteEl.textContent = !windOnline ? "Braked (Offline)" : `Wind Avail: ${Math.round(availW)} MW`;
-      windToggleBtn.className = "scada-btn " + (windOnline ? "on-green" : "on-amber");
-      windToggleBtn.textContent = windOnline ? "● ONLINE (Tap to Brake)" : "○ BRAKED (Tap to Restore)";
-
-      // Gas Peaker
-      gasMwEl.textContent = `${Math.round(curGas)} MW`;
-      gasCapEl.textContent = `Max ${shift.gasCap} MW`;
-      gasBarEl.style.width = `${Math.min(100, (curGas / Math.max(1, shift.gasCap)) * 100)}%`;
-      gasNoteEl.textContent = gasTripped
-        ? "FAULT! Reset Breaker!"
-        : (gasFuel <= 0.1 ? "FUEL DEPLETED!" : `Fast Ramp • Fuel: ${Math.round(gasFuel)}%`);
-
-      // Battery
-      const batPct = Math.round((batEnergy / Math.max(1, shift.batEnergyMax)) * 100);
-      batMwEl.textContent = `${curBat > 0 ? "+" : ""}${Math.round(curBat)} MW`;
-      batMwEl.style.color = curBat > 1 ? "#4ade80" : (curBat < -1 ? "#facc15" : "#94a3b8");
-      batChargeTxt.textContent = `Charge: ${batPct}%`;
-      batCapEl.textContent = `±${shift.batPower} MW`;
-      batBarEl.style.width = `${batPct}%`;
-      batChargeBtn.className = "scada-btn" + (batMode === -1 ? " on-amber" : "");
-      batIdleBtn.className = "scada-btn" + (batMode === 0 ? " on-blue" : "");
-      batDisBtn.className = "scada-btn" + (batMode === 1 ? " on-green" : "");
-
-      // Baseload (Ch. 2+)
-      if (shift.hasBaseload) {
-        baseCard.style.display = "flex";
-        baseMwEl.textContent = `${Math.round(curBase)} MW`;
-        baseCapEl.textContent = `Max ${shift.baseCap} MW`;
-        baseBarEl.style.width = `${Math.min(100, (curBase / Math.max(1, shift.baseCap)) * 100)}%`;
-        const ramping = Math.abs(baseTarget - baseActual) > 0.02;
-        baseNoteEl.textContent = ramping
-          ? `Ramping ${baseTarget > baseActual ? "UP ▲" : "DOWN ▼"} (${Math.round(baseActual * 100)}% → ${Math.round(baseTarget * 100)}%)`
-          : "Slow Ramp • Unlimited Fuel";
-        baseTargetTxt.textContent = `${Math.round(baseTarget * 100)}%`;
-      } else {
-        baseCard.style.display = "none";
-      }
-    }
-
-    function updateTelemetryUI() {
-      const chap = getChapter(currentLevelNum);
-      chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Shift #${currentLevelNum} / ${TOTAL_LEVELS}`;
-      clockPill.textContent = `${formatHour(simHour)} / 24:00`;
-      solvedCounter.textContent = `Cleared: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Shift ${currentLevelNum} / 500 ▾`;
-      pauseBtn.textContent = gameState === "paused" ? "▶ Resume" : "⏸ Pause";
-
-      freqReadout.textContent = `${freqHz.toFixed(2)} Hz`;
-      const dev = Math.abs(freqHz - 50.0);
-      if (dev >= 1.25) freqReadout.className = "freq-readout crit";
-      else if (dev >= 0.65) freqReadout.className = "freq-readout warn";
-      else freqReadout.className = "freq-readout";
-
-      const stRound = Math.max(0, Math.round(stability));
-      stabPctText.textContent = `${stRound}%`;
-      stabFill.style.width = `${stRound}%`;
-
-      const diff = Math.round(curSupply - curDemand);
-      mwBalance.textContent = `${diff > 0 ? "+" : ""}${diff} MW`;
-      if (Math.abs(diff) <= 22) mwBalance.className = "mw-balance mw-bal-ok";
-      else if (diff < 0) mwBalance.className = "mw-balance mw-bal-low";
-      else mwBalance.className = "mw-balance mw-bal-high";
-
-      updateControlDeckUI();
-    }
-
-    function loadShift(num, autoStart = false) {
-      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      shift = buildShift(currentLevelNum);
-
-      simHour = 0;
-      freqHz = 50.0;
-      stability = 100;
-      supplyHistory = [];
-      solarOnline = true;
-      windOnline = true;
-      gasFuel = shift.gasFuelMax;
-      gasTripped = false;
-      batMode = 0;
-      batEnergy = shift.batEnergyMax * 0.55;
-
-      // Auto-balance starting throttle at 00:00 so player starts cleanly at 50.00 Hz!
-      const d0 = shift.getDemandAt(0);
-      const w0 = shift.getWindAvailAt(0);
-      const needed0 = Math.max(0, d0 - w0);
-
-      if (shift.hasBaseload) {
-        baseTarget = Math.min(1, Math.round(((needed0 * 0.65) / shift.baseCap) * 4) / 4);
-        baseActual = baseTarget;
-        const rem = Math.max(0, needed0 - baseActual * shift.baseCap);
-        gasTarget = Math.min(1, Math.round((rem / shift.gasCap) * 4) / 4);
-        gasActual = gasTarget;
-      } else {
-        baseTarget = 0; baseActual = 0;
-        gasTarget = Math.min(1, Math.round((needed0 / shift.gasCap) * 4) / 4);
-        gasActual = gasTarget;
-      }
-
-      curDemand = d0;
-      curSolar = shift.getSolarAvailAt(0);
-      curWind = w0;
-      curGas = gasActual * shift.gasCap;
-      curBase = baseActual * shift.baseCap;
-      curBat = 0;
-      curSupply = curSolar + curWind + curGas + curBase;
-
-      statusToast.classList.remove("show");
-      renderGasControls();
-
-      try {
-        localStorage.setItem("zinplay_grid_500_last", String(currentLevelNum));
-      } catch (e) {}
-
-      if (autoStart) {
-        gameState = "running";
-        hideOverlay();
-      } else {
-        gameState = "ready";
-        const evSummary = shift.events.length > 0
-          ? ` Forecast alerts: ${shift.events.map((e) => `${e.icon} ${e.label}`).join(", ")}.`
-          : " Clear skies expected—watch the midday solar surge and evening peak!";
-        showOverlay(
-          "⚡",
-          `Shift #${currentLevelNum} Ready`,
-          `Hold city frequency near 50.00 Hz for 24 hours.${evSummary}`,
-          "Start 24h Shift ▶"
+      // 4. Wind Corridor (Ch. 2–5)
+      if (day.hasWind) {
+        makeCard(
+          windOn ? "on-clean" : "",
+          "💨 Wind [4]",
+          `${out.windMW} MW`,
+          windOn ? "ONLINE • Gusting" : "BRAKED (OFF)",
+          () => {
+            if (simState === "won" || simState === "failed") return;
+            initAudio(); windOn = !windOn; sfxBreakerClick(windOn); renderSwitchboard();
+          }
         );
       }
 
-      updateTelemetryUI();
+      // 5. Grid Battery Megapack (Ch. 3–5)
+      if (day.hasBattery) {
+        const bCls = battMode === 1 ? "on-charge" : (battMode === 2 ? "on-discharge" : "");
+        const bSub = battMode === 1
+          ? `⚡ CHG (${Math.round(battSoC)}%)`
+          : (battMode === 2 ? `🔋 DIS (${Math.round(battSoC)}%)` : `IDLE • ${Math.round(battSoC)}%`);
+        const bMw = out.battMW > 0 ? `+${out.battMW}` : `${out.battMW}`;
+        makeCard(
+          bCls,
+          "🔋 Batt [5]",
+          `${bMw} MW`,
+          bSub,
+          () => {
+            if (simState === "won" || simState === "failed") return;
+            initAudio(); battMode = (battMode + 1) % 3; sfxBreakerClick(battMode !== 0); renderSwitchboard();
+          }
+        );
+      }
     }
 
-    // Plant Button Event Listeners
-    solarToggleBtn.addEventListener("click", () => {
-      if (gameState !== "running" && gameState !== "ready") return;
-      initAudio();
-      solarOnline = !solarOnline;
-      sfxSwitch();
-      updateControlDeckUI();
-    });
-    windToggleBtn.addEventListener("click", () => {
-      if (gameState !== "running" && gameState !== "ready") return;
-      initAudio();
-      windOnline = !windOnline;
-      sfxSwitch();
-      updateControlDeckUI();
-    });
+    function updateHUD() {
+      const chap = getChapter(currentLevelNum);
+      chapterLabel.textContent = chap.title;
+      levelTitle.textContent = `Day #${currentLevelNum} / ${TOTAL_LEVELS} — ${day.forecastName}`;
+      solvedCounter.textContent = `Days: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Day ${currentLevelNum} / 500 ▾`;
 
-    batChargeBtn.addEventListener("click", () => {
-      if (gameState !== "running" && gameState !== "ready") return;
-      initAudio(); batMode = -1; sfxSwitch(); updateControlDeckUI();
-    });
-    batIdleBtn.addEventListener("click", () => {
-      if (gameState !== "running" && gameState !== "ready") return;
-      initAudio(); batMode = 0; sfxSwitch(); updateControlDeckUI();
-    });
-    batDisBtn.addEventListener("click", () => {
-      if (gameState !== "running" && gameState !== "ready") return;
-      initAudio(); batMode = 1; sfxSwitch(); updateControlDeckUI();
-    });
+      hzPill.textContent = `${freqHz.toFixed(2)} Hz`;
+      const dev = Math.abs(freqHz - 50.0);
+      hzPill.className = "hud-pill " + (dev <= 0.65 ? "hz-ok" : (dev <= 1.05 ? "hz-warn" : "hz-crit"));
 
-    document.getElementById("baseDownBtn").addEventListener("click", () => {
-      if (gameState !== "running" && gameState !== "ready") return;
-      initAudio();
-      baseTarget = Math.max(0, Math.round((baseTarget - 0.25) * 4) / 4);
-      sfxSwitch();
-      updateControlDeckUI();
-    });
-    document.getElementById("baseUpBtn").addEventListener("click", () => {
-      if (gameState !== "running" && gameState !== "ready") return;
-      initAudio();
-      baseTarget = Math.min(1, Math.round((baseTarget + 0.25) * 4) / 4);
-      sfxSwitch();
-      updateControlDeckUI();
-    });
+      const st = Math.max(0, Math.round(integrity));
+      stabPct.textContent = `${st}%`;
+      stabFill.style.width = `${st}%`;
+      stabLbl.textContent = st > 65 ? "🛡️ GRID INTEGRITY" : (st > 30 ? "⚠️ UNSTABLE GRID" : "🚨 BLACKOUT RISK!");
+      stabLbl.style.color = st > 65 ? "#86efac" : (st > 30 ? "#fde047" : "#f87171");
 
-    // Live Grid Advisor Hint Button
-    document.getElementById("hintBtn").addEventListener("click", () => {
-      if (gameState !== "running") {
-        showToast("Start the shift first, then tap Grid Advisor for live dispatch advice!", 2400);
+      clockTxt.textContent = `${simState === "won" ? "24:00" : formatClock(hour)} / 24:00`;
+      dayFill.style.width = `${Math.min(100, (hour / 24) * 100).toFixed(1)}%`;
+
+      speedBtn.textContent = simSpeed === 2 ? "2× FAST" : "1× SPD";
+      speedBtn.className = "speed-btn" + (simSpeed === 2 ? " fast" : "");
+
+      if (simState === "ready") {
+        gridMainBtn.className = "grid-main-btn";
+        gridMainBtn.textContent = "▶ START 24-HOUR SHIFT";
+      } else if (simState === "running") {
+        gridMainBtn.className = "grid-main-btn pause-mode";
+        gridMainBtn.textContent = "⏸ PAUSE CONSOLE";
+      } else if (simState === "paused") {
+        gridMainBtn.className = "grid-main-btn";
+        gridMainBtn.textContent = "▶ RESUME SHIFT";
+      } else if (simState === "failed") {
+        gridMainBtn.className = "grid-main-btn retry-mode";
+        gridMainBtn.textContent = "↺ GRID COLLAPSED — RETRY DAY";
+      } else {
+        gridMainBtn.className = "grid-main-btn";
+        gridMainBtn.textContent = "⚡ 24-HOUR SHIFT CLEARED";
+      }
+    }
+
+    // Smart Auto-Dispatch Assistant: Snaps Plants Cleanly to Closest 50.0 Hz Match!
+    function runAutoDispatch() {
+      if (simState === "won" || simState === "failed") return;
+      initAudio();
+      trippedPlant = null;
+      solarOn = true;
+      windOn = true;
+
+      const dem = evalDemandMW(day, hour);
+      const sol = evalSolarPotential(day, hour);
+      const wnd = evalWindPotential(day, hour);
+
+      let bestErr = Infinity;
+      let bestCfg = { h: 2, g: 0, b: 0, s: true, w: true };
+      const bOpts = day.hasBattery ? [0, 1, 2] : [0];
+
+      for (const sOn of [true, false]) {
+        for (const wOn of (day.hasWind ? [true, false] : [true])) {
+          for (let h = 0; h <= 3; h++) {
+            for (let g = 0; g <= 3; g++) {
+              for (const b of bOpts) {
+                const bMW = (b === 1 && battSoC < 98) ? -90 : ((b === 2 && battSoC > 2) ? 90 : 0);
+                const sup = (sOn ? sol : 0) + (wOn ? wnd : 0) + h * day.hydroStep + g * day.gasStep + bMW;
+                const err = Math.abs(sup - dem);
+                if (err < bestErr) {
+                  bestErr = err;
+                  bestCfg = { h, g, b, s: sOn, w: wOn };
+                }
+              }
+            }
+          }
+        }
+      }
+
+      solarOn = bestCfg.s;
+      windOn = bestCfg.w;
+      hydroLevel = bestCfg.h;
+      gasLevel = bestCfg.g;
+      battMode = bestCfg.b;
+      sfxBreakerClick(true);
+      renderSwitchboard();
+      showToast("💡 Auto-Dispatch balanced breakers straight to 50.0 Hz!", 2000);
+    }
+
+    function loadDay(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      day = buildDayShift(currentLevelNum);
+      simState = "ready";
+      hour = 0;
+      freqHz = 50.0;
+      integrity = 100;
+
+      // Start each shift cleanly pre-balanced near 00:00 demand so player never begins in panic!
+      solarOn = true;
+      windOn = true;
+      trippedPlant = null;
+      tripTriggered = false;
+      cloudWarned = false;
+      battMode = 0;
+      battSoC = 55;
+      const d0 = evalDemandMW(day, 0) - evalWindPotential(day, 0);
+      hydroLevel = Math.max(0, Math.min(3, Math.round(d0 / day.hydroStep)));
+      gasLevel = Math.max(0, Math.min(3, Math.round((d0 - hydroLevel * day.hydroStep) / day.gasStep)));
+
+      demandHist = [];
+      supplyHist = [];
+
+      winOverlay.classList.remove("show");
+      statusToast.classList.remove("show");
+
+      try {
+        localStorage.setItem("zinplay_blackout_500_last", String(currentLevelNum));
+      } catch (e) {}
+
+      renderSwitchboard();
+      updateHUD();
+    }
+
+    function toggleRunState() {
+      initAudio();
+      if (simState === "failed") {
+        loadDay(currentLevelNum);
+        simState = "running";
+        updateHUD();
         return;
       }
-      const diff = curSupply - curDemand;
-      if (gasTripped) {
-        showToast("ADVISOR: Tap the red RESET BREAKER button on the Gas Peaker immediately!", 3000);
-      } else if (diff < -20) {
-        if (!solarOnline && shift.getSolarAvailAt(simHour) > 15) {
-          showToast(`ADVISOR: Underpowered (${Math.round(diff)} MW)! Restore ☀️ Solar Array!`, 3000);
-        } else if (!windOnline && shift.getWindAvailAt(simHour) > 15) {
-          showToast(`ADVISOR: Underpowered (${Math.round(diff)} MW)! Restore 💨 Wind Farm!`, 3000);
-        } else if (batMode !== 1 && batEnergy > shift.batEnergyMax * 0.1) {
-          showToast(`ADVISOR: Deficit ${Math.round(diff)} MW! Switch Battery to ▲ Boost or raise 🔥 Gas!`, 3000);
-        } else {
-          showToast(`ADVISOR: Deficit ${Math.round(diff)} MW! Increase 🔥 Gas Peaker or 🏭 Baseload!`, 3000);
-        }
-      } else if (diff > 20) {
-        if (batMode !== -1 && batEnergy < shift.batEnergyMax * 0.92) {
-          showToast(`ADVISOR: Surplus +${Math.round(diff)} MW! Switch Battery to ⚡ Charge to store it!`, 3000);
-        } else if (gasTarget > 0) {
-          showToast(`ADVISOR: Surplus +${Math.round(diff)} MW! Lower 🔥 Gas Peaker throttle!`, 3000);
-        } else {
-          showToast(`ADVISOR: Surplus +${Math.round(diff)} MW! Curtail ☀️ Solar or 💨 Wind temporarily!`, 3000);
-        }
-      } else {
-        showToast("ADVISOR: Grid is nicely balanced near 50.00 Hz — watch the forecast ahead!", 2400);
+      if (simState === "ready" || simState === "paused") {
+        simState = "running";
+        updateHUD();
+      } else if (simState === "running") {
+        simState = "paused";
+        updateHUD();
       }
-    });
+    }
 
-    // Controls & Overlays
-    ovActionBtn.addEventListener("click", () => {
-      initAudio();
-      if (gameState === "ready" || gameState === "paused") {
-        gameState = "running";
-        hideOverlay();
-        updateTelemetryUI();
-      } else if (gameState === "won") {
-        loadShift(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1, true);
-      } else if (gameState === "lost") {
-        loadShift(currentLevelNum, true);
-      }
-    });
-
-    pauseBtn.addEventListener("click", () => {
-      if (gameState === "running") {
-        gameState = "paused";
-        showOverlay("⏸", "Shift Paused", "Grid clock frozen at " + formatHour(simHour) + ".", "Resume Shift ▶");
-        updateTelemetryUI();
-      } else if (gameState === "paused") {
-        gameState = "running";
-        hideOverlay();
-        updateTelemetryUI();
-      }
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", () => loadShift(currentLevelNum, true));
+    gridMainBtn.addEventListener("click", toggleRunState);
     speedBtn.addEventListener("click", () => {
-      speedMult = speedMult === 1 ? 2 : 1;
-      speedBtn.classList.toggle("active-toggle", speedMult > 1);
-      speedBtn.textContent = speedMult > 1 ? "⚡ 2x ON" : "⚡ 2x";
+      initAudio();
+      simSpeed = simSpeed === 1 ? 2 : 1;
+      updateHUD();
     });
+
+    document.getElementById("hintBtn").addEventListener("click", runAutoDispatch);
+    document.getElementById("resetBtn").addEventListener("click", () => loadDay(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 SCADA Audio ON" : "🔇 OFF";
     });
-
+    nextLevelBtn.addEventListener("click", () => {
+      loadDay(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
+    });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadShift(currentLevelNum - 1, false);
+      if (currentLevelNum > 1) loadDay(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadShift(currentLevelNum + 1, false);
+      if (currentLevelNum < TOTAL_LEVELS) loadDay(currentLevelNum + 1);
     });
 
-    // Shift Picker Modal
+    // Desktop Hotkeys 1–5 & Space
+    window.addEventListener("keydown", (e) => {
+      if (pickerModal.classList.contains("open")) return;
+      if (e.key === " ") { e.preventDefault(); toggleRunState(); return; }
+      const cards = plantsGrid.querySelectorAll(".plant-card");
+      const kIdx = ["1", "2", "3", "4", "5"].indexOf(e.key);
+      if (kIdx !== -1 && cards[kIdx]) cards[kIdx].click();
+    });
+
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1543,7 +1484,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadShift(n, false);
+          loadDay(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1551,10 +1492,6 @@
     }
 
     openPickerBtn.addEventListener("click", () => {
-      if (gameState === "running") {
-        gameState = "paused";
-        updateTelemetryUI();
-      }
       activeChapterIdx = Math.floor((currentLevelNum - 1) / 100);
       jumpInput.value = "";
       renderPicker();
@@ -1562,28 +1499,20 @@
     });
     document.getElementById("closePickerBtn").addEventListener("click", () => {
       pickerModal.classList.remove("open");
-      if (gameState === "paused") {
-        showOverlay("⏸", "Shift Paused", "Resume dispatch whenever ready.", "Resume Shift ▶");
-      }
     });
     pickerModal.addEventListener("click", (e) => {
-      if (e.target === pickerModal) {
-        pickerModal.classList.remove("open");
-        if (gameState === "paused") {
-          showOverlay("⏸", "Shift Paused", "Resume dispatch whenever ready.", "Resume Shift ▶");
-        }
-      }
+      if (e.target === pickerModal) pickerModal.classList.remove("open");
     });
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadShift(val, false);
+        loadDay(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // GRID PHYSICS SIMULATION & SCADA CANVAS RENDERER
+    // CITY SKYLINE + LIVE SCADA OSCILLOSCOPE RENDERER
     // ==============================================
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
@@ -1593,330 +1522,362 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function stepGrid(dt) {
-      if (gameState !== "running") return;
+    function getViewport() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offsetX = (rect.width - WORLD_W * scale) / 2;
+      const offsetY = (rect.height - WORLD_H * scale) / 2;
+      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
+    }
 
-      const effDt = dt * speedMult;
-      const hoursPerSec = 24 / shift.shiftDurationSec;
-      simHour += effDt * hoursPerSec;
+    function lerpCol(a, b, t) {
+      return [
+        Math.round(a[0] + (b[0] - a[0]) * t),
+        Math.round(a[1] + (b[1] - a[1]) * t),
+        Math.round(a[2] + (b[2] - a[2]) * t)
+      ];
+    }
 
-      // Trigger Scheduled Weather / Breaker Events
-      for (const ev of shift.events) {
-        if (!ev.triggered && simHour >= ev.startH) {
-          ev.triggered = true;
-          if (ev.type === "trip") {
-            gasTripped = true;
-            gasActual = 0;
-            renderGasControls();
-            sfxTrip();
-            showToast("⚡ STORM FAULT! Gas Peaker breaker tripped — Reset it now!", 3200);
-          } else {
-            showToast(`${ev.icon} ${ev.label} underway! Watch your MW balance.`, 2400);
+    function getSkyGradientColors(h) {
+      const night = [9, 17, 34], dawn = [180, 83, 62], noon = [24, 92, 148];
+      let top, bot;
+      if (h < 5 || h > 20.5) { top = night; bot = [17, 30, 56]; }
+      else if (h < 8.5) {
+        const t = (h - 5) / 3.5;
+        top = lerpCol(night, noon, t);
+        bot = lerpCol([17, 30, 56], dawn, Math.sin(t * Math.PI));
+      } else if (h < 16.5) {
+        top = [16, 62, 112]; bot = noon;
+      } else {
+        const t = (h - 16.5) / 4.0;
+        top = lerpCol([16, 62, 112], night, t);
+        bot = lerpCol(noon, dawn, Math.sin(t * Math.PI));
+      }
+      return {
+        c1: `rgb(${top[0]},${top[1]},${top[2]})`,
+        c2: `rgb(${bot[0]},${bot[1]},${bot[2]})`
+      };
+    }
+
+    const BUILDINGS = [
+      { x: 24, w: 32, h: 72 }, { x: 62, w: 26, h: 52 }, { x: 94, w: 38, h: 96 },
+      { x: 138, w: 28, h: 64 }, { x: 172, w: 42, h: 108 }, { x: 220, w: 34, h: 82 },
+      { x: 260, w: 30, h: 66 }
+    ];
+
+    let lastTime = performance.now();
+    let uiTickAccum = 0;
+
+    function frame(now) {
+      const dt = Math.min(0.04, (now - lastTime) / 1000);
+      lastTime = now;
+
+      // === LIVE 24-HOUR POWER GRID SIMULATION STEP ===
+      if (simState === "running") {
+        const simDt = dt * simSpeed;
+        hour += simDt * HOURS_PER_SEC;
+
+        // Live Weather Cloud Alert (Ch. 4–5)
+        if (day.hasWeatherEvent && !cloudWarned && hour >= day.cloudStart - 0.5) {
+          cloudWarned = true;
+          showToast("☁️ Storm cloud front dimming Solar Array! Ramp Hydro or Gas.", 2600);
+        }
+
+        // Live Transformer Breaker Trip Alert (Ch. 5)
+        if (day.hasBreakerTrip && !tripTriggered && hour >= day.tripHour) {
+          tripTriggered = true;
+          trippedPlant = hydroLevel > 0 ? "hydro" : "gas";
+          sfxTripBoom();
+          showToast(`🔧 ${trippedPlant === "hydro" ? "Hydro Dam" : "Gas Peaker"} breaker TRIPPED! Tap it to reset!`, 3200);
+          renderSwitchboard();
+        }
+
+        // Update Battery State of Charge
+        if (day.hasBattery) {
+          if (battMode === 1) {
+            battSoC = Math.min(100, battSoC + simDt * 8.5);
+            if (battSoC >= 100) battMode = 0;
+          } else if (battMode === 2) {
+            battSoC = Math.max(0, battSoC - simDt * 9.5);
+            if (battSoC <= 0) battMode = 0;
+          }
+        }
+
+        const out = getLiveOutputs(hour);
+        const netMW = out.totalSupply - out.demand;
+        const targetHz = Math.max(47.2, Math.min(52.8, 50.0 + netMW * 0.0115));
+        freqHz += (targetHz - freqHz) * Math.min(1, dt * 3.8);
+
+        const dev = Math.abs(freqHz - 50.0);
+        if (dev > 1.0) {
+          // Brownout (<49.0) or Over-Frequency Surge (>51.0)!
+          const drain = (dev - 0.9) * 16.5 * dt;
+          integrity = Math.max(0, integrity - drain);
+          sfxFreqAlarm(freqHz > 50.0);
+        } else if (dev < 0.55) {
+          integrity = Math.min(100, integrity + 4.5 * dt);
+        }
+
+        // Record Oscilloscope History
+        if (demandHist.length === 0 || hour - demandHist[demandHist.length - 1].h >= 0.14) {
+          demandHist.push({ h: hour, mw: out.demand });
+          supplyHist.push({ h: hour, mw: out.totalSupply });
+        }
+
+        // Check Blackout Failure!
+        if (integrity <= 0) {
+          simState = "failed";
+          sfxTripBoom();
+          showToast(freqHz < 50 ? "💥 City Brownout! Supply fell too far below demand." : "💥 Grid Surge Trip! Too much excess megawatt supply.", 3200);
+          renderSwitchboard();
+          updateHUD();
+        } else if (hour >= 24.0) {
+          // 24-Hour Shift Completed Cleanly!
+          hour = 24.0;
+          simState = "won";
+          solvedSet.add(currentLevelNum);
+          try {
+            localStorage.setItem("zinplay_blackout_500_solved", JSON.stringify([...solvedSet]));
+          } catch (e) {}
+          sfxShiftWin();
+          renderSwitchboard();
+          updateHUD();
+
+          const isLast = currentLevelNum === TOTAL_LEVELS;
+          winHeading.textContent = isLast ? "All 500 Grid Shifts Mastered!" : `Day #${currentLevelNum} Powered!`;
+          winText.textContent = `Held 50 Hz stability across 24 hours (${Math.round(integrity)}% final grid integrity).`;
+          nextLevelBtn.textContent = isLast ? "Replay Day #1" : `Next Shift (Day #${currentLevelNum + 1}) →`;
+          setTimeout(() => winOverlay.classList.add("show"), 520);
+        } else {
+          uiTickAccum += dt;
+          if (uiTickAccum >= 0.14) {
+            uiTickAccum = 0;
+            renderSwitchboard();
+            updateHUD();
           }
         }
       }
 
-      // Ramp Gas Peaker (fast: 0.65/sec) & Baseload (slow: 0.16/sec)
-      const desiredGas = (gasTripped || gasFuel <= 0) ? 0 : gasTarget;
-      const gasStep = 0.65 * effDt;
-      if (gasActual < desiredGas) gasActual = Math.min(desiredGas, gasActual + gasStep);
-      else if (gasActual > desiredGas) gasActual = Math.max(desiredGas, gasActual - gasStep);
+      // === RENDER METROPOLIS & LIVE SCADA OSCILLOSCOPE ===
+      const vp = getViewport();
+      ctx.clearRect(0, 0, vp.w, vp.h);
 
-      if (gasActual > 0.01 && !gasTripped) {
-        gasFuel = Math.max(0, gasFuel - gasActual * shift.gasFuelBurn * effDt);
+      ctx.save();
+      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.scale(vp.scale, vp.scale);
+
+      const out = getLiveOutputs(hour);
+      const skyTopH = 178;
+
+      // 1. Dynamic 24-Hour Sky Backdrop
+      const skyCols = getSkyGradientColors(hour);
+      const sg = ctx.createLinearGradient(0, 0, 0, skyTopH);
+      sg.addColorStop(0, skyCols.c1);
+      sg.addColorStop(1, skyCols.c2);
+      ctx.fillStyle = sg;
+      ctx.fillRect(0, 0, WORLD_W, skyTopH);
+
+      // Sun / Moon Orbital Arc Across Top Sky!
+      if (hour >= 5.5 && hour <= 19.0) {
+        const t = (hour - 5.5) / 13.5;
+        const sx = 36 + t * 240;
+        const sy = 118 - Math.sin(t * Math.PI) * 86;
+        ctx.fillStyle = "#fef08a";
+        ctx.shadowColor = "#facc15";
+        ctx.shadowBlur = 18;
+        ctx.beginPath(); ctx.arc(sx, sy, 14, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+      } else {
+        ctx.fillStyle = "#e2e8f0";
+        ctx.beginPath(); ctx.arc(140, 44, 11, 0, Math.PI * 2); ctx.fill();
       }
 
-      if (shift.hasBaseload) {
-        const baseStep = 0.16 * effDt;
-        if (baseActual < baseTarget) baseActual = Math.min(baseTarget, baseActual + baseStep);
-        else if (baseActual > baseTarget) baseActual = Math.max(baseTarget, baseActual - baseStep);
+      // Passing Storm Cloud During Chapter 4–5 Cloud Eclipse!
+      if (day.hasWeatherEvent && hour >= day.cloudStart - 0.8 && hour <= day.cloudStart + day.cloudDur + 0.8) {
+        ctx.fillStyle = "rgba(51, 65, 85, 0.78)";
+        ctx.beginPath();
+        ctx.arc(135, 64, 24, 0, Math.PI * 2);
+        ctx.arc(165, 58, 28, 0, Math.PI * 2);
+        ctx.arc(198, 66, 22, 0, Math.PI * 2);
+        ctx.fill();
       }
 
-      // Renewable Outputs
-      curDemand = shift.getDemandAt(simHour);
-      curSolar = solarOnline ? shift.getSolarAvailAt(simHour) : 0;
-      curWind = windOnline ? shift.getWindAvailAt(simHour) : 0;
-      curGas = gasActual * shift.gasCap;
-      curBase = shift.hasBaseload ? (baseActual * shift.baseCap) : 0;
+      // 2. City Skyline Responding Live to Grid Frequency (Warm Glow / Flicker / Surge!)
+      const brownout = freqHz < 49.0;
+      const surge = freqHz > 51.0;
+      const winLit = simState !== "failed" && (!brownout || Math.sin(now * 0.04) > 0);
+      const winCol = surge ? "#67e8f9" : "#fde047";
 
-      // Battery Storage Charge / Discharge
-      curBat = 0;
-      if (batMode === -1 && batEnergy < shift.batEnergyMax) {
-        curBat = -shift.batPower;
-        batEnergy = Math.min(shift.batEnergyMax, batEnergy + shift.batPower * effDt * 0.52);
-        if (batEnergy >= shift.batEnergyMax - 0.1) batMode = 0;
-      } else if (batMode === 1 && batEnergy > 0) {
-        curBat = shift.batPower;
-        batEnergy = Math.max(0, batEnergy - shift.batPower * effDt * 0.55);
-        if (batEnergy <= 0.1) batMode = 0;
+      for (const b of BUILDINGS) {
+        ctx.fillStyle = "#0f172a";
+        ctx.fillRect(b.x, skyTopH - b.h, b.w, b.h);
+        if (winLit) {
+          ctx.fillStyle = winCol;
+          for (let wy = skyTopH - b.h + 8; wy < skyTopH - 10; wy += 11) {
+            for (let wx = b.x + 5; wx < b.x + b.w - 8; wx += 9) {
+              if ((wx + wy) % 3 !== 0) ctx.fillRect(wx, wy, 4, 6);
+            }
+          }
+        }
       }
 
-      curSupply = curSolar + curWind + curGas + curBase + curBat;
-
-      // Realistic Rotational Inertia Grid Frequency Dynamics (Target = 50.00 Hz)
-      const mwErr = curSupply - curDemand;
-      const targetFreq = Math.max(47.2, Math.min(52.8, 50.0 + mwErr * shift.freqGain));
-      freqHz += (targetFreq - freqHz) * Math.min(1, effDt * 2.4);
-
-      // Stability Integrity Calculation
-      const absDev = Math.abs(freqHz - 50.0);
-      if (absDev > 1.0) {
-        const severity = 1 + (absDev - 1.0) * 1.65;
-        stability = Math.max(0, stability - shift.drainRate * severity * effDt);
-        sfxAlarmPing(freqHz > 50.0);
-      } else if (absDev < 0.55) {
-        stability = Math.min(100, stability + 5.5 * effDt);
+      // Spinning Wind Turbine Silhouette Beside City When Unlocked!
+      if (day.hasWind) {
+        const tx = 310, ty = skyTopH - 64;
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(tx, skyTopH); ctx.lineTo(tx, ty); ctx.stroke();
+        const rot = windOn ? now * (0.002 + (out.windMW / 150) * 0.006) : 0;
+        ctx.save();
+        ctx.translate(tx, ty);
+        ctx.rotate(rot);
+        ctx.strokeStyle = "#f8fafc";
+        ctx.lineWidth = 2.4;
+        for (let k = 0; k < 3; k++) {
+          const a = (k * Math.PI * 2) / 3;
+          ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * 24, Math.sin(a) * 24); ctx.stroke();
+        }
+        ctx.restore();
       }
 
-      // Record supply trace point
-      if (supplyHistory.length === 0 || simHour - supplyHistory[supplyHistory.length - 1].h >= 0.2) {
-        supplyHistory.push({ h: simHour, supply: Math.max(0, curSupply) });
-      }
+      // 3. Circular Analog 50.0 Hz Frequency Gauge Dial (Top-Right of Skyline!)
+      const gx = 364, gy = 62, gr = 40;
+      ctx.save();
+      ctx.fillStyle = "rgba(8, 15, 24, 0.88)";
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
-      updateTelemetryUI();
+      // Safe Green 49–51 Hz Arc & Red Overload/Underload Zones
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = "#ef4444";
+      ctx.beginPath(); ctx.arc(gx, gy, gr - 7, Math.PI * 0.8, Math.PI * 1.15); ctx.stroke();
+      ctx.beginPath(); ctx.arc(gx, gy, gr - 7, Math.PI * 1.85, Math.PI * 2.2); ctx.stroke();
+      ctx.strokeStyle = "#22c55e";
+      ctx.beginPath(); ctx.arc(gx, gy, gr - 7, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
 
-      // Check Failure (Blackout / Overload Trip)
-      if (stability <= 0) {
-        gameState = "lost";
-        sfxBlackout();
-        const isOver = freqHz > 50.0;
-        showOverlay(
-          isOver ? "🔥" : "🌑",
-          isOver ? "Grid Overload Trip!" : "Citywide Blackout!",
-          isOver
-            ? `Frequency surged to ${freqHz.toFixed(2)} Hz at ${formatHour(simHour)}. Charge batteries or curtail solar/wind during surplus!`
-            : `Frequency collapsed to ${freqHz.toFixed(2)} Hz at ${formatHour(simHour)}. Ramp backup turbines or tap Battery Boost earlier!`,
-          "↺ Retry Shift"
-        );
-        return;
-      }
-
-      // Check Victory (Full 24-Hour Cycle Survived!)
-      if (simHour >= 24.0) {
-        simHour = 24.0;
-        gameState = "won";
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_grid_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        sfxShiftWin();
-        updateTelemetryUI();
-
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        showOverlay(
-          "⚡",
-          isLast ? "All 500 Shifts Mastered!" : `Shift #${currentLevelNum} Complete!`,
-          `Held the city grid alive for all 24 hours with ${Math.round(stability)}% final stability!`,
-          isLast ? "Replay Shift #1" : `Next Shift (#${currentLevelNum + 1}) →`
-        );
-      }
-    }
-
-    function drawScadaMonitor(now) {
-      const rect = canvas.parentElement.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
-      ctx.clearRect(0, 0, w, h);
-
-      // Day/Night Sky Tint Background for the Skyline
-      const sunNorm = Math.max(0, Math.sin(((simHour - 5.5) / 14.0) * Math.PI));
-      const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
-      skyGrad.addColorStop(0, `rgb(${Math.round(7 + sunNorm * 14)}, ${Math.round(13 + sunNorm * 28)}, ${Math.round(25 + sunNorm * 45)})`);
-      skyGrad.addColorStop(0.7, `rgb(${Math.round(11 + sunNorm * 18)}, ${Math.round(20 + sunNorm * 26)}, ${Math.round(38 + sunNorm * 36)})`);
-      skyGrad.addColorStop(1, "#070c16");
-      ctx.fillStyle = skyGrad;
-      ctx.fillRect(0, 0, w, h);
-
-      // === 1. TOP SCADA 24-HOUR FORECAST & SUPPLY GRAPH ===
-      const gx = 16;
-      const gy = 26;
-      const gw = w - 32;
-      const gh = h * 0.56;
-
-      // Graph Panel Backdrop
-      ctx.fillStyle = "rgba(6, 11, 22, 0.72)";
-      ctx.strokeStyle = "rgba(56, 189, 248, 0.2)";
-      ctx.lineWidth = 1.2;
+      // Animated Frequency Needle!
+      const clampedHz = Math.max(48, Math.min(52, freqHz));
+      const needleA = Math.PI * 1.5 + ((clampedHz - 50) / 2) * (Math.PI * 0.7);
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2.6;
+      ctx.lineCap = "round";
       ctx.beginPath();
-      ctx.roundRect(gx, gy, gw, gh, 10);
+      ctx.moveTo(gx, gy);
+      ctx.lineTo(gx + Math.cos(needleA) * (gr - 10), gy + Math.sin(needleA) * (gr - 10));
+      ctx.stroke();
+
+      ctx.fillStyle = Math.abs(freqHz - 50) <= 1 ? "#86efac" : "#fca5a5";
+      ctx.font = "900 10px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(`${freqHz.toFixed(1)}Hz`, gx, gy + 20);
+      ctx.restore();
+
+      // 4. Lower Half: Live 24-Hour SCADA Demand & Supply Telemetry Chart!
+      const chartX = 16, chartY = 194, chartW = WORLD_W - 32, chartH = 152;
+      const maxMW = 520;
+
+      ctx.save();
+      ctx.fillStyle = "#08101a";
+      ctx.strokeStyle = "#1d324d";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.roundRect(chartX, chartY, chartW, chartH, 10);
       ctx.fill();
       ctx.stroke();
 
-      // Horizontal MW Grid Lines
-      ctx.strokeStyle = "rgba(148, 163, 184, 0.1)";
+      // Subtle Horizontal MW Grid Lines
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.09)";
       ctx.lineWidth = 1;
-      for (let i = 1; i <= 3; i++) {
-        const ly = gy + (gh * i) / 4;
+      for (let g = 1; g <= 3; g++) {
+        const gy2 = chartY + (chartH * g) / 4;
+        ctx.beginPath(); ctx.moveTo(chartX, gy2); ctx.lineTo(chartX + chartW, gy2); ctx.stroke();
+      }
+
+      const mapX = (h) => chartX + (h / 24) * chartW;
+      const mapY = (mw) => chartY + chartH - Math.max(6, Math.min(chartH - 8, (mw / maxMW) * (chartH - 18)));
+
+      // Forecasted Full 24-Hour Demand Curve (Dotted Amber Preview!)
+      ctx.strokeStyle = "rgba(251, 191, 36, 0.35)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      for (let hh = 0; hh <= 24; hh += 0.5) {
+        const px = mapX(hh), py = mapY(evalDemandMW(day, hh));
+        if (hh === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Bright Past Demand Trace (Solid Amber)
+      if (demandHist.length > 1) {
+        ctx.strokeStyle = "#f59e0b";
+        ctx.lineWidth = 2.4;
         ctx.beginPath();
-        ctx.moveTo(gx, ly);
-        ctx.lineTo(gx + gw, ly);
+        demandHist.forEach((p, i) => {
+          const px = mapX(p.h), py = mapY(p.mw);
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
         ctx.stroke();
       }
 
-      // Vertical 6h Time Markers (00, 06, 12, 18, 24)
-      ctx.fillStyle = "#64748b";
-      ctx.font = "700 9.5px monospace";
-      ctx.textAlign = "center";
-      [0, 6, 12, 18, 24].forEach((hr) => {
-        const lx = gx + (hr / 24) * gw;
-        if (hr > 0 && hr < 24) {
-          ctx.beginPath();
-          ctx.moveTo(lx, gy);
-          ctx.lineTo(lx, gy + gh);
-          ctx.stroke();
-        }
-        ctx.fillText(`${String(hr).padStart(2, "0")}h`, lx, gy + gh + 11);
-      });
-
-      const mwToY = (mw) => gy + gh - Math.min(1, Math.max(0, mw / shift.chartMaxMw)) * (gh - 10) - 4;
-      const hrToX = (hr) => gx + (Math.min(24, Math.max(0, hr)) / 24) * gw;
-
-      // Draw Scheduled Weather / Surge Event Bands on Forecast
-      for (const ev of shift.events) {
-        const x1 = hrToX(ev.startH);
-        const x2 = hrToX(Math.min(24, ev.startH + ev.durH));
-        ctx.fillStyle = ev.type === "trip"
-          ? "rgba(239, 68, 68, 0.2)"
-          : (ev.type === "surge" ? "rgba(249, 115, 22, 0.16)" : "rgba(148, 163, 184, 0.16)");
-        ctx.fillRect(x1, gy + 2, Math.max(10, x2 - x1), gh - 4);
-
-        ctx.font = "12px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText(ev.icon, (x1 + x2) / 2, gy + 14);
-      }
-
-      // Forecast Demand Curve (Amber Dashed Future + Solid Past)
-      ctx.save();
-      ctx.strokeStyle = "rgba(250, 204, 21, 0.85)";
-      ctx.lineWidth = 2.2;
-      ctx.setLineDash([5, 4]);
-      ctx.beginPath();
-      shift.forecast.forEach((pt, idx) => {
-        const px = hrToX(pt.h);
-        const py = mwToY(pt.demand);
-        if (idx === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-      });
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
-
-      // Player's Actual Supply Curve History (Bright Cyan)
-      if (supplyHistory.length >= 2) {
-        ctx.save();
+      // Bright Live Supply Trace (Glowing Cyan!)
+      if (supplyHist.length > 1) {
         ctx.strokeStyle = "#38bdf8";
         ctx.shadowColor = "#38bdf8";
         ctx.shadowBlur = 8;
         ctx.lineWidth = 2.6;
         ctx.beginPath();
-        supplyHistory.forEach((pt, idx) => {
-          const px = hrToX(pt.h);
-          const py = mwToY(pt.supply);
-          if (idx === 0) ctx.moveTo(px, py);
+        supplyHist.forEach((p, i) => {
+          const px = mapX(p.h), py = mapY(p.mw);
+          if (i === 0) ctx.moveTo(px, py);
           else ctx.lineTo(px, py);
         });
         ctx.stroke();
-        ctx.restore();
+        ctx.shadowBlur = 0;
       }
 
-      // Live Playhead Vertical Line & Demand/Supply Dots
-      const curX = hrToX(simHour);
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.55)";
+      // Live Vertical Time Cursor + Current Supply vs Demand Markers!
+      const curX = mapX(hour);
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
       ctx.lineWidth = 1.4;
-      ctx.beginPath();
-      ctx.moveTo(curX, gy);
-      ctx.lineTo(curX, gy + gh);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(curX, chartY + 4); ctx.lineTo(curX, chartY + chartH - 4); ctx.stroke();
 
-      // Demand dot (Amber) & Supply dot (Cyan)
-      ctx.fillStyle = "#facc15";
-      ctx.beginPath();
-      ctx.arc(curX, mwToY(curDemand), 4.5, 0, Math.PI * 2);
-      ctx.fill();
-
+      ctx.fillStyle = "#f59e0b";
+      ctx.beginPath(); ctx.arc(curX, mapY(out.demand), 4.5, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = "#38bdf8";
-      ctx.beginPath();
-      ctx.arc(curX, mwToY(curSupply), 4.5, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(curX, mapY(out.totalSupply), 4.5, 0, Math.PI * 2); ctx.fill();
 
-      // Top Legend inside header area
-      ctx.font = "800 10px sans-serif";
+      // Live Top-Left Chart MW Telemetry Readout!
+      ctx.font = "900 10px monospace";
       ctx.textAlign = "left";
-      ctx.fillStyle = "#facc15";
-      ctx.fillText(`● Demand: ${Math.round(curDemand)} MW`, gx + 4, 16);
-      ctx.textAlign = "right";
       ctx.fillStyle = "#38bdf8";
-      ctx.fillText(`● Supply: ${Math.round(curSupply)} MW`, gx + gw - 4, 16);
+      ctx.fillText(`SUPPLY: ${out.totalSupply} MW`, chartX + 10, chartY + 17);
+      ctx.fillStyle = "#fbbf24";
+      ctx.fillText(`DEMAND: ${out.demand} MW`, chartX + 130, chartY + 17);
+      const net = out.totalSupply - out.demand;
+      ctx.fillStyle = Math.abs(net) <= 65 ? "#4ade80" : "#f87171";
+      ctx.textAlign = "right";
+      ctx.fillText(`NET: ${net >= 0 ? "+" : ""}${net} MW`, chartX + chartW - 10, chartY + 17);
 
-      // === 2. LIVE 50HZ AC SINE WAVE + CITY SKYLINE (BOTTOM) ===
-      const cityBaseY = h - 6;
-      const dev = Math.abs(freqHz - 50.0);
-      const isBrownout = freqHz < 49.0;
-      const isOverload = freqHz > 51.0;
-
-      // Subtle Live AC Sine Wave behind city buildings
-      wavePhase += 0.06 * (freqHz / 50.0);
-      ctx.save();
-      ctx.strokeStyle = dev > 1.1 ? "rgba(239, 68, 68, 0.55)" : (dev > 0.6 ? "rgba(250, 204, 21, 0.45)" : "rgba(52, 211, 153, 0.4)");
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      const waveCy = gy + gh + (h - (gy + gh)) * 0.46;
-      for (let x = 14; x <= w - 14; x += 6) {
-        const y = waveCy + Math.sin(x * 0.055 * (freqHz / 50) + wavePhase) * (8 + dev * 5);
-        if (x === 14) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
+      // Hour Axis Labels Along Bottom Edge
+      ctx.fillStyle = "#64748b";
+      ctx.font = "800 8px monospace";
+      ctx.textAlign = "center";
+      [0, 6, 12, 18, 24].forEach((hr) => {
+        ctx.fillText(`${String(hr).padStart(2, "0")}h`, mapX(hr), chartY + chartH - 5);
+      });
       ctx.restore();
 
-      // City Skyline Buildings with Live Grid-Powered Windows!
-      const scaleX = w / 420;
-      const flicker = isBrownout ? (0.35 + 0.5 * Math.abs(Math.sin(now * 0.025))) : 1.0;
-
-      for (const b of shift.buildings) {
-        const bx = b.x * scaleX;
-        const bw = b.w * scaleX;
-        const bh = b.h * 0.92;
-        const by = cityBaseY - bh;
-
-        ctx.fillStyle = "#0b1324";
-        ctx.strokeStyle = isOverload ? "rgba(239, 68, 68, 0.5)" : "rgba(51, 65, 85, 0.65)";
-        ctx.lineWidth = 1.2;
-        ctx.fillRect(bx, by, bw, bh);
-        ctx.strokeRect(bx, by, bw, bh);
-
-        // Windows light up cleanly at 50Hz, flicker dim on low Hz, glow hot red on overload!
-        const winGapX = (bw - 6) / b.cols;
-        const winGapY = (bh - 8) / b.rows;
-        for (let r = 0; r < b.rows; r++) {
-          for (let c = 0; c < b.cols; c++) {
-            const litSeed = ((b.seed + r * 17 + c * 31) % 10) < (sunNorm > 0.4 ? 4 : 8);
-            if (!litSeed || gameState === "lost") continue;
-            ctx.fillStyle = isOverload
-              ? `rgba(248, 113, 113, ${0.7 + 0.3 * Math.sin(now * 0.03 + c)})`
-              : `rgba(254, 240, 138, ${0.78 * flicker})`;
-            ctx.fillRect(bx + 3 + c * winGapX, by + 4 + r * winGapY, Math.max(2.5, winGapX - 2.5), Math.max(3, winGapY - 3));
-          }
-        }
-      }
-
-      // Ground horizon line
-      ctx.fillStyle = "#1e293b";
-      ctx.fillRect(0, cityBaseY, w, 6);
-    }
-
-    let lastFrameTime = performance.now();
-    function frame(now) {
-      const dt = Math.min(0.05, (now - lastFrameTime) / 1000);
-      lastFrameTime = now;
-      stepGrid(dt);
-      drawScadaMonitor(now);
+      ctx.restore();
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadShift(currentLevelNum, false);
+    loadDay(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
