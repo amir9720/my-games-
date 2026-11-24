@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Perfect Peel — 500 ASMR Sticker Peeling Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 relaxing ASMR levels of The Perfect Peel in your browser. Peel protective films and sticky price tags at the exact speed and angle without tearing them." />
+  <title>The Perfect Peel — Free 500-Level ASMR Protective Film &amp; Fruit Peeling Game | ZinPlay</title>
+  <meta name="description" content="Play The Perfect Peel free online with no download. Peel glossy protective screen films, multi-layer gadget seals, and continuous fruit ribbons across 500 relaxing ASMR stages with live Web Audio on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "The Perfect Peel",
+    "url": "https://zinplay.io/games/perfect-peel/",
+    "genre": ["ASMR", "Sensory Simulation", "Relaxation Game"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top HUD */
+    /* Top ASMR Peel Studio HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0f172a;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #0d1221;
+      color: #f8fafc;
+      border-bottom: 1px solid #202a45;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #fb923c;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -63,77 +76,78 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.36);
-      color: #bae6fd;
+      background: rgba(251, 146, 60, 0.16);
+      border: 1px solid rgba(251, 146, 60, 0.36);
+      color: #fed7aa;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.clean-pill {
-      background: rgba(34, 197, 94, 0.18);
-      border-color: rgba(74, 222, 128, 0.42);
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
       color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Live Paper Tension Gauge */
-    .tension-bar-wrap {
-      display: flex;
-      align-items: center;
+    /* Live Peel Progress & Ribbon Tension Bar */
+    .meters-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      padding: 10px 14px;
-      background: #131c31;
-      border-bottom: 1px solid #1e293b;
-      color: #cbd5e1;
-      font-size: 0.75rem;
+      padding: 9px 14px;
+      background: #141c30;
+      border-bottom: 1px solid #243254;
+      color: #e2e8f0;
+      font-size: 0.73rem;
       font-weight: 800;
     }
-    .tens-label {
-      min-width: 96px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .meter-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .tens-smooth { color: #34d399; }
-    .tens-tight  { color: #facc15; }
-    .tens-danger { color: #fb7185; }
-    .tens-track {
-      flex: 1;
-      height: 10px;
-      background: #070c18;
+    .meter-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: monospace;
+    }
+    .meter-track {
+      width: 100%;
+      height: 9px;
+      background: #080d18;
       border-radius: 999px;
-      border: 1px solid #26324d;
+      border: 1px solid #2a3a61;
       overflow: hidden;
-      position: relative;
     }
-    .tens-fill {
+    .meter-fill {
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      background: linear-gradient(90deg, #34d399 0%, #facc15 62%, #ef4444 100%);
-      transition: width 0.04s linear;
+      transition: width 0.06s linear;
     }
-    .tens-pct {
-      min-width: 44px;
-      text-align: right;
-      color: #94a3b8;
-      font-family: monospace;
-      font-size: 0.8rem;
+    .peel-fill {
+      background: linear-gradient(90deg, #38bdf8 0%, #34d399 100%);
+    }
+    .tension-fill {
+      background: linear-gradient(90deg, #22c55e 0%, #facc15 62%, #ef4444 100%);
     }
 
-    /* Stage Canvas */
+    /* Interactive Peeling Studio Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 450px;
-      background: radial-gradient(circle at 50% 42%, #1d2842 0%, #0d1324 100%);
+      aspect-ratio: 1 / 1;
+      max-height: 495px;
+      background: radial-gradient(circle at 50% 45%, #1a243d 0%, #0a0f1c 100%);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
       -webkit-user-select: none;
-    }
-    @media (min-width: 640px) {
-      .canvas-container {
-        height: 500px;
-      }
     }
     #peelCanvas {
       width: 100%;
@@ -150,21 +164,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #0b1222;
-      border-top: 1px solid #1e293b;
-      font-size: 0.74rem;
+      background: #0a0f1c;
+      border-top: 1px solid #1e2942;
+      font-size: 0.73rem;
       color: #94a3b8;
-    }
-    .leg-dot {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      vertical-align: middle;
-      margin-right: 4px;
     }
 
     .status-toast {
@@ -172,8 +178,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.94);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(10, 15, 28, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -187,14 +193,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
-    .stage-overlay {
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(8, 13, 26, 0.8);
+      background: rgba(8, 12, 24, 0.8);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -202,13 +206,13 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
@@ -216,17 +220,15 @@
       text-align: center;
       max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.52);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.32rem;
+    .win-stars {
+      font-size: 1.5rem;
+      letter-spacing: 0.14em;
       margin-bottom: 6px;
     }
-    .overlay-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -255,7 +257,7 @@
       cursor: pointer;
     }
 
-    /* Level Picker Modal */
+    /* Item Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -267,9 +269,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -366,6 +366,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #0d1221;
+      border: 1px solid rgba(251, 146, 60, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #0d1221;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #0d1221 0%, #431407 100%);
+      color: #ffedd5;
+    }
+    .game-seo-banner.teal-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f2933 0%, #1e1b4b 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fed7aa;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .peel-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .peel-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .peel-table th, .peel-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .peel-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .peel-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -378,7 +458,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -391,68 +471,82 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Peels &bull; ASMR Tactile</span>
+      <span class="cat-tag">500 Peels &bull; Tactile ASMR Film</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>The Perfect Peel</h1>
-      <p>Grab the lifted corner and peel protective films and stubborn price tags cleanly in one piece—without tearing!</p>
+      <p>Grab the lifted corner tab and glide steadily across brand-new screens, collector seals, and glossy fruits to peel every protective film off in one unbroken ASMR ribbon.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="The Perfect Peel ASMR Game">
+    <section class="game-wrapper" aria-label="The Perfect Peel ASMR Simulator">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Glossy Screen Films</span>
-          <span id="levelTitle">Peel #1 / 500 — Smartphone Display</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Brand-New Tech Films</span>
+          <span id="levelTitle">Item #1 / 500 — Flagship Glass Phone</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="progressPill">Peeled: 0%</span>
-          <span class="hud-pill clean-pill" id="solvedCounter">Clean: 0 / 500</span>
+          <span class="hud-pill" id="snapsPill">Snaps: 0</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Peeled: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Tension Meter -->
-      <div class="tension-bar-wrap">
-        <span id="tensLabel" class="tens-label tens-smooth">● SMOOTH</span>
-        <div class="tens-track">
-          <div id="tensFill" class="tens-fill"></div>
+      <!-- Dual Peel Progress & Live Film Tension Meter -->
+      <div class="meters-strip">
+        <div class="meter-box">
+          <div class="meter-head">
+            <span style="color:#7dd3fc;">✨ UNCOVERED</span>
+            <span id="peelPctTxt">0%</span>
+          </div>
+          <div class="meter-track">
+            <div id="peelFill" class="meter-fill peel-fill"></div>
+          </div>
         </div>
-        <span id="tensPct" class="tens-pct">0%</span>
+        <div class="meter-box">
+          <div class="meter-head">
+            <span id="tensionLbl" style="color:#86efac;">🌿 STEADY FLOW</span>
+            <span id="tensionPctTxt">0%</span>
+          </div>
+          <div class="meter-track">
+            <div id="tensionFill" class="meter-fill tension-fill"></div>
+          </div>
+        </div>
       </div>
 
+      <!-- Glossy Curled-Film Peeling Canvas -->
       <div class="canvas-container">
         <canvas id="peelCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Win / Tear Overlay -->
-        <div id="stageOverlay" class="stage-overlay">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.3rem; margin-bottom:6px;">✨</div>
-            <h2 id="ovHeading">Spotless Peel!</h2>
-            <p id="ovText">Removed in one unbroken piece with zero sticky residue.</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Next Peel →</button>
+        <!-- Spotless Reveal Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div id="winStars" class="win-stars">⭐⭐⭐</div>
+            <h2 id="winHeading">Unbroken Perfect Peel!</h2>
+            <p id="winText">One continuous glossy ribbon with zero tears and mirror-bright shine.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Item →</button>
           </div>
         </div>
       </div>
 
       <div class="legend-strip">
-        <span><i class="leg-dot" style="background:#34d399"></i>Pull Gently Along Arrow</span>
-        <span><i class="leg-dot" style="background:#f59e0b"></i>Amber Glue Spot = Slow Down!</span>
-        <span><i class="leg-dot" style="background:#ef4444"></i>100% Tension = Paper Rip</span>
+        <span>👆 Grab Glowing Tab &amp; Drag Smoothly Along the Arrow</span>
+        <span>🌿 Pull Steadily (Yanking Too Fast Spikes Tension!)</span>
+        <span>🟠 Slow Down Over Sticky Tack Zones (Ch. 3+)</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Fresh Sticker</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Peel Guide</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Fresh Film</button>
+          <button id="guideBtn" class="btn-outline" type="button">💡 Glide Guide</button>
         </div>
         <button id="soundBtn" class="btn-outline" type="button">🔊 ASMR ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Peel 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Item 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -462,66 +556,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 850+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/perfect-peel-banner-1.jpg"
+            alt="The Perfect Peel online ASMR protective screen film peeling game showing a frosted film curling cleanly off a shiny smartphone and wristwatch"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Glossy Peel Reveals — Authentic Web Audio Adhesive ASMR</h3>
+          <p>Lift the translucent corner tab and glide calmly across fresh tech screens, luxury watches, and fresh citrus without snapping the ribbon.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play The Perfect Peel (500 ASMR Levels)</h2>
-        <p>Few sensations beat peeling a brand-new screen protector off a glossy smartphone—or lifting a stubborn paper price tag off a collectible without leaving a single shred behind. The Perfect Peel simulates real adhesive tension, fold-line reflection, and live procedural ASMR sound directly in your browser across 500 tactile stages.</p>
+        <h2>What Is The Perfect Peel? An ASMR Screen Film &amp; Ribbon Peeling Game Online</h2>
+        <p><strong>The Perfect Peel</strong> is a free <strong>satisfying plastic film peeling game online</strong> that captures one of life's purest micro-joys—slowly lifting the frosted protective shipping film off a brand-new smartphone, gaming handheld, or luxury watch crystal in one unbroken sheet. Powered by smooth 60 FPS curved-sheet graphics and live procedural <strong>Web Audio API adhesive crackle synthesis</strong>, every millimeter you pull responds organically to your finger's pace: glide calmly to hear that crisp, low-frequency sticky whisper and watch a gleaming glossy reflection ripple beneath the curled edge.</p>
+        <p>Built as a lightweight, <strong>no-download sensory relaxation game for smartphones, iPads, and Chromebooks</strong>, The Perfect Peel rewards unhurried mindfulness rather than frantic clicking. Pull too aggressively—especially across high-tack adhesive bands in later chapters—and your ribbon tension spikes red until the film snaps! Maintain steady flow across all <strong>500 curated peel items</strong> to earn coveted <strong>⭐⭐⭐ Unbroken Ribbon</strong> medals saved privately inside your browser.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>How to Earn a 3-Star Unbroken Perfect Peel (Tension &amp; Tack Guide)</h2>
+        <p>Every item features its own realistic surface tackiness and curl direction—from crisp diagonal phone glass to multi-layer collector boxes and spiral citrus skins. Master these four <strong>ASMR peeling fundamentals</strong> to keep your Tension Meter calm in the green:</p>
+
+        <div class="peel-table-wrap">
+          <table class="peel-table">
+            <thead>
+              <tr>
+                <th>Peeling Surface Type</th>
+                <th>Behavior &amp; Visual Cue</th>
+                <th>Best Technique for Zero Snaps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>📱 Glossy Tech Films</strong> (Ch. 1–2)</td>
+                <td>Smooth translucent blue/clear sheet with a single glowing corner Pull Tab.</td>
+                <td>Drag steadily along the diagonal guide arrow—pause anytime and re-grab the curled fold if your thumb reaches the screen edge!</td>
+              </tr>
+              <tr>
+                <td><strong>🟠 High-Tack Sticky Bands</strong> (Ch. 3–5)</td>
+                <td>Subtle glowing amber adhesive strips printed across the film.</td>
+                <td>Slow your pull speed by half right before crossing a sticky strip so tension stays comfortably below <code>80%</code>!</td>
+              </tr>
+              <tr>
+                <td><strong>📑 Twin-Layer Factory Seals</strong> (Ch. 3 &amp; 5)</td>
+                <td>Two overlapping protective layers stacked on collector gadgets.</td>
+                <td>Peel the outer frosted shipping film (Layer 1) cleanly off first, then lift the inner glossy dust-seal (Layer 2) from the opposite edge!</td>
+              </tr>
+              <tr>
+                <td><strong>🍊 Spiral Fruit Ribbons</strong> (Ch. 4–5)</td>
+                <td>Fresh oranges, apples, kiwis, and lemons with curved spiral peel paths.</td>
+                <td>Follow the smooth curved dotted spiral slowly around the fruit—sharp off-track jerks tighten the rind quickly!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Mindful Flow Tip:</strong> If your tension bar climbs into bright amber, simply <em>stop dragging for half a second</em>—tension relaxes smoothly back to zero while holding your exact peel progress! Need to check the exact ideal track or sticky zone boundaries? Tap <strong>💡 Glide Guide</strong> anytime to illuminate the optimal pull vector in glowing cyan.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner teal-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/perfect-peel-banner-2.jpg"
+            alt="Retro handheld screen film, fresh navel orange spiral peel ribbon, and gold-foil collector seal in The Perfect Peel ASMR browser game"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Live Speed-Modulated Adhesive Audio &amp; Mirror-Shine Reveals</h3>
+          <p>Put on headphones—slower glides create warm silky adhesive rustles, while the final edge release snaps off with a crisp glassy shimmer.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Sensory Chapters (500 Unique Peel Items)</h2>
+        <p>Each chapter expands the tactile studio with brand-new illustrated objects, realistic curled-film lighting, and varied adhesive physics:</p>
         <ul>
-          <li><strong>Grab &amp; Glide Gently:</strong> Touch or click the glowing folded corner flap and drag steadily in the direction of the subtle guide arrow. You can lift your finger anytime to pause and let tension drop back to zero—the peeled flap waits right where you left it!</li>
-          <li><strong>Slow Down Over Glue Hotspots (Chapter 3+):</strong> Amber sticky spots under the label grip tightly to the surface. As your fold line crosses a glue patch, ease your drag speed to a gentle crawl until you pass through smoothly.</li>
-          <li><strong>Follow Shifting Paper Grain (Chapter 4+):</strong> Delicate decals and antique foil seals shift their tear grain partway through the peel. Watch the live direction arrow on the flap and gently curve your pull angle to match it.</li>
+          <li><strong>Chapter 1 (Items 1–100 — Brand-New Tech Films):</strong> Smartphones, tablets, smartwatches, and retro handhelds wrapped in forgiving frosted glass protectors—pure stress-free diagonal peeling.</li>
+          <li><strong>Chapter 2 (Items 101–200 — Matte Vinyl &amp; Decals):</strong> Laptop lids, camera lenses, stereo amplifiers, and glossy vinyl records featuring firmer edges and alternating corner peel vectors.</li>
+          <li><strong>Chapter 3 (Items 201–300 — Twin-Layer Seals &amp; Sticky Bands):</strong> Introduces double-layered shipping films plus highlighted <strong>High-Tack Adhesive Strips</strong> that reward patient speed modulation.</li>
+          <li><strong>Chapter 4 (Items 301–400 — Fresh Citrus &amp; Fruit Peels):</strong> Switches to tactile curved spiral fruit peeling on navel oranges, crisp apples, golden mangoes, and fuzzy kiwis in one continuous curly ribbon!</li>
+          <li><strong>Chapter 5 (Items 401–500 — Luxury Collector Editions):</strong> Delicate museum plaques, gold-foil watches, and multi-layer collector consoles combining sticky zones and ultra-sensitive film tension—complete with an instant 1–500 item picker and private browser auto-save.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related ASMR Peeling Topics">
+          <span class="kw-pill">Peel Screen Protector Game Online</span>
+          <span class="kw-pill">Satisfying Plastic Peel ASMR Browser</span>
+          <span class="kw-pill">Fruit Peeling Ribbon Simulator</span>
+          <span class="kw-pill">Oddly Satisfying Stress Relief Web</span>
+          <span class="kw-pill">Web Audio Adhesive Peel Sound</span>
+          <span class="kw-pill">No-Download Chromebook ASMR Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>The Perfect Peel FAQ</h2>
         <details class="faq-item">
-          <summary>Why did my sticker rip even when I wasn't moving fast?</summary>
-          <div class="faq-answer">Two things increase tension: pulling faster than the adhesive allows (especially over amber glue patches) or pulling sideways away from the live grain direction arrow. Tap <strong>💡 Peel Guide</strong> to see the exact golden pull corridor and ideal pace dot!</div>
+          <summary>What happens if I lift my finger midway through peeling on a small phone screen?</summary>
+          <div class="faq-answer">Your peeled film holds right where you stopped with zero penalty! You can pause to relax tension or reposition your thumb onto the curled glowing handle and keep peeling smoothly to 100%.</div>
         </details>
         <details class="faq-item">
-          <summary>Does The Perfect Peel work best with sound on?</summary>
-          <div class="faq-answer">Yes! Our Web Audio synthesizer generates real-time adhesive peel crackles, sticky stretches, and crisp final detachment pops dynamically modulated by your fingertip speed.</div>
+          <summary>Why did my protective film snap mid-pull?</summary>
+          <div class="faq-answer">Pulling too fast—especially across an orange <strong>Sticky Tack Band</strong>—pushes the Tension Meter to 100% and snaps the edge. Don't worry: a fresh grab handle immediately appears so you can still finish clearing the item, or tap <strong>↺ Fresh Film</strong> to try for a ⭐⭐⭐ zero-snap ribbon!</div>
+        </details>
+        <details class="faq-item">
+          <summary>How do Twin-Layer Seals work in Chapters 3 and 5?</summary>
+          <div class="faq-answer">Twin-Layer items wrap the gadget in two separate protective films! Peel the first outer film completely off (100%), and a second inner glossy dust-seal tab immediately pops up on the opposite corner for an ultra-satisfying double reveal.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does The Perfect Peel work smoothly on both mobile touchscreens and Chromebooks?</summary>
+          <div class="faq-answer">Yes! Drag smoothly with your finger, trackpad, or mouse at 60 FPS with zero downloads—and all 500 peeled items save automatically inside your browser's local storage.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🔐</div><span class="cat-tag">Zen</span></div>
-        <h3>The Zen Lockpicker</h3>
-        <p>Turn a dark minimalist safe dial slowly and listen for metallic clicks across 500 vaults.</p>
-        <a href="/games/zen-lockpicker/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🎟️</div><span class="cat-tag">ASMR</span></div>
+        <h3>The Perfect Tear</h3>
+        <p>Tear vintage cinema tickets, receipts, and postage stamps cleanly along perforated lines.</p>
+        <a href="/games/perfect-tear/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧪</div><span class="cat-tag">Physics</span></div>
-        <h3>Oobleck Maze</h3>
-        <p>Glide gently through non-Newtonian fluid across 500 mazes—rush and it turns solid!</p>
-        <a href="/games/oobleck-maze/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">💦</div><span class="cat-tag">ASMR</span></div>
+        <h3>PowerWash ASMR</h3>
+        <p>Blast layers of mud, moss, and rust off 500 vintage relics with live water spray audio.</p>
+        <a href="/games/powerwash-asmr/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🛍️</div><span class="cat-tag">Physics</span></div>
-        <h3>Grocery Bagging Physics</h3>
-        <p>Pack watermelons, eggs, chips, and cacti into one paper bag across 500 orders.</p>
-        <a href="/games/grocery-bagging/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔪</div><span class="cat-tag">ASMR</span></div>
+        <h3>Satisfying Slicer</h3>
+        <p>Slice glossy kinetic sand, soap bars, and crisp veggies in rhythmic ASMR cuts.</p>
+        <a href="/games/satisfying-slicer/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Level Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Peel Level">
+  <!-- Item Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Peel Item">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Peel Level (1 – 500)</h3>
+        <h3>Choose Peel Item (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to level (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to item (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -540,12 +731,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top ASMR</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/powerwash-asmr/">PowerWash ASMR</a></li>
+            <li><a href="/games/perfect-peel/">The Perfect Peel</a></li>
+            <li><a href="/games/perfect-tear/">The Perfect Tear</a></li>
+            <li><a href="/games/satisfying-slicer/">Satisfying Slicer</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -554,7 +745,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -587,39 +778,46 @@
     }
 
     // ==============================================
-    // OBJECT CATALOG & 500-LEVEL PEEL GENERATOR
+    // 500-ITEM CURLED PROTECTIVE FILM & FRUIT PEEL ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
     const WORLD_W = 420;
-    const WORLD_H = 460;
+    const WORLD_H = 420;
     const CX = WORLD_W / 2;
     const CY = WORLD_H / 2;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Glossy Screen Films", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Retail Price Tags", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Stubborn Glue Spots", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Shifting Paper Grain", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Antique Foil Seals", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Brand-New Tech Films", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Matte Vinyl & Decals", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Twin Seals & Sticky Bands", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Fresh Citrus & Fruit Peels", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Luxury Collector Editions", range: "401–500", start: 401, end: 500 }
     ];
 
-    const SURFACES = [
-      { name: "Smartphone Display", w: 196, h: 330, r: 28, bg1: "#0f172a", bg2: "#1e293b", rim: "#475569", accent: "#38bdf8", detail: "phone" },
-      { name: "Brushed Laptop Lid", w: 300, h: 224, r: 18, bg1: "#334155", bg2: "#475569", rim: "#94a3b8", accent: "#e2e8f0", detail: "laptop" },
-      { name: "Ceramic Gift Mug",   w: 224, h: 250, r: 24, bg1: "#0f766e", bg2: "#115e59", rim: "#5eead4", accent: "#ccfbf1", detail: "mug" },
-      { name: "Hardcover Novel",    w: 236, h: 310, r: 10, bg1: "#7f1d1d", bg2: "#991b1b", rim: "#fca5a5", accent: "#fef08a", detail: "book" },
-      { name: "Collector Vinyl",    w: 286, h: 286, r: 12, bg1: "#312e81", bg2: "#4338ca", rim: "#a5b4fc", accent: "#f472b6", detail: "vinyl" },
-      { name: "Glass Tablet",       w: 264, h: 320, r: 24, bg1: "#111827", bg2: "#1f2937", rim: "#64748b", accent: "#818cf8", detail: "tablet" },
-      { name: "Chrome Appliance",   w: 290, h: 240, r: 20, bg1: "#64748b", bg2: "#94a3b8", rim: "#e2e8f0", accent: "#ffffff", detail: "steel" }
+    const TECH_ITEMS = [
+      { id: "phone",    name: "Flagship Glass Phone",   w: 174, h: 302, rad: 28, body: "#1e293b", screen1: "#0ea5e9", screen2: "#6366f1", rim: "#94a3b8" },
+      { id: "tablet",   name: "Pro Studio Tablet",      w: 278, h: 214, rad: 22, body: "#0f172a", screen1: "#14b8a6", screen2: "#3b82f6", rim: "#cbd5e1" },
+      { id: "watch",    name: "Sapphire Chronometer",   w: 206, h: 206, rad: 103, body: "#451a03", screen1: "#1e1b4b", screen2: "#0284c7", rim: "#fbbf24" },
+      { id: "handheld", name: "Retro Pocket Console",   w: 206, h: 286, rad: 24, body: "#312e81", screen1: "#22d3ee", screen2: "#ec4899", rim: "#c7d2fe" },
+      { id: "vinyl",    name: "Gold Collector Album",   w: 256, h: 256, rad: 14, body: "#18181b", screen1: "#f59e0b", screen2: "#dc2626", rim: "#fde68a" },
+      { id: "camera",   name: "Mirrorless Lens Glass",  w: 222, h: 222, rad: 111, body: "#27272a", screen1: "#06b6d4", screen2: "#7c3aed", rim: "#e2e8f0" },
+      { id: "amp",      name: "Chrome Hi-Fi Deck",      w: 286, h: 196, rad: 16, body: "#334155", screen1: "#0f172a", screen2: "#10b981", rim: "#f8fafc" },
+      { id: "plaque",   name: "Museum Emerald Plaque",  w: 244, h: 244, rad: 26, body: "#064e3b", screen1: "#10b981", screen2: "#facc15", rim: "#a7f3d0" }
     ];
 
-    const STICKER_STYLES = [
-      { kind: "film",   title: "PROTECTIVE FILM", sub: "REMOVE BEFORE USE", front: "rgba(56, 189, 248, 0.34)", border: "#7dd3fc", back: "rgba(186, 230, 253, 0.72)", text: "#e0f2fe", translucent: true },
-      { kind: "price",  title: "SPECIAL OFFER",   sub: "SALE TAG",          front: "#fef9c3", border: "#eab308", back: "#e2e8f0", text: "#0f172a", translucent: false },
-      { kind: "retail", title: "CLEARANCE",       sub: "STORE LABEL",       front: "#ffedd5", border: "#f97316", back: "#e2e8f0", text: "#7c2d12", translucent: false },
-      { kind: "mint",   title: "FACTORY SEAL",    sub: "VOID IF TORN",      front: "#dcfce7", border: "#22c55e", back: "#d1d5db", text: "#14532d", translucent: false },
-      { kind: "foil",   title: "VINTAGE EDITION", sub: "AUTHENTIC SEAL",    front: "#fde68a", border: "#b45309", back: "#cbd5e1", text: "#78350f", translucent: false },
-      { kind: "pink",   title: "LIMITED DROP",    sub: "COLLECTOR TAG",     front: "#fce7f3", border: "#ec4899", back: "#e5e7eb", text: "#831843", translucent: false }
+    const FRUIT_ITEMS = [
+      { id: "orange", name: "Sun-Ripened Navel Orange", r: 122, flesh: "#fb923c", fleshHi: "#fed7aa", skin: "#ea580c", pith: "#fff7ed", segs: 10 },
+      { id: "apple",  name: "Honeycrisp Gloss Apple",   r: 120, flesh: "#fef9c3", fleshHi: "#ffffff", skin: "#dc2626", pith: "#fef2f2", segs: 0 },
+      { id: "kiwi",   name: "Emerald Tropical Kiwi",    r: 116, flesh: "#4ade80", fleshHi: "#bbf7d0", skin: "#78350f", pith: "#ecfdf5", segs: 12 },
+      { id: "lemon",  name: "Amalfi Zest Lemon",        r: 118, flesh: "#fde047", fleshHi: "#fef9c3", skin: "#eab308", pith: "#fefce8", segs: 8 },
+      { id: "grape",  name: "Ruby Red Grapefruit",      r: 124, flesh: "#f43f5e", fleshHi: "#fecdd3", skin: "#fb7185", pith: "#fff1f2", segs: 10 }
+    ];
+
+    const FILM_TINTS = [
+      { fill: "rgba(186, 230, 253, 0.72)", curl: "rgba(224, 242, 254, 0.92)", tab: "#38bdf8" },
+      { fill: "rgba(226, 232, 240, 0.76)", curl: "rgba(248, 250, 252, 0.94)", tab: "#f59e0b" },
+      { fill: "rgba(167, 243, 208, 0.70)", curl: "rgba(209, 250, 229, 0.92)", tab: "#10b981" },
+      { fill: "rgba(233, 213, 255, 0.72)", curl: "rgba(243, 232, 255, 0.92)", tab: "#a855f7" }
     ];
 
     function mulberry32(seed) {
@@ -632,116 +830,62 @@
       };
     }
 
-    function buildPeelLevel(levelNum) {
-      const rng = mulberry32(levelNum * 53113 + 70709);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1); // 0..1
+    function buildPeelItem(levelNum) {
+      const rng = mulberry32(levelNum * 319027 + 64151);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const isFruit = chapIdx === 3 || (chapIdx === 4 && levelNum % 3 === 0);
 
-      // Pick surface & sticker style fitting the chapter
-      const surf = SURFACES[Math.floor(rng() * SURFACES.length)];
-      let style;
-      if (levelNum <= 100) {
-        style = levelNum % 3 === 0 ? STICKER_STYLES[3] : STICKER_STYLES[0];
-      } else if (levelNum <= 200) {
-        style = STICKER_STYLES[1 + Math.floor(rng() * 3)];
-      } else if (levelNum <= 400) {
-        style = STICKER_STYLES[1 + Math.floor(rng() * 5)];
-      } else {
-        style = rng() < 0.55 ? STICKER_STYLES[4] : STICKER_STYLES[1 + Math.floor(rng() * 5)];
+      if (isFruit) {
+        const fruit = FRUIT_ITEMS[(levelNum + Math.floor(rng() * 3)) % FRUIT_ITEMS.length];
+        const stickyZones = chapIdx === 4
+          ? [{ a: 0.34, b: 0.46 }, { a: 0.68, b: 0.80 }]
+          : [{ a: 0.48, b: 0.60 }];
+        const maxSafeSpd = chapIdx === 4 ? 148 : 178;
+
+        return {
+          levelNum,
+          chapIdx,
+          mode: "fruit",
+          fruit,
+          name: fruit.name,
+          layers: [{
+            id: 0,
+            stickyZones,
+            maxSafeSpd,
+            dirSign: levelNum % 2 === 0 ? 1 : -1
+          }]
+        };
       }
 
-      // Sticker dimensions cleanly fit inside the surface
-      const isFilm = style.kind === "film";
-      const sw = isFilm
-        ? Math.round(surf.w * 0.8)
-        : Math.round(Math.min(surf.w * 0.76, 138 + rng() * 68));
-      const sh = isFilm
-        ? Math.round(surf.h * 0.78)
-        : Math.round(Math.min(surf.h * 0.66, 98 + rng() * 66));
+      const tech = TECH_ITEMS[(levelNum - 1) % TECH_ITEMS.length];
+      const twinLayers = chapIdx === 2 || (chapIdx === 4 && levelNum % 2 === 1);
+      const maxSafeSpd = chapIdx === 0 ? 255 : (chapIdx === 1 ? 210 : (chapIdx === 2 ? 185 : 155));
 
-      // Peel mode: Straight edge peel (0 deg) OR Diagonal corner peel (rot = atan2(sh, sw) * 0.75)
-      const isDiagonal = levelNum > 8 && (levelNum % 2 === 1 || rng() < 0.6);
-      const rectRot = isDiagonal ? (rng() < 0.5 ? 0.62 : -0.62) : 0;
-
-      // Choose global peel direction (0=L->R, PI=R->L, PI/2=T->B, -PI/2=B->T, or diagonals)
-      const baseAngles = [0, Math.PI, Math.PI / 2, -Math.PI / 2, 0.55, -0.55, Math.PI - 0.55, -Math.PI + 0.55];
-      const baseAngle = levelNum <= 4 ? 0 : baseAngles[Math.floor(rng() * baseAngles.length)];
-
-      // Compute sticker projection bounds in Peel Space (X axis = peel progression)
-      const cosR = Math.cos(rectRot);
-      const sinR = Math.sin(rectRot);
-      const corners = [
-        { x: -sw / 2, y: -sh / 2 },
-        { x:  sw / 2, y: -sh / 2 },
-        { x:  sw / 2, y:  sh / 2 },
-        { x: -sw / 2, y:  sh / 2 }
-      ].map((c) => ({
-        x: c.x * cosR - c.y * sinR,
-        y: c.x * sinR + c.y * cosR
-      }));
-
-      let xMin = Infinity, xMax = -Infinity, tipY = 0;
-      corners.forEach((c) => {
-        if (c.x < xMin) { xMin = c.x; tipY = c.y; }
-        if (c.x > xMax) xMax = c.x;
-      });
-      // For straight peels (rectRot === 0), center the lifted edge tab at y = 0
-      if (!isDiagonal) tipY = 0;
-
-      // Stubborn Glue Hotspots (Chapter 3+)
-      const gluePatches = [];
-      if (levelNum >= 201) {
-        const gCount = levelNum > 420 ? 3 : (levelNum > 300 ? 2 : 1 + (levelNum % 2));
-        for (let i = 0; i < gCount; i++) {
-          const slice = 0.66 / gCount;
-          const gp = 0.2 + i * slice + rng() * (slice * 0.45);
-          gluePatches.push({
-            p: gp,
-            halfWidth: 0.068 + rng() * 0.025,
-            yOff: (rng() - 0.5) * Math.min(sw, sh) * 0.42,
-            rad: 18 + rng() * 10
-          });
+      const makeLayer = (idx) => {
+        // Choose crisp pull vector angle: Diagonal (TL->BR, TR->BL, BL->TR) or Straight Top->Bottom
+        const angles = [Math.PI * 0.25, Math.PI * 0.75, Math.PI * 0.5, -Math.PI * 0.25];
+        const angle = angles[(levelNum + idx * 2) % angles.length];
+        const tint = FILM_TINTS[(levelNum + idx) % FILM_TINTS.length];
+        const stickyZones = [];
+        if (chapIdx >= 2) {
+          stickyZones.push({ a: 0.38 + rng() * 0.14, b: 0.56 + rng() * 0.10 });
         }
-      }
+        if (chapIdx === 4) {
+          stickyZones.push({ a: 0.74, b: 0.84 });
+        }
+        return { id: idx, angle, tint, stickyZones, maxSafeSpd };
+      };
 
-      // Shifting Paper Grain Wave (Chapter 4+)
-      let grainAmp = 0;
-      let grainFreq = 1;
-      let grainSign = 1;
-      if (levelNum >= 301) {
-        grainAmp = Math.min(0.46, 0.22 + ((levelNum - 300) / 200) * 0.24);
-        grainFreq = levelNum > 400 ? 1.5 : 1.0;
-        grainSign = rng() < 0.5 ? 1 : -1;
-      }
-
-      // Safe pull speed (px/sec) and angular tolerance (radians) scale smoothly across 500 levels
-      const safeSpeed = Math.round(250 - p * 105);         // 250 px/s -> 145 px/s
-      const angleTol = 0.88 - p * 0.38;                    // ~50 deg -> ~29 deg
-      const tensionRate = 0.72 + p * 0.58;
-
-      const priceNum = (2.99 + Math.floor(rng() * 48) + 0.99).toFixed(2);
-      const skuCode = `${1000 + Math.floor(rng() * 8999)}-${100 + Math.floor(rng() * 899)}`;
+      const layers = [makeLayer(0)];
+      if (twinLayers) layers.push(makeLayer(1));
 
       return {
         levelNum,
-        surf,
-        style,
-        sw,
-        sh,
-        rectRot,
-        baseAngle,
-        xMin,
-        xMax,
-        span: xMax - xMin,
-        tipY,
-        gluePatches,
-        grainAmp,
-        grainFreq,
-        grainSign,
-        safeSpeed,
-        angleTol,
-        tensionRate,
-        priceNum,
-        skuCode
+        chapIdx,
+        mode: "film",
+        tech,
+        name: twinLayers ? `${tech.name} (2-Layer)` : tech.name,
+        layers
       };
     }
 
@@ -750,15 +894,11 @@
     }
 
     // ==============================================
-    // CONTINUOUS ASMR ADHESIVE WEB AUDIO ENGINE
+    // LIVE SPEED-MODULATED ADHESIVE PEEL WEB AUDIO
     // ==============================================
     let audioCtx = null;
-    let noiseBuf = null;
-    let peelNode = null;
-    let peelFilter = null;
-    let peelGain = null;
     let soundOn = true;
-    let lastCrackleMs = 0;
+    let peelNodes = null;
 
     function initAudio() {
       if (!audioCtx) {
@@ -766,168 +906,139 @@
         if (AC) audioCtx = new AC();
       }
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-
-      if (audioCtx && !noiseBuf) {
-        const len = audioCtx.sampleRate * 2;
-        noiseBuf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-        const d = noiseBuf.getChannelData(0);
-        // Subtle pink-ish noise for velvety ASMR tape texture
-        let b0 = 0, b1 = 0, b2 = 0;
-        for (let i = 0; i < len; i++) {
-          const white = Math.random() * 2 - 1;
-          b0 = 0.997 * b0 + white * 0.029;
-          b1 = 0.985 * b1 + white * 0.032;
-          b2 = 0.950 * b2 + white * 0.048;
-          d[i] = (b0 + b1 + b2 + white * 0.18) * 1.4;
-        }
-      }
-
-      if (audioCtx && noiseBuf && !peelNode) {
-        peelNode = audioCtx.createBufferSource();
-        peelNode.buffer = noiseBuf;
-        peelNode.loop = true;
-
-        peelFilter = audioCtx.createBiquadFilter();
-        peelFilter.type = "bandpass";
-        peelFilter.frequency.value = 1800;
-        peelFilter.Q.value = 1.6;
-
-        peelGain = audioCtx.createGain();
-        peelGain.gain.value = 0.0001;
-
-        peelNode.connect(peelFilter);
-        peelFilter.connect(peelGain);
-        peelGain.connect(audioCtx.destination);
-        peelNode.start();
-      }
     }
 
-    function updatePeelAudio(speedPx, inGlue, tensionVal) {
-      if (!soundOn || !audioCtx || !peelGain || !peelFilter) return;
-      const now = audioCtx.currentTime;
-      const active = Math.min(1, speedPx / 180);
+    function ensurePeelLoop() {
+      initAudio();
+      if (!audioCtx || peelNodes) return;
 
-      if (active < 0.04) {
-        peelGain.gain.setTargetAtTime(0.0001, now, 0.04);
+      // Crinkly adhesive tape micro-crackle texture buffer
+      const len = audioCtx.sampleRate * 2;
+      const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) {
+        // Fine glossy plastic rustle + microscopic adhesive ticks
+        const tick = Math.random() < 0.035 ? (Math.random() * 2 - 1) * 1.4 : (Math.random() * 2 - 1) * 0.28;
+        data[i] = tick;
+      }
+
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+
+      const hp = audioCtx.createBiquadFilter();
+      hp.type = "bandpass";
+      hp.frequency.value = 1900;
+      hp.Q.value = 1.3;
+
+      const g = audioCtx.createGain();
+      g.gain.value = 0;
+
+      src.connect(hp);
+      hp.connect(g);
+      g.connect(audioCtx.destination);
+      src.start();
+
+      peelNodes = { hp, g };
+    }
+
+    function updatePeelAudio(active, speedRatio, inSticky, isFruit) {
+      if (!soundOn || !active || speedRatio < 0.03) {
+        if (peelNodes && audioCtx) {
+          peelNodes.g.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.028);
+        }
         return;
       }
+      ensurePeelLoop();
+      if (!peelNodes || !audioCtx) return;
 
-      // Sticky glue deepens pitch; smooth film has airy crisp shimmer
-      const targetFreq = inGlue
-        ? 780 + active * 420
-        : (level.style.translucent ? 2500 + active * 1100 : 1450 + active * 950);
-      const targetQ = inGlue ? 3.2 : 1.4;
-      const targetVol = (0.045 + active * 0.12) * (inGlue ? 1.25 : 1.0);
-
-      peelFilter.frequency.setTargetAtTime(targetFreq, now, 0.04);
-      peelFilter.Q.setTargetAtTime(targetQ, now, 0.05);
-      peelGain.gain.setTargetAtTime(targetVol, now, 0.035);
-
-      // Micro-crackle adhesive pops & tension strain ticks
-      const nowMs = performance.now();
-      const interval = tensionVal > 0.62 ? 55 : (inGlue ? 85 : 130);
-      if (nowMs - lastCrackleMs > interval && Math.random() < 0.65) {
-        lastCrackleMs = nowMs;
-        const osc = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        osc.type = tensionVal > 0.68 ? "sawtooth" : "triangle";
-        const f = tensionVal > 0.68 ? (360 + Math.random() * 140) : (1600 + Math.random() * 1800);
-        osc.frequency.setValueAtTime(f, now);
-        osc.frequency.exponentialRampToValueAtTime(f * 0.4, now + 0.018);
-        g.gain.setValueAtTime(tensionVal > 0.68 ? 0.06 : 0.025, now);
-        g.gain.exponentialRampToValueAtTime(0.0005, now + 0.022);
-        osc.connect(g);
-        g.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.025);
-      }
-    }
-
-    function stopPeelAudio() {
-      if (audioCtx && peelGain) {
-        peelGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.03);
-      }
-    }
-
-    function sfxRip() {
-      stopPeelAudio();
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx || !noiseBuf) return;
       const now = audioCtx.currentTime;
-      const src = audioCtx.createBufferSource();
-      src.buffer = noiseBuf;
-      const bp = audioCtx.createBiquadFilter();
-      bp.type = "bandpass";
-      bp.frequency.setValueAtTime(1950, now);
-      bp.frequency.exponentialRampToValueAtTime(420, now + 0.34);
-      bp.Q.value = 1.2;
-      const g = audioCtx.createGain();
-      g.gain.setValueAtTime(0.32, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.36);
-      src.connect(bp);
-      bp.connect(g);
-      g.connect(audioCtx.destination);
-      src.start(now);
-      src.stop(now + 0.38);
+      const baseFreq = isFruit ? 1150 : (inSticky ? 1450 : 2100);
+      const targetFreq = baseFreq + Math.min(2200, speedRatio * 1850);
+      const vol = Math.min(0.24, 0.04 + speedRatio * 0.16);
+      peelNodes.hp.frequency.setTargetAtTime(targetFreq, now, 0.035);
+      peelNodes.g.gain.setTargetAtTime(vol, now, 0.025);
     }
 
-    function sfxPerfectPop() {
-      stopPeelAudio();
+    function sfxFilmSnap() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(640, now);
+      osc.frequency.exponentialRampToValueAtTime(140, now + 0.11);
+      g.gain.setValueAtTime(0.14, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.15);
+    }
 
-      // Crisp detachment POP
-      const pop = audioCtx.createOscillator();
-      const gp = audioCtx.createGain();
-      pop.type = "sine";
-      pop.frequency.setValueAtTime(320, now);
-      pop.frequency.exponentialRampToValueAtTime(980, now + 0.075);
-      gp.gain.setValueAtTime(0.22, now);
-      gp.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-      pop.connect(gp);
-      gp.connect(audioCtx.destination);
-      pop.start(now);
-      pop.stop(now + 0.1);
+    function sfxReleasePop() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(420, now);
+      osc.frequency.exponentialRampToValueAtTime(1180, now + 0.09);
+      g.gain.setValueAtTime(0.14, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.14);
+    }
 
-      // Satisfying spotless shimmer chord
-      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+    function sfxPerfectRevealChime() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => {
         setTimeout(() => {
-          const t = audioCtx.currentTime;
+          const now = audioCtx.currentTime;
           const osc = audioCtx.createOscillator();
           const g = audioCtx.createGain();
           osc.type = "sine";
-          osc.frequency.setValueAtTime(f, t);
-          g.gain.setValueAtTime(0.11, t);
-          g.gain.exponentialRampToValueAtTime(0.0008, t + 0.45);
+          osc.frequency.setValueAtTime(f, now);
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.exponentialRampToValueAtTime(0.11, now + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.55);
           osc.connect(g);
           g.connect(audioCtx.destination);
-          osc.start(t);
-          osc.stop(t + 0.48);
-        }, 70 + i * 70);
+          osc.start(now);
+          osc.stop(now + 0.6);
+        }, i * 70);
       });
     }
 
     // ==============================================
-    // GAME STATE, PEEL PHYSICS & POINTER CONTROLS
+    // GAME STATE, CURLED SHEET GEOMETRY & INTERACTION
     // ==============================================
     const canvas = document.getElementById("peelCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const progressPill = document.getElementById("progressPill");
+    const snapsPill = document.getElementById("snapsPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const tensLabel = document.getElementById("tensLabel");
-    const tensFill = document.getElementById("tensFill");
-    const tensPct = document.getElementById("tensPct");
+    const peelPctTxt = document.getElementById("peelPctTxt");
+    const peelFill = document.getElementById("peelFill");
+    const tensionLbl = document.getElementById("tensionLbl");
+    const tensionPctTxt = document.getElementById("tensionPctTxt");
+    const tensionFill = document.getElementById("tensionFill");
     const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
+    const winOverlay = document.getElementById("winOverlay");
+    const winStars = document.getElementById("winStars");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
@@ -939,23 +1050,18 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let level = null;
-    let progress = 0.07; // small lifted corner ready to grab
-    let tension = 0;     // 0..1
-    let maxTensionHit = 0;
-    let gameState = "playing"; // playing | won | ripped
+    let item = null;
+    let activeLayerIdx = 0;
+    let peelProg = 0;        // 0..1 for current layer
+    let tension = 0;         // 0..100
+    let snaps = 0;
+    let itemWon = false;
     let showGuide = false;
 
-    // Drag tracking in Peel Space
-    let isDragging = false;
-    let lastPeelPt = null;
-    let smoothVx = 0;
-    let smoothVy = 0;
-    let livePullSpeed = 0;
-    let liveAngleErr = 0;
-    let currentlyInGlue = false;
-    let ripReason = "";
-    let shineAnim = 0;
+    let isPeeling = false;
+    let lastPtr = null;
+    let livePullSpd = 0;
+    let snapShake = 0;
     let sparkles = [];
     let toastTimer = null;
 
@@ -966,64 +1072,149 @@
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function getIdealAngleAt(pVal) {
-      if (level.grainAmp === 0) return 0;
-      return Math.sin(pVal * Math.PI * level.grainFreq) * level.grainAmp * level.grainSign;
+    function getCurrentLayer() {
+      return item.layers[activeLayerIdx];
     }
 
-    function isProgressInGlue(pVal) {
-      return level.gluePatches.some((g) => Math.abs(pVal - g.p) <= g.halfWidth);
+    // Compute Start & End World Coordinates of Peel Axis for Current Film Layer
+    function getFilmEndpoints(layer) {
+      const t = item.tech;
+      const dx = Math.cos(layer.angle);
+      const dy = Math.sin(layer.angle);
+      const halfSpan = (Math.abs(dx) * t.w + Math.abs(dy) * t.h) * 0.5;
+      return {
+        dx, dy, halfSpan,
+        sx: CX - dx * halfSpan,
+        sy: CY - dy * halfSpan,
+        ex: CX + dx * halfSpan,
+        ey: CY + dy * halfSpan
+      };
     }
 
-    function updateTensionUI() {
-      const pct = Math.min(100, Math.round(tension * 100));
-      tensFill.style.width = `${pct}%`;
-      tensPct.textContent = `${pct}%`;
-      if (gameState === "ripped" || tension > 0.72) {
-        tensLabel.textContent = gameState === "ripped" ? "✕ TORN!" : "▲ RIP RISK!";
-        tensLabel.className = "tens-label tens-danger";
-      } else if (tension > 0.38 || currentlyInGlue) {
-        tensLabel.textContent = currentlyInGlue ? "🔥 GLUE SPOT" : "◆ TIGHT";
-        tensLabel.className = "tens-label tens-tight";
-      } else {
-        tensLabel.textContent = "● SMOOTH";
-        tensLabel.className = "tens-label tens-smooth";
+    // Compute Active Pull Handle Position (Corner Tab / Spiral Fruit Tip)
+    function getActiveHandlePos() {
+      const layer = getCurrentLayer();
+      if (item.mode === "fruit") {
+        // Spiral path starting at outer top rim and winding cleanly inward around fruit!
+        const turns = 2.6;
+        const ang = -Math.PI / 2 + peelProg * Math.PI * 2 * turns * layer.dirSign;
+        const r = item.fruit.r * (0.94 - peelProg * 0.72);
+        return {
+          x: CX + Math.cos(ang) * r,
+          y: CY + Math.sin(ang) * r,
+          // Tangent direction of spiral peel
+          tx: -Math.sin(ang) * layer.dirSign,
+          ty: Math.cos(ang) * layer.dirSign
+        };
       }
+      const ep = getFilmEndpoints(layer);
+      return {
+        x: ep.sx + ep.dx * (peelProg * ep.halfSpan * 2),
+        y: ep.sy + ep.dy * (peelProg * ep.halfSpan * 2),
+        tx: ep.dx,
+        ty: ep.dy
+      };
+    }
+
+    function isInStickyZone(prog, layer) {
+      return layer.stickyZones.some((z) => prog >= z.a && prog <= z.b);
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Peel #${currentLevelNum} / ${TOTAL_LEVELS} — ${level.surf.name}`;
-      const dispPct = gameState === "won" ? 100 : Math.min(99, Math.max(0, Math.round(((progress - 0.07) / 0.91) * 100)));
-      progressPill.textContent = `Peeled: ${dispPct}%`;
-      solvedCounter.textContent = `Clean: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Peel ${currentLevelNum} / 500 ▾`;
-      updateTensionUI();
+      levelTitle.textContent = `Item #${currentLevelNum} / ${TOTAL_LEVELS} — ${item.name}`;
+      snapsPill.textContent = `Snaps: ${snaps}`;
+      solvedCounter.textContent = `Peeled: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Item ${currentLevelNum} / 500 ▾`;
+
+      const totalLayers = item.layers.length;
+      const overallProg = itemWon ? 1 : ((activeLayerIdx + peelProg) / totalLayers);
+      const pct = Math.round(overallProg * 100);
+      peelPctTxt.textContent = `${pct}%`;
+      peelFill.style.width = `${pct}%`;
+
+      const tPct = Math.round(tension);
+      tensionPctTxt.textContent = `${tPct}%`;
+      tensionFill.style.width = `${tPct}%`;
+      if (tPct >= 72) {
+        tensionLbl.textContent = "🔥 SLOW DOWN!";
+        tensionLbl.style.color = "#f87171";
+      } else if (tPct >= 42) {
+        tensionLbl.textContent = "⚡ FIRM PULL";
+        tensionLbl.style.color = "#fde047";
+      } else {
+        tensionLbl.textContent = "🌿 STEADY FLOW";
+        tensionLbl.style.color = "#86efac";
+      }
     }
 
-    function loadLevel(num) {
-      stopPeelAudio();
-      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      level = buildPeelLevel(currentLevelNum);
+    function spawnRevealSparkles() {
+      for (let i = 0; i < 24; i++) {
+        sparkles.push({
+          x: CX + (Math.random() - 0.5) * 230,
+          y: CY + (Math.random() - 0.5) * 230,
+          size: 5 + Math.random() * 8,
+          alpha: 1,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+    }
 
-      progress = 0.07;
+    function completeCurrentLayer() {
+      sfxReleasePop();
+      isPeeling = false;
+      lastPtr = null;
       tension = 0;
-      maxTensionHit = 0;
-      gameState = "playing";
-      isDragging = false;
-      lastPeelPt = null;
-      smoothVx = 0;
-      smoothVy = 0;
-      livePullSpeed = 0;
-      liveAngleErr = 0;
-      currentlyInGlue = false;
-      ripReason = "";
-      shineAnim = 0;
-      sparkles = [];
+      livePullSpd = 0;
+      updatePeelAudio(false, 0, false, false);
+      spawnRevealSparkles();
 
-      canvas.classList.remove("peeling");
-      stageOverlay.classList.remove("show");
+      if (activeLayerIdx < item.layers.length - 1) {
+        activeLayerIdx++;
+        peelProg = 0;
+        showToast("✨ Outer Layer 1 peeled! Now grab Layer 2's glowing tab!", 2400);
+        updateHUD();
+        return;
+      }
+
+      itemWon = true;
+      peelProg = 1;
+      solvedSet.add(currentLevelNum);
+      try {
+        localStorage.setItem("zinplay_peel_500_solved", JSON.stringify([...solvedSet]));
+      } catch (e) {}
+      sfxPerfectRevealChime();
+      updateHUD();
+
+      const stars = snaps === 0 ? "⭐⭐⭐" : (snaps === 1 ? "⭐⭐☆" : "⭐☆☆");
+      const isLast = currentLevelNum === TOTAL_LEVELS;
+      winStars.textContent = stars;
+      winHeading.textContent = snaps === 0 ? "Unbroken Perfect Peel!" : `${item.name} Unwrapped!`;
+      winText.textContent = snaps === 0
+        ? `Zero ribbon snaps—${item.name} gleams spotless under studio light!`
+        : `Completely uncovered with ${snaps} ribbon snap${snaps === 1 ? "" : "s"}.`;
+      nextLevelBtn.textContent = isLast ? "Replay Item #1" : `Next Item (#${currentLevelNum + 1}) →`;
+      setTimeout(() => winOverlay.classList.add("show"), 680);
+    }
+
+    function loadItem(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      item = buildPeelItem(currentLevelNum);
+      activeLayerIdx = 0;
+      peelProg = 0;
+      tension = 0;
+      snaps = 0;
+      itemWon = false;
+      showGuide = false;
+      isPeeling = false;
+      lastPtr = null;
+      livePullSpd = 0;
+      snapShake = 0;
+      sparkles = [];
+      updatePeelAudio(false, 0, false, false);
+
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
       try {
@@ -1033,6 +1224,7 @@
       updateHUD();
     }
 
+    // Viewport & Touch/Mouse Grabbing
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1049,227 +1241,135 @@
       return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    function clientToPeelSpace(clientX, clientY) {
+    function clientToWorld(clientX, clientY) {
       const rect = canvas.getBoundingClientRect();
       const vp = getViewport();
-      const wx = (clientX - rect.left - vp.offsetX) / vp.scale;
-      const wy = (clientY - rect.top - vp.offsetY) / vp.scale;
-      const dx = wx - CX;
-      const dy = wy - CY;
-      const ca = Math.cos(-level.baseAngle);
-      const sa = Math.sin(-level.baseAngle);
       return {
-        x: dx * ca - dy * sa,
-        y: dx * sa + dy * ca
+        x: (clientX - rect.left - vp.offsetX) / vp.scale,
+        y: (clientY - rect.top - vp.offsetY) / vp.scale
       };
     }
-
-    function getCurrentTipPeelSpace() {
-      const xc = level.xMin + progress * level.span;
-      return {
-        x: 2 * xc - level.xMin,
-        y: level.tipY
-      };
-    }
-
-    function triggerRip(reason) {
-      if (gameState !== "playing") return;
-      gameState = "ripped";
-      isDragging = false;
-      ripReason = reason;
-      canvas.classList.remove("peeling");
-      sfxRip();
-      updateHUD();
-
-      ovIcon.textContent = "💔";
-      ovHeading.textContent = "Sticker Torn!";
-      ovText.textContent = reason;
-      ovActionBtn.textContent = "↺ Try Fresh Sticker";
-      setTimeout(() => stageOverlay.classList.add("show"), 360);
-    }
-
-    function triggerCleanWin() {
-      if (gameState !== "playing") return;
-      gameState = "won";
-      progress = 1.02;
-      tension = 0;
-      isDragging = false;
-      shineAnim = 0.01;
-      canvas.classList.remove("peeling");
-      sfxPerfectPop();
-
-      solvedSet.add(currentLevelNum);
-      try {
-        localStorage.setItem("zinplay_peel_500_solved", JSON.stringify([...solvedSet]));
-      } catch (e) {}
-
-      // Celebration sparkles over freshly spotless object
-      for (let i = 0; i < 22; i++) {
-        sparkles.push({
-          x: CX + (Math.random() - 0.5) * level.surf.w * 0.78,
-          y: CY + (Math.random() - 0.5) * level.surf.h * 0.78,
-          size: 3 + Math.random() * 5,
-          alpha: 1,
-          phase: Math.random() * Math.PI * 2
-        });
-      }
-
-      updateHUD();
-
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      const grade = maxTensionHit < 0.38 ? "Flawless ASMR mastery!" : "Spotless peel with zero residue!";
-      ovIcon.textContent = "✨";
-      ovHeading.textContent = isLast ? "All 500 Peels Mastered!" : `Peel #${currentLevelNum} Spotless!`;
-      ovText.textContent = grade;
-      ovActionBtn.textContent = isLast ? "Replay Peel #1" : `Next Peel (#${currentLevelNum + 1}) →`;
-      setTimeout(() => stageOverlay.classList.add("show"), 650);
-    }
-
-    // Pointer Events (1:1 Tactile Flap Peeling)
-    let lastMoveTime = performance.now();
 
     canvas.addEventListener("pointerdown", (e) => {
-      if (gameState !== "playing") return;
+      if (itemWon) return;
       initAudio();
+      const pt = clientToWorld(e.clientX, e.clientY);
+      const handle = getActiveHandlePos();
 
-      const pt = clientToPeelSpace(e.clientX, e.clientY);
-      const tip = getCurrentTipPeelSpace();
-      const xc = level.xMin + progress * level.span;
-
-      // Generous grab hitbox around the curled corner or crease flap
-      const distTip = Math.hypot(pt.x - tip.x, pt.y - tip.y);
-      const nearCrease = Math.abs(pt.x - xc) < 55 && Math.abs(pt.y - tip.y) < Math.max(level.sw, level.sh) * 0.55;
-
-      if (distTip <= 72 || nearCrease) {
-        isDragging = true;
-        lastPeelPt = pt;
-        lastMoveTime = performance.now();
-        smoothVx = 0;
-        smoothVy = 0;
+      // Generous fingertip grab zone around glowing pull tab or along the active peel fold!
+      const dist = Math.hypot(pt.x - handle.x, pt.y - handle.y);
+      if (dist <= 62 || peelProg > 0.04) {
+        isPeeling = true;
+        lastPtr = pt;
         canvas.classList.add("peeling");
         try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
       } else {
-        showToast("Grab the glowing lifted corner and pull slowly!", 2000);
+        showToast("👆 Grab the glowing corner Pull Tab and glide smoothly!", 2000);
       }
     });
+
+    let lastMoveMs = performance.now();
 
     canvas.addEventListener("pointermove", (e) => {
-      if (!isDragging || gameState !== "playing") return;
-      const now = performance.now();
-      const dt = Math.max(0.008, Math.min(0.06, (now - lastMoveTime) / 1000));
-      lastMoveTime = now;
+      if (!isPeeling || !lastPtr || itemWon) return;
+      const nowMs = performance.now();
+      const dt = Math.max(0.008, Math.min(0.06, (nowMs - lastMoveMs) / 1000));
+      lastMoveMs = nowMs;
 
-      const pt = clientToPeelSpace(e.clientX, e.clientY);
-      const dx = pt.x - lastPeelPt.x;
-      const dy = pt.y - lastPeelPt.y;
-      lastPeelPt = pt;
+      const pt = clientToWorld(e.clientX, e.clientY);
+      const mdx = pt.x - lastPtr.x;
+      const mdy = pt.y - lastPtr.y;
+      lastPtr = pt;
 
-      const instVx = dx / dt;
-      const instVy = dy / dt;
-      smoothVx = smoothVx * 0.62 + instVx * 0.38;
-      smoothVy = smoothVy * 0.62 + instVy * 0.38;
-      livePullSpeed = Math.hypot(smoothVx, smoothVy);
+      const moveDist = Math.hypot(mdx, mdy);
+      if (moveDist < 0.4) return;
 
-      // Advance peel smoothly 1:1 with fingertip (crease moves at half tip speed!)
-      if (dx > 0) {
-        const dCrease = dx * 0.5;
-        progress = Math.min(1, progress + dCrease / level.span);
-      }
+      const layer = getCurrentLayer();
+      const handle = getActiveHandlePos();
+      const inSticky = isInStickyZone(peelProg, layer);
 
-      currentlyInGlue = isProgressInGlue(progress);
+      // Project finger movement onto natural peel tangent vector!
+      const along = mdx * handle.tx + mdy * handle.ty;
+      const perp = Math.abs(-mdx * handle.ty + mdy * handle.tx);
 
-      // Evaluate Tension from Speed & Pull Angle
-      if (livePullSpeed > 22 && dx > -1.5) {
-        const pullAngle = Math.atan2(smoothVy, Math.max(1, smoothVx));
-        const idealAngle = getIdealAngleAt(progress);
-        liveAngleErr = Math.abs(pullAngle - idealAngle);
+      if (along > 0) {
+        const totalSpan = item.mode === "fruit" ? 760 : (getFilmEndpoints(layer).halfSpan * 2);
+        const stepProg = along / totalSpan;
+        const speedPxSec = along / dt;
+        const effectiveLimit = inSticky ? layer.maxSafeSpd * 0.56 : layer.maxSafeSpd;
 
-        const effectiveSafeSpeed = currentlyInGlue ? level.safeSpeed * 0.45 : level.safeSpeed;
+        livePullSpd = speedPxSec / effectiveLimit;
+        peelProg = Math.min(1, peelProg + stepProg);
 
-        let stressAdd = 0;
-        let mainCause = "";
-
-        if (livePullSpeed > effectiveSafeSpeed) {
-          const overRatio = (livePullSpeed - effectiveSafeSpeed) / effectiveSafeSpeed;
-          stressAdd += (0.55 + overRatio * 1.45) * level.tensionRate * dt;
-          mainCause = currentlyInGlue
-            ? "You pulled too fast across an amber glue spot! Slow to a crawl over glue."
-            : "Pulled too fast! Glide steadily and keep tension out of the red zone.";
-        }
-
-        if (liveAngleErr > level.angleTol && livePullSpeed > 34) {
-          const angOver = (liveAngleErr - level.angleTol) / 0.55;
-          stressAdd += (0.48 + angOver * 1.2) * level.tensionRate * dt;
-          if (!mainCause) {
-            mainCause = "Pulled off-angle! Follow the live directional arrow on the lifted flap.";
-          }
-        }
-
-        if (stressAdd > 0) {
-          tension = Math.min(1, tension + stressAdd);
-          if (tension > maxTensionHit) maxTensionHit = tension;
-          if (tension >= 1) {
-            triggerRip(mainCause || "Too much tension ripped the sticker!");
-            return;
-          }
+        // Compute realistic adhesive tension buildup if yanking too fast or wildly sideways!
+        if (speedPxSec > effectiveLimit) {
+          const excess = (speedPxSec - effectiveLimit) / effectiveLimit;
+          tension = Math.min(100, tension + (28 + excess * 72) * dt * 2.1);
+        } else if (perp > along * 1.4 && moveDist > 5) {
+          tension = Math.min(100, tension + 26 * dt);
         } else {
-          // Pulling gently inside sweet spot relaxes residual tension
-          tension = Math.max(0, tension - 0.42 * dt);
+          tension = Math.max(0, tension - 34 * dt);
+        }
+
+        updatePeelAudio(true, Math.min(1.3, livePullSpd), inSticky, item.mode === "fruit");
+
+        // Ribbon Snap Event if Tension Hits 100%!
+        if (tension >= 100) {
+          snaps++;
+          tension = 0;
+          snapShake = 0.45;
+          isPeeling = false;
+          lastPtr = null;
+          canvas.classList.remove("peeling");
+          updatePeelAudio(false, 0, false, false);
+          sfxFilmSnap();
+          showToast("💥 Film snapped! Pull slower—especially across orange Sticky Bands.", 2600);
+          updateHUD();
+          return;
+        }
+
+        updateHUD();
+
+        if (peelProg >= 0.985) {
+          completeCurrentLayer();
         }
       }
-
-      updatePeelAudio(dx > 0 ? livePullSpeed : 0, currentlyInGlue, tension);
-      updateHUD();
-
-      if (progress >= 0.985) {
-        triggerCleanWin();
-      }
     });
 
-    function stopDragging() {
-      isDragging = false;
-      livePullSpeed = 0;
-      smoothVx = 0;
-      smoothVy = 0;
+    const endPeel = () => {
+      isPeeling = false;
+      lastPtr = null;
+      livePullSpd = 0;
       canvas.classList.remove("peeling");
-      stopPeelAudio();
-    }
-    canvas.addEventListener("pointerup", stopDragging);
-    canvas.addEventListener("pointercancel", stopDragging);
-    window.addEventListener("blur", stopDragging);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) stopDragging();
+      updatePeelAudio(false, 0, false, false);
+    };
+    canvas.addEventListener("pointerup", endPeel);
+    canvas.addEventListener("pointercancel", endPeel);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) endPeel(); });
+
+    document.getElementById("guideBtn").addEventListener("click", () => {
+      initAudio();
+      showGuide = !showGuide;
+      showToast(showGuide ? "💡 Glide Guide active! Follow the glowing dotted peel path smoothly." : "Glide Guide hidden.", 2300);
     });
 
-    // Controls
-    document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
-    document.getElementById("hintBtn").addEventListener("click", () => {
-      if (gameState !== "playing") return;
-      showGuide = !showGuide;
-      if (showGuide) {
-        showToast("Golden peel lane & ideal pace dot enabled — follow the dot!", 2800);
-      }
-    });
+    document.getElementById("resetBtn").addEventListener("click", () => loadItem(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
       soundBtn.textContent = soundOn ? "🔊 ASMR ON" : "🔇 OFF";
-      if (!soundOn) stopPeelAudio();
+      if (!soundOn) updatePeelAudio(false, 0, false, false);
     });
-    ovActionBtn.addEventListener("click", () => {
-      if (gameState === "won") {
-        loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      } else {
-        loadLevel(currentLevelNum);
-      }
+    nextLevelBtn.addEventListener("click", () => {
+      loadItem(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadItem(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadItem(currentLevelNum + 1);
     });
 
-    // Level Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1300,7 +1400,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadLevel(n);
+          loadItem(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1322,418 +1422,391 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadLevel(val);
+        loadItem(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // REALISTIC 3D-FOLD STICKER RENDERER
+    // GLOSSY GADGET, CURLED FILM & FRUIT SPIRAL RENDERER
     // ==============================================
-    function drawObjectSurface() {
-      const s = level.surf;
-      const x = CX - s.w / 2;
-      const y = CY - s.h / 2;
-
-      ctx.save();
-      // Drop shadow under object
-      ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-      ctx.shadowBlur = 24;
-      ctx.shadowOffsetY = 12;
-
-      const grad = ctx.createLinearGradient(x, y, x + s.w, y + s.h);
-      grad.addColorStop(0, s.bg1);
-      grad.addColorStop(1, s.bg2);
-      ctx.fillStyle = grad;
+    function traceTechClipPath(t, pad = 0) {
+      const w = t.w - pad * 2, h = t.h - pad * 2;
+      const r = Math.max(4, t.rad - pad);
       ctx.beginPath();
-      ctx.roundRect(x, y, s.w, s.h, s.r);
-      ctx.fill();
+      ctx.roundRect(CX - w / 2, CY - h / 2, w, h, r);
+    }
 
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetY = 0;
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = s.rim;
+    function drawGleamingTechObject(t, now) {
+      ctx.save();
+      // Soft studio shadow beneath gadget
+      ctx.shadowColor = "rgba(0, 0, 0, 0.55)";
+      ctx.shadowBlur = 28;
+      ctx.shadowOffsetY = 12;
+      ctx.fillStyle = t.body;
+      traceTechClipPath(t, 0);
+      ctx.fill();
+      ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+      // Brushed Metallic Bezel Frame
+      ctx.strokeStyle = t.rim;
+      ctx.lineWidth = 4;
       ctx.stroke();
 
-      // Subtle Object-Specific Details
+      // Mirror-Gloss Inner Display / Dial Artwork
       ctx.save();
-      ctx.beginPath();
-      ctx.roundRect(x + 2, y + 2, s.w - 4, s.h - 4, Math.max(4, s.r - 2));
+      traceTechClipPath(t, 12);
       ctx.clip();
 
-      if (s.detail === "phone" || s.detail === "tablet") {
-        // Screen bezel & sleek camera island
-        ctx.fillStyle = "rgba(0,0,0,0.45)";
-        ctx.beginPath();
-        ctx.roundRect(CX - 26, y + 12, 52, 12, 6);
-        ctx.fill();
-        ctx.fillStyle = "rgba(56, 189, 248, 0.12)";
-        ctx.beginPath();
-        ctx.arc(CX, CY, s.w * 0.35, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (s.detail === "vinyl") {
-        // Record grooves & center label
-        ctx.strokeStyle = "rgba(255,255,255,0.08)";
-        ctx.lineWidth = 1.5;
-        for (let r = 46; r < 130; r += 12) {
-          ctx.beginPath();
-          ctx.arc(CX, CY, r, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-        ctx.fillStyle = s.accent;
-        ctx.globalAlpha = 0.25;
-        ctx.beginPath();
-        ctx.arc(CX, CY, 34, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (s.detail === "book") {
-        // Spine crease & gold border
-        ctx.strokeStyle = "rgba(254, 240, 138, 0.3)";
+      const sg = ctx.createLinearGradient(CX - t.w / 2, CY - t.h / 2, CX + t.w / 2, CY + t.h / 2);
+      sg.addColorStop(0, t.screen1);
+      sg.addColorStop(1, t.screen2);
+      ctx.fillStyle = sg;
+      ctx.fillRect(CX - t.w / 2, CY - t.h / 2, t.w, t.h);
+
+      // Sleek Object-Specific Graphic Details
+      if (t.id === "watch") {
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.55)";
         ctx.lineWidth = 2;
-        ctx.strokeRect(x + 18, y + 16, s.w - 36, s.h - 32);
-        ctx.fillStyle = "rgba(0,0,0,0.22)";
-        ctx.fillRect(x, y, 22, s.h);
-      }
-
-      // Glossy diagonal specular highlight across clean surface
-      const gloss = ctx.createLinearGradient(x, y, x + s.w * 0.7, y + s.h * 0.5);
-      gloss.addColorStop(0, "rgba(255,255,255,0.14)");
-      gloss.addColorStop(0.45, "rgba(255,255,255,0.02)");
-      gloss.addColorStop(1, "rgba(255,255,255,0)");
-      ctx.fillStyle = gloss;
-      ctx.fillRect(x, y, s.w, s.h);
-
-      // Victory Shine Sweep across freshly peeled object!
-      if (shineAnim > 0 && shineAnim < 1.3) {
-        const sweepX = x - 80 + shineAnim * (s.w + 180);
-        const sGrad = ctx.createLinearGradient(sweepX - 45, y, sweepX + 45, y + 70);
-        sGrad.addColorStop(0, "rgba(255,255,255,0)");
-        sGrad.addColorStop(0.5, "rgba(255,255,255,0.55)");
-        sGrad.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.fillStyle = sGrad;
-        ctx.fillRect(x, y, s.w, s.h);
-      }
-
-      ctx.restore();
-      ctx.restore();
-    }
-
-    function drawStickerFrontBody() {
-      const st = level.style;
-      const w = level.sw;
-      const h = level.sh;
-
-      ctx.save();
-      ctx.rotate(level.rectRot);
-
-      ctx.fillStyle = st.front;
-      ctx.strokeStyle = st.border;
-      ctx.lineWidth = 2.4;
-      ctx.beginPath();
-      ctx.roundRect(-w / 2, -h / 2, w, h, 8);
-      ctx.fill();
-      ctx.stroke();
-
-      // Subtle paper grain lines if Chapter 4-5
-      if (level.grainAmp > 0) {
-        ctx.strokeStyle = "rgba(15, 23, 42, 0.08)";
-        ctx.lineWidth = 1.2;
-        for (let gy = -h / 2 + 12; gy < h / 2 - 8; gy += 14) {
+        for (let k = 0; k < 12; k++) {
+          const a = (k * Math.PI) / 6;
           ctx.beginPath();
-          ctx.moveTo(-w / 2 + 8, gy);
-          ctx.quadraticCurveTo(0, gy + level.grainSign * 14, w / 2 - 8, gy);
+          ctx.moveTo(CX + Math.cos(a) * 66, CY + Math.sin(a) * 66);
+          ctx.lineTo(CX + Math.cos(a) * 80, CY + Math.sin(a) * 80);
           ctx.stroke();
         }
-      }
-
-      // Label Typography & Barcode Details
-      ctx.fillStyle = st.text;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.font = "900 11px sans-serif";
-      ctx.fillText(st.title, 0, -h * 0.22);
-
-      if (st.kind === "price" || st.kind === "retail") {
-        ctx.font = "900 22px monospace";
-        ctx.fillText(`$${level.priceNum}`, 0, 2);
-        // Mini barcode strips
-        ctx.fillStyle = "rgba(15, 23, 42, 0.72)";
-        const barW = Math.min(w * 0.62, 92);
-        for (let bx = -barW / 2; bx < barW / 2; bx += 5) {
-          const thick = ((Math.abs(Math.round(bx)) * 7) % 3) + 1;
-          ctx.fillRect(bx, h * 0.2, thick, 14);
+        ctx.strokeStyle = "#fde047"; ctx.lineWidth = 4; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(CX, CY); ctx.lineTo(CX + 38, CY - 34); ctx.stroke();
+        ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(CX, CY); ctx.lineTo(CX - 28, CY - 44); ctx.stroke();
+      } else if (t.id === "vinyl") {
+        ctx.fillStyle = "#09090b";
+        ctx.beginPath(); ctx.arc(CX, CY, 92, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.14)"; ctx.lineWidth = 1.5;
+        for (let r = 42; r <= 82; r += 10) {
+          ctx.beginPath(); ctx.arc(CX, CY, r, 0, Math.PI * 2); ctx.stroke();
         }
+        ctx.fillStyle = "#f59e0b";
+        ctx.beginPath(); ctx.arc(CX, CY, 28, 0, Math.PI * 2); ctx.fill();
+      } else if (t.id === "camera") {
+        [72, 50, 28].forEach((rr, idx) => {
+          ctx.strokeStyle = idx === 1 ? "#67e8f9" : "rgba(255, 255, 255, 0.35)";
+          ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.arc(CX, CY, rr, 0, Math.PI * 2); ctx.stroke();
+        });
       } else {
-        ctx.font = "700 9.5px sans-serif";
-        ctx.globalAlpha = 0.8;
-        ctx.fillText(st.sub, 0, 4);
-        ctx.font = "700 9px monospace";
-        ctx.fillText(`#${level.skuCode}`, 0, h * 0.24);
+        // Abstract Vibrant OLED Wallpaper Waves
+        ctx.fillStyle = "rgba(255, 255, 255, 0.16)";
+        ctx.beginPath(); ctx.arc(CX - 34, CY - 36, 76, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(15, 23, 42, 0.18)";
+        ctx.beginPath(); ctx.arc(CX + 46, CY + 54, 88, 0, Math.PI * 2); ctx.fill();
       }
 
+      // Animated Mirror-Glass Diagonal Sheen Sweep Across Uncovered Surface!
+      const sweep = ((now * 0.08) % 520) - 260;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+      ctx.save();
+      ctx.translate(CX + sweep, CY);
+      ctx.rotate(-Math.PI / 5);
+      ctx.fillRect(-18, -220, 36, 440);
+      ctx.restore();
+
+      ctx.restore();
       ctx.restore();
     }
 
-    function drawStickerBackBody() {
-      const st = level.style;
-      const w = level.sw;
-      const h = level.sh;
+    function drawProtectiveFilmOverlay(layer, now) {
+      const t = item.tech;
+      const ep = getFilmEndpoints(layer);
+      const totalSpan = ep.halfSpan * 2;
+      const foldDist = -ep.halfSpan + peelProg * totalSpan;
 
       ctx.save();
-      ctx.rotate(level.rectRot);
+      traceTechClipPath(t, 6);
+      ctx.clip();
 
-      const grad = ctx.createLinearGradient(-w / 2, 0, w / 2, 0);
-      grad.addColorStop(0, st.translucent ? "rgba(224, 242, 254, 0.8)" : "#f8fafc");
-      grad.addColorStop(0.5, st.back);
-      grad.addColorStop(1, st.translucent ? "rgba(125, 211, 252, 0.65)" : "#cbd5e1");
+      // Rotate into Peel Frame where +X runs from Start Corner (-halfSpan) to End Corner (+halfSpan)!
+      ctx.translate(CX, CY);
+      ctx.rotate(layer.angle);
 
-      ctx.fillStyle = grad;
-      ctx.strokeStyle = st.translucent ? "#bae6fd" : "#94a3b8";
-      ctx.lineWidth = 2;
+      // 1. Remaining Unpeeled Frosted Protective Film (from foldDist to +halfSpan)
+      ctx.fillStyle = layer.tint.fill;
+      ctx.fillRect(foldDist, -260, ep.halfSpan - foldDist + 20, 520);
+
+      // Subtle Diagonal Matte Frost Grain Lines on Unpeeled Film
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.18)";
+      ctx.lineWidth = 1.2;
+      for (let gx = Math.ceil(foldDist / 16) * 16; gx < ep.halfSpan + 10; gx += 16) {
+        ctx.beginPath(); ctx.moveTo(gx, -220); ctx.lineTo(gx, 220); ctx.stroke();
+      }
+
+      // 2. Highlighted High-Tack Sticky Bands (Chapters 3 & 5!)
+      for (const z of layer.stickyZones) {
+        const zx0 = -ep.halfSpan + z.a * totalSpan;
+        const zx1 = -ep.halfSpan + z.b * totalSpan;
+        const drawStart = Math.max(foldDist, zx0);
+        if (zx1 > drawStart) {
+          ctx.fillStyle = "rgba(249, 115, 22, 0.34)";
+          ctx.fillRect(drawStart, -220, zx1 - drawStart, 440);
+          ctx.strokeStyle = "rgba(251, 146, 60, 0.72)";
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(zx0, -200); ctx.lineTo(zx0, 200);
+          ctx.moveTo(zx1, -200); ctx.lineTo(zx1, 200);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+
+      // 3. Realistic 3D Curled-Back Glossy Film Flap Behind the Fold Seam!
+      if (peelProg > 0.015) {
+        const curlW = Math.min(72, peelProg * totalSpan * 0.55 + 14);
+        // Drop shadow cast by curled film onto newly revealed mirror screen
+        const shG = ctx.createLinearGradient(foldDist - curlW - 14, 0, foldDist, 0);
+        shG.addColorStop(0, "rgba(0, 0, 0, 0)");
+        shG.addColorStop(1, "rgba(0, 0, 0, 0.36)");
+        ctx.fillStyle = shG;
+        ctx.fillRect(foldDist - curlW - 14, -240, curlW + 14, 480);
+
+        // Curled-back translucent reflective film flap
+        const flG = ctx.createLinearGradient(foldDist - curlW, 0, foldDist, 0);
+        flG.addColorStop(0, "rgba(255, 255, 255, 0.35)");
+        flG.addColorStop(0.72, layer.tint.curl);
+        flG.addColorStop(1, "#ffffff");
+        ctx.fillStyle = flG;
+        ctx.fillRect(foldDist - curlW, -240, curlW, 480);
+
+        // Crisp Glowing Adhesive Release Seam Line
+        ctx.strokeStyle = tension >= 70 ? "#ef4444" : "#ffffff";
+        ctx.shadowColor = tension >= 70 ? "#ef4444" : "#38bdf8";
+        ctx.shadowBlur = 10;
+        ctx.lineWidth = 2.6;
+        ctx.beginPath();
+        ctx.moveTo(foldDist, -220);
+        ctx.lineTo(foldDist, 220);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      ctx.restore();
+
+      // 4. Optional Dotted Glide Guide Arrow (When 💡 Guide Active or Before Starting)
+      if (showGuide || peelProg < 0.03) {
+        ctx.save();
+        ctx.strokeStyle = "rgba(254, 240, 138, 0.65)";
+        ctx.lineWidth = 2.4;
+        ctx.setLineDash([6, 6]);
+        ctx.beginPath();
+        ctx.moveTo(ep.sx + ep.dx * (peelProg * totalSpan), ep.sy + ep.dy * (peelProg * totalSpan));
+        ctx.lineTo(ep.ex, ep.ey);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    function drawFruitSpiralScene(layer, now) {
+      const f = item.fruit;
+      const turns = 2.6;
+      const steps = 110;
+
+      // 1. Fresh Juicy Revealed Fruit Core Beneath Skin!
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.52)";
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 10;
+      ctx.fillStyle = f.flesh;
       ctx.beginPath();
-      ctx.roundRect(-w / 2, -h / 2, w, h, 8);
+      ctx.arc(CX, CY, f.r, 0, Math.PI * 2);
       ctx.fill();
-      ctx.stroke();
+      ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
 
+      // Juicy Citrus Segments or Crisp Apple Gloss
+      if (f.segs > 0) {
+        ctx.strokeStyle = f.fleshHi;
+        ctx.lineWidth = 3.5;
+        for (let k = 0; k < f.segs; k++) {
+          const a = (k * Math.PI * 2) / f.segs;
+          ctx.beginPath();
+          ctx.moveTo(CX, CY);
+          ctx.lineTo(CX + Math.cos(a) * (f.r - 6), CY + Math.sin(a) * (f.r - 6));
+          ctx.stroke();
+        }
+        ctx.fillStyle = f.fleshHi;
+        ctx.beginPath(); ctx.arc(CX, CY, 14, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.42)";
+        ctx.beginPath(); ctx.ellipse(CX - 38, CY - 42, 34, 18, -0.6, 0, Math.PI * 2); ctx.fill();
+      }
+
+      // 2. Remaining Unpeeled Outer Fruit Rind Along Spiral Band!
+      if (!itemWon) {
+        const startI = Math.floor(peelProg * steps);
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        // Draw Sticky Tack Highlight Segments If Any
+        for (let i = startI; i < steps; i++) {
+          const t0 = i / steps;
+          const t1 = (i + 1) / steps;
+          const a0 = -Math.PI / 2 + t0 * Math.PI * 2 * turns * layer.dirSign;
+          const a1 = -Math.PI / 2 + t1 * Math.PI * 2 * turns * layer.dirSign;
+          const r0 = f.r * (0.94 - t0 * 0.72);
+          const r1 = f.r * (0.94 - t1 * 0.72);
+          const sticky = isInStickyZone(t0, layer);
+
+          ctx.strokeStyle = sticky ? "#facc15" : f.skin;
+          ctx.lineWidth = 34;
+          ctx.beginPath();
+          ctx.moveTo(CX + Math.cos(a0) * r0, CY + Math.sin(a0) * r0);
+          ctx.lineTo(CX + Math.cos(a1) * r1, CY + Math.sin(a1) * r1);
+          ctx.stroke();
+        }
+
+        // Curled-away Trailing Citrus Peel Ribbon Floating Dynamically from Active Tip!
+        if (peelProg > 0.02) {
+          const h = getActiveHandlePos();
+          ctx.strokeStyle = f.pith;
+          ctx.lineWidth = 14;
+          ctx.beginPath();
+          ctx.moveTo(h.x, h.y);
+          ctx.quadraticCurveTo(h.x - h.tx * 28, h.y - h.ty * 28, h.x - h.tx * 42 + h.ty * 18, h.y - h.ty * 42 - h.tx * 18);
+          ctx.stroke();
+          ctx.strokeStyle = f.skin;
+          ctx.lineWidth = 9;
+          ctx.stroke();
+        }
+
+        // Optional Spiral Glide Guide Line
+        if (showGuide || peelProg < 0.05) {
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+          ctx.lineWidth = 2;
+          ctx.setLineDash([5, 5]);
+          ctx.beginPath();
+          for (let i = startI; i <= steps; i++) {
+            const t = i / steps;
+            const a = -Math.PI / 2 + t * Math.PI * 2 * turns * layer.dirSign;
+            const r = f.r * (0.94 - t * 0.72);
+            const px = CX + Math.cos(a) * r, py = CY + Math.sin(a) * r;
+            if (i === startI) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
       ctx.restore();
     }
 
-    function drawScene(now) {
+    let lastTime = performance.now();
+
+    function frame(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      // Gently relax ribbon tension whenever player pauses or slows down!
+      if (!isPeeling && tension > 0) {
+        tension = Math.max(0, tension - dt * 55);
+        updateHUD();
+      }
+      if (snapShake > 0) snapShake = Math.max(0, snapShake - dt * 2.2);
+
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
+      const shX = snapShake > 0 ? Math.sin(now * 0.09) * snapShake * 10 : 0;
+
       ctx.save();
-      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.translate(vp.offsetX + shX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Clean Object Surface Underneath
-      drawObjectSurface();
-
-      // 2. Sticker & Dynamic 3D Fold Projection (in Peel Space)
-      if (progress < 1.0) {
-        const xc = level.xMin + progress * level.span;
-        const vibX = (isDragging && tension > 0.55) ? (Math.random() - 0.5) * tension * 3.5 : 0;
-        const vibY = (isDragging && tension > 0.55) ? (Math.random() - 0.5) * tension * 3.5 : 0;
-
-        ctx.save();
-        ctx.translate(CX + vibX, CY + vibY);
-        ctx.rotate(level.baseAngle);
-
-        // 2a. Stubborn Glue Spots (Visible under/on the unpeeled region so player plans speed!)
-        for (const g of level.gluePatches) {
-          const gx = level.xMin + g.p * level.span;
-          const activeNow = Math.abs(progress - g.p) <= g.halfWidth;
-          if (gx >= xc - g.rad) {
-            ctx.save();
-            // Clip to stuck region so glue disappears cleanly once peeled over
-            ctx.beginPath();
-            ctx.rect(xc, -260, 520, 520);
-            ctx.clip();
-
-            ctx.fillStyle = activeNow ? "rgba(245, 158, 11, 0.55)" : "rgba(245, 158, 11, 0.28)";
-            ctx.strokeStyle = activeNow ? "#fbbf24" : "rgba(245, 158, 11, 0.6)";
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(gx, g.yOff, g.rad, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
-            ctx.restore();
-          }
+      // 1. Subtle Studio Felt Desk Texture
+      ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
+      for (let x = 22; x < WORLD_W; x += 26) {
+        for (let y = 22; y < WORLD_H; y += 26) {
+          ctx.fillRect(x, y, 1.4, 1.4);
         }
-
-        // 2b. Unpeeled Stuck Sticker Portion (x >= xc)
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(xc, -260, 520, 520);
-        ctx.clip();
-        drawStickerFrontBody();
-
-        // Glue patch tint overlay visible right on the sticker surface
-        for (const g of level.gluePatches) {
-          const gx = level.xMin + g.p * level.span;
-          const activeNow = Math.abs(progress - g.p) <= g.halfWidth;
-          ctx.fillStyle = activeNow ? "rgba(245, 158, 11, 0.34)" : "rgba(245, 158, 11, 0.18)";
-          ctx.beginPath();
-          ctx.arc(gx, g.yOff, g.rad, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        // Soft cast shadow along the peeling fold crease
-        const shadowW = Math.min(26, 8 + progress * 22);
-        const shGrad = ctx.createLinearGradient(xc, 0, xc + shadowW, 0);
-        shGrad.addColorStop(0, "rgba(0, 0, 0, 0.42)");
-        shGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
-        ctx.fillStyle = shGrad;
-        ctx.fillRect(xc, -260, shadowW, 520);
-        ctx.restore();
-
-        // 2c. Reflected Peeled Flap (Authentic 2D Fold Backside!)
-        ctx.save();
-        ctx.translate(xc, 0);
-        ctx.scale(-1, 1);
-        ctx.translate(-xc, 0);
-        ctx.beginPath();
-        ctx.rect(-260, -260, xc + 260, 520);
-        ctx.clip();
-        drawStickerBackBody();
-
-        // Curved highlight along fold ridge
-        const ridgeGrad = ctx.createLinearGradient(xc - 18, 0, xc, 0);
-        ridgeGrad.addColorStop(0, "rgba(255,255,255,0)");
-        ridgeGrad.addColorStop(0.7, "rgba(255,255,255,0.38)");
-        ridgeGrad.addColorStop(1, "rgba(0,0,0,0.16)");
-        ctx.fillStyle = ridgeGrad;
-        ctx.fillRect(xc - 18, -260, 18, 520);
-        ctx.restore();
-
-        // 2d. Tear Stress Crack Visual Along Crease When Dangerously Tight or Ripped
-        if (tension > 0.52 || gameState === "ripped") {
-          const crackLen = gameState === "ripped" ? 44 : (tension - 0.52) * 58;
-          ctx.save();
-          ctx.strokeStyle = "#ef4444";
-          ctx.shadowColor = "#ef4444";
-          ctx.shadowBlur = 10;
-          ctx.lineWidth = 2.6;
-          ctx.beginPath();
-          ctx.moveTo(xc, level.tipY - 22);
-          ctx.lineTo(xc + crackLen * 0.45, level.tipY - 8);
-          ctx.lineTo(xc + crackLen * 0.25, level.tipY + 4);
-          ctx.lineTo(xc + crackLen, level.tipY + 18);
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        // 2e. Live Pull Handle Ring + Ideal Direction Arrow
-        if (gameState === "playing") {
-          const tip = getCurrentTipPeelSpace();
-          const idealAng = getIdealAngleAt(progress);
-
-          // Optional Golden Peel Guide Corridor & Ideal Pace Dot (Hint)
-          if (showGuide) {
-            ctx.save();
-            ctx.strokeStyle = "rgba(250, 204, 21, 0.72)";
-            ctx.lineWidth = 2.4;
-            ctx.setLineDash([6, 5]);
-            ctx.beginPath();
-            ctx.moveTo(tip.x, tip.y);
-            ctx.lineTo(tip.x + Math.cos(idealAng) * 110, tip.y + Math.sin(idealAng) * 110);
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            // Pacing beacon gliding smoothly at the exact safe speed!
-            const paceSpeed = (currentlyInGlue ? level.safeSpeed * 0.36 : level.safeSpeed * 0.65);
-            const paceDist = ((now / 1000) * paceSpeed) % 95;
-            ctx.fillStyle = "#facc15";
-            ctx.shadowColor = "#facc15";
-            ctx.shadowBlur = 10;
-            ctx.beginPath();
-            ctx.arc(
-              tip.x + Math.cos(idealAng) * (16 + paceDist),
-              tip.y + Math.sin(idealAng) * (16 + paceDist),
-              5.5, 0, Math.PI * 2
-            );
-            ctx.fill();
-            ctx.restore();
-          }
-
-          // Pulsing Grab Circle on Lifted Corner Tip
-          const ringColor = tension > 0.7 ? "#ef4444" : (currentlyInGlue ? "#f59e0b" : "#34d399");
-          const pulse = isDragging ? 0 : Math.sin(now * 0.007) * 3.5;
-
-          ctx.save();
-          ctx.translate(tip.x, tip.y);
-
-          // Directional pull chevron arrow ahead of tip
-          ctx.save();
-          ctx.rotate(idealAng);
-          ctx.strokeStyle = ringColor;
-          ctx.fillStyle = ringColor;
-          ctx.lineWidth = 2.4;
-          ctx.globalAlpha = isDragging ? 0.92 : 0.75;
-          ctx.beginPath();
-          ctx.moveTo(16, 0);
-          ctx.lineTo(36, 0);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.moveTo(41, 0);
-          ctx.lineTo(31, -5.5);
-          ctx.lineTo(31, 5.5);
-          ctx.closePath();
-          ctx.fill();
-          ctx.restore();
-
-          // Grab handle circle
-          ctx.strokeStyle = ringColor;
-          ctx.fillStyle = isDragging ? "rgba(52, 211, 153, 0.25)" : "rgba(15, 23, 42, 0.55)";
-          ctx.shadowColor = ringColor;
-          ctx.shadowBlur = 12;
-          ctx.lineWidth = 2.5;
-          ctx.beginPath();
-          ctx.arc(0, 0, 14 + pulse, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.shadowBlur = 0;
-          ctx.fillStyle = "#ffffff";
-          ctx.beginPath();
-          ctx.arc(0, 0, 4, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
-
-        ctx.restore(); // End Peel Space
       }
 
-      // 3. Spotless Victory Sparkles
-      sparkles = sparkles.filter((sp) => sp.alpha > 0.03);
+      // 2. Render Object + Active Protective Film / Fruit Spiral Skin
+      const layer = getCurrentLayer();
+      if (item.mode === "fruit") {
+        drawFruitSpiralScene(layer, now);
+      } else {
+        drawGleamingTechObject(item.tech, now);
+        if (!itemWon) {
+          // If twin-layer & still on layer 0, hint subtle double-film sheen underneath
+          if (activeLayerIdx === 0 && item.layers.length > 1) {
+            ctx.save();
+            traceTechClipPath(item.tech, 8);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.16)";
+            ctx.fill();
+            ctx.restore();
+          }
+          drawProtectiveFilmOverlay(layer, now);
+        }
+      }
+
+      // 3. Glowing Corner Pull-Tab Handle (Guides Player Smoothly Across Every Stage!)
+      if (!itemWon) {
+        const h = getActiveHandlePos();
+        const pulse = 1 + 0.12 * Math.sin(now * 0.008);
+        const tabCol = tension >= 70 ? "#ef4444" : (item.mode === "fruit" ? "#fde047" : layer.tint.tab);
+
+        ctx.save();
+        ctx.translate(h.x, h.y);
+        ctx.fillStyle = isPeeling ? "#ffffff" : tabCol;
+        ctx.strokeStyle = "#ffffff";
+        ctx.shadowColor = tabCol;
+        ctx.shadowBlur = isPeeling ? 18 : 12;
+        ctx.lineWidth = 2.6;
+        ctx.beginPath();
+        ctx.arc(0, 0, (isPeeling ? 16 : 15 * pulse), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Directional Arrow Inside Pull Handle
+        const ang = Math.atan2(h.ty, h.tx);
+        ctx.rotate(ang);
+        ctx.strokeStyle = isPeeling ? "#0f172a" : "#0f172a";
+        ctx.lineWidth = 2.6;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        ctx.moveTo(-4, -5); ctx.lineTo(4, 0); ctx.lineTo(-4, 5);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 4. Mirror-Shine Reveal Starlight Sparkles!
+      sparkles = sparkles.filter((sp) => sp.alpha > 0.04);
       for (const sp of sparkles) {
         sp.alpha *= 0.965;
-        const sc = sp.size * (0.7 + 0.3 * Math.sin(now * 0.012 + sp.phase));
+        const sc = sp.size * (0.7 + 0.35 * Math.sin(now * 0.012 + sp.phase));
         ctx.save();
         ctx.translate(sp.x, sp.y);
-        ctx.fillStyle = `rgba(254, 249, 195, ${sp.alpha})`;
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#fde047";
+        ctx.shadowBlur = 10;
+        ctx.globalAlpha = sp.alpha;
         ctx.beginPath();
-        ctx.moveTo(0, -sc);
-        ctx.lineTo(sc * 0.28, -sc * 0.28);
-        ctx.lineTo(sc, 0);
-        ctx.lineTo(sc * 0.28, sc * 0.28);
-        ctx.lineTo(0, sc);
-        ctx.lineTo(-sc * 0.28, sc * 0.28);
-        ctx.lineTo(-sc, 0);
-        ctx.lineTo(-sc * 0.28, -sc * 0.28);
+        ctx.moveTo(0, -sc); ctx.lineTo(sc * 0.28, -sc * 0.28);
+        ctx.lineTo(sc, 0); ctx.lineTo(sc * 0.28, sc * 0.28);
+        ctx.lineTo(0, sc); ctx.lineTo(-sc * 0.28, sc * 0.28);
+        ctx.lineTo(-sc, 0); ctx.lineTo(-sc * 0.28, -sc * 0.28);
         ctx.closePath();
         ctx.fill();
         ctx.restore();
       }
 
-      ctx.restore(); // End Viewport
-    }
-
-    let lastFrameTime = performance.now();
-    function frame(now) {
-      const dt = Math.min(0.05, (now - lastFrameTime) / 1000);
-      lastFrameTime = now;
-
-      // Gently relax tension when player pauses or releases finger
-      if (gameState === "playing") {
-        const idleSinceMove = (now - lastMoveTime) / 1000;
-        if (!isDragging || idleSinceMove > 0.08) {
-          tension = Math.max(0, tension - 0.72 * dt);
-          if (idleSinceMove > 0.1) stopPeelAudio();
-          updateTensionUI();
-        }
-      }
-
-      if (gameState === "won" && shineAnim > 0 && shineAnim < 1.35) {
-        shineAnim += dt * 1.35;
-      }
-
-      drawScene(now);
+      ctx.restore();
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadLevel(currentLevelNum);
+    loadItem(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
