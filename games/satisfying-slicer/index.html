@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oddly Satisfying Slicer — 500 ASMR Cutting Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 relaxing ASMR levels of Oddly Satisfying Slicer in your browser. Slice pastel soap bars, crunchy kinetic sand, wobbly jelly, and marbled clay into crisp equal pieces." />
+  <title>Satisfying Slicer — Free 500-Level ASMR Kinetic Sand &amp; Soap Cutting Game | ZinPlay</title>
+  <meta name="description" content="Play Satisfying Slicer free online with no download. Slice rainbow kinetic sand, artisan swirl soaps, crisp veggies, and patterned clay loaves across 500 ASMR cutting levels with live Web Audio on mobile &amp; Chromebook." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Satisfying Slicer",
+    "url": "https://zinplay.io/games/satisfying-slicer/",
+    "genre": ["ASMR", "Sensory Simulation", "Relaxation Game"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top HUD */
+    /* Top Cutting Board Studio HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #101726;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #141117;
+      color: #f8fafc;
+      border-bottom: 1px solid #2c2433;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #f472b6;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -63,70 +76,81 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(236, 72, 153, 0.18);
-      border: 1px solid rgba(244, 114, 182, 0.38);
+      background: rgba(244, 114, 182, 0.16);
+      border: 1px solid rgba(244, 114, 182, 0.36);
       color: #fbcfe8;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.clean-pill {
-      background: rgba(34, 197, 94, 0.18);
-      border-color: rgba(74, 222, 128, 0.42);
+    .hud-pill.acc-pill {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(56, 189, 248, 0.38);
+      color: #bae6fd;
+    }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
       color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Live Cut Goal & Precision Bar */
-    .goal-strip {
+    /* Slice Count & Precision Meter Strip */
+    .slice-strip {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: 10px;
-      padding: 10px 14px;
-      background: #162036;
-      border-bottom: 1px solid #1e293b;
+      padding: 9px 14px;
+      background: #1d1822;
+      border-bottom: 1px solid #332a3d;
       color: #e2e8f0;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 800;
-      flex-wrap: wrap;
     }
-    .goal-dots {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-    .cut-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #0b1120;
-      border: 2px solid #475569;
-      transition: all 0.2s ease;
-    }
-    .cut-dot.done {
-      background: #34d399;
-      border-color: #a7f3d0;
-      box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
-    }
-    .goal-target {
+    .slice-lbl {
+      min-width: 122px;
       color: #fde68a;
-      font-size: 0.76rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .slice-track {
+      flex: 1;
+      height: 10px;
+      background: #0d0a10;
+      border-radius: 999px;
+      border: 1px solid #3d324a;
+      overflow: hidden;
+    }
+    .slice-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ec4899 0%, #f59e0b 55%, #34d399 100%);
+      transition: width 0.14s ease-out;
+    }
+    .slice-cnt {
+      min-width: 58px;
+      text-align: right;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: #ffffff;
     }
 
-    /* Cutting Board Stage */
+    /* Walnut Cutting Board Canvas Stage */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 445px;
-      background: radial-gradient(circle at 50% 35%, #272235 0%, #141220 100%);
+      aspect-ratio: 1 / 1;
+      max-height: 495px;
+      background: radial-gradient(circle at 50% 45%, #2b211b 0%, #140f0c 100%);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
       -webkit-user-select: none;
-    }
-    @media (min-width: 640px) {
-      .canvas-container {
-        height: 495px;
-      }
     }
     #slicerCanvas {
       width: 100%;
@@ -136,25 +160,72 @@
       cursor: ns-resize;
     }
 
+    /* 3 Tactile Blade Selector Dock */
+    .blade-dock {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 11px 12px;
+      background: #15111a;
+      border-top: 1px solid #2b2333;
+    }
+    .blade-btn {
+      min-height: 54px;
+      padding: 6px 6px;
+      border-radius: 12px;
+      border: 1.5px solid #352b40;
+      background: #201a29;
+      color: #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
+    }
+    .blade-btn:active { transform: scale(0.95); }
+    .blade-btn.active {
+      border-color: #f472b6;
+      background: rgba(244, 114, 182, 0.22);
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(244, 114, 182, 0.28);
+    }
+    .blade-btn.active[data-blade="crinkle"] {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.2);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.28);
+    }
+    .blade-btn.active[data-blade="wire"] {
+      border-color: #fbbf24;
+      background: rgba(251, 191, 36, 0.22);
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.3);
+    }
+    .bl-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .bl-sub {
+      font-size: 0.62rem;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+    .blade-btn.active .bl-sub {
+      color: #f8fafc;
+    }
+
     .legend-strip {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #0d1322;
-      border-top: 1px solid #1e293b;
+      background: #0e0b12;
+      border-top: 1px solid #241d2b;
       font-size: 0.73rem;
       color: #94a3b8;
-    }
-    .leg-dot {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      vertical-align: middle;
-      margin-right: 4px;
     }
 
     .status-toast {
@@ -162,8 +233,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(14, 11, 18, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -177,14 +248,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
-    .stage-overlay {
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(10, 12, 24, 0.8);
+      background: rgba(12, 9, 16, 0.8);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -192,45 +261,29 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.32rem;
+    .win-stars {
+      font-size: 1.5rem;
+      letter-spacing: 0.14em;
       margin-bottom: 6px;
     }
-    .overlay-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 14px;
-    }
-    .accuracy-badge {
-      display: inline-block;
-      background: #eef2ff;
-      color: #4338ca;
-      font-size: 1.1rem;
-      font-weight: 900;
-      padding: 5px 16px;
-      border-radius: 999px;
-      margin-bottom: 14px;
-    }
-    .accuracy-badge.fail {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -259,7 +312,7 @@
       cursor: pointer;
     }
 
-    /* Level Picker Modal */
+    /* Block Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -271,9 +324,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -370,6 +421,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #141117;
+      border: 1px solid rgba(244, 114, 182, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #141117;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #1b1322 0%, #500724 100%);
+      color: #fce7f3;
+    }
+    .game-seo-banner.wood-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #1c1917 0%, #451a03 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fbcfe8;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .slice-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .slice-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .slice-table th, .slice-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .slice-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .slice-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -382,7 +513,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -395,63 +526,78 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Blocks &bull; ASMR Slicing</span>
+      <span class="cat-tag">500 Blocks &bull; ASMR Cutting Simulator</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
-      <h1>Oddly Satisfying Slicer</h1>
-      <p>Slide the blade cleanly down through pastel soap bars, crunchy kinetic sand, and wobbly jelly to carve perfectly even slices.</p>
+      <h1>Satisfying Slicer</h1>
+      <p>Swipe downward cleanly along every golden cut line to slice rainbow kinetic sand, artisan swirl soaps, crisp veggies, and hidden-core polymer clay with realistic Web Audio ASMR.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Oddly Satisfying Slicer Game">
+    <section class="game-wrapper" aria-label="Satisfying Slicer ASMR Cutting Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Pastel Soap Studio</span>
-          <span id="levelTitle">Block #1 / 500 — Lavender Soap Bar</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Rainbow Kinetic Sand</span>
+          <span id="levelTitle">Block #1 / 500 — Pastel Kinetic Sand Brick</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="piecesPill">Goal: 4 Equal Pieces</span>
-          <span class="hud-pill clean-pill" id="solvedCounter">Sliced: 0 / 500</span>
+          <span class="hud-pill acc-pill" id="accPill">Precision: 100%</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Sliced: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Cut Counter & Target Precision Strip -->
-      <div class="goal-strip">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span id="cutsLeftLabel">Cuts: 0 / 3</span>
-          <div id="goalDots" class="goal-dots"></div>
+      <!-- Slice Progress Meter -->
+      <div class="slice-strip">
+        <span id="sliceLbl" class="slice-lbl">🔪 Swipe Down Along Guide</span>
+        <div class="slice-track">
+          <div id="sliceFill" class="slice-fill"></div>
         </div>
-        <span id="targetAccLabel" class="goal-target">Precision Needed: 78%+</span>
+        <span id="sliceCnt" class="slice-cnt">0 / 6</span>
       </div>
 
+      <!-- Walnut Chef's Cutting Board Canvas -->
       <div class="canvas-container">
         <canvas id="slicerCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Result Overlay -->
-        <div id="stageOverlay" class="stage-overlay">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.3rem; margin-bottom:6px;">🧼</div>
-            <h2 id="ovHeading">Crisp Slices!</h2>
-            <div id="ovScoreBadge" class="accuracy-badge">96% Even</div>
-            <p id="ovText">Every piece separated with buttery ASMR precision.</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Next Block →</button>
+        <!-- Master Slicer Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div id="winStars" class="win-stars">⭐⭐⭐</div>
+            <h2 id="winHeading">Perfect ASMR Slices!</h2>
+            <p id="winText">Every slice fell cleanly across the walnut board in rhythmic perfection.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Block →</button>
           </div>
         </div>
       </div>
 
+      <!-- 3 Selectable Tactile Blades Dock -->
+      <div id="bladeDock" class="blade-dock" role="group" aria-label="Cutting Blades">
+        <button class="blade-btn active" data-blade="chef" type="button">
+          <span class="bl-title">🔪 Chef Knife</span>
+          <span class="bl-sub">Crisp Straight Cut</span>
+        </button>
+        <button class="blade-btn" data-blade="crinkle" type="button">
+          <span class="bl-title">〰️ Crinkle Blade</span>
+          <span class="bl-sub">Wavy Ribbed Edge</span>
+        </button>
+        <button class="blade-btn" data-blade="wire" type="button">
+          <span class="bl-title">🔥 Thermal Wire</span>
+          <span class="bl-sub">Silky Warm Melt</span>
+        </button>
+      </div>
+
       <div class="legend-strip">
-        <span><i class="leg-dot" style="background:#38bdf8"></i>Drag Straight Down to Slice</span>
-        <span><i class="leg-dot" style="background:#facc15"></i>Aim for Equal Piece Widths</span>
-        <span><i class="leg-dot" style="background:#e2e8f0"></i>Avoid Solid Pearls (Ch. 4+)</span>
+        <span>👆 Drag Down Smoothly Through the Glowing Cut Line</span>
+        <span>⚡ Or Tap `Space` / Double-Tap Guide for Quick Chop</span>
+        <span>🎧 5 Distinct Material ASMR Audio Textures</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="undoBtn" class="btn-outline" type="button">← Undo Cut</button>
           <button id="resetBtn" class="btn-outline" type="button">↺ Fresh Block</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Cut Guide</button>
+          <button id="autoChopBtn" class="btn-outline" type="button">⚡ Rhythm Chop</button>
         </div>
         <button id="soundBtn" class="btn-outline" type="button">🔊 ASMR ON</button>
       </div>
@@ -468,61 +614,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 850+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/satisfying-slicer-banner-1.jpg"
+            alt="Satisfying Slicer online ASMR cutting game showing a steel chef knife slicing through rainbow kinetic sand and lavender swirl soap on a walnut board"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Sensory Slicing Stages — Real-Time Material ASMR Audio</h3>
+          <p>Glide smoothly down kinetic sand, creamy soap bars, crisp veggies, and hidden polymer clay patterns to watch freshly cut slices tumble across the board.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Oddly Satisfying Slicer (500 Levels)</h2>
-        <p>Oddly Satisfying Slicer blends tactile visual ASMR with razor-sharp spatial estimation across 500 handcrafted blocks. Each stage places a fresh slab of artisan soap, rainbow kinetic sand, glistening jelly, floral foam, or marbled polymer clay onto the cutting board. Your task is to slice it cleanly into the requested number of <strong>equal-sized pieces</strong>.</p>
+        <h2>What Is Satisfying Slicer? A Kinetic Sand &amp; Soap Cutting ASMR Game Online</h2>
+        <p><strong>Satisfying Slicer</strong> is a free <strong>kinetic sand and soap cutting ASMR game online</strong> built to deliver the crisp acoustic crunch and tactile visual bliss of viral slicing videos straight inside your web browser. Rested across a warm walnut cutting board are <strong>500 layered sensory blocks</strong>—from shimmering pastel kinetic sand bricks and marbled botanical soap loaves to crisp garden cucumbers, sushi rolls, and polymer clay canes hiding secret citrus, star, and heart cross-sections inside.</p>
+        <p>Instead of passive automatic tapping, Satisfying Slicer puts your fingertip directly on the blade spine: drag smoothly downward through the glowing golden guide line to feel your speed modulate the real-time <strong>Web Audio API sound synthesis</strong>—granular sparkling sand crunches, creamy soap whispers, crisp moist vegetable snaps, and a resonant wooden cutting-board <em>thock</em> the instant each slice tumbles cleanly to the right!</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>5 Material Textures &amp; 3 Tactile Cutting Blades Guide</h2>
+        <p>Every chapter introduces a new physical material with custom particle behavior and tailored acoustic synthesis, while three interchangeable blades let you customize both the sliced edge profile and sound signature anytime (or press keys <code>1</code>, <code>2</code>, <code>3</code> on desktop):</p>
+
+        <div class="slice-table-wrap">
+          <table class="slice-table">
+            <thead>
+              <tr>
+                <th>Material / Blade</th>
+                <th>Visual Reaction on the Board</th>
+                <th>Synthesized Web Audio ASMR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🏜️ Kinetic Sand Bricks</strong> (Ch. 1)</td>
+                <td>Clean layered slabs fall away while sparkling pastel sand granules cascade onto the wood.</td>
+                <td>Dry, dense granular micro-crunch modulated live by blade descent speed!</td>
+              </tr>
+              <tr>
+                <td><strong>🧼 Artisan Swirl Soaps</strong> (Ch. 2)</td>
+                <td>Waxy pastel bars detach with curling translucent shavings and glossy marbled edges.</td>
+                <td>Crisp waxy scrape followed by a soft hollow soap-cube knock.</td>
+              </tr>
+              <tr>
+                <td><strong>🥒 Crisp Kitchen Prep</strong> (Ch. 3)</td>
+                <td>Cucumbers, carrots, butter sticks, and sushi rolls reveal crisp moist seeds and fillings.</td>
+                <td>High-frequency hydrated vegetable snap + resonant maple board thud!</td>
+              </tr>
+              <tr>
+                <td><strong>🎨 Hidden-Core Clay Canes</strong> (Ch. 4–5)</td>
+                <td>Opaque outer clay shells reveal vibrant hidden star, citrus, and rainbow bullseye cross-sections!</td>
+                <td>Smooth dense studio-clay whisper with silky edge release.</td>
+              </tr>
+              <tr>
+                <td><strong>🔪 Chef / 〰️ Crinkle / 🔥 Wire</strong></td>
+                <td>Carves razor-straight faces, ribbed crinkle-fry ridges, or glowing warm butter-smooth edges!</td>
+                <td>Shifts acoustic sharpness from bright steel ring to gentle heated sizzle.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Chef's Precision Tip:</strong> Watch the glowing golden vertical guide line near the right end of each loaf—aiming your downward swipe right over the guide nails a <strong>95%+ Precision</strong> rating for <strong>⭐⭐⭐ Master Slicer</strong> stars! Prefer hands-free rhythmic chopping on desktop or one-handed mobile play? Tap <strong>⚡ Rhythm Chop</strong> (or tap <code>Space</code>) to execute a crisp automated downward cut anytime.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner wood-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/satisfying-slicer-banner-2.jpg"
+            alt="Half-sliced rainbow kinetic sand, artisan soap block, crisp cucumber, and patterned clay cane with three blades in Satisfying Slicer"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Revealing Hidden Cross-Sections &amp; Custom Wavy Crinkle Cuts</h3>
+          <p>Switch seamlessly between Damascus steel, wavy crinkle blades, and glowing thermal wire cutters across 500 relaxing zero-timer stages.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Sensory Chapters (500 Unique Cutting Blocks)</h2>
+        <p>Every block from #1 to #500 generates unique color stripes, inner core motifs, slice counts, and thickness rhythms saved privately inside your browser's local storage:</p>
         <ul>
-          <li><strong>Fluid Downward Slicing:</strong> Touch or click anywhere above or on the block to position your gleaming blade, then glide straight downward to press through the material. Watch soap ribbons curl, rainbow sand grains cascade, and jelly slabs wobble as each piece separates onto the cutting board!</li>
-          <li><strong>Real-Time ASMR Audio Textures:</strong> Turn on your sound to hear five distinct procedural textures synthesized live via Web Audio—silky soap glides, crisp granular kinetic sand crunches, airy floral foam crackles, soft jelly squishes, and a rich wooden board <em>THOCK</em> at the bottom of every cut.</li>
-          <li><strong>Avoid Embedded Pearls (Chapter 4+):</strong> High-tier artisan bars contain solid glass pearls or almonds hidden inside the loaf (visible as subtle glowing silhouettes). Because every pearl sits safely inside the center of an ideal slice, making crisp equal cuts will always glide right between them without clinking the blade!</li>
+          <li><strong>Chapter 1 (Blocks 1–100 — Rainbow Kinetic Sand):</strong> Wide 5-to-6 slice pastel sand bricks with forgiving guide corridors and generous tumbling sparkle granules.</li>
+          <li><strong>Chapter 2 (Blocks 101–200 — Artisan Swirl Soaps):</strong> Fragrant lavender, rosewater, charcoal, and seafoam soap loaves that shed delicate glossy shavings on every pass.</li>
+          <li><strong>Chapter 3 (Blocks 201–300 — Crisp Culinary Prep):</strong> Fresh cucumbers, golden carrots, creamy butter sticks, and salmon maki sushi rolls featuring alternating thin and thick chef cuts.</li>
+          <li><strong>Chapter 4 (Blocks 301–400 — Hidden-Core Clay Canes):</strong> Mystery polymer clay cylinders whose vibrant internal fruit, star, and spiral artworks appear only as each slice tips open!</li>
+          <li><strong>Chapter 5 (Blocks 401–500 — Master Layered Artisan Loaves):</strong> Extended 9-to-11 slice multi-stripe rainbow masterpieces mixing wafer-thin precision trims and bold chunky slabs—complete with an instant 1–500 block picker.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related ASMR Slicing Topics">
+          <span class="kw-pill">Kinetic Sand Cutting Game Online</span>
+          <span class="kw-pill">Soap Cutting ASMR Simulator Free</span>
+          <span class="kw-pill">Satisfying Chopping Browser Game</span>
+          <span class="kw-pill">Polymer Clay Slicing ASMR</span>
+          <span class="kw-pill">Web Audio Crunch Relaxation Game</span>
+          <span class="kw-pill">No-Download Chromebook ASMR Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Satisfying Slicer FAQ</h2>
         <details class="faq-item">
-          <summary>What happens if I start slicing in the wrong spot?</summary>
-          <div class="faq-answer">If you lift your finger before slicing halfway through the block, the blade gently pulls back without consuming a cut. You can also tap <strong>← Undo Cut</strong> anytime to re-join your last slice!</div>
+          <summary>How do I slice a block slowly to hear the full ASMR crunch?</summary>
+          <div class="faq-answer">Touch near the top of the glowing golden guide line and glide your finger or mouse slowly downward toward the bottom of the cutting board. The blade follows your exact speed and synthesizes live granular sand crunches or waxy soap scrapes all the way through!</div>
         </details>
         <details class="faq-item">
-          <summary>How is the Evenness Precision score calculated?</summary>
-          <div class="faq-answer">Once you complete the required number of cuts, the game compares every piece's width against the ideal equal width. Tap <strong>💡 Cut Guide</strong> anytime to illuminate golden vertical guide markers for pinpoint accuracy.</div>
+          <summary>What is the difference between Chef Knife, Crinkle Blade, and Thermal Wire?</summary>
+          <div class="faq-answer">All three blades cut every material smoothly, yet each transforms the sensory experience: <strong>🔪 Chef Knife</strong> makes razor-straight cuts, <strong>〰️ Crinkle Blade</strong> leaves satisfying scalloped ridges on fallen slices, and <strong>🔥 Thermal Wire</strong> glides with a warm golden glow and silky sizzle!</div>
+        </details>
+        <details class="faq-item">
+          <summary>How do I earn 3 Stars (⭐⭐⭐) on a cutting block?</summary>
+          <div class="faq-answer">Keep your downward slice aligned closely with the glowing golden target cut line! Achieving an average cut precision of <strong>90% or higher</strong> across the entire block awards a 3-star Master Slicer rating.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I play Satisfying Slicer on mobile phones and Chromebooks without downloading an app?</summary>
+          <div class="faq-answer">Yes! Satisfying Slicer runs natively at 60 FPS inside Android Chrome, iOS Safari, and Chromebook browsers with zero app downloads and automatic private local storage saves across all 500 blocks.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🍊</div><span class="cat-tag">ASMR</span></div>
+        <h3>The Perfect Peel</h3>
+        <p>Peel glossy protective films and continuous fruit ribbons in one smooth, unbroken sheet.</p>
+        <a href="/games/perfect-peel/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🎟️</div><span class="cat-tag">ASMR</span></div>
         <h3>The Perfect Tear</h3>
-        <p>Tear vintage tickets, receipts, and stamps cleanly along perforated lines at a 45° rhythm.</p>
+        <p>Tear vintage cinema tickets, receipts, and postage stamps cleanly along perforated lines.</p>
         <a href="/games/perfect-tear/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💦</div><span class="cat-tag">ASMR</span></div>
-        <h3>ASMR PowerWash</h3>
-        <p>Blast mud, moss, and rust off rugs, antique coins, and classic cars across 500 wash jobs.</p>
-        <a href="/games/powerwash-asmr/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🏷️</div><span class="cat-tag">ASMR</span></div>
-        <h3>The Perfect Peel</h3>
-        <p>Peel glossy screen protectors and sticky price tags cleanly without tearing across 500 levels.</p>
-        <a href="/games/perfect-peel/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🕰️</div><span class="cat-tag">ASMR</span></div>
+        <h3>Antique Restorer</h3>
+        <p>Scrub oxidation, polish brass, and fit tiny gears back into vintage pocket watches.</p>
+        <a href="/games/antique-restorer/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
   <!-- Block Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Block Level">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Slicing Block">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Block (1 – 500)</h3>
+        <h3>Choose Slicing Block (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
@@ -546,12 +794,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top ASMR</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/powerwash-asmr/">PowerWash ASMR</a></li>
+            <li><a href="/games/perfect-peel/">The Perfect Peel</a></li>
+            <li><a href="/games/perfect-tear/">The Perfect Tear</a></li>
+            <li><a href="/games/satisfying-slicer/">Satisfying Slicer</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -560,7 +808,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -593,86 +841,48 @@
     }
 
     // ==============================================
-    // MATERIALS & 500-BLOCK DETERMINISTIC GENERATOR
+    // 500-BLOCK ASMR KINETIC SAND, SOAP & CLAY SLICER ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
     const WORLD_W = 420;
-    const WORLD_H = 445;
-
-    // 3D Isometric Block Layout Metrics
-    const BLOCK_X = 36;
-    const BLOCK_W = 280;
-    const BLOCK_H = 112;
-    const BLOCK_TOP_Y = 194;
-    const DEPTH_X = 24;
-    const DEPTH_Y = -28;
-    const BOARD_BOTTOM_Y = BLOCK_TOP_Y + BLOCK_H;
+    const WORLD_H = 420;
+    const LOAF_Y = 212;
+    const LOAF_H = 128;
+    const LOAF_DEPTH = 30;
+    const LOAF_TOP = LOAF_Y - LOAF_H / 2;
+    const LOAF_BOT = LOAF_Y + LOAF_H / 2;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Pastel Soap Studio", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Kinetic Sand Crunch", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Wobbly Jelly Bar", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Hidden Cores", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Grand ASMR Chef", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Rainbow Kinetic Sand", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Artisan Swirl Soaps", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Crisp Kitchen Prep", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Hidden-Core Clay Canes", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Rainbow Loaves", range: "401–500", start: 401, end: 500 }
     ];
 
     const MATERIALS = {
-      soapLavender: {
-        kind: "soap", name: "Lavender Soap Bar", emoji: "🧼",
-        top: "#ddd6fe", front: "#a78bfa", side: "#7c3aed", stripe: "#f5f3ff",
-        translucent: false, jiggle: false, particle: "curl"
-      },
-      soapMint: {
-        kind: "soap", name: "Spearmint Soap Bar", emoji: "🧼",
-        top: "#a7f3d0", front: "#34d399", side: "#059669", stripe: "#ecfdf5",
-        translucent: false, jiggle: false, particle: "curl"
-      },
-      soapPeach: {
-        kind: "soap", name: "Peach Cream Soap", emoji: "🧼",
-        top: "#fed7aa", front: "#fb923c", side: "#c2410c", stripe: "#fff7ed",
-        translucent: false, jiggle: false, particle: "curl"
-      },
-      sandRainbow: {
-        kind: "sand", name: "Rainbow Kinetic Sand", emoji: "⏳",
-        top: "#f472b6", front: "#ec4899", side: "#be185d",
-        layers: ["#f472b6", "#fb923c", "#facc15", "#34d399", "#38bdf8"],
-        translucent: false, jiggle: false, particle: "crumb"
-      },
-      sandSunset: {
-        kind: "sand", name: "Desert Kinetic Sand", emoji: "⏳",
-        top: "#fde047", front: "#f59e0b", side: "#b45309",
-        layers: ["#fef08a", "#fb923c", "#f43f5e", "#a855f7"],
-        translucent: false, jiggle: false, particle: "crumb"
-      },
-      foamEmerald: {
-        kind: "foam", name: "Craft Floral Foam", emoji: "🟩",
-        top: "#86efac", front: "#22c55e", side: "#15803d", stripe: "#dcfce7",
-        translucent: false, jiggle: false, particle: "dust"
-      },
-      jellyRuby: {
-        kind: "jelly", name: "Strawberry Wobbly Jelly", emoji: "🍓",
-        top: "rgba(251, 113, 133, 0.86)", front: "rgba(225, 29, 72, 0.78)", side: "rgba(159, 18, 57, 0.88)", stripe: "#ffe4e6",
-        translucent: true, jiggle: true, particle: "drop"
-      },
-      jellyBlue: {
-        kind: "jelly", name: "Blueberry Crystal Jelly", emoji: "🫐",
-        top: "rgba(125, 211, 252, 0.86)", front: "rgba(14, 165, 233, 0.76)", side: "rgba(3, 105, 161, 0.88)", stripe: "#e0f2fe",
-        translucent: true, jiggle: true, particle: "drop"
-      },
-      jellyLime: {
-        kind: "jelly", name: "Kiwi Glossy Jelly", emoji: "🥝",
-        top: "rgba(190, 242, 100, 0.86)", front: "rgba(101, 163, 13, 0.76)", side: "rgba(63, 98, 18, 0.88)", stripe: "#ecfccb",
-        translucent: true, jiggle: true, particle: "drop"
-      },
-      clayMarble: {
-        kind: "clay", name: "Marbled Artisan Clay", emoji: "🎨",
-        top: "#c4b5fd", front: "#6366f1", side: "#3730a3",
-        layers: ["#38bdf8", "#818cf8", "#f472b6", "#c084fc"],
-        translucent: false, jiggle: false, particle: "curl"
-      }
+      sand: [
+        { name: "Pastel Kinetic Sand Brick",  kind: "sand", bands: ["#f472b6", "#fb923c", "#facc15", "#34d399", "#38bdf8"], dark: "#9d174d", core: "stripes" },
+        { name: "Galaxy Kinetic Sand Block",  kind: "sand", bands: ["#818cf8", "#c084fc", "#f472b6", "#38bdf8", "#2dd4bf"], dark: "#312e81", core: "stripes" },
+        { name: "Sunset Coral Sand Loaf",     kind: "sand", bands: ["#fb7185", "#fdba74", "#fef08a", "#fca5a5", "#f97316"], dark: "#9a3412", core: "stripes" }
+      ],
+      soap: [
+        { name: "Lavender Swirl Soap Bar",    kind: "soap", bands: ["#c084fc", "#e9d5ff", "#a855f7", "#f3e8ff"], dark: "#581c87", core: "swirl" },
+        { name: "Mint Seafoam Artisan Soap",  kind: "soap", bands: ["#34d399", "#d1fae5", "#14b8a6", "#a7f3d0"], dark: "#065f46", core: "swirl" },
+        { name: "Rosewater Cream Soap Loaf",  kind: "soap", bands: ["#fb7185", "#ffe4e6", "#f43f5e", "#fecdd3"], dark: "#881337", core: "swirl" }
+      ],
+      veggie: [
+        { name: "Crisp Garden Cucumber",      kind: "veggie", bands: ["#15803d", "#22c55e", "#166534"], dark: "#052e16", core: "cucumber", inner: "#dcfce7", seed: "#86efac" },
+        { name: "Sweet Harvest Carrot",       kind: "veggie", bands: ["#ea580c", "#f97316", "#c2410c"], dark: "#7c2d12", core: "carrot",   inner: "#fb923c", seed: "#fde047" },
+        { name: "Salmon Maki Sushi Roll",     kind: "veggie", bands: ["#0f172a", "#1e293b", "#0f172a"], dark: "#020617", core: "sushi",    inner: "#f8fafc", seed: "#fb7185" },
+        { name: "Golden Cultured Butter",     kind: "veggie", bands: ["#fef08a", "#fde047", "#facc15"], dark: "#a16207", core: "butter",   inner: "#fef9c3", seed: "#fde047" }
+      ],
+      clay: [
+        { name: "Citrus Star Clay Cane",      kind: "clay", bands: ["#0284c7", "#38bdf8", "#0369a1"], dark: "#0c4a6e", core: "citrus",   inner: "#fb923c", seed: "#fef08a" },
+        { name: "Emerald Bullseye Polymer",   kind: "clay", bands: ["#059669", "#10b981", "#047857"], dark: "#064e3b", core: "bullseye", inner: "#f472b6", seed: "#fef08a" },
+        { name: "Velvet Starlight Clay Roll", kind: "clay", bands: ["#4c1d95", "#6d28d9", "#3b0764"], dark: "#2e1065", core: "star",     inner: "#fde047", seed: "#38bdf8" }
+      ]
     };
-
-    const ALL_MAT_KEYS = Object.keys(MATERIALS);
 
     function mulberry32(seed) {
       let a = seed >>> 0;
@@ -684,81 +894,54 @@
       };
     }
 
-    function buildBlockLevel(levelNum) {
-      const rng = mulberry32(levelNum * 73303 + 19457);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1);
+    function buildSliceBlock(levelNum) {
+      const rng = mulberry32(levelNum * 349123 + 71287);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
 
-      let matKey, piecesGoal, targetAcc, showRulerTicks, coreCount;
-
-      if (levelNum <= 100) {
-        const pool = ["soapLavender", "soapMint", "soapPeach", "clayMarble"];
-        matKey = pool[Math.floor(rng() * pool.length)];
-        piecesGoal = levelNum <= 25 ? 3 : (levelNum <= 65 ? 4 : 5);
-        targetAcc = Math.round(76 + (levelNum / 100) * 6); // 76% -> 82%
-        showRulerTicks = levelNum <= 60;
-        coreCount = 0;
-      } else if (levelNum <= 200) {
-        const pool = ["sandRainbow", "sandSunset", "foamEmerald", "soapMint"];
-        matKey = pool[Math.floor(rng() * pool.length)];
-        piecesGoal = 4 + Math.floor(rng() * 3); // 4..6 pieces
-        targetAcc = Math.round(80 + ((levelNum - 100) / 100) * 5); // 80% -> 85%
-        showRulerTicks = false;
-        coreCount = 0;
-      } else if (levelNum <= 300) {
-        const pool = ["jellyRuby", "jellyBlue", "jellyLime", "sandRainbow"];
-        matKey = pool[Math.floor(rng() * pool.length)];
-        piecesGoal = 5 + Math.floor(rng() * 3); // 5..7 pieces
-        targetAcc = Math.round(82 + ((levelNum - 200) / 100) * 5); // 82% -> 87%
-        showRulerTicks = false;
-        coreCount = 0;
-      } else if (levelNum <= 400) {
-        const pool = ["soapLavender", "soapPeach", "sandRainbow", "clayMarble", "jellyRuby"];
-        matKey = pool[Math.floor(rng() * pool.length)];
-        piecesGoal = 5 + Math.floor(rng() * 3); // 5..7 pieces
-        targetAcc = Math.round(84 + ((levelNum - 300) / 100) * 5); // 84% -> 89%
-        showRulerTicks = false;
-        coreCount = levelNum > 350 ? 2 : 1;
+      let matPool, sliceCount, variedWidths;
+      if (chapIdx === 0) {
+        matPool = MATERIALS.sand;
+        sliceCount = levelNum <= 45 ? 5 : 6;
+        variedWidths = false;
+      } else if (chapIdx === 1) {
+        matPool = MATERIALS.soap;
+        sliceCount = levelNum <= 150 ? 6 : 7;
+        variedWidths = false;
+      } else if (chapIdx === 2) {
+        matPool = MATERIALS.veggie;
+        sliceCount = 7;
+        variedWidths = true;
+      } else if (chapIdx === 3) {
+        matPool = MATERIALS.clay;
+        sliceCount = 8;
+        variedWidths = true;
       } else {
-        matKey = ALL_MAT_KEYS[Math.floor(rng() * ALL_MAT_KEYS.length)];
-        piecesGoal = 6 + Math.floor(rng() * 4); // 6..9 pieces
-        targetAcc = Math.round(86 + ((levelNum - 400) / 100) * 6); // 86% -> 92%
-        showRulerTicks = false;
-        coreCount = levelNum > 450 ? 3 : 2;
+        const all = [...MATERIALS.sand, ...MATERIALS.soap, ...MATERIALS.veggie, ...MATERIALS.clay];
+        matPool = all;
+        sliceCount = levelNum > 450 ? 10 : 9;
+        variedWidths = true;
       }
 
-      const mat = MATERIALS[matKey];
-      const cutsGoal = piecesGoal - 1;
-      const idealPieceW = BLOCK_W / piecesGoal;
-
-      // Embed solid pearls strictly at the CENTER of selected ideal slices (100% fair!)
-      const cores = [];
-      if (coreCount > 0) {
-        const slots = Array.from({ length: piecesGoal }, (_, i) => i);
-        for (let i = slots.length - 1; i > 0; i--) {
-          const j = Math.floor(rng() * (i + 1));
-          [slots[i], slots[j]] = [slots[j], slots[i]];
-        }
-        const chosenSlots = slots.slice(0, Math.min(coreCount, piecesGoal));
-        const maxR = Math.min(11, idealPieceW * 0.24);
-        chosenSlots.forEach((slotIdx) => {
-          cores.push({
-            // Local X along the uncut block [0 .. BLOCK_W]
-            localX: (slotIdx + 0.5) * idealPieceW,
-            localY: BLOCK_H * (0.36 + rng() * 0.28),
-            r: maxR
-          });
-        });
+      const mat = matPool[(levelNum + Math.floor(rng() * 2)) % matPool.length];
+      const totalLen = 236;
+      const widths = [];
+      let rawSum = 0;
+      for (let i = 0; i < sliceCount; i++) {
+        const w = variedWidths ? (0.72 + rng() * 0.62) : 1;
+        widths.push(w);
+        rawSum += w;
       }
+      // Normalize slice widths cleanly across total block length!
+      const sliceWidths = widths.map((w) => (w / rawSum) * totalLen);
 
       return {
         levelNum,
+        chapIdx,
         mat,
-        piecesGoal,
-        cutsGoal,
-        idealPieceW,
-        targetAcc,
-        showRulerTicks,
-        cores
+        sliceCount,
+        sliceWidths,
+        totalLen,
+        tolerancePx: chapIdx === 0 ? 17 : (chapIdx <= 2 ? 14 : 11.5)
       };
     }
 
@@ -767,15 +950,11 @@
     }
 
     // ==============================================
-    // PROCEDURAL ASMR MATERIAL SLICING AUDIO ENGINE
+    // 5-MATERIAL PROCEDURAL ASMR SLICING WEB AUDIO
     // ==============================================
     let audioCtx = null;
-    let noiseBuf = null;
-    let sliceSrc = null;
-    let sliceFilter = null;
-    let sliceGain = null;
     let soundOn = true;
-    let lastGrainMs = 0;
+    let cutLoopNodes = null;
 
     function initAudio() {
       if (!audioCtx) {
@@ -783,183 +962,148 @@
         if (AC) audioCtx = new AC();
       }
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-
-      if (audioCtx && !noiseBuf) {
-        const len = audioCtx.sampleRate * 2;
-        noiseBuf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-        const d = noiseBuf.getChannelData(0);
-        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-      }
-
-      if (audioCtx && noiseBuf && !sliceSrc) {
-        sliceSrc = audioCtx.createBufferSource();
-        sliceSrc.buffer = noiseBuf;
-        sliceSrc.loop = true;
-
-        sliceFilter = audioCtx.createBiquadFilter();
-        sliceFilter.type = "bandpass";
-        sliceFilter.frequency.value = 1400;
-        sliceFilter.Q.value = 1.5;
-
-        sliceGain = audioCtx.createGain();
-        sliceGain.gain.value = 0.0001;
-
-        sliceSrc.connect(sliceFilter);
-        sliceFilter.connect(sliceGain);
-        sliceGain.connect(audioCtx.destination);
-        sliceSrc.start();
-      }
     }
 
-    function updateSliceAudio(speedPx, matKind) {
-      if (!soundOn || !audioCtx || !sliceGain || !sliceFilter) return;
-      const now = audioCtx.currentTime;
-      const active = Math.min(1, speedPx / 180);
-      if (active < 0.04) {
-        sliceGain.gain.setTargetAtTime(0.0001, now, 0.03);
+    function ensureCutLoop() {
+      initAudio();
+      if (!audioCtx || cutLoopNodes) return;
+
+      const len = audioCtx.sampleRate * 2;
+      const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) {
+        // Granular texture buffer suited for crunch, scrape, and sizzle!
+        data[i] = (Math.random() * 2 - 1) * (Math.random() < 0.12 ? 1.45 : 0.42);
+      }
+
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+
+      const bp = audioCtx.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.frequency.value = 1800;
+      bp.Q.value = 1.2;
+
+      const g = audioCtx.createGain();
+      g.gain.value = 0;
+
+      src.connect(bp);
+      bp.connect(g);
+      g.connect(audioCtx.destination);
+      src.start();
+
+      cutLoopNodes = { bp, g };
+    }
+
+    function updateSliceAudio(active, speedRatio, matKind, bladeKey) {
+      if (!soundOn || !active || speedRatio < 0.03) {
+        if (cutLoopNodes && audioCtx) {
+          cutLoopNodes.g.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.025);
+        }
         return;
       }
+      ensureCutLoop();
+      if (!cutLoopNodes || !audioCtx) return;
 
-      if (matKind === "sand") {
-        // Crisp crunchy kinetic sand
-        sliceFilter.frequency.setTargetAtTime(2800 + active * 1400, now, 0.025);
-        sliceFilter.Q.setTargetAtTime(0.85, now, 0.03);
-        sliceGain.gain.setTargetAtTime(0.06 + active * 0.14, now, 0.02);
-
-        // Micro sand-grain crackle ticks
-        const ms = performance.now();
-        if (ms - lastGrainMs > 32) {
-          lastGrainMs = ms;
-          const s = audioCtx.createBufferSource();
-          s.buffer = noiseBuf;
-          const hp = audioCtx.createBiquadFilter();
-          hp.type = "highpass";
-          hp.frequency.value = 3400;
-          const g = audioCtx.createGain();
-          g.gain.setValueAtTime(0.055, now);
-          g.gain.exponentialRampToValueAtTime(0.001, now + 0.016);
-          s.connect(hp); hp.connect(g); g.connect(audioCtx.destination);
-          s.start(now, Math.random() * 1.4, 0.02);
-        }
-      } else if (matKind === "foam") {
-        // Airy floral foam crisp whisper
-        sliceFilter.frequency.setTargetAtTime(3400 + active * 900, now, 0.025);
-        sliceFilter.Q.setTargetAtTime(1.2, now, 0.03);
-        sliceGain.gain.setTargetAtTime(0.05 + active * 0.12, now, 0.02);
-      } else if (matKind === "jelly") {
-        // Smooth moist low-mid glide
-        sliceFilter.frequency.setTargetAtTime(680 + active * 380, now, 0.03);
-        sliceFilter.Q.setTargetAtTime(3.2, now, 0.04);
-        sliceGain.gain.setTargetAtTime(0.04 + active * 0.09, now, 0.025);
+      const now = audioCtx.currentTime;
+      let baseF = 1650;
+      let qVal = 1.1;
+      if (bladeKey === "wire") {
+        baseF = 3400; qVal = 2.6; // Silky warm sizzle
+      } else if (matKind === "sand") {
+        baseF = 1550; qVal = 0.85; // Rich granular sand crunch
+      } else if (matKind === "soap") {
+        baseF = 2400; qVal = 1.6; // Creamy waxy scrape
+      } else if (matKind === "veggie") {
+        baseF = 2900; qVal = 1.3; // Crisp wet veggie snap
       } else {
-        // Buttery pastel soap / clay slice
-        sliceFilter.frequency.setTargetAtTime(1350 + active * 700, now, 0.03);
-        sliceFilter.Q.setTargetAtTime(2.0, now, 0.03);
-        sliceGain.gain.setTargetAtTime(0.045 + active * 0.1, now, 0.025);
+        baseF = 1150; qVal = 1.4; // Smooth dense clay whisper
       }
+
+      cutLoopNodes.bp.frequency.setTargetAtTime(baseF + Math.min(1800, speedRatio * 1400), now, 0.03);
+      cutLoopNodes.bp.Q.setTargetAtTime(qVal, now, 0.03);
+      cutLoopNodes.g.gain.setTargetAtTime(Math.min(0.24, 0.05 + speedRatio * 0.16), now, 0.02);
     }
 
-    function stopSliceAudio() {
-      if (audioCtx && sliceGain) {
-        sliceGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.025);
-      }
-    }
-
-    // Crisp wooden cutting board THOCK! (plus soft boing for jelly)
-    function sfxBoardThock(isJelly) {
-      stopSliceAudio();
+    function sfxBoardThock(matKind) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
 
+      // Resonant walnut cutting-board knock
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       osc.type = "triangle";
-      osc.frequency.setValueAtTime(210, now);
-      osc.frequency.exponentialRampToValueAtTime(68, now + 0.085);
-      g.gain.setValueAtTime(0.24, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      osc.frequency.setValueAtTime(matKind === "veggie" ? 280 : 185, now);
+      osc.frequency.exponentialRampToValueAtTime(72, now + 0.065);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.linearRampToValueAtTime(0.18, now + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + 0.075);
       osc.connect(g);
       g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + 0.11);
+      osc.stop(now + 0.09);
 
-      if (isJelly) {
-        const wob = audioCtx.createOscillator();
-        const gw = audioCtx.createGain();
-        wob.type = "sine";
-        wob.frequency.setValueAtTime(240, now + 0.02);
-        wob.frequency.exponentialRampToValueAtTime(330, now + 0.09);
-        wob.frequency.exponentialRampToValueAtTime(200, now + 0.22);
-        gw.gain.setValueAtTime(0.09, now + 0.02);
-        gw.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-        wob.connect(gw);
-        gw.connect(audioCtx.destination);
-        wob.start(now + 0.02);
-        wob.stop(now + 0.26);
+      // Extra crisp vegetable moisture snap!
+      if (matKind === "veggie") {
+        const snap = audioCtx.createOscillator();
+        const gs = audioCtx.createGain();
+        snap.type = "sine";
+        snap.frequency.setValueAtTime(980, now);
+        snap.frequency.exponentialRampToValueAtTime(340, now + 0.03);
+        gs.gain.setValueAtTime(0.09, now);
+        gs.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+        snap.connect(gs);
+        gs.connect(audioCtx.destination);
+        snap.start(now);
+        snap.stop(now + 0.045);
       }
     }
 
-    function sfxCoreClink() {
-      stopSliceAudio();
+    function sfxSlicerWin() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(1920, now);
-      osc.frequency.exponentialRampToValueAtTime(1480, now + 0.12);
-      g.gain.setValueAtTime(0.18, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-      osc.connect(g);
-      g.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + 0.16);
-    }
-
-    function sfxWinChord() {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx) return;
-      [440.0, 554.37, 659.25, 880.0].forEach((f, i) => {
+      [440.0, 554.37, 659.25, 880.0, 1108.73].forEach((f, i) => {
         setTimeout(() => {
           const now = audioCtx.currentTime;
           const osc = audioCtx.createOscillator();
           const g = audioCtx.createGain();
           osc.type = "sine";
           osc.frequency.setValueAtTime(f, now);
-          g.gain.setValueAtTime(0.12, now);
-          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.45);
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.exponentialRampToValueAtTime(0.11, now + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.5);
           osc.connect(g);
           g.connect(audioCtx.destination);
           osc.start(now);
-          osc.stop(now + 0.48);
-        }, 60 + i * 75);
+          osc.stop(now + 0.55);
+        }, i * 75);
       });
     }
 
     // ==============================================
-    // GAME STATE, SLICING PHYSICS & INTERACTION
+    // GAME STATE, SLICE PHYSICS & BLADE CONTROLLER
     // ==============================================
     const canvas = document.getElementById("slicerCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const piecesPill = document.getElementById("piecesPill");
+    const accPill = document.getElementById("accPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const cutsLeftLabel = document.getElementById("cutsLeftLabel");
-    const goalDots = document.getElementById("goalDots");
-    const targetAccLabel = document.getElementById("targetAccLabel");
+    const sliceLbl = document.getElementById("sliceLbl");
+    const sliceFill = document.getElementById("sliceFill");
+    const sliceCnt = document.getElementById("sliceCnt");
+    const bladeDock = document.getElementById("bladeDock");
     const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovScoreBadge = document.getElementById("ovScoreBadge");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
+    const winOverlay = document.getElementById("winOverlay");
+    const winStars = document.getElementById("winStars");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
@@ -971,24 +1115,25 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let level = null;
-    // Pieces array: each piece has { startL, endL, offsetX, targetOffsetX, wobble, wobbleV, tipAmt }
-    let pieces = [];
-    let cutHistory = []; // array of localX cuts in chronological order
-    let gameState = "playing"; // playing | won | failed
-    let showGuide = false;
+    let block = null;
+    let activeBlade = "chef"; // 'chef' | 'crinkle' | 'wire'
+    let currentSliceIdx = 0;
+    let remainingLen = 236;
+    let sliceScores = [];
+    let blockWon = false;
 
-    // Active blade cutting state
-    let hoverWorldX = BLOCK_X + BLOCK_W * 0.72;
-    let isSlicing = false;
-    let activeCutPieceIdx = -1;
-    let activeCutLocalX = 0;
-    let activeCutScreenX = 0;
-    let bladeDepth = 0; // 0 (above top) -> 1 (cutting board)
-    let lastBladeY = 0;
-    let lastMoveTime = performance.now();
-    let clinkFlash = null; // { x, y, alpha }
+    // Live Knife State
+    let isCutting = false;
+    let autoChopping = false;
+    let cutX = 270;
+    let cutProg = 0; // 0 (above top of loaf) -> 1 (cleaved all the way to cutting board)
+    let lastPtrY = 0;
+    let lastMoveMs = performance.now();
+
+    // Tumbled Slices & Sensory Shaving/Sand Particles
+    let fallenSlices = [];
     let particles = [];
+    let boardBounce = 0;
     let toastTimer = null;
 
     function showToast(msg, ms = 2200) {
@@ -998,60 +1143,134 @@
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function getGapPerCut() {
-      return Math.min(13, Math.floor(74 / Math.max(1, level.cutsGoal)));
+    // Horizontal Geometry: Remaining Loaf Anchored Cleanly With Active Cut Zone Near X=268!
+    function getLoafRightX() {
+      return 292;
     }
 
-    function recomputeTargetOffsets() {
-      const gap = getGapPerCut();
-      for (let i = 0; i < pieces.length; i++) {
-        pieces[i].targetOffsetX = i * gap;
-      }
+    function getTargetCutX() {
+      if (currentSliceIdx >= block.sliceCount) return getLoafRightX();
+      return getLoafRightX() - block.sliceWidths[currentSliceIdx];
+    }
+
+    function getAveragePrecision() {
+      if (sliceScores.length === 0) return 100;
+      const sum = sliceScores.reduce((a, b) => a + b, 0);
+      return Math.round(sum / sliceScores.length);
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Block #${currentLevelNum} / ${TOTAL_LEVELS} — ${level.mat.name}`;
-      piecesPill.textContent = `Goal: ${level.piecesGoal} Equal Pieces`;
+      levelTitle.textContent = `Block #${currentLevelNum} / ${TOTAL_LEVELS} — ${block.mat.name}`;
+      accPill.textContent = `Precision: ${getAveragePrecision()}%`;
       solvedCounter.textContent = `Sliced: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      cutsLeftLabel.textContent = `Cuts: ${cutHistory.length} / ${level.cutsGoal}`;
-      targetAccLabel.textContent = `Precision Needed: ${level.targetAcc}%+`;
       openPickerBtn.textContent = `Block ${currentLevelNum} / 500 ▾`;
 
-      goalDots.innerHTML = "";
-      for (let i = 0; i < level.cutsGoal; i++) {
-        const dot = document.createElement("span");
-        dot.className = "cut-dot" + (i < cutHistory.length ? " done" : "");
-        goalDots.appendChild(dot);
+      const pct = Math.round((currentSliceIdx / block.sliceCount) * 100);
+      sliceLbl.textContent = blockWon ? "✨ All Slices Complete!" : `🔪 ${block.mat.name}`;
+      sliceFill.style.width = `${pct}%`;
+      sliceCnt.textContent = `${currentSliceIdx} / ${block.sliceCount}`;
+    }
+
+    function spawnCutParticles(x, y, burst = false) {
+      const mat = block.mat;
+      const count = burst ? (mat.kind === "sand" ? 18 : 10) : (mat.kind === "sand" ? 4 : 2);
+      for (let i = 0; i < count; i++) {
+        const col = mat.bands[Math.floor(Math.random() * mat.bands.length)];
+        particles.push({
+          x: x + (Math.random() - 0.5) * 10,
+          y: y + (Math.random() - 0.5) * 10,
+          vx: (Math.random() - 0.35) * (burst ? 3.2 : 1.8),
+          vy: (Math.random() - 0.5) * (burst ? 2.6 : 1.4),
+          r: mat.kind === "sand" ? (1.5 + Math.random() * 2.2) : (2.2 + Math.random() * 2.8),
+          isCurl: mat.kind === "soap" && Math.random() < 0.6,
+          color: activeBlade === "wire" && Math.random() < 0.35 ? "#fde047" : col,
+          alpha: 0.95
+        });
       }
     }
 
-    function loadLevel(num) {
-      stopSliceAudio();
+    function completeSingleSlice() {
+      const targetX = getTargetCutX();
+      const errPx = Math.abs(cutX - targetX);
+      const score = Math.max(55, Math.min(100, Math.round(100 - Math.max(0, errPx - 4) * 2.6)));
+      sliceScores.push(score);
+
+      const sliceW = Math.max(12, Math.min(remainingLen, getLoafRightX() - cutX));
+      remainingLen = Math.max(0, remainingLen - sliceW);
+
+      // Push freshly cleaved slice smoothly onto right side of walnut cutting board!
+      fallenSlices.push({
+        x: cutX + sliceW * 0.5,
+        y: LOAF_Y,
+        w: sliceW,
+        vx: 2.3 + Math.random() * 0.9,
+        vy: (Math.random() - 0.5) * 0.7,
+        rot: 0,
+        vRot: 0.04 + Math.random() * 0.04,
+        tipAnim: 0,
+        blade: activeBlade,
+        mat: block.mat
+      });
+      if (fallenSlices.length > 7) fallenSlices.shift();
+
+      spawnCutParticles(cutX, LOAF_BOT - 8, true);
+      sfxBoardThock(block.mat.kind);
+      boardBounce = 1.0;
+
+      isCutting = false;
+      autoChopping = false;
+      cutProg = 0;
+      updateSliceAudio(false, 0, block.mat.kind, activeBlade);
+
+      currentSliceIdx++;
+      cutX = getTargetCutX();
+      updateHUD();
+
+      if (score >= 95 && currentSliceIdx < block.sliceCount) {
+        showToast(`✨ Crisp ${score}% Cut!`, 1100);
+      }
+
+      // Check Complete Block Victory!
+      if (currentSliceIdx >= block.sliceCount || remainingLen < 10) {
+        currentSliceIdx = block.sliceCount;
+        blockWon = true;
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_slicer_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+        sfxSlicerWin();
+        updateHUD();
+
+        const avg = getAveragePrecision();
+        const stars = avg >= 90 ? "⭐⭐⭐" : (avg >= 78 ? "⭐⭐☆" : "⭐☆☆");
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winStars.textContent = stars;
+        winHeading.textContent = avg >= 90 ? "Master ASMR Cuts!" : `${block.mat.name} Sliced!`;
+        winText.textContent = `Completed all ${block.sliceCount} slices with ${avg}% average precision!`;
+        nextLevelBtn.textContent = isLast ? "Replay Block #1" : `Next Block (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 680);
+      }
+    }
+
+    function loadBlock(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      level = buildBlockLevel(currentLevelNum);
-
-      pieces = [{
-        startL: 0,
-        endL: BLOCK_W,
-        offsetX: 0,
-        targetOffsetX: 0,
-        wobble: 0,
-        wobbleV: 0,
-        justCut: 0
-      }];
-      cutHistory = [];
-      gameState = "playing";
-      showGuide = false;
-      isSlicing = false;
-      activeCutPieceIdx = -1;
-      bladeDepth = 0;
-      clinkFlash = null;
+      block = buildSliceBlock(currentLevelNum);
+      currentSliceIdx = 0;
+      remainingLen = block.totalLen;
+      sliceScores = [];
+      blockWon = false;
+      isCutting = false;
+      autoChopping = false;
+      cutProg = 0;
+      cutX = getTargetCutX();
+      fallenSlices = [];
       particles = [];
-      hoverWorldX = BLOCK_X + BLOCK_W - level.idealPieceW;
+      boardBounce = 0;
+      updateSliceAudio(false, 0, block.mat.kind, activeBlade);
 
-      stageOverlay.classList.remove("show");
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
       try {
@@ -1061,132 +1280,7 @@
       updateHUD();
     }
 
-    function spawnSliceParticles(x, y, count = 4) {
-      const m = level.mat;
-      for (let i = 0; i < count; i++) {
-        const dir = Math.random() < 0.5 ? -1 : 1;
-        const col = m.layers
-          ? m.layers[Math.floor(Math.random() * m.layers.length)]
-          : (Math.random() < 0.5 ? m.top : m.front);
-
-        particles.push({
-          x: x + (Math.random() - 0.5) * 6,
-          y: y + (Math.random() - 0.5) * 8,
-          vx: dir * (0.7 + Math.random() * 2.2),
-          vy: -0.6 - Math.random() * 1.8,
-          r: m.particle === "crumb" ? (1.8 + Math.random() * 2.4) : (2.6 + Math.random() * 3.2),
-          rot: Math.random() * Math.PI * 2,
-          vrot: (Math.random() - 0.5) * 0.25,
-          color: col,
-          type: m.particle,
-          alpha: 0.95
-        });
-      }
-    }
-
-    function finalizeActiveCut() {
-      const idx = activeCutPieceIdx;
-      const localX = activeCutLocalX;
-      const screenX = activeCutScreenX;
-
-      isSlicing = false;
-      activeCutPieceIdx = -1;
-      bladeDepth = 0;
-
-      if (idx < 0 || idx >= pieces.length) return;
-
-      const orig = pieces[idx];
-      const leftPiece = {
-        startL: orig.startL,
-        endL: localX,
-        offsetX: orig.offsetX,
-        targetOffsetX: orig.offsetX,
-        wobble: 0,
-        wobbleV: level.mat.jiggle ? -0.26 : -0.04,
-        justCut: 0.4
-      };
-      const rightPiece = {
-        startL: localX,
-        endL: orig.endL,
-        offsetX: orig.offsetX,
-        targetOffsetX: orig.offsetX,
-        wobble: 0,
-        wobbleV: level.mat.jiggle ? 0.34 : 0.08,
-        justCut: 1.0
-      };
-
-      pieces.splice(idx, 1, leftPiece, rightPiece);
-      cutHistory.push(localX);
-      recomputeTargetOffsets();
-
-      sfxBoardThock(level.mat.jiggle);
-      spawnSliceParticles(screenX, BOARD_BOTTOM_Y - 12, 12);
-      updateHUD();
-
-      // Evaluate once all required cuts are complete!
-      if (cutHistory.length >= level.cutsGoal) {
-        evaluateResult();
-      }
-    }
-
-    function evaluateResult() {
-      const ideal = level.idealPieceW;
-      let totalRelErr = 0;
-      for (const pc of pieces) {
-        const w = pc.endL - pc.startL;
-        totalRelErr += Math.abs(w - ideal) / ideal;
-      }
-      const meanErr = totalRelErr / pieces.length;
-      const accuracy = Math.max(0, Math.min(100, Math.round((1 - meanErr * 1.15) * 100)));
-
-      if (accuracy >= level.targetAcc) {
-        gameState = "won";
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_slicer_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        updateHUD();
-        setTimeout(() => sfxWinChord(), 160);
-
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        ovIcon.textContent = level.mat.emoji;
-        ovHeading.textContent = isLast ? "All 500 Blocks Mastered!" : `Block #${currentLevelNum} Sliced!`;
-        ovScoreBadge.textContent = `${accuracy}% Even`;
-        ovScoreBadge.className = "accuracy-badge";
-        ovText.textContent = accuracy >= 95
-          ? "Surgical ASMR perfection — every slice is razor-even!"
-          : `All ${level.piecesGoal} pieces met the ${level.targetAcc}% precision goal.`;
-        ovActionBtn.textContent = isLast ? "Replay Block #1" : `Next Block (#${currentLevelNum + 1}) →`;
-        setTimeout(() => stageOverlay.classList.add("show"), 550);
-      } else {
-        gameState = "failed";
-        ovIcon.textContent = "🔪";
-        ovHeading.textContent = "Uneven Slices!";
-        ovScoreBadge.textContent = `${accuracy}% (Need ${level.targetAcc}%+)`;
-        ovScoreBadge.className = "accuracy-badge fail";
-        ovText.textContent = "A couple of slices were too wide or thin. Try again or tap 💡 Cut Guide for help!";
-        ovActionBtn.textContent = "↺ Slice Fresh Block";
-        setTimeout(() => stageOverlay.classList.add("show"), 480);
-      }
-    }
-
-    // Undo last cut (re-fuses the two adjacent pieces cleanly!)
-    document.getElementById("undoBtn").addEventListener("click", () => {
-      if (gameState !== "playing" || cutHistory.length === 0 || isSlicing) return;
-      initAudio();
-      const lastCutX = cutHistory.pop();
-      for (let i = 0; i < pieces.length - 1; i++) {
-        if (Math.abs(pieces[i].endL - lastCutX) < 0.01) {
-          pieces[i].endL = pieces[i + 1].endL;
-          pieces.splice(i + 1, 1);
-          break;
-        }
-      }
-      recomputeTargetOffsets();
-      updateHUD();
-    });
-
-    // Viewport Helpers
+    // Viewport & Vertical Swipe Slicing Controls
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1212,161 +1306,111 @@
       };
     }
 
-    // Find which piece lies under screen X and whether localX is valid to cut
-    function findCutTargetAt(wx) {
-      for (let i = 0; i < pieces.length; i++) {
-        const pc = pieces[i];
-        const leftScreen = BLOCK_X + pc.startL + pc.offsetX;
-        const rightScreen = BLOCK_X + pc.endL + pc.offsetX;
-        if (wx >= leftScreen + 11 && wx <= rightScreen - 11) {
-          return {
-            pieceIdx: i,
-            localX: wx - BLOCK_X - pc.offsetX,
-            screenX: wx
-          };
-        }
-      }
-      return null;
-    }
-
-    // Pointer Slicing Interaction
     canvas.addEventListener("pointerdown", (e) => {
-      if (gameState !== "playing") return;
+      if (blockWon || autoChopping) return;
       initAudio();
-
       const pt = clientToWorld(e.clientX, e.clientY);
-      hoverWorldX = pt.x;
 
-      const hit = findCutTargetAt(pt.x);
-      if (!hit) {
-        showToast("Aim over the block (away from edges) and drag straight down!", 2000);
-        return;
-      }
-
-      isSlicing = true;
-      activeCutPieceIdx = hit.pieceIdx;
-      activeCutLocalX = hit.localX;
-      activeCutScreenX = hit.screenX;
-      bladeDepth = Math.max(0, Math.min(0.2, (pt.y - BLOCK_TOP_Y) / BLOCK_H));
-      lastBladeY = pt.y;
-      lastMoveTime = performance.now();
-
+      // Clamp blade X cleanly within valid sliceable zone near the guide line
+      const rightX = getLoafRightX();
+      const leftBound = Math.max(rightX - remainingLen + 10, getTargetCutX() - 36);
+      const rightBound = rightX - 10;
+      cutX = Math.max(leftBound, Math.min(rightBound, pt.x));
+      cutProg = Math.max(0, Math.min(0.85, (pt.y - LOAF_TOP) / LOAF_H));
+      isCutting = true;
+      lastPtrY = pt.y;
+      lastMoveMs = performance.now();
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
     canvas.addEventListener("pointermove", (e) => {
+      if (!isCutting || blockWon || autoChopping) return;
+      const nowMs = performance.now();
+      const dt = Math.max(0.008, Math.min(0.06, (nowMs - lastMoveMs) / 1000));
+      lastMoveMs = nowMs;
+
       const pt = clientToWorld(e.clientX, e.clientY);
+      const dy = pt.y - lastPtrY;
+      lastPtrY = pt.y;
 
-      if (!isSlicing) {
-        if (gameState === "playing") hoverWorldX = pt.x;
-        return;
-      }
+      if (dy > 0.4) {
+        cutProg = Math.min(1, cutProg + dy / (LOAF_H + 14));
+        const spd = dy / dt;
+        updateSliceAudio(true, Math.min(1.4, spd / 240), block.mat.kind, activeBlade);
+        spawnCutParticles(cutX, LOAF_TOP + cutProg * LOAF_H, false);
 
-      const now = performance.now();
-      const dt = Math.max(0.008, Math.min(0.06, (now - lastMoveTime) / 1000));
-      lastMoveTime = now;
-
-      // Before entering the top surface, let player still fine-tune horizontal aim smoothly!
-      if (bladeDepth < 0.06) {
-        const updated = findCutTargetAt(pt.x);
-        if (updated) {
-          activeCutPieceIdx = updated.pieceIdx;
-          activeCutLocalX = updated.localX;
-          activeCutScreenX = updated.screenX;
-          hoverWorldX = pt.x;
+        if (cutProg >= 0.96) {
+          completeSingleSlice();
         }
-      }
-
-      const dy = pt.y - lastBladeY;
-      lastBladeY = pt.y;
-
-      if (dy > 0) {
-        const newDepth = Math.min(1, bladeDepth + dy / BLOCK_H);
-        const bladeLocalY = newDepth * BLOCK_H;
-
-        // Check collision with any embedded Solid Core (Chapter 4-5)
-        for (const core of level.cores) {
-          if (Math.abs(activeCutLocalX - core.localX) < core.r + 2.5 && bladeLocalY >= core.localY - core.r) {
-            sfxCoreClink();
-            clinkFlash = {
-              x: activeCutScreenX,
-              y: BLOCK_TOP_Y + core.localY,
-              alpha: 1.0
-            };
-            isSlicing = false;
-            activeCutPieceIdx = -1;
-            bladeDepth = 0;
-            showToast("Clink! Hit a solid embedded pearl — slice cleanly between them!", 2500);
-            return;
-          }
-        }
-
-        bladeDepth = newDepth;
-        const speedPx = dy / dt;
-
-        // Trigger live ASMR audio & material shavings right at the cut groove
-        updateSliceAudio(speedPx, level.mat.kind);
-        if (Math.random() < 0.65) {
-          spawnSliceParticles(activeCutScreenX, BLOCK_TOP_Y + bladeDepth * BLOCK_H, level.mat.kind === "sand" ? 5 : 2);
-        }
-
-        // Snap cleanly through the final 14% onto the cutting board!
-        if (bladeDepth >= 0.86) {
-          finalizeActiveCut();
-        }
-      } else {
-        stopSliceAudio();
       }
     });
 
-    function releaseBlade() {
-      if (!isSlicing) return;
-      stopSliceAudio();
-      // If player already pushed > 62% through, finish cleanly; otherwise retract gently
-      if (bladeDepth >= 0.62) {
-        finalizeActiveCut();
-      } else {
-        isSlicing = false;
-        activeCutPieceIdx = -1;
-        bladeDepth = 0;
+    const endCut = () => {
+      if (!autoChopping) {
+        isCutting = false;
+        cutProg = 0;
+        updateSliceAudio(false, 0, block.mat.kind, activeBlade);
       }
+    };
+    canvas.addEventListener("pointerup", endCut);
+    canvas.addEventListener("pointercancel", endCut);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) endCut(); });
+
+    // Rhythm Auto-Chop Trigger (Button or Spacebar!)
+    function triggerRhythmChop() {
+      if (blockWon || autoChopping) return;
+      initAudio();
+      cutX = getTargetCutX() + (Math.random() - 0.5) * 3;
+      cutProg = 0.01;
+      autoChopping = true;
+      isCutting = true;
     }
-    canvas.addEventListener("pointerup", releaseBlade);
-    canvas.addEventListener("pointercancel", releaseBlade);
-    window.addEventListener("blur", releaseBlade);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) releaseBlade();
+
+    document.getElementById("autoChopBtn").addEventListener("click", triggerRhythmChop);
+
+    // Blade Dock Selector + Desktop Keys (1/2/3/Space)
+    function selectBlade(key) {
+      activeBlade = key;
+      bladeDock.querySelectorAll(".blade-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.blade === key);
+      });
+    }
+
+    bladeDock.querySelectorAll(".blade-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        initAudio();
+        selectBlade(btn.dataset.blade);
+      });
     });
 
-    // Buttons & Hint
-    document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
-    document.getElementById("hintBtn").addEventListener("click", () => {
-      if (gameState !== "playing") return;
-      showGuide = !showGuide;
-      if (showGuide) {
-        showToast("Golden slice lines enabled — drag the blade straight down each line!", 2600);
+    window.addEventListener("keydown", (e) => {
+      if (pickerModal.classList.contains("open")) return;
+      if (e.key === "1") selectBlade("chef");
+      else if (e.key === "2") selectBlade("crinkle");
+      else if (e.key === "3") selectBlade("wire");
+      else if (e.key === " ") {
+        e.preventDefault();
+        triggerRhythmChop();
       }
     });
+
+    document.getElementById("resetBtn").addEventListener("click", () => loadBlock(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
       soundBtn.textContent = soundOn ? "🔊 ASMR ON" : "🔇 OFF";
-      if (!soundOn) stopSliceAudio();
+      if (!soundOn) updateSliceAudio(false, 0, block.mat.kind, activeBlade);
     });
-    ovActionBtn.addEventListener("click", () => {
-      if (gameState === "won") {
-        loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      } else {
-        loadLevel(currentLevelNum);
-      }
+    nextLevelBtn.addEventListener("click", () => {
+      loadBlock(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadBlock(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadBlock(currentLevelNum + 1);
     });
 
-    // Level Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1397,7 +1441,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadLevel(n);
+          loadBlock(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1419,453 +1463,367 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadLevel(val);
+        loadBlock(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // 3D EXTRUDED BLOCK, KNIFE & PARTICLE RENDERER
+    // 2.5D WALNUT BOARD, CROSS-SECTION & BLADE RENDERER
     // ==============================================
-    function drawPiece3D(pc, idx) {
-      const m = level.mat;
-      const x = BLOCK_X + pc.startL + pc.offsetX;
-      const w = pc.endL - pc.startL;
-      const y = BLOCK_TOP_Y;
-      const h = BLOCK_H;
-
-      // Subtle spring shear for wobbly jelly!
-      const skewX = pc.wobble * 12;
-
+    function drawCrossSectionFace(cx, cy, rx, ry, mat) {
       ctx.save();
+      ctx.translate(cx, cy);
 
-      // Contact shadow on cutting board
-      ctx.fillStyle = "rgba(0, 0, 0, 0.36)";
-      ctx.beginPath();
-      ctx.moveTo(x + 2, y + h);
-      ctx.lineTo(x + w + 2, y + h);
-      ctx.lineTo(x + w + DEPTH_X + 6, y + h + DEPTH_Y + 6);
-      ctx.lineTo(x + DEPTH_X + 6, y + h + DEPTH_Y + 6);
-      ctx.closePath();
-      ctx.fill();
-
-      // 1. Right 3D Extruded Cross-Section Face (Reveals vibrant interior on cut!)
-      ctx.beginPath();
-      ctx.moveTo(x + w + skewX, y);
-      ctx.lineTo(x + w + DEPTH_X + skewX, y + DEPTH_Y);
-      ctx.lineTo(x + w + DEPTH_X, y + h + DEPTH_Y);
-      ctx.lineTo(x + w, y + h);
-      ctx.closePath();
-      ctx.fillStyle = m.side;
-      ctx.fill();
-
-      // Multi-layer interior stripes on Kinetic Sand / Marbled Clay cross-section!
-      if (m.layers) {
-        ctx.save();
-        ctx.clip();
-        const bandH = h / m.layers.length;
-        m.layers.forEach((col, li) => {
-          ctx.fillStyle = col;
-          ctx.globalAlpha = 0.72;
-          ctx.beginPath();
-          const ly = y + li * bandH;
-          ctx.moveTo(x + w - 2, ly);
-          ctx.lineTo(x + w + DEPTH_X + 2, ly + DEPTH_Y);
-          ctx.lineTo(x + w + DEPTH_X + 2, ly + bandH + DEPTH_Y);
-          ctx.lineTo(x + w - 2, ly + bandH);
-          ctx.closePath();
-          ctx.fill();
-        });
-        ctx.restore();
-      }
-
-      // 2. Top 3D Perspective Face
-      ctx.beginPath();
-      ctx.moveTo(x + skewX, y);
-      ctx.lineTo(x + w + skewX, y);
-      ctx.lineTo(x + w + DEPTH_X + skewX, y + DEPTH_Y);
-      ctx.lineTo(x + DEPTH_X + skewX, y + DEPTH_Y);
-      ctx.closePath();
-      ctx.fillStyle = m.top;
-      ctx.fill();
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
-      ctx.lineWidth = 1.2;
-      ctx.stroke();
-
-      // 3. Front Vertical Face
-      ctx.beginPath();
-      ctx.moveTo(x + skewX, y);
-      ctx.lineTo(x + w + skewX, y);
-      ctx.lineTo(x + w, y + h);
-      ctx.lineTo(x, y + h);
-      ctx.closePath();
-      ctx.fillStyle = m.front;
-      ctx.fill();
-
-      // Material-specific front textures clipped cleanly to front face
-      ctx.save();
-      ctx.clip();
-
-      if (m.layers) {
-        // Horizontal rainbow kinetic sand / marbled clay strata
-        const bandH = h / m.layers.length;
-        m.layers.forEach((col, li) => {
-          ctx.fillStyle = col;
-          ctx.fillRect(x - 16, y + li * bandH, w + 32, bandH + 1);
-        });
-        // Subtle sand grain dots
-        if (m.kind === "sand") {
-          ctx.fillStyle = "rgba(15, 23, 42, 0.14)";
-          for (let gx = Math.floor(pc.startL / 9) * 9; gx < pc.endL; gx += 9) {
-            for (let gy = 8; gy < h - 6; gy += 11) {
-              ctx.fillRect(BLOCK_X + gx + pc.offsetX + ((gy * 7) % 4), y + gy, 1.8, 1.8);
-            }
-          }
-        }
-      } else if (m.kind === "foam") {
-        // Porous floral foam micro-texture
-        ctx.fillStyle = "rgba(5, 46, 22, 0.14)";
-        for (let gx = Math.floor(pc.startL / 8) * 8; gx < pc.endL; gx += 8) {
-          for (let gy = 6; gy < h - 6; gy += 9) {
-            ctx.beginPath();
-            ctx.arc(BLOCK_X + gx + pc.offsetX + ((gy * 3) % 4), y + gy, 1.3, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
-      } else if (m.kind === "jelly") {
-        // Glossy translucent shine streaks
-        const jGrad = ctx.createLinearGradient(x, y, x, y + h);
-        jGrad.addColorStop(0, "rgba(255, 255, 255, 0.42)");
-        jGrad.addColorStop(0.28, "rgba(255, 255, 255, 0.06)");
-        jGrad.addColorStop(0.8, "rgba(0, 0, 0, 0.12)");
-        jGrad.addColorStop(1, "rgba(255, 255, 255, 0.2)");
-        ctx.fillStyle = jGrad;
-        ctx.fillRect(x - 16, y, w + 32, h);
-
-        // Specular gel reflection bar
-        ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+      if (mat.core === "stripes" || mat.core === "swirl") {
+        // Horizontal Rainbow / Swirl Strata Inside Kinetic Sand & Soap!
+        const n = mat.bands.length;
+        const bh = (ry * 2) / n;
         ctx.beginPath();
-        ctx.roundRect(x + 6, y + 10, Math.max(4, w - 12), 11, 5);
-        ctx.fill();
-      } else {
-        // Creamy artisan soap highlight band
-        ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
-        ctx.fillRect(x - 12, y + 12, w + 24, 14);
-        ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-        ctx.fillRect(x - 12, y + h - 16, w + 24, 16);
-      }
-
-      // Draw Embedded Solid Pearls (Chapter 4-5) belonging to this piece
-      for (const core of level.cores) {
-        if (core.localX >= pc.startL && core.localX <= pc.endL) {
-          const cx = BLOCK_X + core.localX + pc.offsetX + skewX * (1 - core.localY / h);
-          const cy = y + core.localY;
-
-          // Subtle translucent X-ray ring so player always spots the solid pearl clearly
-          ctx.fillStyle = "rgba(15, 23, 42, 0.32)";
+        ctx.roundRect(-rx, -ry, rx * 2, ry * 2, 6);
+        ctx.clip();
+        mat.bands.forEach((col, i) => {
+          ctx.fillStyle = col;
+          ctx.fillRect(-rx, -ry + i * bh, rx * 2, bh + 1);
+        });
+        if (mat.core === "swirl") {
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+          ctx.lineWidth = 3;
           ctx.beginPath();
-          ctx.arc(cx, cy, core.r + 3, 0, Math.PI * 2);
-          ctx.fill();
-
-          const pGrad = ctx.createRadialGradient(cx - 3, cy - 3, 1.5, cx, cy, core.r);
-          pGrad.addColorStop(0, "#ffffff");
-          pGrad.addColorStop(0.55, "#e2e8f0");
-          pGrad.addColorStop(1, "#64748b");
-          ctx.fillStyle = pGrad;
-          ctx.beginPath();
-          ctx.arc(cx, cy, core.r, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.strokeStyle = "rgba(250, 204, 21, 0.7)";
-          ctx.lineWidth = 1.4;
+          ctx.arc(0, 0, Math.min(rx, ry) * 0.55, 0, Math.PI * 1.5);
           ctx.stroke();
         }
+      } else {
+        // Crisp Cylindrical / Patterned Cross-Section (Cucumber, Sushi, Citrus Clay, Star Cane!)
+        ctx.fillStyle = mat.bands[0];
+        ctx.beginPath();
+        ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = mat.inner || "#ffffff";
+        ctx.beginPath();
+        ctx.ellipse(0, 0, rx * 0.84, ry * 0.84, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (mat.core === "cucumber" || mat.core === "citrus") {
+          ctx.fillStyle = mat.seed;
+          const cnt = mat.core === "citrus" ? 8 : 6;
+          for (let k = 0; k < cnt; k++) {
+            const a = (k * Math.PI * 2) / cnt;
+            ctx.beginPath();
+            ctx.ellipse(Math.cos(a) * rx * 0.45, Math.sin(a) * ry * 0.45, rx * 0.14, ry * 0.08, a, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        } else if (mat.core === "sushi" || mat.core === "bullseye") {
+          ctx.fillStyle = mat.seed;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, rx * 0.44, ry * 0.44, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#22c55e";
+          ctx.beginPath();
+          ctx.ellipse(rx * 0.14, -ry * 0.12, rx * 0.16, ry * 0.16, 0, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (mat.core === "star") {
+          ctx.fillStyle = mat.seed;
+          ctx.beginPath();
+          for (let k = 0; k < 10; k++) {
+            const a = (k * Math.PI) / 5 - Math.PI / 2;
+            const sc = k % 2 === 0 ? 0.62 : 0.28;
+            if (k === 0) ctx.moveTo(Math.cos(a) * rx * sc, Math.sin(a) * ry * sc);
+            else ctx.lineTo(Math.cos(a) * rx * sc, Math.sin(a) * ry * sc);
+          }
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.fillStyle = mat.seed;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, rx * 0.32, ry * 0.32, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
-      ctx.restore(); // End front face clip
-
-      // Crisp outline edge
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.24)";
-      ctx.lineWidth = 1.3;
-      ctx.beginPath();
-      ctx.moveTo(x + skewX, y);
-      ctx.lineTo(x + w + skewX, y);
-      ctx.lineTo(x + w, y + h);
-      ctx.lineTo(x, y + h);
-      ctx.closePath();
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.42)";
+      ctx.lineWidth = 1.6;
       ctx.stroke();
-
-      // Show subtle width badge below each piece after level evaluation
-      if (gameState !== "playing") {
-        const ratio = (pc.endL - pc.startL) / level.idealPieceW;
-        const ok = Math.abs(ratio - 1) <= 0.14;
-        ctx.fillStyle = ok ? "#4ade80" : "#fb7185";
-        ctx.font = "800 10px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText(ok ? "✓" : (ratio > 1 ? "WIDE" : "THIN"), x + w / 2, y + h + 18);
-      }
-
       ctx.restore();
     }
 
-    function drawKnifeBlade(x, depthFrac, isCutting) {
-      // Blade tip descends smoothly from hovering above the top face down to BOARD_BOTTOM_Y
-      const hoverY = BLOCK_TOP_Y + DEPTH_Y - 14;
-      const tipY = isCutting
-        ? BLOCK_TOP_Y + depthFrac * BLOCK_H
-        : hoverY;
+    function drawRemainingLoaf(xRight, len, mat) {
+      if (len < 3) return;
+      const xLeft = xRight - len;
+      const bands = mat.bands;
 
       ctx.save();
+      // Drop shadow beneath sensory block
+      ctx.fillStyle = "rgba(0, 0, 0, 0.44)";
+      ctx.beginPath();
+      ctx.roundRect(xLeft + 5, LOAF_TOP + 10, len + 10, LOAF_H + 14, 14);
+      ctx.fill();
 
-      // Subtle vertical laser/chalk alignment sightline down the front face
-      if (gameState === "playing") {
-        ctx.strokeStyle = isCutting ? "rgba(56, 189, 248, 0.75)" : "rgba(255, 255, 255, 0.35)";
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 4]);
+      // Main 2.5D Horizontal Body (Top Face)
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(xLeft, LOAF_TOP, len, LOAF_H, 10);
+      ctx.clip();
+
+      const bh = LOAF_H / bands.length;
+      bands.forEach((col, i) => {
+        ctx.fillStyle = col;
+        ctx.fillRect(xLeft, LOAF_TOP + i * bh, len, bh + 1);
+      });
+
+      // Soft Top Cylindrical Specular Highlight Gloss
+      const gloss = ctx.createLinearGradient(0, LOAF_TOP, 0, LOAF_BOT);
+      gloss.addColorStop(0, "rgba(255, 255, 255, 0.34)");
+      gloss.addColorStop(0.28, "rgba(255, 255, 255, 0.08)");
+      gloss.addColorStop(0.75, "rgba(0, 0, 0, 0)");
+      gloss.addColorStop(1, "rgba(0, 0, 0, 0.28)");
+      ctx.fillStyle = gloss;
+      ctx.fillRect(xLeft, LOAF_TOP, len, LOAF_H);
+      ctx.restore();
+
+      // Crisp Outline & Front Extruded Base Thickness
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.38)";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.roundRect(xLeft, LOAF_TOP, len, LOAF_H, 10);
+      ctx.stroke();
+
+      // Exposed Cross-Section Cap on the Right Cut End of the Loaf!
+      drawCrossSectionFace(xRight - 2, LOAF_Y, 15, LOAF_H * 0.47, mat);
+      ctx.restore();
+    }
+
+    function drawFallenSlice(sl) {
+      ctx.save();
+      ctx.translate(sl.x, sl.y);
+      ctx.rotate(sl.rot);
+
+      const faceRx = Math.max(14, sl.w * 0.45 + sl.tipAnim * 18);
+      const faceRy = LOAF_H * (0.44 - sl.tipAnim * 0.08);
+
+      // Soft Board Shadow Beneath Tumbled Slice
+      ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+      ctx.beginPath();
+      ctx.ellipse(3, 5, faceRx, faceRy, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      drawCrossSectionFace(0, 0, faceRx, faceRy, sl.mat);
+
+      // Signature Crinkle Cutter Wavy Edge Accents!
+      if (sl.blade === "crinkle") {
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 3]);
         ctx.beginPath();
-        ctx.moveTo(x, tipY);
-        ctx.lineTo(x, BOARD_BOTTOM_Y + 4);
+        ctx.ellipse(0, 0, faceRx - 2, faceRy - 2, 0, 0, Math.PI * 2);
         ctx.stroke();
         ctx.setLineDash([]);
       }
+      ctx.restore();
+    }
 
-      // Live Opening Cut Groove on the Block While Slicing Down!
-      if (isCutting && depthFrac > 0.02) {
-        ctx.strokeStyle = "rgba(15, 23, 42, 0.85)";
-        ctx.lineWidth = 3.2;
+    function drawActiveBlade(x, prog, bladeKey, now) {
+      const tipY = LOAF_TOP - 16 + prog * (LOAF_H + 26);
+
+      ctx.save();
+      // Active Cleave Seam Slit Appearing Directly Behind Descending Blade!
+      if (prog > 0.02) {
+        ctx.strokeStyle = bladeKey === "wire" ? "#facc15" : "#140f0c";
+        ctx.lineWidth = bladeKey === "crinkle" ? 4.5 : 3;
         ctx.beginPath();
-        ctx.moveTo(x + DEPTH_X, BLOCK_TOP_Y + DEPTH_Y);
-        ctx.lineTo(x, BLOCK_TOP_Y);
-        ctx.lineTo(x, tipY);
+        ctx.moveTo(x, LOAF_TOP);
+        if (bladeKey === "crinkle") {
+          for (let sy = LOAF_TOP; sy <= Math.min(LOAF_BOT, tipY); sy += 8) {
+            ctx.lineTo(x + (Math.floor(sy / 8) % 2 === 0 ? -3 : 3), sy);
+          }
+        } else {
+          ctx.lineTo(x, Math.min(LOAF_BOT, tipY));
+        }
         ctx.stroke();
       }
 
-      // Gleaming Stainless Chef Blade (Angled Perspective)
-      const bladeH = 84;
-      const topY = tipY - bladeH;
+      // Draw Sleek Chef Knife, Wavy Crinkle Blade, or Glowing Thermal Wire!
+      if (bladeKey === "wire") {
+        ctx.strokeStyle = "#fde047";
+        ctx.shadowColor = "#f59e0b";
+        ctx.shadowBlur = 14;
+        ctx.lineWidth = 3.2;
+        ctx.beginPath();
+        ctx.moveTo(x, tipY - 62);
+        ctx.lineTo(x, tipY);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
 
-      const bGrad = ctx.createLinearGradient(x, topY, x + DEPTH_X + 10, tipY);
-      bGrad.addColorStop(0, "#e2e8f0");
-      bGrad.addColorStop(0.5, "#ffffff");
-      bGrad.addColorStop(1, "#94a3b8");
+        // Brass Thermal Handle Grip at Top
+        ctx.fillStyle = "#b45309";
+        ctx.strokeStyle = "#fef08a";
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.roundRect(x - 16, tipY - 76, 32, 16, 6);
+        ctx.fill();
+        ctx.stroke();
+      } else {
+        // Gleaming Japanese Damascus Steel Knife Profile Viewed From Above/Angle
+        const bg = ctx.createLinearGradient(x - 10, tipY - 76, x + 10, tipY);
+        bg.addColorStop(0, "#94a3b8");
+        bg.addColorStop(0.5, "#f8fafc");
+        bg.addColorStop(1, "#cbd5e1");
+        ctx.fillStyle = bg;
+        ctx.strokeStyle = bladeKey === "crinkle" ? "#38bdf8" : "#ffffff";
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(x - 5, tipY - 72);
+        ctx.lineTo(x + 7, tipY - 72);
+        ctx.lineTo(x + 5, tipY - 12);
+        ctx.lineTo(x, tipY);
+        ctx.lineTo(x - 5, tipY - 10);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
 
-      ctx.shadowColor = "rgba(0, 0, 0, 0.45)";
-      ctx.shadowBlur = 10;
-      ctx.fillStyle = bGrad;
-      ctx.beginPath();
-      ctx.moveTo(x - 1.5, topY + 12);
-      ctx.lineTo(x + DEPTH_X + 8, topY - 12);
-      ctx.lineTo(x + DEPTH_X + 8, tipY - 18);
-      ctx.lineTo(x + 2, tipY);
-      ctx.lineTo(x - 1.5, tipY);
-      ctx.closePath();
-      ctx.fill();
-
-      // Razor sharp edge highlight
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = "#38bdf8";
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.moveTo(x, tipY);
-      ctx.lineTo(x + DEPTH_X + 8, tipY - 18);
-      ctx.stroke();
-
-      // Ergonomic Dark Walnut Handle Above Blade
-      ctx.fillStyle = "#451a03";
-      ctx.strokeStyle = "#92400e";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.roundRect(x + DEPTH_X * 0.35 - 7, topY - 38, 16, 44, 6);
-      ctx.fill();
-      ctx.stroke();
-
-      // Brass handle rivets
-      ctx.fillStyle = "#facc15";
-      ctx.beginPath();
-      ctx.arc(x + DEPTH_X * 0.35 + 1, topY - 26, 2.2, 0, Math.PI * 2);
-      ctx.arc(x + DEPTH_X * 0.35 + 1, topY - 12, 2.2, 0, Math.PI * 2);
-      ctx.fill();
+        // Dark Walnut Knife Handle Grip Above Spine
+        ctx.fillStyle = "#451a03";
+        ctx.strokeStyle = "#d97706";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(x - 7, tipY - 104, 14, 34, 5);
+        ctx.fill();
+        ctx.stroke();
+      }
 
       ctx.restore();
     }
 
-    let lastFrameTime = performance.now();
+    let lastTime = performance.now();
 
     function frame(now) {
-      const dt = Math.min(0.05, (now - lastFrameTime) / 1000);
-      lastFrameTime = now;
+      const dt = Math.min(0.04, (now - lastTime) / 1000);
+      lastTime = now;
 
-      if (isSlicing && (now - lastMoveTime) / 1000 > 0.08) {
-        stopSliceAudio();
+      if (boardBounce > 0) boardBounce = Math.max(0, boardBounce - dt * 6);
+
+      // Step Smooth Rhythm Auto-Chop If Triggered!
+      if (autoChopping && !blockWon) {
+        cutProg += dt * 3.1;
+        updateSliceAudio(true, 0.9, block.mat.kind, activeBlade);
+        spawnCutParticles(cutX, LOAF_TOP + Math.min(1, cutProg) * LOAF_H, false);
+        if (cutProg >= 0.98) {
+          completeSingleSlice();
+        }
       }
 
-      // Animate piece separation offsets & jelly damped harmonic wobble!
-      for (const pc of pieces) {
-        pc.offsetX += (pc.targetOffsetX - pc.offsetX) * Math.min(1, dt * 11);
-        const stiffness = level.mat.jiggle ? 160 : 280;
-        const damping = level.mat.jiggle ? 4.2 : 14;
-        const acc = -stiffness * pc.wobble - damping * pc.wobbleV;
-        pc.wobbleV += acc * dt;
-        pc.wobble += pc.wobbleV * dt;
-        if (pc.justCut > 0) pc.justCut = Math.max(0, pc.justCut - dt * 2.5);
+      // Animate Freshly Cut Slices Tipping & Sliding Gently Across Cutting Board!
+      for (const sl of fallenSlices) {
+        sl.x += sl.vx;
+        sl.y += sl.vy;
+        sl.vx *= 0.92;
+        sl.vy *= 0.92;
+        sl.rot += sl.vRot;
+        sl.vRot *= 0.92;
+        sl.tipAnim = Math.min(1, sl.tipAnim + dt * 4.5);
       }
 
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
+      const bOff = boardBounce > 0 ? Math.sin(boardBounce * Math.PI) * 2.5 : 0;
+
       ctx.save();
-      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.translate(vp.offsetX, vp.offsetY + bOff);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Warm Butcher Block Cutting Board
-      const boardY = BLOCK_TOP_Y + DEPTH_Y - 12;
-      const boardH = BLOCK_H - DEPTH_Y + 56;
+      // 1. Rich Walnut Chef's Cutting Board Surface & Recessed Juice Groove
       ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.55)";
-      ctx.shadowBlur = 24;
-      ctx.shadowOffsetY = 12;
-
-      const woodGrad = ctx.createLinearGradient(14, boardY, WORLD_W - 14, boardY + boardH);
-      woodGrad.addColorStop(0, "#7c4a26");
-      woodGrad.addColorStop(0.5, "#925a30");
-      woodGrad.addColorStop(1, "#6b3e1f");
-      ctx.fillStyle = woodGrad;
-      ctx.beginPath();
-      ctx.roundRect(14, boardY, WORLD_W - 28, boardH, 16);
-      ctx.fill();
-
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetY = 0;
+      ctx.fillStyle = "#3a291f";
+      ctx.strokeStyle = "#5c4232";
       ctx.lineWidth = 3;
-      ctx.strokeStyle = "#b57c4b";
+      ctx.beginPath();
+      ctx.roundRect(18, 34, WORLD_W - 36, WORLD_H - 68, 22);
+      ctx.fill();
       ctx.stroke();
 
-      // Subtle wood grain lines
-      ctx.strokeStyle = "rgba(45, 22, 8, 0.16)";
-      ctx.lineWidth = 1.5;
-      for (let gy = boardY + 18; gy < boardY + boardH - 12; gy += 18) {
+      // Subtle Woodgrain Planks
+      ctx.strokeStyle = "rgba(254, 243, 199, 0.06)";
+      ctx.lineWidth = 1.6;
+      for (let wy = 56; wy < WORLD_H - 48; wy += 24) {
         ctx.beginPath();
-        ctx.moveTo(22, gy);
-        ctx.lineTo(WORLD_W - 22, gy);
+        ctx.moveTo(26, wy);
+        ctx.bezierCurveTo(150, wy + 4, 270, wy - 4, WORLD_W - 26, wy);
         ctx.stroke();
       }
+
+      // Recessed Inner Cutting Groove Border
+      ctx.strokeStyle = "rgba(15, 10, 7, 0.42)";
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.roundRect(30, 46, WORLD_W - 60, WORLD_H - 92, 14);
+      ctx.stroke();
       ctx.restore();
 
-      // Subtle Training Ruler Ticks on Board (Early Ch. 1 Levels)
-      if (level.showRulerTicks && gameState === "playing") {
-        ctx.save();
-        ctx.strokeStyle = "rgba(254, 243, 199, 0.48)";
-        ctx.lineWidth = 2;
-        for (let k = 1; k < level.piecesGoal; k++) {
-          const tx = BLOCK_X + k * level.idealPieceW;
-          ctx.beginPath();
-          ctx.moveTo(tx, BOARD_BOTTOM_Y + 8);
-          ctx.lineTo(tx, BOARD_BOTTOM_Y + 18);
-          ctx.stroke();
-        }
-        ctx.restore();
+      // 2. Freshly Fallen Slices Resting on Right Side of Board
+      for (const sl of fallenSlices) {
+        drawFallenSlice(sl);
       }
 
-      // 2. Render All 3D Block Pieces (Right-to-left? No: left-to-right so right face isn't covered)
-      // Wait: since 3D extrusion goes UP-RIGHT (+DEPTH_X, -DEPTH_Y), drawing RIGHT-to-LEFT ensures
-      // each piece's left side overlaps behind the piece to its left properly?
-      // Actually piece i's right face extends +DEPTH_X toward piece i+1, so piece i+1 is in front on the right -> draw LEFT-to-RIGHT?
-      // Let's check: piece 0 is at x=36..100, its right face goes 100..124. Piece 1 starts at 100+gap.
-      // Drawing RIGHT-to-LEFT draws piece 1 first, then piece 0's right face cleanly on top without clipping piece 1's front!
-      for (let i = pieces.length - 1; i >= 0; i--) {
-        drawPiece3D(pieces[i], i);
-      }
+      // 3. Remaining Uncut Sensory Loaf
+      if (!blockWon) {
+        drawRemainingLoaf(getLoafRightX(), remainingLen, block.mat);
 
-      // 3. Optional Golden Precision Cut Guides (Hint)
-      if (showGuide && gameState === "playing") {
+        // Glowing Golden Target Cut Line Across Next Slice Width!
+        const gx = getTargetCutX();
+        const pulse = 0.65 + 0.35 * Math.sin(now * 0.008);
         ctx.save();
-        ctx.strokeStyle = "rgba(250, 204, 21, 0.9)";
+        ctx.strokeStyle = `rgba(250, 204, 21, ${pulse})`;
         ctx.shadowColor = "#facc15";
-        ctx.shadowBlur = 8;
-        ctx.lineWidth = 2;
-        ctx.setLineDash([5, 4]);
+        ctx.shadowBlur = 10;
+        ctx.lineWidth = 2.6;
+        ctx.setLineDash([6, 5]);
+        ctx.beginPath();
+        ctx.moveTo(gx, LOAF_TOP - 24);
+        ctx.lineTo(gx, LOAF_BOT + 24);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.shadowBlur = 0;
 
-        for (let k = 1; k < level.piecesGoal; k++) {
-          const idealLocal = k * level.idealPieceW;
-          // Skip if already cut very close to this ideal mark
-          if (cutHistory.some((cx) => Math.abs(cx - idealLocal) < 8)) continue;
-          // Find current visual screen X of this local coordinate
-          const host = pieces.find((pc) => idealLocal >= pc.startL && idealLocal <= pc.endL);
-          if (!host) continue;
-          const sx = BLOCK_X + idealLocal + host.offsetX;
-
+        // Animated Downward Swipe Indicator Arrow Above Guide Line
+        if (!isCutting) {
+          const bob = Math.sin(now * 0.009) * 5;
+          ctx.fillStyle = "#fde047";
           ctx.beginPath();
-          ctx.moveTo(sx + DEPTH_X, BLOCK_TOP_Y + DEPTH_Y - 4);
-          ctx.lineTo(sx, BLOCK_TOP_Y);
-          ctx.lineTo(sx, BOARD_BOTTOM_Y + 4);
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-
-      // 4. Gleaming Chef Knife Blade
-      if (gameState === "playing") {
-        const bladeX = isSlicing
-          ? activeCutScreenX
-          : Math.max(BLOCK_X + 12, Math.min(WORLD_W - 28, hoverWorldX));
-        drawKnifeBlade(bladeX, bladeDepth, isSlicing);
-      }
-
-      // 5. Core Clink Spark Flash
-      if (clinkFlash && clinkFlash.alpha > 0.04) {
-        clinkFlash.alpha *= 0.88;
-        ctx.save();
-        ctx.strokeStyle = `rgba(254, 240, 138, ${clinkFlash.alpha})`;
-        ctx.lineWidth = 2.5;
-        for (let i = 0; i < 6; i++) {
-          const a = (i * Math.PI) / 3;
-          ctx.beginPath();
-          ctx.moveTo(clinkFlash.x + Math.cos(a) * 5, clinkFlash.y + Math.sin(a) * 5);
-          ctx.lineTo(clinkFlash.x + Math.cos(a) * 18, clinkFlash.y + Math.sin(a) * 18);
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-
-      // 6. Material Shavings, Soap Curls, Sand Crumbs & Jelly Drops
-      particles = particles.filter((pt) => pt.alpha > 0.04);
-      for (const pt of particles) {
-        pt.x += pt.vx;
-        pt.y += pt.vy;
-        pt.vy += pt.type === "dust" ? 0.05 : 0.16;
-        pt.rot += pt.vrot;
-        pt.alpha *= pt.type === "dust" ? 0.94 : 0.955;
-
-        ctx.save();
-        ctx.globalAlpha = pt.alpha;
-        ctx.translate(pt.x, pt.y);
-        ctx.rotate(pt.rot);
-        ctx.fillStyle = pt.color;
-
-        if (pt.type === "curl") {
-          // Curled soap/clay ribbon arc
-          ctx.strokeStyle = pt.color;
-          ctx.lineWidth = 2.4;
-          ctx.beginPath();
-          ctx.arc(0, 0, pt.r, 0, Math.PI * 1.35);
-          ctx.stroke();
-        } else if (pt.type === "crumb") {
-          ctx.fillRect(-pt.r / 2, -pt.r / 2, pt.r, pt.r);
-        } else {
-          ctx.beginPath();
-          ctx.arc(0, 0, pt.r, 0, Math.PI * 2);
+          ctx.moveTo(gx, LOAF_TOP - 28 + bob);
+          ctx.lineTo(gx - 7, LOAF_TOP - 40 + bob);
+          ctx.lineTo(gx + 7, LOAF_TOP - 40 + bob);
+          ctx.closePath();
           ctx.fill();
         }
         ctx.restore();
+
+        // Active Knife / Crinkle Blade / Thermal Wire!
+        drawActiveBlade(isCutting ? cutX : gx, isCutting ? cutProg : 0, activeBlade, now);
       }
 
-      // 7. Gentle Top Instruction Prompt Before First Cut
-      if (gameState === "playing" && cutHistory.length === 0 && !isSlicing) {
+      // 4. Sparkling Kinetic Sand Granules & Glossy Soap Curls
+      particles = particles.filter((p) => p.alpha > 0.04);
+      for (const p of particles) {
+        p.vy += 0.07;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha *= 0.93;
         ctx.save();
-        ctx.fillStyle = "rgba(226, 232, 240, 0.72)";
-        ctx.font = "700 12px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("↓ Drag straight down through the block to slice ↓", WORLD_W / 2, 42);
+        ctx.globalAlpha = p.alpha;
+        if (p.isCurl) {
+          ctx.strokeStyle = p.color;
+          ctx.lineWidth = 2.2;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r * 1.4, 0, Math.PI * 1.3);
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
         ctx.restore();
       }
 
@@ -1875,7 +1833,7 @@
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadLevel(currentLevelNum);
+    loadBlock(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
