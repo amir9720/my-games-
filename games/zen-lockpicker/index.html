@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Zen Lockpicker — 500 Audio Safe-Cracking Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free levels of The Zen Lockpicker in your browser. Turn the minimalist dark-mode safe dial slowly, listen for subtle metallic clicks, and reverse direction to crack every lock." />
+  <title>Zen Lockpicker — Free 500-Level ASMR Cutaway Pin-Tumbler Simulator | ZinPlay</title>
+  <meta name="description" content="Play Zen Lockpicker free online with no download. Feel the binding order, listen for crisp brass shear-line clicks, and pick 500 cutaway padlocks with standard, spool, and serrated pins using live Web Audio ASMR." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Zen Lockpicker",
+    "url": "https://zinplay.io/games/zen-lockpicker/",
+    "genre": ["ASMR", "Mechanical Simulation", "Precision Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -29,14 +42,16 @@
       font-size: 0.9rem;
       color: var(--muted);
     }
+
+    /* Top Locksmith Bench HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #070a12;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1a2234;
+      background: #10131a;
+      color: #f8fafc;
+      border-bottom: 1px solid #232a38;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -49,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #fbbf24;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -61,120 +76,147 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(245, 158, 11, 0.16);
-      border: 1px solid rgba(251, 191, 36, 0.38);
+      background: rgba(251, 191, 36, 0.16);
+      border: 1px solid rgba(251, 191, 36, 0.36);
       color: #fde68a;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.dir-pill {
-      background: rgba(56, 189, 248, 0.16);
-      border-color: rgba(56, 189, 248, 0.4);
-      color: #bae6fd;
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Pin Tumbler Progress Strip */
-    .pins-strip {
+    /* Live Pin Set & Acoustic Feedback Strip */
+    .status-strip {
       display: flex;
-      justify-content: center;
       align-items: center;
       gap: 10px;
-      padding: 10px 14px;
-      background: #0b101d;
-      border-bottom: 1px solid #161f33;
-      flex-wrap: wrap;
-    }
-    .pin-slot {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: #141c2f;
-      border: 1.5px solid #2b3854;
-      color: #64748b;
+      padding: 9px 14px;
+      background: #161b26;
+      border-bottom: 1px solid #283042;
+      color: #e2e8f0;
       font-size: 0.75rem;
-      font-weight: 900;
-      display: inline-flex;
+      font-weight: 800;
+    }
+    .status-lbl {
+      min-width: 132px;
+      color: #fcd34d;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pin-dots {
+      flex: 1;
+      display: flex;
       align-items: center;
       justify-content: center;
+      gap: 7px;
+    }
+    .pin-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #0b0e14;
+      border: 2px solid #475569;
       transition: all 0.2s ease;
     }
-    .pin-slot.current {
+    .pin-dot.active {
       border-color: #38bdf8;
-      color: #38bdf8;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
     }
-    .pin-slot.armed {
-      border-color: #facc15;
-      background: rgba(250, 204, 21, 0.18);
-      color: #fef08a;
-      box-shadow: 0 0 14px rgba(250, 204, 21, 0.45);
+    .pin-dot.set {
+      background: #22c55e;
+      border-color: #86efac;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.65);
     }
-    .pin-slot.locked {
-      border-color: #22c55e;
-      background: #14532d;
-      color: #86efac;
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.35);
+    .pin-dot.false-set {
+      background: #f59e0b;
+      border-color: #fde68a;
+    }
+    .status-right {
+      min-width: 64px;
+      text-align: right;
+      font-family: monospace;
+      color: #94a3b8;
     }
 
-    /* Dark Minimalist Vault Stage */
+    /* Cutaway Padlock Cylinder Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 430px;
-      background: radial-gradient(circle at 50% 56%, #141b2d 0%, #070a12 78%, #04060b 100%);
+      height: 410px;
+      background: radial-gradient(circle at 50% 45%, #1d2433 0%, #0b0e14 100%);
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 470px;
+        height: 445px;
       }
     }
-    #dialCanvas {
+    #lockCanvas {
       width: 100%;
       height: 100%;
       display: block;
       touch-action: none;
-      cursor: grab;
-    }
-    #dialCanvas.turning {
-      cursor: grabbing;
+      cursor: ns-resize;
     }
 
-    /* Precision Touch Controls Below Dial */
-    .precision-dock {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr 1fr;
+    /* Precision Pick Navigation & Lift Dock */
+    .pick-dock {
+      display: flex;
+      align-items: center;
       gap: 8px;
-      padding: 12px 14px;
-      background: #0d1322;
-      border-top: 1px solid #1a2234;
+      padding: 11px 12px;
+      background: #121620;
+      border-top: 1px solid #242c3d;
     }
-    .dock-btn {
-      min-height: 44px;
+    .pick-btn {
+      min-height: 46px;
+      padding: 0 13px;
       border-radius: 12px;
-      border: 1.5px solid #293556;
-      background: #151e34;
-      color: #e2e8f0;
-      font-size: 0.86rem;
+      border: 1.5px solid #2d374d;
+      background: #1b2233;
+      color: #f8fafc;
+      font-size: 0.84rem;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 5px;
-      transition: transform 0.08s ease, border-color 0.15s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: transform 0.08s ease, background 0.14s ease, border-color 0.14s ease;
     }
-    .dock-btn:active {
-      transform: scale(0.97);
-    }
-    .dock-btn.lock-ready {
-      background: linear-gradient(135deg, #d97706, #f59e0b);
+    .pick-btn:active { transform: scale(0.95); }
+    .pick-btn:disabled { opacity: 0.36; cursor: default; }
+    .pick-btn.lift-main {
+      flex: 1;
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
       border-color: #fde68a;
-      color: #0f172a;
-      box-shadow: 0 0 18px rgba(245, 158, 11, 0.45);
+      color: #ffffff;
+      font-size: 0.9rem;
+      box-shadow: 0 5px 16px rgba(217, 119, 6, 0.32);
+    }
+
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #0c0f16;
+      border-top: 1px solid #1e2533;
+      font-size: 0.73rem;
+      color: #94a3b8;
     }
 
     .status-toast {
@@ -182,8 +224,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(7, 10, 18, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(12, 15, 22, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -197,15 +239,13 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(5, 8, 15, 0.82);
-      backdrop-filter: blur(5px);
+      background: rgba(10, 13, 20, 0.8);
+      backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -224,19 +264,12 @@
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 320px;
+      max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -264,7 +297,8 @@
       border-radius: 10px;
       cursor: pointer;
     }
-    /* Level Picker Modal */
+
+    /* Lock Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -276,9 +310,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -375,6 +407,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #10131a;
+      border: 1px solid rgba(251, 191, 36, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #10131a;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #12151e 0%, #451a03 100%);
+      color: #fef3c7;
+    }
+    .game-seo-banner.steel-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fde68a;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .lock-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .lock-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .lock-table th, .lock-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .lock-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .lock-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -387,7 +499,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -400,64 +512,74 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Safes &bull; Zen Audio</span>
+      <span class="cat-tag">500 Padlocks &bull; Cutaway ASMR Lockpicking</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
-      <h1>The Zen Lockpicker</h1>
-      <p>Put on headphones or focus closely. Turn the dial slowly until you hear the crisp metallic click, then reverse direction to lock each pin.</p>
+      <h1>Zen Lockpicker</h1>
+      <p>Probe each cutaway pin chamber, feel for the stiff binding pin, and gently lift every brass tumbler to the golden shear line for crisp metallic clicks and a smooth shackle pop.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="The Zen Lockpicker Game">
+    <section class="game-wrapper" aria-label="Zen Lockpicker Cutaway Pin-Tumbler Simulator">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Brass Tumblers</span>
-          <span id="levelTitle">Safe #1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Brass Practice Padlocks</span>
+          <span id="levelTitle">Lock #1 / 500 — 3-Pin Brass Core</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill dir-pill" id="dirPill">Turn ↻ CW</span>
-          <span class="hud-pill" id="solvedCounter">Cracked: 0 / 500</span>
+          <span class="hud-pill" id="corePill">Pins: 0 / 3</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Opened: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Pin Tumbler Indicators -->
-      <div id="pinsStrip" class="pins-strip" aria-label="Lock Pins Status"></div>
+      <!-- Pin Set Status Dots -->
+      <div class="status-strip">
+        <span id="statusLbl" class="status-lbl">🔑 Feel Binding Pin</span>
+        <div id="pinDots" class="pin-dots" aria-label="Pin Chambers"></div>
+        <span id="statusRight" class="status-right">PIN 1</span>
+      </div>
 
-      <!-- Rotary Dial Canvas -->
+      <!-- Cutaway Brass & Steel Padlock Canvas -->
       <div class="canvas-container">
-        <canvas id="dialCanvas"></canvas>
+        <canvas id="lockCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
+        <!-- Shackle Open Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2.2rem; margin-bottom:6px;">🔓</div>
-            <h2 id="winHeading">Vault Unlocked!</h2>
-            <p id="winText">Every brass tumbler clicked smoothly into place.</p>
-            <button id="nextLevelBtn" class="btn-primary" type="button">Next Safe →</button>
+            <div style="font-size:2.3rem; margin-bottom:6px;">🔓</div>
+            <h2 id="winHeading">Click — Lock Opened!</h2>
+            <p id="winText">Every pin tumbler aligned cleanly along the golden shear line.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Lock →</button>
           </div>
         </div>
       </div>
 
-      <!-- Precision Micro-Turn & Lock Dock -->
-      <div class="precision-dock">
-        <button id="stepCCWBtn" class="dock-btn" type="button" aria-label="Turn Counter-Clockwise">↺ -1</button>
-        <button id="lockPinBtn" class="dock-btn" type="button">🎧 Listen &amp; Reverse</button>
-        <button id="stepCWBtn" class="dock-btn" type="button" aria-label="Turn Clockwise">↻ +1</button>
+      <!-- Tactile Pick Step & Smooth Lift Dock -->
+      <div class="pick-dock">
+        <button id="prevPinBtn" class="pick-btn" type="button" aria-label="Previous Pin">◀ Pin</button>
+        <button id="liftBtn" class="pick-btn lift-main" type="button">▲ HOLD TO LIFT PIN</button>
+        <button id="nextPinBtn" class="pick-btn" type="button" aria-label="Next Pin">Pin ▶</button>
+      </div>
+
+      <div class="legend-strip">
+        <span>👆 Drag Upward Directly on Any Pin (or Hold Lift Button)</span>
+        <span>✨ Stop Right When the Split Hits the Gold Shear Line</span>
+        <span>🎧 Listen for Crisp Brass Clicks!</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Reset Safe</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Stethoscope Hint</button>
-          <button id="sampleBtn" class="btn-outline" type="button">🔔 Hear Click</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reset Core</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Stethoscope</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 ASMR ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Safe 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Lock 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -467,67 +589,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 860+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/zen-lockpicker-banner-1.jpg"
+            alt="Zen Lockpicker online ASMR cutaway pin-tumbler padlock simulator showing brass driver pins aligning along a glowing golden shear line"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Cutaway Pin-Tumbler Padlocks — Real Binding-Order Mechanics</h3>
+          <p>Test spring tension across machined brass chambers, hear authentic metallic shear-line clicks, and feel the core turn smoothly open.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play The Zen Lockpicker (500 Safes)</h2>
-        <p>The Zen Lockpicker is a minimalist auditory puzzle designed for deep focus and tactile ASMR satisfaction. Across 500 increasingly refined vaults—from vintage Brass Tumblers to razor-tight Swiss Mechanisms—your ear is your primary tool. Put on headphones (or watch the subtle acoustic stethoscope wave above the dial) and feel every steel notch turn under your fingertips.</p>
+        <h2>What Is Zen Lockpicker? A Locksport &amp; ASMR Pin-Tumbler Simulator Online</h2>
+        <p><strong>Zen Lockpicker</strong> is a free <strong>cutaway lockpicking simulator game online</strong> inspired by the calming mechanical puzzle hobby known as <em>locksport</em>. Inside every real pin-tumbler padlock, tiny manufacturing tolerances ensure that when gentle rotational pressure is applied to the keyhole plug, <strong>only one pin stack binds tightly at a time</strong>. By probing each spring-loaded chamber with a slender chrome hook pick, feeling for the stiff binding pin, and easing its driver pin right up to the horizontal <strong>Shear Line</strong>, you trigger a crisp, unmistakable brass <em>CLICK</em>—freeing the next binding pin in sequence until the entire cylinder spins open and the steel shackle pops!</p>
+        <p>Built as a tranquil, <strong>no-download mechanical ASMR game for smartphones, iPads, and Chromebooks</strong>, Zen Lockpicker removes broken-pick frustration and stressful countdown timers. Instead, it focuses on rich tactile visual cues and live procedural <strong>Web Audio metallic clicks, spring pings, false-set ticks, and heavy shackle clacks</strong> across all <strong>500 unique cores</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Real Locksport Pin Guide (Standard, Spool &amp; Serrated Security Pins)</h2>
+        <p>As you advance from classic 3-pin brass practice padlocks into high-security titanium and vault cores, you'll encounter authentic security pins shaped specifically to fool hurried hands. Learn how each pin looks and sounds in the cutaway view:</p>
+
+        <div class="lock-table-wrap">
+          <table class="lock-table">
+            <thead>
+              <tr>
+                <th>Driver Pin Type</th>
+                <th>Cutaway Visual Shape</th>
+                <th>How to Pick It Cleanly</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🟡 Standard Brass Pin</strong> (Ch. 1+)</td>
+                <td>Smooth cylindrical golden upper pin.</td>
+                <td>When binding, lift smoothly until the silver/gold split meets the glowing golden <strong>Shear Line</strong>—release right on the resonant <em>CLICK!</em></td>
+              </tr>
+              <tr>
+                <td><strong>⏳ Spool Security Pin</strong> (Ch. 3–5)</td>
+                <td>Hourglass-shaped copper pin with a narrow middle waist.</td>
+                <td>First pauses at an amber <strong>False Set</strong>! Keep lifting gently past the narrow waist until you feel counter-rotation and hear the deep true <em>CLICK!</em></td>
+              </tr>
+              <tr>
+                <td><strong>⚙️ Serrated Pin</strong> (Ch. 4–5)</td>
+                <td>Dark bronze steel pin etched with horizontal ridges.</td>
+                <td>Gives 1–2 tiny sharp micro-ticks before reaching the shear line—don't stop on a light tick; watch the split align with the gold line!</td>
+              </tr>
+              <tr>
+                <td><strong>💡 Acoustic Stethoscope</strong></td>
+                <td>Instant glowing gold binding highlight</td>
+                <td>Unsure which chamber is binding right now? Tap <strong>💡 Stethoscope</strong> to glow the exact active binding pin and illuminate its shear-line target!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Locksport Pro Tip:</strong> If a pin bounces lightly back down when you lift it, it's simply <em>springy</em>—meaning it isn't the active binding pin yet! Probe the neighboring chambers until you find the pin with firm resistance (or a warm amber tension glow), lift it smoothly to the shear line, and watch it lock cleanly in place.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner steel-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/zen-lockpicker-banner-2.jpg"
+            alt="Three cutaway brass, titanium, and dark steel vault padlocks alongside stainless hook picks and acoustic ripple rings in Zen Lockpicker"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Zero-Stress Tactile Precision &amp; Live Web Audio Acoustics</h3>
+          <p>Drag directly upward on any pin chamber with your thumb, hold the precision lift bar, or glide across cylinders with keyboard arrows.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Locksmith Chapters (500 Unique Cutaway Cores)</h2>
+        <p>Every lock from #1 to #500 generates a unique key bitting (pin height profile), authentic binding order sequence, and realistic metallic core finish saved privately inside your browser's local storage:</p>
         <ul>
-          <li><strong>Step 1 — Turn Slowly in the Indicated Direction:</strong> Drag smoothly around the dial (or use your mouse wheel / <code>↺ -1</code> and <code>↻ +1</code> micro-step buttons). Pin 1 turns <strong>Clockwise (↻)</strong>, Pin 2 turns <strong>Counter-Clockwise (↺)</strong>, alternating until all pins drop.</li>
-          <li><strong>Step 2 — Catch the Sweet-Spot Click:</strong> As the dial passes ordinary notches, you'll hear a soft metallic friction whisper. The exact moment you cross the hidden combination notch, a crisp, resonant <strong>CLICK</strong> echoes and the acoustic wave spikes.</li>
-          <li><strong>Step 3 — Reverse Direction to Set the Pin:</strong> Immediately reverse your rotation direction (or tap the glowing gold center button) to latch the tumbler with a heavy mechanical <em>CLUNK</em>, then keep turning in that new direction to hunt for the next click!</li>
-          <li><strong>Beware Decoy Notches:</strong> Starting in Chapter 3, high-security safes include softer, dull false ticks to test your ear. Tap <strong>🔔 Hear Click</strong> anytime to remind yourself of the true crystalline latch sound.</li>
+          <li><strong>Chapter 1 (Locks 1–100 — Brass Practice Padlocks):</strong> Classic 3- and 4-pin cutaway brass cylinders with visible binding glow and forgiving shear-line windows—ideal for learning single-pin picking flow.</li>
+          <li><strong>Chapter 2 (Locks 101–200 — Brushed Steel Cylinders):</strong> Expands to 5-pin commercial cores with varied high-low key bitting and firmer binding orders where probing each chamber matters.</li>
+          <li><strong>Chapter 3 (Locks 201–300 — Spool Security Cores):</strong> Introduces iconic hourglass <strong>Spool Pins</strong> that drop the cylinder into a realistic amber false set before popping crisply onto the shear line!</li>
+          <li><strong>Chapter 4 (Locks 301–400 — Serrated Vault Padlocks):</strong> Adds ridged <strong>Serrated Pins</strong> across 6-pin titanium housings that emit crisp decoy ticks on the way up.</li>
+          <li><strong>Chapter 5 (Locks 401–500 — Master Horology Vaults):</strong> Intricate 6- and 7-pin blackened-steel master locks combining standard, spool, and serrated pins in tight precision tolerances—complete with an instant 1–500 lock picker.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Lockpicking Game Topics">
+          <span class="kw-pill">Cutaway Lockpicking Game Online</span>
+          <span class="kw-pill">Pin Tumbler Simulator Browser Free</span>
+          <span class="kw-pill">Locksport Practice ASMR Web</span>
+          <span class="kw-pill">Spool and Serrated Pin Game</span>
+          <span class="kw-pill">500-Level Mechanical ASMR Puzzle</span>
+          <span class="kw-pill">No-Download Chromebook Zen Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Zen Lockpicker FAQ</h2>
         <details class="faq-item">
-          <summary>Can I play The Zen Lockpicker without headphones?</summary>
-          <div class="faq-answer">Yes! While headphones deliver the richest ASMR stereo experience, the built-in stethoscope waveform at the top of the vault and subtle haptic pulses on supported phones let you feel every click visually and physically too.</div>
+          <summary>Why did a pin spring right back down after I lifted it?</summary>
+          <div class="faq-answer">In a real pin-tumbler lock, only one pin binds firmly under wrench tension at a time. A pin that springs smoothly back down isn't binding yet—slide your hook pick to the other chambers to find the stiff binding pin first!</div>
         </details>
         <details class="faq-item">
-          <summary>What happens if I spin past the click too fast?</summary>
-          <div class="faq-answer">No penalty! Simply keep turning slowly around in the required direction until you approach the click again, or use the <code>↺ -1</code> and <code>↻ +1</code> buttons to dial into the exact notch.</div>
+          <summary>What happens if I push a binding pin too far past the golden Shear Line?</summary>
+          <div class="faq-answer">Pushing past the golden shear line causes a soft <strong>over-set clunk</strong> and gently resets that pin back down so you can ease it up more carefully—no broken picks or harsh restarts!</div>
+        </details>
+        <details class="faq-item">
+          <summary>How do I pick a Spool Pin when it hits a False Set?</summary>
+          <div class="faq-answer">When an hourglass Spool Pin catches in its narrow waist, its indicator dot glows amber and the core tilts slightly. Keep lifting that same spool pin smoothly upward past the waist until the top seam reaches the golden Shear Line for a deep, resonant true <em>CLICK!</em></div>
+        </details>
+        <details class="faq-item">
+          <summary>Are keyboard shortcuts supported on desktop and Chromebooks?</summary>
+          <div class="faq-answer">Yes! Press <code>Left / Right Arrows</code> (or <code>A / D</code>) to move your steel hook pick between chambers, and hold <code>Up Arrow</code>, <code>W</code>, or <code>Space</code> to lift the active pin smoothly toward the shear line!</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🕸️</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Tension &amp; Strings</h3>
-        <p>Drag connected nodes until zero elastic strings overlap across 500 geometric webs.</p>
-        <a href="/games/tension-strings/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🕰️</div><span class="cat-tag">ASMR</span></div>
+        <h3>Antique Restorer</h3>
+        <p>Scrub rust, polish brass to a mirror finish, and fit clockwork gears into vintage watches.</p>
+        <a href="/games/antique-restorer/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🎵</div><span class="cat-tag">Puzzle</span></div>
-        <h3>One-Line Symphony</h3>
-        <p>Trace glowing constellations in one continuous stroke across 500 musical levels.</p>
-        <a href="/games/one-line-symphony/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔧</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Un-Builder</h3>
+        <p>Disassemble retro radios, vintage cameras, and classic clocks step by step in reverse order.</p>
+        <a href="/games/un-builder/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
         <h3>Manual Bomb Defusal</h3>
-        <p>Read the live technical manual against the ticking clock and cut the exact right wire.</p>
+        <p>Decode the live technical manual against the ticking clock and cut the exact right wire.</p>
         <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Safe Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Safe">
+  <!-- Lock Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Padlock Core">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Safe (1 – 500)</h3>
+        <h3>Choose Padlock Core (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to safe (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to lock (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -546,12 +764,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top ASMR</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/powerwash-asmr/">PowerWash ASMR</a></li>
+            <li><a href="/games/perfect-peel/">The Perfect Peel</a></li>
+            <li><a href="/games/antique-restorer/">Antique Restorer</a></li>
+            <li><a href="/games/zen-lockpicker/">Zen Lockpicker</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -560,7 +778,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -593,16 +811,29 @@
     }
 
     // ==============================================
-    // 500-SAFE DETERMINISTIC GENERATOR
+    // CUTAWAY PIN-TUMBLER LOCKPICKING ENGINE (500 LOCKS)
     // ==============================================
     const TOTAL_LEVELS = 500;
-    const NOTCHES = 100; // 0..99 classic combination dial
+    const WORLD_W = 420;
+    const WORLD_H = 420;
+    const SHEAR_Y = 236;     // Golden horizontal shear line dividing bible housing & rotating plug!
+    const PLUG_BOT = 312;
+    const BIBLE_TOP = 114;
+
     const CHAPTERS = [
-      { title: "Chapter 1 • Brass Tumblers", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Bank Vaults", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Swiss Mechanisms", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Silent Shadow", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Master Safe-Cracker", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Brass Practice Padlocks", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Brushed Steel Cylinders", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Spool Security Cores", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Serrated Vault Padlocks", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Horology Vaults", range: "401–500", start: 401, end: 500 }
+    ];
+
+    const LOCK_FINISHES = [
+      { name: "Brass Core",        body1: "#ca8a04", body2: "#854d0e", plug: "#a16207", trim: "#fde047" },
+      { name: "Brushed Steel",     body1: "#64748b", body2: "#334155", plug: "#475569", trim: "#cbd5e1" },
+      { name: "Copper Security",   body1: "#c2410c", body2: "#7c2d12", plug: "#9a3412", trim: "#fdba74" },
+      { name: "Titanium Vault",    body1: "#334155", body2: "#0f172a", plug: "#1e293b", trim: "#38bdf8" },
+      { name: "Obsidian Master",   body1: "#27272a", body2: "#09090b", plug: "#18181b", trim: "#facc15" }
     ];
 
     function mulberry32(seed) {
@@ -615,78 +846,103 @@
       };
     }
 
-    function wrapNotch(n) {
-      return ((n % NOTCHES) + NOTCHES) % NOTCHES;
+    function shuffle(arr, rng) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
     }
 
-    function shortestNotchDelta(from, to) {
-      let d = wrapNotch(to) - wrapNotch(from);
-      if (d > NOTCHES / 2) d -= NOTCHES;
-      if (d < -NOTCHES / 2) d += NOTCHES;
-      return d;
-    }
+    function buildLockCore(levelNum) {
+      const rng = mulberry32(levelNum * 375121 + 91409);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const finish = LOCK_FINISHES[chapIdx];
 
-    function buildSafe(levelNum) {
-      const rng = mulberry32(levelNum * 21401 + 88421);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1);
-
-      let pinCount, tol, decoyCount, waveVisibility;
-      if (levelNum <= 100) {
-        pinCount = 3;
-        tol = 1.65 - (levelNum / 100) * 0.25; // generous ~1.5 notches
-        decoyCount = 0;
-        waveVisibility = 1.0;
-      } else if (levelNum <= 200) {
-        pinCount = 4;
-        tol = 1.4 - ((levelNum - 100) / 100) * 0.2;
-        decoyCount = levelNum > 150 ? 1 : 0;
-        waveVisibility = 0.85;
-      } else if (levelNum <= 300) {
+      let pinCount, tolPx, spoolChance, serrChance, showBindCue;
+      if (chapIdx === 0) {
+        pinCount = levelNum <= 45 ? 3 : 4;
+        tolPx = 10.5;
+        spoolChance = 0; serrChance = 0;
+        showBindCue = true; // Practice cutaway softly glows active binding pin!
+      } else if (chapIdx === 1) {
         pinCount = 5;
-        tol = 1.2 - ((levelNum - 200) / 100) * 0.15;
-        decoyCount = 2;
-        waveVisibility = 0.7;
-      } else if (levelNum <= 400) {
-        pinCount = levelNum > 350 ? 6 : 5;
-        tol = 1.05 - ((levelNum - 300) / 100) * 0.15;
-        decoyCount = 2;
-        waveVisibility = 0.45;
+        tolPx = 9.0;
+        spoolChance = 0; serrChance = 0;
+        showBindCue = false;
+      } else if (chapIdx === 2) {
+        pinCount = 5;
+        tolPx = 8.5;
+        spoolChance = 0.45; serrChance = 0;
+        showBindCue = false;
+      } else if (chapIdx === 3) {
+        pinCount = 6;
+        tolPx = 7.8;
+        spoolChance = 0.25; serrChance = 0.42;
+        showBindCue = false;
       } else {
         pinCount = levelNum > 450 ? 7 : 6;
-        tol = Math.max(0.75, 0.9 - ((levelNum - 400) / 100) * 0.15);
-        decoyCount = 3;
-        waveVisibility = 0.3;
+        tolPx = 7.2;
+        spoolChance = 0.35; serrChance = 0.35;
+        showBindCue = false;
       }
+
+      const spanW = Math.min(276, pinCount * 48);
+      const startX = WORLD_W / 2 - spanW / 2 + (spanW / pinCount) * 0.5;
+      const stepX = spanW / pinCount;
+
+      const order = shuffle(Array.from({ length: pinCount }, (_, i) => i), rng);
 
       const pins = [];
-      let prevTarget = 0; // dial starts at 0
       for (let i = 0; i < pinCount; i++) {
-        const dir = i % 2 === 0 ? 1 : -1; // +1 = CW, -1 = CCW
-        // Pick target at least 22 notches away in the travel direction
-        const travel = 22 + Math.floor(rng() * 58);
-        const target = wrapNotch(prevTarget + dir * travel);
+        // Realistic Key Pin Length (22..52px): Shorter key pins must be lifted higher to reach SHEAR_Y!
+        const keyH = Math.round(24 + rng() * 32);
+        const driverH = 34;
+        // Rest bottom of key pin sits at PLUG_BOT - 14.
+        // At lift = 0, seam between keyPin and driverPin sits at restSeamY = (PLUG_BOT - 14) - keyH.
+        // Wait: to sit BELOW the shear line when unpicked, let's place restSeamY BELOW SHEAR_Y!
+        // Specifically: restSeamY = SHEAR_Y + targetLift!
+        const targetLift = Math.round(18 + rng() * 36); // 18..54px upward travel needed to align seam on SHEAR_Y!
 
-        // Optional false decoy notches far enough from true target
-        const decoys = [];
-        for (let d = 0; d < decoyCount; d++) {
-          let cand = Math.floor(rng() * NOTCHES);
-          let tries = 0;
-          while (
-            tries < 30 &&
-            (Math.abs(shortestNotchDelta(cand, target)) < 12 ||
-              decoys.some((ex) => Math.abs(shortestNotchDelta(cand, ex)) < 12))
-          ) {
-            cand = Math.floor(rng() * NOTCHES);
-            tries++;
-          }
-          decoys.push(cand);
-        }
+        const roll = rng();
+        let kind = "std";
+        if (roll < spoolChance) kind = "spool";
+        else if (roll < spoolChance + serrChance) kind = "serrated";
 
-        pins.push({ target, dir, decoys });
-        prevTarget = target;
+        pins.push({
+          id: i,
+          x: startX + i * stepX,
+          keyH,
+          driverH,
+          targetLift,
+          kind,
+          lift: 0,           // current lift in px (0..70)
+          isSet: false,
+          inFalseSet: false,
+          lastSerrStep: -1,
+          clickFlash: 0
+        });
       }
 
-      return { levelNum, pins, tol, waveVisibility };
+      // Guarantee chapter signature security pins appear cleanly!
+      if (chapIdx === 2 && !pins.some((p) => p.kind === "spool")) {
+        pins[order[Math.floor(pinCount / 2)]].kind = "spool";
+      }
+      if (chapIdx === 3 && !pins.some((p) => p.kind === "serrated")) {
+        pins[order[Math.floor(pinCount / 2)]].kind = "serrated";
+      }
+
+      return {
+        levelNum,
+        chapIdx,
+        finish,
+        pinCount,
+        tolPx,
+        showBindCue,
+        bindingOrder: order,
+        pins
+      };
     }
 
     function getChapter(num) {
@@ -694,10 +950,9 @@
     }
 
     // ==============================================
-    // ASMR METALLIC AUDIO SYNTHESIZER (WEB AUDIO)
+    // CRISP METALLIC TUMBLER & SHACKLE ASMR WEB AUDIO
     // ==============================================
     let audioCtx = null;
-    let noiseBuffer = null;
     let soundOn = true;
 
     function initAudio() {
@@ -706,187 +961,103 @@
         if (AC) audioCtx = new AC();
       }
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-      if (audioCtx && !noiseBuffer) {
-        const len = Math.floor(audioCtx.sampleRate * 0.15);
-        noiseBuffer = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-        const data = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
-      }
     }
 
-    // Subtle steel gear friction tick on every notch
-    function sfxFriction(proximity = 0) {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx || !noiseBuffer) return;
-
-      const now = audioCtx.currentTime;
-      const src = audioCtx.createBufferSource();
-      src.buffer = noiseBuffer;
-
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "bandpass";
-      filter.frequency.value = 2400 + proximity * 700;
-      filter.Q.value = 4.5;
-
-      const gain = audioCtx.createGain();
-      const vol = 0.032 + proximity * 0.025;
-      gain.gain.setValueAtTime(vol, now);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.016);
-
-      src.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      src.start(now);
-      src.stop(now + 0.02);
-    }
-
-    // Duller false decoy tick (Chapters 3-5)
-    function sfxDecoyClick() {
+    function playTone(freq, dur, type = "triangle", vol = 0.1) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(340, now);
-      osc.frequency.exponentialRampToValueAtTime(160, now + 0.045);
-
-      gain.gain.setValueAtTime(0.08, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      const g = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + 0.06);
+      osc.stop(now + dur + 0.02);
     }
 
-    // Unmistakable, crisp, satisfying ASMR brass tumbler CLICK!
-    function sfxTargetClick() {
+    function sfxPickSlide() {
+      playTone(1350 + Math.random() * 200, 0.024, "sine", 0.035);
+    }
+
+    function sfxSpringyPin() {
+      playTone(740, 0.04, "sine", 0.045);
+    }
+
+    function sfxSerratedTick() {
+      playTone(1680 + Math.random() * 220, 0.028, "triangle", 0.075);
+    }
+
+    function sfxFalseSetDrop() {
+      playTone(420, 0.07, "triangle", 0.11);
+      setTimeout(() => playTone(310, 0.09, "sine", 0.09), 30);
+    }
+
+    function sfxTrueBrassClick() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-
       const now = audioCtx.currentTime;
+      // Deep satisfying two-harmonic machined brass shear-line CLICK!
+      const o1 = audioCtx.createOscillator();
+      const g1 = audioCtx.createGain();
+      o1.type = "triangle";
+      o1.frequency.setValueAtTime(1420, now);
+      o1.frequency.exponentialRampToValueAtTime(620, now + 0.042);
+      g1.gain.setValueAtTime(0.001, now);
+      g1.gain.linearRampToValueAtTime(0.18, now + 0.003);
+      g1.gain.exponentialRampToValueAtTime(0.0008, now + 0.055);
+      o1.connect(g1); g1.connect(audioCtx.destination);
+      o1.start(now); o1.stop(now + 0.065);
 
-      // 1. High crystalline metallic snap
-      const oscHi = audioCtx.createOscillator();
-      const gHi = audioCtx.createGain();
-      oscHi.type = "sine";
-      oscHi.frequency.setValueAtTime(2150, now);
-      oscHi.frequency.exponentialRampToValueAtTime(1180, now + 0.075);
-      gHi.gain.setValueAtTime(0.22, now);
-      gHi.gain.exponentialRampToValueAtTime(0.0008, now + 0.09);
-      oscHi.connect(gHi);
-      gHi.connect(audioCtx.destination);
-      oscHi.start(now);
-      oscHi.stop(now + 0.1);
-
-      // 2. Resonant brass body ping
-      const oscBody = audioCtx.createOscillator();
-      const gBody = audioCtx.createGain();
-      oscBody.type = "triangle";
-      oscBody.frequency.setValueAtTime(520, now);
-      oscBody.frequency.exponentialRampToValueAtTime(240, now + 0.09);
-      gBody.gain.setValueAtTime(0.18, now);
-      gBody.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
-      oscBody.connect(gBody);
-      gBody.connect(audioCtx.destination);
-      oscBody.start(now);
-      oscBody.stop(now + 0.12);
-
-      // 3. Sharp mechanical transient burst
-      if (noiseBuffer) {
-        const src = audioCtx.createBufferSource();
-        src.buffer = noiseBuffer;
-        const hp = audioCtx.createBiquadFilter();
-        hp.type = "highpass";
-        hp.frequency.value = 3200;
-        const gn = audioCtx.createGain();
-        gn.gain.setValueAtTime(0.14, now);
-        gn.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
-        src.connect(hp);
-        hp.connect(gn);
-        gn.connect(audioCtx.destination);
-        src.start(now);
-        src.stop(now + 0.03);
-      }
+      const o2 = audioCtx.createOscillator();
+      const g2 = audioCtx.createGain();
+      o2.type = "sine";
+      o2.frequency.setValueAtTime(2480, now + 0.006);
+      g2.gain.setValueAtTime(0.09, now + 0.006);
+      g2.gain.exponentialRampToValueAtTime(0.0008, now + 0.09);
+      o2.connect(g2); g2.connect(audioCtx.destination);
+      o2.start(now + 0.006); o2.stop(now + 0.1);
     }
 
-    // Heavy mechanical pin bolt latch (CLACK!)
-    function sfxPinLocked(pinIndex) {
+    function sfxOversetClunk() {
+      playTone(190, 0.11, "sawtooth", 0.09);
+      setTimeout(() => playTone(135, 0.12, "triangle", 0.08), 45);
+    }
+
+    function sfxShacklePopOpen() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-
-      const now = audioCtx.currentTime;
-      const thud = audioCtx.createOscillator();
-      const gThud = audioCtx.createGain();
-      thud.type = "sine";
-      thud.frequency.setValueAtTime(160, now);
-      thud.frequency.exponentialRampToValueAtTime(58, now + 0.13);
-      gThud.gain.setValueAtTime(0.24, now);
-      gThud.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-      thud.connect(gThud);
-      gThud.connect(audioCtx.destination);
-      thud.start(now);
-      thud.stop(now + 0.16);
-
-      // Soft zen harmonic confirmation
-      const notes = [392.0, 440.0, 523.25, 587.33, 659.25, 783.99, 880.0];
-      const chime = audioCtx.createOscillator();
-      const gChime = audioCtx.createGain();
-      chime.type = "sine";
-      chime.frequency.setValueAtTime(notes[pinIndex % notes.length], now + 0.04);
-      gChime.gain.setValueAtTime(0.001, now + 0.04);
-      gChime.gain.exponentialRampToValueAtTime(0.12, now + 0.06);
-      gChime.gain.exponentialRampToValueAtTime(0.0008, now + 0.42);
-      chime.connect(gChime);
-      gChime.connect(audioCtx.destination);
-      chime.start(now + 0.04);
-      chime.stop(now + 0.45);
-    }
-
-    function sfxVaultOpen() {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx) return;
-      [261.63, 329.63, 392.0, 523.25].forEach((freq, i) => {
-        setTimeout(() => {
-          const now = audioCtx.currentTime;
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(freq, now);
-          gain.gain.setValueAtTime(0.13, now);
-          gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.65);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.7);
-        }, i * 85);
+      // Heavy mechanical shackle CLACK + warm victorious harmonic chime!
+      playTone(260, 0.09, "triangle", 0.18);
+      setTimeout(() => playTone(840, 0.11, "triangle", 0.14), 55);
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.48, "sine", 0.1), 150 + i * 75);
       });
     }
 
-    function triggerHaptic(ms) {
-      if (navigator.vibrate) {
-        try { navigator.vibrate(ms); } catch (e) {}
-      }
-    }
-
     // ==============================================
-    // GAME STATE & ROTARY INTERACTION
+    // GAME STATE, PIN PHYSICS & PICK INTERACTION
     // ==============================================
-    const canvas = document.getElementById("dialCanvas");
+    const canvas = document.getElementById("lockCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const dirPill = document.getElementById("dirPill");
+    const corePill = document.getElementById("corePill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const pinsStrip = document.getElementById("pinsStrip");
-    const lockPinBtn = document.getElementById("lockPinBtn");
+    const statusLbl = document.getElementById("statusLbl");
+    const pinDots = document.getElementById("pinDots");
+    const statusRight = document.getElementById("statusRight");
+    const prevPinBtn = document.getElementById("prevPinBtn");
+    const nextPinBtn = document.getElementById("nextPinBtn");
+    const liftBtn = document.getElementById("liftBtn");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
     const winHeading = document.getElementById("winHeading");
@@ -903,212 +1074,195 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let safe = null;
-    let currentPinIdx = 0;
-    let dialPos = 0; // continuous notch value (0..100 wrapping)
-    let lastIntNotch = 0;
+    let lock = null;
+    let activePinIdx = 0;
+    let pickX = WORLD_W / 2;
+    let lockWon = false;
+    let shackleAnim = 0;     // 0 -> 1 smooth spring-open shackle pop!
+    let coreTwistAnim = 0;   // subtle rotation shimmer on false-set or unlock!
+    let stethoscopeTimer = 0;
 
-    let armed = false; // true once player heard/hit the target click
-    let inSweetSpot = false;
-    let overshootAccum = 0;
-    let reverseAccum = 0;
-    let levelWon = false;
-    let hintTier = 0; // 0 = off, 1 = sector arc, 2 = exact notch
+    let holdingLiftBtn = false;
+    let holdingKeyUp = false;
+    let draggingPin = false;
+    let dragStartY = 0;
+    let dragStartLift = 0;
 
-    // Wave & Visual Juice
-    let waveEnergy = 0;
-    let waveIsClick = false;
-    let clickRings = [];
-    let vaultOpenAnim = 0;
+    let sparks = [];
+    let rings = [];
     let toastTimer = null;
 
-    // Pointer Dragging
-    let isDragging = false;
-    let lastPointerAngle = 0;
-
-    function showToast(msg, ms = 2500) {
+    function showToast(msg, ms = 2400) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
+    function getCurrentBindingPinId() {
+      for (const pid of lock.bindingOrder) {
+        if (!lock.pins[pid].isSet) return pid;
+      }
+      return -1;
+    }
+
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Safe #${currentLevelNum} / ${TOTAL_LEVELS}`;
-      solvedCounter.textContent = `Cracked: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Safe ${currentLevelNum} / 500 ▾`;
+      levelTitle.textContent = `Lock #${currentLevelNum} / ${TOTAL_LEVELS} — ${lock.pinCount}-Pin ${lock.finish.name}`;
+      const setCnt = lock.pins.filter((p) => p.isSet).length;
+      corePill.textContent = `Pins: ${setCnt} / ${lock.pinCount}`;
+      solvedCounter.textContent = `Opened: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Lock ${currentLevelNum} / 500 ▾`;
 
-      if (levelWon) {
-        dirPill.textContent = "Unlocked ✓";
+      const curP = lock.pins[activePinIdx];
+      statusRight.textContent = `PIN ${activePinIdx + 1}`;
+      if (lockWon) {
+        statusLbl.textContent = "🔓 Core Rotated Open!";
+      } else if (curP.isSet) {
+        statusLbl.textContent = `✓ Pin ${activePinIdx + 1} Set! Move Pick`;
+      } else if (curP.inFalseSet) {
+        statusLbl.textContent = `⏳ Spool False Set — Ease Up!`;
+      } else if (activePinIdx === getCurrentBindingPinId()) {
+        statusLbl.textContent = "⚡ Binding Pin! Lift Smoothly";
       } else {
-        const pin = safe.pins[currentPinIdx];
-        dirPill.textContent = pin.dir === 1 ? "Turn ↻ CW" : "Turn ↺ CCW";
+        statusLbl.textContent = "🔍 Springy — Probe Another Pin";
       }
 
-      // Render pin indicator slots
-      pinsStrip.innerHTML = "";
-      safe.pins.forEach((p, idx) => {
-        const slot = document.createElement("span");
-        slot.className = "pin-slot";
-        if (idx < currentPinIdx || levelWon) {
-          slot.classList.add("locked");
-          slot.textContent = "✓";
-        } else if (idx === currentPinIdx) {
-          slot.classList.add(armed ? "armed" : "current");
-          slot.textContent = p.dir === 1 ? "↻" : "↺";
-        } else {
-          slot.textContent = idx + 1;
-        }
-        pinsStrip.appendChild(slot);
+      pinDots.innerHTML = "";
+      lock.pins.forEach((p, idx) => {
+        const d = document.createElement("span");
+        d.className = "pin-dot"
+          + (p.isSet ? " set" : (p.inFalseSet ? " false-set" : ""))
+          + (idx === activePinIdx && !lockWon ? " active" : "");
+        pinDots.appendChild(d);
       });
 
-      // Center dock button feedback
-      if (levelWon) {
-        lockPinBtn.className = "dock-btn";
-        lockPinBtn.textContent = "🔓 Vault Open";
-      } else if (armed) {
-        const nextDir = safe.pins[currentPinIdx].dir === 1 ? "↺ CCW" : "↻ CW";
-        lockPinBtn.className = "dock-btn lock-ready";
-        lockPinBtn.textContent = `CLICK! Reverse ${nextDir} or Tap`;
-      } else {
-        const curDir = safe.pins[currentPinIdx].dir === 1 ? "↻ CW" : "↺ CCW";
-        lockPinBtn.className = "dock-btn";
-        lockPinBtn.textContent = `Turn Slowly ${curDir}`;
+      prevPinBtn.disabled = lockWon || activePinIdx <= 0;
+      nextPinBtn.disabled = lockWon || activePinIdx >= lock.pinCount - 1;
+      liftBtn.disabled = lockWon || curP.isSet;
+    }
+
+    function spawnClickSparks(x, y, col = "#fde047", cnt = 10) {
+      rings.push({ x, y, r: 6, alpha: 0.95, color: col });
+      for (let i = 0; i < cnt; i++) {
+        const a = Math.random() * Math.PI * 2;
+        sparks.push({
+          x, y,
+          vx: Math.cos(a) * (1.2 + Math.random() * 2.2),
+          vy: Math.sin(a) * (1.2 + Math.random() * 2.2),
+          r: 2.2, color: col, alpha: 1
+        });
       }
     }
 
-    function lockCurrentPin() {
-      if (levelWon || !armed) return;
-      const lockedPinIdx = currentPinIdx;
-      armed = false;
-      inSweetSpot = false;
-      overshootAccum = 0;
-      reverseAccum = 0;
-      hintTier = 0;
+    function evaluatePinLift(p) {
+      if (p.isSet || lockWon) return;
 
-      currentPinIdx++;
-      triggerHaptic(40);
+      const bindId = getCurrentBindingPinId();
+      const isBinding = p.id === bindId;
 
-      const geom = getDialGeom();
-      clickRings.push({ x: geom.cx, y: geom.cy, r: geom.R * 0.55, alpha: 0.95, color: "#22c55e" });
-
-      if (currentPinIdx >= safe.pins.length) {
-        levelWon = true;
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_lockpicker_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        sfxVaultOpen();
-        updateHUD();
-
-        const isLast = currentLevelNum === TOTAL_LEVELS;
-        winHeading.textContent = isLast ? "All 500 Safes Cracked!" : `Safe #${currentLevelNum} Unlocked!`;
-        winText.textContent = `All ${safe.pins.length} tumblers latched cleanly in silence.`;
-        nextLevelBtn.textContent = isLast ? "Replay Safe #1" : `Next Safe (#${currentLevelNum + 1}) →`;
-
-        setTimeout(() => winOverlay.classList.add("show"), 650);
-      } else {
-        sfxPinLocked(lockedPinIdx);
-        updateHUD();
-        const nextDir = safe.pins[currentPinIdx].dir === 1 ? "Clockwise (↻)" : "Counter-Clockwise (↺)";
-        showToast(`Pin ${lockedPinIdx + 1} set! Now turn ${nextDir}`, 1800);
+      // Non-binding pins feel light & springy and won't click into shear line yet
+      if (!isBinding) {
+        if (p.lift > p.targetLift + 4) {
+          sfxSpringyPin();
+        }
+        return;
       }
-    }
 
-    // Core Rotation Delta Processor (deltaNotch > 0 = CW, < 0 = CCW)
-    function applyDialRotation(deltaNotch) {
-      if (levelWon || Math.abs(deltaNotch) < 0.0001) return;
-
-      const pin = safe.pins[currentPinIdx];
-      dialPos = wrapNotch(dialPos + deltaNotch);
-
-      const curInt = Math.floor(dialPos);
-      const dist = Math.abs(shortestNotchDelta(dialPos, pin.target));
-      const proximity = Math.max(0, 1 - dist / 14);
-      const movingRightWay = (deltaNotch > 0 && pin.dir === 1) || (deltaNotch < 0 && pin.dir === -1);
-
-      // Play metallic friction tick when crossing integer notches
-      if (curInt !== lastIntNotch) {
-        lastIntNotch = curInt;
-
-        // Check decoy hit
-        const hitDecoy = pin.decoys.some((dn) => Math.abs(shortestNotchDelta(dialPos, dn)) <= 0.75);
-        if (hitDecoy && dist > safe.tol + 1) {
-          sfxDecoyClick();
-          waveEnergy = Math.max(waveEnergy, 0.42);
-          waveIsClick = false;
-        } else {
-          sfxFriction(proximity * safe.waveVisibility);
-          waveEnergy = Math.max(waveEnergy, 0.15 + proximity * 0.18 * safe.waveVisibility);
-          waveIsClick = false;
+      // Serrated Security Pin: gives crisp decoy micro-ticks before true shear line!
+      if (p.kind === "serrated" && p.lift < p.targetLift - lock.tolPx) {
+        const sStep = Math.floor(p.lift / 12);
+        if (sStep > p.lastSerrStep && sStep > 0) {
+          p.lastSerrStep = sStep;
+          sfxSerratedTick();
         }
       }
 
-      // Check target sweet spot
-      if (dist <= safe.tol) {
-        if (!inSweetSpot) {
-          inSweetSpot = true;
-          armed = true;
-          overshootAccum = 0;
-          reverseAccum = 0;
-          sfxTargetClick();
-          triggerHaptic(22);
-          waveEnergy = 1.0;
-          waveIsClick = true;
+      // Spool Security Pin: catches in an amber False Set ~16px below true shear line!
+      const falseSetH = Math.max(8, p.targetLift - 16);
+      if (p.kind === "spool" && !p.inFalseSet && p.lift >= falseSetH && p.lift < p.targetLift - lock.tolPx) {
+        p.inFalseSet = true;
+        sfxFalseSetDrop();
+        spawnClickSparks(p.x, SHEAR_Y, "#f59e0b", 6);
+        showToast("⏳ Spool Pin hit a False Set! Keep easing upward smoothly to set it.", 2300);
+        updateHUD();
+      }
 
-          const geom = getDialGeom();
-          clickRings.push({ x: geom.cx, y: geom.cy, r: geom.R * 0.92, alpha: 0.85, color: "#facc15" });
+      // Over-Set Protection: Pushing way past shear line resets that binding pin cleanly!
+      if (p.lift > p.targetLift + lock.tolPx + 9) {
+        p.lift = 0;
+        p.inFalseSet = false;
+        p.lastSerrStep = -1;
+        draggingPin = false;
+        holdingLiftBtn = false;
+        holdingKeyUp = false;
+        sfxOversetClunk();
+        showToast("⚠️ Pin overset! Lift gently and pause right on the golden Shear Line.", 2300);
+        updateHUD();
+      }
+    }
+
+    // Attempt to Lock Binding Pin on Shear Line (Triggered Smoothly When Inside Sweet Spot & Paused/Released OR Auto-Snaps Gently!)
+    function trySetActivePin(p, allowImmediateSnap = false) {
+      if (p.isSet || lockWon) return false;
+      if (p.id !== getCurrentBindingPinId()) return false;
+
+      const distToShear = Math.abs(p.lift - p.targetLift);
+      if (distToShear <= lock.tolPx && (allowImmediateSnap || distToShear <= lock.tolPx * 0.65)) {
+        p.lift = p.targetLift;
+        p.isSet = true;
+        p.inFalseSet = false;
+        p.clickFlash = 1.0;
+        draggingPin = false;
+        holdingLiftBtn = false;
+        holdingKeyUp = false;
+
+        sfxTrueBrassClick();
+        if (navigator.vibrate) try { navigator.vibrate(18); } catch (e) {}
+        spawnClickSparks(p.x, SHEAR_Y, "#4ade80", 12);
+
+        // Check Complete Padlock Unlock!
+        if (lock.pins.every((pin) => pin.isSet)) {
+          lockWon = true;
+          solvedSet.add(currentLevelNum);
+          try {
+            localStorage.setItem("zinplay_lockpicker_500_solved", JSON.stringify([...solvedSet]));
+          } catch (e) {}
+          sfxShacklePopOpen();
+          spawnClickSparks(WORLD_W / 2, 102, "#fde047", 22);
           updateHUD();
-        }
-      } else {
-        inSweetSpot = false;
-        if (armed) {
-          if (movingRightWay) {
-            // Player kept going past the click
-            overshootAccum += Math.abs(deltaNotch);
-            if (overshootAccum > 3.2) {
-              armed = false;
-              overshootAccum = 0;
-              reverseAccum = 0;
-              updateHUD();
-            }
-          } else {
-            // Player reversed direction right after hearing the click -> LOCK PIN!
-            reverseAccum += Math.abs(deltaNotch);
-            if (reverseAccum >= 1.1) {
-              lockCurrentPin();
-            }
-          }
-        }
-      }
 
-      // Even if still inside sweet spot, reversing clearly locks the pin
-      if (armed && inSweetSpot && !movingRightWay) {
-        reverseAccum += Math.abs(deltaNotch);
-        if (reverseAccum >= 1.1) {
-          lockCurrentPin();
+          const isLast = currentLevelNum === TOTAL_LEVELS;
+          winHeading.textContent = isLast ? "All 500 Locks Picked!" : `Lock #${currentLevelNum} Opened!`;
+          winText.textContent = `Picked all ${lock.pinCount} tumblers cleanly along the shear line!`;
+          nextLevelBtn.textContent = isLast ? "Replay Lock #1" : `Next Lock (#${currentLevelNum + 1}) →`;
+          setTimeout(() => winOverlay.classList.add("show"), 780);
+          return true;
         }
+
+        // Auto-select next unset chamber smoothly? No—let player enjoy probing, or show crisp click toast!
+        showToast(`✨ CLICK! Pin ${p.id + 1} locked at the shear line!`, 1500);
+        updateHUD();
+        return true;
       }
+      return false;
     }
 
-    function loadSafe(num) {
+    function loadLock(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      safe = buildSafe(currentLevelNum);
-      currentPinIdx = 0;
-      dialPos = 0;
-      lastIntNotch = 0;
-      armed = false;
-      inSweetSpot = false;
-      overshootAccum = 0;
-      reverseAccum = 0;
-      levelWon = false;
-      hintTier = 0;
-      waveEnergy = 0;
-      waveIsClick = false;
-      clickRings = [];
-      vaultOpenAnim = 0;
+      lock = buildLockCore(currentLevelNum);
+      activePinIdx = 0;
+      pickX = lock.pins[0].x;
+      lockWon = false;
+      shackleAnim = 0;
+      coreTwistAnim = 0;
+      stethoscopeTimer = 0;
+      holdingLiftBtn = false;
+      holdingKeyUp = false;
+      draggingPin = false;
+      sparks = [];
+      rings = [];
 
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
@@ -1120,6 +1274,17 @@
       updateHUD();
     }
 
+    function selectPin(idx) {
+      if (lockWon) return;
+      const next = Math.max(0, Math.min(lock.pinCount - 1, idx));
+      if (next !== activePinIdx) {
+        activePinIdx = next;
+        sfxPickSlide();
+        updateHUD();
+      }
+    }
+
+    // Viewport & Direct Pin Column Touch/Mouse Dragging!
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1128,149 +1293,134 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function getDialGeom() {
+    function getViewport() {
       const rect = canvas.parentElement.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
-      const cx = w / 2;
-      const cy = h * 0.56;
-      const R = Math.min(w * 0.39, h * 0.36, 152);
-      return { w, h, cx, cy, R };
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offsetX = (rect.width - WORLD_W * scale) / 2;
+      const offsetY = (rect.height - WORLD_H * scale) / 2;
+      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    // Pointer Rotary Dragging
-    canvas.addEventListener("pointerdown", (e) => {
-      initAudio();
-      if (levelWon) return;
-
+    function clientToWorld(clientX, clientY) {
       const rect = canvas.getBoundingClientRect();
-      const px = e.clientX - rect.left;
-      const py = e.clientY - rect.top;
-      const g = getDialGeom();
-      const distFromCenter = Math.hypot(px - g.cx, py - g.cy);
+      const vp = getViewport();
+      return {
+        x: (clientX - rect.left - vp.offsetX) / vp.scale,
+        y: (clientY - rect.top - vp.offsetY) / vp.scale
+      };
+    }
 
-      // Tapping center hub while armed locks pin immediately
-      if (distFromCenter < g.R * 0.34 && armed) {
-        lockCurrentPin();
-        return;
+    canvas.addEventListener("pointerdown", (e) => {
+      if (lockWon) return;
+      initAudio();
+      const pt = clientToWorld(e.clientX, e.clientY);
+
+      // Select nearest pin column horizontally
+      let nearest = 0, bestD = Infinity;
+      lock.pins.forEach((p, idx) => {
+        const d = Math.abs(pt.x - p.x);
+        if (d < bestD) { bestD = d; nearest = idx; }
+      });
+      selectPin(nearest);
+
+      const p = lock.pins[activePinIdx];
+      if (!p.isSet) {
+        draggingPin = true;
+        dragStartY = pt.y;
+        dragStartLift = p.lift;
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
       }
-
-      isDragging = true;
-      canvas.classList.add("turning");
-      lastPointerAngle = Math.atan2(py - g.cy, px - g.cx);
-      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
     canvas.addEventListener("pointermove", (e) => {
-      if (!isDragging || levelWon) return;
-      const rect = canvas.getBoundingClientRect();
-      const px = e.clientX - rect.left;
-      const py = e.clientY - rect.top;
-      const g = getDialGeom();
+      if (!draggingPin || lockWon) return;
+      const pt = clientToWorld(e.clientX, e.clientY);
+      const p = lock.pins[activePinIdx];
+      if (p.isSet) return;
 
-      // Ignore jitter right at dead center
-      if (Math.hypot(px - g.cx, py - g.cy) < 16) return;
-
-      const ang = Math.atan2(py - g.cy, px - g.cx);
-      let dAng = ang - lastPointerAngle;
-      if (dAng > Math.PI) dAng -= Math.PI * 2;
-      if (dAng < -Math.PI) dAng += Math.PI * 2;
-      lastPointerAngle = ang;
-
-      // Convert radians to notches (slight precision damping for smooth Zen feel)
-      const deltaNotch = (dAng / (Math.PI * 2)) * NOTCHES * 0.85;
-      applyDialRotation(deltaNotch);
+      const deltaUp = (dragStartY - pt.y) * 0.65; // Smooth geared precision ratio!
+      p.lift = Math.max(0, Math.min(72, dragStartLift + deltaUp));
+      evaluatePinLift(p);
+      trySetActivePin(p, false);
     });
 
-    const stopDrag = () => {
-      isDragging = false;
-      canvas.classList.remove("turning");
-    };
-    canvas.addEventListener("pointerup", stopDrag);
-    canvas.addEventListener("pointercancel", stopDrag);
-
-    // Mouse Wheel Precision Rotation (Desktop)
-    canvas.addEventListener("wheel", (e) => {
-      if (levelWon) return;
-      e.preventDefault();
-      initAudio();
-      const step = e.deltaY > 0 ? 1 : -1;
-      applyDialRotation(step * 0.85);
-    }, { passive: false });
-
-    // Micro-Step Buttons & Keyboard
-    document.getElementById("stepCCWBtn").addEventListener("click", () => {
-      initAudio();
-      applyDialRotation(-1);
-    });
-    document.getElementById("stepCWBtn").addEventListener("click", () => {
-      initAudio();
-      applyDialRotation(1);
-    });
-    lockPinBtn.addEventListener("click", () => {
-      initAudio();
-      if (armed) {
-        lockCurrentPin();
-      } else if (!levelWon) {
-        const dirWord = safe.pins[currentPinIdx].dir === 1 ? "Clockwise (↻)" : "Counter-Clockwise (↺)";
-        showToast(`Turn ${dirWord} slowly until you hear the crisp CLICK!`, 2200);
+    const endDrag = () => {
+      if (draggingPin) {
+        const p = lock.pins[activePinIdx];
+        trySetActivePin(p, true);
+        draggingPin = false;
       }
-    });
+    };
+    canvas.addEventListener("pointerup", endDrag);
+    canvas.addEventListener("pointercancel", endDrag);
+
+    // Bottom Dock Buttons
+    prevPinBtn.addEventListener("click", () => { initAudio(); selectPin(activePinIdx - 1); });
+    nextPinBtn.addEventListener("click", () => { initAudio(); selectPin(activePinIdx + 1); });
+
+    const startLiftHold = (e) => {
+      e.preventDefault();
+      if (lockWon) return;
+      initAudio();
+      holdingLiftBtn = true;
+    };
+    const stopLiftHold = () => {
+      if (holdingLiftBtn) {
+        holdingLiftBtn = false;
+        trySetActivePin(lock.pins[activePinIdx], true);
+      }
+    };
+    liftBtn.addEventListener("pointerdown", startLiftHold);
+    liftBtn.addEventListener("pointerup", stopLiftHold);
+    liftBtn.addEventListener("pointerleave", stopLiftHold);
+    liftBtn.addEventListener("pointercancel", stopLiftHold);
 
     window.addEventListener("keydown", (e) => {
-      if (pickerModal.classList.contains("open") || levelWon) return;
-      if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
-        initAudio();
-        applyDialRotation(1);
-      } else if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
-        initAudio();
-        applyDialRotation(-1);
-      } else if (e.key === " " || e.key === "Enter") {
-        if (armed) {
-          e.preventDefault();
-          lockCurrentPin();
+      if (pickerModal.classList.contains("open") || lockWon) return;
+      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+        e.preventDefault(); selectPin(activePinIdx - 1);
+      } else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
+        e.preventDefault(); selectPin(activePinIdx + 1);
+      } else if (e.key === "ArrowUp" || e.key === "w" || e.key === "W" || e.key === " ") {
+        e.preventDefault(); initAudio(); holdingKeyUp = true;
+      }
+    });
+    window.addEventListener("keyup", (e) => {
+      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W" || e.key === " ") {
+        if (holdingKeyUp) {
+          holdingKeyUp = false;
+          trySetActivePin(lock.pins[activePinIdx], true);
         }
       }
     });
 
-    // Hint & Sample Click Buttons
+    // Stethoscope Acoustic Hint (Reveals Exact Active Binding Pin & Guides Pick Directly There!)
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (levelWon) return;
+      if (lockWon) return;
       initAudio();
-      sfxTargetClick();
-      hintTier = Math.min(2, hintTier + 1);
-      if (hintTier === 1) {
-        showToast("Golden arc marks the sweet-spot zone on the dial!", 2600);
-      } else {
-        const t = safe.pins[currentPinIdx].target;
-        showToast(`Exact notch is #${t} — align #${t} with the top arrow!`, 3000);
-      }
+      const bindId = getCurrentBindingPinId();
+      if (bindId === -1) return;
+      stethoscopeTimer = 5.0;
+      selectPin(bindId);
+      showToast(`💡 Stethoscope locked onto Binding Pin #${bindId + 1}! Ease it up to the gold line.`, 2700);
     });
 
-    document.getElementById("sampleBtn").addEventListener("click", () => {
-      initAudio();
-      sfxTargetClick();
-      waveEnergy = 0.9;
-      waveIsClick = true;
-      showToast("Listen closely — that's the true latch CLICK sound!", 2100);
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", () => loadSafe(currentLevelNum));
+    document.getElementById("resetBtn").addEventListener("click", () => loadLock(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 ASMR ON" : "🔇 OFF";
     });
     nextLevelBtn.addEventListener("click", () => {
-      loadSafe(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
+      loadLock(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadSafe(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadLock(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadSafe(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadLock(currentLevelNum + 1);
     });
 
-    // Safe Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1301,7 +1451,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadSafe(n);
+          loadLock(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1323,205 +1473,344 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadSafe(val);
+        loadLock(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // MINIMALIST METALLIC DIAL RENDER LOOP
+    // CUTAWAY BRASS & STEEL PADLOCK RENDERER
     // ==============================================
-    function draw(time) {
-      const g = getDialGeom();
-      ctx.clearRect(0, 0, g.w, g.h);
-
-      waveEnergy *= 0.91;
-      if (levelWon && vaultOpenAnim < 1) {
-        vaultOpenAnim = Math.min(1, vaultOpenAnim + 0.025);
+    function drawSpringCoil(x, topY, botY) {
+      const coils = 6;
+      const h = Math.max(8, botY - topY);
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 1.9;
+      ctx.beginPath();
+      ctx.moveTo(x, topY);
+      for (let i = 1; i <= coils; i++) {
+        const sy = topY + (i / coils) * h;
+        const sx = x + (i % 2 === 0 ? -6.5 : 6.5);
+        ctx.lineTo(sx, sy);
       }
+      ctx.lineTo(x, botY);
+      ctx.stroke();
+    }
 
-      // 1. Stethoscope Acoustic Wave Oscilloscope (Top)
-      {
-        const waveY = 34;
-        const waveW = Math.min(g.w - 44, 300);
-        const startX = g.cx - waveW / 2;
-        ctx.save();
-        ctx.strokeStyle = waveIsClick
-          ? `rgba(250, 204, 21, ${0.4 + waveEnergy * 0.6})`
-          : `rgba(56, 189, 248, ${0.25 + waveEnergy * 0.5})`;
-        ctx.shadowColor = waveIsClick ? "#facc15" : "#38bdf8";
-        ctx.shadowBlur = waveIsClick ? 12 : 4;
-        ctx.lineWidth = waveIsClick ? 2.4 : 1.6;
+    function drawDriverPin(x, topY, h, kind, isSet) {
+      const w = 16;
+      ctx.save();
+      if (kind === "spool") {
+        // Hourglass Copper-Gold Spool Security Pin!
+        ctx.fillStyle = isSet ? "#4ade80" : "#ea580c";
+        ctx.strokeStyle = "#fde68a";
+        ctx.lineWidth = 1.4;
         ctx.beginPath();
-        for (let i = 0; i <= 60; i++) {
-          const t = i / 60;
-          const x = startX + t * waveW;
-          const env = Math.sin(t * Math.PI);
-          const amp = (waveEnergy * 18 + 1.2) * env;
-          const y = waveY + Math.sin(t * 26 + time * 0.025) * amp;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
+        ctx.moveTo(x - w / 2, topY);
+        ctx.lineTo(x + w / 2, topY);
+        ctx.lineTo(x + w / 2, topY + 7);
+        ctx.lineTo(x + 4, topY + 11);
+        ctx.lineTo(x + 4, topY + h - 11);
+        ctx.lineTo(x + w / 2, topY + h - 7);
+        ctx.lineTo(x + w / 2, topY + h);
+        ctx.lineTo(x - w / 2, topY + h);
+        ctx.lineTo(x - w / 2, topY + h - 7);
+        ctx.lineTo(x - 4, topY + h - 11);
+        ctx.lineTo(x - 4, topY + 11);
+        ctx.lineTo(x - w / 2, topY + 7);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      } else {
+        // Standard Brass OR Serrated Ridged Bronze Driver Pin
+        const g = ctx.createLinearGradient(x - w / 2, topY, x + w / 2, topY);
+        if (isSet) {
+          g.addColorStop(0, "#16a34a"); g.addColorStop(0.5, "#86efac"); g.addColorStop(1, "#15803d");
+        } else if (kind === "serrated") {
+          g.addColorStop(0, "#78350f"); g.addColorStop(0.5, "#d97706"); g.addColorStop(1, "#451a03");
+        } else {
+          g.addColorStop(0, "#b45309"); g.addColorStop(0.5, "#fef08a"); g.addColorStop(1, "#92400e");
         }
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // 2. Outer Brushed Steel Vault Bezel
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(g.cx, g.cy, g.R + 18, 0, Math.PI * 2);
-      ctx.fillStyle = "#0e1526";
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = levelWon ? "#22c55e" : (armed ? "#facc15" : "#24304a");
-      if (armed || levelWon) {
-        ctx.shadowColor = levelWon ? "#22c55e" : "#facc15";
-        ctx.shadowBlur = 18;
-      }
-      ctx.stroke();
-      ctx.restore();
-
-      // 3. Optional Hint Zone Arc on Dial
-      const visualAngle = (dialPos / NOTCHES) * Math.PI * 2;
-      if (hintTier > 0 && !levelWon) {
-        const pin = safe.pins[currentPinIdx];
-        const notchAngle = -Math.PI / 2 + visualAngle - (pin.target / NOTCHES) * Math.PI * 2;
-        const spread = hintTier === 1 ? 0.34 : 0.06;
-        ctx.save();
-        ctx.strokeStyle = hintTier === 1 ? "rgba(250, 204, 21, 0.55)" : "#facc15";
-        ctx.shadowColor = "#facc15";
-        ctx.shadowBlur = 12;
-        ctx.lineWidth = 7;
+        ctx.fillStyle = g;
+        ctx.strokeStyle = isSet ? "#bbf7d0" : "#fef08a";
+        ctx.lineWidth = 1.3;
         ctx.beginPath();
-        ctx.arc(g.cx, g.cy, g.R + 9, notchAngle - spread, notchAngle + spread);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // 4. Rotating Safe Dial Body
-      ctx.save();
-      ctx.translate(g.cx, g.cy);
-
-      // Metallic radial gradient face
-      const grad = ctx.createRadialGradient(-g.R * 0.25, -g.R * 0.25, g.R * 0.1, 0, 0, g.R);
-      grad.addColorStop(0, "#24314d");
-      grad.addColorStop(0.65, "#111829");
-      grad.addColorStop(1, "#090d18");
-
-      ctx.beginPath();
-      ctx.arc(0, 0, g.R, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "#334155";
-      ctx.stroke();
-
-      // Engraved 0..99 Tick Marks & Numbers
-      for (let i = 0; i < NOTCHES; i++) {
-        const a = -Math.PI / 2 + visualAngle - (i / NOTCHES) * Math.PI * 2;
-        const isMajor = i % 10 === 0;
-        const isMid = i % 5 === 0;
-        const rOuter = g.R - 4;
-        const rInner = isMajor ? g.R - 18 : (isMid ? g.R - 13 : g.R - 9);
-
-        ctx.strokeStyle = isMajor ? "#e2e8f0" : (isMid ? "#94a3b8" : "rgba(148, 163, 184, 0.35)");
-        ctx.lineWidth = isMajor ? 2.2 : 1.2;
-        ctx.beginPath();
-        ctx.moveTo(Math.cos(a) * rInner, Math.sin(a) * rInner);
-        ctx.lineTo(Math.cos(a) * rOuter, Math.sin(a) * rOuter);
+        ctx.roundRect(x - w / 2, topY, w, h, 3);
+        ctx.fill();
         ctx.stroke();
 
-        if (isMajor) {
-          const rTxt = g.R - 31;
-          ctx.save();
-          ctx.translate(Math.cos(a) * rTxt, Math.sin(a) * rTxt);
-          ctx.rotate(a + Math.PI / 2);
-          ctx.fillStyle = "#cbd5e1";
-          ctx.font = `700 ${Math.max(10, Math.round(g.R * 0.088))}px monospace`;
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(String(i), 0, 0);
-          ctx.restore();
+        // Crisp Horizontal Serration Grooves
+        if (kind === "serrated") {
+          ctx.strokeStyle = "#1c1917";
+          ctx.lineWidth = 1.6;
+          for (let sy = topY + 8; sy < topY + h - 6; sy += 7) {
+            ctx.beginPath(); ctx.moveTo(x - w / 2, sy); ctx.lineTo(x + w / 2, sy); ctx.stroke();
+          }
         }
       }
-
-      // Inner Knurled Handle Hub
-      const hubR = g.R * 0.42;
-      ctx.beginPath();
-      ctx.arc(0, 0, hubR, 0, Math.PI * 2);
-      ctx.fillStyle = "#0b1120";
-      ctx.fill();
-      ctx.lineWidth = 2.5;
-      ctx.strokeStyle = levelWon ? "#22c55e" : (armed ? "#facc15" : "#475569");
-      ctx.stroke();
-
-      // Rotating grip spokes on inner hub
-      ctx.save();
-      ctx.rotate(visualAngle + vaultOpenAnim * Math.PI * 0.75);
-      for (let s = 0; s < 3; s++) {
-        const sa = (s * Math.PI * 2) / 3;
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.28)";
-        ctx.lineWidth = 4;
-        ctx.lineCap = "round";
-        ctx.beginPath();
-        ctx.moveTo(Math.cos(sa) * (hubR * 0.45), Math.sin(sa) * (hubR * 0.45));
-        ctx.lineTo(Math.cos(sa) * (hubR - 5), Math.sin(sa) * (hubR - 5));
-        ctx.stroke();
-      }
       ctx.restore();
+    }
 
-      // Current Notch Digital Readout in Center Hub
-      const shownNum = Math.round(dialPos) % NOTCHES;
-      ctx.fillStyle = levelWon ? "#4ade80" : (armed ? "#facc15" : "#f8fafc");
-      ctx.font = `800 ${Math.max(18, Math.round(g.R * 0.17))}px monospace`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(String(shownNum).padStart(2, "0"), 0, -2);
-
-      // Subtle Direction Cue Inside Hub
-      ctx.fillStyle = levelWon ? "#86efac" : (armed ? "#fef08a" : "#64748b");
-      ctx.font = `700 ${Math.max(9, Math.round(g.R * 0.068))}px sans-serif`;
-      const subTxt = levelWon ? "OPEN" : (armed ? "REVERSE!" : (safe.pins[currentPinIdx].dir === 1 ? "CW ↻" : "↺ CCW"));
-      ctx.fillText(subTxt, 0, hubR * 0.48);
-
-      ctx.restore(); // End dial translate
-
-      // 5. Fixed Brass Index Triangle at 12 O'Clock
+    function drawKeyPin(x, topY, h) {
+      const w = 16;
       ctx.save();
-      ctx.fillStyle = levelWon ? "#22c55e" : (armed ? "#facc15" : "#ef4444");
-      ctx.shadowColor = levelWon ? "#22c55e" : (armed ? "#facc15" : "#ef4444");
-      ctx.shadowBlur = 10;
-      const tipY = g.cy - g.R - 2;
+      const g = ctx.createLinearGradient(x - w / 2, topY, x + w / 2, topY);
+      g.addColorStop(0, "#64748b");
+      g.addColorStop(0.5, "#f8fafc");
+      g.addColorStop(1, "#475569");
+      ctx.fillStyle = g;
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 1.2;
+
+      // Tapered rounded key-pin tip at bottom where steel hook pick engages!
       ctx.beginPath();
-      ctx.moveTo(g.cx, tipY + 10);
-      ctx.lineTo(g.cx - 8, tipY - 8);
-      ctx.lineTo(g.cx + 8, tipY - 8);
+      ctx.moveTo(x - w / 2, topY);
+      ctx.lineTo(x + w / 2, topY);
+      ctx.lineTo(x + w / 2, topY + h - 7);
+      ctx.lineTo(x + 3, topY + h);
+      ctx.lineTo(x - 3, topY + h);
+      ctx.lineTo(x - w / 2, topY + h - 7);
       ctx.closePath();
       ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    let lastTime = performance.now();
+
+    function frame(now) {
+      const dt = Math.min(0.04, (now - lastTime) / 1000);
+      lastTime = now;
+
+      if (stethoscopeTimer > 0) stethoscopeTimer = Math.max(0, stethoscopeTimer - dt);
+
+      // Smoothly move steel hook pick horizontally toward active chamber
+      const curPin = lock.pins[activePinIdx];
+      pickX += (curPin.x - pickX) * Math.min(1, dt * 16);
+
+      // Smoothly raise active pin while holding Lift button or Keyboard Up!
+      if ((holdingLiftBtn || holdingKeyUp) && !curPin.isSet && !lockWon) {
+        const liftSpd = curPin.inFalseSet ? 26 : 42; // extra control inside spool false-set!
+        curPin.lift = Math.min(72, curPin.lift + dt * liftSpd);
+        evaluatePinLift(curPin);
+        trySetActivePin(curPin, false);
+      }
+
+      // Gently spring-return unset pins when not being pushed!
+      for (const p of lock.pins) {
+        if (p.clickFlash > 0) p.clickFlash = Math.max(0, p.clickFlash - dt * 2.5);
+        const beingHeld = (p.id === activePinIdx) && (draggingPin || holdingLiftBtn || holdingKeyUp);
+        if (!p.isSet && !beingHeld) {
+          const restFloor = p.inFalseSet ? Math.max(8, p.targetLift - 16) : 0;
+          if (p.lift > restFloor) {
+            p.lift = Math.max(restFloor, p.lift - dt * 95);
+          }
+        }
+      }
+
+      // Animate Shackle Popping Open Upon Unlock!
+      if (lockWon && shackleAnim < 1) {
+        shackleAnim = Math.min(1, shackleAnim + dt * 3.8);
+      }
+
+      const vp = getViewport();
+      ctx.clearRect(0, 0, vp.w, vp.h);
+
+      ctx.save();
+      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.scale(vp.scale, vp.scale);
+
+      const fin = lock.finish;
+      const bindId = getCurrentBindingPinId();
+      const anyFalseSet = lock.pins.some((p) => p.inFalseSet);
+
+      // 1. Hardened Chrome Steel Padlock Shackle Arch (Pops Up Smoothly on Unlock!)
+      const shackleLift = shackleAnim * 44;
+      ctx.save();
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 22;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(126, 136 - shackleLift);
+      ctx.lineTo(126, 78 - shackleLift);
+      ctx.arc(WORLD_W / 2, 78 - shackleLift, 84, Math.PI, 0);
+      ctx.lineTo(294, 136 - shackleLift);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#f8fafc";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(122, 126 - shackleLift);
+      ctx.lineTo(122, 78 - shackleLift);
+      ctx.arc(WORLD_W / 2, 78 - shackleLift, 88, Math.PI, Math.PI * 1.65);
+      ctx.stroke();
       ctx.restore();
 
-      // 6. Click Echo Ripples
-      clickRings = clickRings.filter((r) => r.alpha > 0.03);
-      clickRings.forEach((r) => {
-        r.r += 2.1;
-        r.alpha *= 0.91;
+      // 2. Main Cutaway Padlock Body Shell
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.55)";
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 10;
+      const bg = ctx.createLinearGradient(44, 108, 376, 358);
+      bg.addColorStop(0, fin.body1);
+      bg.addColorStop(1, fin.body2);
+      ctx.fillStyle = bg;
+      ctx.strokeStyle = fin.trim;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.roundRect(44, 108, WORLD_W - 88, 250, 22);
+      ctx.fill();
+      ctx.stroke();
+      ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+      // Upper Recessed Cutaway Bible Chamber Window
+      ctx.fillStyle = "#0e121a";
+      ctx.beginPath();
+      ctx.roundRect(62, BIBLE_TOP + 8, WORLD_W - 124, SHEAR_Y - BIBLE_TOP - 8, 8);
+      ctx.fill();
+
+      // Lower Rotating Cylinder Plug Housing (Shifts Slightly on False Set or Unlock!)
+      const plugShift = lockWon ? 10 * shackleAnim : (anyFalseSet ? 2.5 : 0);
+      ctx.fillStyle = fin.plug;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.roundRect(62 + plugShift, SHEAR_Y + 2, WORLD_W - 124, PLUG_BOT - SHEAR_Y + 24, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      // Dark Keyway Channel Tunnel at Bottom of Plug
+      ctx.fillStyle = "#090c12";
+      ctx.beginPath();
+      ctx.roundRect(68, PLUG_BOT - 12, WORLD_W - 136, 30, 6);
+      ctx.fill();
+      ctx.restore();
+
+      // 3. Draw Each Pin Chamber: Spring, Driver Pin & Key Pin!
+      for (const p of lock.pins) {
+        const seamY = (SHEAR_Y + p.targetLift) - p.lift;
+        const driverTopY = seamY - p.driverH;
+        const isActive = p.id === activePinIdx && !lockWon;
+        const isBinding = p.id === bindId && !lockWon;
+        const glowBind = isBinding && (lock.showBindCue || stethoscopeTimer > 0);
+
+        // Recessed vertical machined bore column
+        ctx.fillStyle = isActive ? "rgba(56, 189, 248, 0.14)" : "rgba(0, 0, 0, 0.35)";
+        ctx.fillRect(p.x - 11, BIBLE_TOP + 12, 22, PLUG_BOT - BIBLE_TOP - 16);
+
+        // Subtle golden binding shimmer cue (Chapter 1 practice or Stethoscope Hint!)
+        if (glowBind) {
+          const pulse = 0.45 + 0.4 * Math.sin(now * 0.01);
+          ctx.strokeStyle = `rgba(250, 204, 21, ${pulse})`;
+          ctx.lineWidth = 2;
+          ctx.strokeRect(p.x - 12, BIBLE_TOP + 12, 24, PLUG_BOT - BIBLE_TOP - 16);
+        }
+
+        // Coiled Steel Spring Above Driver Pin
+        drawSpringCoil(p.x, BIBLE_TOP + 14, driverTopY);
+
+        // Upper Driver Pin (Standard / Spool / Serrated)
+        drawDriverPin(p.x, driverTopY, p.driverH, p.kind, p.isSet);
+
+        // Lower Silver Key Pin (Drops smoothly out of keyway once core rotates!)
+        drawKeyPin(p.x, seamY + 1, p.keyH);
+
+        // Pin Chamber Number Badge Underneath Plug
+        ctx.fillStyle = p.isSet ? "#4ade80" : (isActive ? "#38bdf8" : "#cbd5e1");
+        ctx.font = "900 10px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(String(p.id + 1), p.x, PLUG_BOT + 36);
+      }
+
+      // 4. Luminous Horizontal Golden SHEAR LINE!
+      ctx.save();
+      ctx.strokeStyle = lockWon ? "#4ade80" : "#facc15";
+      ctx.shadowColor = lockWon ? "#22c55e" : "#f59e0b";
+      ctx.shadowBlur = 10;
+      ctx.lineWidth = 2.4;
+      ctx.setLineDash([7, 5]);
+      ctx.beginPath();
+      ctx.moveTo(54, SHEAR_Y);
+      ctx.lineTo(WORLD_W - 54, SHEAR_Y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = "rgba(12, 15, 22, 0.88)";
+      ctx.beginPath();
+      ctx.roundRect(WORLD_W - 134, SHEAR_Y - 19, 76, 15, 4);
+      ctx.fill();
+      ctx.fillStyle = lockWon ? "#86efac" : "#fde047";
+      ctx.font = "900 8px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(lockWon ? "SHEAR CLEAR" : "SHEAR LINE", WORLD_W - 96, SHEAR_Y - 11.5);
+      ctx.restore();
+
+      // 5. Sleek Stainless Steel Hook Lockpick Gliding Inside the Keyway!
+      if (!lockWon) {
+        const tipBottomY = (SHEAR_Y + curPin.targetLift - curPin.lift) + curPin.keyH + 2;
         ctx.save();
-        ctx.strokeStyle = r.color;
-        ctx.globalAlpha = r.alpha;
-        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = "#e2e8f0";
+        ctx.shadowColor = "rgba(56, 189, 248, 0.45)";
+        ctx.shadowBlur = 8;
+        ctx.lineWidth = 4.2;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
         ctx.beginPath();
-        ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+        // Slender steel shaft entering from left keyway entrance -> curved hook tip right under active pin!
+        ctx.moveTo(22, PLUG_BOT + 4);
+        ctx.lineTo(pickX - 9, PLUG_BOT + 4);
+        ctx.quadraticCurveTo(pickX, PLUG_BOT + 2, pickX, tipBottomY);
+        ctx.stroke();
+
+        // Pick handle grip at far left
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#334155";
+        ctx.strokeStyle = "#94a3b8";
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.roundRect(6, PLUG_BOT - 5, 36, 18, 5);
+        ctx.fill();
         ctx.stroke();
         ctx.restore();
-      });
+      }
 
-      requestAnimationFrame(draw);
+      // 6. Crisp Click Acoustic Ripple Rings & Golden Sparks
+      rings = rings.filter((rg) => rg.alpha > 0.04);
+      for (const rg of rings) {
+        rg.r += 1.9;
+        rg.alpha *= 0.89;
+        ctx.strokeStyle = rg.color;
+        ctx.globalAlpha = rg.alpha;
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.arc(rg.x, rg.y, rg.r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha *= 0.91;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.restore();
+      requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadSafe(currentLevelNum);
-    requestAnimationFrame(draw);
+    loadLock(currentLevelNum);
+    requestAnimationFrame(frame);
   </script>
 
 </body>
