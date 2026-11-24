@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Antique Restorer — 500 Vintage Workshop Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 relaxing ASMR restoration levels in Antique Restorer. Scrub rust, assemble interlocking brass gears, and polish vintage pocket watches, compasses, and gramophones." />
+  <title>Antique Restorer — Free 500-Level ASMR Vintage Restoration Game | ZinPlay</title>
+  <meta name="description" content="Play Antique Restorer free online with no download. Scrub verdigris rust, buff dull brass to a mirror shine, and snap missing clockwork gears back into 500 vintage pocket watches, compasses, and heirlooms with live ASMR Web Audio." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Antique Restorer",
+    "url": "https://zinplay.io/games/antique-restorer/",
+    "genre": ["ASMR", "Restoration Simulation", "Relaxing Craft Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top HUD */
+    /* Top Watchmaker Atelier HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #14110f;
-      color: #f5efe6;
-      border-bottom: 1px solid #2c241d;
+      background: #14110d;
+      color: #fef3c7;
+      border-bottom: 1px solid #30261b;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #c9a97c;
-      font-weight: 600;
+      color: #f59e0b;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -63,201 +76,180 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(217, 119, 6, 0.2);
-      border: 1px solid rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.16);
+      border: 1px solid rgba(251, 191, 36, 0.36);
       color: #fde68a;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
     .hud-pill.done-pill {
-      background: rgba(34, 197, 94, 0.18);
-      border-color: rgba(74, 222, 128, 0.42);
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
       color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* 3-Step Restoration Workflow Stepper */
-    .steps-strip {
+    /* 3-Stage Restoration Stepper & Progress Bar */
+    .stage-strip {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 9px 14px;
+      background: #1c1712;
+      border-bottom: 1px solid #352b20;
+      color: #e7e5e4;
+    }
+    .step-pills-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
-      padding: 10px 12px;
-      background: #1c1713;
-      border-bottom: 1px solid #2e261f;
     }
-    .step-chip {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      padding: 7px 6px;
-      border-radius: 10px;
-      border: 1.5px solid #352b22;
-      background: #14100d;
-      color: #8c7b68;
-      font-size: 0.74rem;
+    .step-pill {
+      padding: 5px 6px;
+      border-radius: 8px;
+      background: #120e0b;
+      border: 1px solid #362c22;
+      color: #a8a29e;
+      font-size: 0.7rem;
       font-weight: 800;
+      text-align: center;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       transition: all 0.2s ease;
     }
-    .step-chip.active {
+    .step-pill.active {
+      background: rgba(245, 158, 11, 0.2);
       border-color: #f59e0b;
-      background: rgba(245, 158, 11, 0.18);
-      color: #fef3c7;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+      color: #fef08a;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
     }
-    .step-chip.complete {
-      border-color: #22c55e;
+    .step-pill.done {
       background: rgba(34, 197, 94, 0.16);
-      color: #bbf7d0;
+      border-color: #22c55e;
+      color: #86efac;
     }
-
-    /* Stage Progress Meter */
-    .stage-bar-wrap {
+    .prog-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 8px 14px;
-      background: #171310;
-      border-bottom: 1px solid #2c241d;
-      color: #e7dcc8;
       font-size: 0.74rem;
       font-weight: 800;
     }
-    .stage-label {
-      min-width: 96px;
-      color: #fbbf24;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .prog-lbl {
+      min-width: 118px;
+      color: #fcd34d;
+      white-space: nowrap;
     }
-    .stage-track {
+    .prog-track {
       flex: 1;
-      height: 10px;
+      height: 9px;
       background: #0d0a08;
       border-radius: 999px;
-      border: 1px solid #3a2e24;
+      border: 1px solid #423628;
       overflow: hidden;
     }
-    .stage-fill {
+    .prog-fill {
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      background: linear-gradient(90deg, #d97706 0%, #f59e0b 55%, #34d399 100%);
-      transition: width 0.08s ease-out;
+      background: linear-gradient(90deg, #d97706 0%, #facc15 55%, #34d399 100%);
+      transition: width 0.1s linear;
     }
-    .stage-pct {
+    .prog-val {
       min-width: 48px;
       text-align: right;
       font-family: monospace;
-      font-size: 0.82rem;
-      color: #fde68a;
+      color: #ffffff;
     }
 
-    /* Workbench Canvas */
+    /* Emerald Velvet Jeweler's Mat Canvas Stage */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 430px;
-      background: radial-gradient(circle at 50% 42%, #2c231b 0%, #16110d 100%);
+      aspect-ratio: 1 / 1;
+      max-height: 495px;
+      background: radial-gradient(circle at 50% 42%, #13382e 0%, #091d18 100%);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
       -webkit-user-select: none;
     }
-    @media (min-width: 640px) {
-      .canvas-container {
-        height: 475px;
-      }
-    }
-    #benchCanvas {
+    #antiqueCanvas {
       width: 100%;
       height: 100%;
       display: block;
       touch-action: none;
-      cursor: crosshair;
+      cursor: grab;
+    }
+    #antiqueCanvas.working {
+      cursor: grabbing;
     }
 
-    /* Mechanical Parts Tray (Active During Stage 2) */
-    .parts-tray {
-      background: #171310;
-      border-top: 1px solid #2e251d;
-      padding: 10px 12px;
-      min-height: 82px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .tray-title {
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #c9a97c;
-      margin-bottom: 7px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .parts-row {
-      display: flex;
+    /* Interactive Jeweler's Tool Bench Dock */
+    .tool-dock {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 2px;
+      padding: 11px 12px;
+      background: #14100c;
+      border-top: 1px solid #30261b;
     }
-    .part-btn {
-      flex: 0 0 auto;
-      min-width: 78px;
-      padding: 6px 10px;
-      border-radius: 10px;
-      border: 1.5px solid #3c3026;
-      background: #221b16;
-      color: #f5efe6;
+    .tool-btn {
+      min-height: 54px;
+      padding: 6px 6px;
+      border-radius: 12px;
+      border: 1.5px solid #382d20;
+      background: #1f1913;
+      color: #a8a29e;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 2px;
       cursor: pointer;
-      transition: transform 0.1s ease, border-color 0.14s ease, background 0.14s ease;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
     }
-    .part-btn.selected {
-      border-color: #facc15;
-      background: rgba(250, 204, 21, 0.18);
-      box-shadow: 0 0 12px rgba(250, 204, 21, 0.28);
-      transform: translateY(-2px);
+    .tool-btn:active { transform: scale(0.95); }
+    .tool-btn.active {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.22);
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.3);
     }
-    .part-swatch {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 2.5px dashed rgba(255, 255, 255, 0.7);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      font-weight: 900;
-      color: #0f172a;
+    .tool-btn.completed {
+      border-color: #22c55e;
+      color: #86efac;
     }
-    .part-name {
-      font-size: 0.7rem;
+    .tl-name {
+      font-size: 0.78rem;
       font-weight: 800;
+      white-space: nowrap;
     }
-    .part-size {
+    .tl-sub {
       font-size: 0.62rem;
-      color: #c9a97c;
+      color: #78716c;
       font-weight: 700;
     }
-    .tool-banner {
-      font-size: 0.8rem;
-      color: #e7dcc8;
-      font-weight: 700;
+    .tool-btn.active .tl-sub {
+      color: #fde68a;
+    }
+
+    .legend-strip {
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 10px 6px;
-      background: #1f1914;
-      border-radius: 10px;
-      border: 1px solid #352b22;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #0e0b09;
+      border-top: 1px solid #261e16;
+      font-size: 0.73rem;
+      color: #a8a29e;
     }
 
     .status-toast {
@@ -265,8 +257,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(20, 15, 11, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.7);
+      background: rgba(14, 11, 9, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -280,14 +272,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
     .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(14, 11, 8, 0.82);
+      background: rgba(10, 18, 15, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -307,19 +297,12 @@
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -348,7 +331,7 @@
       cursor: pointer;
     }
 
-    /* Level Picker Modal */
+    /* Relic Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -360,9 +343,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -459,6 +440,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #14110d;
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #14110d;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #17120c 0%, #451a03 100%);
+      color: #fef3c7;
+    }
+    .game-seo-banner.velvet-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #064e3b 0%, #1c140e 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fde68a;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .rest-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .rest-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .rest-table th, .rest-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .rest-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .rest-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -471,7 +532,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -484,65 +545,85 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Antiques &bull; ASMR Workshop</span>
+      <span class="cat-tag">500 Heirlooms &bull; ASMR Restoration Craft</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Antique Restorer</h1>
-      <p>Scrub away centuries of rust, reassemble interlocking brass gears, and buff heirloom treasures back to a mirror shine.</p>
+      <p>Scrub centuries of teal verdigris and rust, buff dull brass with a velvet cloth until it gleams like gold, and snap tiny missing clockwork gears back into 500 treasured relics.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Antique Restorer Workshop Game">
+    <section class="game-wrapper" aria-label="Antique Restorer ASMR Workshop Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Attic Finds</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Pocket Timepieces</span>
           <span id="levelTitle">Relic #1 / 500 — Victorian Pocket Watch</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="eraPill">Est. 1892</span>
+          <span class="hud-pill" id="eraPill">Era: 1884</span>
           <span class="hud-pill done-pill" id="solvedCounter">Restored: 0 / 500</span>
         </div>
       </div>
 
-      <!-- 3-Stage Workshop Stepper -->
-      <div class="steps-strip" aria-label="Restoration Stages">
-        <div id="step1Chip" class="step-chip active">1. 🧽 Scrub Rust</div>
-        <div id="step2Chip" class="step-chip">2. ⚙️ Fit Gears</div>
-        <div id="step3Chip" class="step-chip">3. ✨ Polish</div>
-      </div>
-
-      <!-- Active Stage Progress Bar -->
-      <div class="stage-bar-wrap">
-        <span id="stageLabel" class="stage-label">🧽 RUST REMOVED</span>
-        <div class="stage-track">
-          <div id="stageFill" class="stage-fill"></div>
+      <!-- 3-Phase Atelier Workflow Stepper -->
+      <div class="stage-strip">
+        <div class="step-pills-row">
+          <div id="pillStep1" class="step-pill active">1. 🪥 Scrub Rust</div>
+          <div id="pillStep2" class="step-pill">2. ✨ Velvet Buff</div>
+          <div id="pillStep3" class="step-pill">3. ⚙️ Fit Parts</div>
         </div>
-        <span id="stagePct" class="stage-pct">0%</span>
+        <div class="prog-row">
+          <span id="progLbl" class="prog-lbl">🪥 Brush Off Rust</span>
+          <div class="prog-track">
+            <div id="progFill" class="prog-fill"></div>
+          </div>
+          <span id="progVal" class="prog-val">0%</span>
+        </div>
       </div>
 
+      <!-- Emerald Velvet Watchmaker's Mat Canvas -->
       <div class="canvas-container">
-        <canvas id="benchCanvas"></canvas>
+        <canvas id="antiqueCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Restored Win Overlay -->
+        <!-- Museum-Grade Restoration Victory Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
             <div style="font-size:2.3rem; margin-bottom:6px;">🕰️</div>
             <h2 id="winHeading">Heirloom Restored!</h2>
-            <p id="winText">Clean gears ticking smoothly and brass gleaming like new.</p>
+            <p id="winText">Gleaming like the day it left the 19th-century watchmaker's bench.</p>
             <button id="nextLevelBtn" class="btn-primary" type="button">Next Antique →</button>
           </div>
         </div>
       </div>
 
-      <!-- Dynamic Tool / Gear Parts Dock -->
-      <div id="partsTray" class="parts-tray"></div>
+      <!-- 3 Bench Tools (Auto-Advances Smoothly Each Phase!) -->
+      <div id="toolDock" class="tool-dock" role="group" aria-label="Restoration Tools">
+        <button id="btnScrub" class="tool-btn active" type="button">
+          <span class="tl-name">🪥 Brass Brush</span>
+          <span class="tl-sub">Step 1: Strip Rust</span>
+        </button>
+        <button id="btnPolish" class="tool-btn" type="button">
+          <span class="tl-name">✨ Velvet Cloth</span>
+          <span class="tl-sub">Step 2: Mirror Buff</span>
+        </button>
+        <button id="btnFit" class="tool-btn" type="button">
+          <span class="tl-name">⚙️ Tweezers</span>
+          <span class="tl-sub">Step 3: Snap Parts</span>
+        </button>
+      </div>
+
+      <div class="legend-strip">
+        <span>🪥 Scrub All Verdigris &amp; Rust First</span>
+        <span>✨ Buff Until Mirror Gold Shines</span>
+        <span>⚙️ Drag Missing Gears &amp; Gems Into Glowing Sockets</span>
+      </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Restart Relic</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Workshop Hint</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reset Relic</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Loupe Hint</button>
         </div>
         <button id="soundBtn" class="btn-outline" type="button">🔊 ASMR ON</button>
       </div>
@@ -559,61 +640,158 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 850+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/antique-restorer-banner-1.jpg"
+            alt="Antique Restorer online ASMR restoration game showing a Victorian gold pocket watch half-encrusted in teal verdigris and half mirror-polished with gears"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Vintage Heirlooms — 3-Step Tactile ASMR Restoration</h3>
+          <p>Scrub away centuries of green patina, buff tarnished metal to a warm mirror luster, and click delicate brass clockwork back to life.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Antique Restorer (500 Vintage Relics)</h2>
-        <p>Step into a quiet wooden horologist's workshop and bring 500 forgotten treasures back to life—from Victorian pocket watches and maritime compasses to brass horn gramophones, twin-lens cameras, heirloom music boxes, and ship chronometers. Every restoration unfolds in three tactile, soothing stages:</p>
+        <h2>What Is Antique Restorer? A Vintage Restoration ASMR Game Online</h2>
+        <p><strong>Antique Restorer</strong> is a free <strong>antique restoration simulator game online</strong> inspired by relaxing workshop repair videos and watchmaking craftsmanship. Spread out on a deep emerald jeweler's velvet mat are <strong>500 tarnished museum heirlooms</strong>—ranging from Victorian gold pocket watches and brass nautical compasses to Art Deco lockets, ornate skeleton keys, vintage gramophones, and gilded royal music boxes. Each relic arrives heavily oxidized with green copper verdigris, dark iron rust, dull cloudy tarnish, and loose precision parts waiting to be brought back to showroom perfection.</p>
+        <p>Built as a lightweight, <strong>no-download ASMR craft game for smartphones, iPads, and Chromebooks</strong>, Antique Restorer runs natively at 60 FPS with live procedural <strong>Web Audio bristle brushing, velvety cloth polishing swooshes, crisp metallic gear clicks, and a triumphant antique music-box chime</strong>—zero countdown timers and automatic private browser saving across all 500 relics.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>The 3-Stage Watchmaker's Restoration Workflow</h2>
+        <p>Every heirloom follows the authentic sequence used by real museum conservators—and Antique Restorer automatically advances your active tool as soon as each phase crosses its clean threshold so your focus stays completely relaxed:</p>
+
+        <div class="rest-table-wrap">
+          <table class="rest-table">
+            <thead>
+              <tr>
+                <th>Restoration Phase</th>
+                <th>Bench Tool &amp; ASMR Audio</th>
+                <th>How to Complete Smoothly</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Step 1: Strip Oxidation</strong></td>
+                <td><strong>🪥 Brass Brush</strong> — Crisp fine bristle scrubbing sound</td>
+                <td>Glide back and forth across all green verdigris and dark brown rust crusts until the metal shape emerges cleanly (auto-finishes at <code>95%</code>!).</td>
+              </tr>
+              <tr>
+                <td><strong>Step 2: Mirror Polish</strong></td>
+                <td><strong>✨ Velvet Cloth</strong> — Soft silk buffing whisper</td>
+                <td>Rub across the hazy oxidized tarnish film in smooth circular motions to bring out bright warm gold, silver, and gleaming enamel luster!</td>
+              </tr>
+              <tr>
+                <td><strong>Step 3: Precision Fit</strong></td>
+                <td><strong>⚙️ Jeweler's Tweezers</strong> — Crisp metallic gear &amp; jewel clicks</td>
+                <td>Drag each missing brass gear, ruby bearing, emerald gem, or clock hand from the bottom velvet tray straight into its matching glowing socket!</td>
+              </tr>
+              <tr>
+                <td><strong>💡 Watchmaker's Loupe</strong></td>
+                <td>Instant 3.5-second golden spotter overlay</td>
+                <td>Stuck at 91% scrubbing or polishing? Tap <strong>💡 Loupe Hint</strong> to pulse every remaining tarnished patch in bright gold—or connect a missing part straight to its exact socket!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Conservator Pro Tip:</strong> Because our coverage engine evaluates pixels <em>strictly over the antique's silhouette</em>—ignoring the surrounding green velvet mat—you can sweep comfortably across ornate rims, watch bows, and compass handles without worrying about wasted edge strokes!</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner velvet-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/antique-restorer-banner-2.jpg"
+            alt="Restored vintage brass compass, Victorian gramophone, gold skeleton key, and Art Deco locket arranged with clockwork gears in Antique Restorer"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>10 Handcrafted Museum Relics &amp; Live Spinning Clockwork</h3>
+          <p>Watch interlocking gears rotate smoothly and watch hands tick to life the instant the final ruby bearing or brass cog clicks into place.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Atelier Chapters (500 Unique Vintage Relics)</h2>
+        <p>Every relic from #1 to #500 pairs one of 10 bespoke historical designs with authentic era stamps (1780–1948), unique metal finishes (polished brass, antique rose gold, sterling silver, and deep emerald enamel), and progressively richer mechanical assemblies:</p>
         <ul>
-          <li><strong>Step 1 — Scrub Rust &amp; Patina (🧽):</strong> Drag your brass wire brush back and forth across encrusted orange rust and green verdigris patina. In higher chapters, thicker corrosion takes a couple of steady passes to break free.</li>
-          <li><strong>Step 2 — Assemble the Gear Train (⚙️):</strong> Once clean, the internal mechanism opens up. Pick each gear from the wooden workbench tray below and tap (or drag onto) the matching dashed axle outline by size and metal finish. Once the final gear clicks into place, the entire interlocking train whirrs to life!</li>
-          <li><strong>Step 3 — Mirror Polish (✨):</strong> Buff away the dull matte oxidation film with your soft velvet cloth until the brass and gold gleam with sparkling highlights and a vintage chime rings out.</li>
+          <li><strong>Chapter 1 (Relics 1–100 — Pocket Timepieces):</strong> Classic Victorian pocket watches, Art Deco lockets, and ornate skeleton keys with forgiving rust layers and 1 to 2 precision pieces to snap home.</li>
+          <li><strong>Chapter 2 (Relics 101–200 — Nautical &amp; Explorer Gear):</strong> Brass astrolabe compasses, pocket sextants, and spyglass lenses coated in salty teal sea-verdigris and needing aligned needles and glass crystals.</li>
+          <li><strong>Chapter 3 (Relics 201–300 — Grand Parlor Acoustics):</strong> Vintage brass gramophones, royal music boxes, and mantle clocks requiring 2 to 3 interlocking drive gears and tuning dials.</li>
+          <li><strong>Chapter 4 (Relics 301–400 — Royal Jewelry &amp; Crown Medallions):</strong> Intricate jeweled lockets, gilded apothecary balances, and filigree crests with heavier double-pass oxidation and 3 precious gems/cogs.</li>
+          <li><strong>Chapter 5 (Relics 401–500 — Master Museum Conservatory):</strong> Rare 18th-century astronomical chronometers and multi-gear heirlooms featuring stubborn patina crusts and 4 intricate precision components—complete with an instant 1–500 relic picker and private browser saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Antique Restoration Topics">
+          <span class="kw-pill">Antique Restoration Game Online</span>
+          <span class="kw-pill">Rust Cleaning ASMR Browser Simulator</span>
+          <span class="kw-pill">Watchmaker Gear Repair Game Free</span>
+          <span class="kw-pill">Brass Polishing Oddly Satisfying Web</span>
+          <span class="kw-pill">500-Level Relic Craft Game</span>
+          <span class="kw-pill">No-Download Chromebook ASMR Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Antique Restorer FAQ</h2>
         <details class="faq-item">
-          <summary>How do I know which gear goes on which axle during Step 2?</summary>
-          <div class="faq-answer">Each empty axle displays a dashed circular outline matching the exact diameter and metallic color (Brass, Copper, Steel, or Gold) of the gear that belongs there. Tap <strong>💡 Workshop Hint</strong> anytime to highlight the exact axle for your selected gear!</div>
+          <summary>Do I need to manually switch tools between Scrubbing, Polishing, and Fitting Parts?</summary>
+          <div class="faq-answer">No—as soon as you clean 95% of the rust and verdigris, Antique Restorer automatically polishes the final specks with a chime and hands you the <strong>✨ Velvet Cloth</strong>! Once mirror-buffed, your <strong>⚙️ Tweezers</strong> activate automatically so you can snap the missing gears and gems into place.</div>
         </details>
         <details class="faq-item">
-          <summary>What if I miss one tiny speck of rust or tarnish?</summary>
-          <div class="faq-answer">Tap <strong>💡 Workshop Hint</strong> during scrubbing or polishing to flash any remaining spots in bright glowing orange, and each stage auto-finishes cleanly at 96% so you never have to pixel-hunt.</div>
+          <summary>How do I find a stubborn 4% spot of tarnish hiding on the brass?</summary>
+          <div class="faq-answer">Tap the <strong>💡 Loupe Hint</strong> button right below the tool dock! Every remaining uncleaned or unpolished cell pulses bright neon gold for 3.5 seconds so you can buff it spotless instantly.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Why are there multiple identical-looking gears in Step 3?</summary>
+          <div class="faq-answer">In Chapters 3 through 5, heirlooms may hold both large brass drive wheels, smaller silver pinions, ruby jewels, or ornate hands! Match each part's size and shape to its glowing dotted socket—and tapping <strong>💡 Loupe Hint</strong> draws a golden guide line from the next tray part straight to its exact slot.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I play Antique Restorer smoothly on phones and Chromebooks without an app?</summary>
+          <div class="faq-answer">Yes! Scrubbing, polishing, and dragging gears run at a smooth 60 FPS on Android Chrome, iOS Safari, and Chromebooks with synthesized Web Audio ASMR and automatic local browser saving.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧼</div><span class="cat-tag">ASMR</span></div>
-        <h3>Oddly Satisfying Slicer</h3>
-        <p>Slice pastel soap bars, crunchy kinetic sand, and wobbly jelly into even pieces across 500 blocks.</p>
-        <a href="/games/satisfying-slicer/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔐</div><span class="cat-tag">ASMR</span></div>
+        <h3>Zen Lockpicker</h3>
+        <p>Listen for crisp brass tumbler clicks and feel tension feedback to pick 500 intricate padlocks.</p>
+        <a href="/games/zen-lockpicker/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">💦</div><span class="cat-tag">ASMR</span></div>
-        <h3>ASMR PowerWash</h3>
-        <p>Blast mud, moss, and rust off rugs, antique coins, and classic cars across 500 wash jobs.</p>
+        <h3>PowerWash ASMR</h3>
+        <p>Blast layers of mud, moss, and rust off 500 vintage relics with live water spray audio.</p>
         <a href="/games/powerwash-asmr/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🔐</div><span class="cat-tag">Zen</span></div>
-        <h3>The Zen Lockpicker</h3>
-        <p>Turn a dark minimalist safe dial slowly and listen for metallic clicks across 500 vaults.</p>
-        <a href="/games/zen-lockpicker/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔧</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Un-Builder</h3>
+        <p>Disassemble retro radios, vintage cameras, and classic clocks step by step in reverse order.</p>
+        <a href="/games/un-builder/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
   <!-- Relic Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Relic">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Vintage Relic">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Antique Relic (1 – 500)</h3>
+        <h3>Choose Vintage Relic (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
@@ -637,12 +815,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top ASMR</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/powerwash-asmr/">PowerWash ASMR</a></li>
+            <li><a href="/games/perfect-peel/">The Perfect Peel</a></li>
+            <li><a href="/games/antique-restorer/">Antique Restorer</a></li>
+            <li><a href="/games/zen-lockpicker/">Zen Lockpicker</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -651,7 +829,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -684,54 +862,104 @@
     }
 
     // ==============================================
-    // CONSTANTS, ARTIFACTS & 500-RELIC GENERATOR
+    // 3-STAGE ANTIQUE RESTORATION ENGINE (500 RELICS)
     // ==============================================
     const TOTAL_LEVELS = 500;
     const WORLD_W = 420;
-    const WORLD_H = 440;
-    const CX = WORLD_W / 2;
-    const CY = WORLD_H / 2;
-    const GRID_W = 48;
-    const GRID_H = 50;
-    const CELL_W = WORLD_W / GRID_W;
-    const CELL_H = WORLD_H / GRID_H;
+    const WORLD_H = 420;
+    const RELIC_CX = WORLD_W / 2;
+    const RELIC_CY = 186;
+    const MASK_N = 48; // 48x48 precision silhouette-aware rust & tarnish grid!
+    const CELL_PX = WORLD_W / MASK_N;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Attic Finds", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Horologist Bench", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Maritime Relics", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Royal Archives", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Master Curator", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Pocket Timepieces", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Nautical & Explorer Gear", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Grand Parlor Acoustics", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Royal Jeweled Lockets", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Museum Conservatory", range: "401–500", start: 401, end: 500 }
     ];
 
-    const ARTIFACTS = [
-      { id: "watch",       name: "Victorian Pocket Watch", bayCx: 210, bayCy: 242, bayRx: 94, bayRy: 94 },
-      { id: "gramophone",  name: "Brass Horn Gramophone",  bayCx: 210, bayCy: 286, bayRx: 98, bayRy: 68 },
-      { id: "compass",     name: "Maritime Brass Compass", bayCx: 210, bayCy: 224, bayRx: 94, bayRy: 94 },
-      { id: "camera",      name: "Vintage Rangefinder",    bayCx: 210, bayCy: 238, bayRx: 106, bayRy: 74 },
-      { id: "musicbox",    name: "Heirloom Music Box",     bayCx: 210, bayCy: 228, bayRx: 108, bayRy: 76 },
-      { id: "chronometer", name: "Ship Chronometer",       bayCx: 210, bayCy: 224, bayRx: 96, bayRy: 96 }
+    const METALS = [
+      { name: "Victorian Gold", main: "#d97706", hi: "#fef08a", dark: "#78350f", dial: "#fffbeb" },
+      { name: "Rose Brass",     main: "#b45309", hi: "#fed7aa", dark: "#431407", dial: "#fef2f2" },
+      { name: "Sterling Silver",main: "#94a3b8", hi: "#f8fafc", dark: "#334155", dial: "#f1f5f9" },
+      { name: "Royal Bronze",   main: "#a16207", hi: "#fde047", dark: "#422006", dial: "#ecfdf5" }
     ];
 
-    const GEAR_METALS = {
-      brass:  { key: "brass",  name: "Brass",  fill: "#eab308", light: "#fef08a", dark: "#854d0e" },
-      copper: { key: "copper", name: "Copper", fill: "#ea580c", light: "#fed7aa", dark: "#7c2d12" },
-      steel:  { key: "steel",  name: "Steel",  fill: "#94a3b8", light: "#f1f5f9", dark: "#334155" },
-      gold:   { key: "gold",   name: "Gold",   fill: "#f59e0b", light: "#fef9c3", dark: "#92400e" }
-    };
-
-    const GEAR_SIZES = [
-      { code: "S", label: "Small",  r: 17, teeth: 8 },
-      { code: "M", label: "Medium", r: 23, teeth: 11 },
-      { code: "L", label: "Large",  r: 29, teeth: 14 },
-      { code: "XL", label: "Grand", r: 34, teeth: 16 }
-    ];
-
-    const FINISH_PALETTES = [
-      { main: "#d97706", hi: "#fde68a", dark: "#78350f", dial: "#fef9c3", accent: "#991b1b" },
-      { main: "#ca8a04", hi: "#fef08a", dark: "#713f12", dial: "#f8fafc", accent: "#1e3a8a" },
-      { main: "#b45309", hi: "#fed7aa", dark: "#431407", dial: "#ecfdf5", accent: "#065f46" },
-      { main: "#94a3b8", hi: "#f8fafc", dark: "#334155", dial: "#eff6ff", accent: "#4338ca" }
+    const RELIC_CATALOG = [
+      {
+        id: "watch", name: "Victorian Pocket Watch",
+        sockets: [
+          { kind: "gear_lg", x: 0, y: 0, r: 26, col: "#f59e0b" },
+          { kind: "gear_sm", x: 34, y: -22, r: 17, col: "#cbd5e1" },
+          { kind: "ruby",    x: -32, y: 24, r: 13, col: "#e11d48" },
+          { kind: "hands",   x: 0, y: 0, r: 20, col: "#0f172a" }
+        ]
+      },
+      {
+        id: "compass", name: "Brass Astrolabe Compass",
+        sockets: [
+          { kind: "needle",  x: 0, y: 0, r: 28, col: "#dc2626" },
+          { kind: "emerald", x: 0, y: -56, r: 13, col: "#10b981" },
+          { kind: "gear_sm", x: -46, y: 34, r: 16, col: "#fbbf24" },
+          { kind: "gear_sm", x: 46, y: 34, r: 16, col: "#fbbf24" }
+        ]
+      },
+      {
+        id: "locket", name: "Art Deco Jeweled Locket",
+        sockets: [
+          { kind: "ruby",    x: 0, y: -12, r: 20, col: "#e11d48" },
+          { kind: "emerald", x: -36, y: 18, r: 14, col: "#10b981" },
+          { kind: "emerald", x: 36, y: 18, r: 14, col: "#10b981" },
+          { kind: "sapphire",x: 0, y: 48, r: 15, col: "#0284c7" }
+        ]
+      },
+      {
+        id: "key", name: "Ornate Royal Skeleton Key",
+        sockets: [
+          { kind: "ruby",    x: -78, y: 0, r: 18, col: "#e11d48" },
+          { kind: "gear_sm", x: -16, y: 0, r: 15, col: "#fbbf24" },
+          { kind: "emerald", x: 46, y: 0, r: 13, col: "#10b981" },
+          { kind: "sapphire",x: 92, y: 20, r: 12, col: "#0284c7" }
+        ]
+      },
+      {
+        id: "musicbox", name: "Gilded Parlor Music Box",
+        sockets: [
+          { kind: "gear_lg", x: -44, y: 8, r: 25, col: "#f59e0b" },
+          { kind: "gear_lg", x: 10, y: -8, r: 22, col: "#cbd5e1" },
+          { kind: "gear_sm", x: 54, y: 16, r: 17, col: "#fbbf24" },
+          { kind: "ruby",    x: 0, y: 42, r: 13, col: "#e11d48" }
+        ]
+      },
+      {
+        id: "clock", name: "Arch Mantle Chronometer",
+        sockets: [
+          { kind: "hands",   x: 0, y: -18, r: 22, col: "#1e293b" },
+          { kind: "gear_lg", x: -34, y: 42, r: 22, col: "#f59e0b" },
+          { kind: "gear_sm", x: 34, y: 42, r: 18, col: "#cbd5e1" },
+          { kind: "sapphire",x: 0, y: -74, r: 13, col: "#0284c7" }
+        ]
+      },
+      {
+        id: "medallion", name: "Imperial Sun Medallion",
+        sockets: [
+          { kind: "sapphire",x: 0, y: 0, r: 22, col: "#0284c7" },
+          { kind: "ruby",    x: 0, y: -56, r: 13, col: "#e11d48" },
+          { kind: "emerald", x: -54, y: 26, r: 13, col: "#10b981" },
+          { kind: "emerald", x: 54, y: 26, r: 13, col: "#10b981" }
+        ]
+      },
+      {
+        id: "spyglass", name: "Captain's Brass Spyglass",
+        sockets: [
+          { kind: "sapphire",x: 78, y: 0, r: 20, col: "#38bdf8" },
+          { kind: "gear_sm", x: 10, y: 0, r: 16, col: "#fbbf24" },
+          { kind: "ruby",    x: -54, y: 0, r: 14, col: "#e11d48" },
+          { kind: "emerald", x: -96, y: 0, r: 12, col: "#10b981" }
+        ]
+      }
     ];
 
     function mulberry32(seed) {
@@ -744,596 +972,10 @@
       };
     }
 
-    function shuffle(arr, rng) {
-      const copy = arr.slice();
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-      }
-      return copy;
-    }
-
-    // Generate guaranteed non-overlapping interlocking gear train inside the artifact's mechanical bay
-    function generateGearTrain(art, gearCount, rng) {
-      const metalKeys = Object.keys(GEAR_METALS);
-
-      for (let attempt = 0; attempt < 50; attempt++) {
-        const slots = [];
-        const sz0 = GEAR_SIZES[1 + Math.floor(rng() * 3)]; // Medium/Large anchor gear
-        const startX = art.bayCx + (rng() - 0.5) * 32;
-        const startY = art.bayCy + (rng() - 0.5) * 24;
-        slots.push({
-          id: 0,
-          x: startX,
-          y: startY,
-          r: sz0.r,
-          teeth: sz0.teeth,
-          sizeCode: sz0.code,
-          sizeLabel: sz0.label,
-          metal: GEAR_METALS[metalKeys[0]],
-          dir: 1,
-          angle: rng() * Math.PI * 2,
-          placed: false
-        });
-
-        let ok = true;
-        for (let i = 1; i < gearCount; i++) {
-          let placedSlot = null;
-          const parentOrder = shuffle(slots.map((_, idx) => idx), rng);
-
-          for (const pIdx of parentOrder) {
-            const parent = slots[pIdx];
-            const sizeOrder = shuffle(GEAR_SIZES, rng);
-
-            for (const sz of sizeOrder) {
-              const meshDist = parent.r + sz.r + 3;
-              for (let aTry = 0; aTry < 16; aTry++) {
-                const ang = (aTry * Math.PI * 2) / 16 + rng() * 0.35;
-                const nx = parent.x + Math.cos(ang) * meshDist;
-                const ny = parent.y + Math.sin(ang) * meshDist;
-
-                // Stay cleanly inside the antique's mechanical bay ellipse
-                const normX = (nx - art.bayCx) / Math.max(10, art.bayRx - sz.r - 4);
-                const normY = (ny - art.bayCy) / Math.max(10, art.bayRy - sz.r - 4);
-                if (normX * normX + normY * normY > 1.0) continue;
-
-                // Never overlap any other gear
-                let overlaps = false;
-                for (let j = 0; j < slots.length; j++) {
-                  if (j === pIdx) continue;
-                  const d = Math.hypot(nx - slots[j].x, ny - slots[j].y);
-                  if (d < slots[j].r + sz.r + 6) {
-                    overlaps = true;
-                    break;
-                  }
-                }
-                if (overlaps) continue;
-
-                placedSlot = {
-                  id: i,
-                  x: nx,
-                  y: ny,
-                  r: sz.r,
-                  teeth: sz.teeth,
-                  sizeCode: sz.code,
-                  sizeLabel: sz.label,
-                  metal: GEAR_METALS[metalKeys[i % metalKeys.length]],
-                  dir: -parent.dir,
-                  angle: rng() * Math.PI * 2,
-                  placed: false
-                };
-                break;
-              }
-              if (placedSlot) break;
-            }
-            if (placedSlot) break;
-          }
-
-          if (!placedSlot) {
-            ok = false;
-            break;
-          }
-          slots.push(placedSlot);
-        }
-
-        if (ok && slots.length === gearCount) return slots;
-      }
-
-      // Guaranteed horizontal meshing fallback
-      const fallback = [];
-      let curX = art.bayCx - (gearCount - 1) * 20;
-      for (let i = 0; i < gearCount; i++) {
-        const sz = GEAR_SIZES[i % 2];
-        if (i > 0) curX += fallback[i - 1].r + sz.r + 3;
-        fallback.push({
-          id: i,
-          x: curX,
-          y: art.bayCy,
-          r: sz.r,
-          teeth: sz.teeth,
-          sizeCode: sz.code,
-          sizeLabel: sz.label,
-          metal: GEAR_METALS[metalKeys[i % metalKeys.length]],
-          dir: i % 2 === 0 ? 1 : -1,
-          angle: 0,
-          placed: false
-        });
-      }
-      return fallback;
-    }
-
-    function buildRelic(levelNum) {
-      const rng = mulberry32(levelNum * 81197 + 18891);
-      const art = ARTIFACTS[(levelNum - 1) % ARTIFACTS.length];
-      const pal = FINISH_PALETTES[Math.floor(rng() * FINISH_PALETTES.length)];
-      const eraYear = 1845 + (levelNum * 7) % 125;
-
-      let gearCount, rustHP, polishHP;
-      if (levelNum <= 100) {
-        gearCount = levelNum <= 35 ? 2 : 3;
-        rustHP = 1.0;
-        polishHP = 1.0;
-      } else if (levelNum <= 200) {
-        gearCount = levelNum <= 150 ? 3 : 4;
-        rustHP = 1.35;
-        polishHP = 1.2;
-      } else if (levelNum <= 300) {
-        gearCount = 4;
-        rustHP = 1.65;
-        polishHP = 1.35;
-      } else if (levelNum <= 400) {
-        gearCount = 5;
-        rustHP = 1.95;
-        polishHP = 1.5;
-      } else {
-        gearCount = levelNum > 450 ? 6 : 5;
-        rustHP = 2.2;
-        polishHP = 1.65;
-      }
-
-      const gearSlots = generateGearTrain(art, gearCount, rng);
-
-      return {
-        levelNum,
-        art,
-        pal,
-        eraYear,
-        gearCount,
-        rustHP,
-        polishHP,
-        gearSlots,
-        seed: levelNum * 4099 + 77
-      };
-    }
-
-    function getChapter(num) {
-      return CHAPTERS.find((c) => num >= c.start && num <= c.end) || CHAPTERS[0];
-    }
-
-    // ==============================================
-    // PROCEDURAL VINTAGE ANTIQUE ARTWORK (6 RELICS)
-    // ==============================================
-    function drawCleanAntique(cctx, relic) {
-      const p = relic.pal;
-      const cx = CX, cy = CY;
-      cctx.clearRect(0, 0, WORLD_W, WORLD_H);
-
-      if (relic.art.id === "watch") {
-        // Victorian Gold/Brass Pocket Watch
-        const wy = 242, R = 136;
-        // Top hanging bow ring & winding crown
-        cctx.strokeStyle = p.main;
-        cctx.lineWidth = 10;
-        cctx.beginPath();
-        cctx.arc(cx, wy - R - 26, 22, 0, Math.PI * 2);
-        cctx.stroke();
-        cctx.fillStyle = p.dark;
-        cctx.fillRect(cx - 16, wy - R - 16, 32, 22);
-        cctx.fillStyle = p.hi;
-        cctx.fillRect(cx - 12, wy - R - 14, 24, 6);
-
-        // Outer metallic casing
-        const g = cctx.createRadialGradient(cx - 42, wy - 42, 20, cx, wy, R);
-        g.addColorStop(0, p.hi);
-        g.addColorStop(0.55, p.main);
-        g.addColorStop(1, p.dark);
-        cctx.fillStyle = g;
-        cctx.beginPath();
-        cctx.arc(cx, wy, R, 0, Math.PI * 2);
-        cctx.fill();
-
-        // Inner cream enamel dial ring
-        cctx.fillStyle = p.dial;
-        cctx.beginPath();
-        cctx.arc(cx, wy, R - 18, 0, Math.PI * 2);
-        cctx.fill();
-        cctx.strokeStyle = p.dark;
-        cctx.lineWidth = 3;
-        cctx.stroke();
-
-        // Roman numeral tick markers around perimeter
-        const numerals = ["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
-        cctx.fillStyle = p.dark;
-        cctx.font = "900 12px serif";
-        cctx.textAlign = "center";
-        cctx.textBaseline = "middle";
-        numerals.forEach((num, i) => {
-          const a = -Math.PI / 2 + (i * Math.PI * 2) / 12;
-          cctx.fillText(num, cx + Math.cos(a) * (R - 30), wy + Math.sin(a) * (R - 30));
-        });
-
-        // Recessed Dark Horology Gear Bay
-        cctx.fillStyle = "#1e1915";
-        cctx.beginPath();
-        cctx.arc(cx, wy, 94, 0, Math.PI * 2);
-        cctx.fill();
-        cctx.strokeStyle = p.main;
-        cctx.lineWidth = 4;
-        cctx.stroke();
-      } else if (relic.art.id === "gramophone") {
-        // Ornate Brass Horn Gramophone
-        // Flared Brass Morning-Glory Horn (Top)
-        const hGrad = cctx.createLinearGradient(cx - 95, 42, cx + 95, 195);
-        hGrad.addColorStop(0, p.hi);
-        hGrad.addColorStop(0.5, p.main);
-        hGrad.addColorStop(1, p.dark);
-        cctx.fillStyle = hGrad;
-        cctx.beginPath();
-        cctx.moveTo(cx - 102, 72);
-        cctx.quadraticCurveTo(cx, 32, cx + 102, 72);
-        cctx.quadraticCurveTo(cx + 38, 138, cx + 18, 196);
-        cctx.lineTo(cx - 18, 196);
-        cctx.quadraticCurveTo(cx - 38, 138, cx - 102, 72);
-        cctx.closePath();
-        cctx.fill();
-        cctx.strokeStyle = p.dark;
-        cctx.lineWidth = 3;
-        cctx.stroke();
-
-        // Dark bell opening inside horn
-        cctx.fillStyle = "#451a03";
-        cctx.beginPath();
-        cctx.ellipse(cx, 72, 68, 22, 0, 0, Math.PI * 2);
-        cctx.fill();
-
-        // Carved Mahogany Cabinet Base (Bottom)
-        const bx = cx - 134, by = 192, bw = 268, bh = 186;
-        cctx.fillStyle = "#5c2d16";
-        cctx.beginPath();
-        cctx.roundRect(bx, by, bw, bh, 18);
-        cctx.fill();
-        cctx.lineWidth = 6;
-        cctx.strokeStyle = p.main;
-        cctx.stroke();
-
-        // Brass Corner Filigree
-        cctx.strokeStyle = p.hi;
-        cctx.lineWidth = 2;
-        cctx.strokeRect(bx + 10, by + 10, bw - 20, bh - 20);
-
-        // Exposed Brass Turntable Gear Deck
-        cctx.fillStyle = "#1c1612";
-        cctx.beginPath();
-        cctx.roundRect(cx - 106, 214, 212, 144, 14);
-        cctx.fill();
-        cctx.strokeStyle = p.main;
-        cctx.lineWidth = 3;
-        cctx.stroke();
-      } else if (relic.art.id === "compass") {
-        // Maritime Octagonal Brass Compass
-        const R = 142;
-        const g = cctx.createRadialGradient(cx - 40, cy - 40, 20, cx, cy, R);
-        g.addColorStop(0, p.hi);
-        g.addColorStop(0.6, p.main);
-        g.addColorStop(1, p.dark);
-
-        cctx.fillStyle = g;
-        cctx.beginPath();
-        for (let i = 0; i < 8; i++) {
-          const a = Math.PI / 8 + (i * Math.PI) / 4;
-          const px = cx + Math.cos(a) * R;
-          const py = cy + Math.sin(a) * R;
-          if (i === 0) cctx.moveTo(px, py);
-          else cctx.lineTo(px, py);
-        }
-        cctx.closePath();
-        cctx.fill();
-        cctx.lineWidth = 4;
-        cctx.strokeStyle = p.dark;
-        cctx.stroke();
-
-        // Compass Rose Degree Ring
-        cctx.fillStyle = p.dial;
-        cctx.beginPath();
-        cctx.arc(cx, cy, 118, 0, Math.PI * 2);
-        cctx.fill();
-
-        const dirs = [["N", -Math.PI / 2], ["E", 0], ["S", Math.PI / 2], ["W", Math.PI]];
-        cctx.font = "900 16px serif";
-        cctx.textAlign = "center";
-        cctx.textBaseline = "middle";
-        dirs.forEach(([lbl, a]) => {
-          cctx.fillStyle = lbl === "N" ? "#dc2626" : p.dark;
-          cctx.fillText(lbl, cx + Math.cos(a) * 106, cy + Math.sin(a) * 106);
-        });
-
-        // Inner exposed brass compass mechanics
-        cctx.fillStyle = "#17202a";
-        cctx.beginPath();
-        cctx.arc(cx, cy, 94, 0, Math.PI * 2);
-        cctx.fill();
-        cctx.strokeStyle = p.main;
-        cctx.lineWidth = 3.5;
-        cctx.stroke();
-      } else if (relic.art.id === "camera") {
-        // Vintage Rangefinder Metal & Leather Camera
-        const x = cx - 148, y = 132, w = 296, h = 204;
-
-        // Top Film Advance Knobs & Viewfinder
-        cctx.fillStyle = p.main;
-        cctx.fillRect(x + 28, y - 22, 44, 24);
-        cctx.fillRect(x + w - 76, y - 28, 48, 30);
-        cctx.fillStyle = p.hi;
-        cctx.beginPath();
-        cctx.roundRect(cx - 48, y - 30, 96, 34, 8);
-        cctx.fill();
-
-        // Main Camera Body
-        cctx.fillStyle = "#292524";
-        cctx.beginPath();
-        cctx.roundRect(x, y, w, h, 20);
-        cctx.fill();
-        cctx.lineWidth = 5;
-        cctx.strokeStyle = p.main;
-        cctx.stroke();
-
-        // Metallic Brushed Top Plate
-        const tg = cctx.createLinearGradient(x, y, x + w, y);
-        tg.addColorStop(0, p.dark);
-        tg.addColorStop(0.5, p.hi);
-        tg.addColorStop(1, p.dark);
-        cctx.fillStyle = tg;
-        cctx.beginPath();
-        cctx.roundRect(x + 3, y + 3, w - 6, 36, [16, 16, 0, 0]);
-        cctx.fill();
-
-        // Open Shutter Mechanics Bay
-        cctx.fillStyle = "#141210";
-        cctx.beginPath();
-        cctx.roundRect(cx - 114, 162, 228, 152, 16);
-        cctx.fill();
-        cctx.strokeStyle = p.main;
-        cctx.lineWidth = 3;
-        cctx.stroke();
-      } else if (relic.art.id === "musicbox") {
-        // Heirloom Carved Music Box
-        const x = cx - 148, y = 114, w = 296, h = 228;
-        cctx.fillStyle = "#451a03";
-        cctx.beginPath();
-        cctx.roundRect(x, y, w, h, 20);
-        cctx.fill();
-        cctx.lineWidth = 7;
-        cctx.strokeStyle = p.main;
-        cctx.stroke();
-
-        // Gold inlay decorative frame
-        cctx.strokeStyle = p.hi;
-        cctx.lineWidth = 2;
-        cctx.strokeRect(x + 12, y + 12, w - 24, h - 24);
-
-        // Acoustic resonance chamber
-        cctx.fillStyle = "#1b1410";
-        cctx.beginPath();
-        cctx.roundRect(cx - 116, 146, 232, 164, 14);
-        cctx.fill();
-        cctx.strokeStyle = p.main;
-        cctx.lineWidth = 3;
-        cctx.stroke();
-
-        // Tiny Steel Music Comb Teeth along bottom of chamber
-        cctx.fillStyle = "#cbd5e1";
-        for (let tx = cx - 96; tx <= cx + 96; tx += 10) {
-          cctx.fillRect(tx, 294, 4, 14);
-        }
-      } else {
-        // Brass Marine Ship Chronometer
-        const R = 140;
-        const g = cctx.createRadialGradient(cx - 40, cy - 40, 20, cx, cy, R);
-        g.addColorStop(0, p.hi);
-        g.addColorStop(0.55, p.main);
-        g.addColorStop(1, p.dark);
-        cctx.fillStyle = g;
-        cctx.beginPath();
-        cctx.arc(cx, cy, R, 0, Math.PI * 2);
-        cctx.fill();
-        cctx.strokeStyle = p.dark;
-        cctx.lineWidth = 5;
-        cctx.stroke();
-
-        // 8 Brass Rim Bolts
-        for (let i = 0; i < 8; i++) {
-          const a = (i * Math.PI) / 4;
-          const bx = cx + Math.cos(a) * (R - 14);
-          const by = cy + Math.sin(a) * (R - 14);
-          cctx.fillStyle = p.hi;
-          cctx.beginPath();
-          cctx.arc(bx, by, 6, 0, Math.PI * 2);
-          cctx.fill();
-          cctx.strokeStyle = p.dark;
-          cctx.lineWidth = 1.5;
-          cctx.stroke();
-        }
-
-        // Precision Chronometer Bay
-        cctx.fillStyle = "#111827";
-        cctx.beginPath();
-        cctx.arc(cx, cy, 98, 0, Math.PI * 2);
-        cctx.fill();
-        cctx.strokeStyle = p.hi;
-        cctx.lineWidth = 3.5;
-        cctx.stroke();
-      }
-    }
-
-    // ==============================================
-    // PROCEDURAL ASMR WORKSHOP WEB AUDIO ENGINE
-    // ==============================================
-    let audioCtx = null;
-    let noiseBuf = null;
-    let rubSrc = null;
-    let rubFilter = null;
-    let rubGain = null;
-    let soundOn = true;
-
-    function initAudio() {
-      if (!audioCtx) {
-        const AC = window.AudioContext || window.webkitAudioContext;
-        if (AC) audioCtx = new AC();
-      }
-      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-
-      if (audioCtx && !noiseBuf) {
-        const len = audioCtx.sampleRate * 2;
-        noiseBuf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-        const d = noiseBuf.getChannelData(0);
-        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-      }
-
-      if (audioCtx && noiseBuf && !rubSrc) {
-        rubSrc = audioCtx.createBufferSource();
-        rubSrc.buffer = noiseBuf;
-        rubSrc.loop = true;
-
-        rubFilter = audioCtx.createBiquadFilter();
-        rubFilter.type = "bandpass";
-        rubFilter.frequency.value = 1800;
-        rubFilter.Q.value = 1.4;
-
-        rubGain = audioCtx.createGain();
-        rubGain.gain.value = 0.0001;
-
-        rubSrc.connect(rubFilter);
-        rubFilter.connect(rubGain);
-        rubGain.connect(audioCtx.destination);
-        rubSrc.start();
-      }
-    }
-
-    function updateRubAudio(speedPx, isPolish) {
-      if (!soundOn || !audioCtx || !rubGain || !rubFilter) return;
-      const now = audioCtx.currentTime;
-      const act = Math.min(1, speedPx / 220);
-      if (act < 0.05) {
-        rubGain.gain.setTargetAtTime(0.0001, now, 0.03);
-        return;
-      }
-      // Wire brush = gritty bright midrange; velvet cloth polish = soft silky swoosh
-      const freq = isPolish ? (950 + act * 550) : (2200 + act * 1400);
-      const qVal = isPolish ? 2.6 : 1.1;
-      const vol = isPolish ? (0.03 + act * 0.065) : (0.045 + act * 0.11);
-
-      rubFilter.frequency.setTargetAtTime(freq, now, 0.025);
-      rubFilter.Q.setTargetAtTime(qVal, now, 0.03);
-      rubGain.gain.setTargetAtTime(vol, now, 0.025);
-    }
-
-    function stopRubAudio() {
-      if (audioCtx && rubGain) {
-        rubGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.025);
-      }
-    }
-
-    function sfxGearSnap(stepIdx) {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx) return;
-      const now = audioCtx.currentTime;
-      // Mechanical metallic click + rising horology ping
-      const notes = [440, 493.88, 587.33, 659.25, 783.99, 880];
-      const osc = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(notes[stepIdx % notes.length], now);
-      osc.frequency.exponentialRampToValueAtTime(notes[stepIdx % notes.length] * 1.15, now + 0.09);
-      g.gain.setValueAtTime(0.16, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
-      osc.connect(g);
-      g.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + 0.15);
-    }
-
-    function sfxWrongFit() {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx) return;
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(165, now);
-      osc.frequency.exponentialRampToValueAtTime(110, now + 0.14);
-      g.gain.setValueAtTime(0.12, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
-      osc.connect(g);
-      g.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + 0.18);
-    }
-
-    function sfxStageChime() {
-      stopRubAudio();
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx) return;
-      [523.25, 659.25, 783.99].forEach((f, i) => {
-        setTimeout(() => {
-          const now = audioCtx.currentTime;
-          const osc = audioCtx.createOscillator();
-          const g = audioCtx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(f, now);
-          g.gain.setValueAtTime(0.11, now);
-          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.35);
-          osc.connect(g);
-          g.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.38);
-        }, i * 75);
-      });
-    }
-
-    function sfxMusicBoxWin() {
-      stopRubAudio();
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx) return;
-      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => {
-        setTimeout(() => {
-          const now = audioCtx.currentTime;
-          const osc = audioCtx.createOscillator();
-          const g = audioCtx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(f, now);
-          g.gain.setValueAtTime(0.12, now);
-          g.gain.exponentialRampToValueAtTime(0.0006, now + 0.65);
-          osc.connect(g);
-          g.connect(audioCtx.destination);
-          osc.start(now);
-          osc.stop(now + 0.7);
-        }, i * 85);
-      });
-    }
-
-    // ==============================================
-    // MULTI-LAYER OFFSCREEN CANVAS & GAME CONTROLLER
-    // ==============================================
-    const canvas = document.getElementById("benchCanvas");
-    const ctx = canvas.getContext("2d");
-
-    const cleanCanvas = document.createElement("canvas");
-    cleanCanvas.width = WORLD_W; cleanCanvas.height = WORLD_H;
-    const cleanCtx = cleanCanvas.getContext("2d");
+    // Offscreen Layers: Clean Heirloom, Cloudy Tarnish Layer (Step 2), Heavy Rust/Verdigris Layer (Step 1)!
+    const baseCanvas = document.createElement("canvas");
+    baseCanvas.width = WORLD_W; baseCanvas.height = WORLD_H;
+    const baseCtx = baseCanvas.getContext("2d", { willReadFrequently: true });
 
     const tarnishCanvas = document.createElement("canvas");
     tarnishCanvas.width = WORLD_W; tarnishCanvas.height = WORLD_H;
@@ -1343,17 +985,367 @@
     rustCanvas.width = WORLD_W; rustCanvas.height = WORLD_H;
     const rustCtx = rustCanvas.getContext("2d");
 
+    // Draw Each Ornate Vintage Relic Onto baseCanvas!
+    function renderRelicBase(relicId, metal) {
+      const c = baseCtx;
+      c.clearRect(0, 0, WORLD_W, WORLD_H);
+      c.save();
+      c.translate(RELIC_CX, RELIC_CY);
+
+      const mg = c.createLinearGradient(-110, -110, 110, 110);
+      mg.addColorStop(0, metal.hi);
+      mg.addColorStop(0.5, metal.main);
+      mg.addColorStop(1, metal.dark);
+
+      if (relicId === "watch" || relicId === "compass") {
+        // Crown Bow Ring at Top
+        c.strokeStyle = mg; c.lineWidth = 10;
+        c.beginPath(); c.arc(0, -124, 20, 0, Math.PI * 2); c.stroke();
+        c.fillStyle = mg; c.fillRect(-14, -108, 28, 22);
+
+        // Outer Engraved Circular Case
+        c.fillStyle = mg; c.strokeStyle = metal.hi; c.lineWidth = 4;
+        c.beginPath(); c.arc(0, 0, 102, 0, Math.PI * 2); c.fill(); c.stroke();
+
+        // Inner Porcelain / Enamel Dial Face
+        c.fillStyle = metal.dial; c.strokeStyle = metal.dark; c.lineWidth = 3;
+        c.beginPath(); c.arc(0, 0, 82, 0, Math.PI * 2); c.fill(); c.stroke();
+
+        // Fine Roman / Compass Ticks Around Rim
+        c.strokeStyle = metal.dark; c.lineWidth = 2;
+        for (let k = 0; k < 12; k++) {
+          const a = (k * Math.PI) / 6;
+          c.beginPath();
+          c.moveTo(Math.cos(a) * 66, Math.sin(a) * 66);
+          c.lineTo(Math.cos(a) * 76, Math.sin(a) * 76);
+          c.stroke();
+        }
+      } else if (relicId === "locket") {
+        // Top Bail Loop
+        c.strokeStyle = mg; c.lineWidth = 9;
+        c.beginPath(); c.arc(0, -120, 16, 0, Math.PI * 2); c.stroke();
+        // Ornate Oval Art Deco Locket Body
+        c.fillStyle = mg; c.strokeStyle = metal.hi; c.lineWidth = 4;
+        c.beginPath(); c.ellipse(0, 0, 88, 108, 0, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.fillStyle = "#1e293b";
+        c.beginPath(); c.ellipse(0, 0, 68, 86, 0, 0, Math.PI * 2); c.fill();
+        c.strokeStyle = metal.hi; c.lineWidth = 2;
+        c.strokeRect(-42, -52, 84, 104);
+      } else if (relicId === "key") {
+        // Vintage Ornate Skeleton Key Bow, Shaft & Bit Teeth
+        c.fillStyle = mg; c.strokeStyle = metal.hi; c.lineWidth = 3.5;
+        c.beginPath(); c.arc(-78, 0, 56, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.fillStyle = "#0b241d";
+        c.beginPath(); c.arc(-78, 0, 26, 0, Math.PI * 2); c.fill();
+        c.fillStyle = mg;
+        c.beginPath(); c.roundRect(-26, -15, 152, 30, 8); c.fill(); c.stroke();
+        // Intricate Key Bit Teeth
+        c.beginPath(); c.roundRect(62, 12, 58, 42, 6); c.fill(); c.stroke();
+        c.fillStyle = "#0b241d";
+        c.fillRect(78, 28, 12, 26); c.fillRect(98, 22, 10, 32);
+      } else if (relicId === "musicbox") {
+        // Rectangular Open Gilded Music Box Chamber
+        c.fillStyle = "#451a03"; c.strokeStyle = mg; c.lineWidth = 7;
+        c.beginPath(); c.roundRect(-118, -82, 236, 164, 16); c.fill(); c.stroke();
+        c.fillStyle = metal.dial;
+        c.beginPath(); c.roundRect(-98, -62, 196, 124, 10); c.fill();
+        // Brass Acoustic Comb Teeth Along Top Interior
+        c.fillStyle = mg;
+        for (let tx = -82; tx <= 82; tx += 12) {
+          c.fillRect(tx, -56, 6, 22);
+        }
+      } else if (relicId === "clock") {
+        // Arched Cathedral Mantle Clock Silhouette
+        c.fillStyle = mg; c.strokeStyle = metal.hi; c.lineWidth = 4;
+        c.beginPath();
+        c.arc(0, -28, 86, Math.PI, 0);
+        c.lineTo(94, 92); c.lineTo(-94, 92); c.closePath();
+        c.fill(); c.stroke();
+        c.fillStyle = metal.dial;
+        c.beginPath(); c.arc(0, -18, 56, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.fillStyle = "#1c1917";
+        c.beginPath(); c.roundRect(-64, 24, 128, 52, 8); c.fill();
+      } else if (relicId === "medallion") {
+        // Sunburst Scalloped Imperial Medallion
+        c.fillStyle = mg; c.strokeStyle = metal.hi; c.lineWidth = 3.5;
+        c.beginPath();
+        for (let k = 0; k < 24; k++) {
+          const a = (k * Math.PI * 2) / 24;
+          const rr = k % 2 === 0 ? 108 : 88;
+          if (k === 0) c.moveTo(Math.cos(a) * rr, Math.sin(a) * rr);
+          else c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
+        }
+        c.closePath(); c.fill(); c.stroke();
+        c.fillStyle = "#0f172a";
+        c.beginPath(); c.arc(0, 0, 68, 0, Math.PI * 2); c.fill(); c.stroke();
+      } else {
+        // Telescoping Captain's Brass Spyglass
+        c.fillStyle = mg; c.strokeStyle = metal.hi; c.lineWidth = 3.5;
+        c.beginPath(); c.roundRect(-124, -26, 78, 52, 8); c.fill(); c.stroke();
+        c.beginPath(); c.roundRect(-50, -34, 92, 68, 8); c.fill(); c.stroke();
+        c.beginPath(); c.roundRect(38, -42, 86, 84, 10); c.fill(); c.stroke();
+        // Leather Grip Band
+        c.fillStyle = "#5c2814";
+        c.fillRect(-38, -32, 66, 64);
+      }
+
+      c.restore();
+    }
+
+    function buildRelicLevel(levelNum) {
+      const rng = mulberry32(levelNum * 362411 + 83017);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const spec = RELIC_CATALOG[(levelNum - 1 + chapIdx) % RELIC_CATALOG.length];
+      const metal = METALS[(levelNum + chapIdx) % METALS.length];
+      const eraYear = 1785 + ((levelNum * 17) % 163);
+
+      renderRelicBase(spec.id, metal);
+
+      // Sample Alpha Silhouette of Rendered Heirloom so Rust & Tarnish Stay STRICTLY on the Antique!
+      const imgData = baseCtx.getImageData(0, 0, WORLD_W, WORLD_H).data;
+      const validMask = new Uint8Array(MASK_N * MASK_N);
+      const rustGrid = new Float32Array(MASK_N * MASK_N);
+      const tarnishGrid = new Float32Array(MASK_N * MASK_N);
+      let validCount = 0;
+
+      const rustTough = chapIdx === 0 ? 0.9 : (chapIdx <= 2 ? 1.25 : 1.65);
+      const polishTough = chapIdx <= 1 ? 0.9 : 1.3;
+
+      for (let r = 0; r < MASK_N; r++) {
+        for (let c = 0; c < MASK_N; c++) {
+          const sx = Math.min(WORLD_W - 1, Math.floor((c + 0.5) * CELL_PX));
+          const sy = Math.min(WORLD_H - 1, Math.floor((r + 0.5) * CELL_PX));
+          const alpha = imgData[(sy * WORLD_W + sx) * 4 + 3];
+          const idx = r * MASK_N + c;
+          if (alpha > 120) {
+            validMask[idx] = 1;
+            rustGrid[idx] = rustTough;
+            tarnishGrid[idx] = polishTough;
+            validCount++;
+          }
+        }
+      }
+
+      // Paint Cloudy Dull Tarnish Mask Clipped Cleanly to Relic Silhouette (Step 2)
+      tarnishCtx.clearRect(0, 0, WORLD_W, WORLD_H);
+      tarnishCtx.save();
+      tarnishCtx.drawImage(baseCanvas, 0, 0);
+      tarnishCtx.globalCompositeOperation = "source-in";
+      tarnishCtx.fillStyle = "rgba(82, 74, 62, 0.72)";
+      tarnishCtx.fillRect(0, 0, WORLD_W, WORLD_H);
+      for (let i = 0; i < 65; i++) {
+        tarnishCtx.fillStyle = i % 2 === 0 ? "rgba(120, 113, 108, 0.45)" : "rgba(41, 37, 36, 0.4)";
+        tarnishCtx.beginPath();
+        tarnishCtx.arc(80 + rng() * 260, 60 + rng() * 250, 12 + rng() * 28, 0, Math.PI * 2);
+        tarnishCtx.fill();
+      }
+      tarnishCtx.restore();
+
+      // Paint Heavy Teal Verdigris + Dark Iron Rust Crust Clipped Cleanly to Relic Silhouette (Step 1)
+      rustCtx.clearRect(0, 0, WORLD_W, WORLD_H);
+      rustCtx.save();
+      rustCtx.drawImage(baseCanvas, 0, 0);
+      rustCtx.globalCompositeOperation = "source-in";
+      rustCtx.fillStyle = chapIdx % 2 === 0 ? "#4a3222" : "#245448";
+      rustCtx.fillRect(0, 0, WORLD_W, WORLD_H);
+      for (let i = 0; i < 110; i++) {
+        rustCtx.fillStyle = i % 3 === 0
+          ? "rgba(45, 112, 92, 0.78)"
+          : (i % 3 === 1 ? "rgba(114, 46, 18, 0.75)" : "rgba(38, 28, 22, 0.65)");
+        rustCtx.beginPath();
+        rustCtx.arc(60 + rng() * 300, 50 + rng() * 270, 9 + rng() * 22, 0, Math.PI * 2);
+        rustCtx.fill();
+      }
+      rustCtx.restore();
+
+      // Determine How Many Precision Parts Need Fitting in Step 3 (1 -> 4 Across Chapters 1–5!)
+      const partCount = chapIdx === 0 ? (levelNum <= 40 ? 1 : 2) : (chapIdx <= 2 ? 2 : (chapIdx === 3 ? 3 : 4));
+      const chosenSockets = spec.sockets.slice(0, partCount);
+      const traySpacing = partCount === 1 ? 0 : Math.min(82, 260 / (partCount - 1));
+      const trayStartX = RELIC_CX - ((partCount - 1) * traySpacing) / 2;
+
+      const parts = chosenSockets.map((sk, idx) => ({
+        id: idx,
+        kind: sk.kind,
+        col: sk.col,
+        r: sk.r,
+        targetX: RELIC_CX + sk.x,
+        targetY: RELIC_CY + sk.y,
+        homeX: trayStartX + idx * traySpacing,
+        homeY: 368,
+        x: trayStartX + idx * traySpacing,
+        y: 368,
+        fitted: false
+      }));
+
+      return {
+        levelNum,
+        chapIdx,
+        spec,
+        metal,
+        eraYear,
+        validMask,
+        validCount: Math.max(1, validCount),
+        rustGrid,
+        tarnishGrid,
+        parts
+      };
+    }
+
+    function getChapter(num) {
+      return CHAPTERS.find((c) => num >= c.start && num <= c.end) || CHAPTERS[0];
+    }
+
+    // ==============================================
+    // BRISTLE SCRUB, VELVET BUFF & MUSIC-BOX WEB AUDIO
+    // ==============================================
+    let audioCtx = null;
+    let soundOn = true;
+    let workLoop = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    }
+
+    function ensureWorkLoop() {
+      initAudio();
+      if (!audioCtx || workLoop) return;
+
+      const len = audioCtx.sampleRate * 2;
+      const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) {
+        data[i] = (Math.random() * 2 - 1) * (Math.random() < 0.14 ? 1.3 : 0.45);
+      }
+
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+
+      const bp = audioCtx.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.frequency.value = 2400;
+      bp.Q.value = 1.1;
+
+      const g = audioCtx.createGain();
+      g.gain.value = 0;
+
+      src.connect(bp);
+      bp.connect(g);
+      g.connect(audioCtx.destination);
+      src.start();
+
+      workLoop = { bp, g };
+    }
+
+    function updateBenchAudio(active, phase, speedRatio) {
+      if (!soundOn || !active || speedRatio < 0.04) {
+        if (workLoop && audioCtx) {
+          workLoop.g.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.03);
+        }
+        return;
+      }
+      ensureWorkLoop();
+      if (!workLoop || !audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      if (phase === 0) {
+        // Crisp brass wire-brush scrubbing
+        workLoop.bp.frequency.setTargetAtTime(2200 + speedRatio * 1400, now, 0.03);
+        workLoop.bp.Q.setTargetAtTime(1.1, now, 0.03);
+        workLoop.g.gain.setTargetAtTime(Math.min(0.18, 0.04 + speedRatio * 0.12), now, 0.025);
+      } else {
+        // Silky soft velvet cloth polishing whisper
+        workLoop.bp.frequency.setTargetAtTime(1050 + speedRatio * 750, now, 0.04);
+        workLoop.bp.Q.setTargetAtTime(2.0, now, 0.04);
+        workLoop.g.gain.setTargetAtTime(Math.min(0.14, 0.03 + speedRatio * 0.09), now, 0.03);
+      }
+    }
+
+    function sfxGearSnap() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(1180, now);
+      osc.frequency.exponentialRampToValueAtTime(520, now + 0.055);
+      g.gain.setValueAtTime(0.15, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.08);
+    }
+
+    function sfxPhaseAdvance() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      [587.33, 880.0].forEach((f, i) => {
+        setTimeout(() => {
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(f, now);
+          g.gain.setValueAtTime(0.1, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.34);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.38);
+        }, i * 70);
+      });
+    }
+
+    function sfxMusicBoxWin() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      [523.25, 659.25, 783.99, 1046.5, 1318.5, 1567.98].forEach((f, i) => {
+        setTimeout(() => {
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(f, now);
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.exponentialRampToValueAtTime(0.1, now + 0.01);
+          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.65);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.7);
+        }, i * 80);
+      });
+    }
+
+    // ==============================================
+    // GAME STATE, 3-PHASE INTERACTION & RENDER LOOP
+    // ==============================================
+    const canvas = document.getElementById("antiqueCanvas");
+    const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
     const eraPill = document.getElementById("eraPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const step1Chip = document.getElementById("step1Chip");
-    const step2Chip = document.getElementById("step2Chip");
-    const step3Chip = document.getElementById("step3Chip");
-    const stageLabel = document.getElementById("stageLabel");
-    const stageFill = document.getElementById("stageFill");
-    const stagePct = document.getElementById("stagePct");
-    const partsTray = document.getElementById("partsTray");
+    const pillStep1 = document.getElementById("pillStep1");
+    const pillStep2 = document.getElementById("pillStep2");
+    const pillStep3 = document.getElementById("pillStep3");
+    const progLbl = document.getElementById("progLbl");
+    const progFill = document.getElementById("progFill");
+    const progVal = document.getElementById("progVal");
+    const btnScrub = document.getElementById("btnScrub");
+    const btnPolish = document.getElementById("btnPolish");
+    const btnFit = document.getElementById("btnFit");
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
     const winHeading = document.getElementById("winHeading");
@@ -1371,422 +1363,209 @@
     } catch (e) {}
 
     let relic = null;
-    let stage = 1; // 1 = Scrub Rust, 2 = Fit Gears, 3 = Polish Brass, 4 = Done
-    let objectMask = new Uint8Array(GRID_W * GRID_H);
-    let rustGrid = new Float32Array(GRID_W * GRID_H);
-    let polishGrid = new Float32Array(GRID_W * GRID_H);
-    let totalMaskCells = 1;
-    let rustCleared = 0;
-    let polishCleared = 0;
+    let phase = 0; // 0 = Scrub Rust, 1 = Velvet Polish, 2 = Fit Missing Parts, 3 = Won!
+    let phaseRatio = 0;
+    let isWorking = false;
+    let ptrPos = { x: RELIC_CX, y: RELIC_CY };
+    let lastPtr = null;
+    let draggingPart = null;
+    let loupeTimer = 0;
 
-    // Stage 2 Gear Assembly state
-    let gearSlots = [];
-    let unplacedParts = [];
-    let selectedPartIdx = 0;
-    let hintAxleId = -1;
-    let gearsSpinning = false;
-
-    // Pointer & VFX state
-    let isPointerDown = false;
-    let pointerWorld = { x: CX, y: CY };
-    let lastWorld = null;
-    let lastMoveMs = performance.now();
-    let radarTimer = 0;
-    let shineAnim = 0;
-    let particles = [];
+    let dustBits = [];
     let sparkles = [];
     let toastTimer = null;
 
-    function showToast(msg, ms = 2400) {
+    function showToast(msg, ms = 2300) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function renderTrayArea() {
-      partsTray.innerHTML = "";
-
-      if (stage === 1) {
-        partsTray.innerHTML = `<div class="tool-banner">🧽 <span><strong>Wire Rust Brush Active</strong> — Drag across the antique to scrub away rust &amp; green patina!</span></div>`;
-        return;
+    function computeGridProgress(grid) {
+      let clean = 0;
+      const mask = relic.validMask;
+      for (let i = 0; i < mask.length; i++) {
+        if (mask[i] && grid[i] <= 0.08) clean++;
       }
-      if (stage === 3) {
-        partsTray.innerHTML = `<div class="tool-banner">✨ <span><strong>Velvet Brass Polish Active</strong> — Buff the dull surface until it gleams like a mirror!</span></div>`;
-        return;
-      }
-      if (stage === 4) {
-        partsTray.innerHTML = `<div class="tool-banner" style="border-color:#22c55e; color:#bbf7d0;">🕰️ <span><strong>Restoration Complete!</strong> Every gear ticking smoothly in mirror-bright brass.</span></div>`;
-        return;
-      }
-
-      // Stage 2: Interactive Gear Parts Tray
-      const title = document.createElement("div");
-      title.className = "tray-title";
-      title.innerHTML = `<span>Select a gear, then tap or drag onto its matching axle</span><span>${unplacedParts.length} left</span>`;
-      partsTray.appendChild(title);
-
-      const row = document.createElement("div");
-      row.className = "parts-row";
-      if (selectedPartIdx >= unplacedParts.length) selectedPartIdx = 0;
-
-      unplacedParts.forEach((part, idx) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "part-btn" + (idx === selectedPartIdx ? " selected" : "");
-        btn.innerHTML = `
-          <span class="part-swatch" style="background:${part.metal.fill}; border-color:${part.metal.light};">${part.sizeCode}</span>
-          <span class="part-name">${part.metal.name}</span>
-          <span class="part-size">${part.sizeLabel} (${part.teeth}T)</span>
-        `;
-        btn.addEventListener("click", () => {
-          initAudio();
-          selectedPartIdx = idx;
-          hintAxleId = -1;
-          renderTrayArea();
-        });
-        row.appendChild(btn);
-      });
-      partsTray.appendChild(row);
-    }
-
-    function updateStageUI() {
-      step1Chip.className = "step-chip" + (stage === 1 ? " active" : " complete");
-      step2Chip.className = "step-chip" + (stage === 2 ? " active" : (stage > 2 ? " complete" : ""));
-      step3Chip.className = "step-chip" + (stage === 3 ? " active" : (stage > 3 ? " complete" : ""));
-
-      if (stage === 1) {
-        const pct = Math.min(99, Math.floor((rustCleared / Math.max(1, totalMaskCells)) * 100));
-        stageLabel.textContent = "🧽 RUST CLEANED";
-        stageFill.style.width = `${pct}%`;
-        stagePct.textContent = `${pct}%`;
-      } else if (stage === 2) {
-        const placedCount = gearSlots.filter((g) => g.placed).length;
-        const pct = Math.round((placedCount / Math.max(1, gearSlots.length)) * 100);
-        stageLabel.textContent = "⚙️ GEARS FITTED";
-        stageFill.style.width = `${pct}%`;
-        stagePct.textContent = `${placedCount} / ${gearSlots.length}`;
-      } else if (stage === 3) {
-        const pct = Math.min(99, Math.floor((polishCleared / Math.max(1, totalMaskCells)) * 100));
-        stageLabel.textContent = "✨ POLISH SHINE";
-        stageFill.style.width = `${pct}%`;
-        stagePct.textContent = `${pct}%`;
-      } else {
-        stageLabel.textContent = "✨ RESTORED";
-        stageFill.style.width = "100%";
-        stagePct.textContent = "100%";
-      }
+      return clean / relic.validCount;
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Relic #${currentLevelNum} / ${TOTAL_LEVELS} — ${relic.art.name}`;
-      eraPill.textContent = `Est. ${relic.eraYear}`;
+      levelTitle.textContent = `Relic #${currentLevelNum} / ${TOTAL_LEVELS} — ${relic.spec.name}`;
+      eraPill.textContent = `Era: ${relic.eraYear}`;
       solvedCounter.textContent = `Restored: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Relic ${currentLevelNum} / 500 ▾`;
-      updateStageUI();
+
+      pillStep1.className = "step-pill" + (phase === 0 ? " active" : " done");
+      pillStep2.className = "step-pill" + (phase === 1 ? " active" : (phase > 1 ? " done" : ""));
+      pillStep3.className = "step-pill" + (phase === 2 ? " active" : (phase > 2 ? " done" : ""));
+
+      btnScrub.className = "tool-btn" + (phase === 0 ? " active" : " completed");
+      btnPolish.className = "tool-btn" + (phase === 1 ? " active" : (phase > 1 ? " completed" : ""));
+      btnFit.className = "tool-btn" + (phase === 2 ? " active" : (phase > 2 ? " completed" : ""));
+
+      if (phase === 0) {
+        const pct = Math.min(99, Math.round(phaseRatio * 100));
+        progLbl.textContent = "🪥 Brush Off Rust";
+        progFill.style.width = `${pct}%`;
+        progVal.textContent = `${pct}%`;
+      } else if (phase === 1) {
+        const pct = Math.min(99, Math.round(phaseRatio * 100));
+        progLbl.textContent = "✨ Buff Tarnish";
+        progFill.style.width = `${pct}%`;
+        progVal.textContent = `${pct}%`;
+      } else if (phase === 2) {
+        const fitCnt = relic.parts.filter((p) => p.fitted).length;
+        const pct = Math.round((fitCnt / relic.parts.length) * 100);
+        progLbl.textContent = "⚙️ Fit Clockwork";
+        progFill.style.width = `${pct}%`;
+        progVal.textContent = `${fitCnt} / ${relic.parts.length}`;
+      } else {
+        progLbl.textContent = "✨ Museum Ready!";
+        progFill.style.width = "100%";
+        progVal.textContent = "100%";
+      }
     }
 
-    function buildRustAndTarnishLayers() {
-      const rng = mulberry32(relic.seed * 7919 + 41);
-      const data = cleanCtx.getImageData(0, 0, WORLD_W, WORLD_H).data;
+    function spawnSparkleBurst(cx, cy, count = 14) {
+      for (let i = 0; i < count; i++) {
+        sparkles.push({
+          x: cx + (Math.random() - 0.5) * 170,
+          y: cy + (Math.random() - 0.5) * 170,
+          size: 5 + Math.random() * 7,
+          alpha: 1,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+    }
 
-      objectMask.fill(0);
-      rustGrid.fill(0);
-      polishGrid.fill(0);
-      totalMaskCells = 0;
-      rustCleared = 0;
-      polishCleared = 0;
+    function scrubLayerAt(wx, wy, moveDist) {
+      const isRust = phase === 0;
+      const grid = isRust ? relic.rustGrid : relic.tarnishGrid;
+      const targetCtx = isRust ? rustCtx : tarnishCtx;
+      const rad = isRust ? 28 : 34;
 
-      rustCtx.clearRect(0, 0, WORLD_W, WORLD_H);
-      tarnishCtx.clearRect(0, 0, WORLD_W, WORLD_H);
+      const cMin = Math.max(0, Math.floor((wx - rad) / CELL_PX));
+      const cMax = Math.min(MASK_N - 1, Math.floor((wx + rad) / CELL_PX));
+      const rMin = Math.max(0, Math.floor((wy - rad) / CELL_PX));
+      const rMax = Math.min(MASK_N - 1, Math.floor((wy + rad) / CELL_PX));
 
-      // Matte dull oxidation layer (for Stage 3 polishing!)
-      tarnishCtx.fillStyle = "rgba(46, 38, 30, 0.56)";
-      tarnishCtx.fillRect(0, 0, WORLD_W, WORLD_H);
+      let touchedAny = false;
+      targetCtx.save();
+      targetCtx.globalCompositeOperation = "destination-out";
 
-      for (let gy = 0; gy < GRID_H; gy++) {
-        for (let gx = 0; gx < GRID_W; gx++) {
-          const px = Math.min(WORLD_W - 1, Math.floor((gx + 0.5) * CELL_W));
-          const py = Math.min(WORLD_H - 1, Math.floor((gy + 0.5) * CELL_H));
-          const alpha = data[(py * WORLD_W + px) * 4 + 3];
-          const idx = gy * GRID_W + gx;
+      for (let r = rMin; r <= rMax; r++) {
+        for (let c = cMin; c <= cMax; c++) {
+          const idx = r * MASK_N + c;
+          if (!relic.validMask[idx] || grid[idx] <= 0.08) continue;
 
-          if (alpha > 110) {
-            objectMask[idx] = 1;
-            totalMaskCells++;
-            rustGrid[idx] = relic.rustHP;
-            polishGrid[idx] = relic.polishHP;
+          const cx = (c + 0.5) * CELL_PX;
+          const cy = (r + 0.5) * CELL_PX;
+          const d = Math.hypot(cx - wx, cy - wy);
+          if (d > rad) continue;
 
-            // Organic orange-brown rust & aged green verdigris patina
-            const jx = (rng() - 0.5) * 3;
-            const jy = (rng() - 0.5) * 3;
-            const rr = Math.max(CELL_W, CELL_H) * (0.9 + rng() * 0.45);
-            const isVerdigris = rng() < 0.24;
-            const rustPalette = isVerdigris
-              ? ["#3f6212", "#365314", "#115e59", "#4d7c0f"]
-              : ["#7c2d12", "#9a3412", "#5c240e", "#854d0e", "#431407"];
+          const amt = (0.28 + Math.min(0.65, moveDist * 0.032)) * (1 - (d / rad) * 0.45);
+          const prev = grid[idx];
+          const next = Math.max(0, prev - amt);
+          grid[idx] = next;
+          touchedAny = true;
 
-            rustCtx.fillStyle = rustPalette[Math.floor(rng() * rustPalette.length)];
-            rustCtx.beginPath();
-            rustCtx.arc(px + jx, py + jy, rr, 0, Math.PI * 2);
-            rustCtx.fill();
+          const eraseA = next <= 0.08 ? 1.0 : Math.min(0.75, amt / Math.max(0.2, prev));
+          targetCtx.fillStyle = `rgba(0, 0, 0, ${eraseA})`;
+          targetCtx.beginPath();
+          targetCtx.arc(cx, cy, CELL_PX * 0.96, 0, Math.PI * 2);
+          targetCtx.fill();
+        }
+      }
+      targetCtx.restore();
 
-            // Dull mottled patina clouds on tarnishCanvas
-            if (rng() < 0.5) {
-              tarnishCtx.fillStyle = "rgba(30, 24, 18, 0.25)";
-              tarnishCtx.beginPath();
-              tarnishCtx.arc(px + jx, py + jy, rr * 1.1, 0, Math.PI * 2);
-              tarnishCtx.fill();
-            }
-          }
+      if (touchedAny) {
+        for (let k = 0; k < 3; k++) {
+          dustBits.push({
+            x: wx + (Math.random() - 0.5) * 18,
+            y: wy + (Math.random() - 0.5) * 18,
+            vx: (Math.random() - 0.5) * 2.2,
+            vy: (Math.random() - 0.5) * 2.2 - 0.4,
+            r: isRust ? (1.8 + Math.random() * 2) : (2.2 + Math.random() * 2),
+            color: isRust ? (Math.random() < 0.5 ? "#2dd4bf" : "#b45309") : "#fef08a",
+            alpha: 0.9
+          });
         }
       }
 
-      // Clip both layers crisply to the exact antique silhouette
-      [rustCtx, tarnishCtx].forEach((c) => {
-        c.save();
-        c.globalCompositeOperation = "destination-in";
-        c.drawImage(cleanCanvas, 0, 0);
-        c.restore();
-      });
+      phaseRatio = computeGridProgress(grid);
+      updateHUD();
+
+      // Auto-Advance Smoothly at >= 95% (Zero Pixel-Hunting Frustration!)
+      if (phaseRatio >= 0.95) {
+        targetCtx.clearRect(0, 0, WORLD_W, WORLD_H);
+        grid.fill(0);
+        isWorking = false;
+        lastPtr = null;
+        loupeTimer = 0;
+        updateBenchAudio(false, phase, 0);
+        sfxPhaseAdvance();
+        spawnSparkleBurst(RELIC_CX, RELIC_CY, 16);
+
+        phase++;
+        phaseRatio = 0;
+        if (phase === 1) {
+          showToast("✨ Rust stripped! Now buff with the Velvet Cloth for a mirror shine.", 2400);
+        } else if (phase === 2) {
+          showToast("⚙️ Gleaming metal! Drag each missing piece into its glowing socket.", 2500);
+        }
+        updateHUD();
+      }
+    }
+
+    function checkRelicRestored() {
+      if (phase !== 2) return;
+      if (relic.parts.every((p) => p.fitted)) {
+        phase = 3;
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_antique_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+
+        sfxMusicBoxWin();
+        spawnSparkleBurst(RELIC_CX, RELIC_CY, 28);
+        updateHUD();
+
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winHeading.textContent = isLast ? "All 500 Heirlooms Restored!" : `${relic.spec.name} Restored!`;
+        winText.textContent = `${relic.eraYear} ${relic.metal.name} masterpiece shines spotless with live clockwork!`;
+        nextLevelBtn.textContent = isLast ? "Replay Relic #1" : `Next Antique (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 780);
+      }
     }
 
     function loadRelic(num) {
-      stopRubAudio();
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      relic = buildRelic(currentLevelNum);
-      stage = 1;
-      gearsSpinning = false;
-      hintAxleId = -1;
-      radarTimer = 0;
-      shineAnim = 0;
-      isPointerDown = false;
-      lastWorld = null;
-      particles = [];
+      relic = buildRelicLevel(currentLevelNum);
+      phase = 0;
+      phaseRatio = 0;
+      isWorking = false;
+      lastPtr = null;
+      draggingPart = null;
+      loupeTimer = 0;
+      dustBits = [];
       sparkles = [];
-
-      const rng = mulberry32(relic.seed + 555);
-      gearSlots = relic.gearSlots.map((g) => ({ ...g, placed: false }));
-      unplacedParts = shuffle(
-        gearSlots.map((g) => ({
-          r: g.r,
-          teeth: g.teeth,
-          sizeCode: g.sizeCode,
-          sizeLabel: g.sizeLabel,
-          metal: g.metal
-        })),
-        rng
-      );
-      selectedPartIdx = 0;
+      updateBenchAudio(false, 0, 0);
 
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
-
-      drawCleanAntique(cleanCtx, relic);
-      buildRustAndTarnishLayers();
 
       try {
         localStorage.setItem("zinplay_antique_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      renderTrayArea();
       updateHUD();
     }
 
-    function advanceToStage2() {
-      stage = 2;
-      isPointerDown = false;
-      rustGrid.fill(0);
-      rustCleared = totalMaskCells;
-      rustCtx.clearRect(0, 0, WORLD_W, WORLD_H);
-      radarTimer = 0;
-      sfxStageChime();
-      renderTrayArea();
-      updateStageUI();
-      showToast("Rust scrubbed clean! Now fit every gear onto its matching axle.", 2600);
-    }
-
-    function advanceToStage3() {
-      stage = 3;
-      gearsSpinning = true;
-      hintAxleId = -1;
-      radarTimer = 0;
-      sfxStageChime();
-      renderTrayArea();
-      updateStageUI();
-      showToast("Mechanism ticking! Buff the tarnished brass to a mirror shine!", 2600);
-    }
-
-    function completeRestoration() {
-      stage = 4;
-      isPointerDown = false;
-      polishGrid.fill(0);
-      polishCleared = totalMaskCells;
-      tarnishCtx.clearRect(0, 0, WORLD_W, WORLD_H);
-      shineAnim = 0.01;
-      sfxMusicBoxWin();
-
-      solvedSet.add(currentLevelNum);
-      try {
-        localStorage.setItem("zinplay_antique_500_solved", JSON.stringify([...solvedSet]));
-      } catch (e) {}
-
-      for (let i = 0; i < 24; i++) {
-        sparkles.push({
-          x: 75 + Math.random() * 270,
-          y: 65 + Math.random() * 310,
-          size: 4 + Math.random() * 6,
-          alpha: 1,
-          phase: Math.random() * Math.PI * 2
-        });
-      }
-
-      renderTrayArea();
-      updateHUD();
-
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      winHeading.textContent = isLast ? "All 500 Antiques Restored!" : `Relic #${currentLevelNum} Restored!`;
-      winText.textContent = `${relic.art.name} (${relic.eraYear}) is ticking smoothly and gleaming like brand new.`;
-      nextLevelBtn.textContent = isLast ? "Replay Relic #1" : `Next Antique (#${currentLevelNum + 1}) →`;
-      setTimeout(() => winOverlay.classList.add("show"), 700);
-    }
-
-    // Apply Scrubbing (Stage 1) or Polishing (Stage 3) at World Coordinates
-    function applyRubAt(wx, wy, powerScale = 1) {
-      const isPolish = stage === 3;
-      const rad = isPolish ? 32 : 28;
-      const grid = isPolish ? polishGrid : rustGrid;
-      const targetCtx = isPolish ? tarnishCtx : rustCtx;
-
-      const minGx = Math.max(0, Math.floor((wx - rad) / CELL_W));
-      const maxGx = Math.min(GRID_W - 1, Math.ceil((wx + rad) / CELL_W));
-      const minGy = Math.max(0, Math.floor((wy - rad) / CELL_H));
-      const maxGy = Math.min(GRID_H - 1, Math.ceil((wy + rad) / CELL_H));
-
-      let touched = false;
-      targetCtx.save();
-      targetCtx.globalCompositeOperation = "destination-out";
-
-      for (let gy = minGy; gy <= maxGy; gy++) {
-        for (let gx = minGx; gx <= maxGx; gx++) {
-          const idx = gy * GRID_W + gx;
-          if (!objectMask[idx] || grid[idx] <= 0) continue;
-
-          const cx = (gx + 0.5) * CELL_W;
-          const cy = (gy + 0.5) * CELL_H;
-          const dist = Math.hypot(cx - wx, cy - wy);
-          if (dist > rad) continue;
-
-          touched = true;
-          const falloff = 1 - (dist / rad) * 0.45;
-          grid[idx] -= 1.05 * falloff * powerScale;
-
-          if (grid[idx] <= 0) {
-            grid[idx] = 0;
-            if (isPolish) polishCleared++;
-            else rustCleared++;
-            targetCtx.fillStyle = "rgba(0,0,0,1)";
-            targetCtx.beginPath();
-            targetCtx.arc(cx, cy, Math.max(CELL_W, CELL_H) * 0.96, 0, Math.PI * 2);
-            targetCtx.fill();
-          } else {
-            targetCtx.fillStyle = "rgba(0,0,0,0.34)";
-            targetCtx.beginPath();
-            targetCtx.arc(cx, cy, Math.max(CELL_W, CELL_H) * 0.85, 0, Math.PI * 2);
-            targetCtx.fill();
-          }
-        }
-      }
-      targetCtx.restore();
-
-      if (touched) {
-        updateStageUI();
-        if (Math.random() < 0.6) {
-          for (let k = 0; k < 3; k++) {
-            const a = Math.random() * Math.PI * 2;
-            const s = 1 + Math.random() * 2.5;
-            particles.push({
-              x: wx + (Math.random() - 0.5) * 14,
-              y: wy + (Math.random() - 0.5) * 14,
-              vx: Math.cos(a) * s,
-              vy: Math.sin(a) * s - 0.5,
-              r: isPolish ? (2 + Math.random() * 2) : (1.8 + Math.random() * 2.4),
-              color: isPolish ? "#fef08a" : (Math.random() < 0.3 ? "#65a30d" : "#c2410c"),
-              alpha: 0.9,
-              sparkle: isPolish
-            });
-          }
-        }
-
-        if (!isPolish && rustCleared / Math.max(1, totalMaskCells) >= 0.955) {
-          advanceToStage2();
-        } else if (isPolish && polishCleared / Math.max(1, totalMaskCells) >= 0.96) {
-          completeRestoration();
-        }
-      }
-      return touched;
-    }
-
-    // Attempt to Seat Selected Gear at Canvas Point (wx, wy)
-    function tryPlaceSelectedGear(wx, wy) {
-      if (stage !== 2 || unplacedParts.length === 0) return;
-      const part = unplacedParts[selectedPartIdx];
-      if (!part) return;
-
-      // Find closest empty axle within generous touch radius
-      let closest = null;
-      let bestDist = 42;
-      for (const slot of gearSlots) {
-        if (slot.placed) continue;
-        const d = Math.hypot(wx - slot.x, wy - slot.y);
-        if (d < bestDist) {
-          bestDist = d;
-          closest = slot;
-        }
-      }
-
-      if (!closest) return;
-
-      if (closest.r === part.r && closest.metal.key === part.metal.key) {
-        closest.placed = true;
-        const placedCount = gearSlots.filter((g) => g.placed).length;
-        unplacedParts.splice(selectedPartIdx, 1);
-        if (selectedPartIdx >= unplacedParts.length) selectedPartIdx = 0;
-        hintAxleId = -1;
-
-        sfxGearSnap(placedCount - 1);
-        for (let i = 0; i < 10; i++) {
-          const a = (i * Math.PI * 2) / 10;
-          particles.push({
-            x: closest.x + Math.cos(a) * closest.r * 0.7,
-            y: closest.y + Math.sin(a) * closest.r * 0.7,
-            vx: Math.cos(a) * 2.2,
-            vy: Math.sin(a) * 2.2,
-            r: 2.5,
-            color: "#fef08a",
-            alpha: 1,
-            sparkle: true
-          });
-        }
-
-        renderTrayArea();
-        updateStageUI();
-
-        if (unplacedParts.length === 0) {
-          setTimeout(() => advanceToStage3(), 550);
-        }
-      } else {
-        sfxWrongFit();
-        const reason = closest.r !== part.r
-          ? `Wrong gear size! That axle needs a ${closest.sizeLabel} (${closest.metal.name}) gear.`
-          : `Match the ${closest.metal.name} color ring on that axle!`;
-        showToast(reason, 2200);
-      }
-    }
-
-    // Viewport & Pointer Controls
+    // Viewport & Pointer Interaction (Scrub/Polish in Steps 1–2, Drag & Snap Parts in Step 3!)
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1807,97 +1586,112 @@
       const rect = canvas.getBoundingClientRect();
       const vp = getViewport();
       return {
-        x: (clientX - rect.left - vp.offsetX) / vp.scale,
-        y: (clientY - rect.top - vp.offsetY) / vp.scale
+        x: Math.max(0, Math.min(WORLD_W, (clientX - rect.left - vp.offsetX) / vp.scale)),
+        y: Math.max(0, Math.min(WORLD_H, (clientY - rect.top - vp.offsetY) / vp.scale))
       };
     }
 
     canvas.addEventListener("pointerdown", (e) => {
-      if (stage === 4) return;
+      if (phase >= 3) return;
       initAudio();
       const pt = clientToWorld(e.clientX, e.clientY);
-      pointerWorld = pt;
-      isPointerDown = true;
-      lastWorld = pt;
-      lastMoveMs = performance.now();
-      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      ptrPos = pt;
 
-      if (stage === 1 || stage === 3) {
-        applyRubAt(pt.x, pt.y, 0.9);
+      if (phase === 0 || phase === 1) {
+        isWorking = true;
+        lastPtr = pt;
+        canvas.classList.add("working");
+        scrubLayerAt(pt.x, pt.y, 12);
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      } else if (phase === 2) {
+        // Pick up nearest unfitted brass gear / jewel / hand from tray!
+        let best = null, bestD = 38;
+        for (const p of relic.parts) {
+          if (p.fitted) continue;
+          const d = Math.hypot(pt.x - p.x, pt.y - p.y);
+          if (d < bestD) { bestD = d; best = p; }
+        }
+        if (best) {
+          draggingPart = best;
+          canvas.classList.add("working");
+          try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+        }
       }
     });
 
     canvas.addEventListener("pointermove", (e) => {
       const pt = clientToWorld(e.clientX, e.clientY);
-      pointerWorld = pt;
-      if (!isPointerDown || stage === 4) return;
+      ptrPos = pt;
 
-      const now = performance.now();
-      const dt = Math.max(0.008, Math.min(0.06, (now - lastMoveMs) / 1000));
-      lastMoveMs = now;
-
-      if (stage === 1 || stage === 3) {
-        const prev = lastWorld || pt;
-        const dist = Math.hypot(pt.x - prev.x, pt.y - prev.y);
-        const speed = dist / dt;
-        const steps = Math.max(1, Math.ceil(dist / 9));
-
-        let hitAny = false;
-        for (let i = 1; i <= steps; i++) {
-          const t = i / steps;
-          if (applyRubAt(prev.x + (pt.x - prev.x) * t, prev.y + (pt.y - prev.y) * t, 0.7)) {
-            hitAny = true;
-          }
+      if ((phase === 0 || phase === 1) && isWorking && lastPtr) {
+        const md = Math.hypot(pt.x - lastPtr.x, pt.y - lastPtr.y);
+        lastPtr = pt;
+        if (md > 0.6) {
+          scrubLayerAt(pt.x, pt.y, md);
+          updateBenchAudio(true, phase, Math.min(1.2, md / 18));
         }
-        lastWorld = pt;
-        updateRubAudio(hitAny ? speed : speed * 0.35, stage === 3);
+      } else if (phase === 2 && draggingPart) {
+        draggingPart.x = pt.x;
+        draggingPart.y = pt.y;
+
+        // Instant Satisfying Magnetic Click When Close to Matching Socket!
+        if (Math.hypot(draggingPart.x - draggingPart.targetX, draggingPart.y - draggingPart.targetY) <= 28) {
+          draggingPart.x = draggingPart.targetX;
+          draggingPart.y = draggingPart.targetY;
+          draggingPart.fitted = true;
+          sfxGearSnap();
+          spawnSparkleBurst(draggingPart.targetX, draggingPart.targetY, 8);
+          draggingPart = null;
+          canvas.classList.remove("working");
+          updateHUD();
+          checkRelicRestored();
+        }
       }
     });
 
-    function releasePointer(e) {
-      if (!isPointerDown) return;
-      isPointerDown = false;
-      lastWorld = null;
-      stopRubAudio();
-
-      if (stage === 2 && e && e.clientX !== undefined) {
-        const pt = clientToWorld(e.clientX, e.clientY);
-        tryPlaceSelectedGear(pt.x, pt.y);
+    const endWork = () => {
+      isWorking = false;
+      lastPtr = null;
+      if (draggingPart && !draggingPart.fitted) {
+        // Gently return released part back to velvet tray slot
+        draggingPart.x = draggingPart.homeX;
+        draggingPart.y = draggingPart.homeY;
       }
-    }
-    canvas.addEventListener("pointerup", releasePointer);
-    canvas.addEventListener("pointercancel", () => {
-      isPointerDown = false;
-      lastWorld = null;
-      stopRubAudio();
+      draggingPart = null;
+      canvas.classList.remove("working");
+      updateBenchAudio(false, phase, 0);
+    };
+    canvas.addEventListener("pointerup", endWork);
+    canvas.addEventListener("pointercancel", endWork);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) endWork(); });
+
+    // Tool Buttons Give Helpful Contextual Feedback If Clicked Out of Sequence
+    btnScrub.addEventListener("click", () => {
+      if (phase > 0) showToast("✓ Rust is already stripped clean!", 1800);
     });
-    window.addEventListener("blur", () => {
-      isPointerDown = false;
-      stopRubAudio();
+    btnPolish.addEventListener("click", () => {
+      if (phase === 0) showToast("🪥 Scrub away the rust first—Velvet Cloth unlocks automatically!", 2200);
+      else if (phase > 1) showToast("✓ Metal is already mirror-polished!", 1800);
+    });
+    btnFit.addEventListener("click", () => {
+      if (phase < 2) showToast("✨ Polish the heirloom first—Tweezers unlock automatically in Step 3!", 2200);
     });
 
-    // Controls & Workshop Hint
-    document.getElementById("resetBtn").addEventListener("click", () => loadRelic(currentLevelNum));
+    // Loupe Hint Button (Spotlights Remaining Tarnish OR Draws Golden Socket Guide!)
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (stage === 4) return;
+      if (phase >= 3) return;
       initAudio();
-      if (stage === 1 || stage === 3) {
-        radarTimer = 2.5;
-        showToast(stage === 1 ? "Glowing orange highlights remaining rust spots!" : "Glowing gold highlights dull unpolished spots!", 2200);
-      } else if (stage === 2 && unplacedParts.length > 0) {
-        const part = unplacedParts[selectedPartIdx];
-        const match = gearSlots.find((s) => !s.placed && s.r === part.r && s.metal.key === part.metal.key);
-        if (match) {
-          hintAxleId = match.id;
-          showToast(`Tap the glowing golden axle to seat the ${part.metal.name} gear!`, 2500);
-        }
-      }
+      loupeTimer = 3.8;
+      if (phase === 0) showToast("💡 Loupe active! Remaining rust spots pulsing bright gold.", 2400);
+      else if (phase === 1) showToast("💡 Loupe active! Unbuffed tarnish highlighted in gold.", 2400);
+      else showToast("💡 Loupe active! Golden thread links the next piece to its exact socket.", 2500);
     });
 
+    document.getElementById("resetBtn").addEventListener("click", () => loadRelic(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
       soundBtn.textContent = soundOn ? "🔊 ASMR ON" : "🔇 OFF";
-      if (!soundOn) stopRubAudio();
+      if (!soundOn) updateBenchAudio(false, phase, 0);
     });
     nextLevelBtn.addEventListener("click", () => {
       loadRelic(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
@@ -1909,7 +1703,7 @@
       if (currentLevelNum < TOTAL_LEVELS) loadRelic(currentLevelNum + 1);
     });
 
-    // Relic Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1968,86 +1762,92 @@
     });
 
     // ==============================================
-    // INTERLOCKING GEAR & WORKBENCH RENDERER
+    // PRECISION GEARS, GEMS & ATELIER RENDERER
     // ==============================================
-    function drawPrecisionGear(x, y, r, teeth, metal, angle, alpha = 1) {
+    function drawPrecisionPart(p, now, spinActive) {
       ctx.save();
-      ctx.globalAlpha = alpha;
-      ctx.translate(x, y);
-      ctx.rotate(angle);
+      ctx.translate(p.x, p.y);
+      const r = p.r;
 
-      const outerR = r + 3.5;
-      const innerR = r - 2.2;
-
-      // Gear teeth silhouette
-      ctx.beginPath();
-      for (let i = 0; i < teeth; i++) {
-        const a0 = (i * Math.PI * 2) / teeth;
-        const step = (Math.PI * 2) / teeth;
-        ctx.lineTo(Math.cos(a0) * innerR, Math.sin(a0) * innerR);
-        ctx.lineTo(Math.cos(a0 + step * 0.18) * outerR, Math.sin(a0 + step * 0.18) * outerR);
-        ctx.lineTo(Math.cos(a0 + step * 0.52) * outerR, Math.sin(a0 + step * 0.52) * outerR);
-        ctx.lineTo(Math.cos(a0 + step * 0.70) * innerR, Math.sin(a0 + step * 0.70) * innerR);
-      }
-      ctx.closePath();
-
-      const grad = ctx.createRadialGradient(-r * 0.25, -r * 0.25, 2, 0, 0, outerR);
-      grad.addColorStop(0, metal.light);
-      grad.addColorStop(0.55, metal.fill);
-      grad.addColorStop(1, metal.dark);
-      ctx.fillStyle = grad;
-      ctx.fill();
-      ctx.lineWidth = 1.4;
-      ctx.strokeStyle = metal.dark;
-      ctx.stroke();
-
-      // Recessed inner rim & decorative spokes
-      ctx.fillStyle = "#1a1410";
-      ctx.beginPath();
-      ctx.arc(0, 0, r * 0.62, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.strokeStyle = metal.fill;
-      ctx.lineWidth = 3.2;
-      for (let s = 0; s < 4; s++) {
-        const sa = (s * Math.PI) / 2;
+      if (p.kind === "gear_lg" || p.kind === "gear_sm") {
+        const spin = spinActive ? now * (p.kind === "gear_lg" ? 0.0014 : -0.0022) : 0;
+        ctx.rotate(spin);
+        const teeth = p.kind === "gear_lg" ? 10 : 8;
+        ctx.fillStyle = p.col;
+        ctx.strokeStyle = "#fef08a";
+        ctx.lineWidth = 1.6;
         ctx.beginPath();
-        ctx.moveTo(Math.cos(sa) * -r * 0.62, Math.sin(sa) * -r * 0.62);
-        ctx.lineTo(Math.cos(sa) * r * 0.62, Math.sin(sa) * r * 0.62);
+        for (let k = 0; k < teeth * 2; k++) {
+          const a = (k * Math.PI) / teeth;
+          const rr = k % 2 === 0 ? r : r * 0.78;
+          if (k === 0) ctx.moveTo(Math.cos(a) * rr, Math.sin(a) * rr);
+          else ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
+        }
+        ctx.closePath();
+        ctx.fill();
         ctx.stroke();
-      }
 
-      // Center ruby/steel axle hub
-      ctx.fillStyle = metal.light;
-      ctx.beginPath();
-      ctx.arc(0, 0, Math.max(4.5, r * 0.24), 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#dc2626";
-      ctx.beginPath();
-      ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
-      ctx.fill();
+        ctx.fillStyle = "#1c1917";
+        ctx.beginPath(); ctx.arc(0, 0, r * 0.34, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#fef08a";
+        ctx.beginPath(); ctx.arc(0, 0, r * 0.14, 0, Math.PI * 2); ctx.fill();
+      } else if (p.kind === "hands") {
+        const rot = spinActive ? now * 0.0008 : 0;
+        ctx.strokeStyle = p.col;
+        ctx.lineCap = "round";
+        ctx.lineWidth = 3.6;
+        ctx.beginPath();
+        ctx.moveTo(0, 0); ctx.lineTo(Math.cos(rot - 1.1) * r * 1.45, Math.sin(rot - 1.1) * r * 1.45);
+        ctx.stroke();
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.moveTo(0, 0); ctx.lineTo(Math.cos(rot * 4 + 0.5) * r * 2.0, Math.sin(rot * 4 + 0.5) * r * 2.0);
+        ctx.stroke();
+        ctx.fillStyle = "#f59e0b";
+        ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2); ctx.fill();
+      } else if (p.kind === "needle") {
+        const wobble = spinActive ? Math.sin(now * 0.003) * 0.15 : -0.4;
+        ctx.rotate(wobble);
+        ctx.fillStyle = "#dc2626";
+        ctx.beginPath(); ctx.moveTo(0, -r * 1.7); ctx.lineTo(7, 0); ctx.lineTo(-7, 0); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = "#e2e8f0";
+        ctx.beginPath(); ctx.moveTo(0, r * 1.7); ctx.lineTo(7, 0); ctx.lineTo(-7, 0); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = "#fbbf24";
+        ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2); ctx.fill();
+      } else {
+        // Faceted Ruby / Emerald / Sapphire Jewels!
+        ctx.fillStyle = p.col;
+        ctx.strokeStyle = "#ffffff";
+        ctx.shadowColor = p.col;
+        ctx.shadowBlur = 10;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        for (let k = 0; k < 8; k++) {
+          const a = (k * Math.PI) / 4;
+          if (k === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+          else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.42)";
+        ctx.beginPath();
+        ctx.arc(-r * 0.25, -r * 0.25, r * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
       ctx.restore();
     }
 
     let lastTime = performance.now();
 
-    function drawScene(now) {
+    function frame(now) {
       const dt = Math.min(0.05, (now - lastTime) / 1000);
       lastTime = now;
 
-      if ((stage === 1 || stage === 3) && (now - lastMoveMs) / 1000 > 0.08) {
-        stopRubAudio();
-      }
-      if (radarTimer > 0) radarTimer = Math.max(0, radarTimer - dt);
-      if (stage === 4 && shineAnim > 0 && shineAnim < 1.35) shineAnim += dt * 1.35;
-
-      // Spin interlocking gear train smoothly once assembled!
-      if (gearsSpinning) {
-        for (const g of gearSlots) {
-          g.angle += g.dir * (38 / g.r) * dt;
-        }
-      }
+      if (loupeTimer > 0) loupeTimer = Math.max(0, loupeTimer - dt);
 
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
@@ -2056,170 +1856,169 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Warm Wooden Watchmaker Workbench Planks
-      ctx.strokeStyle = "rgba(217, 169, 114, 0.08)";
-      ctx.lineWidth = 1.5;
-      for (let y = 36; y < WORLD_H; y += 44) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WORLD_W, y); ctx.stroke();
-      }
+      // 1. Luxury Emerald Velvet Jeweler's Mat & Gold Inlaid Border
+      ctx.strokeStyle = "rgba(251, 191, 36, 0.28)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(14, 14, WORLD_W - 28, WORLD_H - 28, 18);
+      ctx.stroke();
 
-      // 2. Clean Antique Base Artwork
-      ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.58)";
-      ctx.shadowBlur = 24;
-      ctx.shadowOffsetY = 10;
-      ctx.drawImage(cleanCanvas, 0, 0);
-      ctx.restore();
+      // 2. Gleaming Restored Base Heirloom
+      ctx.drawImage(baseCanvas, 0, 0);
 
-      // 3. Mechanical Gear Slots & Assembled Gears (Visible cleanly from Stage 2 onward!)
-      if (stage >= 2) {
-        for (const slot of gearSlots) {
-          if (slot.placed) {
-            drawPrecisionGear(slot.x, slot.y, slot.r, slot.teeth, slot.metal, slot.angle, 1);
-          } else {
-            // Empty Axle Pin + Matching Size & Metal Ghost Outline
-            const isHint = slot.id === hintAxleId;
-            ctx.save();
-            ctx.strokeStyle = isHint ? "#facc15" : slot.metal.fill;
-            ctx.lineWidth = isHint ? 3 : 2;
-            ctx.setLineDash([5, 4]);
-            ctx.globalAlpha = isHint ? (0.65 + 0.35 * Math.sin(now * 0.012)) : 0.65;
-            if (isHint) {
-              ctx.shadowColor = "#facc15";
-              ctx.shadowBlur = 14;
-            }
-            ctx.beginPath();
-            ctx.arc(slot.x, slot.y, slot.r, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            // Steel center axle post
-            ctx.shadowBlur = 0;
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = "#cbd5e1";
-            ctx.strokeStyle = "#334155";
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.arc(slot.x, slot.y, 4.5, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
-
-            // Subtle size letter hint inside large empty axles
-            ctx.fillStyle = isHint ? "#fef08a" : "rgba(255,255,255,0.55)";
-            ctx.font = "800 9px sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillText(slot.sizeCode, slot.x, slot.y - 9);
-            ctx.restore();
-          }
-        }
-      }
-
-      // 4. Dull Oxidation / Tarnish Layer (Covers antique until buffed in Stage 3!)
-      if (stage < 4) {
-        ctx.drawImage(tarnishCanvas, 0, 0);
-      }
-
-      // 5. Heavy Rust & Patina Layer (Stage 1)
-      if (stage === 1) {
-        ctx.drawImage(rustCanvas, 0, 0);
-      }
-
-      // 6. Optional Radar Highlight for Remaining Rust or Tarnish Spots (Hint)
-      if (radarTimer > 0 && (stage === 1 || stage === 3)) {
-        const grid = stage === 1 ? rustGrid : polishGrid;
-        const pulse = (0.35 + 0.55 * Math.abs(Math.sin(now * 0.012))) * Math.min(1, radarTimer);
+      // Animated Mirror Sheen Sweep Once Polished (Phases 2–3!)
+      if (phase >= 2) {
         ctx.save();
-        ctx.fillStyle = stage === 1
-          ? `rgba(249, 115, 22, ${pulse})`
-          : `rgba(250, 204, 21, ${pulse})`;
-        for (let gy = 0; gy < GRID_H; gy++) {
-          for (let gx = 0; gx < GRID_W; gx++) {
-            const idx = gy * GRID_W + gx;
-            if (objectMask[idx] && grid[idx] > 0) {
-              ctx.fillRect(gx * CELL_W, gy * CELL_H, CELL_W + 0.5, CELL_H + 0.5);
+        ctx.globalCompositeOperation = "source-atop";
+        const sweep = ((now * 0.09) % 520) - 260;
+        ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+        ctx.translate(RELIC_CX + sweep, RELIC_CY);
+        ctx.rotate(-Math.PI / 5);
+        ctx.fillRect(-16, -200, 32, 400);
+        ctx.restore();
+      }
+
+      // 3. Remaining Tarnish & Oxidation Crusts (Phases 0 & 1)
+      if (phase <= 1) ctx.drawImage(tarnishCanvas, 0, 0);
+      if (phase === 0) ctx.drawImage(rustCanvas, 0, 0);
+
+      // 4. Optional Loupe Hint Overlay for Remaining Rust/Tarnish Spots!
+      if (loupeTimer > 0 && phase <= 1) {
+        const g = phase === 0 ? relic.rustGrid : relic.tarnishGrid;
+        const pulse = 0.45 + 0.4 * Math.sin(now * 0.015);
+        ctx.save();
+        ctx.fillStyle = `rgba(250, 204, 21, ${pulse * 0.72})`;
+        for (let r = 0; r < MASK_N; r++) {
+          for (let c = 0; c < MASK_N; c++) {
+            const idx = r * MASK_N + c;
+            if (relic.validMask[idx] && g[idx] > 0.08) {
+              ctx.fillRect(c * CELL_PX, r * CELL_PX, CELL_PX, CELL_PX);
             }
           }
         }
         ctx.restore();
       }
 
-      // 7. Dragging Floating Gear Preview (Stage 2)
-      if (stage === 2 && isPointerDown && unplacedParts[selectedPartIdx]) {
-        const part = unplacedParts[selectedPartIdx];
-        drawPrecisionGear(pointerWorld.x, pointerWorld.y, part.r, part.teeth, part.metal, now * 0.002, 0.88);
+      // 5. Phase 2 & 3: Recessed Precision Sockets, Velvet Tray & Draggable Parts!
+      if (phase >= 2) {
+        // Draw Sleek Recessed Velvet Parts Tray Along Bottom of Workbench in Phase 2
+        if (phase === 2) {
+          ctx.save();
+          ctx.fillStyle = "rgba(10, 14, 12, 0.74)";
+          ctx.strokeStyle = "rgba(251, 191, 36, 0.42)";
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.roundRect(42, 330, WORLD_W - 84, 72, 14);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = "#fde68a";
+          ctx.font = "800 9px monospace";
+          ctx.textAlign = "center";
+          ctx.fillText("PRECISION PARTS TRAY — DRAG INTO GLOWING SOCKETS", RELIC_CX, 342);
+          ctx.restore();
+        }
+
+        // Draw Glowing Dotted Recessed Sockets on the Heirloom for Unfitted Parts
+        for (const p of relic.parts) {
+          if (p.fitted) continue;
+          const pulse = 0.55 + 0.4 * Math.sin(now * 0.008 + p.id);
+          ctx.save();
+          ctx.fillStyle = "rgba(15, 23, 42, 0.55)";
+          ctx.strokeStyle = `rgba(250, 204, 21, ${pulse})`;
+          ctx.shadowColor = "#facc15";
+          ctx.shadowBlur = 10;
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.arc(p.targetX, p.targetY, Math.max(13, p.r * 0.92), 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Optional Loupe Golden Thread From First Unfitted Tray Part -> Its Exact Socket!
+        if (loupeTimer > 0 && phase === 2) {
+          const nxt = relic.parts.find((p) => !p.fitted);
+          if (nxt) {
+            ctx.save();
+            ctx.strokeStyle = "#facc15";
+            ctx.lineWidth = 2.4;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(nxt.x, nxt.y);
+            ctx.lineTo(nxt.targetX, nxt.targetY);
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+
+        // Draw Fitted Parts (Spinning Clockwork Live!) & Remaining Tray Parts
+        for (const p of relic.parts) {
+          if (p !== draggingPart) drawPrecisionPart(p, now, phase === 3);
+        }
+        if (draggingPart) {
+          drawPrecisionPart(draggingPart, now, false);
+        }
       }
 
-      // 8. Active Brush / Polishing Cloth Cursor Ring (Stage 1 & 3)
-      if ((stage === 1 || stage === 3) && isPointerDown) {
-        const isPol = stage === 3;
+      // 6. Active Brush / Velvet Cloth Cursor Reticle in Phases 0 & 1
+      if ((phase === 0 || phase === 1) && isWorking) {
         ctx.save();
-        ctx.strokeStyle = isPol ? "#fef08a" : "#fb923c";
-        ctx.fillStyle = isPol ? "rgba(254, 249, 195, 0.2)" : "rgba(251, 146, 60, 0.16)";
-        ctx.lineWidth = 2.4;
+        ctx.translate(ptrPos.x, ptrPos.y);
+        ctx.strokeStyle = phase === 0 ? "#fbbf24" : "#fef08a";
+        ctx.fillStyle = phase === 0 ? "rgba(217, 119, 6, 0.25)" : "rgba(254, 240, 138, 0.25)";
+        ctx.lineWidth = 2.2;
         ctx.beginPath();
-        ctx.arc(pointerWorld.x, pointerWorld.y, isPol ? 30 : 26, 0, Math.PI * 2);
+        ctx.arc(0, 0, phase === 0 ? 26 : 32, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
         ctx.restore();
       }
 
-      // 9. Mirror Shine Sweep on Completed Restoration
-      if (stage === 4 && shineAnim > 0 && shineAnim < 1.3) {
-        const sx = -80 + shineAnim * (WORLD_W + 160);
-        ctx.save();
-        const sGrad = ctx.createLinearGradient(sx - 50, 0, sx + 50, 100);
-        sGrad.addColorStop(0, "rgba(255,255,255,0)");
-        sGrad.addColorStop(0.5, "rgba(255,255,255,0.52)");
-        sGrad.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.fillStyle = sGrad;
-        ctx.fillRect(0, 0, WORLD_W, WORLD_H);
-        ctx.restore();
-      }
-
-      // 10. Rust Dust & Polish Sparkle Particles
-      particles = particles.filter((p) => p.alpha > 0.04);
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += p.sparkle ? -0.01 : 0.12;
-        p.alpha *= 0.91;
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.alpha;
+      // 7. Rust Dust & Golden Polish Flakes
+      dustBits = dustBits.filter((d) => d.alpha > 0.04);
+      for (const d of dustBits) {
+        d.x += d.vx;
+        d.y += d.vy;
+        d.alpha *= 0.9;
+        ctx.fillStyle = d.color;
+        ctx.globalAlpha = d.alpha;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalAlpha = 1;
       }
 
-      sparkles = sparkles.filter((sp) => sp.alpha > 0.03);
+      // 8. Mirror-Finish Starlight Sparkles!
+      sparkles = sparkles.filter((sp) => sp.alpha > 0.04);
       for (const sp of sparkles) {
         sp.alpha *= 0.965;
-        const sc = sp.size * (0.7 + 0.3 * Math.sin(now * 0.014 + sp.phase));
+        const sc = sp.size * (0.7 + 0.35 * Math.sin(now * 0.012 + sp.phase));
         ctx.save();
         ctx.translate(sp.x, sp.y);
-        ctx.fillStyle = `rgba(254, 249, 195, ${sp.alpha})`;
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#facc15";
+        ctx.shadowBlur = 10;
+        ctx.globalAlpha = sp.alpha;
         ctx.beginPath();
-        ctx.moveTo(0, -sc);
-        ctx.lineTo(sc * 0.28, -sc * 0.28);
-        ctx.lineTo(sc, 0);
-        ctx.lineTo(sc * 0.28, sc * 0.28);
-        ctx.lineTo(0, sc);
-        ctx.lineTo(-sc * 0.28, sc * 0.28);
-        ctx.lineTo(-sc, 0);
-        ctx.lineTo(-sc * 0.28, -sc * 0.28);
+        ctx.moveTo(0, -sc); ctx.lineTo(sc * 0.28, -sc * 0.28);
+        ctx.lineTo(sc, 0); ctx.lineTo(sc * 0.28, sc * 0.28);
+        ctx.lineTo(0, sc); ctx.lineTo(-sc * 0.28, sc * 0.28);
+        ctx.lineTo(-sc, 0); ctx.lineTo(-sc * 0.28, -sc * 0.28);
         ctx.closePath();
         ctx.fill();
         ctx.restore();
       }
 
       ctx.restore();
-      requestAnimationFrame(drawScene);
+      requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
     loadRelic(currentLevelNum);
-    requestAnimationFrame(drawScene);
+    requestAnimationFrame(frame);
   </script>
 
 </body>
