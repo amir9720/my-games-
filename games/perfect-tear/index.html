@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Perfect Tear — 500 ASMR Perforation Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 relaxing ASMR levels of The Perfect Tear in your browser. Tear vintage tickets, receipts, and postage stamps cleanly along perforated lines at a crisp 45-degree rhythm." />
+  <title>The Perfect Tear — Free 500-Level ASMR Perforated Paper Tearing Game | ZinPlay</title>
+  <meta name="description" content="Play The Perfect Tear free online with no download. Tear vintage cinema tickets, café receipts, collector postage stamps, and double-stub boarding passes cleanly along perforated seams across 500 ASMR levels." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "The Perfect Tear",
+    "url": "https://zinplay.io/games/perfect-tear/",
+    "genre": ["ASMR", "Precision Simulation", "Relaxation Game"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top HUD */
+    /* Top Stationery Desk HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #101829;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #17120f;
+      color: #fef3c7;
+      border-bottom: 1px solid #332720;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #f59e0b;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -69,117 +82,92 @@
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.clean-pill {
-      background: rgba(34, 197, 94, 0.18);
-      border-color: rgba(74, 222, 128, 0.42);
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
       color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Live Alignment / Drift Balance Meter */
-    .align-bar-wrap {
-      display: flex;
-      align-items: center;
+    /* Live Seam Progress & Cleanliness Accuracy Strip */
+    .meters-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      padding: 10px 14px;
-      background: #152038;
-      border-bottom: 1px solid #1e293b;
-      color: #cbd5e1;
-      font-size: 0.75rem;
+      padding: 9px 14px;
+      background: #211a15;
+      border-bottom: 1px solid #3a2d24;
+      color: #e7e5e4;
+      font-size: 0.73rem;
       font-weight: 800;
     }
-    .align-label {
-      min-width: 98px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .meter-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .al-crisp  { color: #34d399; }
-    .al-drift  { color: #facc15; }
-    .al-danger { color: #fb7185; }
-    .align-track {
-      flex: 1;
-      height: 11px;
-      background: linear-gradient(90deg, #ef4444 0%, #f59e0b 24%, #10b981 50%, #f59e0b 76%, #ef4444 100%);
-      border-radius: 999px;
-      border: 1px solid #2b3c5e;
-      position: relative;
-      opacity: 0.9;
-    }
-    .align-center-mark {
-      position: absolute;
-      left: 50%;
-      top: -2px;
-      bottom: -2px;
-      width: 2px;
-      background: rgba(255, 255, 255, 0.75);
-      transform: translateX(-50%);
-    }
-    .align-needle {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #ffffff;
-      border: 2.5px solid #0f172a;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-      transform: translate(-50%, -50%);
-      transition: left 0.04s linear;
-    }
-    .align-pct {
-      min-width: 44px;
-      text-align: right;
+    .meter-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-family: monospace;
-      font-size: 0.8rem;
-      color: #94a3b8;
+    }
+    .meter-track {
+      width: 100%;
+      height: 9px;
+      background: #100c09;
+      border-radius: 999px;
+      border: 1px solid #4a3a2f;
+      overflow: hidden;
+    }
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      transition: width 0.06s linear;
+    }
+    .prog-fill {
+      background: linear-gradient(90deg, #f59e0b 0%, #34d399 100%);
+    }
+    .acc-fill {
+      background: linear-gradient(90deg, #ef4444 0%, #facc15 55%, #22c55e 100%);
     }
 
-    /* Cutting Mat Canvas Stage */
+    /* Warm Walnut Paper Desk Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 450px;
-      background: radial-gradient(circle at 50% 42%, #1e3338 0%, #0f1e24 100%);
+      aspect-ratio: 1 / 1;
+      max-height: 495px;
+      background: radial-gradient(circle at 50% 45%, #2e241d 0%, #15100d 100%);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       user-select: none;
       -webkit-user-select: none;
-    }
-    @media (min-width: 640px) {
-      .canvas-container {
-        height: 500px;
-      }
     }
     #tearCanvas {
       width: 100%;
       height: 100%;
       display: block;
       touch-action: none;
-      cursor: grab;
-    }
-    #tearCanvas.tearing {
-      cursor: grabbing;
+      cursor: crosshair;
     }
 
     .legend-strip {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #0c1422;
-      border-top: 1px solid #1e293b;
+      background: #120e0b;
+      border-top: 1px solid #2b211a;
       font-size: 0.73rem;
-      color: #94a3b8;
-    }
-    .leg-dot {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      vertical-align: middle;
-      margin-right: 4px;
+      color: #a8a29e;
     }
 
     .status-toast {
@@ -187,8 +175,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.65);
+      background: rgba(18, 14, 11, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -202,14 +190,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
-    .stage-overlay {
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(8, 13, 26, 0.8);
+      background: rgba(16, 12, 9, 0.8);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -217,13 +203,13 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
@@ -231,17 +217,15 @@
       text-align: center;
       max-width: 325px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.52);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.32rem;
+    .win-stars {
+      font-size: 1.5rem;
+      letter-spacing: 0.14em;
       margin-bottom: 6px;
     }
-    .overlay-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -270,7 +254,7 @@
       cursor: pointer;
     }
 
-    /* Level Picker Modal */
+    /* Ticket Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -282,9 +266,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -381,6 +363,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #17120f;
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #17120f;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #1c1410 0%, #5c2814 100%);
+      color: #fef3c7;
+    }
+    .game-seo-banner.slate-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #1e293b 0%, #3f2b1e 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fde68a;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .tear-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .tear-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .tear-table th, .tear-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tear-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .tear-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -393,7 +455,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -406,69 +468,82 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Tears &bull; ASMR Paper</span>
+      <span class="cat-tag">500 Stubs &bull; ASMR Paper Tearing</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>The Perfect Tear</h1>
-      <p>Tear vintage cinema tickets, thermal receipts, and collector postage stamps cleanly along the perforated line at a crisp 45° angle.</p>
+      <p>Pinch the glowing starter notch and glide steadily along every perforated seam to detach vintage cinema tickets, café receipts, and postage stamps with crisp serrated edges.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="The Perfect Tear ASMR Game">
+    <section class="game-wrapper" aria-label="The Perfect Tear ASMR Paper Simulator">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Cinema Stubs</span>
-          <span id="levelTitle">Tear #1 / 500 — Vintage Cinema Ticket</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Vintage Cinema Tickets</span>
+          <span id="levelTitle">Slip #1 / 500 — Starlight Cinema Ticket</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="progressPill">Torn: 0%</span>
-          <span class="hud-pill clean-pill" id="solvedCounter">Clean: 0 / 500</span>
+          <span class="hud-pill" id="seamsPill">Seam: 1 / 1</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Torn: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Center Alignment Balance Gauge -->
-      <div class="align-bar-wrap">
-        <span id="alignLabel" class="align-label al-crisp">● ON TRACK</span>
-        <div class="align-track">
-          <div class="align-center-mark"></div>
-          <div id="alignNeedle" class="align-needle"></div>
+      <!-- Dual Tear Progress & Edge Cleanliness Accuracy Strip -->
+      <div class="meters-strip">
+        <div class="meter-box">
+          <div class="meter-head">
+            <span style="color:#fde68a;">🎟️ TEAR PROGRESS</span>
+            <span id="progPctTxt">0%</span>
+          </div>
+          <div class="meter-track">
+            <div id="progFill" class="meter-fill prog-fill"></div>
+          </div>
         </div>
-        <span id="alignPct" class="align-pct">45°</span>
+        <div class="meter-box">
+          <div class="meter-head">
+            <span id="accLbl" style="color:#86efac;">✨ EDGE CLEAN</span>
+            <span id="accPctTxt">100%</span>
+          </div>
+          <div class="meter-track">
+            <div id="accFill" class="meter-fill acc-fill" style="width:100%;"></div>
+          </div>
+        </div>
       </div>
 
+      <!-- Interactive Walnut Desk Paper Canvas -->
       <div class="canvas-container">
         <canvas id="tearCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Win / Rip Overlay -->
-        <div id="stageOverlay" class="stage-overlay">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.3rem; margin-bottom:6px;">🎟️</div>
-            <h2 id="ovHeading">Crisp Separation!</h2>
-            <p id="ovText">Every perforated tooth snapped cleanly right on the line.</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Next Ticket →</button>
+        <!-- Clean Separation Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div id="winStars" class="win-stars">⭐⭐⭐</div>
+            <h2 id="winHeading">Razor-Clean Tear!</h2>
+            <p id="winText">Every perforated tooth parted smoothly with zero jagged fiber snags.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Ticket →</button>
           </div>
         </div>
       </div>
 
       <div class="legend-strip">
-        <span><i class="leg-dot" style="background:#34d399"></i>Pull Gently at ~45° Outward</span>
-        <span><i class="leg-dot" style="background:#f97316"></i>Orange Tough Spot = Slow Down!</span>
-        <span><i class="leg-dot" style="background:#38bdf8"></i>Corner Turn (Ch. 4+) = Pivot!</span>
+        <span>👆 Grab Glowing Notch &amp; Trace Along the Perforated Line</span>
+        <span>🌿 Steady Rhythm Keeps Teeth Crisp &amp; 100% Clean</span>
+        <span>📮 Multi-Stub Sheets Feature 2–3 Seams (Ch. 3+)</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
           <button id="resetBtn" class="btn-outline" type="button">↺ Fresh Paper</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 45° Guide</button>
+          <button id="guideBtn" class="btn-outline" type="button">💡 Seam Guide</button>
         </div>
         <button id="soundBtn" class="btn-outline" type="button">🔊 ASMR ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Tear 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Slip 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -478,66 +553,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 840+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/perfect-tear-banner-1.jpg"
+            alt="The Perfect Tear online ASMR paper tearing simulator showing a vintage movie ticket and collector stamp separating cleanly along a perforated seam"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Crisp Perforated Paper Tears — Live Fibrous ASMR Audio</h3>
+          <p>Glide smoothly down dotted cardstock perforations to hear each tiny paper tooth pop cleanly apart without a single jagged snag.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play The Perfect Tear (500 ASMR Levels)</h2>
-        <p>The Perfect Tear recreates the crisp, meditative feeling of detaching a freshly printed cinema ticket stub, thermal coffee receipt, or collector postage stamp right along its perforated teeth. Across 500 tactile stages, steady pacing and a clean <strong>45-degree outward angle</strong> keep the tear centered without straying into the printed artwork.</p>
+        <h2>What Is The Perfect Tear? A Perforated Paper ASMR Simulator Online</h2>
+        <p><strong>The Perfect Tear</strong> is a free <strong>paper tearing ASMR game online</strong> celebrating the deeply satisfying tactile snap of detaching a vintage cinema ticket stub, tearing a fresh espresso receipt off a roll, or separating collector postage stamps along tiny die-cut teeth. Rather than relying on simple tap-to-cut animations, our HTML5 Canvas engine tracks your fingertip's real-time path alignment and gliding rhythm along every perforation hole—physically parting the detached paper stub away at a crisp angle while synthesizing live fibrous cardstock audio through the <strong>Web Audio API</strong>.</p>
+        <p>Engineered as a calm, <strong>no-download sensory focus game for smartphones, iPads, and Chromebooks</strong>, The Perfect Tear features zero harsh timers or game-over screens. Drift too far off the perforated track or rip too recklessly and a small jagged fiber snag trims your Clean Edge score—making a flawless <strong>⭐⭐⭐ 98%+ Razor-Clean Tear</strong> genuinely rewarding across all <strong>500 stationery items</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>How to Achieve a 98%+ Razor-Clean Edge Every Time (Paper Craft Guide)</h2>
+        <p>Different stationery weights tear with noticeably different sensitivity—thin thermal receipt paper demands a lighter touch than thick cotton raffle cardstock! Keep these four <strong>tactile paper-tearing tips</strong> in mind as you advance from Chapter 1 to Chapter 5:</p>
+
+        <div class="tear-table-wrap">
+          <table class="tear-table">
+            <thead>
+              <tr>
+                <th>Paper &amp; Seam Type</th>
+                <th>Tactile Feel</th>
+                <th>Best Technique for 3 Stars</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🎟️ Cardstock Cinema &amp; Raffle Stubs</strong> (Ch. 1)</td>
+                <td>Sturdy straight vertical or horizontal perforation seams.</td>
+                <td>Glide straight down the dotted seam at a calm medium tempo—watch the detached stub swing gently open as you go!</td>
+              </tr>
+              <tr>
+                <td><strong>🧾 Crisp Thermal Café Receipts</strong> (Ch. 2)</td>
+                <td>Thinner paper with subtle gentle curved or angled tear edges.</td>
+                <td>Stay centered inside the seam corridor; jerking sideways off-line creates a quick diagonal receipt snag!</td>
+              </tr>
+              <tr>
+                <td><strong>📮 Collector Stamp Blocks</strong> (Ch. 3)</td>
+                <td>Two intersecting perpendicular seams separating individual stamps.</td>
+                <td>Complete Seam 1 cleanly first—as soon as the strip detaches, grab the glowing amber notch on Seam 2!</td>
+              </tr>
+              <tr>
+                <td><strong>✈️ Double-Stub Boarding Passes &amp; Curved Seals</strong> (Ch. 4–5)</td>
+                <td>High-precision curved arcs and 3-seam collector sheets.</td>
+                <td>Tap <strong>💡 Seam Guide</strong> to highlight the exact safe tolerance lane in glowing gold before starting your glide!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Stationery ASMR Tip:</strong> Put on earbuds or headphones to catch the two-layer acoustic synthesis—each perforation notch emits a crisp micro-click while your motion weaves a soft, continuous cotton-paper rip underneath!</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner slate-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/perfect-tear-banner-2.jpg"
+            alt="Vintage paper stationery ASMR studio featuring detached cinema stubs, postage stamps, café receipts, and boarding passes in The Perfect Tear"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>8 Handcrafted Retro Paper Styles &amp; Multi-Seam Collector Sheets</h3>
+          <p>Detach Starlight Cinema passes, Espresso Bar receipts, Ocean Airway boarding stubs, and Botanical Postage stamps with automatic browser saves.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Stationery Chapters (500 Unique Paper Slips)</h2>
+        <p>Every item from Slip #1 to Slip #500 generates crisp retro typography, serial numbers, decorative notches, and unique seam angles saved automatically in private local browser storage:</p>
         <ul>
-          <li><strong>Master the 45° Outward Rhythm:</strong> Grab the glowing notch at the start of the dotted perforation and pull steadily along the angled guide arrow. Pulling straight along the line or yanking too sharply pushes the Alignment Needle away from center—if it hits either red edge, the paper rips jaggedly into the stub!</li>
-          <li><strong>Watch for Unpunched Paper Bridges (Chapter 3+):</strong> Older printing presses sometimes miss a perforation hole! Orange thick spots along the dotted line require extra patience—slow your pull to a smooth crawl across them so the tear snaps through cleanly.</li>
-          <li><strong>Pivot Cleanly at Stamp Corners (Chapter 4+):</strong> Collector postage stamp sheets feature <strong>L-shaped 90-degree corners</strong>. When your tear reaches the glowing cyan corner dot, pause for a beat and redirect your pull along the new 45° arrow to detach the stamp intact.</li>
+          <li><strong>Chapter 1 (Slips 1–100 — Vintage Cinema &amp; Raffle Stubs):</strong> Classic thick cardstock tickets with forgiving straight perforation seams—perfect for relaxing rhythmic tears.</li>
+          <li><strong>Chapter 2 (Slips 101–200 — Thermal Café Receipts &amp; Vouchers):</strong> Crisp bakery coupons and coffee shop receipts featuring diagonal angles and slightly tighter alignment corridors.</li>
+          <li><strong>Chapter 3 (Slips 201–300 — Collector Postage Stamp Blocks):</strong> Multi-seam perforated stamp sheets requiring two clean sequential tears to free prized botanical and celestial stamps.</li>
+          <li><strong>Chapter 4 (Slips 301–400 — Curved Tear Seals &amp; Boarding Passes):</strong> Introduces graceful curved perforation arcs on vintage airline boarding passes and postal telegraph slips.</li>
+          <li><strong>Chapter 5 (Slips 401–500 — Master Archival Stationery):</strong> Delicate 2- and 3-seam museum vouchers and rare collector sheets demanding steady hands and whisper-smooth pace—complete with an instant 1–500 slip picker.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Paper ASMR Topics">
+          <span class="kw-pill">Paper Tearing ASMR Game Online</span>
+          <span class="kw-pill">Perforated Ticket Tear Simulator</span>
+          <span class="kw-pill">Satisfying Receipt Tear Browser</span>
+          <span class="kw-pill">Oddly Satisfying Precision Game</span>
+          <span class="kw-pill">Web Audio Paper Rip Sound</span>
+          <span class="kw-pill">No-Download Chromebook ASMR Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>The Perfect Tear FAQ</h2>
         <details class="faq-item">
-          <summary>Can I lift my finger partway through a long ticket or corner?</summary>
-          <div class="faq-answer">Yes! Lifting your finger pauses the tear cleanly right where you stopped so you can re-grip comfortably or adjust your angle before tackling an orange tough spot or L-shaped stamp corner.</div>
+          <summary>Can I pause and lift my finger halfway down a perforated seam?</summary>
+          <div class="faq-answer">Yes! Lifting your finger pauses the tear cleanly right at your current perforation tooth with zero penalty—just re-grab the glowing notch whenever you're ready and continue gliding to the edge.</div>
         </details>
         <details class="faq-item">
-          <summary>How does the 45° Guide (💡) button help?</summary>
-          <div class="faq-answer">Tapping 45° Guide lights up a golden angled pull corridor and an animated pacing dot gliding at the exact safe speed—just match your fingertip motion to the golden dot!</div>
+          <summary>Why did my Edge Clean percentage drop during a tear?</summary>
+          <div class="faq-answer">Drifting off-center from the dotted perforation line—or ripping faster than the paper's safe rhythm—causes tiny jagged paper fibers to snag along the edge. Glide steadily right on top of the dots for a <strong>⭐⭐⭐ 95%+</strong> flawless finish!</div>
+        </details>
+        <details class="faq-item">
+          <summary>How do multi-seam Postage Stamp sheets work in Chapters 3–5?</summary>
+          <div class="faq-answer">Multi-seam slips highlight one active perforation line at a time. As soon as you cleanly tear the first strip away, the glowing pinch handle shifts automatically to the next dotted seam!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does The Perfect Tear work on Android phones, iPhones, and Chromebooks?</summary>
+          <div class="faq-answer">Yes! Trace smoothly along the perforated seams using your touchscreen, trackpad, or mouse at 60 FPS with zero downloads and automatic local browser saving.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💦</div><span class="cat-tag">ASMR</span></div>
-        <h3>ASMR PowerWash</h3>
-        <p>Blast mud, moss, and rust off rugs, antique coins, and classic cars across 500 wash jobs.</p>
-        <a href="/games/powerwash-asmr/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🏷️</div><span class="cat-tag">ASMR</span></div>
+        <div class="card-top"><div class="icon-box">🍊</div><span class="cat-tag">ASMR</span></div>
         <h3>The Perfect Peel</h3>
-        <p>Peel glossy screen protectors and sticky price tags cleanly without tearing across 500 levels.</p>
+        <p>Peel glossy protective films and continuous fruit ribbons in one smooth, unbroken sheet.</p>
         <a href="/games/perfect-peel/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🔐</div><span class="cat-tag">Zen</span></div>
-        <h3>The Zen Lockpicker</h3>
-        <p>Turn a dark minimalist safe dial slowly and listen for metallic clicks across 500 vaults.</p>
-        <a href="/games/zen-lockpicker/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔪</div><span class="cat-tag">ASMR</span></div>
+        <h3>Satisfying Slicer</h3>
+        <p>Slice glossy kinetic sand, soap bars, and crisp veggies in rhythmic ASMR cuts.</p>
+        <a href="/games/satisfying-slicer/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">📄</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Fold &amp; Reveal</h3>
+        <p>Fold colorful washi paper sheets from the right edges in exact layer order like origami.</p>
+        <a href="/games/fold-reveal/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Level Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Tear Level">
+  <!-- Slip Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Paper Slip">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Paper Level (1 – 500)</h3>
+        <h3>Choose Paper Slip (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to level (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to slip (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -556,12 +728,12 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top ASMR</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/powerwash-asmr/">PowerWash ASMR</a></li>
+            <li><a href="/games/perfect-peel/">The Perfect Peel</a></li>
+            <li><a href="/games/perfect-tear/">The Perfect Tear</a></li>
+            <li><a href="/games/satisfying-slicer/">Satisfying Slicer</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -570,7 +742,7 @@
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -603,66 +775,32 @@
     }
 
     // ==============================================
-    // PAPER ARTIFACTS & 500-LEVEL GENERATOR
+    // 500-SLIP PERFORATED PAPER TEARING ASMR ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
     const WORLD_W = 420;
-    const WORLD_H = 460;
+    const WORLD_H = 420;
     const CX = WORLD_W / 2;
     const CY = WORLD_H / 2;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Cinema Stubs", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Receipts & Boarding", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Unpunched Bridges", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • L-Corner Stamps", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Collector Editions", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Vintage Cinema Tickets", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Café Receipts & Vouchers", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Collector Stamp Blocks", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Curved Airline Passes", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Archival Master Stationery", range: "401–500", start: 401, end: 500 }
     ];
 
-    const ARTIFACTS = {
-      cinema: {
-        name: "Vintage Cinema Ticket", orientation: "vertical",
-        w: 320, h: 170, splitRatio: 0.68,
-        bg: "#fef3c7", border: "#b91c1c", ink: "#7f1d1d", accent: "#dc2626",
-        title: "GRAND CINEMA", sub: "ADMIT ONE • BALCONY", stubTitle: "STUB"
-      },
-      raffle: {
-        name: "Golden Raffle Coupon", orientation: "vertical",
-        w: 316, h: 164, splitRatio: 0.65,
-        bg: "#ffedd5", border: "#c2410c", ink: "#7c2d12", accent: "#ea580c",
-        title: "LUCKY RAFFLE", sub: "KEEP THIS COUPON", stubTitle: "DRAW"
-      },
-      boarding: {
-        name: "Retro Boarding Pass", orientation: "vertical",
-        w: 336, h: 176, splitRatio: 0.70,
-        bg: "#f8fafc", border: "#1d4ed8", ink: "#0f172a", accent: "#2563eb",
-        title: "SKYLINE AIR 1978", sub: "BERLIN → TOKYO • SEAT 12A", stubTitle: "GATE"
-      },
-      receipt: {
-        name: "Coffee Shop Receipt", orientation: "horizontal",
-        w: 220, h: 310, splitRatio: 0.68,
-        bg: "#fafaf9", border: "#78716c", ink: "#1c1917", accent: "#0d9488",
-        title: "ROASTERY CAFE", sub: "ESPRESSO + CROISSANT", stubTitle: "CLAIM"
-      },
-      concert: {
-        name: "VIP Concert Pass", orientation: "vertical",
-        w: 328, h: 172, splitRatio: 0.67,
-        bg: "#f5f3ff", border: "#6d28d9", ink: "#2e1065", accent: "#9333ea",
-        title: "MIDNIGHT JAZZ", sub: "FRONT ROW • LIVE HALL", stubTitle: "VIP"
-      },
-      stamp: {
-        name: "Collector Stamp Sheet", orientation: "lcorner",
-        w: 284, h: 284, splitX: 0.56, splitY: 0.56,
-        bg: "#fdf2f8", border: "#be185d", ink: "#831843", accent: "#db2777",
-        title: "AIR MAIL 1964", sub: "FIRST CLASS", stubTitle: "25¢"
-      },
-      goldStamp: {
-        name: "Royal Gold Foil Stamp", orientation: "lcorner",
-        w: 284, h: 284, splitX: 0.54, splitY: 0.54,
-        bg: "#fef9c3", border: "#a16207", ink: "#422006", accent: "#ca8a04",
-        title: "ROYAL POST", sub: "LIMITED ARCHIVE", stubTitle: "50¢"
-      }
-    };
+    const PAPER_STYLES = [
+      { id: "cinema",   name: "Starlight Cinema Ticket", w: 320, h: 174, bg: "#fef3c7", accent: "#dc2626", ink: "#451a03", code: "ADMIT ONE",  stub: "ROW G • 14" },
+      { id: "raffle",   name: "Golden Carnival Raffle",  w: 316, h: 168, bg: "#fef9c3", accent: "#d97706", ink: "#713f12", code: "LUCKY DRAW", stub: "NO. 0482" },
+      { id: "receipt",  name: "Roastery Café Receipt",   w: 224, h: 312, bg: "#f8fafc", accent: "#334155", ink: "#0f172a", code: "ZIN CAFÉ",   stub: "TOTAL $7.50" },
+      { id: "voucher",  name: "Artisan Bakery Coupon",   w: 312, h: 184, bg: "#ffedd5", accent: "#ea580c", ink: "#7c2d12", code: "FRESH LOAF", stub: "20% OFF" },
+      { id: "stamp",    name: "Botanical Stamp Block",   w: 266, h: 266, bg: "#ecfdf5", accent: "#059669", ink: "#064e3b", code: "AIR MAIL",   stub: "50¢ MINT" },
+      { id: "boarding", name: "Jet-Age Boarding Pass",   w: 332, h: 176, bg: "#e0f2fe", accent: "#0284c7", ink: "#0c4a6e", code: "FLIGHT 204", stub: "GATE B12" },
+      { id: "concert",  name: "Midnight Jazz Pass",      w: 322, h: 174, bg: "#f3e8ff", accent: "#7c3aed", ink: "#3b0764", code: "LIVE JAZZ",  stub: "VIP BALCONY" },
+      { id: "railway",  name: "Alpine Express Ticket",   w: 324, h: 182, bg: "#fef2f2", accent: "#b91c1c", ink: "#450a0a", code: "1ST CLASS",  stub: "CAR 3 • 8A" }
+    ];
 
     function mulberry32(seed) {
       let a = seed >>> 0;
@@ -674,126 +812,95 @@
       };
     }
 
-    function buildTearLevel(levelNum) {
-      const rng = mulberry32(levelNum * 67213 + 31991);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1);
+    // Evaluate point & unit tangent along a straight or curved quadratic seam (t in 0..1)
+    function evalSeamPoint(seam, t) {
+      const u = 1 - t;
+      const x = u * u * seam.x1 + 2 * u * t * seam.cx + t * t * seam.x2;
+      const y = u * u * seam.y1 + 2 * u * t * seam.cy + t * t * seam.y2;
+      const dx = 2 * u * (seam.cx - seam.x1) + 2 * t * (seam.x2 - seam.cx);
+      const dy = 2 * u * (seam.cy - seam.y1) + 2 * t * (seam.y2 - seam.cy);
+      const len = Math.hypot(dx, dy) || 1;
+      return { x, y, tx: dx / len, ty: dy / len };
+    }
 
-      let artKey;
-      if (levelNum <= 100) {
-        artKey = levelNum % 3 === 0 ? "raffle" : (levelNum % 2 === 0 ? "receipt" : "cinema");
-      } else if (levelNum <= 200) {
-        artKey = ["boarding", "receipt", "concert", "cinema"][Math.floor(rng() * 4)];
-      } else if (levelNum <= 300) {
-        artKey = ["boarding", "concert", "receipt", "raffle", "cinema"][Math.floor(rng() * 5)];
-      } else if (levelNum <= 400) {
-        artKey = levelNum % 4 === 0 ? "boarding" : "stamp";
+    function buildTearSlip(levelNum) {
+      const rng = mulberry32(levelNum * 331777 + 58109);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+
+      let style;
+      if (chapIdx === 0) style = PAPER_STYLES[levelNum % 2]; // Cinema / Raffle
+      else if (chapIdx === 1) style = PAPER_STYLES[2 + (levelNum % 2)]; // Receipt / Bakery
+      else if (chapIdx === 2) style = PAPER_STYLES[4]; // Stamp Block
+      else if (chapIdx === 3) style = PAPER_STYLES[5 + (levelNum % 2)]; // Boarding / Concert
+      else style = PAPER_STYLES[(levelNum + chapIdx) % PAPER_STYLES.length];
+
+      const x0 = CX - style.w / 2;
+      const y0 = CY - style.h / 2;
+      const serial = `#${String(1000 + ((levelNum * 73) % 8999))}`;
+
+      const safeLane = chapIdx === 0 ? 22 : (chapIdx === 1 ? 18 : (chapIdx === 2 ? 16 : (chapIdx === 3 ? 15 : 13.5)));
+      const maxSpd = chapIdx === 0 ? 290 : (chapIdx === 1 ? 250 : (chapIdx === 2 ? 235 : (chapIdx === 3 ? 210 : 185)));
+
+      const makeSeam = (x1, y1, x2, y2, curveAmp = 0, detachDir = { x: 1, y: 0 }) => {
+        const mx = (x1 + x2) * 0.5;
+        const my = (y1 + y2) * 0.5;
+        const dx = x2 - x1, dy = y2 - y1;
+        const len = Math.hypot(dx, dy) || 1;
+        const nx = -dy / len, ny = dx / len;
+        return {
+          x1, y1, x2, y2,
+          cx: mx + nx * curveAmp,
+          cy: my + ny * curveAmp,
+          length: len + Math.abs(curveAmp) * 0.6,
+          detachDir,
+          prog: 0,
+          torn: false,
+          detachAnim: 0,
+          snagMarks: []
+        };
+      };
+
+      const seams = [];
+      const flip = levelNum % 2 === 0;
+
+      if (style.id === "receipt") {
+        // Horizontal tear across tall café receipt (slight curve in Ch. 2+!)
+        const ty = y0 + style.h * (0.64 + (rng() - 0.5) * 0.12);
+        const curve = chapIdx >= 1 ? (flip ? 18 : -18) : 0;
+        seams.push(makeSeam(x0, ty, x0 + style.w, ty, curve, { x: 0, y: 1 }));
+        if (chapIdx >= 4) {
+          const ty2 = y0 + style.h * 0.28;
+          seams.push(makeSeam(x0 + style.w, ty2, x0, ty2, -curve * 0.8, { x: 0, y: -1 }));
+        }
+      } else if (style.id === "stamp") {
+        // Dual perpendicular perforated seams on square Collector Stamp Block!
+        const sx = CX + (rng() - 0.5) * 24;
+        const sy = CY + (rng() - 0.5) * 24;
+        seams.push(makeSeam(sx, y0, sx, y0 + style.h, 0, { x: 1, y: 0 }));
+        seams.push(makeSeam(x0, sy, x0 + style.w, sy, 0, { x: 0, y: 1 }));
       } else {
-        artKey = levelNum % 3 === 0 ? "stamp" : (levelNum % 3 === 1 ? "goldStamp" : "concert");
-      }
+        // Wide ticket/boarding pass stub tear(s)
+        const stubX = flip ? (x0 + style.w * 0.72) : (x0 + style.w * 0.28);
+        const curve = chapIdx >= 3 ? (flip ? -22 : 22) : (chapIdx === 1 ? (flip ? -10 : 10) : 0);
+        const dDir = flip ? { x: 1, y: 0 } : { x: -1, y: 0 };
+        seams.push(makeSeam(stubX, y0, stubX, y0 + style.h, curve, dDir));
 
-      const art = ARTIFACTS[artKey];
-      const left = CX - art.w / 2;
-      const top = CY - art.h / 2;
-      const right = left + art.w;
-      const bottom = top + art.h;
-
-      // Build Perforation Waypoints + Outward Stub Normal per Segment
-      // Each segment has: x1, y1, x2, y2, tx, ty, nx, ny, len
-      let segments = [];
-      let stubRect = null;
-
-      if (art.orientation === "vertical") {
-        const sx = left + art.w * art.splitRatio;
-        const topDown = rng() < 0.65 || levelNum <= 3;
-        const y1 = topDown ? top : bottom;
-        const y2 = topDown ? bottom : top;
-        const ty = topDown ? 1 : -1;
-        // Stub is on the RIGHT side -> outward normal is (+1, 0)
-        segments.push({
-          x1: sx, y1, x2: sx, y2,
-          tx: 0, ty,
-          nx: 1, ny: 0,
-          len: Math.abs(y2 - y1)
-        });
-        stubRect = { x: sx, y: top, w: right - sx, h: art.h };
-      } else if (art.orientation === "horizontal") {
-        const sy = top + art.h * art.splitRatio;
-        const leftRight = rng() < 0.65;
-        const x1 = leftRight ? left : right;
-        const x2 = leftRight ? right : left;
-        const tx = leftRight ? 1 : -1;
-        // Stub is on the BOTTOM side -> outward normal is (0, +1)
-        segments.push({
-          x1, y1: sy, x2, y2: sy,
-          tx, ty: 0,
-          nx: 0, ny: 1,
-          len: Math.abs(x2 - x1)
-        });
-        stubRect = { x: left, y: sy, w: art.w, h: bottom - sy };
-      } else {
-        // L-Shaped Stamp Sheet: Bottom-Right Stamp Detaches via 2 Perpendicular Segments!
-        const sx = left + art.w * art.splitX;
-        const sy = top + art.h * art.splitY;
-        // Segment 1: Bottom edge up to inner corner (sx, bottom) -> (sx, sy), stub is on RIGHT (+1, 0)
-        // Segment 2: Inner corner out to right edge (sx, sy) -> (right, sy), stub is BELOW (0, +1)
-        segments.push({
-          x1: sx, y1: bottom, x2: sx, y2: sy,
-          tx: 0, ty: -1,
-          nx: 1, ny: 0,
-          len: bottom - sy
-        });
-        segments.push({
-          x1: sx, y1: sy, x2: right, y2: sy,
-          tx: 1, ty: 0,
-          nx: 0, ny: 1,
-          len: right - sx
-        });
-        stubRect = { x: sx, y: sy, w: right - sx, h: bottom - sy };
-      }
-
-      const totalLen = segments.reduce((acc, s) => acc + s.len, 0);
-
-      // Tough Unpunched Paper Bridges (Chapter 3+)
-      const bridges = [];
-      if (levelNum >= 201) {
-        const bCount = levelNum > 420 ? 3 : (levelNum > 300 ? 2 : 1 + (levelNum % 2));
-        for (let i = 0; i < bCount; i++) {
-          const frac = 0.22 + (i / bCount) * 0.56 + rng() * 0.1;
-          const distCenter = frac * totalLen;
-          // Keep bridges clear of any L-corner vertex
-          const nearCorner = segments.length > 1 && Math.abs(distCenter - segments[0].len) < 24;
-          if (!nearCorner) {
-            bridges.push({
-              dist: distCenter,
-              halfLen: 12 + rng() * 6
-            });
-          }
+        if (chapIdx >= 3 && (chapIdx === 4 || levelNum % 2 === 1)) {
+          const stubX2 = flip ? (x0 + style.w * 0.24) : (x0 + style.w * 0.76);
+          const dDir2 = flip ? { x: -1, y: 0 } : { x: 1, y: 0 };
+          seams.push(makeSeam(stubX2, y0 + style.h, stubX2, y0, -curve * 0.7, dDir2));
         }
       }
 
-      // Difficulty parameters scaling smoothly across 500 levels
-      const idealOutwardRad = 0.68; // ~39° outward — classic crisp 45° tear angle!
-      const angleTolRad = 0.68 - p * 0.30; // ~39° forgiveness in Ch.1 -> ~22° in Ch.5
-      const safeSpeed = Math.round(235 - p * 90); // 235 px/s -> 145 px/s
-      const driftRate = 0.72 + p * 0.62;
-      const serialCode = `NO. ${10000 + Math.floor(rng() * 89999)}`;
-      const seatLabel = `${"ABCDEFGH"[Math.floor(rng() * 8)]}-${1 + Math.floor(rng() * 24)}`;
-
       return {
         levelNum,
-        artKey,
-        art,
-        left, top, right, bottom,
-        segments,
-        totalLen,
-        stubRect,
-        bridges,
-        idealOutwardRad,
-        angleTolRad,
-        safeSpeed,
-        driftRate,
-        serialCode,
-        seatLabel
+        chapIdx,
+        style,
+        x0, y0,
+        serial,
+        safeLane,
+        maxSpd,
+        seams
       };
     }
 
@@ -802,14 +909,12 @@
     }
 
     // ==============================================
-    // ASMR PERFORATED PAPER TEAR WEB AUDIO ENGINE
+    // FIBROUS PAPER TEAR & PERFORATION TICK WEB AUDIO
     // ==============================================
     let audioCtx = null;
-    let noiseBuf = null;
-    let tearSrc = null;
-    let tearFilter = null;
-    let tearGain = null;
     let soundOn = true;
+    let ripNodes = null;
+    let lastTickStep = -1;
 
     function initAudio() {
       if (!audioCtx) {
@@ -817,77 +922,92 @@
         if (AC) audioCtx = new AC();
       }
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-
-      if (audioCtx && !noiseBuf) {
-        const len = audioCtx.sampleRate * 2;
-        noiseBuf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-        const d = noiseBuf.getChannelData(0);
-        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-      }
-
-      if (audioCtx && noiseBuf && !tearSrc) {
-        tearSrc = audioCtx.createBufferSource();
-        tearSrc.buffer = noiseBuf;
-        tearSrc.loop = true;
-
-        tearFilter = audioCtx.createBiquadFilter();
-        tearFilter.type = "highpass";
-        tearFilter.frequency.value = 1800;
-
-        tearGain = audioCtx.createGain();
-        tearGain.gain.value = 0.0001;
-
-        tearSrc.connect(tearFilter);
-        tearFilter.connect(tearGain);
-        tearGain.connect(audioCtx.destination);
-        tearSrc.start();
-      }
     }
 
-    function updateTearFiberAudio(speedPx, onBridge) {
-      if (!soundOn || !audioCtx || !tearGain || !tearFilter) return;
-      const now = audioCtx.currentTime;
-      const active = Math.min(1, speedPx / 170);
-      if (active < 0.04) {
-        tearGain.gain.setTargetAtTime(0.0001, now, 0.03);
-        return;
-      }
-      tearFilter.frequency.setTargetAtTime(onBridge ? 950 : 2100 + active * 900, now, 0.03);
-      tearGain.gain.setTargetAtTime(0.03 + active * (onBridge ? 0.11 : 0.07), now, 0.025);
-    }
-
-    function stopTearAudio() {
-      if (audioCtx && tearGain) {
-        tearGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.025);
-      }
-    }
-
-    // Crisp individual perforation tooth snap ("tk-tk-tk" ASMR rhythm!)
-    function sfxToothSnap(onBridge, driftAbs) {
-      if (!soundOn) return;
+    function ensureRipLoop() {
       initAudio();
-      if (!audioCtx || !noiseBuf) return;
-      const now = audioCtx.currentTime;
+      if (!audioCtx || ripNodes) return;
+
+      const len = audioCtx.sampleRate * 2;
+      const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) {
+        // Fibrous paper grain crackle
+        data[i] = (Math.random() * 2 - 1) * (Math.random() < 0.08 ? 1.3 : 0.45);
+      }
 
       const src = audioCtx.createBufferSource();
-      src.buffer = noiseBuf;
+      src.buffer = buf;
+      src.loop = true;
+
       const bp = audioCtx.createBiquadFilter();
       bp.type = "bandpass";
-      bp.frequency.value = onBridge ? 1100 : (2800 + Math.random() * 700 - driftAbs * 800);
-      bp.Q.value = onBridge ? 1.8 : 2.8;
+      bp.frequency.value = 2600;
+      bp.Q.value = 1.1;
 
       const g = audioCtx.createGain();
-      const vol = onBridge ? 0.16 : 0.095;
-      g.gain.setValueAtTime(vol, now);
-      g.gain.exponentialRampToValueAtTime(0.0008, now + (onBridge ? 0.032 : 0.018));
+      g.gain.value = 0;
 
       src.connect(bp);
       bp.connect(g);
       g.connect(audioCtx.destination);
-      src.start(now, Math.random() * 1.2, 0.04);
+      src.start();
+
+      ripNodes = { bp, g };
     }
 
-    function sfxCornerChime() {
+    function updateTearAudio(active, speedRatio) {
+      if (!soundOn || !active || speedRatio < 0.04) {
+        if (ripNodes && audioCtx) {
+          ripNodes.g.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.025);
+        }
+        return;
+      }
+      ensureRipLoop();
+      if (!ripNodes || !audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      ripNodes.bp.frequency.setTargetAtTime(2100 + Math.min(2400, speedRatio * 1700), now, 0.03);
+      ripNodes.g.gain.setTargetAtTime(Math.min(0.22, 0.045 + speedRatio * 0.14), now, 0.025);
+    }
+
+    function sfxPerfToothTick() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(1100 + Math.random() * 280, now);
+      osc.frequency.exponentialRampToValueAtTime(340, now + 0.018);
+      g.gain.setValueAtTime(0.055, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.022);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.028);
+    }
+
+    function sfxPaperSnag() {
+      if (!soundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(360, now);
+      osc.frequency.exponentialRampToValueAtTime(135, now + 0.09);
+      g.gain.setValueAtTime(0.09, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.12);
+    }
+
+    function sfxCleanDetach() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
@@ -895,80 +1015,59 @@
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(660, now);
-      osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+      osc.frequency.setValueAtTime(520, now);
+      osc.frequency.exponentialRampToValueAtTime(980, now + 0.08);
       g.gain.setValueAtTime(0.11, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
       osc.connect(g);
       g.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + 0.14);
+      osc.stop(now + 0.12);
     }
 
-    function sfxBadRip() {
-      stopTearAudio();
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx || !noiseBuf) return;
-      const now = audioCtx.currentTime;
-      const src = audioCtx.createBufferSource();
-      src.buffer = noiseBuf;
-      const bp = audioCtx.createBiquadFilter();
-      bp.type = "bandpass";
-      bp.frequency.setValueAtTime(1750, now);
-      bp.frequency.exponentialRampToValueAtTime(380, now + 0.34);
-      const g = audioCtx.createGain();
-      g.gain.setValueAtTime(0.32, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.36);
-      src.connect(bp);
-      bp.connect(g);
-      g.connect(audioCtx.destination);
-      src.start(now);
-      src.stop(now + 0.38);
-    }
-
-    function sfxCleanFinish() {
-      stopTearAudio();
+    function sfxVictoryChime() {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
-      // Crisp final snap + gentle chord
-      sfxToothSnap(false, 0);
-      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+      [440.0, 554.37, 659.25, 880.0].forEach((f, i) => {
         setTimeout(() => {
           const now = audioCtx.currentTime;
           const osc = audioCtx.createOscillator();
           const g = audioCtx.createGain();
           osc.type = "sine";
           osc.frequency.setValueAtTime(f, now);
-          g.gain.setValueAtTime(0.11, now);
-          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.45);
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.exponentialRampToValueAtTime(0.11, now + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.0008, now + 0.5);
           osc.connect(g);
           g.connect(audioCtx.destination);
           osc.start(now);
-          osc.stop(now + 0.48);
-        }, 55 + i * 70);
+          osc.stop(now + 0.55);
+        }, i * 75);
       });
     }
 
     // ==============================================
-    // GAME STATE, TEAR PATH MATH & INPUT
+    // GAME STATE, SEAM TRACKING & INTERACTION
     // ==============================================
     const canvas = document.getElementById("tearCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const progressPill = document.getElementById("progressPill");
+    const seamsPill = document.getElementById("seamsPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const alignLabel = document.getElementById("alignLabel");
-    const alignNeedle = document.getElementById("alignNeedle");
-    const alignPct = document.getElementById("alignPct");
+    const progPctTxt = document.getElementById("progPctTxt");
+    const progFill = document.getElementById("progFill");
+    const accLbl = document.getElementById("accLbl");
+    const accPctTxt = document.getElementById("accPctTxt");
+    const accFill = document.getElementById("accFill");
     const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
+    const winOverlay = document.getElementById("winOverlay");
+    const winStars = document.getElementById("winStars");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
@@ -980,129 +1079,118 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let level = null;
-    let progressDist = 12; // pixels torn along perforation
-    let drift = 0;         // -1 (into main) .. 0 (center) .. +1 (into stub)
-    let tearTrail = [];    // recorded { x, y } points showing actual tear line!
-    let lastToothIndex = 0;
-    let cornerPaused = false;
-    let cornerCleared = false;
-    let gameState = "playing"; // playing | won | ripped
+    let slip = null;
+    let activeSeamIdx = 0;
+    let accuracy = 100;
+    let snagCount = 0;
+    let slipWon = false;
     let showGuide = false;
-    let detachAnim = 0;
-    let maxDriftSeen = 0;
 
-    // Pointer tracking
-    let isDragging = false;
-    let lastWorldPt = null;
-    let lastMoveTime = performance.now();
-    let smoothVx = 0;
-    let smoothVy = 0;
-    let liveSpeed = 0;
-    let onBridgeNow = false;
-    let confetti = [];
+    let isTearing = false;
+    let lastPtr = null;
+    let lastMoveMs = performance.now();
+    let paperDust = [];
     let toastTimer = null;
 
-    function showToast(msg, ms = 2400) {
+    function showToast(msg, ms = 2300) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function getStateAtDist(dist) {
-      let rem = Math.max(0, Math.min(level.totalLen, dist));
-      for (let i = 0; i < level.segments.length; i++) {
-        const s = level.segments[i];
-        if (rem <= s.len || i === level.segments.length - 1) {
-          const t = Math.min(1, rem / Math.max(1, s.len));
-          // Ideal 45° outward pull vector: blend tangent (along line) + outward normal (toward stub)
-          const cosI = Math.cos(level.idealOutwardRad);
-          const sinI = Math.sin(level.idealOutwardRad);
-          const ix = s.tx * cosI + s.nx * sinI;
-          const iy = s.ty * cosI + s.ny * sinI;
-          return {
-            segIdx: i,
-            seg: s,
-            x: s.x1 + (s.x2 - s.x1) * t,
-            y: s.y1 + (s.y2 - s.y1) * t,
-            idealX: ix,
-            idealY: iy,
-            idealAngle: Math.atan2(iy, ix)
-          };
-        }
-        rem -= s.len;
-      }
-    }
-
-    function isDistOnBridge(dist) {
-      return level.bridges.some((b) => Math.abs(dist - b.dist) <= b.halfLen);
-    }
-
-    function updateAlignUI() {
-      const clamped = Math.max(-1, Math.min(1, drift));
-      alignNeedle.style.left = `${50 + clamped * 46}%`;
-      const absD = Math.abs(clamped);
-
-      if (gameState === "ripped" || absD > 0.72) {
-        alignLabel.textContent = gameState === "ripped" ? "✕ TORN OFF!" : "▲ VEERING!";
-        alignLabel.className = "align-label al-danger";
-      } else if (cornerPaused) {
-        alignLabel.textContent = "↱ TURN CORNER";
-        alignLabel.className = "align-label al-drift";
-      } else if (onBridgeNow) {
-        alignLabel.textContent = "◆ TOUGH SPOT";
-        alignLabel.className = "align-label al-drift";
-      } else if (absD > 0.36) {
-        alignLabel.textContent = "◆ DRIFTING";
-        alignLabel.className = "align-label al-drift";
-      } else {
-        alignLabel.textContent = "● ON TRACK";
-        alignLabel.className = "align-label al-crisp";
-      }
-
-      const acc = Math.max(0, Math.round((1 - absD) * 100));
-      alignPct.textContent = `${acc}%`;
-    }
-
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Tear #${currentLevelNum} / ${TOTAL_LEVELS} — ${level.art.name}`;
-      const pct = gameState === "won" ? 100 : Math.min(99, Math.max(0, Math.round(((progressDist - 12) / Math.max(1, level.totalLen - 12)) * 100)));
-      progressPill.textContent = `Torn: ${pct}%`;
-      solvedCounter.textContent = `Clean: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Tear ${currentLevelNum} / 500 ▾`;
-      updateAlignUI();
+      levelTitle.textContent = `Slip #${currentLevelNum} / ${TOTAL_LEVELS} — ${slip.style.name}`;
+      seamsPill.textContent = `Seam: ${Math.min(activeSeamIdx + 1, slip.seams.length)} / ${slip.seams.length}`;
+      solvedCounter.textContent = `Torn: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      openPickerBtn.textContent = `Slip ${currentLevelNum} / 500 ▾`;
+
+      const totalProg = slip.seams.reduce((s, sm) => s + (sm.torn ? 1 : sm.prog), 0) / slip.seams.length;
+      const pct = Math.round(totalProg * 100);
+      progPctTxt.textContent = `${pct}%`;
+      progFill.style.width = `${pct}%`;
+
+      const acc = Math.max(40, Math.round(accuracy));
+      accPctTxt.textContent = `${acc}%`;
+      accFill.style.width = `${acc}%`;
+      if (acc >= 93) {
+        accLbl.textContent = "✨ RAZOR CLEAN";
+        accLbl.style.color = "#86efac";
+      } else if (acc >= 80) {
+        accLbl.textContent = "🎟️ NEAT EDGE";
+        accLbl.style.color = "#fde047";
+      } else {
+        accLbl.textContent = "⚠️ JAGGED SNAG";
+        accLbl.style.color = "#fca5a5";
+      }
     }
 
-    function loadLevel(num) {
-      stopTearAudio();
+    function spawnPaperDust(x, y, col) {
+      for (let i = 0; i < 3; i++) {
+        paperDust.push({
+          x: x + (Math.random() - 0.5) * 8,
+          y: y + (Math.random() - 0.5) * 8,
+          vx: (Math.random() - 0.5) * 1.4,
+          vy: (Math.random() - 0.5) * 1.4,
+          r: 1.4 + Math.random() * 1.6,
+          color: col,
+          alpha: 0.9
+        });
+      }
+    }
+
+    function finishCurrentSeam() {
+      const seam = slip.seams[activeSeamIdx];
+      seam.prog = 1;
+      seam.torn = true;
+      isTearing = false;
+      lastPtr = null;
+      lastTickStep = -1;
+      updateTearAudio(false, 0);
+      sfxCleanDetach();
+
+      if (activeSeamIdx < slip.seams.length - 1) {
+        activeSeamIdx++;
+        showToast(`✨ Seam ${activeSeamIdx} detached! Now tear Seam ${activeSeamIdx + 1}.`, 2200);
+        updateHUD();
+        return;
+      }
+
+      slipWon = true;
+      solvedSet.add(currentLevelNum);
+      try {
+        localStorage.setItem("zinplay_tear_500_solved", JSON.stringify([...solvedSet]));
+      } catch (e) {}
+      sfxVictoryChime();
+      updateHUD();
+
+      const acc = Math.round(accuracy);
+      const stars = acc >= 94 ? "⭐⭐⭐" : (acc >= 82 ? "⭐⭐☆" : "⭐☆☆");
+      const isLast = currentLevelNum === TOTAL_LEVELS;
+      winStars.textContent = stars;
+      winHeading.textContent = acc >= 94 ? "Razor-Clean Tear!" : `${slip.style.name} Detached!`;
+      winText.textContent = `Perforation precision: ${acc}% (${snagCount === 0 ? "zero fiber snags" : `${snagCount} minor snag${snagCount === 1 ? "" : "s"}`}).`;
+      nextLevelBtn.textContent = isLast ? "Replay Slip #1" : `Next Slip (#${currentLevelNum + 1}) →`;
+      setTimeout(() => winOverlay.classList.add("show"), 640);
+    }
+
+    function loadSlip(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      level = buildTearLevel(currentLevelNum);
+      slip = buildTearSlip(currentLevelNum);
+      activeSeamIdx = 0;
+      accuracy = 100;
+      snagCount = 0;
+      slipWon = false;
+      showGuide = false;
+      isTearing = false;
+      lastPtr = null;
+      lastTickStep = -1;
+      paperDust = [];
+      updateTearAudio(false, 0);
 
-      progressDist = 12;
-      drift = 0;
-      maxDriftSeen = 0;
-      lastToothIndex = Math.floor(progressDist / 11);
-      cornerPaused = false;
-      cornerCleared = false;
-      gameState = "playing";
-      detachAnim = 0;
-      isDragging = false;
-      lastWorldPt = null;
-      smoothVx = 0;
-      smoothVy = 0;
-      liveSpeed = 0;
-      onBridgeNow = false;
-      confetti = [];
-
-      const s0 = getStateAtDist(0);
-      const s1 = getStateAtDist(progressDist);
-      tearTrail = [{ x: s0.x, y: s0.y }, { x: s1.x, y: s1.y }];
-
-      canvas.classList.remove("tearing");
-      stageOverlay.classList.remove("show");
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
       try {
@@ -1112,6 +1200,7 @@
       updateHUD();
     }
 
+    // Viewport & Touch Tracking
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1137,276 +1226,113 @@
       };
     }
 
-    function triggerRipFail(reason) {
-      if (gameState !== "playing") return;
-      gameState = "ripped";
-      isDragging = false;
-      canvas.classList.remove("tearing");
-      sfxBadRip();
-
-      // Add dramatic jagged off-track rip tail
-      const st = getStateAtDist(progressDist);
-      const side = drift >= 0 ? 1 : -1;
-      tearTrail.push({
-        x: st.x + st.seg.nx * side * 26 + st.seg.tx * 12,
-        y: st.y + st.seg.ny * side * 26 + st.seg.ty * 12
-      });
-
-      updateHUD();
-      ovIcon.textContent = "📄";
-      ovHeading.textContent = "Off the Line!";
-      ovText.textContent = reason;
-      ovActionBtn.textContent = "↺ Fresh Paper";
-      setTimeout(() => stageOverlay.classList.add("show"), 360);
-    }
-
-    function triggerCleanWin() {
-      if (gameState !== "playing") return;
-      gameState = "won";
-      progressDist = level.totalLen;
-      drift = 0;
-      isDragging = false;
-      detachAnim = 0.01;
-      canvas.classList.remove("tearing");
-      sfxCleanFinish();
-
-      solvedSet.add(currentLevelNum);
-      try {
-        localStorage.setItem("zinplay_tear_500_solved", JSON.stringify([...solvedSet]));
-      } catch (e) {}
-
-      // Crisp paper-fiber sparkles along finished edge
-      for (let i = 0; i < 20; i++) {
-        const pt = getStateAtDist((i / 20) * level.totalLen);
-        confetti.push({
-          x: pt.x,
-          y: pt.y,
-          vx: (Math.random() - 0.5) * 2.4 + pt.seg.nx * 1.4,
-          vy: (Math.random() - 0.5) * 2.4 + pt.seg.ny * 1.4,
-          size: 3 + Math.random() * 3,
-          color: i % 2 === 0 ? "#fef08a" : "#34d399",
-          alpha: 1
-        });
-      }
-
-      updateHUD();
-
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      const grade = maxDriftSeen < 0.35 ? "Razor-sharp 45° perforation mastery!" : "Cleanly detached right along the dotted teeth.";
-      ovIcon.textContent = "🎟️";
-      ovHeading.textContent = isLast ? "All 500 Tears Mastered!" : `Tear #${currentLevelNum} Crisp!`;
-      ovText.textContent = grade;
-      ovActionBtn.textContent = isLast ? "Replay Tear #1" : `Next Paper (#${currentLevelNum + 1}) →`;
-      setTimeout(() => stageOverlay.classList.add("show"), 650);
-    }
-
-    function angleDiffSigned(a, b) {
-      let d = a - b;
-      while (d > Math.PI) d -= Math.PI * 2;
-      while (d < -Math.PI) d += Math.PI * 2;
-      return d;
-    }
-
-    // Pointer Events
     canvas.addEventListener("pointerdown", (e) => {
-      if (gameState !== "playing") return;
+      if (slipWon) return;
       initAudio();
-
       const pt = clientToWorld(e.clientX, e.clientY);
-      const st = getStateAtDist(progressDist);
-      const grabX = st.x + st.seg.nx * drift * 12;
-      const grabY = st.y + st.seg.ny * drift * 12;
+      const seam = slip.seams[activeSeamIdx];
+      const curTip = evalSeamPoint(seam, seam.prog);
 
-      if (Math.hypot(pt.x - grabX, pt.y - grabY) <= 78) {
-        isDragging = true;
-        lastWorldPt = pt;
-        lastMoveTime = performance.now();
-        smoothVx = 0;
-        smoothVy = 0;
-        canvas.classList.add("tearing");
+      if (Math.hypot(pt.x - curTip.x, pt.y - curTip.y) <= 44) {
+        isTearing = true;
+        lastPtr = pt;
+        lastMoveMs = performance.now();
         try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
       } else {
-        showToast("Grab the glowing tear notch and pull at a crisp 45° angle!", 2200);
+        showToast("👆 Pinch the glowing notch on the dotted seam and glide steadily!", 2100);
       }
     });
 
     canvas.addEventListener("pointermove", (e) => {
-      if (!isDragging || gameState !== "playing") return;
-      const now = performance.now();
-      const dt = Math.max(0.008, Math.min(0.06, (now - lastMoveTime) / 1000));
-      lastMoveTime = now;
+      if (!isTearing || !lastPtr || slipWon) return;
+      const nowMs = performance.now();
+      const dt = Math.max(0.008, Math.min(0.06, (nowMs - lastMoveMs) / 1000));
+      lastMoveMs = nowMs;
 
       const pt = clientToWorld(e.clientX, e.clientY);
-      const dx = pt.x - lastWorldPt.x;
-      const dy = pt.y - lastWorldPt.y;
-      lastWorldPt = pt;
+      const mdx = pt.x - lastPtr.x;
+      const mdy = pt.y - lastPtr.y;
+      lastPtr = pt;
 
-      const instVx = dx / dt;
-      const instVy = dy / dt;
-      smoothVx = smoothVx * 0.6 + instVx * 0.4;
-      smoothVy = smoothVy * 0.6 + instVy * 0.4;
-      liveSpeed = Math.hypot(smoothVx, smoothVy);
+      const moveDist = Math.hypot(mdx, mdy);
+      if (moveDist < 0.5) return;
 
-      // Handle L-Corner Pivot Pause (Chapter 4-5)
-      if (cornerPaused) {
-        const seg2 = level.segments[1];
-        const cosI = Math.cos(level.idealOutwardRad);
-        const sinI = Math.sin(level.idealOutwardRad);
-        const ix2 = seg2.tx * cosI + seg2.nx * sinI;
-        const iy2 = seg2.ty * cosI + seg2.ny * sinI;
-        const alignNew = dx * ix2 + dy * iy2;
-        if (alignNew > 2.2) {
-          cornerPaused = false;
-          cornerCleared = true;
-          progressDist = level.segments[0].len + 2;
-        }
-        updateAlignUI();
-        return;
-      }
+      const seam = slip.seams[activeSeamIdx];
+      const tip = evalSeamPoint(seam, seam.prog);
+      const along = mdx * tip.tx + mdy * tip.ty;
 
-      const st = getStateAtDist(progressDist);
-      const seg = st.seg;
+      if (along > 0) {
+        const nextProg = Math.min(1, seam.prog + along / seam.length);
+        const nextTip = evalSeamPoint(seam, nextProg);
+        const drift = Math.hypot(pt.x - nextTip.x, pt.y - nextTip.y);
+        const spd = along / dt;
 
-      // Project movement onto current perforation direction & ideal 45° vector
-      const projAlongLine = dx * seg.tx + dy * seg.ty;
-      const projAlongIdeal = dx * st.idealX + dy * st.idealY;
-      const forwardStep = Math.max(0, projAlongIdeal * 0.85);
+        seam.prog = nextProg;
+        spawnPaperDust(nextTip.x, nextTip.y, slip.style.bg);
+        updateTearAudio(true, Math.min(1.4, spd / slip.maxSpd));
 
-      onBridgeNow = isDistOnBridge(progressDist);
-
-      if (forwardStep > 0.25 && liveSpeed > 18) {
-        const nextDist = Math.min(level.totalLen, progressDist + forwardStep);
-
-        // Snap cleanly at L-Corner vertex if crossing from segment 0 to segment 1
-        if (level.segments.length > 1 && !cornerCleared && progressDist < level.segments[0].len && nextDist >= level.segments[0].len) {
-          progressDist = level.segments[0].len;
-          drift *= 0.4;
-          cornerPaused = true;
-          const cp = getStateAtDist(progressDist);
-          tearTrail.push({ x: cp.x, y: cp.y });
-          sfxCornerChime();
-          stopTearAudio();
-          showToast("Corner reached! Pivot your pull along the new 45° arrow!", 2400);
-          updateHUD();
-          return;
+        // Crisp Perforation Tooth Micro-Tick every ~14px along seam!
+        const toothStep = Math.floor((seam.prog * seam.length) / 14);
+        if (toothStep > lastTickStep) {
+          lastTickStep = toothStep;
+          sfxPerfToothTick();
         }
 
-        progressDist = nextDist;
-
-        // Play crisp individual perforation tooth snaps every 11px!
-        const toothIdx = Math.floor(progressDist / 11);
-        if (toothIdx > lastToothIndex) {
-          lastToothIndex = toothIdx;
-          sfxToothSnap(onBridgeNow, Math.abs(drift));
+        // Check Drift Off Perforation Lane OR Too-Fast Rip Snags!
+        const offTrack = drift > slip.safeLane;
+        const tooFast = spd > slip.maxSpd * 1.25;
+        if (offTrack || tooFast) {
+          const pen = (offTrack ? (drift - slip.safeLane) * 0.16 : 0) + (tooFast ? 0.55 : 0);
+          accuracy = Math.max(40, accuracy - pen);
+          if (seam.snagMarks.length === 0 || Math.abs(seam.snagMarks[seam.snagMarks.length - 1].t - seam.prog) > 0.12) {
+            snagCount++;
+            seam.snagMarks.push({ t: seam.prog, side: (pt.x - nextTip.x) >= 0 ? 1 : -1 });
+            sfxPaperSnag();
+            if (offTrack) showToast("⚠️ Stay centered on the dotted seam for a razor-clean edge!", 1800);
+            else showToast("⚠️ Ease up your speed slightly to avoid jagged fiber snags!", 1800);
+          }
         }
 
-        // Evaluate Pull Angle vs Sweet-Spot 45° Outward Vector
-        const pullAng = Math.atan2(smoothVy, smoothVx);
-        const signedErr = angleDiffSigned(pullAng, st.idealAngle);
-        const absErr = Math.abs(signedErr);
-        const effSafeSpeed = onBridgeNow ? level.safeSpeed * 0.48 : level.safeSpeed;
+        updateHUD();
 
-        // Determine outward/inward sign of angular error relative to the stub normal
-        const perpComponent = (smoothVx * seg.nx + smoothVy * seg.ny) / Math.max(1, liveSpeed);
-        const idealPerp = Math.sin(level.idealOutwardRad);
-        const driftSign = perpComponent >= idealPerp ? 1 : -1;
-
-        let badDrift = false;
-        let failMsg = "";
-
-        if (absErr > level.angleTolRad) {
-          badDrift = true;
-          const over = (absErr - level.angleTolRad) / 0.55;
-          drift += driftSign * (0.48 + over * 1.15) * level.driftRate * dt;
-          failMsg = "Pulled off the 45° tear angle! Keep your pull aligned with the angled guide arrow.";
-        }
-
-        if (liveSpeed > effSafeSpeed) {
-          badDrift = true;
-          const overSpd = (liveSpeed - effSafeSpeed) / effSafeSpeed;
-          const pushDir = Math.abs(drift) > 0.08 ? Math.sign(drift) : driftSign;
-          drift += pushDir * (0.55 + overSpd * 1.45) * level.driftRate * dt;
-          failMsg = onBridgeNow
-            ? "Too fast across an orange unpunched bridge! Ease up over tough spots."
-            : "Tore too quickly! Maintain a steady, crisp rhythm so the paper stays on the dots.";
-        }
-
-        if (!badDrift) {
-          // Perforations naturally guide a smooth 45° pull right back to center!
-          drift *= Math.pow(0.18, dt);
-        }
-
-        maxDriftSeen = Math.max(maxDriftSeen, Math.abs(drift));
-
-        // Record visual tear trail point
-        const curPt = getStateAtDist(progressDist);
-        const lastTr = tearTrail[tearTrail.length - 1];
-        const visualX = curPt.x + curPt.seg.nx * drift * 14;
-        const visualY = curPt.y + curPt.seg.ny * drift * 14;
-        if (!lastTr || Math.hypot(visualX - lastTr.x, visualY - lastTr.y) > 4) {
-          tearTrail.push({ x: visualX, y: visualY });
-        }
-
-        updateTearFiberAudio(liveSpeed, onBridgeNow);
-
-        if (Math.abs(drift) >= 1.0) {
-          triggerRipFail(failMsg || "The tear veered off the perforated line!");
-          return;
-        }
-
-        if (progressDist >= level.totalLen - 3) {
-          triggerCleanWin();
-          return;
+        if (seam.prog >= 0.985) {
+          finishCurrentSeam();
         }
       }
-
-      updateHUD();
     });
 
-    function stopDragging() {
-      isDragging = false;
-      liveSpeed = 0;
-      smoothVx = 0;
-      smoothVy = 0;
-      canvas.classList.remove("tearing");
-      stopTearAudio();
-    }
-    canvas.addEventListener("pointerup", stopDragging);
-    canvas.addEventListener("pointercancel", stopDragging);
-    window.addEventListener("blur", stopDragging);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) stopDragging();
-    });
+    const endTear = () => {
+      isTearing = false;
+      lastPtr = null;
+      updateTearAudio(false, 0);
+    };
+    canvas.addEventListener("pointerup", endTear);
+    canvas.addEventListener("pointercancel", endTear);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) endTear(); });
 
-    // Buttons & Guide Toggle
-    document.getElementById("resetBtn").addEventListener("click", () => loadLevel(currentLevelNum));
-    document.getElementById("hintBtn").addEventListener("click", () => {
-      if (gameState !== "playing") return;
+    document.getElementById("guideBtn").addEventListener("click", () => {
+      initAudio();
       showGuide = !showGuide;
-      if (showGuide) {
-        showToast("Golden 45° pull lane & ideal rhythm dot enabled!", 2600);
-      }
+      showToast(showGuide ? "💡 Golden Safe Seam Corridor illuminated!" : "Seam Guide hidden.", 2200);
     });
+
+    document.getElementById("resetBtn").addEventListener("click", () => loadSlip(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
       soundBtn.textContent = soundOn ? "🔊 ASMR ON" : "🔇 OFF";
-      if (!soundOn) stopTearAudio();
+      if (!soundOn) updateTearAudio(false, 0);
     });
-    ovActionBtn.addEventListener("click", () => {
-      if (gameState === "won") {
-        loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      } else {
-        loadLevel(currentLevelNum);
-      }
+    nextLevelBtn.addEventListener("click", () => {
+      loadSlip(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadSlip(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadSlip(currentLevelNum + 1);
     });
 
-    // Level Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1437,7 +1363,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadLevel(n);
+          loadSlip(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1459,176 +1385,221 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadLevel(val);
+        loadSlip(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // VINTAGE PAPER & SERRATED PERFORATION RENDERER
+    // VINTAGE PAPER STATIONERY & SERRATED TEAR RENDERER
     // ==============================================
-    function drawPaperGraphic(isStubOnly) {
-      const a = level.art;
-      const l = level.left, t = level.top, w = a.w, h = a.h;
-      const sr = level.stubRect;
-
+    function drawPaperBaseArt(s, x0, y0) {
       ctx.save();
-
-      // Clip either to the Main Paper region OR strictly to the Detachable Stub region
+      // Drop shadow on walnut desk
+      ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+      ctx.shadowBlur = 22;
+      ctx.shadowOffsetY = 9;
+      ctx.fillStyle = s.bg;
       ctx.beginPath();
-      if (isStubOnly) {
-        ctx.rect(sr.x, sr.y, sr.w, sr.h);
-      } else {
-        // Main sheet minus stubRect (evenodd clip)
-        ctx.rect(l - 4, t - 4, w + 8, h + 8);
-        ctx.rect(sr.x, sr.y, sr.w, sr.h);
-        ctx.clip("evenodd");
-      }
-      if (isStubOnly) ctx.clip();
-
-      // Paper Stock Fill & Subtle Vintage Frame
-      ctx.fillStyle = a.bg;
-      ctx.beginPath();
-      ctx.roundRect(l, t, w, h, 8);
+      ctx.roundRect(x0, y0, s.w, s.h, s.id === "receipt" ? 4 : 10);
       ctx.fill();
+      ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
 
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = a.border;
-      ctx.stroke();
+      // Decorative Border Frame
+      ctx.strokeStyle = s.accent;
+      ctx.lineWidth = s.id === "receipt" ? 1.5 : 3;
+      ctx.strokeRect(x0 + 10, y0 + 10, s.w - 20, s.h - 20);
 
-      // Decorative Inner Frame
-      ctx.strokeStyle = a.border;
-      ctx.globalAlpha = 0.35;
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(l + 9, t + 9, w - 18, h - 18);
-      ctx.globalAlpha = 1;
-
-      if (a.orientation === "vertical") {
-        // Main Left Ticket Body
-        const mainCx = l + (sr.x - l) / 2;
-        ctx.fillStyle = a.accent;
-        ctx.fillRect(l + 14, t + 16, (sr.x - l) - 28, 30);
-
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "900 14px sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(a.title, mainCx, t + 32);
-
-        ctx.fillStyle = a.ink;
-        ctx.font = "800 11px monospace";
-        ctx.fillText(a.sub, mainCx, CY - 4);
-
-        ctx.font = "700 10px monospace";
-        ctx.globalAlpha = 0.72;
-        ctx.fillText(`${level.serialCode}  •  SEAT ${level.seatLabel}`, mainCx, CY + 24);
-        ctx.globalAlpha = 1;
-
-        // Decorative barcode bottom-left
-        ctx.fillStyle = a.ink;
-        for (let bx = l + 28; bx < sr.x - 28; bx += 6) {
-          const bw = ((bx * 3) % 3) + 1;
-          ctx.fillRect(bx, t + h - 36, bw, 18);
-        }
-
-        // Right Detachable Stub Typography
-        const stubCx = sr.x + sr.w / 2;
-        ctx.fillStyle = a.accent;
-        ctx.font = "900 15px sans-serif";
-        ctx.fillText(a.stubTitle, stubCx, CY - 26);
-
-        ctx.fillStyle = a.ink;
-        ctx.font = "800 12px monospace";
-        ctx.fillText(level.seatLabel, stubCx, CY + 4);
-
-        ctx.font = "700 9px monospace";
-        ctx.globalAlpha = 0.7;
-        ctx.fillText(level.serialCode, stubCx, CY + 32);
-        ctx.globalAlpha = 1;
-      } else if (a.orientation === "horizontal") {
-        // Thermal Receipt Top Body
-        ctx.fillStyle = a.ink;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+      // Authentic Stationery Details
+      if (s.id === "receipt") {
+        ctx.fillStyle = s.ink;
         ctx.font = "900 15px monospace";
-        ctx.fillText(a.title, CX, t + 32);
-
-        ctx.strokeStyle = a.ink;
-        ctx.globalAlpha = 0.35;
-        ctx.setLineDash([4, 3]);
-        ctx.beginPath();
-        ctx.moveTo(l + 18, t + 50); ctx.lineTo(l + w - 18, t + 50);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.globalAlpha = 1;
-
-        ctx.font = "700 11px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(s.code, CX, y0 + 38);
+        ctx.font = "700 10px monospace";
+        ctx.fillStyle = "#64748b";
+        ctx.fillText(`ORDER ${slip.serial}`, CX, y0 + 56);
+        // Itemized espresso lines
         ctx.textAlign = "left";
-        const rows = [
-          ["1x ESPRESSO", "$3.50"],
-          ["1x CROISSANT", "$4.25"],
-          ["1x MATCHA LATTE", "$5.00"],
-          ["TOTAL PAID", "$12.75"]
-        ];
-        rows.forEach(([lbl, val], idx) => {
-          const ry = t + 74 + idx * 26;
-          if (idx === 3) ctx.font = "900 12px monospace";
-          ctx.fillText(lbl, l + 20, ry);
+        ctx.fillStyle = s.ink;
+        const rows = [["OAT LATTE", "$4.50"], ["CROISSANT", "$3.00"], ["SUBTOTAL", "$7.50"]];
+        rows.forEach(([itemL, priceL], idx) => {
+          const ry = y0 + 92 + idx * 26;
+          ctx.fillText(itemL, x0 + 26, ry);
           ctx.textAlign = "right";
-          ctx.fillText(val, l + w - 20, ry);
+          ctx.fillText(priceL, x0 + s.w - 26, ry);
           ctx.textAlign = "left";
         });
-
-        // Bottom Claim Stub
-        const stubCy = sr.y + sr.h / 2;
         ctx.textAlign = "center";
-        ctx.fillStyle = a.accent;
-        ctx.font = "900 14px monospace";
-        ctx.fillText(`★ ${a.stubTitle} TICKET ★`, CX, stubCy - 14);
-        ctx.fillStyle = a.ink;
-        ctx.font = "800 11px monospace";
-        ctx.fillText(`ORDER ${level.serialCode}`, CX, stubCy + 14);
-      } else {
-        // Collector 2x2 Postage Stamp Sheet (Bottom-Right Stamp Detaches via L-Corner!)
-        const quads = [
-          { x: l, y: t, w: sr.x - l, h: sr.y - t, stamp: false },
-          { x: sr.x, y: t, w: sr.w, h: sr.y - t, stamp: false },
-          { x: l, y: sr.y, w: sr.x - l, h: sr.h, stamp: false },
-          { x: sr.x, y: sr.y, w: sr.w, h: sr.h, stamp: true }
-        ];
-
-        quads.forEach((q, idx) => {
-          const qcx = q.x + q.w / 2;
-          const qcy = q.y + q.h / 2;
-          ctx.fillStyle = q.stamp ? a.accent : a.border;
-          ctx.globalAlpha = q.stamp ? 0.16 : 0.08;
-          ctx.fillRect(q.x + 12, q.y + 12, q.w - 24, q.h - 24);
-          ctx.globalAlpha = 1;
-
-          ctx.strokeStyle = a.border;
-          ctx.lineWidth = q.stamp ? 2 : 1.2;
-          ctx.strokeRect(q.x + 12, q.y + 12, q.w - 24, q.h - 24);
-
-          ctx.fillStyle = a.ink;
+        ctx.font = "900 12px monospace";
+        ctx.fillText(s.stub, CX, y0 + s.h - 36);
+      } else if (s.id === "stamp") {
+        // 2x2 Illustrated Collector Stamp Grid
+        const hw = s.w / 2, hh = s.h / 2;
+        const icons = ["🌿", "🦋", "☀️", "🌺"];
+        [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(([gx, gy], idx) => {
+          const sx = x0 + gx * hw + hw / 2;
+          const sy = y0 + gy * hh + hh / 2;
+          ctx.fillStyle = s.accent + "22";
+          ctx.fillRect(sx - 44, sy - 44, 88, 88);
+          ctx.strokeStyle = s.accent;
+          ctx.lineWidth = 2;
+          ctx.strokeRect(sx - 44, sy - 44, 88, 88);
+          ctx.font = "28px sans-serif";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.font = "900 10px serif";
-          ctx.fillText(a.title, qcx, q.y + 26);
-
-          ctx.font = q.stamp ? "900 22px serif" : "700 18px serif";
-          ctx.fillStyle = q.stamp ? a.accent : a.ink;
-          ctx.fillText(q.stamp ? `★ ${a.stubTitle}` : a.stubTitle, qcx, qcy + 4);
-
-          ctx.fillStyle = a.ink;
-          ctx.font = "700 8.5px monospace";
-          ctx.fillText(q.stamp ? "DETACH ME" : a.sub, qcx, q.y + q.h - 24);
+          ctx.fillText(icons[idx], sx, sy - 4);
+          ctx.fillStyle = s.ink;
+          ctx.font = "900 9px monospace";
+          ctx.fillText(s.stub, sx, sy + 28);
         });
-      }
+      } else {
+        // Wide Vintage Ticket / Boarding Pass Header & Serial
+        ctx.fillStyle = s.accent;
+        ctx.fillRect(x0 + 10, y0 + 10, s.w - 20, 34);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 14px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(s.code, CX, y0 + 27);
 
+        ctx.fillStyle = s.ink;
+        ctx.font = "900 18px serif";
+        ctx.fillText(s.name.toUpperCase().slice(0, 18), CX, CY + 2);
+
+        ctx.fillStyle = s.accent;
+        ctx.font = "800 11px monospace";
+        ctx.fillText(`${s.stub}   •   ${slip.serial}`, CX, y0 + s.h - 32);
+
+        // Classic Side Ticket Scallop Cutouts
+        ctx.fillStyle = "#221a15";
+        ctx.beginPath();
+        ctx.arc(x0, CY, 11, -Math.PI / 2, Math.PI / 2);
+        ctx.arc(x0 + s.w, CY, 11, Math.PI / 2, Math.PI * 1.5);
+        ctx.fill();
+      }
       ctx.restore();
     }
 
-    function drawScene(now) {
+    function drawPerforationSeam(seam, isActive, now) {
+      const steps = Math.max(16, Math.round(seam.length / 8));
+
+      // 1. Optional Safe Tolerance Lane Highlight (When 💡 Seam Guide Active)
+      if (isActive && showGuide && !seam.torn) {
+        ctx.save();
+        ctx.strokeStyle = "rgba(250, 204, 21, 0.24)";
+        ctx.lineWidth = slip.safeLane * 1.65;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(seam.x1, seam.y1);
+        ctx.quadraticCurveTo(seam.cx, seam.cy, seam.x2, seam.y2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 2. Crisp Parted Tear Gap (Dark Desk Showing Through Between Torn Serrated Teeth!)
+      if (seam.prog > 0.005) {
+        ctx.save();
+        const gapWidth = seam.torn ? (7 + seam.detachAnim * 12) : 6.5;
+
+        // Dark desk slit opening cleanly behind tear progress
+        ctx.strokeStyle = "#140f0c";
+        ctx.lineWidth = gapWidth;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        for (let i = 0; i <= steps; i++) {
+          const t = (i / steps) * seam.prog;
+          const p = evalSeamPoint(seam, t);
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        }
+        ctx.stroke();
+
+        // Crisp White Cotton Serrated Fiber Teeth on Both Edges of Torn Slit!
+        ctx.fillStyle = "#ffffff";
+        for (let i = 0; i <= steps; i++) {
+          const t = (i / steps) * seam.prog;
+          if (t <= 0) continue;
+          const p = evalSeamPoint(seam, t);
+          const nx = -p.ty, ny = p.tx;
+          const off = gapWidth * 0.52;
+          ctx.beginPath();
+          ctx.arc(p.x + nx * off, p.y + ny * off, 1.7, 0, Math.PI * 2);
+          ctx.arc(p.x - nx * off, p.y - ny * off, 1.7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Visible Tiny Jagged Snag Notches If Player Drifted Off-Line
+        ctx.strokeStyle = "#fca5a5";
+        ctx.lineWidth = 2;
+        for (const sn of seam.snagMarks) {
+          const p = evalSeamPoint(seam, sn.t);
+          const nx = -p.ty * sn.side, ny = p.tx * sn.side;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x + nx * 10, p.y + ny * 10);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // 3. Remaining Un-Torn Dotted Perforation Holes
+      if (!seam.torn) {
+        ctx.save();
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps;
+          if (t < seam.prog) continue;
+          const p = evalSeamPoint(seam, t);
+          ctx.fillStyle = isActive ? "#1c1410" : "rgba(28, 20, 16, 0.45)";
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, isActive ? 2.4 : 1.9, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      // 4. Glowing Pinch-and-Tear Starter Handle on Active Seam Tip!
+      if (isActive && !seam.torn) {
+        const tip = evalSeamPoint(seam, seam.prog);
+        const pulse = 1 + 0.1 * Math.sin(now * 0.009);
+        ctx.save();
+        ctx.translate(tip.x, tip.y);
+        ctx.fillStyle = isTearing ? "#ffffff" : "#f59e0b";
+        ctx.strokeStyle = "#ffffff";
+        ctx.shadowColor = "#f59e0b";
+        ctx.shadowBlur = isTearing ? 18 : 12;
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.arc(0, 0, isTearing ? 14 : 14 * pulse, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Directional Arrow Inside Tear Handle
+        ctx.rotate(Math.atan2(tip.ty, tip.tx));
+        ctx.strokeStyle = "#17120f";
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        ctx.moveTo(-4, -4.5); ctx.lineTo(4, 0); ctx.lineTo(-4, 4.5);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    let lastTime = performance.now();
+
+    function frame(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      for (const sm of slip.seams) {
+        if (sm.torn && sm.detachAnim < 1) {
+          sm.detachAnim = Math.min(1, sm.detachAnim + dt * 3.8);
+        }
+      }
+
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
@@ -1636,229 +1607,45 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      // 1. Craft Cutting Mat Grid Background
-      ctx.strokeStyle = "rgba(94, 234, 212, 0.09)";
-      ctx.lineWidth = 1;
-      for (let x = 20; x < WORLD_W; x += 28) {
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, WORLD_H); ctx.stroke();
-      }
-      for (let y = 20; y < WORLD_H; y += 28) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WORLD_W, y); ctx.stroke();
-      }
-
-      // Compute slight physical separation of detachable stub as player tears!
-      const progFrac = Math.min(1, progressDist / Math.max(1, level.totalLen));
-      const vib = (isDragging && Math.abs(drift) > 0.55) ? (Math.random() - 0.5) * Math.abs(drift) * 3 : 0;
-
-      // 2. Main Stationary Paper Sheet
-      ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.45)";
-      ctx.shadowBlur = 18;
-      ctx.shadowOffsetY = 8;
-      drawPaperGraphic(false);
-      ctx.restore();
-
-      // 3. Detachable Stub (Gently Hinges / Glides Outward as Perforation Opens!)
-      ctx.save();
-      const firstSeg = level.segments[0];
-      const lastSeg = level.segments[level.segments.length - 1];
-      const sepShift = progFrac * 7 + detachAnim * 36;
-      const sepRot = (progFrac * 0.055 + detachAnim * 0.16) * (firstSeg.ny === 0 ? 1 : -1);
-
-      // Hinge around the far end of the perforation until fully detached
-      const pivotX = lastSeg.x2;
-      const pivotY = lastSeg.y2;
-
-      ctx.shadowColor = "rgba(0, 0, 0, 0.48)";
-      ctx.shadowBlur = 18 + progFrac * 10;
-      ctx.shadowOffsetY = 8 + progFrac * 6;
-
-      ctx.translate(pivotX + vib, pivotY + vib);
-      ctx.rotate(sepRot);
-      ctx.translate(
-        -pivotX + (level.art.orientation === "horizontal" ? 0 : sepShift * 0.75),
-        -pivotY + (level.art.orientation === "vertical" ? 0 : sepShift * 0.75)
-      );
-      drawPaperGraphic(true);
-      ctx.restore();
-
-      // 4. Perforation Dotted Line, Unpunched Tough Bridges & Live Torn Trail
-      if (gameState !== "won") {
-        // Draw un-torn perforated holes
-        for (let d = progressDist; d <= level.totalLen; d += 11) {
-          const pt = getStateAtDist(d);
-          const isBridge = isDistOnBridge(d);
-          ctx.save();
-          if (isBridge) {
-            // Orange unpunched tough spot marker
-            ctx.fillStyle = "rgba(249, 115, 22, 0.85)";
-            ctx.beginPath();
-            ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
-            ctx.fill();
-          } else {
-            ctx.fillStyle = "rgba(15, 23, 42, 0.52)";
-            ctx.beginPath();
-            ctx.arc(pt.x, pt.y, 2.3, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          ctx.restore();
-        }
-
-        // Highlight L-Corner Pivot Dot if Chapter 4-5
-        if (level.segments.length > 1 && !cornerCleared) {
-          const cp = getStateAtDist(level.segments[0].len);
-          const pulse = 7 + Math.sin(now * 0.01) * 2.5;
-          ctx.save();
-          ctx.strokeStyle = cornerPaused ? "#facc15" : "#38bdf8";
-          ctx.fillStyle = cornerPaused ? "rgba(250, 204, 21, 0.35)" : "rgba(56, 189, 248, 0.25)";
-          ctx.lineWidth = 2.4;
-          ctx.beginPath();
-          ctx.arc(cp.x, cp.y, pulse, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        // Draw Already-Torn Split Trail (dark cutting mat peeking through!)
-        if (tearTrail.length >= 2) {
-          ctx.save();
-          ctx.strokeStyle = gameState === "ripped" ? "#ef4444" : "#0f1e24";
-          ctx.lineWidth = gameState === "ripped" ? 4.5 : 4.2;
-          ctx.lineCap = "round";
-          ctx.lineJoin = "round";
-          ctx.beginPath();
-          ctx.moveTo(tearTrail[0].x, tearTrail[0].y);
-          for (let i = 1; i < tearTrail.length; i++) {
-            ctx.lineTo(tearTrail[i].x, tearTrail[i].y);
-          }
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        // 5. Live 45° Tear Handle & Directional Arrow
-        if (gameState === "playing") {
-          const curSt = cornerPaused
-            ? getStateAtDist(level.segments[0].len + 0.5)
-            : getStateAtDist(progressDist);
-
-          const hx = curSt.x + curSt.seg.nx * drift * 14;
-          const hy = curSt.y + curSt.seg.ny * drift * 14;
-          const absD = Math.abs(drift);
-          const ringColor = absD > 0.68 ? "#ef4444" : (cornerPaused || onBridgeNow ? "#facc15" : "#34d399");
-
-          // Optional Golden 45° Guide Corridor & Pacing Dot (Hint)
-          if (showGuide) {
-            ctx.save();
-            ctx.strokeStyle = "rgba(250, 204, 21, 0.8)";
-            ctx.lineWidth = 2.5;
-            ctx.setLineDash([6, 5]);
-            ctx.beginPath();
-            ctx.moveTo(hx, hy);
-            ctx.lineTo(hx + curSt.idealX * 100, hy + curSt.idealY * 100);
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            const paceSpd = onBridgeNow ? level.safeSpeed * 0.36 : level.safeSpeed * 0.62;
-            const paceOff = ((now / 1000) * paceSpd) % 86;
-            ctx.fillStyle = "#facc15";
-            ctx.shadowColor = "#facc15";
-            ctx.shadowBlur = 10;
-            ctx.beginPath();
-            ctx.arc(
-              hx + curSt.idealX * (16 + paceOff),
-              hy + curSt.idealY * (16 + paceOff),
-              5.5, 0, Math.PI * 2
-            );
-            ctx.fill();
-            ctx.restore();
-          }
-
-          // Angled 45° Pull Arrow Ahead of Tear Point
-          ctx.save();
-          ctx.translate(hx, hy);
-          ctx.save();
-          ctx.rotate(curSt.idealAngle);
-          ctx.strokeStyle = ringColor;
-          ctx.fillStyle = ringColor;
-          ctx.lineWidth = 2.6;
-          ctx.beginPath();
-          ctx.moveTo(16, 0);
-          ctx.lineTo(38, 0);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.moveTo(44, 0);
-          ctx.lineTo(33, -6);
-          ctx.lineTo(33, 6);
-          ctx.closePath();
-          ctx.fill();
-          ctx.restore();
-
-          // Glowing Grab Notch Ring
-          const pulse = isDragging ? 0 : Math.sin(now * 0.008) * 3;
-          ctx.strokeStyle = ringColor;
-          ctx.fillStyle = isDragging ? "rgba(52, 211, 153, 0.28)" : "rgba(15, 23, 42, 0.6)";
-          ctx.shadowColor = ringColor;
-          ctx.shadowBlur = 12;
-          ctx.lineWidth = 2.6;
-          ctx.beginPath();
-          ctx.arc(0, 0, 14 + pulse, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.shadowBlur = 0;
-          ctx.fillStyle = "#ffffff";
-          ctx.beginPath();
-          ctx.arc(0, 0, 4, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
-      }
-
-      // 6. Crisp Celebration Confetti Sparkles
-      confetti = confetti.filter((c) => c.alpha > 0.04);
-      for (const c of confetti) {
-        c.x += c.vx;
-        c.y += c.vy;
-        c.alpha *= 0.94;
-        ctx.fillStyle = c.color;
-        ctx.globalAlpha = c.alpha;
+      // 1. Subtle Walnut Craft Mat Woodgrain Lines
+      ctx.strokeStyle = "rgba(251, 191, 36, 0.05)";
+      ctx.lineWidth = 1.5;
+      for (let wy = 20; wy < WORLD_H; wy += 24) {
         ctx.beginPath();
-        ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+        ctx.moveTo(0, wy);
+        ctx.bezierCurveTo(140, wy + 5, 280, wy - 5, WORLD_W, wy);
+        ctx.stroke();
+      }
+
+      // 2. Vintage Paper Stationery Artwork
+      drawPaperBaseArt(slip.style, slip.x0, slip.y0);
+
+      // 3. All Perforation Seams (Active Seam Highlighted On Top!)
+      slip.seams.forEach((sm, idx) => {
+        drawPerforationSeam(sm, idx === activeSeamIdx && !slipWon, now);
+      });
+
+      // 4. Delicate Cotton Paper Fiber Dust Particles
+      paperDust = paperDust.filter((p) => p.alpha > 0.04);
+      for (const p of paperDust) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha *= 0.91;
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalAlpha = 1;
       }
 
       ctx.restore();
-    }
-
-    let lastFrameTime = performance.now();
-    function frame(now) {
-      const dt = Math.min(0.05, (now - lastFrameTime) / 1000);
-      lastFrameTime = now;
-
-      if (gameState === "playing") {
-        const idle = (now - lastMoveTime) / 1000;
-        if (!isDragging || idle > 0.09) {
-          stopTearAudio();
-          // Gently steady alignment slightly when paused to re-grip
-          if (!isDragging) {
-            drift *= Math.pow(0.55, dt);
-            updateAlignUI();
-          }
-        }
-      }
-
-      if (gameState === "won" && detachAnim > 0 && detachAnim < 1) {
-        detachAnim = Math.min(1, detachAnim + dt * 2.2);
-      }
-
-      drawScene(now);
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadLevel(currentLevelNum);
+    loadSlip(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
