@@ -3,10 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grocery Bagging Physics — 500 Checkout Packing Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free physics levels of Grocery Bagging Physics in your browser. Pack watermelons, milk, eggs, chips, and spiky cacti into one paper bag without crushing or tearing anything." />
+  <title>Grocery Bagging Simulator — Free 500-Level Supermarket Packing Puzzle | ZinPlay</title>
+  <meta name="description" content="Play Grocery Bagging Simulator free online with no download. Pack milk, watermelons, eggs, frozen ice cream, and dish soap into kraft grocery bags without crushing fragile items across 500 spatial checkout puzzles." />
   <link rel="stylesheet" href="/assets/css/style.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Grocery Bagging Simulator",
+    "url": "https://zinplay.io/games/grocery-bagging/",
+    "genre": ["Strategy", "Spatial Packing Puzzle", "Simulation"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -31,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top HUD */
+    /* Top Checkout Lane HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #141c2f;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #101820;
+      color: #f8fafc;
+      border-bottom: 1px solid #213040;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -52,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #4ade80;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -64,168 +76,181 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(34, 197, 94, 0.16);
+      background: rgba(74, 222, 128, 0.16);
       border: 1px solid rgba(74, 222, 128, 0.36);
       color: #bbf7d0;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
     }
-    .hud-pill.warn-pill {
-      background: rgba(245, 158, 11, 0.18);
-      border-color: rgba(251, 191, 36, 0.42);
-      color: #fde68a;
+    .hud-pill.done-pill {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(56, 189, 248, 0.38);
+      color: #bae6fd;
+      font-family: inherit;
     }
 
-    /* Canvas Stage */
+    /* Live Bagging Safety Rules Strip */
+    .rules-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 12px;
+      background: #16212c;
+      border-bottom: 1px solid #26384a;
+    }
+    .rule-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      border: 1px solid #334a61;
+      background: #0e161f;
+      color: #cbd5e1;
+      transition: all 0.18s ease;
+    }
+    .rule-badge.ok {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.16);
+      color: #86efac;
+    }
+    .rule-badge.err {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.22);
+      color: #fecaca;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    }
+
+    /* Standing Kraft Grocery Bag Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 430px;
-      background: linear-gradient(180deg, #16213a 0%, #1e293b 68%, #293548 100%);
+      height: 360px;
+      background: radial-gradient(circle at 50% 42%, #1e2d3b 0%, #0d141c 100%);
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 470px;
+        height: 395px;
       }
     }
     #bagCanvas {
       width: 100%;
       height: 100%;
       display: block;
-      touch-action: none;
-      cursor: ew-resize;
+      touch-action: manipulation;
+      cursor: pointer;
     }
 
-    .hold-banner {
-      position: absolute;
-      top: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.92);
-      border: 2px solid #22c55e;
-      color: #dcfce7;
-      padding: 6px 16px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 900;
-      box-shadow: 0 0 18px rgba(34, 197, 94, 0.35);
-      display: none;
-      align-items: center;
-      gap: 6px;
-      pointer-events: none;
-      white-space: nowrap;
+    /* Checkout Conveyor Belt Item Tray */
+    .conveyor-wrap {
+      background: #121a24;
+      border-top: 2px solid #283a4d;
+      padding: 10px 12px 12px;
     }
-    .hold-banner.show {
-      display: inline-flex;
-    }
-
-    /* Checkout Counter Item Tray */
-    .tray-section {
-      background: #0f172a;
-      border-top: 1px solid #1e293b;
-      padding: 10px 12px;
-    }
-    .tray-header {
+    .conveyor-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #94a3b8;
       margin-bottom: 8px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
-    .tray-strip {
+    .conveyor-title {
+      font-size: 0.73rem;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .rot-inline-btn {
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 9px;
+      border: 1.5px solid #38bdf8;
+      background: rgba(56, 189, 248, 0.16);
+      color: #e0f2fe;
+      font-size: 0.77rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .rot-inline-btn:disabled { opacity: 0.35; cursor: default; }
+
+    .conveyor-tray {
       display: flex;
       gap: 7px;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
       padding-bottom: 4px;
+      scrollbar-width: thin;
     }
-    .tray-item-btn {
+    .item-card {
       flex: 0 0 auto;
-      min-width: 66px;
-      padding: 6px 8px;
-      border-radius: 10px;
-      border: 1.5px solid #2b3a55;
-      background: #17223a;
-      color: #e2e8f0;
+      min-width: 84px;
+      padding: 7px 8px;
+      border-radius: 12px;
+      border: 1.5px solid #2b3e52;
+      background: #1a2634;
+      color: #f1f5f9;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 2px;
       cursor: pointer;
-      transition: transform 0.1s ease, border-color 0.14s ease, background 0.14s ease;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
     }
-    .tray-item-btn.selected {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.2);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
-      transform: translateY(-2px);
+    .item-card:active { transform: scale(0.95); }
+    .item-card.selected {
+      border-color: #facc15;
+      background: rgba(250, 204, 21, 0.18);
+      box-shadow: 0 0 14px rgba(250, 204, 21, 0.32);
     }
-    .tray-item-btn .it-emoji {
-      font-size: 1.25rem;
-      line-height: 1.1;
+    .ic-top {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 1.15rem;
     }
-    .tray-item-btn .it-name {
-      font-size: 0.68rem;
-      font-weight: 700;
+    .ic-dim {
+      font-size: 0.64rem;
+      font-family: monospace;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.65);
+      padding: 1px 5px;
+      border-radius: 5px;
+      font-weight: 800;
+    }
+    .ic-name {
+      font-size: 0.71rem;
+      font-weight: 800;
       white-space: nowrap;
     }
-    .tray-item-btn .it-tag {
-      font-size: 0.58rem;
+    .ic-tag {
+      font-size: 0.61rem;
       font-weight: 800;
-      text-transform: uppercase;
-      padding: 1px 5px;
-      border-radius: 4px;
+      padding: 1px 6px;
+      border-radius: 999px;
     }
-    .tag-heavy   { background: #334155; color: #f8fafc; }
-    .tag-medium  { background: #1e3a8a; color: #bfdbfe; }
-    .tag-fragile { background: #7f1d1d; color: #fecaca; }
-    .tag-spiky   { background: #14532d; color: #fde047; }
+    .tag-heavy  { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    .tag-fragile{ background: rgba(250, 204, 21, 0.2); color: #fef08a; }
+    .tag-frozen { background: rgba(56, 189, 248, 0.22); color: #bae6fd; }
+    .tag-chem   { background: rgba(192, 132, 252, 0.22); color: #e9d5ff; }
+    .tag-med    { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; }
 
-    /* Action Dock */
-    .action-dock {
-      display: grid;
-      grid-template-columns: 0.9fr 1.8fr 0.9fr;
-      gap: 8px;
-      padding: 10px 12px 12px;
-      background: #11192c;
-      border-top: 1px solid #1e293b;
-    }
-    .dock-btn {
-      min-height: 46px;
-      border-radius: 12px;
-      border: 1.5px solid #2b3a55;
-      background: #1a2640;
-      color: #f8fafc;
-      font-size: 0.86rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
+    .legend-strip {
+      display: flex;
       justify-content: center;
-      gap: 5px;
-      transition: transform 0.08s ease;
-    }
-    .dock-btn:active {
-      transform: scale(0.97);
-    }
-    .dock-btn:disabled {
-      opacity: 0.42;
-      cursor: default;
-    }
-    .dock-btn.pack-main {
-      background: linear-gradient(135deg, #16a34a, #059669);
-      border-color: #86efac;
-      color: #ffffff;
-      box-shadow: 0 6px 18px rgba(22, 163, 74, 0.35);
-      font-size: 0.94rem;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #0c121a;
+      border-top: 1px solid #1d2b3a;
+      font-size: 0.73rem;
+      color: #94a3b8;
     }
 
     .status-toast {
@@ -233,8 +258,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 15, 32, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.68);
+      background: rgba(12, 18, 26, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.72);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -248,14 +273,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
-    .stage-overlay {
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(9, 13, 28, 0.82);
+      background: rgba(10, 16, 24, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -263,31 +286,24 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.22s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .overlay-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
@@ -316,7 +332,7 @@
       cursor: pointer;
     }
 
-    /* Level Picker Modal */
+    /* Order Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -328,9 +344,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -427,6 +441,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #101820;
+      border: 1px solid rgba(74, 222, 128, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #101820;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #101820 0%, #064e3b 100%);
+      color: #ecfdf5;
+    }
+    .game-seo-banner.oak-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #1c1917 0%, #451a03 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #bbf7d0;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .pack-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .pack-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .pack-table th, .pack-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .pack-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .pack-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -439,7 +533,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -452,67 +546,67 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Orders &bull; Packing Physics</span>
+      <span class="cat-tag">500 Orders &bull; Spatial Packing Strategy</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
-      <h1>Grocery Bagging Physics</h1>
-      <p>Choose your packing order wisely! Fit every watermelon, milk carton, egg box, chip bag, and spiky cactus inside one paper bag.</p>
+      <h1>Grocery Bagging Simulator</h1>
+      <p>Pack milk jugs, watermelons, fresh eggs, frozen ice cream, and dish soap neatly into kraft grocery bags without crushing fragile items or breaking store bagging rules.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Grocery Bagging Physics Game">
+    <section class="game-wrapper" aria-label="Grocery Bagging Simulator Packing Puzzle">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Express Lane</span>
-          <span id="levelTitle">Order #1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Express Checkout Lane</span>
+          <span id="levelTitle">Order #1 / 500 — 4×4 Kraft Bag</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="packedCounter">Packed: 0 / 5</span>
-          <span class="hud-pill warn-pill" id="cactusPill" style="display:none;">🌵 Keep Off Side Walls!</span>
-          <span class="hud-pill" id="solvedCounter">Orders: 0 / 500</span>
+          <span class="hud-pill" id="packedPill">Packed: 0 / 6</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Orders: 0 / 500</span>
         </div>
       </div>
 
+      <!-- Real-Time Bagging Rules Validator Strip -->
+      <div id="rulesStrip" class="rules-strip" aria-label="Active Bagging Rules"></div>
+
+      <!-- Standing Kraft Bag Grid Canvas -->
       <div class="canvas-container">
         <canvas id="bagCanvas"></canvas>
-        <div id="holdBanner" class="hold-banner">🛍️ CHECKING BAG: <span id="holdTimeText">3.0s</span></div>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Win / Fail Overlay -->
-        <div id="stageOverlay" class="stage-overlay">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.3rem; margin-bottom:6px;">🛍️</div>
-            <h2 id="ovHeading">Order Packed!</h2>
-            <p id="ovText">Zero crushed eggs, zero ripped paper—checkout approved!</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Next Customer →</button>
+        <!-- Order Bagged Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div style="font-size:2.3rem; margin-bottom:6px;">🛍️</div>
+            <h2 id="winHeading">Order Packed Perfectly!</h2>
+            <p id="winText">Zero squished eggs, neat stacking, and every checkout rule satisfied!</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Customer →</button>
           </div>
         </div>
       </div>
 
-      <!-- Checkout Counter Tray (Pick Any Order!) -->
-      <div class="tray-section">
-        <div class="tray-header">
-          <span>Checkout Counter — Tap an item to pack next</span>
-          <span id="trayRemainingLabel">5 left</span>
+      <!-- Conveyor Belt Item Picker & Rotate Bar -->
+      <div class="conveyor-wrap">
+        <div class="conveyor-head">
+          <span id="conveyorTitle" class="conveyor-title">🛒 Checkout Belt — Tap Item, Then Tap Bag Slot</span>
+          <button id="rotateBtn" class="rot-inline-btn" type="button">⟳ Rotate 90°</button>
         </div>
-        <div id="trayStrip" class="tray-strip" role="listbox" aria-label="Remaining Groceries"></div>
+        <div id="conveyorTray" class="conveyor-tray" role="group" aria-label="Unpacked Groceries"></div>
       </div>
 
-      <!-- Rotate & Drop Controls -->
-      <div class="action-dock">
-        <button id="rotLeftBtn" class="dock-btn" type="button" aria-label="Rotate Left">⟲ -30°</button>
-        <button id="dropBtn" class="dock-btn pack-main" type="button">⬇ PACK ITEM</button>
-        <button id="rotRightBtn" class="dock-btn" type="button" aria-label="Rotate Right">⟳ +30°</button>
+      <div class="legend-strip">
+        <span>🪨 Heavy on Bottom</span>
+        <span>🥚 Never Place Heavy Above Fragile</span>
+        <span>👆 Tap Any Packed Item in Bag to Lift It Back Out</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="undoBtn" class="btn-outline" type="button">← Undo</button>
           <button id="resetBtn" class="btn-outline" type="button">↺ Empty Bag</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Packing Hint</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Smart Pack</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Checkout Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
@@ -527,61 +621,158 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 850+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/grocery-bagging-banner-1.jpg"
+            alt="Grocery Bagging Simulator online spatial packing puzzle showing milk, watermelon, frozen ice cream, bread, and eggs packed neatly in a kraft bag"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Supermarket Packing Orders — Cozy Tetris Meets Real Rules</h3>
+          <p>Scan and pack polyomino groceries into standing paper bags—heavy bottles low, delicate eggs high, cold goods clustered, and soap isolated.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Grocery Bagging Physics (500 Orders)</h2>
-        <p>Grocery Bagging Physics turns everyday supermarket checkout into a hilarious 2D Matter.js engineering puzzle. Instead of forcing a random sequence, all items sit right on the <strong>Checkout Counter Tray</strong>—you choose which item goes into the brown kraft paper bag first, aim its position, rotate it cleanly, and pack everything beneath the green rim line.</p>
+        <h2>What Is Grocery Bagging Simulator? A Supermarket Spatial Packing Game Online</h2>
+        <p><strong>Grocery Bagging Simulator</strong> is a free <strong>grocery packing puzzle game online</strong> that transforms the everyday art of bagging supermarket orders into a deeply satisfying spatial-logic challenge. Every customer rolls a mix of rectangular and square groceries onto your checkout conveyor belt—from chunky 2×2 watermelons and tall milk cartons to wide loaves of artisan bread, egg cartons, frosty ice cream tubs, and bottles of dish soap. Your mission is to rotate and fit every single item cleanly inside the standing brown kraft bag while obeying real-world grocery safety rules!</p>
+        <p>Built as a lightweight, <strong>no-download spatial organization brain teaser for phones, tablets, and Chromebooks</strong>, Grocery Bagging Simulator runs smoothly at 60 FPS with lively procedural <strong>Web Audio barcode scanner beeps, crisp brown paper rustles, comedic egg-squish alerts, and cash register <em>cha-ching</em> chimes</strong>. Every completed customer order across all <strong>500 checkout levels</strong> saves automatically inside private browser local storage.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Supermarket Bagging Handbook (The 3 Golden Packing Rules)</h2>
+        <p>Fitting odd shapes into a tight bag grid is only half the puzzle—every order checks your bag in real time against authentic retail bagging standards. Watch the glowing live <strong>Rule Badges</strong> right above the bag as you pack:</p>
+
+        <div class="pack-table-wrap">
+          <table class="pack-table">
+            <thead>
+              <tr>
+                <th>Bagging Rule</th>
+                <th>Affected Items</th>
+                <th>How to Keep the Badge Green (✓)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Zero Crushed Goods</strong> (Ch. 1–5)</td>
+                <td><strong>🪨 Heavy</strong> (Milk, Watermelon, Soda, Oil) &amp; <strong>🥚 Fragile</strong> (Eggs, Bread, Berries, Tomatoes)</td>
+                <td>Never stack a Heavy item in any row <em>above</em> a Fragile item in the same vertical column! Anchor Heavy items along the bottom floor and crown the top with Fragile goods.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Cold Chain Cluster</strong> (Ch. 3–5)</td>
+                <td><strong>❄️ Frozen</strong> (Ice Cream, Frozen Peas, Popsicles)</td>
+                <td>Keep all Frozen items touching side-by-side or top-to-bottom in a single connected cold block so they insulate each other all the way home!</td>
+              </tr>
+              <tr>
+                <td><strong>3. Soap &amp; Food Separation</strong> (Ch. 4–5)</td>
+                <td><strong>🧴 Chemical</strong> (Dish Soap, Laundry Pods) vs. <strong>🥚 Fragile Fresh</strong></td>
+                <td>Keep household cleaning soaps from touching any Fragile fresh produce, eggs, or bread along shared edges—tuck soap neatly beside canned or boxed pantry goods!</td>
+              </tr>
+              <tr>
+                <td><strong>💡 Smart Pack Hint</strong></td>
+                <td>Verified constructive solver</td>
+                <td>Tight on space in a 6×5 rush-hour bag? Tap <strong>💡 Smart Pack</strong> to snap the next conveyor item cleanly into a guaranteed 100%-valid slot and orientation!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Checkout Pro Tip:</strong> Start every crowded order by packing your largest <strong>2×2</strong> and <strong>2×1 Heavy</strong> items first along the bottom row, lock your <strong>❄️ Frozen</strong> items together in one corner next, and save <strong>1×1</strong> fillers and <strong>🥚 Fragile</strong> loaves for the airy upper shelves! Tap any already-packed item inside the bag anytime to lift it right back onto the belt.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner oak-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/grocery-bagging-banner-2.jpg"
+            alt="Miniature 3D grocery items organized into heavy, frozen, fragile, and dish soap zones in Grocery Bagging Simulator"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Constructive Verified Layouts Across 5 Escalating Store Chapters</h3>
+          <p>Every single customer order from #1 to #500 is built backward from a mathematically verified rule-compliant bag so zero impossible packs ever occur.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Checkout Chapters (500 Verified Customer Orders)</h2>
+        <p>Progress from relaxed morning express lanes to bustling weekend mega-carts across five distinct supermarket chapters:</p>
         <ul>
-          <li><strong>Rule 1 — Heavy &amp; Sturdy First:</strong> Always pack <strong>Watermelons 🍉</strong>, <strong>Soup Cans 🥫</strong>, <strong>Milk Cartons 🥛</strong>, and <strong>Cereal Boxes 📦</strong> at the bottom of the bag to form a flat, solid foundation.</li>
-          <li><strong>Rule 2 — Protect Fragile Goods:</strong> <strong>Eggs 🥚</strong>, <strong>Chips 🍟</strong>, and <strong>Soft Bread 🍞</strong> belong strictly on the upper layer! Dropping or resting heavy items on top of them builds red crush stress until they crack or pop.</li>
-          <li><strong>Rule 3 — Shield the Paper Walls from Cacti 🌵:</strong> Starting in Chapter 3, customers buy potted cacti! The reinforced cardboard floor at the bottom is puncture-proof, but if a cactus touches the thin <strong>left or right brown paper walls</strong> (or pokes a fragile item), it tears the bag instantly. Wedge sturdy cartons against the walls first, then tuck the cactus safely in the middle!</li>
+          <li><strong>Chapter 1 (Orders 1–100 — Express Checkout Lane):</strong> Compact 4×4 paper bags with 5 to 6 everyday staples teaching heavy-bottom / fragile-top weight discipline and 90° item rotation.</li>
+          <li><strong>Chapter 2 (Orders 101–200 — Family Pantry Rush):</strong> Expands to 5×4 bags packing 7 to 9 tight-fitting milk jugs, cereal boxes, watermelons, and artisan loaves with crisp spatial Tetris fits.</li>
+          <li><strong>Chapter 3 (Orders 201–300 — Frozen Aisle Express):</strong> Upgrades to 5×5 bags and activates the <strong>❄️ Cold Chain Cluster</strong> rule—requiring ice cream tubs, frozen peas, and popsicles to huddle together!</li>
+          <li><strong>Chapter 4 (Orders 301–400 — Household &amp; Produce Mix):</strong> Introduces <strong>🧴 Cleaning Chemicals</strong> (Dish Soap &amp; Laundry Pods) alongside fresh berries, eggs, and bread—requiring safe separation!</li>
+          <li><strong>Chapter 5 (Orders 401–500 — Weekend Mega-Cart Master):</strong> Massive 6×5 bags loaded with 10 to 13 diverse groceries enforcing all three checkout rules simultaneously—complete with an instant 1–500 order selector and private local saving.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Packing Puzzle Topics">
+          <span class="kw-pill">Grocery Bagging Game Online Free</span>
+          <span class="kw-pill">Supermarket Packing Puzzle Browser</span>
+          <span class="kw-pill">Cozy Spatial Organization Game</span>
+          <span class="kw-pill">Inventory Tetris Logic Brain Teaser</span>
+          <span class="kw-pill">500-Level Retail Simulation Web</span>
+          <span class="kw-pill">No-Download Chromebook Strategy Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Grocery Bagging Simulator FAQ</h2>
         <details class="faq-item">
-          <summary>Can I change which grocery item I pack next?</summary>
-          <div class="faq-answer">Yes! Tap any item on the Checkout Counter tray below the bag at any time to switch what's in your hand before dropping it.</div>
+          <summary>How do I rotate a milk carton or bread loaf before placing it in the bag?</summary>
+          <div class="faq-answer">Select any item from the Checkout Belt below the bag, then tap the <strong>⟳ Rotate 90°</strong> button right above the conveyor (or press <code>R</code> on your keyboard) to flip its orientation cleanly between horizontal and vertical!</div>
         </details>
         <details class="faq-item">
-          <summary>What does the Packing Hint (💡) button do?</summary>
-          <div class="faq-answer">Packing Hint selects the smartest next item based on weight and fragility, levels its rotation, and highlights a recommended golden drop lane above the bag.</div>
+          <summary>How do I remove an item I already placed inside the grocery bag?</summary>
+          <div class="faq-answer">Simply tap or click directly on any packed item inside the kraft bag! It lifts cleanly back onto the checkout conveyor belt so you can reorganize without emptying the entire bag.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Why did my bag flash red even though every item fit inside?</summary>
+          <div class="faq-answer">Check the glowing <strong>Rule Badges</strong> directly above the bag! Either a Heavy item is stacked above a Fragile item in the same column, Frozen goods aren't touching each other (Ch. 3+), or Dish Soap is touching fresh Fragile food (Ch. 4+).</div>
+        </details>
+        <details class="faq-item">
+          <summary>Are all 500 customer orders guaranteed to fit inside the bag while obeying every rule?</summary>
+          <div class="faq-answer">Yes! Every single order from #1 to #500 is generated constructively from a verified, rule-compliant layout before moving the items onto the conveyor belt—and tapping <strong>💡 Smart Pack</strong> can demonstrate a valid placement anytime.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🧳</div><span class="cat-tag">Strategy</span></div>
+        <h3>Baggage Routing Chaos</h3>
+        <p>Flip airport conveyor junctions in real time to route color-coded suitcases to the right flight gates.</p>
+        <a href="/games/baggage-chaos/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
+        <h3>Blackout Grid Operator</h3>
+        <p>Balance solar, wind, and gas power plants across a 24-hour demand curve to prevent city blackouts.</p>
+        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🚢</div><span class="cat-tag">Physics</span></div>
         <h3>Cargo Wave Balancer</h3>
-        <p>Drop shipping containers onto a floating cargo ship riding dynamic ocean waves.</p>
+        <p>Drop and balance shipping containers on a swaying cargo vessel riding dynamic ocean waves.</p>
         <a href="/games/cargo-balancer/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧨</div><span class="cat-tag">Physics</span></div>
-        <h3>Controlled Demolition</h3>
-        <p>Wire timed dynamite waves on pillars to collapse towers inward without hitting neighbors.</p>
-        <a href="/games/controlled-demolition/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
-        <h3>Gravity Stone Stacker</h3>
-        <p>Balance irregular geometric stones into a steady tower across 500 physics levels.</p>
-        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
   <!-- Order Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Order">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Customer Order">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Checkout Order (1 – 500)</h3>
+        <h3>Choose Customer Order (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
@@ -605,21 +796,21 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Strategy</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/grocery-bagging/">Grocery Bagging</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Top Strategy</h4>
+          <h4>Top Mystery</h4>
           <ul>
-            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
-            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
             <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -652,75 +843,51 @@
     }
 
     // ==============================================
-    // GROCERY CATALOG & 500-ORDER GENERATOR
+    // CONSTRUCTIVE 500-ORDER GROCERY BAGGING ENGINE
     // ==============================================
     const TOTAL_LEVELS = 500;
     const WORLD_W = 420;
-    const WORLD_H = 470;
-    const COUNTER_Y = 438;
-    const BAG_H = 264;
-    const BAG_TOP_Y = COUNTER_Y - BAG_H;
-    const WALL_THICK = 14;
-    const HOLD_SECONDS = 3.0;
+    const WORLD_H = 365;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Express Lane", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Bakery & Produce", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Garden Aisle", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Weekend Rush", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Master Bagger", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Express Checkout Lane", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Family Pantry Rush", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Frozen Aisle Express", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Household & Produce Mix", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Weekend Mega-Cart", range: "401–500", start: 401, end: 500 }
     ];
 
-    // Item Catalog with Balanced Dimensions (guarantees clean packing in all 500 orders)
     const GROCERY_CATALOG = {
-      melon: {
-        key: "melon", name: "Melon", emoji: "🍉", cat: "heavy", priority: 1,
-        shape: "circle", r: 29, w: 58, h: 58, density: 0.0052, friction: 0.75,
-        fill: "#15803d", stroke: "#052e16", accent: "#4ade80"
-      },
-      can: {
-        key: "can", name: "Soup", emoji: "🥫", cat: "heavy", priority: 1,
-        shape: "rect", w: 34, h: 42, density: 0.0044, friction: 0.85,
-        fill: "#dc2626", stroke: "#7f1d1d", accent: "#fef08a"
-      },
-      milk: {
-        key: "milk", name: "Milk", emoji: "🥛", cat: "medium", priority: 2,
-        shape: "rect", w: 38, h: 62, density: 0.0028, friction: 0.88,
-        fill: "#e0f2fe", stroke: "#0369a1", accent: "#38bdf8"
-      },
-      cereal: {
-        key: "cereal", name: "Cereal", emoji: "📦", cat: "medium", priority: 2,
-        shape: "rect", w: 68, h: 32, density: 0.0021, friction: 0.9,
-        fill: "#f59e0b", stroke: "#92400e", accent: "#fef3c7"
-      },
-      soda: {
-        key: "soda", name: "Soda", emoji: "🍾", cat: "medium", priority: 2,
-        shape: "rect", w: 28, h: 64, density: 0.0031, friction: 0.82,
-        fill: "#0d9488", stroke: "#134e4a", accent: "#99f6e4"
-      },
-      cactus: {
-        key: "cactus", name: "Cactus", emoji: "🌵", cat: "spiky", priority: 3,
-        shape: "rect", w: 42, h: 54, density: 0.0023, friction: 0.92,
-        fill: "#22c55e", stroke: "#14532d", accent: "#c2410c"
-      },
-      bread: {
-        key: "bread", name: "Bread", emoji: "🍞", cat: "fragile", priority: 4,
-        shape: "rect", w: 64, h: 30, density: 0.0011, friction: 0.92,
-        fill: "#d97706", stroke: "#78350f", accent: "#fde68a",
-        maxSpeedHeavy: 2.8, maxSpeedMed: 4.2, stressResist: 1.25
-      },
-      eggs: {
-        key: "eggs", name: "Eggs", emoji: "🥚", cat: "fragile", priority: 5,
-        shape: "rect", w: 66, h: 28, density: 0.0012, friction: 0.92,
-        fill: "#cbd5e1", stroke: "#475569", accent: "#f8fafc",
-        maxSpeedHeavy: 2.2, maxSpeedMed: 3.4, stressResist: 0.95
-      },
-      chips: {
-        key: "chips", name: "Chips", emoji: "🍟", cat: "fragile", priority: 5,
-        shape: "rect", w: 48, h: 42, density: 0.0009, friction: 0.9,
-        fill: "#ef4444", stroke: "#991b1b", accent: "#facc15",
-        maxSpeedHeavy: 2.4, maxSpeedMed: 3.6, stressResist: 1.0
-      }
+      heavy: [
+        { key: "milk",   name: "Milk Jug",    icon: "🥛", w: 1, h: 2, cat: "heavy",   fill: "#2563eb", hi: "#93c5fd" },
+        { key: "melon",  name: "Watermelon",  icon: "🍉", w: 2, h: 2, cat: "heavy",   fill: "#15803d", hi: "#86efac" },
+        { key: "soda",   name: "Soda Pack",   icon: "🥫", w: 2, h: 1, cat: "heavy",   fill: "#dc2626", hi: "#fca5a5" },
+        { key: "oil",    name: "Olive Oil",   icon: "🫒", w: 1, h: 2, cat: "heavy",   fill: "#4d7c0f", hi: "#bef264" },
+        { key: "can",    name: "Soup Can",    icon: "🥫", w: 1, h: 1, cat: "heavy",   fill: "#b91c1c", hi: "#f87171" }
+      ],
+      medium: [
+        { key: "cereal", name: "Cereal Box",  icon: "🥣", w: 1, h: 2, cat: "medium",  fill: "#d97706", hi: "#fde68a" },
+        { key: "pasta",  name: "Pasta Box",   icon: "🍝", w: 2, h: 1, cat: "medium",  fill: "#ca8a04", hi: "#fef08a" },
+        { key: "cheese", name: "Cheddar",     icon: "🧀", w: 1, h: 1, cat: "medium",  fill: "#eab308", hi: "#fef9c3" },
+        { key: "apple",  name: "Crisp Apple", icon: "🍎", w: 1, h: 1, cat: "medium",  fill: "#e11d48", hi: "#fda4af" },
+        { key: "honey",  name: "Honey Jar",   icon: "🍯", w: 1, h: 1, cat: "medium",  fill: "#b45309", hi: "#fcd34d" }
+      ],
+      fragile: [
+        { key: "eggs",   name: "Egg Carton",  icon: "🥚", w: 2, h: 1, cat: "fragile", fill: "#ca8a04", hi: "#fef3c7" },
+        { key: "bread",  name: "Fresh Bread", icon: "🥖", w: 2, h: 1, cat: "fragile", fill: "#a16207", hi: "#fde68a" },
+        { key: "berry",  name: "Strawberries",icon: "🍓", w: 1, h: 1, cat: "fragile", fill: "#be123c", hi: "#fda4af" },
+        { key: "tomato", name: "Tomatoes",    icon: "🍅", w: 1, h: 1, cat: "fragile", fill: "#dc2626", hi: "#fecaca" },
+        { key: "cake",   name: "Cupcake",     icon: "🧁", w: 1, h: 1, cat: "fragile", fill: "#db2777", hi: "#fbcfe8" }
+      ],
+      frozen: [
+        { key: "icecrm", name: "Ice Cream",   icon: "🍨", w: 2, h: 1, cat: "frozen",  fill: "#0284c7", hi: "#bae6fd" },
+        { key: "peas",   name: "Frozen Peas", icon: "🧊", w: 1, h: 1, cat: "frozen",  fill: "#0ea5e9", hi: "#e0f2fe" },
+        { key: "pops",   name: "Popsicles",   icon: "🍧", w: 1, h: 2, cat: "frozen",  fill: "#06b6d4", hi: "#cffafe" }
+      ],
+      chem: [
+        { key: "soap",   name: "Dish Soap",   icon: "🧴", w: 1, h: 2, cat: "chem",    fill: "#7c3aed", hi: "#ddd6fe" },
+        { key: "pods",   name: "Wash Pods",   icon: "🧼", w: 1, h: 1, cat: "chem",    fill: "#9333ea", hi: "#e9d5ff" }
+      ]
     };
 
     function mulberry32(seed) {
@@ -742,81 +909,264 @@
       return copy;
     }
 
-    function buildOrder(levelNum) {
-      const rng = mulberry32(levelNum * 47317 + 88109);
-      const p = (levelNum - 1) / (TOTAL_LEVELS - 1);
+    function getDims(item, rot) {
+      return rot % 2 === 0 ? { w: item.w, h: item.h } : { w: item.h, h: item.w };
+    }
 
-      // Bag inner width narrows gently (244px -> 212px) while staying 100% packable
-      const bagW = Math.round(244 - p * 32);
-      const items = [];
-
-      const pushItem = (key) => {
-        items.push({ ...GROCERY_CATALOG[key], uid: `${key}_${items.length}` });
-      };
-
-      if (levelNum <= 100) {
-        // Chapter 1: 5–6 classic items (heavy + medium + fragile, no cactus)
-        pushItem(rng() < 0.65 ? "melon" : "can");
-        pushItem("can");
-        pushItem(rng() < 0.5 ? "milk" : "cereal");
-        pushItem("eggs");
-        pushItem(rng() < 0.55 ? "chips" : "bread");
-        if (levelNum > 45) pushItem(rng() < 0.5 ? "milk" : "can");
-      } else if (levelNum <= 200) {
-        // Chapter 2: 6–7 items (adds soda, bread, cereal)
-        pushItem("melon");
-        pushItem("can");
-        pushItem("milk");
-        pushItem(rng() < 0.5 ? "cereal" : "soda");
-        pushItem("eggs");
-        pushItem(rng() < 0.5 ? "chips" : "bread");
-        if (levelNum > 140) pushItem(rng() < 0.5 ? "bread" : "cereal");
-      } else if (levelNum <= 300) {
-        // Chapter 3: 7–8 items + 1 Spiky Cactus!
-        pushItem(rng() < 0.6 ? "melon" : "can");
-        pushItem("milk");
-        pushItem("cereal");
-        pushItem("cactus");
-        pushItem("eggs");
-        pushItem("chips");
-        pushItem(rng() < 0.5 ? "soda" : "can");
-        if (levelNum > 250) pushItem("bread");
-      } else if (levelNum <= 400) {
-        // Chapter 4: 8–9 items + 1–2 Cacti
-        pushItem("melon");
-        pushItem("can");
-        pushItem("milk");
-        pushItem("cereal");
-        pushItem("soda");
-        pushItem("cactus");
-        pushItem("eggs");
-        pushItem("chips");
-        if (levelNum > 345) pushItem(levelNum % 2 === 0 ? "cactus" : "bread");
-      } else {
-        // Chapter 5: 9–10 items + 1–2 Cacti + Multiple Fragile
-        pushItem("melon");
-        pushItem("can");
-        pushItem("milk");
-        pushItem("cereal");
-        pushItem("soda");
-        pushItem("cactus");
-        pushItem("eggs");
-        pushItem("chips");
-        pushItem("bread");
-        if (levelNum > 445) pushItem(levelNum % 2 === 0 ? "cactus" : "can");
+    // Validate All Active Checkout Bagging Rules on Any Set of Placed Items!
+    function evaluateBagRules(cols, rows, placedItems, checkCold, checkChem) {
+      const grid = Array.from({ length: rows }, () => Array(cols).fill(null));
+      for (const it of placedItems) {
+        const { w, h } = getDims(it, it.rot);
+        for (let dr = 0; dr < h; dr++) {
+          for (let dc = 0; dc < w; dc++) {
+            const rr = it.r + dr, cc = it.c + dc;
+            if (rr >= 0 && rr < rows && cc >= 0 && cc < cols) grid[rr][cc] = it;
+          }
+        }
       }
 
-      // Shuffle counter display so player thinks about order instead of blind left-to-right!
-      const shuffled = shuffle(items, rng);
-      const hasCactus = shuffled.some((it) => it.cat === "spiky");
+      const badIds = new Set();
+
+      // Rule 1: Zero Crushed Goods — No Heavy Item Anywhere Above a Fragile Item in the Same Column!
+      let crushedOk = true;
+      for (let c = 0; c < cols; c++) {
+        let sawHeavyAbove = false;
+        let heavyRef = null;
+        for (let r = 0; r < rows; r++) {
+          const cellIt = grid[r][c];
+          if (!cellIt) continue;
+          if (cellIt.cat === "heavy") {
+            sawHeavyAbove = true;
+            heavyRef = cellIt;
+          } else if (cellIt.cat === "fragile" && sawHeavyAbove) {
+            crushedOk = false;
+            badIds.add(cellIt.id);
+            if (heavyRef) badIds.add(heavyRef.id);
+          }
+        }
+      }
+
+      // Rule 2: Cold Chain Cluster (Ch. 3–5) — All Placed Frozen Items Must Touch Orthogonally!
+      let coldOk = true;
+      const frozenItems = placedItems.filter((it) => it.cat === "frozen");
+      if (checkCold && frozenItems.length >= 2) {
+        const adj = new Map(frozenItems.map((it) => [it.id, new Set()]));
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const a = grid[r][c];
+            if (!a || a.cat !== "frozen") continue;
+            [[0, 1], [1, 0]].forEach(([dr, dc]) => {
+              const nr = r + dr, nc = c + dc;
+              if (nr < rows && nc < cols) {
+                const b = grid[nr][nc];
+                if (b && b.cat === "frozen" && b.id !== a.id) {
+                  adj.get(a.id).add(b.id);
+                  adj.get(b.id).add(a.id);
+                }
+              }
+            });
+          }
+        }
+        const seen = new Set([frozenItems[0].id]);
+        const q = [frozenItems[0].id];
+        while (q.length > 0) {
+          const cur = q.shift();
+          for (const nb of adj.get(cur)) {
+            if (!seen.has(nb)) { seen.add(nb); q.push(nb); }
+          }
+        }
+        if (seen.size < frozenItems.length) {
+          coldOk = false;
+          frozenItems.forEach((f) => badIds.add(f.id));
+        }
+      }
+
+      // Rule 3: Soap Isolation (Ch. 4–5) — Chemical Items Must NOT Orthogonally Touch Fragile Fresh Food!
+      let chemOk = true;
+      if (checkChem) {
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const a = grid[r][c];
+            if (!a || a.cat !== "chem") continue;
+            [[-1, 0], [1, 0], [0, -1], [0, 1]].forEach(([dr, dc]) => {
+              const nr = r + dr, nc = c + dc;
+              if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+                const b = grid[nr][nc];
+                if (b && b.cat === "fragile") {
+                  chemOk = false;
+                  badIds.add(a.id);
+                  badIds.add(b.id);
+                }
+              }
+            });
+          }
+        }
+      }
 
       return {
-        levelNum,
-        bagW,
-        totalCount: shuffled.length,
-        hasCactus,
-        items: shuffled
+        crushedOk,
+        coldOk,
+        chemOk,
+        allOk: crushedOk && coldOk && chemOk,
+        badIds,
+        grid
       };
+    }
+
+    // Constructive 500-Order Verified Generator (Guarantees 100% Rule-Compliant Packing!)
+    function buildOrderLevel(levelNum) {
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      let cols, rows, wantHeavy, wantFragile, wantFrozen, wantChem, targetFill;
+
+      if (chapIdx === 0) {
+        cols = 4; rows = 4; wantHeavy = 2; wantFragile = 2; wantFrozen = 0; wantChem = 0; targetFill = 0.82;
+      } else if (chapIdx === 1) {
+        cols = 5; rows = 4; wantHeavy = 3; wantFragile = 2; wantFrozen = 0; wantChem = 0; targetFill = 0.86;
+      } else if (chapIdx === 2) {
+        cols = 5; rows = 5; wantHeavy = 3; wantFragile = 2; wantFrozen = 2; wantChem = 0; targetFill = 0.84;
+      } else if (chapIdx === 3) {
+        cols = 5; rows = 5; wantHeavy = 3; wantFragile = 3; wantFrozen = 2; wantChem = 1; targetFill = 0.86;
+      } else {
+        cols = 6; rows = 5; wantHeavy = 4; wantFragile = 3; wantFrozen = 3; wantChem = 2; targetFill = 0.88;
+      }
+
+      const checkCold = wantFrozen >= 2;
+      const checkChem = wantChem >= 1;
+
+      for (let attempt = 0; attempt < 45; attempt++) {
+        const rng = mulberry32(levelNum * 389123 + attempt * 7919 + 41201);
+        const occ = Array.from({ length: rows }, () => Array(cols).fill(false));
+        const solItems = [];
+        let filledCells = 0;
+
+        const canFit = (r, c, w, h) => {
+          if (r < 0 || c < 0 || r + h > rows || c + w > cols) return false;
+          for (let dr = 0; dr < h; dr++) {
+            for (let dc = 0; dc < w; dc++) {
+              if (occ[r + dr][c + dc]) return false;
+            }
+          }
+          return true;
+        };
+
+        const stampItem = (proto, r, c, rot) => {
+          const { w, h } = getDims(proto, rot);
+          for (let dr = 0; dr < h; dr++) {
+            for (let dc = 0; dc < w; dc++) occ[r + dr][c + dc] = true;
+          }
+          filledCells += w * h;
+          const obj = {
+            ...proto,
+            id: solItems.length,
+            r, c, rot,
+            solR: r, solC: c, solRot: rot,
+            placed: true
+          };
+          solItems.push(obj);
+          return obj;
+        };
+
+        const tryPlaceFromPool = (pool, rowPrefMin, rowPrefMax, mustTouchCat = null) => {
+          const proto = pool[Math.floor(rng() * pool.length)];
+          const rots = proto.w === proto.h ? [0] : shuffle([0, 1], rng);
+          const candCells = [];
+          for (let r = rowPrefMin; r <= rowPrefMax; r++) {
+            for (let c = 0; c < cols; c++) candCells.push([r, c]);
+          }
+          for (const [r, c] of shuffle(candCells, rng)) {
+            for (const rot of rots) {
+              const { w, h } = getDims(proto, rot);
+              if (!canFit(r, c, w, h)) continue;
+              if (mustTouchCat) {
+                // Verify orthogonal adjacency to an existing item of `mustTouchCat`
+                let touches = false;
+                for (let dr = 0; dr < h && !touches; dr++) {
+                  for (let dc = 0; dc < w && !touches; dc++) {
+                    [[-1, 0], [1, 0], [0, -1], [0, 1]].forEach(([ar, ac]) => {
+                      const nr = r + dr + ar, nc = c + dc + ac;
+                      if (solItems.some((ex) => {
+                        if (ex.cat !== mustTouchCat) return false;
+                        const ed = getDims(ex, ex.rot);
+                        return nr >= ex.r && nr < ex.r + ed.h && nc >= ex.c && nc < ex.c + ed.w;
+                      })) touches = true;
+                    });
+                  }
+                }
+                if (!touches) continue;
+              }
+              return stampItem(proto, r, c, rot);
+            }
+          }
+          return null;
+        };
+
+        // 1. Place Heavy Items Securely Along Bottom Rows
+        for (let i = 0; i < wantHeavy; i++) {
+          tryPlaceFromPool(GROCERY_CATALOG.heavy, Math.max(1, rows - 2), rows - 1);
+        }
+
+        // 2. Place Connected Frozen Cluster (Ch. 3–5)
+        for (let i = 0; i < wantFrozen; i++) {
+          tryPlaceFromPool(GROCERY_CATALOG.frozen, 0, rows - 1, i === 0 ? null : "frozen");
+        }
+
+        // 3. Place Cleaning Chemicals on Lower Corners/Sides (Ch. 4–5)
+        for (let i = 0; i < wantChem; i++) {
+          tryPlaceFromPool(GROCERY_CATALOG.chem, Math.max(1, rows - 2), rows - 1);
+        }
+
+        // 4. Place Fragile Fresh Items Along Top Rows
+        for (let i = 0; i < wantFragile; i++) {
+          tryPlaceFromPool(GROCERY_CATALOG.fragile, 0, Math.min(1, rows - 2));
+        }
+
+        // 5. Fill Remaining Space With Cozy Medium Pantry Goods
+        const maxCells = Math.floor(cols * rows * targetFill);
+        let guard = 0;
+        while (filledCells < maxCells && guard < 22) {
+          guard++;
+          const ok = tryPlaceFromPool(GROCERY_CATALOG.medium, 0, rows - 1);
+          if (!ok) break;
+        }
+
+        // Certify All Active Rules Pass 100% On Our Constructed Solution!
+        const check = evaluateBagRules(cols, rows, solItems, checkCold, checkChem);
+        const hasEnoughFragile = solItems.filter((x) => x.cat === "fragile").length >= 1;
+        const hasEnoughHeavy = solItems.filter((x) => x.cat === "heavy").length >= 1;
+        const hasEnoughFrozen = !checkCold || solItems.filter((x) => x.cat === "frozen").length >= 2;
+        const hasEnoughChem = !checkChem || solItems.filter((x) => x.cat === "chem").length >= 1;
+
+        if (check.allOk && hasEnoughFragile && hasEnoughHeavy && hasEnoughFrozen && hasEnoughChem && solItems.length >= 4) {
+          // Prepare clean unpacked conveyor items preserving verified solution coords for Smart Hint!
+          const items = shuffle(solItems, rng).map((it, idx) => ({
+            ...it,
+            id: idx,
+            r: -1, c: -1,
+            rot: 0,
+            placed: false
+          }));
+          return {
+            levelNum,
+            chapIdx,
+            cols,
+            rows,
+            checkCold,
+            checkChem,
+            items
+          };
+        }
+      }
+
+      // Guaranteed-Solvable Clean Fallback Order
+      const fbItems = [
+        { ...GROCERY_CATALOG.heavy[0],   id: 0, r: -1, c: -1, rot: 0, solR: 2, solC: 0, solRot: 0, placed: false },
+        { ...GROCERY_CATALOG.heavy[2],   id: 1, r: -1, c: -1, rot: 0, solR: 3, solC: 1, solRot: 0, placed: false },
+        { ...GROCERY_CATALOG.medium[0],  id: 2, r: -1, c: -1, rot: 0, solR: 1, solC: 3, solRot: 0, placed: false },
+        { ...GROCERY_CATALOG.fragile[0], id: 3, r: -1, c: -1, rot: 0, solR: 0, solC: 0, solRot: 0, placed: false },
+        { ...GROCERY_CATALOG.fragile[2], id: 4, r: -1, c: -1, rot: 0, solR: 0, solC: 2, solRot: 0, placed: false }
+      ];
+      return { levelNum, chapIdx, cols: 4, rows: 4, checkCold: false, checkChem: false, items: fbItems };
     }
 
     function getChapter(num) {
@@ -824,10 +1174,9 @@
     }
 
     // ==============================================
-    // AUDIO ENGINE (GROCERY THUD, CRACK, RIP, KA-CHING)
+    // CHECKOUT SCANNER, PAPER BAG & REGISTER WEB AUDIO
     // ==============================================
     let audioCtx = null;
-    let noiseBuffer = null;
     let soundOn = true;
 
     function initAudio() {
@@ -836,109 +1185,57 @@
         if (AC) audioCtx = new AC();
       }
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-      if (audioCtx && !noiseBuffer) {
-        const len = Math.floor(audioCtx.sampleRate * 0.45);
-        noiseBuffer = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-        const d = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-      }
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.12) {
+    function playTone(freq, dur, type = "sine", vol = 0.09) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      const g = audioCtx.createGain();
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(vol, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
       osc.stop(now + dur + 0.02);
     }
 
-    function sfxThud(heavy, speed) {
-      if (!soundOn || speed < 0.7) return;
-      initAudio();
-      if (!audioCtx) return;
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(heavy ? 120 : 210, now);
-      osc.frequency.exponentialRampToValueAtTime(48, now + 0.08);
-      g.gain.setValueAtTime(Math.min(0.18, 0.04 + speed * 0.025), now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-      osc.connect(g);
-      g.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + 0.1);
+    function sfxBarcodeBeep() { playTone(2150, 0.055, "square", 0.045); }
+    function sfxBagThump() { playTone(190, 0.075, "triangle", 0.11); }
+    function sfxRotateClick() { playTone(560, 0.04, "sine", 0.07); }
+    function sfxCrushWarn() {
+      playTone(175, 0.12, "sawtooth", 0.1);
+      setTimeout(() => playTone(130, 0.14, "sawtooth", 0.09), 65);
     }
-
-    function sfxPaperRip() {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx || !noiseBuffer) return;
-      const now = audioCtx.currentTime;
-      const src = audioCtx.createBufferSource();
-      src.buffer = noiseBuffer;
-      const bp = audioCtx.createBiquadFilter();
-      bp.type = "bandpass";
-      bp.frequency.setValueAtTime(1600, now);
-      bp.frequency.exponentialRampToValueAtTime(520, now + 0.32);
-      const g = audioCtx.createGain();
-      g.gain.setValueAtTime(0.28, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.34);
-      src.connect(bp);
-      bp.connect(g);
-      g.connect(audioCtx.destination);
-      src.start(now);
-      src.stop(now + 0.36);
+    function sfxChaChingWin() {
+      playTone(1046.5, 0.14, "triangle", 0.12);
+      setTimeout(() => playTone(1567.98, 0.45, "sine", 0.13), 85);
+      setTimeout(() => playTone(2093.0, 0.55, "sine", 0.11), 155);
     }
-
-    function sfxCrush() {
-      playTone(190, 0.12, "sawtooth", 0.16);
-      setTimeout(() => playTone(125, 0.22, "sawtooth", 0.15), 80);
-    }
-
-    function sfxKaChing() {
-      playTone(1046.5, 0.14, "sine", 0.13);
-      setTimeout(() => playTone(1567.98, 0.35, "sine", 0.15), 95);
-      setTimeout(() => playTone(2093.0, 0.45, "triangle", 0.11), 170);
-    }
-
-    function sfxRotate() { playTone(380, 0.045, "sine", 0.07); }
-    function sfxTick() { playTone(640, 0.045, "sine", 0.07); }
 
     // ==============================================
-    // MATTER.JS PACKING ENGINE & GAME STATE
+    // GAME STATE, BAG GRID INTERACTION & RENDER LOOP
     // ==============================================
-    const { Engine, World, Bodies, Body, Events } = Matter;
-
     const canvas = document.getElementById("bagCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const packedCounter = document.getElementById("packedCounter");
-    const cactusPill = document.getElementById("cactusPill");
+    const packedPill = document.getElementById("packedPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const holdBanner = document.getElementById("holdBanner");
-    const holdTimeText = document.getElementById("holdTimeText");
-    const trayStrip = document.getElementById("trayStrip");
-    const trayRemainingLabel = document.getElementById("trayRemainingLabel");
+    const rulesStrip = document.getElementById("rulesStrip");
+    const conveyorTray = document.getElementById("conveyorTray");
+    const rotateBtn = document.getElementById("rotateBtn");
     const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
-    const rotLeftBtn = document.getElementById("rotLeftBtn");
-    const rotRightBtn = document.getElementById("rotRightBtn");
-    const dropBtn = document.getElementById("dropBtn");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
@@ -950,457 +1247,177 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let engine = null;
     let order = null;
-    let trayItems = [];
-    let selectedTrayIdx = 0;
-    let packedItems = []; // { body, spec, stress, tearStress, failed }
-
-    let aimX = WORLD_W / 2;
-    let aimAngle = 0;
-    let dropCooldown = 0;
-    let gameState = "playing"; // playing | holding | won | lost
-    let holdLeft = HOLD_SECONDS;
-    let lastWholeSec = 3;
-    let overflowWarned = false;
-    let tearMark = null; // { x, y, side }
-    let hintTargetX = null;
-    let isPointerDown = false;
-    let particles = [];
+    let selectedId = -1;
+    let evalRes = null;
+    let hoverCell = null;
+    let orderWon = false;
+    let sparks = [];
     let toastTimer = null;
 
-    function showToast(msg, ms = 2600) {
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function getBagBounds() {
-      const cx = WORLD_W / 2;
-      const half = order.bagW / 2;
-      return {
-        cx,
-        left: cx - half,
-        right: cx + half,
-        top: BAG_TOP_Y,
-        bottom: COUNTER_Y,
-        w: order.bagW,
-        h: BAG_H
-      };
+    function getBagLayout() {
+      const maxBagW = 304;
+      const maxBagH = 264;
+      const cs = Math.floor(Math.min(maxBagW / order.cols, maxBagH / order.rows));
+      const bw = cs * order.cols;
+      const bh = cs * order.rows;
+      const bx = (WORLD_W - bw) / 2;
+      const by = (WORLD_H - bh) / 2 + 18;
+      return { cs, bw, bh, bx, by };
     }
 
-    function renderTray() {
-      trayStrip.innerHTML = "";
-      trayRemainingLabel.textContent = `${trayItems.length} left`;
+    function getPlacedItems() {
+      return order.items.filter((it) => it.placed);
+    }
 
-      if (trayItems.length === 0) {
-        const done = document.createElement("div");
-        done.style.fontSize = "0.78rem";
-        done.style.color = "#86efac";
-        done.style.fontWeight = "700";
-        done.style.padding = "6px 2px";
-        done.textContent = "All items packed! Checking stability...";
-        trayStrip.appendChild(done);
+    function selectFirstUnpacked() {
+      const nxt = order.items.find((it) => !it.placed);
+      selectedId = nxt ? nxt.id : -1;
+    }
+
+    function renderRulesStrip() {
+      rulesStrip.innerHTML = "";
+      const addRule = (ok, okTxt, errTxt) => {
+        const sp = document.createElement("span");
+        sp.className = "rule-badge " + (ok ? "ok" : "err");
+        sp.textContent = ok ? okTxt : errTxt;
+        rulesStrip.appendChild(sp);
+      };
+      addRule(evalRes.crushedOk, "✓ No Crushed Goods", "✕ Heavy Above Fragile!");
+      if (order.checkCold) {
+        addRule(evalRes.coldOk, "✓ Frozen Grouped", "✕ Keep Frozen Touching!");
+      }
+      if (order.checkChem) {
+        addRule(evalRes.chemOk, "✓ Soap Isolated", "✕ Soap Touching Fresh!");
+      }
+    }
+
+    function renderConveyorTray() {
+      conveyorTray.innerHTML = "";
+      const unpacked = order.items.filter((it) => !it.placed);
+      rotateBtn.disabled = orderWon || selectedId === -1;
+
+      if (unpacked.length === 0) {
+        const msg = document.createElement("div");
+        msg.style.cssText = "color:#94a3b8; font-size:0.78rem; font-weight:700; padding:12px 4px;";
+        msg.textContent = evalRes.allOk
+          ? "🛍️ Every item packed cleanly!"
+          : "⚠️ Belt clear, but fix the red bagging rule warning above (tap any packed item to move it)!";
+        conveyorTray.appendChild(msg);
         return;
       }
 
-      if (selectedTrayIdx >= trayItems.length) selectedTrayIdx = 0;
+      const tagMap = {
+        heavy:   { cls: "tag-heavy",   lbl: "🪨 Heavy" },
+        fragile: { cls: "tag-fragile", lbl: "🥚 Fragile" },
+        frozen:  { cls: "tag-frozen",  lbl: "❄️ Frozen" },
+        chem:    { cls: "tag-chem",    lbl: "🧴 Soap" },
+        medium:  { cls: "tag-med",     lbl: "📦 Pantry" }
+      };
 
-      trayItems.forEach((it, idx) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "tray-item-btn" + (idx === selectedTrayIdx ? " selected" : "");
-        btn.innerHTML = `
-          <span class="it-emoji">${it.emoji}</span>
-          <span class="it-name">${it.name}</span>
-          <span class="it-tag tag-${it.cat}">${it.cat}</span>
+      for (const it of unpacked) {
+        const d = getDims(it, it.rot);
+        const tg = tagMap[it.cat];
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "item-card" + (it.id === selectedId ? " selected" : "");
+        card.innerHTML = `
+          <div class="ic-top"><span>${it.icon}</span><span class="ic-dim">${d.w}×${d.h}</span></div>
+          <span class="ic-name">${it.name}</span>
+          <span class="ic-tag ${tg.cls}">${tg.lbl}</span>
         `;
-        btn.addEventListener("click", () => {
-          if (gameState !== "playing") return;
+        card.addEventListener("click", () => {
           initAudio();
-          selectedTrayIdx = idx;
-          aimAngle = 0;
-          hintTargetX = null;
-          sfxRotate();
-          renderTray();
+          selectedId = it.id;
+          sfxBarcodeBeep();
+          renderConveyorTray();
         });
-        trayStrip.appendChild(btn);
-      });
+        conveyorTray.appendChild(card);
+      }
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Order #${currentLevelNum} / ${TOTAL_LEVELS}`;
-      packedCounter.textContent = `Packed: ${packedItems.length} / ${order.totalCount}`;
+      levelTitle.textContent = `Order #${currentLevelNum} / ${TOTAL_LEVELS} — ${order.cols}×${order.rows} Kraft Bag`;
+      const packedCnt = getPlacedItems().length;
+      packedPill.textContent = `Packed: ${packedCnt} / ${order.items.length}`;
       solvedCounter.textContent = `Orders: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Order ${currentLevelNum} / 500 ▾`;
-      cactusPill.style.display = order.hasCactus ? "inline-block" : "none";
 
-      const canAct = gameState === "playing" && trayItems.length > 0 && dropCooldown <= 0;
-      rotLeftBtn.disabled = !canAct;
-      rotRightBtn.disabled = !canAct;
-      dropBtn.disabled = !canAct;
+      evalRes = evaluateBagRules(order.cols, order.rows, getPlacedItems(), order.checkCold, order.checkChem);
+      renderRulesStrip();
+      renderConveyorTray();
     }
 
-    function spawnBurst(x, y, color, count = 14) {
-      for (let i = 0; i < count; i++) {
-        const a = Math.random() * Math.PI * 2;
-        const s = 1.4 + Math.random() * 3.6;
-        particles.push({
-          x, y,
-          vx: Math.cos(a) * s,
-          vy: Math.sin(a) * s - 1.2,
-          r: 2.5 + Math.random() * 3,
-          color,
-          alpha: 1
-        });
+    function checkOrderWin() {
+      if (orderWon) return;
+      const allPacked = order.items.every((it) => it.placed);
+      if (allPacked && evalRes.allOk) {
+        orderWon = true;
+        selectedId = -1;
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_grocery_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+
+        sfxChaChingWin();
+        for (let k = 0; k < 20; k++) {
+          const a = Math.random() * Math.PI * 2;
+          sparks.push({
+            x: WORLD_W / 2, y: WORLD_H / 2,
+            vx: Math.cos(a) * (1.8 + Math.random() * 2.5),
+            vy: Math.sin(a) * (1.8 + Math.random() * 2.5),
+            r: 2.6, color: k % 2 === 0 ? "#4ade80" : "#fde047", alpha: 1
+          });
+        }
+        updateHUD();
+
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winHeading.textContent = isLast ? "All 500 Orders Packed!" : `Order #${currentLevelNum} Complete!`;
+        winText.textContent = `Packed all ${order.items.length} groceries cleanly with zero crushed goods!`;
+        nextLevelBtn.textContent = isLast ? "Replay Order #1" : `Next Customer (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 520);
       }
     }
 
-    function triggerFail(icon, title, msg, fxType, fxPos) {
-      if (gameState === "won" || gameState === "lost") return;
-      gameState = "lost";
-      holdBanner.classList.remove("show");
-
-      if (fxType === "rip") {
-        sfxPaperRip();
-        if (fxPos) spawnBurst(fxPos.x, fxPos.y, "#d97706", 18);
-      } else {
-        sfxCrush();
-        if (fxPos) spawnBurst(fxPos.x, fxPos.y, "#facc15", 18);
+    function canPlaceItemAt(item, r0, c0, rot) {
+      const { w, h } = getDims(item, rot);
+      if (r0 < 0 || c0 < 0 || r0 + h > order.rows || c0 + w > order.cols) return false;
+      for (let dr = 0; dr < h; dr++) {
+        for (let dc = 0; dc < w; dc++) {
+          if (evalRes.grid[r0 + dr][c0 + dc] !== null) return false;
+        }
       }
-
-      ovIcon.textContent = icon;
-      ovHeading.textContent = title;
-      ovText.textContent = msg;
-      ovActionBtn.textContent = "↺ Repack Order";
-      stageOverlay.classList.add("show");
-      updateHUD();
+      return true;
     }
 
-    function triggerWin() {
-      if (gameState === "won" || gameState === "lost") return;
-      gameState = "won";
-      holdBanner.classList.remove("show");
-      solvedSet.add(currentLevelNum);
-      try {
-        localStorage.setItem("zinplay_grocery_500_solved", JSON.stringify([...solvedSet]));
-      } catch (e) {}
-      sfxKaChing();
-
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      ovIcon.textContent = "🛍️";
-      ovHeading.textContent = isLast ? "All 500 Orders Packed!" : `Order #${currentLevelNum} Approved!`;
-      ovText.textContent = `All ${order.totalCount} groceries packed safely with zero crushed or torn items.`;
-      ovActionBtn.textContent = isLast ? "Replay Order #1" : `Next Customer (#${currentLevelNum + 1}) →`;
-      stageOverlay.classList.add("show");
-      updateHUD();
-    }
-
-    function initOrder(num) {
+    function loadOrder(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      order = buildOrder(currentLevelNum);
-      trayItems = order.items.map((it) => ({ ...it }));
-      selectedTrayIdx = 0;
-      packedItems = [];
+      order = buildOrderLevel(currentLevelNum);
+      orderWon = false;
+      hoverCell = null;
+      sparks = [];
+      selectFirstUnpacked();
 
-      if (engine) {
-        World.clear(engine.world, false);
-        Engine.clear(engine);
-      }
-      engine = Engine.create({
-        gravity: { x: 0, y: 1.05 },
-        positionIterations: 10,
-        velocityIterations: 8
-      });
-
-      const bag = getBagBounds();
-
-      // Reinforced Cardboard Bag Floor
-      const bagFloor = Bodies.rectangle(bag.cx, bag.bottom + 8, bag.w + WALL_THICK * 2, 16, {
-        isStatic: true,
-        friction: 0.96,
-        frictionStatic: 1.4,
-        restitution: 0.02,
-        label: "bag-floor"
-      });
-      // Left & Right Paper Side Walls (Vulnerable to Cactus!)
-      const leftWall = Bodies.rectangle(bag.left - WALL_THICK / 2, bag.top + bag.h / 2, WALL_THICK, bag.h, {
-        isStatic: true,
-        friction: 0.85,
-        restitution: 0.04,
-        label: "bag-wall-left"
-      });
-      const rightWall = Bodies.rectangle(bag.right + WALL_THICK / 2, bag.top + bag.h / 2, WALL_THICK, bag.h, {
-        isStatic: true,
-        friction: 0.85,
-        restitution: 0.04,
-        label: "bag-wall-right"
-      });
-
-      World.add(engine.world, [bagFloor, leftWall, rightWall]);
-
-      // Impact Collision Listener
-      Events.on(engine, "collisionStart", (ev) => {
-        if (gameState !== "playing" && gameState !== "holding") return;
-        for (const pair of ev.pairs) {
-          const a = pair.bodyA;
-          const b = pair.bodyB;
-          const spd = Math.hypot(a.velocity.x - b.velocity.x, a.velocity.y - b.velocity.y);
-          const itemA = a.groceryRef || null;
-          const itemB = b.groceryRef || null;
-
-          if (spd > 0.9 && (itemA || itemB)) {
-            const isHeavy = (itemA && itemA.spec.cat === "heavy") || (itemB && itemB.spec.cat === "heavy");
-            sfxThud(isHeavy, spd);
-          }
-
-          // Check Fragile vs Heavy/Medium/Spiky impacts
-          const checkFragileImpact = (frag, other) => {
-            if (!frag || frag.spec.cat !== "fragile" || !other) return;
-            if (other.spec.cat === "spiky") {
-              frag.failed = true;
-              triggerFail(
-                "🌵",
-                `${frag.spec.name} Punctured!`,
-                `The spiky cactus poked right into the ${frag.spec.name.toLowerCase()}! Keep sturdy boxes between cacti and fragile foods.`,
-                "crush",
-                frag.body.position
-              );
-              return;
-            }
-            if (other.spec.cat === "heavy" && spd > frag.spec.maxSpeedHeavy) {
-              frag.failed = true;
-              triggerFail(
-                "💥",
-                `${frag.spec.name} Crushed!`,
-                `A heavy ${other.spec.name.toLowerCase()} slammed into the ${frag.spec.name.toLowerCase()}! Pack heavy goods at the bottom first.`,
-                "crush",
-                frag.body.position
-              );
-              return;
-            }
-            if (other.spec.cat === "medium" && spd > frag.spec.maxSpeedMed) {
-              frag.failed = true;
-              triggerFail(
-                "💥",
-                `${frag.spec.name} Squished!`,
-                `The ${other.spec.name.toLowerCase()} dropped too hard onto the ${frag.spec.name.toLowerCase()}! Save fragile items for last.`,
-                "crush",
-                frag.body.position
-              );
-            }
-          };
-
-          checkFragileImpact(itemA, itemB);
-          checkFragileImpact(itemB, itemA);
-
-          // Check Cactus slamming into Paper Side Walls
-          const checkWallTearImpact = (item, otherBody) => {
-            if (!item || item.spec.cat !== "spiky") return;
-            if (otherBody.label === "bag-wall-left" || otherBody.label === "bag-wall-right") {
-              if (spd > 1.7) {
-                const side = otherBody.label === "bag-wall-left" ? "left" : "right";
-                tearMark = {
-                  x: side === "left" ? bag.left : bag.right,
-                  y: item.body.position.y,
-                  side
-                };
-                triggerFail(
-                  "🌵",
-                  "Paper Bag Torn!",
-                  "The cactus spines sliced right through the paper side wall! Pad the sides with Milk or Cereal first, then center the cactus.",
-                  "rip",
-                  tearMark
-                );
-              }
-            }
-          };
-          checkWallTearImpact(itemA, b);
-          checkWallTearImpact(itemB, a);
-        }
-      });
-
-      // Continuous Resting Weight & Wall-Poke Stress Listener
-      Events.on(engine, "collisionActive", (ev) => {
-        if (gameState !== "playing" && gameState !== "holding") return;
-        const dt = FIXED_STEP / 1000;
-
-        for (const pair of ev.pairs) {
-          const a = pair.bodyA;
-          const b = pair.bodyB;
-          const itemA = a.groceryRef || null;
-          const itemB = b.groceryRef || null;
-
-          // Sustained weight pressing down onto fragile items
-          const applyLoad = (frag, other) => {
-            if (!frag || frag.spec.cat !== "fragile" || !other) return;
-            if (other.spec.cat === "spiky") {
-              frag.stress += 3.5 * dt;
-              return;
-            }
-            // Only crush if the heavier item is genuinely ABOVE the fragile item
-            if (other.body.position.y < frag.body.position.y - 6) {
-              if (other.spec.cat === "heavy") {
-                frag.stress += (2.1 / frag.spec.stressResist) * dt;
-              } else if (other.spec.cat === "medium") {
-                frag.stress += (1.1 / frag.spec.stressResist) * dt;
-              }
-            }
-          };
-          applyLoad(itemA, itemB);
-          applyLoad(itemB, itemA);
-
-          // Sustained cactus poke against paper side walls
-          const applyPoke = (item, otherBody) => {
-            if (!item || item.spec.cat !== "spiky") return;
-            if (otherBody.label === "bag-wall-left" || otherBody.label === "bag-wall-right") {
-              item.tearStress += 3.0 * dt;
-              item.tearSide = otherBody.label === "bag-wall-left" ? "left" : "right";
-            }
-          };
-          applyPoke(itemA, b);
-          applyPoke(itemB, a);
-        }
-      });
-
-      aimX = WORLD_W / 2;
-      aimAngle = 0;
-      dropCooldown = 0;
-      gameState = "playing";
-      holdLeft = HOLD_SECONDS;
-      lastWholeSec = 3;
-      overflowWarned = false;
-      tearMark = null;
-      hintTargetX = null;
-      particles = [];
-
-      holdBanner.classList.remove("show");
-      stageOverlay.classList.remove("show");
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
       try {
         localStorage.setItem("zinplay_grocery_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      renderTray();
       updateHUD();
     }
 
-    function getDropY() {
-      const it = trayItems[selectedTrayIdx];
-      const hApprox = it ? Math.max(it.w, it.h) * 0.5 : 28;
-      return Math.max(58, BAG_TOP_Y - hApprox - 10);
-    }
-
-    function packSelectedItem() {
-      if (gameState !== "playing" || trayItems.length === 0 || dropCooldown > 0) return;
-      initAudio();
-
-      const spec = trayItems.splice(selectedTrayIdx, 1)[0];
-      const dropY = getDropY();
-
-      let body;
-      if (spec.shape === "circle") {
-        body = Bodies.circle(aimX, dropY, spec.r, {
-          friction: spec.friction,
-          frictionStatic: 1.2,
-          frictionAir: 0.018,
-          restitution: 0.04,
-          density: spec.density,
-          label: "grocery"
-        });
-      } else {
-        body = Bodies.rectangle(aimX, dropY, spec.w, spec.h, {
-          friction: spec.friction,
-          frictionStatic: 1.35,
-          frictionAir: 0.018,
-          restitution: 0.03,
-          density: spec.density,
-          chamfer: { radius: spec.cat === "fragile" ? 7 : 4 },
-          label: "grocery"
-        });
-        Body.setAngle(body, aimAngle);
-      }
-
-      const itemObj = { body, spec, stress: 0, tearStress: 0, tearSide: null, failed: false };
-      body.groceryRef = itemObj;
-      World.add(engine.world, body);
-      packedItems.push(itemObj);
-
-      if (selectedTrayIdx >= trayItems.length) selectedTrayIdx = 0;
-      aimAngle = 0;
-      hintTargetX = null;
-      dropCooldown = 0.42;
-
-      if (trayItems.length === 0) {
-        gameState = "holding";
-        holdLeft = HOLD_SECONDS;
-        lastWholeSec = 3;
-        overflowWarned = false;
-        holdTimeText.textContent = "3.0s";
-        holdBanner.classList.add("show");
-      }
-
-      renderTray();
-      updateHUD();
-    }
-
-    // Undo last packed item (pull back onto checkout counter)
-    document.getElementById("undoBtn").addEventListener("click", () => {
-      if ((gameState !== "playing" && gameState !== "holding") || packedItems.length === 0) return;
-      initAudio();
-      const last = packedItems.pop();
-      World.remove(engine.world, last.body);
-      trayItems.unshift(last.spec);
-      selectedTrayIdx = 0;
-      aimAngle = 0;
-      gameState = "playing";
-      holdBanner.classList.remove("show");
-      sfxRotate();
-      renderTray();
-      updateHUD();
-    });
-
-    // Smart Packing Order Hint
-    document.getElementById("hintBtn").addEventListener("click", () => {
-      if (gameState !== "playing" || trayItems.length === 0) return;
-      initAudio();
-
-      // Pick lowest priority number first (1=heavy, 2=medium, 3=cactus, 4-5=fragile)
-      let bestIdx = 0;
-      for (let i = 1; i < trayItems.length; i++) {
-        if (trayItems[i].priority < trayItems[bestIdx].priority) {
-          bestIdx = i;
-        }
-      }
-      selectedTrayIdx = bestIdx;
-      aimAngle = 0;
-      const picked = trayItems[bestIdx];
-      const bag = getBagBounds();
-
-      if (picked.cat === "spiky") {
-        hintTargetX = bag.cx;
-        showToast("Pack Cactus dead-center, buffered away from paper walls!", 3000);
-      } else if (picked.cat === "heavy") {
-        hintTargetX = bag.cx + (packedItems.length % 2 === 0 ? -42 : 42);
-        showToast(`Pack heavy ${picked.name} low on the reinforced floor first!`, 2800);
-      } else if (picked.cat === "medium") {
-        hintTargetX = bag.cx + (packedItems.length % 2 === 0 ? -62 : 62);
-        showToast(`Place ${picked.name} near the side to build a sturdy wall!`, 2800);
-      } else {
-        hintTargetX = bag.cx;
-        showToast(`Gently set fragile ${picked.name} right on top!`, 2800);
-      }
-
-      aimX = hintTargetX;
-      sfxRotate();
-      renderTray();
-    });
-
-    // Viewport Helpers
+    // Viewport & Tap-to-Pack / Tap-to-Lift Controls
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1417,81 +1434,170 @@
       return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    function updateAimFromClientX(clientX) {
+    function clientToCell(clientX, clientY) {
       const rect = canvas.getBoundingClientRect();
       const vp = getViewport();
-      const bag = getBagBounds();
       const wx = (clientX - rect.left - vp.offsetX) / vp.scale;
-      aimX = Math.max(bag.left + 22, Math.min(bag.right - 22, wx));
+      const wy = (clientY - rect.top - vp.offsetY) / vp.scale;
+      const lay = getBagLayout();
+      const c = Math.floor((wx - lay.bx) / lay.cs);
+      const r = Math.floor((wy - lay.by) / lay.cs);
+      if (r < 0 || r >= order.rows || c < 0 || c >= order.cols) return null;
+      return { r, c };
     }
 
-    canvas.addEventListener("pointerdown", (e) => {
-      initAudio();
-      if (gameState !== "playing") return;
-      isPointerDown = true;
-      canvas.setPointerCapture(e.pointerId);
-      updateAimFromClientX(e.clientX);
-    });
     canvas.addEventListener("pointermove", (e) => {
-      if (!isPointerDown || gameState !== "playing") return;
-      updateAimFromClientX(e.clientX);
+      if (orderWon) { hoverCell = null; return; }
+      hoverCell = clientToCell(e.clientX, e.clientY);
     });
-    const endPtr = () => { isPointerDown = false; };
-    canvas.addEventListener("pointerup", endPtr);
-    canvas.addEventListener("pointercancel", endPtr);
+    canvas.addEventListener("pointerleave", () => { hoverCell = null; });
 
-    // Dock & Keyboard Controls
-    rotLeftBtn.addEventListener("click", () => {
-      if (gameState !== "playing") return;
+    canvas.addEventListener("pointerdown", (e) => {
+      if (orderWon) return;
       initAudio();
-      aimAngle -= Math.PI / 6;
-      sfxRotate();
+      const cell = clientToCell(e.clientX, e.clientY);
+      if (!cell) return;
+
+      // 1. If tapping an already-packed item inside the bag, lift it cleanly back to conveyor & select it!
+      const existing = evalRes.grid[cell.r][cell.c];
+      if (existing) {
+        existing.placed = false;
+        existing.r = -1;
+        existing.c = -1;
+        selectedId = existing.id;
+        sfxRotateClick();
+        updateHUD();
+        return;
+      }
+
+      // 2. Otherwise try to pack the currently selected conveyor item at (r, c) (with smart edge clamping!)
+      if (selectedId === -1) return;
+      const item = order.items.find((x) => x.id === selectedId);
+      if (!item || item.placed) return;
+
+      const d = getDims(item, item.rot);
+      // Smart edge-clamp so tapping the rightmost/bottommost cell places a 2-wide item effortlessly!
+      const tryR = Math.max(0, Math.min(order.rows - d.h, cell.r));
+      const tryC = Math.max(0, Math.min(order.cols - d.w, cell.c));
+
+      if (!canPlaceItemAt(item, tryR, tryC, item.rot)) {
+        // Also try centered shift (r-1 / c-1) for super-forgiving mobile placement!
+        const alts = [[tryR, tryC - 1], [tryR - 1, tryC]];
+        let placedAlt = false;
+        for (const [ar, ac] of alts) {
+          if (canPlaceItemAt(item, ar, ac, item.rot)) {
+            item.r = ar; item.c = ac; item.placed = true;
+            placedAlt = true; break;
+          }
+        }
+        if (!placedAlt) {
+          sfxCrushWarn();
+          showToast("Won't fit here! Try rotating ⟳ 90° or lifting another item.", 2100);
+          return;
+        }
+      } else {
+        item.r = tryR;
+        item.c = tryC;
+        item.placed = true;
+      }
+
+      const lay = getBagLayout();
+      for (let k = 0; k < 6; k++) {
+        const a = Math.random() * Math.PI * 2;
+        sparks.push({
+          x: lay.bx + (item.c + d.w / 2) * lay.cs,
+          y: lay.by + (item.r + d.h / 2) * lay.cs,
+          vx: Math.cos(a) * 1.5, vy: Math.sin(a) * 1.5,
+          r: 2.2, color: item.hi, alpha: 0.9
+        });
+      }
+
+      selectFirstUnpacked();
+      updateHUD();
+
+      if (!evalRes.allOk) {
+        sfxCrushWarn();
+        if (!evalRes.crushedOk) showToast("🥚 Crunch! Never put Heavy items above Fragile ones!", 2500);
+        else if (!evalRes.coldOk) showToast("❄️ Frozen goods must touch each other to stay cold!", 2500);
+        else showToast("🧴 Keep Dish Soap away from Fragile fresh produce & bread!", 2500);
+      } else {
+        sfxBagThump();
+        checkOrderWin();
+      }
     });
-    rotRightBtn.addEventListener("click", () => {
-      if (gameState !== "playing") return;
+
+    function rotateSelectedItem() {
+      if (orderWon || selectedId === -1) return;
+      const it = order.items.find((x) => x.id === selectedId);
+      if (!it || it.placed) return;
       initAudio();
-      aimAngle += Math.PI / 6;
-      sfxRotate();
-    });
-    dropBtn.addEventListener("click", packSelectedItem);
+      it.rot = (it.rot + 1) % 2;
+      sfxRotateClick();
+      renderConveyorTray();
+    }
+
+    rotateBtn.addEventListener("click", rotateSelectedItem);
 
     window.addEventListener("keydown", (e) => {
-      if (pickerModal.classList.contains("open") || gameState !== "playing") return;
-      const bag = getBagBounds();
-      if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
-        aimX = Math.max(bag.left + 22, aimX - 14);
-      } else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
-        aimX = Math.min(bag.right - 22, aimX + 14);
-      } else if (e.key === "q" || e.key === "Q") {
-        aimAngle -= Math.PI / 6; sfxRotate();
-      } else if (e.key === "e" || e.key === "E") {
-        aimAngle += Math.PI / 6; sfxRotate();
-      } else if (e.key === " " || e.key === "Enter") {
+      if (pickerModal.classList.contains("open") || orderWon) return;
+      if (e.key === "r" || e.key === "R" || e.key === " ") {
         e.preventDefault();
-        packSelectedItem();
+        rotateSelectedItem();
       }
     });
 
-    document.getElementById("resetBtn").addEventListener("click", () => initOrder(currentLevelNum));
+    // Smart Pack Hint Button (Places 1 Unpacked Item Into Its Verified 100%-Valid Slot!)
+    document.getElementById("hintBtn").addEventListener("click", () => {
+      if (orderWon) return;
+      initAudio();
+
+      // Find an item not currently in its verified solution spot
+      const target = order.items.find((it) => !it.placed || it.r !== it.solR || it.c !== it.solC || it.rot !== it.solRot);
+      if (!target) return;
+
+      // Clear any conflicting items occupying target's verified solution cells cleanly back to conveyor
+      const td = getDims(target, target.solRot);
+      for (const other of order.items) {
+        if (!other.placed || other.id === target.id) continue;
+        const od = getDims(other, other.rot);
+        const overlaps = !(
+          other.c + od.w <= target.solC ||
+          other.c >= target.solC + td.w ||
+          other.r + od.h <= target.solR ||
+          other.r >= target.solR + td.h
+        );
+        if (overlaps) {
+          other.placed = false; other.r = -1; other.c = -1;
+        }
+      }
+
+      target.r = target.solR;
+      target.c = target.solC;
+      target.rot = target.solRot;
+      target.placed = true;
+      sfxBarcodeBeep();
+      selectFirstUnpacked();
+      updateHUD();
+      showToast(`💡 Smart-packed ${target.icon} ${target.name} into a verified slot!`, 2200);
+      checkOrderWin();
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => loadOrder(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Checkout Audio ON" : "🔇 OFF";
     });
-    ovActionBtn.addEventListener("click", () => {
-      if (gameState === "won") {
-        initOrder(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      } else {
-        initOrder(currentLevelNum);
-      }
+    nextLevelBtn.addEventListener("click", () => {
+      loadOrder(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) initOrder(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadOrder(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) initOrder(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadOrder(currentLevelNum + 1);
     });
 
-    // Order Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1522,7 +1628,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          initOrder(n);
+          loadOrder(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1544,180 +1650,15 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        initOrder(val);
+        loadOrder(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // PHYSICS TICK & GROCERY CANVAS RENDERING
+    // STANDING KRAFT PAPER BAG & GROCERY PACK RENDERER
     // ==============================================
-    let lastTime = performance.now();
-    let accumulator = 0;
-    const FIXED_STEP = 1000 / 60;
-
-    function stepPhysics() {
-      Engine.update(engine, FIXED_STEP);
-      if (gameState !== "playing" && gameState !== "holding") return;
-
-      const dt = FIXED_STEP / 1000;
-      const bag = getBagBounds();
-
-      for (const item of packedItems) {
-        // Decay stress slowly when safe
-        item.stress = Math.max(0, item.stress - 0.55 * dt);
-        item.tearStress = Math.max(0, item.tearStress - 0.9 * dt);
-
-        // Check Fragile Crush Limit
-        if (item.spec.cat === "fragile" && item.stress >= 1.0) {
-          item.failed = true;
-          triggerFail(
-            "💥",
-            `${item.spec.name} Crushed!`,
-            `Too much weight rested on top of the ${item.spec.name.toLowerCase()}! Pack fragile items on the very top layer.`,
-            "crush",
-            item.body.position
-          );
-          return;
-        }
-
-        // Check Cactus Wall Tear Limit
-        if (item.spec.cat === "spiky" && item.tearStress >= 0.42) {
-          tearMark = {
-            x: item.tearSide === "left" ? bag.left : bag.right,
-            y: item.body.position.y,
-            side: item.tearSide
-          };
-          triggerFail(
-            "🌵",
-            "Paper Bag Ripped!",
-            "The cactus poked through the thin paper wall! Buffer the sides with Milk or Cereal before placing the cactus in the center.",
-            "rip",
-            tearMark
-          );
-          return;
-        }
-
-        // Check Spill Outside Bag
-        if (
-          item.body.position.y > COUNTER_Y + 35 ||
-          item.body.position.x < bag.left - 45 ||
-          item.body.position.x > bag.right + 45
-        ) {
-          triggerFail(
-            "🛒",
-            "Groceries Spilled!",
-            `The ${item.spec.name.toLowerCase()} tumbled out of the paper bag!`,
-            "crush",
-            item.body.position
-          );
-          return;
-        }
-      }
-    }
-
-    function drawGroceryItem(x, y, angle, spec, stress = 0, alpha = 1, dashed = false) {
-      ctx.save();
-      ctx.globalAlpha = alpha;
-      ctx.translate(x, y);
-      ctx.rotate(angle);
-
-      const dangerGlow = stress > 0.15;
-      if (dangerGlow) {
-        ctx.shadowColor = "#ef4444";
-        ctx.shadowBlur = 14 * Math.min(1, stress);
-      }
-
-      if (spec.shape === "circle") {
-        // Watermelon
-        ctx.fillStyle = spec.fill;
-        ctx.strokeStyle = dashed ? "#38bdf8" : (dangerGlow ? "#ef4444" : spec.stroke);
-        ctx.lineWidth = 2.4;
-        if (dashed) ctx.setLineDash([5, 4]);
-        ctx.beginPath();
-        ctx.arc(0, 0, spec.r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Stripes
-        ctx.strokeStyle = spec.accent;
-        ctx.lineWidth = 2.2;
-        ctx.globalAlpha = alpha * 0.65;
-        ctx.beginPath();
-        ctx.arc(0, 0, spec.r * 0.68, -0.9, 0.9);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(0, 0, spec.r * 0.68, Math.PI - 0.9, Math.PI + 0.9);
-        ctx.stroke();
-      } else {
-        const hw = spec.w / 2;
-        const hh = spec.h / 2;
-        const rad = spec.cat === "fragile" ? 7 : 4;
-
-        ctx.fillStyle = spec.fill;
-        ctx.strokeStyle = dashed ? "#38bdf8" : (dangerGlow ? "#ef4444" : spec.stroke);
-        ctx.lineWidth = dangerGlow ? 3 : 2;
-        if (dashed) ctx.setLineDash([5, 4]);
-        ctx.beginPath();
-        ctx.roundRect(-hw, -hh, spec.w, spec.h, rad);
-        ctx.fill();
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Custom Visual Details per Item Type
-        if (spec.key === "cactus") {
-          // Terracotta pot bottom
-          ctx.fillStyle = spec.accent;
-          ctx.fillRect(-hw + 3, 2, spec.w - 6, hh - 3);
-          // Spiky warning needles sticking out slightly visually
-          ctx.strokeStyle = "#fef08a";
-          ctx.lineWidth = 1.6;
-          for (let sy = -hh + 6; sy <= -2; sy += 8) {
-            ctx.beginPath();
-            ctx.moveTo(-hw, sy); ctx.lineTo(-hw - 5, sy - 2);
-            ctx.moveTo(hw, sy); ctx.lineTo(hw + 5, sy - 2);
-            ctx.stroke();
-          }
-        } else if (spec.key === "eggs") {
-          ctx.fillStyle = spec.accent;
-          for (let ex = -20; ex <= 20; ex += 13.3) {
-            ctx.beginPath();
-            ctx.ellipse(ex, 0, 4.5, 6.5, 0, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        } else if (spec.key === "milk" || spec.key === "cereal" || spec.key === "can") {
-          ctx.fillStyle = spec.accent;
-          ctx.globalAlpha = alpha * 0.85;
-          ctx.fillRect(-hw + 3, -hh + 5, spec.w - 6, 7);
-        } else if (spec.key === "chips") {
-          ctx.fillStyle = spec.accent;
-          ctx.globalAlpha = alpha * 0.85;
-          ctx.beginPath();
-          ctx.arc(0, 0, 12, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      // Crisp Emoji + Label
-      ctx.shadowBlur = 0;
-      ctx.globalAlpha = alpha;
-      ctx.font = `${spec.key === "melon" ? 22 : 17}px sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(spec.emoji, 0, spec.key === "cactus" ? -6 : 1);
-
-      // Tiny Stress Bar if Fragile Under Load
-      if (dangerGlow && spec.cat === "fragile") {
-        ctx.fillStyle = "#ef4444";
-        ctx.font = "900 10px sans-serif";
-        ctx.fillText("⚠", 0, -spec.h / 2 - 7);
-      }
-
-      ctx.restore();
-    }
-
-    function drawScene(now) {
+    function frame(now) {
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
@@ -1725,220 +1666,156 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      const bag = getBagBounds();
-      const holdingItem = gameState === "playing" && trayItems[selectedTrayIdx] ? trayItems[selectedTrayIdx] : null;
-      const holdingCactus = holdingItem && holdingItem.cat === "spiky";
+      const lay = getBagLayout();
 
-      // 1. Supermarket Checkout Counter Base
-      ctx.fillStyle = "#334155";
-      ctx.fillRect(-30, COUNTER_Y, WORLD_W + 60, 50);
-      ctx.fillStyle = "#64748b";
-      ctx.fillRect(-30, COUNTER_Y, WORLD_W + 60, 4);
-
-      // 2. Kraft Paper Bag Interior Back Wall
-      const bagGrad = ctx.createLinearGradient(bag.left, bag.top, bag.right, bag.bottom);
-      bagGrad.addColorStop(0, "#92623a");
-      bagGrad.addColorStop(0.5, "#a87347");
-      bagGrad.addColorStop(1, "#7c502d");
-      ctx.fillStyle = bagGrad;
-      ctx.fillRect(bag.left, bag.top, bag.w, bag.h);
-
-      // Subtle vertical bag fold creases
-      ctx.strokeStyle = "rgba(67, 20, 7, 0.22)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(bag.left + 26, bag.top); ctx.lineTo(bag.left + 26, bag.bottom);
-      ctx.moveTo(bag.right - 26, bag.top); ctx.lineTo(bag.right - 26, bag.bottom);
-      ctx.stroke();
-
-      // Reinforced Cardboard Bottom Pad Visual
-      ctx.fillStyle = "#5c3a1e";
-      ctx.fillRect(bag.left, bag.bottom - 10, bag.w, 10);
-      ctx.fillStyle = "rgba(254, 243, 199, 0.35)";
-      ctx.font = "800 8px sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("REINFORCED BASE", bag.cx, bag.bottom - 2.5);
-
-      // 3. Green Dashed Bag Rim Fit Line
+      // 1. Twine Paper Bag Handles Arching Above Top Rim!
       ctx.save();
-      ctx.strokeStyle = "rgba(74, 222, 128, 0.85)";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([7, 5]);
+      ctx.strokeStyle = "#b08254";
+      ctx.lineWidth = 6;
       ctx.beginPath();
-      ctx.moveTo(bag.left - 18, bag.top - 6);
-      ctx.lineTo(bag.right + 18, bag.top - 6);
+      ctx.arc(WORLD_W / 2, lay.by - 8, 42, Math.PI, 0);
       ctx.stroke();
-      ctx.setLineDash([]);
 
-      ctx.fillStyle = "rgba(22, 101, 52, 0.9)";
+      // Standing Kraft Brown Paper Grocery Bag Outer Shell
+      ctx.shadowColor = "rgba(0, 0, 0, 0.52)";
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 10;
+      const bagG = ctx.createLinearGradient(lay.bx - 16, lay.by, lay.bx + lay.bw + 16, lay.by + lay.bh);
+      bagG.addColorStop(0, "#c89b6c");
+      bagG.addColorStop(1, "#9a6c40");
+      ctx.fillStyle = bagG;
+      ctx.strokeStyle = "#e6c39c";
+      ctx.lineWidth = 2.6;
       ctx.beginPath();
-      ctx.roundRect(bag.right + 20, bag.top - 15, 58, 17, 5);
+      ctx.roundRect(lay.bx - 14, lay.by - 12, lay.bw + 28, lay.bh + 24, 14);
       ctx.fill();
-      ctx.fillStyle = "#dcfce7";
-      ctx.font = "800 8.5px sans-serif";
+      ctx.stroke();
+      ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+      // Recessed Interior Bag Packing Grid
+      ctx.fillStyle = "#5e3e22";
+      ctx.beginPath();
+      ctx.roundRect(lay.bx - 2, lay.by - 2, lay.bw + 4, lay.bh + 4, 8);
+      ctx.fill();
+
+      // Subtle Grid Cell Wells + Top/Bottom Packing Hints
+      for (let r = 0; r < order.rows; r++) {
+        for (let c = 0; c < order.cols; c++) {
+          const x = lay.bx + c * lay.cs;
+          const y = lay.by + r * lay.cs;
+          ctx.fillStyle = r === 0
+            ? "rgba(254, 240, 138, 0.08)"
+            : (r === order.rows - 1 ? "rgba(15, 23, 42, 0.25)" : "rgba(0, 0, 0, 0.14)");
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.14)";
+          ctx.lineWidth = 1;
+          ctx.fillRect(x + 2, y + 2, lay.cs - 4, lay.cs - 4);
+          ctx.strokeRect(x + 2, y + 2, lay.cs - 4, lay.cs - 4);
+        }
+      }
+
+      // Faint Top ("FRAGILE TOP") & Bottom ("HEAVY BASE") Printed Kraft Labels
+      ctx.fillStyle = "rgba(254, 243, 199, 0.45)";
+      ctx.font = "900 8.5px monospace";
       ctx.textAlign = "center";
-      ctx.fillText("FIT LINE", bag.right + 49, bag.top - 3.5);
+      ctx.fillText("▲ FRAGILE TOP ▲", WORLD_W / 2, lay.by - 18);
+      ctx.fillText("▼ HEAVY BASE FLOOR ▼", WORLD_W / 2, lay.by + lay.bh + 22);
       ctx.restore();
 
-      // 4. Packed Groceries Inside Bag
-      for (const item of packedItems) {
-        drawGroceryItem(
-          item.body.position.x,
-          item.body.position.y,
-          item.body.angle,
-          item.spec,
-          item.stress,
-          1,
-          false
-        );
+      // 2. Ghost Hover Preview of Currently Selected Conveyor Item
+      if (hoverCell && selectedId !== -1 && !orderWon) {
+        const it = order.items.find((x) => x.id === selectedId);
+        if (it && !it.placed) {
+          const d = getDims(it, it.rot);
+          const rr = Math.max(0, Math.min(order.rows - d.h, hoverCell.r));
+          const cc = Math.max(0, Math.min(order.cols - d.w, hoverCell.c));
+          const ok = canPlaceItemAt(it, rr, cc, it.rot);
+          ctx.save();
+          ctx.fillStyle = ok ? "rgba(74, 222, 128, 0.28)" : "rgba(239, 68, 68, 0.3)";
+          ctx.strokeStyle = ok ? "#4ade80" : "#ef4444";
+          ctx.lineWidth = 2.2;
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath();
+          ctx.roundRect(lay.bx + cc * lay.cs + 3, lay.by + rr * lay.cs + 3, d.w * lay.cs - 6, d.h * lay.cs - 6, 8);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
       }
 
-      // 5. Left & Right Kraft Paper Bag Walls (Highlight red warning if holding Cactus!)
-      const wallPulse = holdingCactus ? (0.55 + 0.45 * Math.sin(now * 0.01)) : 0;
-      const drawPaperWall = (x, isLeft) => {
+      // 3. Draw All Packed Grocery Items Inside the Kraft Bag!
+      for (const it of getPlacedItems()) {
+        const d = getDims(it, it.rot);
+        const x = lay.bx + it.c * lay.cs + 3;
+        const y = lay.by + it.r * lay.cs + 3;
+        const w = d.w * lay.cs - 6;
+        const h = d.h * lay.cs - 6;
+        const isBad = evalRes.badIds.has(it.id);
+
         ctx.save();
-        ctx.fillStyle = "#b57c4b";
-        ctx.strokeStyle = holdingCactus ? `rgba(239, 68, 68, ${wallPulse})` : "#5c3a1e";
-        ctx.lineWidth = holdingCactus ? 3 : 2;
-        ctx.fillRect(x, bag.top, WALL_THICK, bag.h);
-        ctx.strokeRect(x, bag.top, WALL_THICK, bag.h);
-
-        // Zigzag paper top cuff
-        ctx.fillStyle = "#c99260";
-        ctx.fillRect(x - 1, bag.top - 3, WALL_THICK + 2, 6);
-        ctx.restore();
-      };
-      drawPaperWall(bag.left - WALL_THICK, true);
-      drawPaperWall(bag.right, false);
-
-      // Subtle Eco-Market Front Lip Overlay (Translucent so player still sees all items clearly)
-      ctx.fillStyle = "rgba(181, 124, 75, 0.16)";
-      ctx.fillRect(bag.left, bag.top, bag.w, bag.h);
-      ctx.fillStyle = "rgba(254, 243, 199, 0.22)";
-      ctx.font = "900 18px sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("ZIN MARKET", bag.cx, bag.top + bag.h * 0.52);
-
-      // Tear Mark Graphic (If Cactus Ripped the Wall)
-      if (tearMark) {
-        ctx.save();
-        ctx.strokeStyle = "#ef4444";
-        ctx.lineWidth = 3;
+        ctx.fillStyle = it.fill;
+        ctx.strokeStyle = isBad ? "#ef4444" : it.hi;
+        if (isBad) {
+          ctx.shadowColor = "#ef4444";
+          ctx.shadowBlur = 14;
+        }
+        ctx.lineWidth = isBad ? 3.2 : 2;
         ctx.beginPath();
-        ctx.moveTo(tearMark.x - 6, tearMark.y - 16);
-        ctx.lineTo(tearMark.x + 7, tearMark.y - 6);
-        ctx.lineTo(tearMark.x - 5, tearMark.y + 4);
-        ctx.lineTo(tearMark.x + 6, tearMark.y + 16);
+        ctx.roundRect(x, y, w, h, 9);
+        ctx.fill();
         ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Subtle Glossy Packaging Highlight Strip
+        ctx.fillStyle = "rgba(255, 255, 255, 0.16)";
+        ctx.beginPath();
+        ctx.roundRect(x + 3, y + 3, w - 6, Math.min(14, h * 0.3), 5);
+        ctx.fill();
+
+        // Crisp Item Emoji & Category Corner Dot
+        ctx.font = `${Math.min(28, Math.round(Math.min(w, h) * 0.56))}px sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(it.icon, x + w / 2, y + h / 2 + 1);
+
+        // Mini Category Pill Tag on Corner
+        const badgeIcon = it.cat === "heavy" ? "🪨" : (it.cat === "fragile" ? "🥚" : (it.cat === "frozen" ? "❄️" : (it.cat === "chem" ? "🧴" : "")));
+        if (badgeIcon) {
+          ctx.font = "10px sans-serif";
+          ctx.fillText(badgeIcon, x + w - 10, y + 11);
+        }
+
+        // Red Alert Pulse If Violating a Rule!
+        if (isBad) {
+          const pulse = 0.4 + 0.4 * Math.sin(now * 0.014);
+          ctx.fillStyle = `rgba(239, 68, 68, ${pulse * 0.35})`;
+          ctx.beginPath();
+          ctx.roundRect(x, y, w, h, 9);
+          ctx.fill();
+        }
         ctx.restore();
       }
 
-      // 6. Optional Golden Hint Guide Arrow
-      if (hintTargetX !== null && gameState === "playing") {
-        ctx.save();
-        ctx.strokeStyle = "rgba(250, 204, 21, 0.85)";
-        ctx.lineWidth = 2.4;
-        ctx.setLineDash([5, 5]);
+      // 4. Packing Sparkles
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.alpha *= 0.91;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha;
         ctx.beginPath();
-        ctx.moveTo(hintTargetX, 26);
-        ctx.lineTo(hintTargetX, bag.bottom - 14);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.restore();
-      }
-
-      // 7. Hovering Hand Item Preview Above Bag
-      if (holdingItem) {
-        const dropY = getDropY();
-
-        // Vertical drop aim guide
-        ctx.save();
-        ctx.strokeStyle = holdingCactus ? "rgba(250, 204, 21, 0.5)" : "rgba(56, 189, 248, 0.35)";
-        ctx.lineWidth = 1.6;
-        ctx.setLineDash([5, 6]);
-        ctx.beginPath();
-        ctx.moveTo(aimX, dropY);
-        ctx.lineTo(aimX, bag.bottom - 12);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.restore();
-
-        drawGroceryItem(aimX, dropY, aimAngle, holdingItem, 0, dropCooldown > 0 ? 0.35 : 0.95, true);
-      }
-
-      // 8. Burst Particles
-      particles = particles.filter((pt) => pt.alpha > 0.04);
-      for (const pt of particles) {
-        pt.x += pt.vx;
-        pt.y += pt.vy;
-        pt.vy += 0.14;
-        pt.alpha *= 0.93;
-        ctx.fillStyle = pt.color;
-        ctx.globalAlpha = pt.alpha;
-        ctx.beginPath();
-        ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2);
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalAlpha = 1;
       }
 
       ctx.restore();
-    }
-
-    function frame(now) {
-      const rawDt = Math.min(50, now - lastTime);
-      lastTime = now;
-      const dtSec = rawDt / 1000;
-
-      if (dropCooldown > 0) {
-        dropCooldown = Math.max(0, dropCooldown - dtSec);
-        if (dropCooldown === 0) updateHUD();
-      }
-
-      accumulator += rawDt;
-      while (accumulator >= FIXED_STEP) {
-        stepPhysics();
-        accumulator -= FIXED_STEP;
-      }
-
-      // 3-Second Bag Check Countdown Once All Items Are Packed
-      if (gameState === "holding") {
-        let allBelowRim = true;
-        let maxSpeed = 0;
-        for (const it of packedItems) {
-          if (it.body.bounds.min.y < BAG_TOP_Y - 16) allBelowRim = false;
-          const spd = Math.hypot(it.body.velocity.x, it.body.velocity.y);
-          if (spd > maxSpeed) maxSpeed = spd;
-        }
-
-        if (allBelowRim) {
-          holdLeft = Math.max(0, holdLeft - dtSec);
-          holdTimeText.textContent = `${holdLeft.toFixed(1)}s`;
-          const whole = Math.ceil(holdLeft);
-          if (whole < lastWholeSec && whole > 0) {
-            lastWholeSec = whole;
-            sfxTick();
-          }
-          if (holdLeft <= 0) {
-            triggerWin();
-          }
-        } else {
-          // Item sticking above fit line — reset hold timer & gently advise player
-          holdLeft = HOLD_SECONDS;
-          holdTimeText.textContent = "OVERFLOW!";
-          if (maxSpeed < 0.35 && !overflowWarned) {
-            overflowWarned = true;
-            showToast("Overflowing above the green line! Tap Undo or Empty Bag to pack tighter.", 3400);
-          }
-        }
-      }
-
-      drawScene(now);
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    initOrder(currentLevelNum);
+    loadOrder(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
