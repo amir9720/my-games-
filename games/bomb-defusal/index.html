@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manual Bomb Defusal — 500 High-Stakes Logic Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 levels of Manual Bomb Defusal free in your browser. Read the live technical manual, decode serial rules, cut colored wires, and disarm bombs before time runs out." />
+  <title>Manual Bomb Defusal — Free 500-Case Logic &amp; Wire Cutting Puzzle | ZinPlay</title>
+  <meta name="description" content="Play Manual Bomb Defusal free online with no download. Decode the live EOD technical manual to cut exact wires, hold pressure buttons on timer digits, crack symbol keypads, and flip DIP switches across 500 tense puzzle cases." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Manual Bomb Defusal",
+    "url": "https://zinplay.io/games/bomb-defusal/",
+    "genre": ["Strategy", "Deduction Puzzle", "Logic Simulation"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,16 +43,16 @@
       color: var(--muted);
     }
 
-    /* Top Mission HUD */
+    /* Top EOD Briefcase HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0b1120;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
-      font-size: 0.85rem;
+      background: #120d0e;
+      color: #f8fafc;
+      border-bottom: 1px solid #301f22;
+      font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
       flex-wrap: wrap;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #f87171;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -63,610 +76,456 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(239, 68, 68, 0.18);
-      border: 1px solid rgba(248, 113, 113, 0.35);
+      background: rgba(248, 113, 113, 0.16);
+      border: 1px solid rgba(248, 113, 113, 0.4);
       color: #fecaca;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
+    }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Always-Visible Bomb Specs Bar (Timer, Serial, LEDs, Batteries, Strikes) */
-    .bomb-specs-bar {
+    /* Hardware Casing Edgework Bar (Serial #, Batteries, Status LED, Countdown!) */
+    .edgework-strip {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding: 12px 14px;
-      background: #141c2f;
-      border-bottom: 2px solid #26324d;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 14px;
+      background: #1c1618;
+      border-bottom: 2px solid #38282b;
       color: #e2e8f0;
     }
-    .timer-display {
-      font-family: "Courier New", Consolas, monospace;
-      font-size: 1.55rem;
-      font-weight: 900;
-      letter-spacing: 0.06em;
-      background: #050811;
-      color: #ef4444;
-      padding: 5px 14px;
-      border-radius: 10px;
-      border: 2px solid #334155;
-      text-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
-      min-width: 104px;
-      text-align: center;
-    }
-    .timer-display.urgent {
-      animation: timerPulse 0.55s infinite;
-      border-color: #ef4444;
-    }
-    @keyframes timerPulse {
-      0%, 100% { color: #ef4444; }
-      50% { color: #fca5a5; }
-    }
-    .specs-group {
+    .edge-tags {
       display: flex;
+      gap: 7px;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
     }
-    .spec-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #0b1120;
-      border: 1px solid #2b3854;
+    .edge-badge {
+      padding: 4px 9px;
+      border-radius: 7px;
+      background: #0d0a0b;
+      border: 1px solid #443236;
+      font-family: monospace;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #fde68a;
+    }
+    .edge-badge.led-tag {
+      color: #7dd3fc;
+      border-color: #1e40af;
+    }
+    .timer-display {
+      padding: 5px 12px;
       border-radius: 8px;
-      padding: 5px 10px;
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-    .spec-chip code {
-      font-family: "Courier New", Consolas, monospace;
-      font-size: 0.88rem;
-      color: #facc15;
-      letter-spacing: 0.05em;
-    }
-    .led-row {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .led-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.7rem;
-      color: #94a3b8;
-    }
-    .led-bulb {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      background: #1e293b;
-      border: 1px solid #475569;
-    }
-    .led-bulb.on-red { background: #ef4444; box-shadow: 0 0 8px #ef4444; border-color: #fca5a5; }
-    .led-bulb.on-grn { background: #22c55e; box-shadow: 0 0 8px #22c55e; border-color: #86efac; }
-    .led-bulb.on-blu { background: #38bdf8; box-shadow: 0 0 8px #38bdf8; border-color: #bae6fd; }
-    .strikes-box {
-      display: inline-flex;
-      gap: 4px;
-      align-items: center;
-    }
-    .strike-x {
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      border: 1px solid #475569;
-      background: #0b1120;
-      color: #334155;
+      background: #090405;
+      border: 1.5px solid #dc2626;
+      color: #ef4444;
+      font-family: monospace;
+      font-size: 1.15rem;
       font-weight: 900;
-      font-size: 0.8rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.65);
+      min-width: 82px;
+      text-align: center;
     }
-    .strike-x.hit {
-      background: #7f1d1d;
-      border-color: #ef4444;
-      color: #ffffff;
+    .timer-display.safe {
+      border-color: #22c55e;
+      color: #4ade80;
+      text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
     }
 
-    /* Mobile View Switcher Tabs */
-    .mobile-tabs {
+    /* Mobile-First View Switcher Tabs (Bomb Casing vs Live EOD Manual) */
+    .view-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      background: #0f172a;
-      border-bottom: 1px solid #1e293b;
+      background: #110c0e;
+      border-bottom: 1px solid #2e2023;
     }
     .view-tab-btn {
       min-height: 44px;
-      background: transparent;
       border: none;
-      border-bottom: 3px solid transparent;
+      background: transparent;
       color: #94a3b8;
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       font-weight: 800;
       cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.15s ease;
     }
     .view-tab-btn.active {
       color: #ffffff;
-      border-bottom-color: #6366f1;
-      background: rgba(99, 102, 241, 0.14);
+      background: rgba(245, 158, 11, 0.14);
+      border-bottom-color: #f59e0b;
     }
 
-    /* Main Split Workspace */
-    .workspace {
+    /* Main Stage Area */
+    .eod-stage {
       position: relative;
-      background: #0f172a;
-      min-height: 430px;
+      min-height: 410px;
+      background: radial-gradient(circle at 50% 35%, #231c1f 0%, #100c0e 100%);
+      padding: 14px;
+      color: #f1f5f9;
     }
-    .pane-bomb {
-      padding: 16px;
-      background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0d1323 100%);
-    }
-    .pane-manual {
-      display: none;
-      padding: 16px;
-      background: #fffbeb;
-      color: #1e293b;
-      max-height: 540px;
-      overflow-y: auto;
-    }
-    .workspace.show-manual .pane-bomb {
-      display: none;
-    }
-    .workspace.show-manual .pane-manual {
-      display: block;
-    }
-
-    @media (min-width: 860px) {
-      .mobile-tabs {
-        display: none;
-      }
-      .workspace {
-        display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
-      }
-      .workspace.show-manual .pane-bomb,
-      .pane-bomb {
-        display: block;
-      }
-      .pane-manual {
-        display: block;
-        border-left: 3px solid #334155;
-        max-height: 580px;
-      }
+    .pane-hidden {
+      display: none !important;
     }
 
     /* Bomb Modules Grid */
     .modules-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 14px;
+      gap: 12px;
     }
-    @media (min-width: 560px) {
+    @media (min-width: 600px) {
       .modules-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
       }
     }
-    .mod-card {
-      background: #1a2338;
-      border: 2px solid #334155;
+    .mod-box {
+      background: #1a1618;
+      border: 2px solid #3d3337;
       border-radius: 14px;
-      padding: 14px;
-      position: relative;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-      transition: border-color 0.2s ease;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.45);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .mod-card.solved {
+    .mod-box.solved {
       border-color: #22c55e;
-      background: #132824;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.2);
     }
-    .mod-card.shake {
-      animation: shakeAnim 0.35s ease;
+    .mod-box.strike-flash {
       border-color: #ef4444;
-    }
-    @keyframes shakeAnim {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      75% { transform: translateX(6px); }
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.55);
     }
     .mod-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
-    }
-    .mod-name {
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
       color: #cbd5e1;
     }
     .mod-led {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       background: #334155;
-      border: 2px solid #475569;
+      border: 1.5px solid #64748b;
     }
-    .mod-card.solved .mod-led {
+    .mod-box.solved .mod-led {
       background: #22c55e;
-      border-color: #86efac;
+      border-color: #bbf7d0;
       box-shadow: 0 0 10px #22c55e;
     }
 
-    /* Module 1: Wires */
+    /* Module 1: Wire Harness */
     .wires-list {
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 8px;
+      padding: 4px 0;
     }
     .wire-row {
       display: flex;
       align-items: center;
       gap: 8px;
-    }
-    .wire-num {
-      font-family: monospace;
-      font-size: 0.78rem;
-      color: #94a3b8;
-      width: 16px;
-      text-align: center;
-      font-weight: 700;
-    }
-    .wire-btn {
-      flex: 1;
-      height: 30px;
+      background: transparent;
       border: none;
-      border-radius: 8px;
-      background: #0d1323;
-      position: relative;
+      padding: 2px 0;
       cursor: pointer;
+      width: 100%;
+    }
+    .wire-row:disabled {
+      cursor: default;
+    }
+    .wire-idx {
+      font-family: monospace;
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: #94a3b8;
+      width: 18px;
+      text-align: center;
+    }
+    .wire-term {
+      width: 10px;
+      height: 16px;
+      border-radius: 3px;
+      background: #64748b;
+      border: 1px solid #94a3b8;
+      flex-shrink: 0;
+    }
+    .wire-cord {
+      flex: 1;
+      height: 14px;
+      border-radius: 999px;
+      position: relative;
+      transition: transform 0.08s ease;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45);
+    }
+    .wire-row:not(:disabled):hover .wire-cord {
+      transform: scaleY(1.18);
+    }
+    .wire-cord.cut {
+      background: transparent !important;
+      box-shadow: none;
+    }
+    .wire-cord.cut::before, .wire-cord.cut::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      height: 10px;
+      width: 36%;
+      border-radius: 4px;
+      background: var(--wcol);
+    }
+    .wire-cord.cut::before { left: 0; transform: rotate(-6deg); }
+    .wire-cord.cut::after  { right: 0; transform: rotate(7deg); }
+
+    /* Module 2: Big Pressure Button + Hold LED Strip */
+    .btn-mod-body {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 8px;
+      gap: 16px;
+      padding: 8px 4px;
     }
-    .wire-btn:disabled {
-      cursor: default;
-    }
-    .wire-line {
-      width: 100%;
-      height: 10px;
-      border-radius: 999px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.45);
-      transition: transform 0.12s ease;
-    }
-    .wire-btn:not(:disabled):hover .wire-line {
-      transform: scaleY(1.22);
-    }
-    .wire-btn.cut .wire-line {
-      background: transparent !important;
-      box-shadow: none;
-      border-top: 3px dashed rgba(148, 163, 184, 0.35);
-      height: 0;
-    }
-    .wire-tag {
-      position: absolute;
-      right: 8px;
-      font-size: 0.65rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      background: rgba(15, 23, 42, 0.8);
-      color: #e2e8f0;
-      padding: 1px 6px;
-      border-radius: 4px;
-    }
-
-    /* Module 2: Pressure Button */
-    .button-mod-body {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      gap: 12px;
-      padding: 6px 0;
-    }
-    .big-bomb-btn {
+    .big-eod-btn {
       width: 112px;
       height: 112px;
       border-radius: 50%;
-      border: 5px solid rgba(255,255,255,0.22);
-      font-size: 0.92rem;
+      border: 4px solid rgba(255, 255, 255, 0.32);
+      font-family: monospace;
+      font-size: 0.88rem;
       font-weight: 900;
       letter-spacing: 0.05em;
       cursor: pointer;
-      box-shadow: 0 8px 0 rgba(0,0,0,0.45), 0 12px 24px rgba(0,0,0,0.35);
-      transition: transform 0.08s ease, box-shadow 0.08s ease;
       user-select: none;
       -webkit-user-select: none;
-      touch-action: none;
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.45), 0 12px 20px rgba(0, 0, 0, 0.45);
+      transition: transform 0.06s ease, box-shadow 0.06s ease;
     }
-    .big-bomb-btn.pressed {
+    .big-eod-btn.pressed {
       transform: translateY(5px);
-      box-shadow: 0 3px 0 rgba(0,0,0,0.45);
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.45);
+    }
+    .big-eod-btn:disabled {
+      opacity: 0.65;
+      cursor: default;
     }
     .strip-housing {
-      width: 28px;
-      height: 108px;
-      border-radius: 8px;
-      background: #0b1120;
-      border: 2px solid #334155;
-      padding: 4px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      gap: 5px;
     }
-    .strip-light {
-      width: 100%;
-      height: 100%;
-      border-radius: 4px;
-      background: #1e293b;
-      transition: background 0.15s ease, box-shadow 0.15s ease;
+    .hold-led-strip {
+      width: 24px;
+      height: 92px;
+      border-radius: 8px;
+      background: #0d0f14;
+      border: 2px solid #475569;
+      transition: all 0.15s ease;
     }
-    .btn-hint-note {
-      text-align: center;
-      font-size: 0.72rem;
+    .strip-cap {
+      font-family: monospace;
+      font-size: 0.64rem;
+      font-weight: 800;
       color: #94a3b8;
-      margin-top: 8px;
     }
 
-    /* Module 3: Keypad Cipher */
+    /* Module 3: 2x2 Symbol Keypad */
     .keypad-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
-    .key-btn {
-      height: 58px;
-      border-radius: 10px;
+    .sym-key {
+      min-height: 58px;
+      border-radius: 11px;
       border: 2px solid #475569;
-      background: #0f172a;
-      color: #f8fafc;
-      font-size: 1.65rem;
-      font-weight: 700;
+      background: #272226;
+      color: #fef3c7;
+      font-size: 1.55rem;
+      font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      transition: 0.12s ease;
+      transition: transform 0.07s ease, background 0.14s ease, border-color 0.14s ease;
     }
-    .key-btn:hover:not(:disabled) {
-      border-color: #818cf8;
-      background: #1e293b;
-    }
-    .key-btn.pressed-ok {
-      background: #14532d;
+    .sym-key:active { transform: scale(0.95); }
+    .sym-key.lit {
       border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.22);
       color: #86efac;
+      box-shadow: inset 0 0 12px rgba(34, 197, 94, 0.35);
     }
-    .key-order-badge {
-      position: absolute;
-      top: 4px;
-      right: 6px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      color: #86efac;
-    }
+    .sym-key:disabled { cursor: default; }
 
-    /* Module 4: Logic Switches */
-    .switches-row {
+    /* Module 4: 4-Bank DIP Switches */
+    .dip-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 12px;
+      gap: 7px;
     }
-    .sw-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-    .sw-label {
-      font-size: 0.78rem;
-      font-weight: 800;
-      color: #cbd5e1;
-    }
-    .sw-toggle {
-      width: 44px;
-      height: 68px;
+    .dip-btn {
+      min-height: 62px;
       border-radius: 10px;
-      border: 2px solid #475569;
-      background: #0b1120;
-      padding: 4px;
-      cursor: pointer;
+      border: 1.5px solid #475569;
+      background: #121013;
+      color: #94a3b8;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      transition: border-color 0.15s ease;
-    }
-    .sw-toggle.up {
-      justify-content: flex-start;
-      border-color: #38bdf8;
-    }
-    .sw-knob {
-      width: 100%;
-      height: 28px;
-      border-radius: 6px;
-      background: #64748b;
-      color: #ffffff;
-      font-size: 0.66rem;
-      font-weight: 900;
-      display: flex;
       align-items: center;
       justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      font-family: monospace;
+      font-weight: 900;
     }
-    .sw-toggle.up .sw-knob {
-      background: #38bdf8;
-      color: #0f172a;
+    .dip-btn.on {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.2);
+      color: #ffffff;
     }
-    .sync-btn {
-      width: 100%;
+    .dip-lbl { font-size: 0.7rem; }
+    .dip-state { font-size: 0.78rem; }
+    .dip-verify-btn {
       min-height: 38px;
       border-radius: 9px;
-      border: none;
-      background: #4f46e5;
-      color: #ffffff;
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
+      border: 1.5px solid #f59e0b;
+      background: rgba(245, 158, 11, 0.18);
+      color: #fef08a;
+      font-family: monospace;
+      font-size: 0.8rem;
+      font-weight: 900;
       cursor: pointer;
     }
-    .sync-btn:disabled {
-      background: #166534;
-      cursor: default;
-    }
+    .dip-verify-btn:disabled { opacity: 0.4; cursor: default; }
 
-    /* Manual Styling (Technical Field Manual Look) */
-    .manual-header {
-      border-bottom: 2px solid #0f172a;
-      padding-bottom: 8px;
-      margin-bottom: 12px;
-    }
-    .manual-header h3 {
-      font-size: 1rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #0f172a;
-    }
-    .manual-header span {
-      font-size: 0.74rem;
-      color: #78350f;
-      font-weight: 700;
-    }
-    .manual-sec {
-      background: #ffffff;
-      border: 1px solid #fde68a;
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 12px;
+    /* Live In-Game EOD Field Manual Pane */
+    .manual-sheet {
+      background: #fefce8;
+      color: #1c1917;
+      border-radius: 12px;
+      padding: 14px;
+      border: 2px solid #ca8a04;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       font-size: 0.82rem;
       line-height: 1.5;
     }
-    .manual-sec h4 {
-      font-size: 0.84rem;
-      font-weight: 900;
-      color: #991b1b;
-      text-transform: uppercase;
-      margin-bottom: 6px;
+    .manual-sec {
+      border-bottom: 1px dashed #d6d3d1;
+      padding-bottom: 10px;
     }
-    .manual-sec ol, .manual-sec ul {
-      padding-left: 16px;
-      margin-bottom: 6px;
+    .manual-sec:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .manual-sec h4 {
+      font-size: 0.88rem;
+      font-weight: 900;
+      color: #7c2d12;
+      margin: 0 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .manual-sec ul {
+      margin: 0;
+      padding-left: 18px;
     }
     .manual-sec li {
-      margin-bottom: 4px;
-    }
-    .manual-subhead {
-      font-weight: 800;
-      color: #0f172a;
-      margin-top: 6px;
       margin-bottom: 3px;
-      background: #fef3c7;
-      padding: 2px 7px;
-      border-radius: 5px;
-      display: inline-block;
-      font-size: 0.76rem;
     }
-    .cipher-table {
+    .sym-cols-preview {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
       margin-top: 6px;
     }
-    .cipher-col {
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
+    .sym-col-box {
+      background: #ffffff;
+      border: 1px solid #d6d3d1;
       border-radius: 8px;
-      padding: 6px 4px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      font-size: 1.15rem;
-      font-weight: 700;
-    }
-    .cipher-col-title {
-      font-size: 0.64rem;
-      color: #64748b;
-      text-transform: uppercase;
-      border-bottom: 1px solid #e2e8f0;
-      width: 100%;
+      padding: 7px 10px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      font-weight: 800;
       text-align: center;
-      padding-bottom: 2px;
+      letter-spacing: 0.18em;
     }
 
-    /* Toast & End Overlays */
     .status-toast {
       position: absolute;
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 30;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.7);
+      background: rgba(15, 10, 12, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.78);
       color: #fef08a;
-      padding: 8px 16px;
+      padding: 7px 14px;
       border-radius: 999px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      text-align: center;
+      white-space: nowrap;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.2s ease;
       max-width: 92%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      z-index: 10;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
-    .end-overlay {
+    .status-toast.show { opacity: 1; }
+
+    .win-overlay {
       position: absolute;
       inset: 0;
-      z-index: 40;
-      background: rgba(9, 13, 28, 0.86);
-      backdrop-filter: blur(5px);
+      background: rgba(10, 7, 9, 0.84);
+      backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
+      z-index: 20;
     }
-    .end-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .end-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .end-card h2 {
-      font-size: 1.35rem;
-      margin-bottom: 6px;
-    }
-    .end-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
-    /* Controls & Picker */
     .controls-group {
       display: flex;
       gap: 6px;
@@ -693,6 +552,8 @@
       border-radius: 10px;
       cursor: pointer;
     }
+
+    /* Case Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -704,9 +565,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -803,6 +662,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #120d0e;
+      border: 1px solid rgba(248, 113, 113, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #120d0e;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #1a1012 0%, #5c1919 100%);
+      color: #fee2e2;
+    }
+    .game-seo-banner.navy-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fecaca;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .eod-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .eod-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .eod-table th, .eod-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .eod-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .eod-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -815,7 +754,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -828,177 +767,115 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Missions &bull; Strategy</span>
+      <span class="cat-tag">500 Briefcases &bull; EOD Logic Deduction</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Manual Bomb Defusal</h1>
-      <p>Check the serial code, LED indicators, and technical manual to disarm every module before the timer hits zero.</p>
+      <p>Inspect the briefcase serial number, batteries, and status LED, consult the live EOD Field Manual, and disarm every wire, button, keypad, and DIP switch before zero.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Manual Bomb Defusal Game">
+    <section class="game-wrapper" aria-label="Manual Bomb Defusal Logic Puzzle">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Cadet Training</span>
-          <span id="levelTitle">Mission 1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Wire Harness Basics</span>
+          <span id="levelTitle">Case #1 / 500 — 1 Module Briefcase</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="modulesCounter">Modules: 0 / 1</span>
-          <span class="hud-pill" id="solvedCounter">Defused: 0 / 500</span>
+          <span class="hud-pill" id="strikesPill">Strikes: 0 / 3</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Defused: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Persistent Bomb Hardware Bar -->
-      <div class="bomb-specs-bar">
-        <div id="timerDisplay" class="timer-display">03:00</div>
-        <div class="specs-group">
-          <div class="spec-chip">SN: <code id="serialCode">K4-82A</code></div>
-          <div class="spec-chip">🔋 <span id="batteryCount">2</span></div>
-          <div class="spec-chip">
-            <div class="led-row">
-              <span class="led-item"><i id="ledRed" class="led-bulb"></i>RED</span>
-              <span class="led-item"><i id="ledGrn" class="led-bulb"></i>GRN</span>
-              <span class="led-item"><i id="ledBlu" class="led-bulb"></i>BLU</span>
-            </div>
-          </div>
-          <div class="spec-chip">
-            <span>STRIKES:</span>
-            <span id="strikesBox" class="strikes-box"></span>
-          </div>
+      <!-- Briefcase Hardware Metadata & Live Digital Countdown -->
+      <div class="edgework-strip">
+        <div class="edge-tags">
+          <span class="edge-badge" id="serialBadge">SN: 4K89V2</span>
+          <span class="edge-badge" id="battBadge">🔋 ×2</span>
+          <span class="edge-badge led-tag" id="ledBadge">● FRK</span>
         </div>
+        <div id="timerDisplay" class="timer-display">01:30</div>
       </div>
 
-      <!-- Mobile Tabs (Auto-hidden on Desktop) -->
-      <div class="mobile-tabs">
-        <button id="tabBombBtn" class="view-tab-btn active" type="button">💣 Bomb Case</button>
-        <button id="tabManualBtn" class="view-tab-btn" type="button">📖 Defusal Manual</button>
+      <!-- Mobile-Friendly Switcher Between Bomb Modules & Live Technical Manual -->
+      <div class="view-tabs" role="tablist">
+        <button id="tabBomb" class="view-tab-btn active" type="button" role="tab" aria-selected="true">💣 Bomb Casing</button>
+        <button id="tabManual" class="view-tab-btn" type="button" role="tab" aria-selected="false">📖 EOD Field Manual</button>
       </div>
 
-      <!-- Split Workspace -->
-      <div id="workspace" class="workspace">
-        <!-- Left: Active Bomb Modules -->
-        <div class="pane-bomb">
-          <div id="modulesGrid" class="modules-grid"></div>
-        </div>
+      <!-- Interactive Stage (Bomb Modules + Field Manual + Overlays) -->
+      <div class="eod-stage">
+        <div id="bombPane" class="modules-grid"></div>
 
-        <!-- Right: Technical Defusal Manual -->
-        <aside class="pane-manual" aria-label="Bomb Defusal Technical Manual">
-          <div class="manual-header">
-            <h3>Defusal Field Manual v4.2</h3>
-            <span>Verify Serial (SN), Batteries (🔋), and Lit LEDs before acting.</span>
-          </div>
-
+        <!-- Complete Built-In Technical Manual -->
+        <div id="manualPane" class="manual-sheet pane-hidden" aria-label="EOD Technical Field Manual">
           <div class="manual-sec">
-            <h4>1. Wire Array</h4>
-            <p>Check the total number of wires and follow the <strong>first</strong> rule that applies:</p>
-
-            <div class="manual-subhead">If 4 Wires:</div>
-            <ol>
-              <li>More than 1 Red wire <strong>AND</strong> last SN digit is <strong>ODD</strong> → Cut the <strong>last Red wire</strong>.</li>
-              <li>Last wire is Yellow <strong>AND</strong> NO Red wires → Cut the <strong>1st wire</strong>.</li>
-              <li>Exactly 1 Blue wire → Cut the <strong>1st wire</strong>.</li>
-              <li>More than 1 Yellow wire → Cut the <strong>last wire</strong>.</li>
-              <li>Otherwise → Cut the <strong>2nd wire</strong>.</li>
-            </ol>
-
-            <div class="manual-subhead">If 5 Wires:</div>
-            <ol>
-              <li>Last wire is Black <strong>AND</strong> last SN digit is <strong>ODD</strong> → Cut the <strong>4th wire</strong>.</li>
-              <li>Exactly 1 Red wire <strong>AND</strong> more than 1 Yellow wire → Cut the <strong>1st wire</strong>.</li>
-              <li>NO Black wires → Cut the <strong>2nd wire</strong>.</li>
-              <li>Otherwise → Cut the <strong>1st wire</strong>.</li>
-            </ol>
-
-            <div class="manual-subhead">If 6 Wires:</div>
-            <ol>
-              <li>NO Yellow wires <strong>AND</strong> last SN digit is <strong>ODD</strong> → Cut the <strong>3rd wire</strong>.</li>
-              <li>Exactly 1 Yellow wire <strong>AND</strong> more than 1 White wire → Cut the <strong>4th wire</strong>.</li>
-              <li>NO Red wires → Cut the <strong>last wire</strong>.</li>
-              <li>Otherwise → Cut the <strong>4th wire</strong>.</li>
-            </ol>
-          </div>
-
-          <div class="manual-sec">
-            <h4>2. Pressure Button</h4>
-            <p>Follow the <strong>first</strong> matching rule:</p>
-            <ol>
-              <li>Button is <strong>BLUE</strong> and says <strong>ABORT</strong> → <strong>HOLD</strong>.</li>
-              <li>More than 1 battery <strong>AND</strong> says <strong>DETONATE</strong> → <strong>QUICK TAP</strong>.</li>
-              <li>Button is <strong>WHITE</strong> and <strong>GRN LED</strong> is lit → <strong>HOLD</strong>.</li>
-              <li>3 batteries <strong>AND</strong> <strong>RED LED</strong> is lit → <strong>QUICK TAP</strong>.</li>
-              <li>Button is <strong>YELLOW</strong> → <strong>HOLD</strong>.</li>
-              <li>Button is <strong>RED</strong> and says <strong>HOLD</strong> → <strong>QUICK TAP</strong>.</li>
-              <li>Otherwise → <strong>HOLD</strong>.</li>
-            </ol>
-            <div class="manual-subhead">If Holding (Check Side Light Strip):</div>
+            <h4>✂️ Section 1: Wire Harness (Cut Exactly ONE Wire)</h4>
             <ul>
-              <li><strong>BLUE strip:</strong> Release when timer shows a <strong>4</strong> anywhere.</li>
-              <li><strong>YELLOW strip:</strong> Release when timer shows a <strong>5</strong> anywhere.</li>
-              <li><strong>RED strip:</strong> Release when timer shows a <strong>1</strong> anywhere.</li>
-              <li><strong>WHITE strip:</strong> Release when timer shows a <strong>0</strong> anywhere.</li>
+              <li><strong>4 Wires:</strong> &gt;1 Red &amp; Serial ends <strong>ODD</strong> → cut <strong>last Red</strong>. Else last is Yellow &amp; 0 Red → cut <strong>1st</strong>. Else exactly 1 Blue → cut <strong>1st</strong>. Else &gt;1 Yellow → cut <strong>last</strong>. Otherwise → cut <strong>2nd</strong>.</li>
+              <li><strong>5 Wires:</strong> Last is Black &amp; Serial ends <strong>ODD</strong> → cut <strong>4th</strong>. Else exactly 1 Red &amp; &gt;1 Yellow → cut <strong>1st</strong>. Else 0 Black → cut <strong>2nd</strong>. Otherwise → cut <strong>1st</strong>.</li>
+              <li><strong>6 Wires:</strong> 0 Yellow &amp; Serial ends <strong>ODD</strong> → cut <strong>3rd</strong>. Else exactly 1 Yellow &amp; &gt;1 White → cut <strong>4th</strong>. Else 0 Red → cut <strong>last</strong>. Otherwise → cut <strong>4th</strong>.</li>
             </ul>
           </div>
 
           <div class="manual-sec">
-            <h4>3. Keypad Cipher</h4>
-            <p>Find the single column below containing all 4 symbols on the keypad. Press the 4 buttons in <strong>top-to-bottom</strong> order:</p>
-            <div class="cipher-table">
-              <div class="cipher-col">
-                <span class="cipher-col-title">Col 1</span>
-                <span>Ω</span><span>Δ</span><span>Ψ</span><span>★</span><span>λ</span><span>⊗</span>
-              </div>
-              <div class="cipher-col">
-                <span class="cipher-col-title">Col 2</span>
-                <span>Φ</span><span>Ω</span><span>⌘</span><span>✦</span><span>Δ</span><span>Σ</span>
-              </div>
-              <div class="cipher-col">
-                <span class="cipher-col-title">Col 3</span>
-                <span>◈</span><span>Ψ</span><span>Φ</span><span>⟁</span><span>★</span><span>⌘</span>
-              </div>
-              <div class="cipher-col">
-                <span class="cipher-col-title">Col 4</span>
-                <span>Σ</span><span>⟁</span><span>λ</span><span>◈</span><span>⊗</span><span>✦</span>
-              </div>
+            <h4>🔴 Section 2: Pressure Button (Tap vs. Hold)</h4>
+            <ul>
+              <li><strong>Blue</strong> + <code>ABORT</code> → <strong>HOLD</strong>.</li>
+              <li><strong>Batteries &gt; 1</strong> + <code>DETONATE</code> → <strong>QUICK TAP</strong>.</li>
+              <li><strong>White</strong> + LED <code>CAR</code> → <strong>HOLD</strong>.</li>
+              <li><strong>Batteries &gt; 2</strong> + LED <code>FRK</code> → <strong>QUICK TAP</strong>.</li>
+              <li><strong>Yellow</strong> → <strong>HOLD</strong>. Else <strong>Red</strong> + <code>HOLD</code> → <strong>QUICK TAP</strong>. Otherwise → <strong>HOLD</strong>.</li>
+              <li><strong>When Holding (Strip Lights Up):</strong> Release when countdown contains <strong>4</strong> (Blue strip), <strong>5</strong> (Yellow strip), or <strong>1</strong> (Red / White strip)!</li>
+            </ul>
+          </div>
+
+          <div class="manual-sec">
+            <h4>🔢 Section 3: Symbol Keypad (Press All 4 Left-to-Right Order)</h4>
+            <p style="margin:0 0 4px;">Find the row below containing all 4 symbols on your keypad, then press them in that exact order:</p>
+            <div class="sym-cols-preview">
+              <div class="sym-col-box">Row A: Ω → Δ → Ψ → Φ → Σ → ★</div>
+              <div class="sym-col-box">Row B: ⌘ → ⚡ → ◈ → ❖ → ✦ → ⬡</div>
             </div>
           </div>
 
           <div class="manual-sec">
-            <h4>4. Logic Switches</h4>
-            <p>Flip each switch to <strong>UP (1)</strong> or <strong>DOWN (0)</strong>, then tap <strong>SYNC</strong>:</p>
+            <h4>🎚️ Section 4: Tactical DIP Switches (Set &amp; Tap Verify)</h4>
             <ul>
-              <li><strong>Switch A:</strong> <strong>UP</strong> if Serial (SN) contains a vowel (<code>A, E, I, O, U</code>), else DOWN.</li>
-              <li><strong>Switch B:</strong> <strong>UP</strong> if <strong>RED LED</strong> is lit <strong>OR</strong> Batteries = <strong>3</strong>, else DOWN.</li>
-              <li><strong>Switch C:</strong> <strong>UP</strong> if <strong>BLU LED</strong> is lit <strong>AND</strong> last SN digit is <strong>EVEN</strong>, else DOWN.</li>
-              <li><strong>Switch D:</strong> <strong>UP</strong> if <strong>GRN LED</strong> is lit <strong>AND</strong> Batteries &ge; <strong>2</strong>, else DOWN.</li>
+              <li><strong>SW1:</strong> <code>ON</code> if Serial # contains a <strong>Vowel (A,E,I,O,U)</strong>, else <code>OFF</code>.</li>
+              <li><strong>SW2:</strong> <code>ON</code> if <strong>Batteries ≥ 2</strong>, else <code>OFF</code>.</li>
+              <li><strong>SW3:</strong> <code>ON</code> if last Serial digit is <strong>EVEN (0,2,4,6,8)</strong>, else <code>OFF</code>.</li>
+              <li><strong>SW4:</strong> <code>ON</code> if Status LED is <strong><code>FRK</code></strong> or <strong><code>SIG</code></strong>, else <code>OFF</code>.</li>
             </ul>
           </div>
-        </aside>
+        </div>
 
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Win / Boom Overlay -->
-        <div id="endOverlay" class="end-overlay">
-          <div class="end-card">
-            <div id="endIcon" style="font-size:2.3rem; margin-bottom:6px;">✅</div>
-            <h2 id="endHeading">Bomb Defused!</h2>
-            <p id="endText">All modules disarmed cleanly.</p>
-            <button id="endActionBtn" class="btn-primary" type="button">Next Mission →</button>
+        <!-- Victory / Detonation Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div id="overlayEmoji" style="font-size:2.3rem; margin-bottom:6px;">✅</div>
+            <h2 id="winHeading">Device Defused!</h2>
+            <p id="winText">Every module disarmed safely with seconds to spare.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Case →</button>
           </div>
         </div>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Restart Mission</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Hint</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Retry Case</button>
+          <button id="pauseBtn" class="btn-outline" type="button">⏸ Pause</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 EOD Hint</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Mission 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Case 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -1008,66 +885,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 860+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/bomb-defusal-banner-1.jpg"
+            alt="Manual Bomb Defusal online logic puzzle briefcase showing colored wire harnesses, glowing countdown timer, symbol keypad, and technical manual"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Tense EOD Logic Briefcases — Decode the Manual Against the Clock</h3>
+          <p>Check the serial number, count the batteries, cross-reference the live Field Manual, and disarm every module without triggering a strike.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Manual Bomb Defusal (500 Missions)</h2>
-        <p>Manual Bomb Defusal puts your calm under pressure to the ultimate test. Every briefcase comes with a unique serial number (SN), battery count, and three colored LED indicators. Before cutting a single wire or tapping a button, cross-reference those hardware specs with the built-in <strong>Defusal Field Manual v4.2</strong>.</p>
+        <h2>What Is Manual Bomb Defusal? A Technical Deduction Puzzle Game Online</h2>
+        <p><strong>Manual Bomb Defusal</strong> is a free <strong>manual-reading bomb defusal puzzle game online</strong> inspired by cult deductive hits like <em>Keep Talking and Nobody Explodes</em>, engineered natively for instant solo play or couch co-op right inside any web browser. Every metallic briefcase hides up to four distinct electronic logic modules—colored wire harnesses, pressure-sensitive trigger buttons, symbol keypads, and tactical DIP switches—governed by the casing's unique <strong>Serial Number</strong>, <strong>Battery Count</strong>, and glowing <strong>Status Indicator LED</strong>.</p>
+        <p>Built as a lightweight, <strong>no-download deductive strategy game for smartphones, iPads, and Chromebooks</strong>, Manual Bomb Defusal pairs crisp tactile controls with live procedural <strong>Web Audio countdown ticks, metallic wire snips, keypad tones, strike buzzers, and defusal confirmation chimes</strong>. Even better, the countdown clock waits patiently until your first touch—and you can flip seamlessly between the <strong>💣 Bomb Casing</strong> and <strong>📖 EOD Field Manual</strong> tabs across all <strong>500 unique cases</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>EOD Technician Quick-Start Guide (How All 4 Modules Work)</h2>
+        <p>Panic causes strikes—calm checklists save lives! Before snipping a single wire or pushing a button, scan the briefcase's top edgework bar (`SN`, `🔋`, and `● LED`), then apply the exact logic rule for each module:</p>
+
+        <div class="eod-table-wrap">
+          <table class="eod-table">
+            <thead>
+              <tr>
+                <th>Briefcase Module</th>
+                <th>Core Deduction Mechanic</th>
+                <th>Key Watch-Out</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>✂️ Wire Harness</strong> (Ch. 1–5)</td>
+                <td>4, 5, or 6 color-coded wires—cut the <strong>one</strong> exact wire matching the manual's sequential checklist.</td>
+                <td>Check whether the last digit of the Serial Number is <strong>ODD</strong> before counting wire colors!</td>
+              </tr>
+              <tr>
+                <td><strong>🔴 Pressure Button</strong> (Ch. 2–5)</td>
+                <td>Decide between a <strong>Quick Tap</strong> (&lt;0.3s) or <strong>Hold &amp; Release</strong> based on color, label, batteries, and LED.</td>
+                <td>When holding, watch the vertical LED strip light up beside the button and release only when the countdown clock displays <strong>4</strong> (Blue), <strong>5</strong> (Yellow), or <strong>1</strong> (Red/White)!</td>
+              </tr>
+              <tr>
+                <td><strong>🔢 Symbol Keypad</strong> (Ch. 3–5)</td>
+                <td>Press all 4 ancient/tech symbols in exact Left-to-Right order from Row A or Row B in the manual.</td>
+                <td>Take two seconds to identify whether your 4 symbols belong to Row A (Greek) or Row B (Geometric) before tapping!</td>
+              </tr>
+              <tr>
+                <td><strong>🎚️ Tactical DIP Switches</strong> (Ch. 4–5)</td>
+                <td>Flip <code>SW1</code>–<code>SW4</code> to <code>ON</code> or <code>OFF</code> using the briefcase's Vowel, Battery, Even-Digit, and LED rules, then tap <strong>VERIFY</strong>.</td>
+                <td>Double-check vowels (<code>A, E, I, O, U</code>) inside the Serial Number—letters like <code>Y</code> are not vowels!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Play Co-Op With a Friend!</strong> Want the classic two-player party experience? Open this page on one phone as the <em>Bomb Expert</em> (viewing the <strong>📖 EOD Field Manual</strong> tab) while a friend plays on the <strong>💣 Bomb Casing</strong> tab—call out serial numbers, wire colors, and button labels aloud without looking at each other's screens! Playing solo and stuck on a tricky rule? Tap <strong>💡 EOD Hint</strong> anytime for the exact plain-English solution to the next unsolved module.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner navy-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/bomb-defusal-banner-2.jpg"
+            alt="Four modular electronic puzzle bays—wires, illuminated trigger button, geometric symbol keypad, and DIP toggle switches in Manual Bomb Defusal"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Zero Ambiguity — 500 Procedurally Verified Logic Briefcases</h3>
+          <p>Every wire count, button strip, symbol set, and DIP bank is mathematically verified against the built-in Field Manual for fair, crisp deduction.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 EOD Chapters (500 Unique Defusal Cases)</h2>
+        <p>Every case from #1 to #500 generates a fresh serial number, battery configuration, indicator LED, and module layout saved privately inside your browser's local storage:</p>
         <ul>
-          <li><strong>Mobile &amp; Desktop Ready:</strong> On desktop screens, the briefcase and manual appear side by side. On smartphones, tap the <strong>Bomb Case</strong> and <strong>Defusal Manual</strong> tabs—your live timer, serial code, batteries, and LEDs stay pinned at the top so you never lose track.</li>
-          <li><strong>Master the 4 Modules:</strong> Start with Wire Arrays in Chapter 1, then unlock Pressure Buttons, Keypad Ciphers, and Logic Switches across 500 escalating missions.</li>
-          <li><strong>Watch Your Strikes:</strong> Early training missions allow 3 strikes before detonation, while Chapter 5 (Zero Margin) gives you just 1 strike and a tight countdown!</li>
+          <li><strong>Chapter 1 (Cases 1–100 — Wire Harness Basics):</strong> Single-module 4-, 5-, and 6-wire briefcases with generous 90-second timers so you can master the conditional wire-cutting manual effortlessly.</li>
+          <li><strong>Chapter 2 (Cases 101–200 — Trigger &amp; Timing):</strong> Pairs Wire Harnesses with the iconic <strong>🔴 Pressure Button</strong>—forcing snap decisions between instant taps and nail-biting timer-digit releases!</li>
+          <li><strong>Chapter 3 (Cases 201–300 — Cryptic Keypads):</strong> Adds the 4-key <strong>🔢 Symbol Keypad</strong> for 3-module briefcases that reward quick pattern recognition under steady ticking tension.</li>
+          <li><strong>Chapter 4 (Cases 301–400 — Binary DIP Switches):</strong> Introduces the 4-bank <strong>🎚️ Tactical DIP Switch</strong> module, turning every piece of briefcase hardware edgework into a rapid-fire Boolean logic check.</li>
+          <li><strong>Chapter 5 (Cases 401–500 — Master EOD Briefcase):</strong> Full 4-module veteran defusals with tighter timers and a razor-thin <strong>2-Strike</strong> ceiling—complete with an instant 1–500 case picker and pause support.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Bomb Defusal Topics">
+          <span class="kw-pill">Bomb Defusal Puzzle Game Online</span>
+          <span class="kw-pill">Keep Talking Style Browser Game</span>
+          <span class="kw-pill">Wire Cutting Logic Game Free</span>
+          <span class="kw-pill">EOD Manual Deduction Simulator</span>
+          <span class="kw-pill">500-Level Brain Teaser Chromebook</span>
+          <span class="kw-pill">No-Download Co-Op Logic Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Manual Bomb Defusal FAQ</h2>
         <details class="faq-item">
-          <summary>How does "Holding" the Pressure Button work on mobile?</summary>
-          <div class="faq-answer">Press and keep your finger on the round button for half a second until the vertical light strip on its right glows Blue, Yellow, Red, or White. Keep holding until the matching digit (4, 5, 1, or 0) appears anywhere in the countdown timer, then lift your finger!</div>
+          <summary>How do I perform a "Quick Tap" vs. a "Hold" on the Pressure Button?</summary>
+          <div class="faq-answer">For a <strong>Quick Tap</strong>, simply click or tap and release the big button immediately (under 0.3 seconds). For a <strong>Hold</strong>, press and keep holding until the vertical LED strip beside the button lights up Blue, Yellow, Red, or White—then release the instant the digital countdown clock displays the matching digit (<strong>4</strong>, <strong>5</strong>, or <strong>1</strong>)!</div>
         </details>
         <details class="faq-item">
-          <summary>Which digit is the "last SN digit" in the serial number?</summary>
-          <div class="faq-answer">Look at the numeric digits inside the serial code (for example, in <code>K4-82A</code>, the final digit is <strong>2</strong>, which is EVEN; in <code>M7-39E</code>, the final digit is <strong>9</strong>, which is ODD).</div>
+          <summary>Does the countdown timer start before I've even looked at the briefcase?</summary>
+          <div class="faq-answer">No! The countdown clock stays cleanly armed and frozen until you interact with a module or open the Field Manual—and you can tap <strong>⏸ Pause</strong> anytime if you need a breather mid-case.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What happens if I cut the wrong wire or press a symbol out of order?</summary>
+          <div class="faq-answer">Each mistake triggers a sharp buzzer and adds <strong>1 Strike</strong> (Chapters 1–4 allow up to 3 strikes; Chapter 5 allows 2). A single strike doesn't end the case immediately—check the manual carefully and complete the remaining modules before your final strike!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can two players play Manual Bomb Defusal together on separate phones?</summary>
+          <div class="faq-answer">Yes! Have Player 1 stay on the <strong>💣 Bomb Casing</strong> tab while Player 2 opens the <strong>📖 EOD Field Manual</strong> tab on their own device and talks Player 1 through each module—just like a real bomb squad team!</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🎵</div><span class="cat-tag">Puzzle</span></div>
-        <h3>One-Line Symphony</h3>
-        <p>Trace glowing constellations in one continuous stroke across 500 musical levels.</p>
-        <a href="/games/one-line-symphony/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
+        <h3>Blackout Grid Operator</h3>
+        <p>Balance solar, wind, hydro, gas, and battery plants across a 24-hour cycle to hold 50 Hz.</p>
+        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Prism &amp; Lasers</h3>
-        <p>Place mirrors and split laser beams through prisms across 500 dark-mode optical puzzles.</p>
-        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🗺️</div><span class="cat-tag">Strategy</span></div>
+        <h3>Heist Blueprint Planner</h3>
+        <p>Plot synchronized stealth waypoints past sweeping guards and laser cameras to crack the vault.</p>
+        <a href="/games/heist-planner/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🧳</div><span class="cat-tag">Strategy</span></div>
-        <h3>Baggage Routing Chaos</h3>
-        <p>Flip conveyor belt switches in real time to send suitcases to matching airport gates.</p>
-        <a href="/games/baggage-chaos/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🔌</div><span class="cat-tag">Puzzle</span></div>
+        <h3>Minimalist Logic Gates</h3>
+        <p>Snap AND, OR, NOT, XOR, NAND, and NOR gates into glowing circuit boards across 500 tests.</p>
+        <a href="/games/logic-gates/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Mission Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Mission">
+  <!-- Case Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Defusal Case">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Mission (1 – 500)</h3>
+        <h3>Choose Defusal Case (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to mission (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to case (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -1086,21 +1060,21 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Strategy</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/grocery-bagging/">Grocery Bagging</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Top Strategy</h4>
+          <h4>Top Mystery</h4>
           <ul>
-            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
-            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
             <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -1132,64 +1106,47 @@
       });
     }
 
-    // Mobile Bomb/Manual Tabs
-    const workspace = document.getElementById("workspace");
-    const tabBombBtn = document.getElementById("tabBombBtn");
-    const tabManualBtn = document.getElementById("tabManualBtn");
-    tabBombBtn.addEventListener("click", () => {
-      workspace.classList.remove("show-manual");
-      tabBombBtn.classList.add("active");
-      tabManualBtn.classList.remove("active");
-    });
-    tabManualBtn.addEventListener("click", () => {
-      workspace.classList.add("show-manual");
-      tabManualBtn.classList.add("active");
-      tabBombBtn.classList.remove("active");
-    });
-
     // ==============================================
-    // CONSTANTS & DETERMINISTIC 500-MISSION ENGINE
+    // EOD TECHNICAL MANUAL & 500-CASE BOMB GENERATOR
     // ==============================================
     const TOTAL_LEVELS = 500;
+
     const CHAPTERS = [
-      { title: "Chapter 1 • Cadet Training", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Field Tech", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Bomb Squad", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Black Ops", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Zero Margin", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Wire Harness Basics", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Trigger & Timing", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Cryptic Keypads", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Binary DIP Switches", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master EOD Briefcase", range: "401–500", start: 401, end: 500 }
     ];
 
-    const WIRE_COLORS = ["Red", "Blue", "Yellow", "White", "Black"];
-    const WIRE_HEX = {
-      Red: "#ef4444",
-      Blue: "#3b82f6",
-      Yellow: "#facc15",
-      White: "#f1f5f9",
-      Black: "#334155"
+    const WIRE_PAL = {
+      red:    { name: "Red",    css: "linear-gradient(180deg, #f87171, #dc2626)", solid: "#dc2626" },
+      blue:   { name: "Blue",   css: "linear-gradient(180deg, #60a5fa, #2563eb)", solid: "#2563eb" },
+      yellow: { name: "Yellow", css: "linear-gradient(180deg, #fef08a, #eab308)", solid: "#eab308" },
+      white:  { name: "White",  css: "linear-gradient(180deg, #ffffff, #cbd5e1)", solid: "#e2e8f0" },
+      black:  { name: "Black",  css: "linear-gradient(180deg, #475569, #0f172a)", solid: "#1e293b" }
     };
 
-    const BTN_COLORS = ["Red", "Blue", "Yellow", "White"];
-    const BTN_STYLE = {
-      Red: { bg: "#dc2626", fg: "#ffffff" },
-      Blue: { bg: "#2563eb", fg: "#ffffff" },
-      Yellow: { bg: "#eab308", fg: "#0f172a" },
-      White: { bg: "#f1f5f9", fg: "#0f172a" }
+    const BTN_PAL = {
+      red:    { bg: "radial-gradient(circle at 35% 30%, #f87171, #b91c1c)", text: "#ffffff" },
+      blue:   { bg: "radial-gradient(circle at 35% 30%, #60a5fa, #1d4ed8)", text: "#ffffff" },
+      yellow: { bg: "radial-gradient(circle at 35% 30%, #fef08a, #ca8a04)", text: "#1c1917" },
+      white:  { bg: "radial-gradient(circle at 35% 30%, #ffffff, #cbd5e1)", text: "#0f172a" }
     };
-    const BTN_LABELS = ["ABORT", "DETONATE", "HOLD", "PRESS"];
-    const STRIP_INFO = [
-      { name: "Blue", hex: "#38bdf8", digit: "4" },
-      { name: "Yellow", hex: "#facc15", digit: "5" },
-      { name: "Red", hex: "#ef4444", digit: "1" },
-      { name: "White", hex: "#f8fafc", digit: "0" }
+
+    const STRIP_COLORS = [
+      { key: "blue",   digit: "4", bg: "#3b82f6", glow: "0 0 18px #3b82f6" },
+      { key: "yellow", digit: "5", bg: "#facc15", glow: "0 0 18px #facc15" },
+      { key: "red",    digit: "1", bg: "#ef4444", glow: "0 0 18px #ef4444" },
+      { key: "white",  digit: "1", bg: "#f8fafc", glow: "0 0 18px #ffffff" }
     ];
 
-    // Guaranteed zero-ambiguity columns (any pair shares <= 2 symbols)
-    const CIPHER_COLUMNS = [
-      ["Ω", "Δ", "Ψ", "★", "λ", "⊗"],
-      ["Φ", "Ω", "⌘", "✦", "Δ", "Σ"],
-      ["◈", "Ψ", "Φ", "⟁", "★", "⌘"],
-      ["Σ", "⟁", "λ", "◈", "⊗", "✦"]
+    const SYM_ROWS = [
+      ["Ω", "Δ", "Ψ", "Φ", "Σ", "★"],
+      ["⌘", "⚡", "◈", "❖", "✦", "⬡"]
     ];
+
+    const LED_TAGS = ["FRK", "CAR", "SIG", "NSA", "BOB"];
 
     function mulberry32(seed) {
       let a = seed >>> 0;
@@ -1201,10 +1158,6 @@
       };
     }
 
-    function pick(arr, rng) {
-      return arr[Math.floor(rng() * arr.length)];
-    }
-
     function shuffle(arr, rng) {
       const copy = arr.slice();
       for (let i = copy.length - 1; i > 0; i--) {
@@ -1214,147 +1167,143 @@
       return copy;
     }
 
-    // Rule Evaluators (100% synced with the Field Manual v4.2)
-    function getCorrectWireIndex(wires, lastDigitOdd) {
-      const n = wires.length;
-      const count = (c) => wires.filter((w) => w === c).length;
-      const lastIndexOf = (c) => wires.lastIndexOf(c);
+    // Exact Deterministic Wire Rule Solver (Matches Manual Section 1 Word-for-Word!)
+    function solveWiresTarget(colors, serialOdd) {
+      const n = colors.length;
+      const count = (c) => colors.filter((x) => x === c).length;
+      const lastIdx = (c) => colors.lastIndexOf(c);
 
       if (n === 4) {
-        if (count("Red") > 1 && lastDigitOdd) return lastIndexOf("Red");
-        if (wires[n - 1] === "Yellow" && count("Red") === 0) return 0;
-        if (count("Blue") === 1) return 0;
-        if (count("Yellow") > 1) return n - 1;
+        if (count("red") > 1 && serialOdd) return lastIdx("red");
+        if (colors[n - 1] === "yellow" && count("red") === 0) return 0;
+        if (count("blue") === 1) return 0;
+        if (count("yellow") > 1) return n - 1;
         return 1;
       }
       if (n === 5) {
-        if (wires[n - 1] === "Black" && lastDigitOdd) return 3;
-        if (count("Red") === 1 && count("Yellow") > 1) return 0;
-        if (count("Black") === 0) return 1;
+        if (colors[n - 1] === "black" && serialOdd) return 3;
+        if (count("red") === 1 && count("yellow") > 1) return 0;
+        if (count("black") === 0) return 1;
         return 0;
       }
       // 6 wires
-      if (count("Yellow") === 0 && lastDigitOdd) return 2;
-      if (count("Yellow") === 1 && count("White") > 1) return 3;
-      if (count("Red") === 0) return n - 1;
+      if (count("yellow") === 0 && serialOdd) return 2;
+      if (count("yellow") === 1 && count("white") > 1) return 3;
+      if (count("red") === 0) return n - 1;
       return 3;
     }
 
-    function getCorrectButtonAction(btnColor, btnLabel, specs) {
-      if (btnColor === "Blue" && btnLabel === "ABORT") return "HOLD";
-      if (specs.batteries > 1 && btnLabel === "DETONATE") return "TAP";
-      if (btnColor === "White" && specs.leds.grn) return "HOLD";
-      if (specs.batteries === 3 && specs.leds.red) return "TAP";
-      if (btnColor === "Yellow") return "HOLD";
-      if (btnColor === "Red" && btnLabel === "HOLD") return "TAP";
-      return "HOLD";
+    // Exact Deterministic Button Rule Solver (Matches Manual Section 2 Word-for-Word!)
+    function solveButtonAction(color, label, batteries, ledTag) {
+      if (color === "blue" && label === "ABORT") return "hold";
+      if (batteries > 1 && label === "DETONATE") return "tap";
+      if (color === "white" && ledTag === "CAR") return "hold";
+      if (batteries > 2 && ledTag === "FRK") return "tap";
+      if (color === "yellow") return "hold";
+      if (color === "red" && label === "HOLD") return "tap";
+      return "hold";
     }
 
-    function getCorrectSwitches(specs) {
-      return [
-        specs.hasVowel,
-        specs.leds.red || specs.batteries === 3,
-        specs.leds.blu && !specs.lastDigitOdd,
-        specs.leds.grn && specs.batteries >= 2
-      ];
-    }
+    function buildBombCase(levelNum) {
+      const rng = mulberry32(levelNum * 431927 + 72019);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
 
-    function buildMission(levelNum) {
-      const rng = mulberry32(levelNum * 9973 + 424242);
+      // Generate Hardware Edgework (Serial Number, Batteries, Status LED)
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
+      let serial = "";
+      for (let i = 0; i < 5; i++) serial += chars[Math.floor(rng() * chars.length)];
+      const lastDigit = Math.floor(rng() * 10);
+      serial += String(lastDigit);
 
-      // Hardware specs
-      const letters = "ABCDEFGHJKLMNPQRSTUVXYZ";
-      const l1 = pick(letters, rng);
-      const d1 = Math.floor(rng() * 10);
-      const d2 = Math.floor(rng() * 10);
-      const d3 = Math.floor(rng() * 10);
-      const l2 = pick(letters, rng);
-      const serial = `${l1}${d1}-${d2}${d3}${l2}`;
-      const hasVowel = /[AEIOU]/.test(serial);
-      const lastDigitOdd = d3 % 2 === 1;
-      const batteries = 1 + Math.floor(rng() * 3);
-      const leds = {
-        red: rng() < 0.5,
-        grn: rng() < 0.5,
-        blu: rng() < 0.5
-      };
-      const specs = { serial, hasVowel, lastDigitOdd, batteries, leds };
+      const serialOdd = lastDigit % 2 === 1;
+      const serialHasVowel = /[AEIOU]/.test(serial);
+      const batteries = 1 + Math.floor(rng() * 3); // 1, 2, or 3
+      const ledTag = LED_TAGS[Math.floor(rng() * LED_TAGS.length)];
 
-      // Time limit & max strikes scale across 5 chapters
-      let timeLimit, maxStrikes, modTypes;
-      if (levelNum <= 25) {
-        timeLimit = 180; maxStrikes = 3;
-        modTypes = ["wires"];
-      } else if (levelNum <= 100) {
-        timeLimit = 180; maxStrikes = 3;
-        modTypes = ["wires", "button"];
-      } else if (levelNum <= 200) {
-        timeLimit = 165; maxStrikes = 3;
-        modTypes = levelNum % 2 === 0 ? ["wires", "button", "keypad"] : ["wires", "keypad", "switches"];
-      } else if (levelNum <= 300) {
-        timeLimit = 150; maxStrikes = 2;
-        modTypes = shuffle(["wires", "button", "keypad", "switches"], rng).slice(0, 3);
-      } else if (levelNum <= 400) {
-        timeLimit = 135; maxStrikes = 2;
-        modTypes = ["wires", "button", "keypad", "switches"];
-      } else {
-        timeLimit = 105; maxStrikes = 1;
-        modTypes = ["wires", "button", "keypad", "switches"];
-      }
+      const maxStrikes = chapIdx === 4 ? 2 : 3;
+      const timeLimitSec = chapIdx === 0 ? 90 : (chapIdx === 1 ? 120 : (chapIdx === 2 ? 150 : (chapIdx === 3 ? 165 : 155)));
 
-      const modules = modTypes.map((type) => {
-        if (type === "wires") {
-          const wireCount = levelNum <= 10 ? 4 : (4 + Math.floor(rng() * 3));
-          const wires = Array.from({ length: wireCount }, () => pick(WIRE_COLORS, rng));
-          return {
-            type: "wires",
-            title: "Wire Array",
-            wires,
-            cutSet: new Set(),
-            targetIdx: getCorrectWireIndex(wires, lastDigitOdd),
-            solved: false
-          };
-        }
-        if (type === "button") {
-          const color = pick(BTN_COLORS, rng);
-          const label = pick(BTN_LABELS, rng);
-          const strip = pick(STRIP_INFO, rng);
-          return {
-            type: "button",
-            title: "Pressure Button",
-            color,
-            label,
-            strip,
-            requiredAction: getCorrectButtonAction(color, label, specs),
-            solved: false
-          };
-        }
-        if (type === "keypad") {
-          const colIdx = Math.floor(rng() * CIPHER_COLUMNS.length);
-          const col = CIPHER_COLUMNS[colIdx];
-          const chosen = shuffle(col, rng).slice(0, 4);
-          const ordered = chosen.slice().sort((a, b) => col.indexOf(a) - col.indexOf(b));
-          const display = shuffle(ordered, rng);
-          return {
-            type: "keypad",
-            title: "Keypad Cipher",
-            display,
-            ordered,
-            nextStep: 0,
-            solved: false
-          };
-        }
-        // switches
-        return {
-          type: "switches",
-          title: "Logic Switches",
-          state: [false, false, false, false],
-          target: getCorrectSwitches(specs),
-          solved: false
-        };
+      const modules = [];
+
+      // Module 1: Wire Harness (Present in All 5 Chapters)
+      const wireCount = chapIdx === 0 ? (levelNum <= 50 ? 4 : 5) : (4 + Math.floor(rng() * 3));
+      const wireColorKeys = ["red", "blue", "yellow", "white", "black"];
+      const wireColors = Array.from({ length: wireCount }, () => wireColorKeys[Math.floor(rng() * wireColorKeys.length)]);
+      modules.push({
+        type: "wires",
+        title: `Wire Harness (${wireCount})`,
+        colors: wireColors,
+        cutFlags: Array(wireCount).fill(false),
+        targetIdx: solveWiresTarget(wireColors, serialOdd),
+        solved: false
       });
 
-      return { levelNum, specs, timeLimit, maxStrikes, modules };
+      // Module 2: Pressure Button (Chapters 2–5)
+      if (chapIdx >= 1) {
+        const bCols = ["red", "blue", "yellow", "white"];
+        const bLbls = ["ABORT", "DETONATE", "HOLD", "PRESS"];
+        const color = bCols[Math.floor(rng() * bCols.length)];
+        const label = bLbls[Math.floor(rng() * bLbls.length)];
+        const strip = STRIP_COLORS[Math.floor(rng() * STRIP_COLORS.length)];
+        modules.push({
+          type: "button",
+          title: "Pressure Button",
+          color,
+          label,
+          strip,
+          action: solveButtonAction(color, label, batteries, ledTag),
+          solved: false
+        });
+      }
+
+      // Module 3: Symbol Keypad (Chapters 3–5)
+      if (chapIdx >= 2) {
+        const rowIdx = Math.floor(rng() * SYM_ROWS.length);
+        const masterRow = SYM_ROWS[rowIdx];
+        const pickedIndices = shuffle([0, 1, 2, 3, 4, 5], rng).slice(0, 4).sort((a, b) => a - b);
+        const expectedOrder = pickedIndices.map((i) => masterRow[i]);
+        const keypadLayout = shuffle(expectedOrder, rng);
+        modules.push({
+          type: "keypad",
+          title: "Symbol Keypad",
+          rowName: rowIdx === 0 ? "Row A" : "Row B",
+          symbols: keypadLayout,
+          expectedOrder,
+          progress: 0,
+          litFlags: [false, false, false, false],
+          solved: false
+        });
+      }
+
+      // Module 4: Tactical DIP Switches (Chapters 4–5)
+      if (chapIdx >= 3) {
+        const expected = [
+          serialHasVowel,
+          batteries >= 2,
+          !serialOdd,
+          ledTag === "FRK" || ledTag === "SIG"
+        ];
+        modules.push({
+          type: "dip",
+          title: "Tactical DIP Bank",
+          states: [false, false, false, false],
+          expected,
+          solved: false
+        });
+      }
+
+      return {
+        levelNum,
+        chapIdx,
+        serial,
+        serialOdd,
+        serialHasVowel,
+        batteries,
+        ledTag,
+        maxStrikes,
+        timeLimitSec,
+        modules
+      };
     }
 
     function getChapter(num) {
@@ -1362,7 +1311,7 @@
     }
 
     // ==============================================
-    // AUDIO ENGINE (WEB AUDIO SYNTHESIS)
+    // EOD TICK, WIRE SNIP, BUZZER & DEFUSAL WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
@@ -1375,517 +1324,500 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.12) {
+    function playTone(freq, dur, type = "sine", vol = 0.09) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      const g = audioCtx.createGain();
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(vol, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.005);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
       osc.stop(now + dur + 0.02);
     }
 
-    function sfxTick(urgent) {
-      playTone(urgent ? 980 : 660, 0.045, "square", urgent ? 0.06 : 0.03);
+    function sfxTimerTick(urgent) { playTone(urgent ? 1280 : 880, 0.025, "square", urgent ? 0.045 : 0.022); }
+    function sfxWireSnip() {
+      playTone(1450, 0.032, "triangle", 0.12);
+      setTimeout(() => playTone(620, 0.04, "triangle", 0.08), 18);
     }
-    function sfxSnip() {
-      playTone(520, 0.07, "triangle", 0.12);
-      setTimeout(() => playTone(880, 0.12, "sine", 0.12), 60);
+    function sfxKeyBeep(step) { playTone(520 + step * 110, 0.06, "sine", 0.09); }
+    function sfxSwitchFlip() { playTone(460, 0.035, "triangle", 0.08); }
+    function sfxModuleDisarmed() {
+      playTone(659.25, 0.11, "sine", 0.11);
+      setTimeout(() => playTone(987.77, 0.18, "sine", 0.11), 65);
     }
-    function sfxClick() {
-      playTone(420, 0.05, "triangle", 0.08);
+    function sfxStrikeBuzz() {
+      playTone(155, 0.22, "sawtooth", 0.14);
+      setTimeout(() => playTone(125, 0.24, "sawtooth", 0.13), 90);
     }
-    function sfxModuleClear() {
-      playTone(523.25, 0.14, "sine", 0.13);
-      setTimeout(() => playTone(659.25, 0.16, "sine", 0.13), 80);
-      setTimeout(() => playTone(783.99, 0.24, "sine", 0.14), 160);
-    }
-    function sfxStrike() {
-      playTone(150, 0.28, "sawtooth", 0.18);
-      setTimeout(() => playTone(120, 0.28, "sawtooth", 0.16), 140);
-    }
-    function sfxBoom() {
-      if (!soundOn) return;
-      initAudio();
-      if (!audioCtx) return;
-      const bufSize = audioCtx.sampleRate * 0.7;
-      const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-      const data = buf.getChannelData(0);
-      for (let i = 0; i < bufSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.35));
-      }
-      const noise = audioCtx.createBufferSource();
-      noise.buffer = buf;
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.value = 340;
-      const gain = audioCtx.createGain();
-      gain.gain.value = 0.35;
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      noise.start();
+    function sfxBombDefusedWin() {
+      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.48, "sine", 0.11), i * 80);
+      });
     }
 
     // ==============================================
-    // GAME STATE & UI CONTROLLER
+    // GAME STATE, MODULE HANDLERS & TIMER CONTROLLER
     // ==============================================
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const modulesCounter = document.getElementById("modulesCounter");
+    const strikesPill = document.getElementById("strikesPill");
     const solvedCounter = document.getElementById("solvedCounter");
+    const serialBadge = document.getElementById("serialBadge");
+    const battBadge = document.getElementById("battBadge");
+    const ledBadge = document.getElementById("ledBadge");
     const timerDisplay = document.getElementById("timerDisplay");
-    const serialCodeEl = document.getElementById("serialCode");
-    const batteryCountEl = document.getElementById("batteryCount");
-    const ledRed = document.getElementById("ledRed");
-    const ledGrn = document.getElementById("ledGrn");
-    const ledBlu = document.getElementById("ledBlu");
-    const strikesBox = document.getElementById("strikesBox");
-    const modulesGrid = document.getElementById("modulesGrid");
+    const tabBomb = document.getElementById("tabBomb");
+    const tabManual = document.getElementById("tabManual");
+    const bombPane = document.getElementById("bombPane");
+    const manualPane = document.getElementById("manualPane");
     const statusToast = document.getElementById("statusToast");
-    const endOverlay = document.getElementById("endOverlay");
-    const endIcon = document.getElementById("endIcon");
-    const endHeading = document.getElementById("endHeading");
-    const endText = document.getElementById("endText");
-    const endActionBtn = document.getElementById("endActionBtn");
+    const winOverlay = document.getElementById("winOverlay");
+    const overlayEmoji = document.getElementById("overlayEmoji");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
     let solvedSet = new Set();
     let currentLevelNum = 1;
     try {
-      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_bomb_500_solved") || "[]"));
-      const last = parseInt(localStorage.getItem("zinplay_bomb_500_last") || "1", 10);
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_bombdefusal_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_bombdefusal_500_last") || "1", 10);
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let mission = null;
-    let timeLeft = 180;
+    let bomb = null;
+    let timeLeft = 90;
     let strikes = 0;
-    let timerInterval = null;
+    let timerArmed = false;  // Starts smoothly on first player action!
+    let isPaused = false;
     let gameEnded = false;
-    let missionWon = false;
+    let caseWon = false;
+
+    let holdTimerHandle = null;
+    let isHoldingBtn = false;
+    let stripLit = false;
     let toastTimer = null;
 
-    function showToast(msg, ms = 2600) {
+    function showToast(msg, ms = 2500) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function formatTime(sec) {
-      const s = Math.max(0, sec);
-      const m = Math.floor(s / 60);
-      const r = s % 60;
-      return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+    function formatTimer(sec) {
+      const s = Math.max(0, Math.ceil(sec));
+      const mm = Math.floor(s / 60);
+      const ss = s % 60;
+      return `${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
     }
 
-    function updateTimerUI() {
-      timerDisplay.textContent = formatTime(timeLeft);
-      timerDisplay.classList.toggle("urgent", timeLeft <= 30 && !gameEnded);
+    function ensureTimerRunning() {
+      if (!timerArmed && !gameEnded) {
+        timerArmed = true;
+        isPaused = false;
+        pauseBtn.textContent = "⏸ Pause";
+      }
     }
+
+    function switchTab(which) {
+      const isBomb = which === "bomb";
+      tabBomb.classList.toggle("active", isBomb);
+      tabManual.classList.toggle("active", !isBomb);
+      tabBomb.setAttribute("aria-selected", isBomb);
+      tabManual.setAttribute("aria-selected", !isBomb);
+      bombPane.classList.toggle("pane-hidden", !isBomb);
+      manualPane.classList.toggle("pane-hidden", isBomb);
+    }
+
+    tabBomb.addEventListener("click", () => switchTab("bomb"));
+    tabManual.addEventListener("click", () => {
+      initAudio();
+      switchTab("manual");
+    });
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Mission ${currentLevelNum} / ${TOTAL_LEVELS}`;
-      const done = mission.modules.filter((m) => m.solved).length;
-      modulesCounter.textContent = `Modules: ${done} / ${mission.modules.length}`;
+      levelTitle.textContent = `Case #${currentLevelNum} / ${TOTAL_LEVELS} — ${bomb.modules.length} Module Briefcase`;
+      strikesPill.textContent = `Strikes: ${strikes} / ${bomb.maxStrikes}`;
       solvedCounter.textContent = `Defused: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Mission ${currentLevelNum} / 500 ▾`;
+      openPickerBtn.textContent = `Case ${currentLevelNum} / 500 ▾`;
 
-      strikesBox.innerHTML = "";
-      for (let i = 0; i < mission.maxStrikes; i++) {
-        const sp = document.createElement("span");
-        sp.className = "strike-x" + (i < strikes ? " hit" : "");
-        sp.textContent = "✕";
-        strikesBox.appendChild(sp);
-      }
+      serialBadge.textContent = `SN: ${bomb.serial}`;
+      battBadge.textContent = `🔋 ×${bomb.batteries}`;
+      ledBadge.textContent = `● ${bomb.ledTag}`;
+
+      timerDisplay.textContent = formatTimer(timeLeft);
+      timerDisplay.className = "timer-display" + (caseWon ? " safe" : "");
+      pauseBtn.textContent = isPaused ? "▶ Resume" : "⏸ Pause";
     }
 
-    function registerStrike(cardEl, reason) {
+    function recordStrike(reason, modEl) {
       if (gameEnded) return;
       strikes++;
-      sfxStrike();
-      if (cardEl) {
-        cardEl.classList.remove("shake");
-        void cardEl.offsetWidth;
-        cardEl.classList.add("shake");
+      sfxStrikeBuzz();
+      if (modEl) {
+        modEl.classList.add("strike-flash");
+        setTimeout(() => modEl.classList.remove("strike-flash"), 480);
       }
       updateHUD();
-      if (strikes >= mission.maxStrikes) {
-        triggerExplosion("Too many strikes! The bomb detonated.");
+
+      if (strikes >= bomb.maxStrikes) {
+        triggerDetonation("Too many strikes! Check the EOD Field Manual and retry.");
       } else {
-        showToast(`STRIKE! ${reason}`, 2400);
+        showToast(`🚨 STRIKE ${strikes}/${bomb.maxStrikes}! ${reason}`, 2700);
       }
     }
 
-    function markModuleSolved(mod, cardEl) {
-      mod.solved = true;
-      cardEl.classList.add("solved");
-      sfxModuleClear();
-      updateHUD();
+    function triggerDetonation(reason) {
+      gameEnded = true;
+      caseWon = false;
+      clearTimeout(holdTimerHandle);
+      sfxStrikeBuzz();
+      overlayEmoji.textContent = "💥";
+      winHeading.textContent = "Briefcase Detonated!";
+      winText.textContent = reason;
+      nextLevelBtn.textContent = "↺ Retry This Case";
+      setTimeout(() => winOverlay.classList.add("show"), 320);
+    }
 
-      if (mission.modules.every((m) => m.solved)) {
-        clearInterval(timerInterval);
+    function checkAllDefused() {
+      if (gameEnded) return;
+      if (bomb.modules.every((m) => m.solved)) {
         gameEnded = true;
-        missionWon = true;
+        caseWon = true;
         solvedSet.add(currentLevelNum);
         try {
-          localStorage.setItem("zinplay_bomb_500_solved", JSON.stringify([...solvedSet]));
+          localStorage.setItem("zinplay_bombdefusal_500_solved", JSON.stringify([...solvedSet]));
         } catch (e) {}
+        sfxBombDefusedWin();
         updateHUD();
 
         const isLast = currentLevelNum === TOTAL_LEVELS;
-        endIcon.textContent = "🛡️";
-        endHeading.textContent = isLast ? "All 500 Bombs Defused!" : `Mission ${currentLevelNum} Cleared!`;
-        endText.textContent = `Disarmed with ${formatTime(timeLeft)} remaining and ${strikes} strike${strikes === 1 ? "" : "s"}.`;
-        endActionBtn.textContent = isLast ? "Replay from Mission 1" : `Next Mission (${currentLevelNum + 1}) →`;
-        setTimeout(() => endOverlay.classList.add("show"), 350);
+        overlayEmoji.textContent = "✅";
+        winHeading.textContent = isLast ? "All 500 Cases Defused!" : `Case #${currentLevelNum} Defused!`;
+        winText.textContent = `Disarmed with ${formatTimer(timeLeft)} remaining and ${strikes} strike${strikes === 1 ? "" : "s"}.`;
+        nextLevelBtn.textContent = isLast ? "Replay Case #1" : `Next Case (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 460);
       }
     }
 
-    function triggerExplosion(msg) {
-      clearInterval(timerInterval);
-      gameEnded = true;
-      missionWon = false;
-      sfxBoom();
-      endIcon.textContent = "💥";
-      endHeading.textContent = "BOOM! Detonated";
-      endText.textContent = msg;
-      endActionBtn.textContent = "↺ Retry Mission";
-      endOverlay.classList.add("show");
-    }
+    function renderBombModules() {
+      bombPane.innerHTML = "";
 
-    function renderModules() {
-      modulesGrid.innerHTML = "";
-
-      mission.modules.forEach((mod) => {
-        const card = document.createElement("div");
-        card.className = "mod-card" + (mod.solved ? " solved" : "");
+      bomb.modules.forEach((mod) => {
+        const box = document.createElement("div");
+        box.className = "mod-box" + (mod.solved ? " solved" : "");
 
         const head = document.createElement("div");
         head.className = "mod-head";
-        head.innerHTML = `<span class="mod-name">${mod.title}</span><span class="mod-led"></span>`;
-        card.appendChild(head);
+        head.innerHTML = `<span>${mod.title}</span><span class="mod-led"></span>`;
+        box.appendChild(head);
 
-        // --- MODULE 1: WIRES ---
+        // === 1. WIRE HARNESS MODULE ===
         if (mod.type === "wires") {
           const list = document.createElement("div");
           list.className = "wires-list";
-          mod.wires.forEach((colorName, idx) => {
-            const row = document.createElement("div");
+          mod.colors.forEach((colKey, idx) => {
+            const pal = WIRE_PAL[colKey];
+            const row = document.createElement("button");
+            row.type = "button";
             row.className = "wire-row";
-
-            const num = document.createElement("span");
-            num.className = "wire-num";
-            num.textContent = idx + 1;
-
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = "wire-btn";
-            btn.innerHTML = `<span class="wire-line" style="background:${WIRE_HEX[colorName]}"></span><span class="wire-tag">${colorName}</span>`;
-
-            btn.addEventListener("click", () => {
-              if (gameEnded || mod.solved || mod.cutSet.has(idx)) return;
+            row.disabled = mod.solved || mod.cutFlags[idx] || gameEnded;
+            row.innerHTML = `
+              <span class="wire-idx">${idx + 1}</span>
+              <span class="wire-term"></span>
+              <span class="wire-cord ${mod.cutFlags[idx] ? "cut" : ""}" style="background:${pal.css}; --wcol:${pal.solid};"></span>
+              <span class="wire-term"></span>
+            `;
+            row.addEventListener("click", () => {
+              if (mod.solved || mod.cutFlags[idx] || gameEnded) return;
               initAudio();
-              mod.cutSet.add(idx);
-              btn.classList.add("cut");
-              btn.disabled = true;
+              ensureTimerRunning();
+              mod.cutFlags[idx] = true;
+              sfxWireSnip();
 
               if (idx === mod.targetIdx) {
-                sfxSnip();
-                list.querySelectorAll("button").forEach((b) => (b.disabled = true));
-                markModuleSolved(mod, card);
+                mod.solved = true;
+                sfxModuleDisarmed();
+                renderBombModules();
+                checkAllDefused();
               } else {
-                registerStrike(card, `Wrong wire! Check the ${mod.wires.length}-wire rule.`);
+                renderBombModules();
+                const latestBox = bombPane.children[bomb.modules.indexOf(mod)];
+                recordStrike(`Wire #${idx + 1} (${pal.name}) was wrong—check Manual Section 1!`, latestBox);
               }
             });
-
-            row.appendChild(num);
-            row.appendChild(btn);
             list.appendChild(row);
           });
-          card.appendChild(list);
+          box.appendChild(list);
         }
 
-        // --- MODULE 2: PRESSURE BUTTON ---
-        if (mod.type === "button") {
+        // === 2. PRESSURE BUTTON MODULE ===
+        else if (mod.type === "button") {
           const body = document.createElement("div");
-          body.className = "button-mod-body";
+          body.className = "btn-mod-body";
+          const pal = BTN_PAL[mod.color];
 
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "big-bomb-btn";
-          btn.textContent = mod.label;
-          btn.style.background = BTN_STYLE[mod.color].bg;
-          btn.style.color = BTN_STYLE[mod.color].fg;
+          const bigBtn = document.createElement("button");
+          bigBtn.type = "button";
+          bigBtn.className = "big-eod-btn";
+          bigBtn.style.background = pal.bg;
+          bigBtn.style.color = pal.text;
+          bigBtn.textContent = mod.label;
+          bigBtn.disabled = mod.solved || gameEnded;
 
           const stripWrap = document.createElement("div");
           stripWrap.className = "strip-housing";
-          const stripLight = document.createElement("div");
-          stripLight.className = "strip-light";
-          stripWrap.appendChild(stripLight);
+          const stripEl = document.createElement("div");
+          stripEl.className = "hold-led-strip";
+          const stripCap = document.createElement("span");
+          stripCap.className = "strip-cap";
+          stripCap.textContent = "STRIP";
+          stripWrap.appendChild(stripEl);
+          stripWrap.appendChild(stripCap);
 
-          const note = document.createElement("div");
-          note.className = "btn-hint-note";
-          note.textContent = "Tap quickly OR Press & Hold to check light strip";
-
-          let holdTimer = null;
-          let isHolding = false;
-          let activePointerId = null;
-
-          btn.addEventListener("pointerdown", (e) => {
-            if (gameEnded || mod.solved) return;
+          const startHold = (e) => {
+            e.preventDefault();
+            if (mod.solved || gameEnded || isHoldingBtn) return;
             initAudio();
-            activePointerId = e.pointerId;
-            try { btn.setPointerCapture(e.pointerId); } catch (err) {}
-            btn.classList.add("pressed");
-            sfxClick();
-            isHolding = false;
+            ensureTimerRunning();
+            isHoldingBtn = true;
+            stripLit = false;
+            bigBtn.classList.add("pressed");
+            playTone(320, 0.04, "triangle", 0.08);
 
-            holdTimer = setTimeout(() => {
-              if (gameEnded || mod.solved) return;
-              isHolding = true;
-              stripLight.style.background = mod.strip.hex;
-              stripLight.style.boxShadow = `0 0 14px ${mod.strip.hex}`;
-              note.textContent = `${mod.strip.name.toUpperCase()} strip lit — release on right digit!`;
-              playTone(300, 0.08, "sine", 0.08);
-            }, 340);
-          });
-
-          const releaseHandler = (e) => {
-            if (activePointerId === null || e.pointerId !== activePointerId) return;
-            activePointerId = null;
-            clearTimeout(holdTimer);
-            btn.classList.remove("pressed");
-            stripLight.style.background = "#1e293b";
-            stripLight.style.boxShadow = "none";
-
-            if (gameEnded || mod.solved) return;
-
-            if (!isHolding) {
-              // Player did a QUICK TAP
-              if (mod.requiredAction === "TAP") {
-                btn.disabled = true;
-                note.textContent = "Button disarmed!";
-                markModuleSolved(mod, card);
-              } else {
-                registerStrike(card, "Manual says HOLD this button, not quick tap!");
-              }
-            } else {
-              // Player HELD and RELEASED
-              if (mod.requiredAction === "TAP") {
-                registerStrike(card, "Manual says QUICK TAP this button, don't hold!");
-              } else {
-                const timeStr = formatTime(timeLeft);
-                if (timeStr.includes(mod.strip.digit)) {
-                  btn.disabled = true;
-                  note.textContent = `Released cleanly on ${timeStr}!`;
-                  markModuleSolved(mod, card);
-                } else {
-                  registerStrike(card, `${mod.strip.name} strip needs digit "${mod.strip.digit}" in timer!`);
-                }
-              }
-            }
-            isHolding = false;
+            // After 320ms hold, illuminate the side LED strip color!
+            holdTimerHandle = setTimeout(() => {
+              if (!isHoldingBtn || gameEnded) return;
+              stripLit = true;
+              stripEl.style.background = mod.strip.bg;
+              stripEl.style.boxShadow = mod.strip.glow;
+              stripCap.textContent = mod.strip.key.toUpperCase();
+              playTone(620, 0.07, "sine", 0.07);
+            }, 320);
           };
 
-          btn.addEventListener("pointerup", releaseHandler);
-          btn.addEventListener("pointercancel", releaseHandler);
+          const endHold = () => {
+            if (!isHoldingBtn) return;
+            isHoldingBtn = false;
+            clearTimeout(holdTimerHandle);
+            bigBtn.classList.remove("pressed");
+            const wasHeld = stripLit;
+            stripLit = false;
+            stripEl.style.background = "#0d0f14";
+            stripEl.style.boxShadow = "none";
+            stripCap.textContent = "STRIP";
 
-          body.appendChild(btn);
+            if (mod.solved || gameEnded) return;
+
+            if (mod.action === "tap") {
+              if (!wasHeld) {
+                mod.solved = true;
+                sfxModuleDisarmed();
+                renderBombModules();
+                checkAllDefused();
+              } else {
+                recordStrike("Manual calls for a QUICK TAP—don't hold!", box);
+              }
+            } else {
+              // Required action: HOLD & release on matching timer digit!
+              const timerStr = formatTimer(timeLeft);
+              if (!wasHeld) {
+                recordStrike("Manual calls to HOLD until the LED strip lights up!", box);
+              } else if (timerStr.includes(mod.strip.digit)) {
+                mod.solved = true;
+                sfxModuleDisarmed();
+                renderBombModules();
+                checkAllDefused();
+              } else {
+                recordStrike(`Released on ${timerStr}—needed digit '${mod.strip.digit}' for ${mod.strip.key} strip!`, box);
+              }
+            }
+          };
+
+          bigBtn.addEventListener("pointerdown", startHold);
+          bigBtn.addEventListener("pointerup", endHold);
+          bigBtn.addEventListener("pointercancel", endHold);
+          bigBtn.addEventListener("pointerleave", endHold);
+
+          body.appendChild(bigBtn);
           body.appendChild(stripWrap);
-          card.appendChild(body);
-          card.appendChild(note);
+          box.appendChild(body);
         }
 
-        // --- MODULE 3: KEYPAD CIPHER ---
-        if (mod.type === "keypad") {
+        // === 3. SYMBOL KEYPAD MODULE ===
+        else if (mod.type === "keypad") {
           const grid = document.createElement("div");
           grid.className = "keypad-grid";
-
-          mod.display.forEach((sym) => {
-            const kBtn = document.createElement("button");
-            kBtn.type = "button";
-            kBtn.className = "key-btn";
-            kBtn.textContent = sym;
-
-            kBtn.addEventListener("click", () => {
-              if (gameEnded || mod.solved || kBtn.classList.contains("pressed-ok")) return;
+          mod.symbols.forEach((sym, idx) => {
+            const key = document.createElement("button");
+            key.type = "button";
+            key.className = "sym-key" + (mod.litFlags[idx] ? " lit" : "");
+            key.textContent = sym;
+            key.disabled = mod.solved || mod.litFlags[idx] || gameEnded;
+            key.addEventListener("click", () => {
+              if (mod.solved || mod.litFlags[idx] || gameEnded) return;
               initAudio();
-              if (sym === mod.ordered[mod.nextStep]) {
-                mod.nextStep++;
-                kBtn.classList.add("pressed-ok");
-                kBtn.innerHTML = `${sym}<span class="key-order-badge">${mod.nextStep}</span>`;
-                playTone(400 + mod.nextStep * 95, 0.1, "sine", 0.11);
-                if (mod.nextStep === mod.ordered.length) {
-                  markModuleSolved(mod, card);
+              ensureTimerRunning();
+
+              if (sym === mod.expectedOrder[mod.progress]) {
+                mod.litFlags[idx] = true;
+                mod.progress++;
+                sfxKeyBeep(mod.progress);
+                if (mod.progress >= 4) {
+                  mod.solved = true;
+                  sfxModuleDisarmed();
                 }
+                renderBombModules();
+                checkAllDefused();
               } else {
-                registerStrike(card, "Wrong symbol order! Follow the column top-to-bottom.");
+                recordStrike(`Wrong symbol order! Check ${mod.rowName} in Manual Section 3.`, box);
               }
             });
-
-            grid.appendChild(kBtn);
+            grid.appendChild(key);
           });
-          card.appendChild(grid);
+          box.appendChild(grid);
         }
 
-        // --- MODULE 4: LOGIC SWITCHES ---
-        if (mod.type === "switches") {
-          const row = document.createElement("div");
-          row.className = "switches-row";
-          const labels = ["A", "B", "C", "D"];
-          const toggleBtns = [];
-
-          labels.forEach((lbl, idx) => {
-            const col = document.createElement("div");
-            col.className = "sw-col";
-
-            const lab = document.createElement("span");
-            lab.className = "sw-label";
-            lab.textContent = lbl;
-
+        // === 4. TACTICAL DIP SWITCHES MODULE ===
+        else if (mod.type === "dip") {
+          const dGrid = document.createElement("div");
+          dGrid.className = "dip-grid";
+          mod.states.forEach((isOn, idx) => {
             const sw = document.createElement("button");
             sw.type = "button";
-            sw.className = "sw-toggle";
-            sw.innerHTML = `<span class="sw-knob">0</span>`;
-
+            sw.className = "dip-btn" + (isOn ? " on" : "");
+            sw.disabled = mod.solved || gameEnded;
+            sw.innerHTML = `<span class="dip-lbl">SW${idx + 1}</span><span class="dip-state">${isOn ? "ON" : "OFF"}</span>`;
             sw.addEventListener("click", () => {
-              if (gameEnded || mod.solved) return;
+              if (mod.solved || gameEnded) return;
               initAudio();
-              sfxClick();
-              mod.state[idx] = !mod.state[idx];
-              sw.classList.toggle("up", mod.state[idx]);
-              sw.querySelector(".sw-knob").textContent = mod.state[idx] ? "1" : "0";
+              ensureTimerRunning();
+              mod.states[idx] = !mod.states[idx];
+              sfxSwitchFlip();
+              renderBombModules();
             });
-
-            toggleBtns.push(sw);
-            col.appendChild(lab);
-            col.appendChild(sw);
-            row.appendChild(col);
+            dGrid.appendChild(sw);
           });
+          box.appendChild(dGrid);
 
-          const syncBtn = document.createElement("button");
-          syncBtn.type = "button";
-          syncBtn.className = "sync-btn";
-          syncBtn.textContent = "SYNC SWITCHES";
-          syncBtn.addEventListener("click", () => {
-            if (gameEnded || mod.solved) return;
+          const vBtn = document.createElement("button");
+          vBtn.type = "button";
+          vBtn.className = "dip-verify-btn";
+          vBtn.textContent = mod.solved ? "✓ DIP BANK VERIFIED" : "VERIFY DIP BANK";
+          vBtn.disabled = mod.solved || gameEnded;
+          vBtn.addEventListener("click", () => {
+            if (mod.solved || gameEnded) return;
             initAudio();
-            const match = mod.state.every((val, i) => val === mod.target[i]);
+            ensureTimerRunning();
+            const match = mod.states.every((v, i) => v === mod.expected[i]);
             if (match) {
-              syncBtn.disabled = true;
-              syncBtn.textContent = "SYNCED ✓";
-              toggleBtns.forEach((b) => (b.disabled = true));
-              markModuleSolved(mod, card);
+              mod.solved = true;
+              sfxModuleDisarmed();
+              renderBombModules();
+              checkAllDefused();
             } else {
-              registerStrike(card, "Switch configuration mismatch! Re-check Section 4.");
+              recordStrike("DIP switch pattern mismatch—check Manual Section 4!", box);
             }
           });
-
-          card.appendChild(row);
-          card.appendChild(syncBtn);
+          box.appendChild(vBtn);
         }
 
-        modulesGrid.appendChild(card);
+        bombPane.appendChild(box);
       });
     }
 
-    function loadMission(num) {
-      clearInterval(timerInterval);
+    function loadCase(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      mission = buildMission(currentLevelNum);
-      timeLeft = mission.timeLimit;
+      bomb = buildBombCase(currentLevelNum);
+      timeLeft = bomb.timeLimitSec;
       strikes = 0;
+      timerArmed = false;
+      isPaused = false;
       gameEnded = false;
-      missionWon = false;
+      caseWon = false;
+      isHoldingBtn = false;
+      stripLit = false;
+      clearTimeout(holdTimerHandle);
 
-      endOverlay.classList.remove("show");
+      switchTab("bomb");
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
-      workspace.classList.remove("show-manual");
-      tabBombBtn.classList.add("active");
-      tabManualBtn.classList.remove("active");
-
-      // Render Hardware Specs
-      serialCodeEl.textContent = mission.specs.serial;
-      batteryCountEl.textContent = mission.specs.batteries;
-      ledRed.className = "led-bulb" + (mission.specs.leds.red ? " on-red" : "");
-      ledGrn.className = "led-bulb" + (mission.specs.leds.grn ? " on-grn" : "");
-      ledBlu.className = "led-bulb" + (mission.specs.leds.blu ? " on-blu" : "");
 
       try {
-        localStorage.setItem("zinplay_bomb_500_last", String(currentLevelNum));
+        localStorage.setItem("zinplay_bombdefusal_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      renderModules();
+      renderBombModules();
       updateHUD();
-      updateTimerUI();
-
-      timerInterval = setInterval(() => {
-        if (gameEnded) return;
-        timeLeft--;
-        updateTimerUI();
-        if (timeLeft <= 0) {
-          triggerExplosion("Time ran out before all modules were disarmed!");
-        } else {
-          sfxTick(timeLeft <= 30);
-        }
-      }, 1000);
     }
 
-    // Hint Button: Explains the exact next move on the first unsolved module
+    // Smart Plain-English EOD Hint Button (Guides Next Unsolved Module!)
     document.getElementById("hintBtn").addEventListener("click", () => {
       if (gameEnded) return;
-      const mod = mission.modules.find((m) => !m.solved);
+      initAudio();
+      const mod = bomb.modules.find((m) => !m.solved);
       if (!mod) return;
 
       if (mod.type === "wires") {
-        showToast(`Hint (Wires): Cut Wire #${mod.targetIdx + 1} (${mod.wires[mod.targetIdx]}).`, 3500);
+        const wCol = WIRE_PAL[mod.colors[mod.targetIdx]].name;
+        showToast(`💡 Wires Hint: Cut Wire #${mod.targetIdx + 1} (${wCol})!`, 3400);
       } else if (mod.type === "button") {
-        if (mod.requiredAction === "TAP") {
-          showToast("Hint (Button): Give the button a QUICK TAP!", 3500);
+        if (mod.action === "tap") {
+          showToast("💡 Button Hint: Perform a QUICK TAP (<0.3s) immediately!", 3400);
         } else {
-          showToast(`Hint (Button): HOLD until ${mod.strip.name} lights, release on digit "${mod.strip.digit}".`, 4000);
+          showToast(`💡 Button Hint: HOLD until strip lights ${mod.strip.key.toUpperCase()}, release on digit '${mod.strip.digit}'!`, 3600);
         }
       } else if (mod.type === "keypad") {
-        showToast(`Hint (Keypad): Next symbol to tap is "${mod.ordered[mod.nextStep]}".`, 3500);
-      } else if (mod.type === "switches") {
-        const code = mod.target.map((v, i) => `${["A","B","C","D"][i]}=${v ? "UP" : "DN"}`).join(", ");
-        showToast(`Hint (Switches): Set ${code}, then SYNC.`, 4000);
+        const nxtSym = mod.expectedOrder[mod.progress];
+        showToast(`💡 Keypad Hint (${mod.rowName}): Press '${nxtSym}' next!`, 3200);
+      } else if (mod.type === "dip") {
+        const pat = mod.expected.map((v, i) => `SW${i + 1}:${v ? "ON" : "OFF"}`).join(" ");
+        showToast(`💡 DIP Hint: Set ${pat}, then Verify!`, 3800);
       }
     });
 
-    // Buttons & Navigation
-    document.getElementById("resetBtn").addEventListener("click", () => loadMission(currentLevelNum));
+    pauseBtn.addEventListener("click", () => {
+      if (gameEnded || !timerArmed) return;
+      initAudio();
+      isPaused = !isPaused;
+      updateHUD();
+      showToast(isPaused ? "⏸ Countdown paused." : "▶ Countdown resumed!", 1500);
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => loadCase(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
-    endActionBtn.addEventListener("click", () => {
-      if (missionWon) {
-        loadMission(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
+    nextLevelBtn.addEventListener("click", () => {
+      if (!caseWon) {
+        loadCase(currentLevelNum);
       } else {
-        loadMission(currentLevelNum);
+        loadCase(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
       }
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadMission(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadCase(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadMission(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadCase(currentLevelNum + 1);
     });
 
-    // Mission Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1916,7 +1848,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadMission(n);
+          loadCase(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1938,13 +1870,36 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadMission(val);
+        loadCase(val);
         pickerModal.classList.remove("open");
       }
     });
 
-    // Launch Mission
-    loadMission(currentLevelNum);
+    // Live 1-Second Heartbeat Countdown Loop
+    let lastTickMs = performance.now();
+    let lastWholeSec = -1;
+
+    function tickLoop(now) {
+      const dt = Math.min(0.1, (now - lastTickMs) / 1000);
+      lastTickMs = now;
+
+      if (timerArmed && !isPaused && !gameEnded) {
+        timeLeft = Math.max(0, timeLeft - dt);
+        const whole = Math.ceil(timeLeft);
+        if (whole !== lastWholeSec) {
+          lastWholeSec = whole;
+          timerDisplay.textContent = formatTimer(timeLeft);
+          if (whole > 0) sfxTimerTick(whole <= 15);
+        }
+        if (timeLeft <= 0) {
+          triggerDetonation("Countdown reached 00:00! Check the manual and try again.");
+        }
+      }
+      requestAnimationFrame(tickLoop);
+    }
+
+    loadCase(currentLevelNum);
+    requestAnimationFrame(tickLoop);
   </script>
 
 </body>
