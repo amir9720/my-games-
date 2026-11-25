@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OSINT Geo-Sleuth — 500 Photo Geolocation Cases | ZinPlay</title>
-  <meta name="description" content="Play 500 free OSINT geolocation mystery cases in OSINT Geo-Sleuth. Zoom into wall outlets, cafe menus, window skylines, and license plates to pinpoint the exact city on the world map." />
+  <title>OSINT Geo-Sleuth — Free 500-Case Geolocation Detective Game | ZinPlay</title>
+  <meta name="description" content="Play OSINT Geo-Sleuth free online with no download. Analyze license plates, left/right driving lanes, roadside bollards, street scripts, sun hemisphere, and flora across 500 geolocation mystery cases." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "OSINT Geo-Sleuth",
+    "url": "https://zinplay.io/games/geo-sleuth/",
+    "genre": ["Mystery", "OSINT Deduction", "Geography Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top Intelligence HUD */
+    /* Top Intelligence Desk HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #08121c;
-      color: #f1f5f9;
-      border-bottom: 1px solid #182c42;
+      background: #09121e;
+      color: #f8fafc;
+      border-bottom: 1px solid #1a2d47;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -64,12 +77,17 @@
     }
     .hud-pill {
       background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      border: 1px solid rgba(56, 189, 248, 0.36);
       color: #bae6fd;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
       font-family: monospace;
+    }
+    .hud-pill.streak-pill {
+      background: rgba(250, 204, 21, 0.16);
+      border-color: rgba(250, 204, 21, 0.42);
+      color: #fef08a;
     }
     .hud-pill.done-pill {
       background: rgba(34, 197, 94, 0.16);
@@ -78,195 +96,166 @@
       font-family: inherit;
     }
 
-    /* Mode Switcher Bar (Photo Inspector vs World Map) */
-    .view-tabs-bar {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      padding: 10px 12px;
-      background: #0d1a29;
-      border-bottom: 1px solid #1c324a;
-    }
-    .view-tab-btn {
-      min-height: 40px;
-      border-radius: 10px;
-      border: 1.5px solid #243d59;
-      background: #13253a;
-      color: #94a3b8;
-      font-size: 0.84rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: 0.14s ease;
-    }
-    .view-tab-btn.active {
-      border-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.22);
-      color: #ffffff;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.26);
-    }
-
-    /* Main Viewport Canvas Container */
+    /* Live Street View Scene Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 390px;
-      background: #060e17;
+      height: 295px;
+      background: #07101c;
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 430px;
+        height: 335px;
       }
     }
     #geoCanvas {
       width: 100%;
       height: 100%;
       display: block;
-      touch-action: none;
-      cursor: grab;
-    }
-    #geoCanvas.dragging {
-      cursor: grabbing;
-    }
-    #geoCanvas.map-mode {
-      cursor: crosshair;
     }
 
-    /* Floating Zoom HUD Pill on Canvas */
-    .canvas-badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(8, 18, 28, 0.84);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #e0f2fe;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-family: monospace;
-      font-weight: 800;
-      pointer-events: none;
-      backdrop-filter: blur(4px);
-    }
-
-    /* Contextual Bottom Action Dock */
-    .action-dock {
-      padding: 11px 12px 12px;
-      background: #0b1623;
-      border-top: 1px solid #1b3048;
+    /* Interactive OSINT Field Evidence Dossier Cards */
+    .evidence-wrap {
+      background: #0d1827;
+      border-top: 1px solid #1e334f;
+      padding: 11px 12px;
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 10px;
     }
-    .zoom-controls-row {
-      display: flex;
-      align-items: center;
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 7px;
     }
-    .dock-btn {
-      min-height: 42px;
-      padding: 0 12px;
+    @media (min-width: 620px) {
+      .evidence-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .ev-card {
+      background: #132236;
+      border: 1px solid #243e5e;
+      border-radius: 10px;
+      padding: 7px 9px;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .ev-card.redacted {
+      border-style: dashed;
+      border-color: #334155;
+      background: #0d1624;
+      opacity: 0.72;
+    }
+    .ev-k {
+      font-size: 0.64rem;
+      font-weight: 800;
+      color: #7dd3fc;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .ev-v {
+      font-family: monospace;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+    .ev-card.redacted .ev-v {
+      color: #94a3b8;
+    }
+
+    /* Country Pinpoint Suspect Grid */
+    .suspect-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .choices-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 7px;
+    }
+    @media (min-width: 580px) {
+      .choices-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+      .choices-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    }
+    .country-btn {
+      min-height: 46px;
+      padding: 7px 10px;
       border-radius: 11px;
-      border: 1.5px solid #243e5c;
-      background: #14273d;
+      border: 1.5px solid #264163;
+      background: #142438;
       color: #f8fafc;
       font-size: 0.82rem;
       font-weight: 800;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      transition: transform 0.08s ease;
-    }
-    .dock-btn:active { transform: scale(0.96); }
-    .dock-btn:disabled { opacity: 0.4; cursor: default; }
-    .dock-btn.confirm-pin {
-      flex: 1;
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      border-color: #6ee7b7;
-      color: #ffffff;
-      font-size: 0.9rem;
-      box-shadow: 0 5px 16px rgba(16, 185, 129, 0.3);
-    }
-    .dock-btn.switch-map {
-      flex: 1;
-      background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
-      border-color: #7dd3fc;
-      color: #ffffff;
-      font-size: 0.86rem;
-    }
-
-    /* Quick Clue Hot-Jump Chips (Inside Photo Mode) */
-    .clue-chips {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 6px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 2px;
+      text-align: left;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease;
     }
-    .clue-chip {
-      flex: 0 0 auto;
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: 1px solid #294463;
-      background: #122236;
-      color: #bae6fd;
-      font-size: 0.72rem;
-      font-weight: 800;
-      cursor: pointer;
+    .country-btn:active { transform: scale(0.96); }
+    .country-btn:hover:not(:disabled) {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.16);
     }
-    .clue-chip:active { transform: scale(0.96); }
+    .country-btn.eliminated {
+      opacity: 0.34;
+      border-color: #7f1d1d;
+      background: #1a1216;
+      text-decoration: line-through;
+      cursor: default;
+    }
+    .country-btn.correct {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.24);
+      color: #bbf7d0;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.35);
+    }
+    .c-reg {
+      font-size: 0.63rem;
+      font-family: monospace;
+      color: #94a3b8;
+      font-weight: 700;
+    }
 
-    /* Expandable OSINT Field Reference Drawer */
-    .guide-drawer {
-      background: #09131e;
-      border-top: 1px solid #192d44;
-      padding: 10px 14px;
-      color: #cbd5e1;
-      font-size: 0.74rem;
-      display: none;
-    }
-    .guide-drawer.open {
-      display: block;
-    }
-    .guide-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .guide-box {
-      background: #102033;
-      border: 1px solid #213954;
-      border-radius: 9px;
-      padding: 7px 9px;
-      line-height: 1.45;
-    }
-    .guide-box strong {
-      color: #fde68a;
-      display: block;
-      margin-bottom: 2px;
-      font-size: 0.75rem;
+    .legend-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 8px 14px;
+      background: #070e18;
+      border-top: 1px solid #162840;
+      font-size: 0.73rem;
+      color: #94a3b8;
     }
 
     .status-toast {
       position: absolute;
-      bottom: 12px;
+      bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(8, 18, 28, 0.96);
-      border: 1px solid rgba(250, 204, 21, 0.72);
+      background: rgba(7, 14, 24, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.78);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       font-weight: 700;
       white-space: nowrap;
       pointer-events: none;
@@ -275,14 +264,14 @@
       max-width: 92%;
       overflow: hidden;
       text-overflow: ellipsis;
+      z-index: 10;
     }
     .status-toast.show { opacity: 1; }
 
-    /* Result / Breakdown Overlay */
-    .result-overlay {
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(6, 13, 22, 0.84);
+      background: rgba(7, 14, 24, 0.84);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -290,59 +279,30 @@
       padding: 16px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
+      z-index: 20;
     }
-    .result-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .result-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
       padding: 20px 18px;
       text-align: center;
-      max-width: 345px;
+      max-width: 340px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .result-card h2 { font-size: 1.26rem; margin-bottom: 4px; }
-    .dist-badge {
-      display: inline-block;
-      background: #ecfdf5;
-      color: #047857;
-      font-family: monospace;
-      font-size: 0.95rem;
-      font-weight: 900;
-      padding: 4px 12px;
-      border-radius: 999px;
-      margin: 6px 0 10px;
-    }
-    .dist-badge.miss {
-      background: #fef2f2;
-      color: #b91c1c;
-    }
-    .clue-breakdown {
-      text-align: left;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 0.76rem;
-      color: #334155;
-      line-height: 1.5;
-      margin-bottom: 14px;
-    }
+    .win-card h2 { font-size: 1.25rem; margin-bottom: 5px; }
+    .win-card p { font-size: 0.84rem; color: #475569; margin-bottom: 14px; line-height: 1.45; }
 
     .controls-group {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-    }
-    .btn-outline.active-toggle {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
     }
     .level-nav-bar {
       display: flex;
@@ -475,6 +435,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #09121e;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #09121e;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #09121e 0%, #0c4a6e 100%);
+      color: #e0f2fe;
+    }
+    .game-seo-banner.amber-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #17152e 0%, #451a03 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #bae6fd;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .osint-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .osint-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .osint-table th, .osint-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .osint-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .osint-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -487,7 +527,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -500,109 +540,65 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Geo-Cases &bull; OSINT Mystery</span>
+      <span class="cat-tag">500 Dossiers &bull; Geolocation OSINT</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>OSINT Geo-Sleuth</h1>
-      <p>Zoom into photo clues—wall electrical outlets, cafe menus, window skylines, and passing license plates—then pinpoint the exact city on the world map.</p>
+      <p>Analyze street-level driving lanes, license plate bands, roadside bollards, sun hemisphere, local alphabets, and climate flora to pinpoint the exact country across 500 field investigations.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="OSINT Geo-Sleuth Geolocation Game">
+    <section class="game-wrapper" aria-label="OSINT Geo-Sleuth Geolocation Detective Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Rookie Analyst</span>
-          <span id="levelTitle">Geo-Case #1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Field Agent Orientation</span>
+          <span id="levelTitle">Case #1 / 500 — Street Capture</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="radiusPill">Target: &lt; 1500 km</span>
-          <span class="hud-pill done-pill" id="solvedCounter">Located: 0 / 500</span>
+          <span class="hud-pill streak-pill" id="streakPill">🔥 Streak: 0</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Pinpointed: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Photo vs World Map View Switcher -->
-      <div class="view-tabs-bar" role="tablist">
-        <button id="photoTabBtn" class="view-tab-btn active" type="button">🔍 Evidence Photo</button>
-        <button id="mapTabBtn" class="view-tab-btn" type="button">🗺️ World Map Pin</button>
-      </div>
-
-      <!-- Interactive Zoomable Photo / World Map Canvas -->
+      <!-- Rendered Street-View Visual Clues Canvas -->
       <div class="canvas-container">
         <canvas id="geoCanvas"></canvas>
-        <div id="canvasBadge" class="canvas-badge">PHOTO ZOOM: 1.0×</div>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Case Verdict & OSINT Breakdown Overlay -->
-        <div id="resultOverlay" class="result-overlay">
-          <div class="result-card">
-            <div id="resIcon" style="font-size:2.2rem; margin-bottom:4px;">🌍</div>
-            <h2 id="resHeading">Location Confirmed!</h2>
-            <div id="resDistBadge" class="dist-badge">142 km away</div>
-            <div id="resBreakdown" class="clue-breakdown"></div>
-            <button id="resActionBtn" class="btn-primary" type="button">Next Geo-Case →</button>
+        <!-- Country Pinpointed Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div id="winFlag" style="font-size:2.4rem; margin-bottom:4px;">🇯🇵</div>
+            <h2 id="winHeading">Target Pinpointed: Japan!</h2>
+            <p id="winText">Key OSINT Clues: Left-hand drive, white/yellow square plates, and Kanji/Kana signage.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Dossier →</button>
           </div>
         </div>
       </div>
 
-      <!-- Contextual Zoom / Pin Action Dock -->
-      <div class="action-dock">
-        <!-- Photo Mode Controls -->
-        <div id="photoControls">
-          <div class="zoom-controls-row" style="margin-bottom:8px;">
-            <button id="zoomOutBtn" class="dock-btn" type="button" aria-label="Zoom Out">🔍−</button>
-            <button id="zoomResetBtn" class="dock-btn" type="button">1×</button>
-            <button id="zoomInBtn" class="dock-btn" type="button" aria-label="Zoom In">🔍+</button>
-            <button id="goMapBtn" class="dock-btn switch-map" type="button">🗺️ Drop Pin on Map →</button>
-          </div>
-          <div class="clue-chips" aria-label="Quick Zoom Areas">
-            <button class="clue-chip" data-focus="window" type="button">🪟 Window &amp; Street</button>
-            <button class="clue-chip" data-focus="menu" type="button">☕ Cafe Menu</button>
-            <button class="clue-chip" data-focus="outlet" type="button">🔌 Wall Outlet</button>
-            <button class="clue-chip" data-focus="table" type="button">🧾 Receipt &amp; Wi-Fi</button>
-          </div>
+      <!-- Structured OSINT Evidence Metadata + Suspect Selector -->
+      <div class="evidence-wrap">
+        <div id="evidenceGrid" class="evidence-grid" aria-label="Extracted Field Evidence"></div>
+        <div class="suspect-head">
+          <span id="suspectPrompt">📍 Pinpoint Origin Country</span>
+          <span id="guessesLeft">Attempts: 3</span>
         </div>
-
-        <!-- Map Mode Controls -->
-        <div id="mapControls" style="display:none;">
-          <div class="zoom-controls-row">
-            <button id="mapOutBtn" class="dock-btn" type="button" aria-label="Zoom Out Map">🔍−</button>
-            <button id="mapInBtn" class="dock-btn" type="button" aria-label="Zoom In Map">🔍+</button>
-            <button id="confirmPinBtn" class="dock-btn confirm-pin" type="button" disabled>📍 TAP MAP TO DROP PIN</button>
-          </div>
-        </div>
+        <div id="choicesGrid" class="choices-grid" role="group" aria-label="Country Suspects"></div>
       </div>
 
-      <!-- Expandable OSINT Field Guide Reference -->
-      <div id="guideDrawer" class="guide-drawer">
-        <strong style="color:#38bdf8; font-size:0.78rem;">📖 OSINT FIELD REFERENCE — REAL-WORLD GEOLOCATION CLUES</strong>
-        <div class="guide-grid">
-          <div class="guide-box">
-            <strong>🔌 Wall Outlets</strong>
-            <b>Type A/B (||):</b> USA, Canada, Mexico, Japan<br>
-            <b>Type C/F (● ●):</b> Continental Europe, Turkey, S. Korea, Brazil, Egypt<br>
-            <b>Type G (3 Rect):</b> UK, Ireland, Singapore, UAE<br>
-            <b>Type I (/ \):</b> Australia, New Zealand, Argentina<br>
-            <b>Type D/M (3 Round):</b> India, South Africa
-          </div>
-          <div class="guide-box">
-            <strong>🚗 Left-Hand Traffic</strong>
-            Cars drive on the <b>LEFT</b> in: UK, Ireland, Japan, Australia, New Zealand, Singapore, India, South Africa.<br>
-            All other featured countries drive on the <b>RIGHT</b>!
-          </div>
-          <div class="guide-box">
-            <strong>💱 Currencies &amp; Temp</strong>
-            <b>€</b> Eurozone • <b>£</b> UK • <b>¥</b> Japan • <b>₩</b> Korea • <b>₺</b> Turkey • <b>₹</b> India • <b>kr</b> Norway/Sweden • <b>CHF</b> Switzerland • <b>°F</b> USA only!
-          </div>
-        </div>
+      <div class="legend-strip">
+        <span>🚗 Check Left vs. Right Lane &amp; Centerline Color</span>
+        <span>🪧 Inspect License Plate Band &amp; Local Alphabet</span>
+        <span>☀️ Sun in South = Northern Hemisphere (and vice versa!)</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="guideBtn" class="btn-outline" type="button">📖 Field Guide</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Clue Intel</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reload Case</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 OSINT Intel</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
@@ -617,61 +613,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 880+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/geo-sleuth-banner-1.jpg"
+            alt="OSINT Geo-Sleuth online geolocation detective game showing a glowing world globe surrounded by license plate, street bollard, and compass clue cards"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Real-World OSINT Geolocation Cases — Learn Authentic Geo-Meta</h3>
+          <p>Spot European blue plate strips, yellow UK rear plates, Southern Hemisphere sun shadows, and distinctive roadside bollards like a pro investigator.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play OSINT Geo-Sleuth (500 Geolocation Cases)</h2>
-        <p>OSINT Geo-Sleuth trains your real-world open-source intelligence (OSINT) instincts across 500 illustrated photo investigations spanning 32 iconic cities around the globe. Every clue hidden inside each travel photo is grounded in genuine geography, electrical standards, currencies, traffic rules, and local culture.</p>
+        <h2>What Is OSINT Geo-Sleuth? A Geolocation Deduction Game Online</h2>
+        <p><strong>OSINT Geo-Sleuth</strong> is a free <strong>geolocation detective and Geo-OSINT puzzle game online</strong> that teaches real-world open-source intelligence techniques used by investigative journalists and pro <em>GeoGuessr</em> players—without needing heavy streaming map tiles or paid subscriptions. Each of the <strong>500 case dossiers</strong> synthesizes a crisp street-level scene rendered live in HTML5 Canvas packed with authentic regional signatures: left-hand versus right-hand traffic lanes, painted highway line colors, country-specific license plate formats, roadside reflective bollards, sun hemisphere compass telemetry, architectural skylines, climate foliage, and genuine local street scripts.</p>
+        <p>Built as a fast, <strong>no-download geography deduction game for smartphones, tablets, and Chromebooks</strong>, OSINT Geo-Sleuth runs smoothly at 60 FPS with crisp procedural <strong>Web Audio camera shutters, radar lock-on tones, and dossier alerts</strong>. Best of all, every solved case reveals a concise debrief explaining <em>exactly</em> which real-world clues identified that nation—turning every 30-second round into lasting global intuition.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Real-World OSINT Geolocation Meta Cheat Sheet</h2>
+        <p>In Chapters 1 and 2, full field metadata—including dialing codes and domain extensions—helps you learn the ropes. By Chapters 4 and 5, intelligence briefings arrive heavily <strong>REDACTED</strong>, forcing you to read visual street clues directly! Master these five authentic <strong>OSINT geo-meta markers</strong>:</p>
+
+        <div class="osint-table-wrap">
+          <table class="osint-table">
+            <thead>
+              <tr>
+                <th>OSINT Clue Category</th>
+                <th>What to Look For in the Scene</th>
+                <th>Instant Country Deductions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🚗 Driving Side &amp; Road Lines</strong></td>
+                <td>Which lane the passing car drives in + yellow vs. white dashed centerline.</td>
+                <td><strong>Left-hand drive</strong> immediately narrows suspects to UK, Japan, Australia, South Africa, India, or Thailand! <strong>Yellow outer / white center</strong> points strongly to South Africa or Norway/Americas.</td>
+              </tr>
+              <tr>
+                <td><strong>🪪 License Plate Geometry</strong></td>
+                <td>Blue EU strip on left, twin blue bands, yellow rear plate, or square tall plate.</td>
+                <td><strong>Yellow rear plate</strong> = UK or Netherlands; <strong>Dual blue strips</strong> (left &amp; right) = Italy or France; <strong>Green/Yellow square plate</strong> = Japan; <strong>Blue top bar</strong> = Brazil Mercosur!</td>
+              </tr>
+              <tr>
+                <td><strong>🪧 Roadside Bollards</strong></td>
+                <td>White/red posts, orange Nordic snow sticks, or wrap-around red reflectors.</td>
+                <td><strong>Orange tall snow poles</strong> = Norway/Iceland; <strong>White post with red band + white tip</strong> = Australia; <strong>Black-cap slanted bar</strong> = Germany/Poland!</td>
+              </tr>
+              <tr>
+                <td><strong>🔤 Unique Alphabet Letters</strong></td>
+                <td>Distinctive diacritics and scripts on shop awnings and highway boards.</td>
+                <td><code>ß</code> = Germany; <code>Å/Ø</code> = Norway; <code>Ä/Ö + Å</code> = Sweden; <code>Ł/Ż</code> = Poland; <code>Ğ/Ş</code> = Turkey; <code>가/한</code> = South Korea; <code>ก/ข</code> = Thailand; <code>Ω/Δ</code> = Greece!</td>
+              </tr>
+              <tr>
+                <td><strong>☀️ Sun &amp; Hemisphere</strong></td>
+                <td>Check the compass HUD badge (`SUN: SOUTH` vs `SUN: NORTH`).</td>
+                <td><strong>Sun due NORTH</strong> = Southern Hemisphere (Australia, Brazil, South Africa, Argentina)! <strong>Sun due SOUTH</strong> = Northern Hemisphere!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Investigator Pro Tip:</strong> Whenever two European or Asian countries share similar scripts or plates, cross-check <strong>two clues together</strong>—for example, both Sweden and Norway sit in northern pine forests with right-hand traffic, yet Norway uses <code>Ø/Æ</code> while Sweden uses <code>Ö/Ä</code> and distinctive blue-background highway signs! Stuck on a redacted Chapter 5 dossier? Tap <strong>💡 OSINT Intel</strong> to unlock one verified regional deduction clue immediately.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner amber-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/geo-sleuth-banner-2.jpg"
+            alt="Four miniature regional street dioramas—Nordic snow road, Mediterranean village, neon Tokyo lane, and Brazilian palm boulevard in OSINT Geo-Sleuth"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>20 Authentic Country Profiles &amp; Progressive Redacted Dossiers</h3>
+          <p>Graduate from full-intel training captures to high-stakes black-ops briefings where only visual road lines, plates, bollards, and sun angles remain.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Intelligence Chapters (500 Unique Geo-OSINT Cases)</h2>
+        <p>Progress from rookie analyst to elite global tracker across five increasingly challenging OSINT tiers:</p>
         <ul>
-          <li><strong>Zoom In &amp; Inspect Every Corner:</strong> Pinch-to-zoom, scroll, or tap the quick-focus chips (<strong>🪟 Window</strong>, <strong>☕ Cafe Menu</strong>, <strong>🔌 Wall Outlet</strong>, <strong>🧾 Receipt &amp; Wi-Fi</strong>) to magnify crisp vector details up to <strong>4.5×</strong>.</li>
-          <li><strong>Cross-Reference Multiple Clues:</strong> A single Type G British plug narrows your suspect photo to the UK, Ireland, Singapore, or the UAE—then checking the currency (<code>£</code> vs <code>S$</code> vs <code>AED</code>), temperature, and skyline outside the window pinpoints the exact city!</li>
-          <li><strong>Pinpoint on the World Map:</strong> Switch to <strong>🗺️ World Map Pin</strong>, zoom into your target continent if needed, tap to drop your red locator pin, and hit <strong>📍 CONFIRM PIN</strong> to see your exact great-circle distance in kilometers.</li>
+          <li><strong>Chapter 1 (Cases 1–100 — Field Agent Orientation):</strong> Full unredacted street captures across 4 geographically distinct suspects—learn how driving lanes, dialing codes, plates, and scripts align.</li>
+          <li><strong>Chapter 2 (Cases 101–200 — Regional Lookalikes):</strong> Groups tricky neighboring lookalikes (e.g., Japan vs. South Korea vs. Thailand, or Sweden vs. Norway vs. Poland) with phone codes redacted!</li>
+          <li><strong>Chapter 3 (Cases 201–300 — Visual Meta Analyst):</strong> Expands the suspect lineup to <strong>6 countries</strong> while redacting top-level domain and currency hints—relying on bollards, road paint, flora, and signs.</li>
+          <li><strong>Chapter 4 (Cases 301–400 — Shadow &amp; Plate Specialist):</strong> Introduces dusk/overcast lighting and strips away text translations, testing fast license-plate geometry and hemisphere compass reading across 6 closely matched nations.</li>
+          <li><strong>Chapter 5 (Cases 401–500 — Black-Ops Master Sleuth):</strong> Maximum <strong>8-country suspect board</strong> with heavily redacted telemetry—pure visual street-view deduction across all 20 global nations, complete with an instant 1–500 dossier picker and private local saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Geolocation OSINT Topics">
+          <span class="kw-pill">OSINT Geolocation Game Online</span>
+          <span class="kw-pill">GeoGuessr Meta Trainer Free</span>
+          <span class="kw-pill">License Plate &amp; Bollard Quiz</span>
+          <span class="kw-pill">Geography Detective Browser Game</span>
+          <span class="kw-pill">500-Level World Clue Puzzle</span>
+          <span class="kw-pill">No-Download Chromebook Geography Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>OSINT Geo-Sleuth FAQ</h2>
         <details class="faq-item">
-          <summary>Are the electrical outlets, currencies, and driving sides historically accurate?</summary>
-          <div class="faq-answer">Yes! Every city in OSINT Geo-Sleuth uses its real-world socket standard (Type A/B, C/F, G, I, or D/M), actual local currency symbol, genuine left/right traffic lane, authentic license plate style, and true latitude/longitude coordinates.</div>
+          <summary>How does the Sun Compass clue (`SUN: NORTH` vs `SUN: SOUTH`) help identify the country?</summary>
+          <div class="faq-answer">In the Northern Hemisphere (Europe, North America, East Asia), the midday sun arcs across the <strong>Southern</strong> sky. In the Southern Hemisphere (Australia, Brazil, Argentina, South Africa), the midday sun shines from the <strong>North</strong>—instantly eliminating half the globe!</div>
         </details>
         <details class="faq-item">
-          <summary>How can I memorize plug types and country clues quickly?</summary>
-          <div class="faq-answer">Tap <strong>📖 Field Guide</strong> anytime beneath the viewport to open your pocket OSINT reference sheet without losing progress—or tap <strong>💡 Clue Intel</strong> to zoom straight onto an informative detail!</div>
+          <summary>Why are some Evidence Cards marked "[REDACTED]" in Chapters 2 through 5?</summary>
+          <div class="faq-answer">As your investigator rank climbs, easy giveaways like international calling codes (`+81`, `+46`) and web domains (`.de`, `.br`) are redacted so you practice genuine visual OSINT—identifying countries from driving side, license plate design, roadside bollards, street script, and climate!</div>
+        </details>
+        <details class="faq-item">
+          <summary>What happens if I select the wrong country suspect?</summary>
+          <div class="faq-answer">You have <strong>3 Attempts</strong> per case. A wrong guess crosses that suspect off the board and gives a brief clue nudge (like hemisphere or driving side) so you can narrow down the real location logically!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does OSINT Geo-Sleuth require Google Maps or heavy image downloads?</summary>
+          <div class="faq-answer">Zero external maps or megabytes of images! Every street view scene, passing car, license plate, bollard, and storefront sign is drawn procedurally in crisp HTML5 Canvas—working smoothly even on slow Wi-Fi or school Chromebooks.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">👁️</div><span class="cat-tag">Mystery</span></div>
-        <h3>Micro-Expression Polygraph</h3>
-        <p>Watch a suspect's face closely during questioning and catch split-second eye twitches.</p>
-        <a href="/games/micro-polygraph/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🖥️</div><span class="cat-tag">Mystery</span></div>
+        <div class="card-top"><div class="icon-box">💻</div><span class="cat-tag">Mystery</span></div>
         <h3>OS Sleuth</h3>
-        <p>Explore a retro Windows 98 desktop, inspect emails and hidden files, and solve a mystery.</p>
+        <p>Investigate a suspect's simulated desktop, decode encrypted notes, and uncover hidden truths.</p>
         <a href="/games/os-sleuth/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🔍</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Infinite Zoom Hidden Object</h3>
-        <p>Dive smoothly through nested illustrated vector worlds to discover three hidden artifacts.</p>
-        <a href="/games/infinite-zoom/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🧠</div><span class="cat-tag">Mystery</span></div>
+        <h3>Micro-Expression Polygraph</h3>
+        <p>Interrogate suspects, spot split-second facial micro-expressions, and catch every lie on tape.</p>
+        <a href="/games/micro-polygraph/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🗺️</div><span class="cat-tag">Strategy</span></div>
+        <h3>Heist Blueprint Planner</h3>
+        <p>Plot synchronized stealth waypoints past sweeping guards and laser cameras to crack the vault.</p>
+        <a href="/games/heist-planner/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
   <!-- Case Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Geo-Case">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select OSINT Case">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Geo-Case (1 – 500)</h3>
+        <h3>Choose OSINT Dossier (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
@@ -695,21 +793,21 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Mystery</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/fold-reveal/">Fold &amp; Reveal</a></li>
-            <li><a href="/games/infinite-zoom/">Infinite Zoom</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
+            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
+            <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Top Strategy</h4>
           <ul>
+            <li><a href="/games/grocery-bagging/">Grocery Bagging</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
             <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
-            <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
-            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -742,91 +840,182 @@
     }
 
     // ==============================================
-    // 32 REAL-WORLD OSINT CITIES & 500-CASE DATABASE
+    // 20-COUNTRY AUTHENTIC OSINT GEO-META DATABASE (500 CASES)
     // ==============================================
     const TOTAL_LEVELS = 500;
-    const WORLD_W = 460;
-    const WORLD_H = 380;
+    const WORLD_W = 440;
+    const WORLD_H = 310;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Rookie Analyst", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Field Investigator", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Shadow Analyst", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Deep OSINT", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Master Geoint", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Field Agent Orientation", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Regional Lookalikes", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Visual Meta Analyst", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Shadow & Plate Specialist", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Black-Ops Master Sleuth", range: "401–500", start: 401, end: 500 }
     ];
 
-    // Authentic Real-World Geolocation Intelligence Database (32 Global Cities)
-    const CITIES = [
-      { city: "Tokyo",         country: "Japan",        lat: 35.68,  lon: 139.69, plug: "A", drive: "LEFT",  plate: "jp", cur: "¥",   menu1: "MATCHA LATTE ¥480",  menu2: "RAMEN SET ¥950",     cafe: "KISSA",     phone: "+81",  tld: ".jp",    temp: "19°C", skyline: "pagoda" },
-      { city: "Kyoto",         country: "Japan",        lat: 35.01,  lon: 135.77, plug: "A", drive: "LEFT",  plate: "jp", cur: "¥",   menu1: "HOJICHA TEA ¥420",   menu2: "MOCHI PLATE ¥560",   cafe: "CHAYA",     phone: "+81",  tld: ".jp",    temp: "17°C", skyline: "torii" },
-      { city: "Seoul",         country: "South Korea",  lat: 37.57,  lon: 126.98, plug: "C", drive: "RIGHT", plate: "kr", cur: "₩",   menu1: "ICED AMERICANO ₩4500",menu2: "HOTTEOK ₩3000",     cafe: "SEOUL ROAST",phone: "+82", tld: ".kr",    temp: "16°C", skyline: "tower_kr" },
-      { city: "London",        country: "UK",           lat: 51.51,  lon: -0.13,  plug: "G", drive: "LEFT",  plate: "uk", cur: "£",   menu1: "EARL GREY TEA £3.20",menu2: "SCONE & JAM £4.50",  cafe: "THE CROWN", phone: "+44",  tld: ".co.uk", temp: "13°C", skyline: "bigben" },
-      { city: "Edinburgh",     country: "UK",           lat: 55.95,  lon: -3.19,  plug: "G", drive: "LEFT",  plate: "uk", cur: "£",   menu1: "SHORTBREAD £2.80",   menu2: "PORRIDGE £4.90",     cafe: "HIGHLAND",  phone: "+44",  tld: ".co.uk", temp: "10°C", skyline: "castle" },
-      { city: "Dublin",        country: "Ireland",      lat: 53.35,  lon: -6.26,  plug: "G", drive: "LEFT",  plate: "eu", cur: "€",   menu1: "IRISH BREAKFAST €9", menu2: "SODA BREAD €3.50",   cafe: "LIFFEY",    phone: "+353", tld: ".ie",    temp: "12°C", skyline: "spire" },
-      { city: "Paris",         country: "France",       lat: 48.86,  lon: 2.35,   plug: "C", drive: "RIGHT", plate: "eu", cur: "€",   menu1: "CAFÉ CRÈME 3.80€",   menu2: "CROISSANT 2.10€",    cafe: "BISTRO",    phone: "+33",  tld: ".fr",    temp: "18°C", skyline: "eiffel" },
-      { city: "Berlin",        country: "Germany",      lat: 52.52,  lon: 13.40,  plug: "C", drive: "RIGHT", plate: "eu", cur: "€",   menu1: "KAFFEE CREMA 3.40€", menu2: "BREZEL 2.20€",       cafe: "BÄCKEREI",  phone: "+49",  tld: ".de",    temp: "15°C", skyline: "tvtower" },
-      { city: "Munich",        country: "Germany",      lat: 48.14,  lon: 11.58,  plug: "C", drive: "RIGHT", plate: "eu", cur: "€",   menu1: "APFELSTRUDEL 4.90€", menu2: "MILCHKAFFEE 3.80€",  cafe: "STUBE",     phone: "+49",  tld: ".de",    temp: "14°C", skyline: "alps" },
-      { city: "Rome",          country: "Italy",        lat: 41.90,  lon: 12.50,  plug: "C", drive: "RIGHT", plate: "eu", cur: "€",   menu1: "ESPRESSO 1.40€",     menu2: "CORNETTO 1.80€",     cafe: "CAFFÈ",     phone: "+39",  tld: ".it",    temp: "24°C", skyline: "dome" },
-      { city: "Venice",        country: "Italy",        lat: 45.44,  lon: 12.32,  plug: "C", drive: "RIGHT", plate: "eu", cur: "€",   menu1: "CAPPUCCINO 2.60€",   menu2: "TIRAMISÙ 5.50€",     cafe: "LAGUNA",    phone: "+39",  tld: ".it",    temp: "21°C", skyline: "canal" },
-      { city: "Madrid",        country: "Spain",        lat: 40.42,  lon: -3.70,  plug: "C", drive: "RIGHT", plate: "eu", cur: "€",   menu1: "CAFÉ CON LECHE 2.2€",menu2: "CHURROS 3.50€",      cafe: "PLAZA",     phone: "+34",  tld: ".es",    temp: "26°C", skyline: "plaza" },
-      { city: "Barcelona",     country: "Spain",        lat: 41.39,  lon: 2.17,   plug: "C", drive: "RIGHT", plate: "eu", cur: "€",   menu1: "CORTADO 2.10€",      menu2: "PA AMB TOMÀQUET 4€", cafe: "RAMBLA",    phone: "+34",  tld: ".es",    temp: "25°C", skyline: "spires_bcn" },
-      { city: "Athens",        country: "Greece",       lat: 37.98,  lon: 23.73,  plug: "C", drive: "RIGHT", plate: "eu", cur: "€",   menu1: "FREDDO ESPRESSO 3€", menu2: "SPANAKOPITA 2.80€",  cafe: "KAFENEIO",  phone: "+30",  tld: ".gr",    temp: "28°C", skyline: "parthenon" },
-      { city: "Zurich",        country: "Switzerland",  lat: 47.37,  lon: 8.54,   plug: "C", drive: "RIGHT", plate: "ch", cur: "CHF", menu1: "SCHALE KAFFEE 5 CHF",menu2: "GIPFELI 2.60 CHF",   cafe: "ALPINE",    phone: "+41",  tld: ".ch",    temp: "11°C", skyline: "alps" },
-      { city: "Oslo",          country: "Norway",       lat: 59.91,  lon: 10.75,  plug: "C", drive: "RIGHT", plate: "eu", cur: "kr",  menu1: "FILTERKAFFE 44 kr",  menu2: "KANELBOLLE 48 kr",   cafe: "FJORD",     phone: "+47",  tld: ".no",    temp: "7°C",  skyline: "fjord" },
-      { city: "Stockholm",     country: "Sweden",       lat: 59.33,  lon: 18.07,  plug: "C", drive: "RIGHT", plate: "eu", cur: "kr",  menu1: "FIKA BRYGG 38 kr",   menu2: "KANELBULLE 36 kr",   cafe: "GAMLA",     phone: "+46",  tld: ".se",    temp: "8°C",  skyline: "nordic" },
-      { city: "Istanbul",      country: "Turkey",       lat: 41.01,  lon: 28.98,  plug: "C", drive: "RIGHT", plate: "tr", cur: "₺",   menu1: "TÜRK KAHVESİ ₺75",   menu2: "SİMİT & ÇAY ₺45",    cafe: "BOSPHORUS", phone: "+90",  tld: ".tr",    temp: "23°C", skyline: "minaret" },
-      { city: "Cairo",         country: "Egypt",        lat: 30.04,  lon: 31.24,  plug: "C", drive: "RIGHT", plate: "eg", cur: "E£",  menu1: "SHAI BIL NANA E£25", menu2: "FALAFEL PLATE E£45", cafe: "NILE",      phone: "+20",  tld: ".eg",    temp: "33°C", skyline: "pyramids" },
-      { city: "Dubai",         country: "UAE",          lat: 25.20,  lon: 55.27,  plug: "G", drive: "RIGHT", plate: "ae", cur: "AED", menu1: "KARAK CHAI 8 AED",   menu2: "DATES & QAHWA 24 AED",cafe:"DESERT",    phone: "+971", tld: ".ae",    temp: "38°C", skyline: "burj" },
-      { city: "Mumbai",        country: "India",        lat: 19.08,  lon: 72.88,  plug: "D", drive: "LEFT",  plate: "in", cur: "₹",   menu1: "MASALA CHAI ₹40",    menu2: "VADA PAV ₹50",       cafe: "IRANI",     phone: "+91",  tld: ".in",    temp: "32°C", skyline: "gateway" },
-      { city: "New Delhi",     country: "India",        lat: 28.61,  lon: 77.21,  plug: "D", drive: "LEFT",  plate: "in", cur: "₹",   menu1: "FILTER KAAPI ₹60",   menu2: "SAMOSA CHAAT ₹80",   cafe: "BAZAAR",    phone: "+91",  tld: ".in",    temp: "34°C", skyline: "dome" },
-      { city: "Singapore",     country: "Singapore",    lat: 1.35,   lon: 103.82, plug: "G", drive: "LEFT",  plate: "sg", cur: "S$",  menu1: "KOPI O KOSONG S$2.2",menu2: "KAYA TOAST S$4.50",  cafe: "KOPITIAM",  phone: "+65",  tld: ".sg",    temp: "31°C", skyline: "mbs" },
-      { city: "Sydney",        country: "Australia",    lat: -33.87, lon: 151.21, plug: "I", drive: "LEFT",  plate: "au", cur: "A$",  menu1: "FLAT WHITE A$5.00",  menu2: "AVO SMASH A$16",     cafe: "HARBOUR",   phone: "+61",  tld: ".au",    temp: "24°C", skyline: "opera" },
-      { city: "Auckland",      country: "New Zealand",  lat: -36.85, lon: 174.76, plug: "I", drive: "LEFT",  plate: "au", cur: "NZ$", menu1: "LONG BLACK NZ$4.80", menu2: "KIWI PIE NZ$7.50",   cafe: "AOTEAROA",  phone: "+64",  tld: ".nz",    temp: "19°C", skyline: "skytower" },
-      { city: "New York",      country: "USA",          lat: 40.71,  lon: -74.01, plug: "A", drive: "RIGHT", plate: "us", cur: "$",   menu1: "DRIP COFFEE $3.50",  menu2: "LOX BAGEL $9.50",    cafe: "MIDTOWN",   phone: "+1",   tld: ".us",    temp: "68°F", skyline: "empire" },
-      { city: "San Francisco", country: "USA",          lat: 37.77,  lon: -122.42,plug: "A", drive: "RIGHT", plate: "us", cur: "$",   menu1: "COLD BREW $5.25",    menu2: "SOURDOUGH $6.50",    cafe: "BAYSIDE",   phone: "+1",   tld: ".us",    temp: "63°F", skyline: "bridge_sf" },
-      { city: "Toronto",       country: "Canada",       lat: 43.65,  lon: -79.38, plug: "A", drive: "RIGHT", plate: "ca", cur: "C$",  menu1: "DOUBLE-DOUBLE C$2.5",menu2: "MAPLE DONUT C$3.20", cafe: "MAPLE",     phone: "+1",   tld: ".ca",    temp: "14°C", skyline: "cntower" },
-      { city: "Mexico City",   country: "Mexico",       lat: 19.43,  lon: -99.13, plug: "A", drive: "RIGHT", plate: "mx", cur: "MX$", menu1: "CAFÉ DE OLLA MX$45", menu2: "CHILAQUILES MX$95",  cafe: "ZÓCALO",    phone: "+52",  tld: ".mx",    temp: "23°C", skyline: "cactus_mx" },
-      { city: "Rio de Janeiro",country: "Brazil",       lat: -22.91, lon: -43.17, plug: "C", drive: "RIGHT", plate: "br", cur: "R$",  menu1: "CAFEZINHO R$7.00",   menu2: "PÃO DE QUEIJO R$9",  cafe: "COPA",      phone: "+55",  tld: ".br",    temp: "29°C", skyline: "rio" },
-      { city: "Buenos Aires",  country: "Argentina",    lat: -34.60, lon: -58.38, plug: "I", drive: "RIGHT", plate: "ar", cur: "AR$", menu1: "CORTADO AR$2400",    menu2: "MEDIALUNAS AR$1800", cafe: "PALERMO",   phone: "+54",  tld: ".ar",    temp: "22°C", skyline: "obelisk" },
-      { city: "Cape Town",     country: "South Africa", lat: -33.92, lon: 18.42,  plug: "D", drive: "LEFT",  plate: "za", cur: "R",   menu1: "ROOIBOS LATTE R38",  menu2: "BILTONG ROLL R65",   cafe: "TABLE BAY", phone: "+27",  tld: ".za",    temp: "22°C", skyline: "tablemtn" }
-    ];
-
-    const WALL_THEMES = [
-      { wall: "#2e2824", wood: "#5c3a21", board: "#182421", skyDay: "#38bdf8", skyLow: "#bae6fd" },
-      { wall: "#252c38", wood: "#6b4423", board: "#1c202b", skyDay: "#0284c7", skyLow: "#7dd3fc" },
-      { wall: "#36282a", wood: "#783f22", board: "#241d22", skyDay: "#f97316", skyLow: "#fde68a" },
-      { wall: "#1e2e2a", wood: "#4a321f", board: "#13221f", skyDay: "#0ea5e9", skyLow: "#e0f2fe" }
-    ];
-
-    // Simplified Accurate Geographic Continent Polygons (lon, lat) for Crisp World Map!
-    const CONTINENT_POLYS = [
-      // North America
-      [[-166,65],[-140,69],[-110,69],[-82,63],[-60,47],[-75,35],[-81,25],[-97,26],[-87,21],[-78,9],[-84,9],[-92,15],[-106,20],[-117,32],[-125,49],[-140,60],[-162,55]],
-      // Greenland
-      [[-52,60],[-42,60],[-20,70],[-28,81],[-58,78],[-56,67]],
-      // South America
-      [[-78,9],[-62,10],[-50,0],[-35,-6],[-38,-18],[-48,-28],[-58,-38],[-68,-54],[-75,-46],[-71,-18],[-81,-5]],
-      // Europe
-      [[-9,37],[-9,43],[-2,48],[5,53],[10,58],[5,61],[18,69],[30,70],[42,66],[42,46],[28,41],[24,37],[18,40],[14,44],[6,43],[-5,36]],
-      // UK & Ireland
-      [[-6,50],[2,51],[1,54],[-2,58],[-6,57]],
-      [[-10,51],[-6,52],[-6,55],[-10,54]],
-      // Africa
-      [[-17,15],[-6,36],[10,37],[25,32],[33,31],[43,12],[51,11],[41,-3],[40,-15],[33,-26],[18,-34],[12,-17],[9,4],[-8,5],[-16,11]],
-      // Madagascar
-      [[44,-25],[47,-25],[50,-13],[47,-14]],
-      // Asia
-      [[27,41],[42,46],[42,66],[68,72],[105,76],[140,72],[170,66],[162,55],[140,54],[135,44],[129,35],[121,31],[120,23],[108,21],[109,11],[104,1],[100,6],[97,16],[88,22],[77,8],[72,21],[62,25],[56,26],[48,30],[36,36]],
-      // Japan
-      [[130,31],[136,34],[141,36],[145,44],[140,42],[136,37],[131,34]],
-      // Indonesia / Maritime SE Asia
-      [[96,5],[105,-6],[115,-8],[115,-4],[104,0]],
-      [[109,2],[118,5],[118,-3],[111,-3]],
-      // Australia
-      [[114,-22],[122,-17],[136,-12],[143,-11],[153,-28],[149,-37],[138,-35],[128,-32],[115,-34]],
-      // New Zealand
-      [[167,-46],[174,-41],[178,-37],[173,-35],[172,-42]]
+    // 20 Distinct Real-World Countries With Authentic Driving Side, Plates, Bollards, Scripts, Flora & Telemetry!
+    const COUNTRIES = [
+      {
+        id: "jp", name: "Japan", flag: "🇯🇵", region: "E. Asia", hemi: "N", drive: "L",
+        roadLine: "white_dash", plateStyle: "jp_square", plateText: "品川 500",
+        bollard: "jp_stripe", flora: "sakura", sky: ["#38bdf8", "#bae6fd"], ground: "#64748b",
+        signs: ["渋谷駅 • 止まれ", "ラーメン 営業中", "京都府 24km"],
+        dial: "+81", tld: ".jp", curr: "¥ JPY",
+        debrief: "Left-hand drive, square white/yellow kei plates, and Japanese Kanji/Kana street signage."
+      },
+      {
+        id: "kr", name: "South Korea", flag: "🇰🇷", region: "E. Asia", hemi: "N", drive: "R",
+        roadLine: "yellow_double", plateStyle: "kr_wide", plateText: "12가 3456",
+        bollard: "kr_yellow", flora: "pine", sky: ["#0284c7", "#e0f2fe"], ground: "#64748b",
+        signs: ["서울특별시 • 정지", "강남대로 18km", "카페 24시"],
+        dial: "+82", tld: ".kr", curr: "₩ KRW",
+        debrief: "Right-hand drive, Hangul script (circles & crisp strokes), and yellow double centerlines."
+      },
+      {
+        id: "th", name: "Thailand", flag: "🇹🇭", region: "SE Asia", hemi: "N", drive: "L",
+        roadLine: "yellow_dash", plateStyle: "white_plain", plateText: "กข 4821",
+        bollard: "th_concrete", flora: "palm", sky: ["#0ea5e9", "#fef3c7"], ground: "#65a30d",
+        signs: ["กรุงเทพมหานคร", "ตลาดน้ำ 12 กม.", "ถนนสุขุมวิท"],
+        dial: "+66", tld: ".th", curr: "฿ THB",
+        debrief: "Left-hand traffic, looped Thai script without spaces, tropical palms, and square concrete poles."
+      },
+      {
+        id: "in", name: "India", flag: "🇮🇳", region: "S. Asia", hemi: "N", drive: "L",
+        roadLine: "white_dash", plateStyle: "in_ind", plateText: "MH 12 AB 409",
+        bollard: "in_km", flora: "palm", sky: ["#38bdf8", "#fde68a"], ground: "#a16207",
+        signs: ["जयपुर • मार्ग 48", "नई दिल्ली 35 km", "चाय और नाश्ता"],
+        dial: "+91", tld: ".in", curr: "₹ INR",
+        debrief: "Left-hand drive, Devanagari script with continuous top bar, and 'IND' plate prefix."
+      },
+      {
+        id: "uk", name: "United Kingdom", flag: "🇬🇧", region: "Europe", hemi: "N", drive: "L",
+        roadLine: "white_dash", plateStyle: "uk_yellow", plateText: "AB21 XYZ",
+        bollard: "uk_black", flora: "oak", sky: ["#64748b", "#cbd5e1"], ground: "#4d7c0f",
+        signs: ["GIVE WAY • A40", "OXFORD CIRCUS", "MIND THE GAP"],
+        dial: "+44", tld: ".co.uk", curr: "£ GBP",
+        debrief: "Left-hand drive, iconic solid yellow rear license plates, and green/white A-road signage."
+      },
+      {
+        id: "nl", name: "Netherlands", flag: "🇳🇱", region: "Europe", hemi: "N", drive: "R",
+        roadLine: "white_dash", plateStyle: "nl_yellow_eu", plateText: "G-482-KD",
+        bollard: "eu_red", flora: "oak", sky: ["#60a5fa", "#dbeafe"], ground: "#65a30d",
+        signs: ["FIETSPAD • A10", "AMSTERDAM 14km", "UITRIT VRIJ"],
+        dial: "+31", tld: ".nl", curr: "€ EUR",
+        debrief: "Right-hand drive paired with yellow EU-band license plates and Dutch 'Fietspad' cycleway signs."
+      },
+      {
+        id: "de", name: "Germany", flag: "🇩🇪", region: "Europe", hemi: "N", drive: "R",
+        roadLine: "white_dash", plateStyle: "eu_blue", plateText: "B • MK 4092",
+        bollard: "de_slant", flora: "pine", sky: ["#3b82f6", "#e0f2fe"], ground: "#4d7c0f",
+        signs: ["HAUPTSTRASSE • ß", "AUTOBAHN A9", "AUSFAHRT 500m"],
+        dial: "+49", tld: ".de", curr: "€ EUR",
+        debrief: "Right-hand drive, German 'ß' / 'Ausfahrt' signage, EU blue-left plate, and black-cap German bollards."
+      },
+      {
+        id: "fr", name: "France", flag: "🇫🇷", region: "Europe", hemi: "N", drive: "R",
+        roadLine: "white_dash", plateStyle: "eu_dual", plateText: "AA-482-FR",
+        bollard: "fr_red", flora: "cypress", sky: ["#2563eb", "#dbeafe"], ground: "#65a30d",
+        signs: ["BOULANGERIE • D9", "RUE DE LA PAIX", "CÉDEZ LE PASSAGE"],
+        dial: "+33", tld: ".fr", curr: "€ EUR",
+        debrief: "Dual blue-stripe license plates (left & right), French accents ('é/è'), and white red-ring bollards."
+      },
+      {
+        id: "it", name: "Italy", flag: "🇮🇹", region: "Europe", hemi: "N", drive: "R",
+        roadLine: "white_solid", plateStyle: "eu_dual", plateText: "FX 492 LK",
+        bollard: "it_slant", flora: "cypress", sky: ["#0284c7", "#fef3c7"], ground: "#84cc16",
+        signs: ["VIA ROMA • ZTL", "PIAZZA GARIBALDI", "SENSO UNICO"],
+        dial: "+39", tld: ".it", curr: "€ EUR",
+        debrief: "Dual blue-band plates, Mediterranean cypress trees, and Italian 'Via / Piazza / ZTL' street signs."
+      },
+      {
+        id: "es", name: "Spain", flag: "🇪🇸", region: "Europe", hemi: "N", drive: "R",
+        roadLine: "white_dash", plateStyle: "eu_blue", plateText: "4928 KLM",
+        bollard: "eu_red", flora: "palm", sky: ["#0ea5e9", "#fde68a"], ground: "#ca8a04",
+        signs: ["CALLE ESPAÑA • Ñ", "PLAZA MAYOR", "CEDA EL PASO"],
+        dial: "+34", tld: ".es", curr: "€ EUR",
+        debrief: "Right-hand drive, Spanish 'Ñ' / 'Calle' signage, EU blue-left plate, and warm dry ochre hills."
+      },
+      {
+        id: "no", name: "Norway", flag: "🇳🇴", region: "Nordic", hemi: "N", drive: "R",
+        roadLine: "yellow_dash", plateStyle: "eu_blue", plateText: "EL 49201",
+        bollard: "no_snow", flora: "pine", sky: ["#1d4ed8", "#cbd5e1"], ground: "#334155",
+        signs: ["TROMSØ • E6", "FJORDVEIEN 8km", "VIKTIGE ØY"],
+        dial: "+47", tld: ".no", curr: "kr NOK",
+        debrief: "Dashed yellow centerline (unique in Scandinavia!), 'Ø / Å' letters, and orange Nordic snow poles."
+      },
+      {
+        id: "se", name: "Sweden", flag: "🇸🇪", region: "Nordic", hemi: "N", drive: "R",
+        roadLine: "white_dash", plateStyle: "eu_blue", plateText: "MLB 482",
+        bollard: "se_snow", flora: "birch", sky: ["#0284c7", "#e2e8f0"], ground: "#4d7c0f",
+        signs: ["GÖTEBORG • E4", "STORGATAN 12", "VÄLKOMMEN ÄÖ"],
+        dial: "+46", tld: ".se", curr: "kr SEK",
+        debrief: "Short dashed white outer lines, Swedish 'Ä / Ö / Å' letters, birch/pine woods, and blue-trim road signs."
+      },
+      {
+        id: "pl", name: "Poland", flag: "🇵🇱", region: "Europe", hemi: "N", drive: "R",
+        roadLine: "white_dash", plateStyle: "eu_blue", plateText: "WA 4928K",
+        bollard: "pl_red", flora: "birch", sky: ["#3b82f6", "#e2e8f0"], ground: "#65a30d",
+        signs: ["ŁÓDŹ • UL. NOWA", "KRAKÓW 28km", "ŻABKA SKLEP"],
+        dial: "+48", tld: ".pl", curr: "zł PLN",
+        debrief: "Distinctive Polish letters ('Ł / Ż / Ó'), EU blue-band plate, and white bollards with a red center stripe."
+      },
+      {
+        id: "gr", name: "Greece", flag: "🇬🇷", region: "Europe", hemi: "N", drive: "R",
+        roadLine: "white_dash", plateStyle: "eu_blue", plateText: "IKA-4920",
+        bollard: "eu_red", flora: "cypress", sky: ["#0284c7", "#bae6fd"], ground: "#d97706",
+        signs: ["ΑΘΗΝΑ • ΕΞΟΔΟΣ", "ΘΕΣΣΑΛΟΝΙΚΗ 15km", "ΟΔΟΣ ΕΡΜΟΥ"],
+        dial: "+30", tld: ".gr", curr: "€ EUR",
+        debrief: "Greek alphabet ('Ω / Δ / Θ / Σ') on blue highway signs, Mediterranean sun, and EU blue-left plates."
+      },
+      {
+        id: "tr", name: "Turkey", flag: "🇹🇷", region: "Eurasia", hemi: "N", drive: "R",
+        roadLine: "white_dash", plateStyle: "tr_blue", plateText: "34 TR 492",
+        bollard: "tr_red", flora: "cypress", sky: ["#0ea5e9", "#fde68a"], ground: "#b45309",
+        signs: ["İSTANBUL • ÇIKIŞ", "ANKARA 42km", "BOĞAZİÇİ Ş"],
+        dial: "+90", tld: ".tr", curr: "₺ TRY",
+        debrief: "Turkish special letters ('Ğ / Ş / İ / Ç'), blue TR strip plate starting with city number, and arid hills."
+      },
+      {
+        id: "au", name: "Australia", flag: "🇦🇺", region: "Oceania", hemi: "S", drive: "L",
+        roadLine: "white_dash", plateStyle: "white_plain", plateText: "NSW 482K",
+        bollard: "au_red", flora: "eucalyptus", sky: ["#0284c7", "#fef08a"], ground: "#c2410c",
+        signs: ["SYDNEY M1 • KM", "GIVE WAY", "KANGAROO XING"],
+        dial: "+61", tld: ".com.au", curr: "$ AUD",
+        debrief: "Southern Hemisphere (sun in North!), left-hand drive, red outback soil, eucalyptus trees, and red-band white bollards."
+      },
+      {
+        id: "za", name: "South Africa", flag: "🇿🇦", region: "Africa", hemi: "S", drive: "L",
+        roadLine: "yellow_outer", plateStyle: "white_plain", plateText: "CA 492-810",
+        bollard: "za_white", flora: "acacia", sky: ["#0ea5e9", "#fde68a"], ground: "#a16207",
+        signs: ["KAAPSTAD • N1", "PRETORIA 30km", "ROBOT AHEAD"],
+        dial: "+27", tld: ".co.za", curr: "R ZAR",
+        debrief: "Southern Hemisphere (sun North), left-hand drive, solid yellow outer shoulder lines, and bilingual English/Afrikaans signs."
+      },
+      {
+        id: "br", name: "Brazil", flag: "🇧🇷", region: "S. America", hemi: "S", drive: "R",
+        roadLine: "yellow_double", plateStyle: "mercosur", plateText: "BRA2E19",
+        bollard: "br_black", flora: "palm", sky: ["#0284c7", "#fef3c7"], ground: "#b45309",
+        signs: ["SÃO PAULO • BR-101", "PARE • AVENIDA", "PRAÇA CENTRAL"],
+        dial: "+55", tld: ".com.br", curr: "R$ BRL",
+        debrief: "Southern Hemisphere (sun North), right-hand drive, Mercosur top-blue plate, and Portuguese 'São / Praça' signage."
+      },
+      {
+        id: "ar", name: "Argentina", flag: "🇦🇷", region: "S. America", hemi: "S", drive: "R",
+        roadLine: "yellow_dash", plateStyle: "mercosur", plateText: "AE 492 KL",
+        bollard: "eu_red", flora: "cactus", sky: ["#0ea5e9", "#e0f2fe"], ground: "#a16207",
+        signs: ["BUENOS AIRES • RN9", "PARE • CALLE", "RUTA NACIONAL"],
+        dial: "+54", tld: ".com.ar", curr: "$ ARS",
+        debrief: "Southern Hemisphere (sun North), right-hand drive, Mercosur top-blue plate, and Spanish 'Ruta Nacional' signs."
+      },
+      {
+        id: "us", name: "United States", flag: "🇺🇸", region: "N. America", hemi: "N", drive: "R",
+        roadLine: "yellow_double", plateStyle: "us_state", plateText: "7KLP492",
+        bollard: "us_white", flora: "cactus", sky: ["#0284c7", "#fde68a"], ground: "#ca8a04",
+        signs: ["SPEED LIMIT 55 MPH", "INTERSTATE I-80", "EXIT 42 • MILES"],
+        dial: "+1", tld: ".us", curr: "$ USD",
+        debrief: "Northern Hemisphere, right-hand drive, Imperial MPH/Miles signage, double yellow centerlines, and US plate proportions."
+      }
     ];
 
     function mulberry32(seed) {
@@ -839,51 +1028,63 @@
       };
     }
 
-    // Real Great-Circle Distance on Earth (Haversine formula in km)
-    function haversineKm(lat1, lon1, lat2, lon2) {
-      const R = 6371;
-      const toRad = (d) => (d * Math.PI) / 180;
-      const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lon2 - lon1);
-      const a = Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-      return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+    function shuffle(arr, rng) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
     }
 
     function buildGeoCase(levelNum) {
-      const rng = mulberry32(levelNum * 204107 + 77311);
-      const city = CITIES[(levelNum - 1 + Math.floor(levelNum / 32) * 7) % CITIES.length];
-      const theme = WALL_THEMES[Math.floor(rng() * WALL_THEMES.length)];
+      const rng = mulberry32(levelNum * 463219 + 77101);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const target = COUNTRIES[(levelNum - 1 + Math.floor(rng() * 3) * 0) % COUNTRIES.length];
+      // Ensure rich variety across all 500 cases while rotating cleanly through all 20 nations!
+      const orderedPool = shuffle(COUNTRIES, mulberry32(chapIdx * 9973 + 17));
+      const answer = orderedPool[(levelNum - 1) % orderedPool.length];
 
-      let radiusKm, showWifiDomain, partialBlinds, nightFilter, showCityDots;
-      if (levelNum <= 100) {
-        radiusKm = 1500; showWifiDomain = true; partialBlinds = false; nightFilter = false; showCityDots = true;
-      } else if (levelNum <= 200) {
-        radiusKm = 1100; showWifiDomain = false; partialBlinds = false; nightFilter = false; showCityDots = true;
-      } else if (levelNum <= 300) {
-        radiusKm = 850; showWifiDomain = false; partialBlinds = true; nightFilter = false; showCityDots = false;
-      } else if (levelNum <= 400) {
-        radiusKm = 650; showWifiDomain = false; partialBlinds = true; nightFilter = true; showCityDots = false;
+      const numChoices = chapIdx <= 1 ? 4 : (chapIdx <= 3 ? 6 : 8);
+      const signText = answer.signs[Math.floor(rng() * answer.signs.length)];
+      const isDusk = chapIdx >= 3 && rng() < 0.45;
+      const carColor = ["#dc2626", "#2563eb", "#e2e8f0", "#f59e0b", "#10b981", "#334155"][Math.floor(rng() * 6)];
+
+      // Smart Lookalike Distractor Picking (Harder Chapters Pick Closer Regional/Feature Lookalikes!)
+      const others = COUNTRIES.filter((c) => c.id !== answer.id);
+      let distractors;
+      if (chapIdx === 0) {
+        distractors = shuffle(others, rng).slice(0, numChoices - 1);
       } else {
-        radiusKm = 500; showWifiDomain = false; partialBlinds = true; nightFilter = true; showCityDots = false;
+        // Weight same-region or same-driving-side nations higher for genuine OSINT challenge!
+        const scored = others.map((c) => ({
+          c,
+          w: (c.region === answer.region ? 3 : 0) + (c.drive === answer.drive ? 2 : 0) + (c.hemi === answer.hemi ? 1 : 0) + rng() * 2.5
+        })).sort((a, b) => b.w - a.w);
+        distractors = scored.slice(0, numChoices - 1).map((x) => x.c);
       }
 
-      const mugColor = ["#e11d48", "#0284c7", "#d97706", "#059669", "#7c3aed"][Math.floor(rng() * 5)];
-      const carColor = ["#ef4444", "#eab308", "#3b82f6", "#f8fafc", "#10b981"][Math.floor(rng() * 5)];
-      const receiptId = `${1000 + Math.floor(rng() * 8999)}`;
+      const choices = shuffle([answer, ...distractors], rng);
+
+      // Progressive OSINT Redaction Rules Across Chapters 1–5
+      const showTelecom = chapIdx === 0;
+      const showDriveText = chapIdx <= 2;
+      const showSunText = true;
+      const showBollardText = chapIdx <= 3;
 
       return {
         levelNum,
-        city,
-        theme,
-        radiusKm,
-        showWifiDomain,
-        partialBlinds,
-        nightFilter,
-        showCityDots,
-        mugColor,
+        chapIdx,
+        answer,
+        choices,
+        signText,
+        isDusk,
         carColor,
-        receiptId
+        showTelecom,
+        showDriveText,
+        showSunText,
+        showBollardText,
+        seed: Math.floor(rng() * 10000)
       };
     }
 
@@ -892,7 +1093,7 @@
     }
 
     // ==============================================
-    // OSINT SHUTTER, RADAR PING & CHIME AUDIO ENGINE
+    // CAMERA SHUTTER, RADAR PING & DOSSIER WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
@@ -915,7 +1116,7 @@
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
       g.gain.setValueAtTime(0.001, now);
-      g.gain.exponentialRampToValueAtTime(vol, now + 0.01);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.006);
       g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
       osc.connect(g);
       g.connect(audioCtx.destination);
@@ -923,91 +1124,56 @@
       osc.stop(now + dur + 0.02);
     }
 
-    function sfxZoom() { playTone(560, 0.045, "triangle", 0.06); }
-    function sfxPinDrop() {
-      playTone(820, 0.08, "sine", 0.11);
-      setTimeout(() => playTone(1120, 0.09, "sine", 0.08), 55);
+    function sfxRadarPing() { playTone(1180, 0.14, "sine", 0.08); }
+    function sfxWrongGuess() {
+      playTone(210, 0.13, "sawtooth", 0.1);
+      setTimeout(() => playTone(155, 0.16, "sawtooth", 0.09), 75);
     }
-    function sfxSuccess() {
+    function sfxPinpointWin() {
       [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.38, "sine", 0.12), i * 80);
+        setTimeout(() => playTone(f, 0.42, "sine", 0.11), i * 75);
       });
-    }
-    function sfxMiss() {
-      playTone(230, 0.18, "sawtooth", 0.11);
-      setTimeout(() => playTone(165, 0.24, "sawtooth", 0.11), 110);
     }
 
     // ==============================================
-    // GAME STATE, DUAL CAMERA (PHOTO & MAP) & INPUT
+    // GAME STATE, DOSSIER UI & STREET VIEW RENDERER
     // ==============================================
     const canvas = document.getElementById("geoCanvas");
     const ctx = canvas.getContext("2d");
 
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const radiusPill = document.getElementById("radiusPill");
+    const streakPill = document.getElementById("streakPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const photoTabBtn = document.getElementById("photoTabBtn");
-    const mapTabBtn = document.getElementById("mapTabBtn");
-    const canvasBadge = document.getElementById("canvasBadge");
-    const photoControls = document.getElementById("photoControls");
-    const mapControls = document.getElementById("mapControls");
-    const confirmPinBtn = document.getElementById("confirmPinBtn");
-    const guideDrawer = document.getElementById("guideDrawer");
-    const guideBtn = document.getElementById("guideBtn");
+    const evidenceGrid = document.getElementById("evidenceGrid");
+    const suspectPrompt = document.getElementById("suspectPrompt");
+    const guessesLeftEl = document.getElementById("guessesLeft");
+    const choicesGrid = document.getElementById("choicesGrid");
     const statusToast = document.getElementById("statusToast");
-    const resultOverlay = document.getElementById("resultOverlay");
-    const resIcon = document.getElementById("resIcon");
-    const resHeading = document.getElementById("resHeading");
-    const resDistBadge = document.getElementById("resDistBadge");
-    const resBreakdown = document.getElementById("resBreakdown");
-    const resActionBtn = document.getElementById("resActionBtn");
+    const winOverlay = document.getElementById("winOverlay");
+    const winFlag = document.getElementById("winFlag");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
     let solvedSet = new Set();
     let currentLevelNum = 1;
+    let streak = 0;
     try {
-      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_geo_500_solved") || "[]"));
-      const last = parseInt(localStorage.getItem("zinplay_geo_500_last") || "1", 10);
+      solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_geosleuth_500_solved") || "[]"));
+      const last = parseInt(localStorage.getItem("zinplay_geosleuth_500_last") || "1", 10);
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let curCase = null;
-    let viewMode = "photo"; // 'photo' | 'map'
-    let roundDone = false;
-    let roundWon = false;
-
-    // Photo Camera (Smooth Zoom 1.0..4.5 & Pan)
-    let pZoom = 1.0, pTargetZoom = 1.0;
-    let pX = WORLD_W / 2, pY = WORLD_H / 2;
-    let pTargetX = WORLD_W / 2, pTargetY = WORLD_H / 2;
-
-    // Map Camera (Zoom 1.0..3.5 & Pan) + User Pin
-    let mZoom = 1.0, mTargetZoom = 1.0;
-    let mX = WORLD_W / 2, mY = WORLD_H / 2;
-    let mTargetX = WORLD_W / 2, mTargetY = WORLD_H / 2;
-    let userPin = null; // { lat, lon }
-    let revealTarget = false;
-    let hintBox = null; // { x, y, w, h, timer }
-    let hintStep = 0;
-
-    // Multi-touch Pinch & Pan Pointer Tracking
-    const pointers = new Map();
-    let lastPinchD = null;
-    let dragStartScreen = null;
-    let dragMoved = false;
-    let lastPanPt = null;
+    let gCase = null;
+    let attemptsLeft = 3;
+    let eliminatedIds = new Set();
+    let caseWon = false;
+    let caseLost = false;
+    let revealedIntel = false;
     let toastTimer = null;
-
-    // Focus Anchor Coordinates Inside the 460x380 Evidence Photo
-    const FOCUS_POINTS = {
-      window: { x: 146, y: 124, z: 2.35, label: "Window Skyline & Street Traffic" },
-      menu:   { x: 356, y: 122, z: 2.65, label: "Cafe Chalkboard Menu" },
-      outlet: { x: 386, y: 264, z: 3.85, label: "Wall Electrical Outlet" },
-      table:  { x: 204, y: 318, z: 3.15, label: "Receipt & Wi-Fi Card" }
-    };
 
     function showToast(msg, ms = 2600) {
       statusToast.textContent = msg;
@@ -1016,381 +1182,195 @@
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    // Equirectangular Map Projection on 460x380 World Space
-    // lon: -175..185 (360°), lat: +78..-58 (136°)
-    function latLonToMapXY(lat, lon) {
-      const mx = 10 + ((lon + 175) / 360) * (WORLD_W - 20);
-      const my = 46 + ((78 - lat) / 136) * (WORLD_H - 92);
-      return { x: mx, y: my };
+    function renderEvidenceCards() {
+      const a = gCase.answer;
+      evidenceGrid.innerHTML = "";
+
+      const addCard = (k, v, redacted = false) => {
+        const div = document.createElement("div");
+        div.className = "ev-card" + (redacted ? " redacted" : "");
+        div.innerHTML = `<span class="ev-k">${k}</span><span class="ev-v">${v}</span>`;
+        evidenceGrid.appendChild(div);
+      };
+
+      // 1. Sun & Hemisphere Telemetry
+      addCard(
+        "☀️ Sun Compass",
+        a.hemi === "N" ? "Midday Sun: SOUTH" : "Midday Sun: NORTH",
+        false
+      );
+
+      // 2. Traffic & Road Markings
+      const lineNames = {
+        white_dash: "White Dashed",
+        white_solid: "White Solid",
+        yellow_dash: "Yellow Dashed",
+        yellow_double: "Double Yellow",
+        yellow_outer: "Yellow Shoulders"
+      };
+      addCard(
+        "🚗 Traffic Meta",
+        gCase.showDriveText || revealedIntel
+          ? `${a.drive === "L" ? "LEFT-HAND" : "RIGHT-HAND"} • ${lineNames[a.roadLine]}`
+          : `[VISUAL ONLY] Check Road`,
+        !(gCase.showDriveText || revealedIntel)
+      );
+
+      // 3. Roadside Bollard / Flora
+      const floraMap = {
+        sakura: "Cherry Blossoms", pine: "Northern Pines", palm: "Tropical Palms",
+        oak: "Temperate Oaks", cypress: "Med. Cypress", birch: "White Birch",
+        eucalyptus: "Eucalyptus & Red Soil", acacia: "Savanna Acacia", cactus: "Arid Scrub"
+      };
+      addCard(
+        "🌿 Biome & Flora",
+        gCase.showBollardText || revealedIntel ? floraMap[a.flora] : "[VISUAL ONLY] Inspect Trees",
+        !(gCase.showBollardText || revealedIntel)
+      );
+
+      // 4. Telecom / Domain Intel (Redacted in Chapters 2–5 Unless Hint Used!)
+      addCard(
+        "📡 Telecom / TLD",
+        gCase.showTelecom || revealedIntel
+          ? `${a.dial} • ${a.tld} • ${a.curr}`
+          : "[REDACTED — Ch. 2+]",
+        !(gCase.showTelecom || revealedIntel)
+      );
     }
 
-    function mapXYToLatLon(mx, my) {
-      const lon = Math.max(-175, Math.min(180, ((mx - 10) / (WORLD_W - 20)) * 360 - 175));
-      const lat = Math.max(-58, Math.min(78, 78 - ((my - 46) / (WORLD_H - 92)) * 136));
-      return { lat, lon };
-    }
+    function renderChoices() {
+      const n = gCase.choices.length;
+      choicesGrid.className = "choices-grid" + (n === 6 ? " cols-3" : (n === 8 ? " cols-4" : ""));
+      choicesGrid.innerHTML = "";
 
-    function clampCamera(camType) {
-      if (camType === "photo") {
-        pTargetZoom = Math.max(1.0, Math.min(4.5, pTargetZoom));
-        const halfW = (WORLD_W / 2) / pTargetZoom;
-        const halfH = (WORLD_H / 2) / pTargetZoom;
-        pTargetX = Math.max(halfW, Math.min(WORLD_W - halfW, pTargetX));
-        pTargetY = Math.max(halfH, Math.min(WORLD_H - halfH, pTargetY));
-      } else {
-        mTargetZoom = Math.max(1.0, Math.min(3.5, mTargetZoom));
-        const halfW = (WORLD_W / 2) / mTargetZoom;
-        const halfH = (WORLD_H / 2) / mTargetZoom;
-        mTargetX = Math.max(halfW, Math.min(WORLD_W - halfW, mTargetX));
-        mTargetY = Math.max(halfH, Math.min(WORLD_H - halfH, mTargetY));
-      }
-    }
+      for (const c of gCase.choices) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        const isElim = eliminatedIds.has(c.id);
+        const isRight = (caseWon || caseLost) && c.id === gCase.answer.id;
 
-    function setViewMode(nextMode) {
-      viewMode = nextMode;
-      photoTabBtn.classList.toggle("active", viewMode === "photo");
-      mapTabBtn.classList.toggle("active", viewMode === "map");
-      photoControls.style.display = viewMode === "photo" ? "block" : "none";
-      mapControls.style.display = viewMode === "map" ? "block" : "none";
-      canvas.classList.toggle("map-mode", viewMode === "map");
-      updateBadgeAndPinBtn();
-    }
+        btn.className = "country-btn" + (isElim ? " eliminated" : "") + (isRight ? " correct" : "");
+        btn.disabled = isElim || caseWon || caseLost;
+        btn.innerHTML = `<span>${c.flag} ${c.name}</span><span class="c-reg">${c.region}</span>`;
 
-    function updateBadgeAndPinBtn() {
-      if (viewMode === "photo") {
-        canvasBadge.textContent = `PHOTO ZOOM: ${pZoom.toFixed(1)}×`;
-      } else {
-        if (userPin) {
-          const ns = userPin.lat >= 0 ? "N" : "S";
-          const ew = userPin.lon >= 0 ? "E" : "W";
-          canvasBadge.textContent = `PIN: ${Math.abs(userPin.lat).toFixed(1)}°${ns}, ${Math.abs(userPin.lon).toFixed(1)}°${ew}`;
-          confirmPinBtn.disabled = roundDone;
-          confirmPinBtn.textContent = "📍 CONFIRM LOCATION";
-        } else {
-          canvasBadge.textContent = `MAP ZOOM: ${mZoom.toFixed(1)}× • TAP TO PIN`;
-          confirmPinBtn.disabled = true;
-          confirmPinBtn.textContent = "📍 TAP MAP TO DROP PIN";
-        }
+        btn.addEventListener("click", () => handleGuess(c));
+        choicesGrid.appendChild(btn);
       }
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Geo-Case #${currentLevelNum} / ${TOTAL_LEVELS}`;
-      radiusPill.textContent = `Target: < ${curCase.radiusKm} km`;
-      solvedCounter.textContent = `Located: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      levelTitle.textContent = `Case #${currentLevelNum} / ${TOTAL_LEVELS} — ${gCase.isDusk ? "Twilight Capture" : "Daylight Capture"}`;
+      streakPill.textContent = `🔥 Streak: ${streak}`;
+      solvedCounter.textContent = `Pinpointed: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Case ${currentLevelNum} / 500 ▾`;
-      updateBadgeAndPinBtn();
+      guessesLeftEl.textContent = `Attempts: ${attemptsLeft}`;
+      suspectPrompt.textContent = caseWon
+        ? `✅ Pinpointed: ${gCase.answer.flag} ${gCase.answer.name}`
+        : "📍 Select Origin Country";
+
+      renderEvidenceCards();
+      renderChoices();
+    }
+
+    function handleGuess(country) {
+      if (caseWon || caseLost || eliminatedIds.has(country.id)) return;
+      initAudio();
+
+      if (country.id === gCase.answer.id) {
+        caseWon = true;
+        streak++;
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_geosleuth_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+
+        sfxPinpointWin();
+        updateHUD();
+
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        winFlag.textContent = country.flag;
+        winHeading.textContent = `Pinpointed: ${country.name}!`;
+        winText.textContent = `OSINT Debrief: ${country.debrief}`;
+        nextLevelBtn.textContent = isLast ? "Replay Case #1" : `Next Dossier (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 420);
+      } else {
+        attemptsLeft--;
+        streak = 0;
+        eliminatedIds.add(country.id);
+        sfxWrongGuess();
+
+        if (attemptsLeft <= 0) {
+          caseLost = true;
+          updateHUD();
+          winFlag.textContent = gCase.answer.flag;
+          winHeading.textContent = `Case Cold — It Was ${gCase.answer.name}`;
+          winText.textContent = `OSINT Debrief: ${gCase.answer.debrief}`;
+          nextLevelBtn.textContent = "↺ Retry Case";
+          setTimeout(() => winOverlay.classList.add("show"), 480);
+        } else {
+          const a = gCase.answer;
+          const clue = country.hemi !== a.hemi
+            ? `Not ${country.name}! Check the Sun Compass (${a.hemi === "N" ? "Northern" : "Southern"} Hemisphere).`
+            : (country.drive !== a.drive
+              ? `Not ${country.name}! Look closely at which lane the car drives in (${a.drive === "L" ? "LEFT" : "RIGHT"}).`
+              : `Not ${country.name}! Inspect the street sign alphabet and license plate closely.`);
+          showToast(clue, 2900);
+          updateHUD();
+        }
+      }
     }
 
     function loadCase(num) {
       currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      curCase = buildGeoCase(currentLevelNum);
+      gCase = buildGeoCase(currentLevelNum);
+      attemptsLeft = 3;
+      eliminatedIds = new Set();
+      caseWon = false;
+      caseLost = false;
+      revealedIntel = false;
 
-      roundDone = false;
-      roundWon = false;
-      revealTarget = false;
-      userPin = null;
-      hintBox = null;
-      hintStep = 0;
-
-      pZoom = 1.0; pTargetZoom = 1.0; pX = WORLD_W / 2; pY = WORLD_H / 2; pTargetX = pX; pTargetY = pY;
-      mZoom = 1.0; mTargetZoom = 1.0; mX = WORLD_W / 2; mY = WORLD_H / 2; mTargetX = mX; mTargetY = mY;
-
-      resultOverlay.classList.remove("show");
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
-      setViewMode("photo");
 
       try {
-        localStorage.setItem("zinplay_geo_500_last", String(currentLevelNum));
+        localStorage.setItem("zinplay_geosleuth_500_last", String(currentLevelNum));
       } catch (e) {}
 
       updateHUD();
+      drawStreetCapture();
     }
 
-    function confirmGuess() {
-      if (!userPin || roundDone) return;
-      initAudio();
-
-      const c = curCase.city;
-      const distKm = haversineKm(userPin.lat, userPin.lon, c.lat, c.lon);
-      const passed = distKm <= curCase.radiusKm;
-
-      roundDone = true;
-      roundWon = passed;
-      revealTarget = true;
-      // Zoom map cleanly back to 1x so player sees full arc from pin to true city!
-      mTargetZoom = 1.0; mTargetX = WORLD_W / 2; mTargetY = WORLD_H / 2;
-
-      if (passed) {
-        solvedSet.add(currentLevelNum);
-        try {
-          localStorage.setItem("zinplay_geo_500_solved", JSON.stringify([...solvedSet]));
-        } catch (e) {}
-        sfxSuccess();
-      } else {
-        sfxMiss();
-      }
-
-      updateHUD();
-
-      const plugNames = {
-        A: "Type A/B (Flat vertical prongs)",
-        C: "Type C/F (Two round recessed pins)",
-        G: "Type G (3 rectangular British prongs)",
-        I: "Type I (Angled V-prongs)",
-        D: "Type D/M (3 round triangle pins)"
-      };
-
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      resIcon.textContent = passed ? "🎯" : "🧭";
-      resHeading.textContent = passed
-        ? (isLast ? "All 500 Locations Pinpointed!" : `${c.city}, ${c.country}!`)
-        : `Actual Location: ${c.city}, ${c.country}`;
-
-      resDistBadge.textContent = passed
-        ? `✓ ${distKm} km off (Goal < ${curCase.radiusKm} km)`
-        : `✕ ${distKm} km off (Needed < ${curCase.radiusKm} km)`;
-      resDistBadge.className = "dist-badge" + (passed ? "" : " miss");
-
-      resBreakdown.innerHTML = `
-        <strong>Forensic Clue Breakdown:</strong><br>
-        • <b>Outlet:</b> ${plugNames[c.plug]}<br>
-        • <b>Menu &amp; Currency:</b> ${c.menu1} (${c.cur})<br>
-        • <b>Traffic &amp; Temp:</b> ${c.drive}-hand drive • ${c.temp}<br>
-        • <b>Dial / Domain:</b> ${c.phone} / ${c.tld}
-      `;
-
-      resActionBtn.textContent = passed
-        ? (isLast ? "Replay Case #1" : `Next Geo-Case (#${currentLevelNum + 1}) →`)
-        : "↺ Retry This Case";
-
-      setTimeout(() => resultOverlay.classList.add("show"), 950);
-    }
-
-    // ==============================================
-    // VIEWPORT, PINCH-ZOOM, PAN & PIN PLACEMENT
-    // ==============================================
-    function resizeCanvas() {
-      const rect = canvas.parentElement.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    function getViewport() {
-      const rect = canvas.parentElement.getBoundingClientRect();
-      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
-      const offsetX = (rect.width - WORLD_W * scale) / 2;
-      const offsetY = (rect.height - WORLD_H * scale) / 2;
-      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
-    }
-
-    // Convert Client Pixel -> World Scene Coordinate accounting for live Camera Zoom & Pan!
-    function clientToScene(clientX, clientY) {
-      const rect = canvas.getBoundingClientRect();
-      const vp = getViewport();
-      const vx = (clientX - rect.left - vp.offsetX) / vp.scale;
-      const vy = (clientY - rect.top - vp.offsetY) / vp.scale;
-      const z = viewMode === "photo" ? pZoom : mZoom;
-      const cx = viewMode === "photo" ? pX : mX;
-      const cy = viewMode === "photo" ? pY : mY;
-      return {
-        x: cx + (vx - WORLD_W / 2) / z,
-        y: cy + (vy - WORLD_H / 2) / z
-      };
-    }
-
-    canvas.addEventListener("pointerdown", (e) => {
-      initAudio();
-      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-
-      if (pointers.size === 1) {
-        dragStartScreen = { x: e.clientX, y: e.clientY };
-        lastPanPt = { x: e.clientX, y: e.clientY };
-        dragMoved = false;
-        lastPinchD = null;
-        canvas.classList.add("dragging");
-      } else if (pointers.size === 2) {
-        dragMoved = true;
-        const pts = [...pointers.values()];
-        lastPinchD = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
-      }
-    });
-
-    canvas.addEventListener("pointermove", (e) => {
-      if (!pointers.has(e.pointerId)) return;
-      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
-      if (pointers.size === 2) {
-        const pts = [...pointers.values()];
-        const d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
-        if (lastPinchD !== null) {
-          const mult = d / Math.max(10, lastPinchD);
-          if (viewMode === "photo") { pTargetZoom *= mult; clampCamera("photo"); }
-          else { mTargetZoom *= mult; clampCamera("map"); }
-        }
-        lastPinchD = d;
-        return;
-      }
-
-      if (pointers.size === 1 && lastPanPt) {
-        const dx = e.clientX - lastPanPt.x;
-        const dy = e.clientY - lastPanPt.y;
-        lastPanPt = { x: e.clientX, y: e.clientY };
-
-        if (dragStartScreen && Math.hypot(e.clientX - dragStartScreen.x, e.clientY - dragStartScreen.y) > 8) {
-          dragMoved = true;
-        }
-
-        const vp = getViewport();
-        if (viewMode === "photo" && pTargetZoom > 1.01) {
-          pTargetX -= dx / (vp.scale * pZoom);
-          pTargetY -= dy / (vp.scale * pZoom);
-          clampCamera("photo");
-        } else if (viewMode === "map" && mTargetZoom > 1.01) {
-          mTargetX -= dx / (vp.scale * mZoom);
-          mTargetY -= dy / (vp.scale * mZoom);
-          clampCamera("map");
-        }
-      }
-    });
-
-    function onPtrEnd(e) {
-      if (pointers.size === 1 && !dragMoved && !roundDone) {
-        const pt = clientToScene(e.clientX, e.clientY);
-        if (viewMode === "map") {
-          // Drop Investigation Pin on World Map!
-          if (pt.x >= 10 && pt.x <= WORLD_W - 10 && pt.y >= 46 && pt.y <= WORLD_H - 46) {
-            userPin = mapXYToLatLon(pt.x, pt.y);
-            sfxPinDrop();
-            updateBadgeAndPinBtn();
-          }
-        } else {
-          // Quick double-feel tap zoom onto photo area if at 1x
-          if (pTargetZoom < 1.8) {
-            pTargetX = pt.x;
-            pTargetY = pt.y;
-            pTargetZoom = 2.6;
-            clampCamera("photo");
-            sfxZoom();
-          }
-        }
-      }
-      pointers.delete(e.pointerId);
-      if (pointers.size === 0) {
-        lastPanPt = null;
-        lastPinchD = null;
-        canvas.classList.remove("dragging");
-      }
-    }
-    canvas.addEventListener("pointerup", onPtrEnd);
-    canvas.addEventListener("pointercancel", onPtrEnd);
-
-    // Desktop Mouse Wheel Zoom
-    canvas.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      initAudio();
-      const factor = e.deltaY < 0 ? 1.22 : 0.82;
-      if (viewMode === "photo") {
-        pTargetZoom *= factor;
-        clampCamera("photo");
-      } else {
-        mTargetZoom *= factor;
-        clampCamera("map");
-      }
-    }, { passive: false });
-
-    // UI Button Listeners
-    photoTabBtn.addEventListener("click", () => setViewMode("photo"));
-    mapTabBtn.addEventListener("click", () => setViewMode("map"));
-    document.getElementById("goMapBtn").addEventListener("click", () => setViewMode("map"));
-
-    document.getElementById("zoomInBtn").addEventListener("click", () => {
-      initAudio(); pTargetZoom *= 1.45; clampCamera("photo"); sfxZoom();
-    });
-    document.getElementById("zoomOutBtn").addEventListener("click", () => {
-      initAudio(); pTargetZoom /= 1.45; clampCamera("photo"); sfxZoom();
-    });
-    document.getElementById("zoomResetBtn").addEventListener("click", () => {
-      initAudio(); pTargetZoom = 1.0; pTargetX = WORLD_W / 2; pTargetY = WORLD_H / 2; sfxZoom();
-    });
-
-    document.getElementById("mapInBtn").addEventListener("click", () => {
-      initAudio(); mTargetZoom *= 1.45; clampCamera("map"); sfxZoom();
-    });
-    document.getElementById("mapOutBtn").addEventListener("click", () => {
-      initAudio(); mTargetZoom /= 1.45; clampCamera("map"); sfxZoom();
-    });
-
-    confirmPinBtn.addEventListener("click", confirmGuess);
-
-    // Quick Focus Clue Chips
-    document.querySelectorAll(".clue-chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        initAudio();
-        const fk = chip.getAttribute("data-focus");
-        const fp = FOCUS_POINTS[fk];
-        if (!fp) return;
-        setViewMode("photo");
-        pTargetX = fp.x;
-        pTargetY = fp.y;
-        pTargetZoom = fp.z;
-        clampCamera("photo");
-        sfxZoom();
-      });
-    });
-
-    // OSINT Field Guide Toggle
-    guideBtn.addEventListener("click", () => {
-      const open = guideDrawer.classList.toggle("open");
-      guideBtn.classList.toggle("active-toggle", open);
-    });
-
-    // Smart Clue Intel Hint Button
+    // OSINT Intel Hint Button: Unlocks Redacted Card + Eliminates 1 Wrong Suspect!
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (roundDone) return;
+      if (caseWon || caseLost) return;
       initAudio();
-      const c = curCase.city;
-      const plugTips = {
-        A: "Type A/B flat vertical prongs (North America or Japan)",
-        C: "Type C/F twin round pins (Europe, Turkey, S. Korea, Brazil, or Egypt)",
-        G: "Type G 3-prong British outlet (UK, Ireland, Singapore, or UAE)",
-        I: "Type I angled V-prongs (Australia, New Zealand, or Argentina)",
-        D: "Type D/M 3-round-pin triangle socket (India or South Africa)"
-      };
+      sfxRadarPing();
 
-      setViewMode("photo");
-      if (hintStep === 0) {
-        const fp = FOCUS_POINTS.outlet;
-        pTargetX = fp.x; pTargetY = fp.y; pTargetZoom = fp.z; clampCamera("photo");
-        hintBox = { x: 364, y: 242, w: 44, h: 44, timer: 4.0 };
-        showToast(`💡 Outlet Intel: ${plugTips[c.plug]}!`, 3400);
-      } else if (hintStep === 1) {
-        const fp = FOCUS_POINTS.menu;
-        pTargetX = fp.x; pTargetY = fp.y; pTargetZoom = fp.z; clampCamera("photo");
-        hintBox = { x: 286, y: 58, w: 142, h: 128, timer: 4.0 };
-        showToast(`💡 Currency & Menu Intel: Priced in "${c.cur}" • Local temp ${c.temp}!`, 3400);
+      if (!revealedIntel) {
+        revealedIntel = true;
+        const a = gCase.answer;
+        showToast(`💡 OSINT Intel: Region is ${a.region} (${a.dial} / ${a.tld})!`, 3000);
+        updateHUD();
       } else {
-        const fp = FOCUS_POINTS.window;
-        pTargetX = fp.x; pTargetY = fp.y; pTargetZoom = fp.z; clampCamera("photo");
-        hintBox = { x: 36, y: 42, w: 222, h: 164, timer: 4.0 };
-        showToast(`💡 Street Intel: Cars drive on the ${c.drive} in ${c.country}!`, 3400);
+        const wrong = gCase.choices.find((c) => c.id !== gCase.answer.id && !eliminatedIds.has(c.id));
+        if (wrong) {
+          eliminatedIds.add(wrong.id);
+          showToast(`💡 Eliminated ${wrong.flag} ${wrong.name} from suspect list!`, 2200);
+          updateHUD();
+        }
       }
-      hintStep = (hintStep + 1) % 3;
-      sfxZoom();
     });
 
+    document.getElementById("resetBtn").addEventListener("click", () => loadCase(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
-    resActionBtn.addEventListener("click", () => {
-      if (roundWon) loadCase(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      else loadCase(currentLevelNum);
+    nextLevelBtn.addEventListener("click", () => {
+      if (caseLost) loadCase(currentLevelNum);
+      else loadCase(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
       if (currentLevelNum > 1) loadCase(currentLevelNum - 1);
@@ -1399,7 +1379,7 @@
       if (currentLevelNum < TOTAL_LEVELS) loadCase(currentLevelNum + 1);
     });
 
-    // Case Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1458,604 +1438,333 @@
     });
 
     // ==============================================
-    // CRISP VECTOR OSINT EVIDENCE PHOTO RENDERER
+    // HIGH-DETAIL OSINT STREET VIEW CANVAS RENDERER
     // ==============================================
-    function drawSkylineLandmark(kind, wx, wy, ww, wh) {
-      const baseY = wy + wh - 42;
-      ctx.save();
-      ctx.fillStyle = "rgba(15, 23, 42, 0.72)";
-      ctx.strokeStyle = "rgba(15, 23, 42, 0.8)";
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (gCase) drawStreetCapture();
+    }
 
-      if (kind === "eiffel") {
-        // Eiffel Tower lattice spire
-        ctx.beginPath();
-        ctx.moveTo(wx + 86, baseY); ctx.lineTo(wx + 105, baseY - 68);
-        ctx.lineTo(wx + 111, baseY - 68); ctx.lineTo(wx + 130, baseY);
-        ctx.lineTo(wx + 118, baseY); ctx.quadraticCurveTo(wx + 108, baseY - 22, wx + 98, baseY);
-        ctx.closePath(); ctx.fill();
-        ctx.fillRect(wx + 106, baseY - 82, 4, 16);
-      } else if (kind === "pagoda" || kind === "torii") {
-        if (kind === "pagoda") {
-          for (let t = 0; t < 3; t++) {
-            const ty = baseY - 18 - t * 20;
-            const tw = 50 - t * 10;
-            ctx.beginPath();
-            ctx.moveTo(wx + 110 - tw / 2, ty);
-            ctx.lineTo(wx + 110 + tw / 2, ty);
-            ctx.lineTo(wx + 110 + tw * 0.35, ty - 12);
-            ctx.lineTo(wx + 110 - tw * 0.35, ty - 12);
-            ctx.closePath(); ctx.fill();
-          }
-          ctx.fillRect(wx + 108, baseY - 76, 4, 18);
-        } else {
-          // Vermilion Torii Gate
-          ctx.fillStyle = "#b91c1c";
-          ctx.fillRect(wx + 88, baseY - 52, 7, 52);
-          ctx.fillRect(wx + 128, baseY - 52, 7, 52);
-          ctx.fillRect(wx + 76, baseY - 56, 72, 8);
-          ctx.fillRect(wx + 82, baseY - 40, 60, 6);
-        }
-      } else if (kind === "bigben") {
-        ctx.fillRect(wx + 94, baseY - 70, 24, 70);
-        ctx.beginPath();
-        ctx.moveTo(wx + 94, baseY - 70); ctx.lineTo(wx + 106, baseY - 94); ctx.lineTo(wx + 118, baseY - 70);
-        ctx.closePath(); ctx.fill();
-        ctx.fillStyle = "#fef08a";
-        ctx.beginPath(); ctx.arc(wx + 106, baseY - 56, 6.5, 0, Math.PI * 2); ctx.fill();
-      } else if (kind === "pyramids") {
-        ctx.fillStyle = "#b45309";
-        ctx.beginPath();
-        ctx.moveTo(wx + 44, baseY); ctx.lineTo(wx + 92, baseY - 58); ctx.lineTo(wx + 140, baseY);
-        ctx.closePath(); ctx.fill();
-        ctx.fillStyle = "#d97706";
-        ctx.beginPath();
-        ctx.moveTo(wx + 120, baseY); ctx.lineTo(wx + 158, baseY - 44); ctx.lineTo(wx + 196, baseY);
-        ctx.closePath(); ctx.fill();
-      } else if (kind === "opera") {
-        // Sydney Harbor Sails
-        ctx.fillStyle = "#f8fafc";
-        [[68, 36], [100, 48], [134, 32]].forEach(([ox, oh]) => {
-          ctx.beginPath();
-          ctx.moveTo(wx + ox, baseY);
-          ctx.quadraticCurveTo(wx + ox + 10, baseY - oh, wx + ox + 36, baseY);
-          ctx.closePath(); ctx.fill();
+    function drawTreeFlora(x, y, kind) {
+      ctx.save();
+      ctx.translate(x, y);
+      if (kind === "pine") {
+        ctx.fillStyle = "#451a03"; ctx.fillRect(-3, 0, 6, 16);
+        ctx.fillStyle = "#14532d";
+        ctx.beginPath(); ctx.moveTo(0, -44); ctx.lineTo(-18, -6); ctx.lineTo(18, -6); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(0, -30); ctx.lineTo(-22, 4); ctx.lineTo(22, 4); ctx.closePath(); ctx.fill();
+      } else if (kind === "palm") {
+        ctx.strokeStyle = "#78350f"; ctx.lineWidth = 6;
+        ctx.beginPath(); ctx.moveTo(0, 14); ctx.quadraticCurveTo(6, -12, 2, -38); ctx.stroke();
+        ctx.strokeStyle = "#15803d"; ctx.lineWidth = 4; ctx.lineCap = "round";
+        [-2.2, -1.3, -0.5, 0.4, 1.2].forEach((a) => {
+          ctx.beginPath(); ctx.moveTo(2, -38); ctx.quadraticCurveTo(2 + Math.cos(a) * 16, -46, 2 + Math.cos(a) * 26, -30); ctx.stroke();
         });
-      } else if (kind === "burj" || kind === "cntower" || kind === "tvtower" || kind === "skytower" || kind === "tower_kr") {
-        // Needle landmark tower
-        ctx.fillRect(wx + 104, baseY - 84, 8, 84);
-        ctx.fillRect(wx + 96, baseY - 42, 24, 42);
-        ctx.beginPath(); ctx.arc(wx + 108, baseY - 62, 10, 0, Math.PI * 2); ctx.fill();
-      } else if (kind === "alps" || kind === "fjord" || kind === "tablemtn") {
-        ctx.fillStyle = "#475569";
-        if (kind === "tablemtn") {
-          ctx.beginPath();
-          ctx.moveTo(wx + 24, baseY); ctx.lineTo(wx + 56, baseY - 50);
-          ctx.lineTo(wx + 168, baseY - 50); ctx.lineTo(wx + 200, baseY);
-          ctx.closePath(); ctx.fill();
-        } else {
-          ctx.beginPath();
-          ctx.moveTo(wx + 24, baseY); ctx.lineTo(wx + 82, baseY - 68); ctx.lineTo(wx + 132, baseY);
-          ctx.moveTo(wx + 96, baseY); ctx.lineTo(wx + 152, baseY - 60); ctx.lineTo(wx + 206, baseY);
-          ctx.closePath(); ctx.fill();
-          ctx.fillStyle = "#f8fafc";
-          ctx.beginPath();
-          ctx.moveTo(wx + 69, baseY - 48); ctx.lineTo(wx + 82, baseY - 68); ctx.lineTo(wx + 96, baseY - 48);
-          ctx.closePath(); ctx.fill();
-        }
-      } else if (kind === "minaret" || kind === "dome") {
-        ctx.beginPath(); ctx.arc(wx + 110, baseY - 14, 34, Math.PI, 0); ctx.fill();
-        ctx.fillRect(wx + 76, baseY - 14, 68, 14);
-        if (kind === "minaret") {
-          ctx.fillRect(wx + 64, baseY - 66, 6, 66);
-          ctx.fillRect(wx + 150, baseY - 66, 6, 66);
-        }
-      } else if (kind === "parthenon") {
-        ctx.fillStyle = "#e2e8f0";
-        ctx.fillRect(wx + 66, baseY - 8, 92, 8);
-        for (let cx = wx + 72; cx <= wx + 150; cx += 15) {
-          ctx.fillRect(cx, baseY - 40, 6, 32);
-        }
-        ctx.beginPath();
-        ctx.moveTo(wx + 62, baseY - 40); ctx.lineTo(wx + 112, baseY - 58); ctx.lineTo(wx + 162, baseY - 40);
-        ctx.closePath(); ctx.fill();
-      } else if (kind === "rio") {
-        // Sugarloaf & Christ the Redeemer silhouette
-        ctx.beginPath();
-        ctx.moveTo(wx + 42, baseY); ctx.quadraticCurveTo(wx + 110, baseY - 82, wx + 178, baseY);
-        ctx.closePath(); ctx.fill();
-        ctx.fillStyle = "#f8fafc";
-        ctx.fillRect(wx + 108, baseY - 58, 4, 18);
-        ctx.fillRect(wx + 100, baseY - 54, 20, 3.5);
-      } else if (kind === "bridge_sf") {
-        ctx.strokeStyle = "#dc2626";
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.moveTo(wx + 66, baseY); ctx.lineTo(wx + 66, baseY - 62);
-        ctx.moveTo(wx + 154, baseY); ctx.lineTo(wx + 154, baseY - 62);
-        ctx.moveTo(wx + 24, baseY - 22); ctx.lineTo(wx + 200, baseY - 22);
-        ctx.stroke();
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(wx + 24, baseY - 22); ctx.quadraticCurveTo(wx + 45, baseY - 24, wx + 66, baseY - 60);
-        ctx.quadraticCurveTo(wx + 110, baseY - 20, wx + 154, baseY - 60);
-        ctx.quadraticCurveTo(wx + 178, baseY - 24, wx + 200, baseY - 22);
-        ctx.stroke();
-      } else if (kind === "mbs") {
-        // Marina Bay Sands 3 towers + sky deck
-        ctx.fillRect(wx + 68, baseY - 54, 14, 54);
-        ctx.fillRect(wx + 100, baseY - 54, 14, 54);
-        ctx.fillRect(wx + 132, baseY - 54, 14, 54);
-        ctx.beginPath();
-        ctx.roundRect(wx + 52, baseY - 64, 112, 10, 5); ctx.fill();
+      } else if (kind === "sakura") {
+        ctx.fillStyle = "#5c2814"; ctx.fillRect(-4, -8, 8, 22);
+        ctx.fillStyle = "#f9a8d4";
+        ctx.beginPath(); ctx.arc(0, -24, 19, 0, Math.PI * 2); ctx.arc(-14, -14, 13, 0, Math.PI * 2); ctx.arc(14, -14, 13, 0, Math.PI * 2); ctx.fill();
+      } else if (kind === "cypress") {
+        ctx.fillStyle = "#3f2b1e"; ctx.fillRect(-3, 2, 6, 12);
+        ctx.fillStyle = "#166534";
+        ctx.beginPath(); ctx.ellipse(0, -24, 9, 32, 0, 0, Math.PI * 2); ctx.fill();
+      } else if (kind === "birch") {
+        ctx.fillStyle = "#f8fafc"; ctx.fillRect(-3, -10, 6, 26);
+        ctx.fillStyle = "#0f172a"; ctx.fillRect(-3, -4, 4, 2); ctx.fillRect(-1, 4, 4, 2);
+        ctx.fillStyle = "#65a30d";
+        ctx.beginPath(); ctx.arc(0, -24, 16, 0, Math.PI * 2); ctx.fill();
+      } else if (kind === "cactus") {
+        ctx.fillStyle = "#15803d";
+        ctx.beginPath(); ctx.roundRect(-5, -30, 10, 44, 5); ctx.fill();
+        ctx.beginPath(); ctx.roundRect(-16, -18, 12, 7, 3); ctx.roundRect(-16, -28, 7, 14, 3); ctx.fill();
+        ctx.beginPath(); ctx.roundRect(4, -14, 12, 7, 3); ctx.roundRect(9, -24, 7, 14, 3); ctx.fill();
+      } else if (kind === "eucalyptus" || kind === "acacia") {
+        ctx.fillStyle = "#d6d3d1"; ctx.fillRect(-3, -6, 6, 22);
+        ctx.fillStyle = kind === "eucalyptus" ? "#4d7c0f" : "#65a30d";
+        ctx.beginPath(); ctx.ellipse(0, -20, 26, 11, 0, 0, Math.PI * 2); ctx.fill();
       } else {
-        // Urban skyline / Empire / Obelisk / Plaza towers
-        [[46, 46, 24], [76, 68, 28], [112, 82, 24], [142, 54, 26]].forEach(([bx, bh, bw]) => {
-          ctx.fillRect(wx + bx, baseY - bh, bw, bh);
-        });
+        ctx.fillStyle = "#5c2814"; ctx.fillRect(-4, -4, 8, 18);
+        ctx.fillStyle = "#15803d";
+        ctx.beginPath(); ctx.arc(0, -20, 20, 0, Math.PI * 2); ctx.fill();
       }
       ctx.restore();
     }
 
-    function drawWallOutlet(cx, cy, plugType) {
+    function drawRoadsideBollard(x, y, style) {
       ctx.save();
-      ctx.translate(cx, cy);
+      ctx.translate(x, y);
+      if (style === "no_snow" || style === "se_snow") {
+        // Tall Nordic Orange Snow-Plow Marker Pole!
+        ctx.fillStyle = style === "no_snow" ? "#f97316" : "#fb923c";
+        ctx.fillRect(-2.5, -52, 5, 52);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(-2.5, -44, 5, 8);
+      } else {
+        ctx.fillStyle = style === "uk_black" ? "#0f172a" : "#f8fafc";
+        ctx.strokeStyle = "#334155";
+        ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.roundRect(-5, -34, 10, 34, 3); ctx.fill(); ctx.stroke();
 
-      // Matte white electrical wall faceplate
-      ctx.fillStyle = "#f1f5f9";
-      ctx.strokeStyle = "#94a3b8";
+        if (style === "de_slant" || style === "it_slant") {
+          ctx.fillStyle = "#0f172a"; ctx.fillRect(-5, -34, 10, 11);
+          ctx.fillStyle = "#ef4444"; ctx.fillRect(-3.5, -20, 7, 5);
+        } else if (style === "au_red" || style === "pl_red" || style === "fr_red") {
+          ctx.fillStyle = "#dc2626"; ctx.fillRect(-5, -24, 10, 7);
+        } else if (style === "jp_stripe") {
+          ctx.fillStyle = "#facc15"; ctx.fillRect(-5, -28, 10, 6);
+          ctx.fillStyle = "#0f172a"; ctx.fillRect(-5, -22, 10, 6);
+        } else if (style === "kr_yellow") {
+          ctx.fillStyle = "#facc15"; ctx.fillRect(-5, -34, 10, 34);
+          ctx.fillStyle = "#0f172a"; ctx.fillRect(-5, -20, 10, 6);
+        } else {
+          ctx.fillStyle = "#ef4444"; ctx.fillRect(-3.5, -26, 7, 6);
+        }
+      }
+      ctx.restore();
+    }
+
+    function drawLicensePlateInset(x, y, a) {
+      ctx.save();
+      ctx.translate(x, y);
+
+      const isSquare = a.plateStyle === "jp_square";
+      const pw = isSquare ? 88 : 114;
+      const ph = isSquare ? 48 : 30;
+
+      // Magnified OSINT Plate Card Callout Frame
+      ctx.fillStyle = "rgba(8, 15, 26, 0.9)";
+      ctx.strokeStyle = "#38bdf8";
       ctx.lineWidth = 1.6;
-      ctx.beginPath();
-      ctx.roundRect(-18, -18, 36, 36, 4);
-      ctx.fill();
-      ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(-pw / 2 - 8, -ph / 2 - 14, pw + 16, ph + 22, 8); ctx.fill(); ctx.stroke();
 
-      ctx.fillStyle = "#0f172a";
-      if (plugType === "A") {
-        // Type A/B: Twin vertical flat slots + lower U-ground hole
-        ctx.fillRect(-7.5, -8, 2.8, 10);
-        ctx.fillRect(4.5, -8, 2.8, 10);
-        ctx.beginPath(); ctx.arc(0, 8, 2.8, 0, Math.PI * 2); ctx.fill();
-      } else if (plugType === "C") {
-        // Type C/F Schuko: Recessed circular socket with two round horizontal holes
-        ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1.6;
-        ctx.beginPath(); ctx.arc(0, 0, 12, 0, Math.PI * 2); ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(-6, 0, 2.7, 0, Math.PI * 2);
-        ctx.arc(6, 0, 2.7, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (plugType === "G") {
-        // Type G British: Top vertical ground rectangle + 2 lower horizontal rectangles
-        ctx.fillRect(-2, -10, 4, 7.5);
-        ctx.fillRect(-10.5, 3, 7, 3.6);
-        ctx.fillRect(3.5, 3, 7, 3.6);
-      } else if (plugType === "I") {
-        // Type I Australian / Argentinian: Two angled V-slots + bottom vertical slot
-        ctx.save(); ctx.translate(-5.5, -4); ctx.rotate(0.55); ctx.fillRect(-1.4, -4.5, 2.8, 9); ctx.restore();
-        ctx.save(); ctx.translate(5.5, -4); ctx.rotate(-0.55); ctx.fillRect(-1.4, -4.5, 2.8, 9); ctx.restore();
-        ctx.fillRect(-1.4, 5, 2.8, 7.5);
-      } else {
-        // Type D/M: Large top round earth hole + 2 lower round pins in triangle
-        ctx.beginPath();
-        ctx.arc(0, -6.5, 3.5, 0, Math.PI * 2);
-        ctx.arc(-6.5, 5.5, 2.8, 0, Math.PI * 2);
-        ctx.arc(6.5, 5.5, 2.8, 0, Math.PI * 2);
-        ctx.fill();
+      ctx.fillStyle = "#7dd3fc";
+      ctx.font = "800 7.5px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("🔍 PLATE ZOOM", 0, -ph / 2 - 4);
+
+      const px = -pw / 2, py = -ph / 2 + 2;
+      const bgCol = (a.plateStyle === "uk_yellow" || a.plateStyle === "nl_yellow_eu") ? "#facc15" : "#f8fafc";
+      ctx.fillStyle = bgCol;
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 4); ctx.fill(); ctx.stroke();
+
+      // Authentic Regional Color Strips!
+      if (a.plateStyle === "eu_blue" || a.plateStyle === "nl_yellow_eu" || a.plateStyle === "tr_blue") {
+        ctx.fillStyle = "#1d4ed8";
+        ctx.fillRect(px + 1, py + 1, 13, ph - 2);
+      } else if (a.plateStyle === "eu_dual") {
+        ctx.fillStyle = "#1d4ed8";
+        ctx.fillRect(px + 1, py + 1, 12, ph - 2);
+        ctx.fillRect(px + pw - 13, py + 1, 12, ph - 2);
+      } else if (a.plateStyle === "mercosur") {
+        ctx.fillStyle = "#1d4ed8";
+        ctx.fillRect(px + 1, py + 1, pw - 2, 7);
+      } else if (a.plateStyle === "us_state") {
+        ctx.fillStyle = "#dc2626";
+        ctx.fillRect(px + 1, py + 1, pw - 2, 6);
+      } else if (a.plateStyle === "in_ind") {
+        ctx.fillStyle = "#2563eb";
+        ctx.fillRect(px + 1, py + 1, 15, ph - 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 6px monospace";
+        ctx.fillText("IND", px + 8.5, py + ph / 2 + 2);
       }
 
-      // Tiny plate corner screws
-      ctx.fillStyle = "#94a3b8";
-      ctx.beginPath();
-      ctx.arc(-13, 0, 1.3, 0, Math.PI * 2);
-      ctx.arc(13, 0, 1.3, 0, Math.PI * 2);
-      ctx.fill();
-
+      ctx.fillStyle = a.plateStyle === "jp_square" ? "#166534" : "#0f172a";
+      ctx.font = `900 ${isSquare ? 12 : 11.5}px monospace`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const txOff = (a.plateStyle === "eu_blue" || a.plateStyle === "nl_yellow_eu" || a.plateStyle === "in_ind" || a.plateStyle === "tr_blue") ? 6 : 0;
+      ctx.fillText(a.plateText, txOff, py + ph / 2 + (a.plateStyle === "mercosur" ? 3 : 1));
       ctx.restore();
     }
 
-    function drawEvidencePhoto(now) {
-      const c = curCase.city;
-      const th = curCase.theme;
+    function drawStreetCapture() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offX = (rect.width - WORLD_W * scale) / 2;
+      const offY = (rect.height - WORLD_H * scale) / 2;
 
+      ctx.clearRect(0, 0, rect.width, rect.height);
       ctx.save();
-      // Apply Camera Zoom & Pan
-      ctx.translate(WORLD_W / 2, WORLD_H / 2);
-      ctx.scale(pZoom, pZoom);
-      ctx.translate(-pX, -pY);
+      ctx.translate(offX, offY);
+      ctx.scale(scale, scale);
 
-      // 1. Cafe Interior Wall & Wainscoting Trim
-      ctx.fillStyle = th.wall;
-      ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+      const a = gCase.answer;
+      const horizonY = 148;
 
-      ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
-      ctx.fillRect(0, 224, WORLD_W, 80);
-      ctx.fillStyle = th.wood;
-      ctx.fillRect(0, 220, WORLD_W, 7);
-
-      // 2. LARGE STREET WINDOW (Left Side: Skyline + Traffic Side + License Plate!)
-      const wx = 34, wy = 40, ww = 224, wh = 166;
-      ctx.save();
-      ctx.beginPath();
-      ctx.roundRect(wx, wy, ww, wh, 6);
-      ctx.clip();
-
-      // Outdoor Sky Gradient
-      const skyG = ctx.createLinearGradient(wx, wy, wx, wy + wh);
-      if (curCase.nightFilter) {
-        skyG.addColorStop(0, "#0f172a");
-        skyG.addColorStop(1, "#312e81");
+      // 1. Sky Gradient (Daylight vs Twilight Capture)
+      const sg = ctx.createLinearGradient(0, 0, 0, horizonY);
+      if (gCase.isDusk) {
+        sg.addColorStop(0, "#1e1b4b");
+        sg.addColorStop(1, "#c2410c");
       } else {
-        skyG.addColorStop(0, th.skyDay);
-        skyG.addColorStop(1, th.skyLow);
+        sg.addColorStop(0, a.sky[0]);
+        sg.addColorStop(1, a.sky[1]);
       }
-      ctx.fillStyle = skyG;
-      ctx.fillRect(wx, wy, ww, wh);
+      ctx.fillStyle = sg;
+      ctx.fillRect(0, 0, WORLD_W, horizonY);
 
-      // City Landmark Silhouette on the Horizon
-      drawSkylineLandmark(c.skyline, wx, wy, ww, wh);
+      // Sun Position Reflecting Hemisphere & Compass!
+      const sunX = a.hemi === "N" ? 336 : 96;
+      ctx.fillStyle = gCase.isDusk ? "#fb923c" : "#fef08a";
+      ctx.shadowColor = "#facc15";
+      ctx.shadowBlur = 18;
+      ctx.beginPath(); ctx.arc(sunX, 54, 17, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0;
 
-      // Sidewalk & Street Roadway
-      const roadY = wy + wh - 42;
-      ctx.fillStyle = "#475569";
-      ctx.fillRect(wx, roadY, ww, 42);
-      ctx.strokeStyle = "#facc15";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([8, 6]);
+      // Distant Mountain / Hill Horizon Silhouette
+      ctx.fillStyle = gCase.isDusk ? "#312e81" : "rgba(30, 41, 59, 0.35)";
       ctx.beginPath();
-      ctx.moveTo(wx, roadY + 21); ctx.lineTo(wx + ww, roadY + 21);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Passing Car Showing Traffic Side (LEFT vs RIGHT lane!) + Authentic License Plate!
-      const isLeftDrive = c.drive === "LEFT";
-      const carX = isLeftDrive ? wx + 78 : wx + 150;
-      const carY = roadY + 22;
-
-      ctx.fillStyle = curCase.carColor;
-      ctx.beginPath();
-      ctx.roundRect(carX - 28, carY - 12, 56, 20, 6);
-      ctx.fill();
-      ctx.fillStyle = "#1e293b";
-      ctx.beginPath();
-      ctx.roundRect(carX - 18, carY - 21, 36, 12, 4);
+      ctx.moveTo(0, horizonY);
+      ctx.lineTo(75, horizonY - 26);
+      ctx.lineTo(170, horizonY - 12);
+      ctx.lineTo(285, horizonY - 34);
+      ctx.lineTo(380, horizonY - 18);
+      ctx.lineTo(WORLD_W, horizonY - 24);
+      ctx.lineTo(WORLD_W, horizonY);
+      ctx.closePath();
       ctx.fill();
 
-      // Rear License Plate with Authentic Regional Color Strip!
-      const plX = carX - 12, plY = carY - 2;
-      ctx.fillStyle = c.plate === "uk" ? "#facc15" : "#ffffff";
-      ctx.fillRect(plX, plY, 24, 7.5);
-      if (c.plate === "eu" || c.plate === "tr") {
-        ctx.fillStyle = "#2563eb";
-        ctx.fillRect(plX, plY, 4.5, 7.5);
-      } else if (c.plate === "jp") {
-        ctx.fillStyle = "#16a34a";
-        ctx.fillRect(plX, plY, 24, 2);
-      } else if (c.plate === "br" || c.plate === "ar") {
-        ctx.fillStyle = "#1d4ed8";
-        ctx.fillRect(plX, plY, 24, 2);
-      }
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "900 5px monospace";
-      ctx.textAlign = "center";
-      ctx.fillText(c.drive === "LEFT" ? "L-DRIVE" : "R-DRIVE", carX, roadY + 38);
+      // 2. Ground Biome Terrain (Lush Grass, Red Outback Soil, Arid Ochre, or Asphalt!)
+      ctx.fillStyle = a.ground;
+      ctx.fillRect(0, horizonY, WORLD_W, WORLD_H - horizonY);
 
-      // Subtle Street Lane Signpost inside window
-      ctx.fillStyle = "#0f172a";
-      ctx.fillRect(wx + 12, roadY - 24, 3, 28);
-      ctx.fillStyle = "#1d4ed8";
-      ctx.beginPath(); ctx.roundRect(wx + 4, roadY - 34, 34, 12, 3); ctx.fill();
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "800 5.5px sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText(c.temp, wx + 21, roadY - 26);
-
-      // Partial Venetian Blinds in Chapter 3-5 (adds authentic challenge!)
-      if (curCase.partialBlinds) {
-        ctx.fillStyle = "rgba(15, 23, 42, 0.72)";
-        for (let by = wy; by < wy + 52; by += 9) {
-          ctx.fillRect(wx, by, ww, 5.5);
-        }
-      }
-
-      // Subtle Window Glass Diagonal Sheen
-      ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+      // 3. Perspective Two-Lane Highway
+      const cx = WORLD_W / 2;
+      ctx.fillStyle = "#334155";
       ctx.beginPath();
-      ctx.moveTo(wx + 20, wy); ctx.lineTo(wx + 66, wy);
-      ctx.lineTo(wx + 12, wy + wh); ctx.lineTo(wx - 20, wy + wh);
-      ctx.closePath(); ctx.fill();
-      ctx.restore();
+      ctx.moveTo(cx - 34, horizonY);
+      ctx.lineTo(cx + 34, horizonY);
+      ctx.lineTo(cx + 178, WORLD_H);
+      ctx.lineTo(cx - 178, WORLD_H);
+      ctx.closePath();
+      ctx.fill();
 
-      // Window Wooden Frame Mullions
-      ctx.strokeStyle = th.wood;
-      ctx.lineWidth = 6;
-      ctx.strokeRect(wx, wy, ww, wh);
+      // Outer Shoulder Lines (Yellow in South Africa, Crisp White Elsewhere!)
+      ctx.strokeStyle = a.roadLine === "yellow_outer" ? "#facc15" : "#f8fafc";
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(wx + ww / 2, wy); ctx.lineTo(wx + ww / 2, wy + wh);
+      ctx.moveTo(cx - 30, horizonY); ctx.lineTo(cx - 156, WORLD_H);
+      ctx.moveTo(cx + 30, horizonY); ctx.lineTo(cx + 156, WORLD_H);
       ctx.stroke();
 
-      // 3. CAFE CHALKBOARD MENU (Top-Right: Currency, Script & Local Cuisine!)
-      const mx = 286, my = 56, mw = 144, mh = 132;
-      ctx.fillStyle = th.board;
-      ctx.strokeStyle = "#b45309";
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.roundRect(mx, my, mw, mh, 6);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = "#fde68a";
-      ctx.font = "900 11px serif";
-      ctx.textAlign = "center";
-      ctx.fillText(`☕ ${c.cafe} MENU`, mx + mw / 2, my + 22);
-
-      ctx.strokeStyle = "rgba(253, 230, 138, 0.35)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(mx + 14, my + 30); ctx.lineTo(mx + mw - 14, my + 30);
-      ctx.stroke();
-
-      ctx.fillStyle = "#f8fafc";
-      ctx.font = "700 8.5px monospace";
-      ctx.fillText(c.menu1, mx + mw / 2, my + 54);
-      ctx.fillText(c.menu2, mx + mw / 2, my + 74);
-
-      ctx.fillStyle = "#94a3b8";
-      ctx.font = "700 7.5px monospace";
-      ctx.fillText(`WEATHER: ${c.temp}`, mx + mw / 2, my + 100);
-      ctx.fillText(`TAX INCL. (${c.cur})`, mx + mw / 2, my + 116);
-
-      // 4. WALL ELECTRICAL OUTLET (Bottom-Right Wall — Classic OSINT Socket Clue!)
-      drawWallOutlet(386, 264, c.plug);
-
-      // 5. FOREGROUND WOODEN CAFE TABLE (Coffee Mug + Paper Receipt + Wi-Fi Card!)
-      ctx.fillStyle = "#6b4423";
-      ctx.fillRect(0, 294, WORLD_W, WORLD_H - 294);
-      ctx.fillStyle = "#8c5b32";
-      ctx.fillRect(0, 294, WORLD_W, 8);
-
-      // Steaming Ceramic Coffee Mug on Left Table
-      ctx.fillStyle = curCase.mugColor;
-      ctx.strokeStyle = "#f8fafc";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.roundRect(62, 304, 42, 46, 6);
-      ctx.fill();
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(104, 326, 10, -Math.PI / 2, Math.PI / 2);
-      ctx.stroke();
-
-      // Printed Cafe Paper Receipt (Center Table)
+      // Centerline Marking (White Dashed / Yellow Dashed / Double Yellow / Solid White)
       ctx.save();
-      ctx.translate(184, 336);
-      ctx.rotate(-0.08);
-      ctx.fillStyle = "#f8fafc";
-      ctx.strokeStyle = "#cbd5e1";
-      ctx.lineWidth = 1.2;
-      ctx.fillRect(-34, -34, 68, 66);
-      ctx.strokeRect(-34, -34, 68, 66);
+      if (a.roadLine === "yellow_double") {
+        ctx.strokeStyle = "#facc15"; ctx.lineWidth = 2.6;
+        ctx.beginPath();
+        ctx.moveTo(cx - 2, horizonY); ctx.lineTo(cx - 5, WORLD_H);
+        ctx.moveTo(cx + 2, horizonY); ctx.lineTo(cx + 5, WORLD_H);
+        ctx.stroke();
+      } else {
+        ctx.strokeStyle = a.roadLine === "yellow_dash" ? "#facc15" : "#f8fafc";
+        ctx.lineWidth = 3;
+        if (a.roadLine !== "white_solid") ctx.setLineDash([14, 12]);
+        ctx.beginPath();
+        ctx.moveTo(cx, horizonY); ctx.lineTo(cx, WORLD_H);
+        ctx.stroke();
+      }
+      ctx.restore();
 
+      // 4. Regional Climate Flora Lining Both Shoulders!
+      drawTreeFlora(54, horizonY + 18, a.flora);
+      drawTreeFlora(102, horizonY + 4, a.flora);
+      drawTreeFlora(386, horizonY + 20, a.flora);
+      drawTreeFlora(342, horizonY + 6, a.flora);
+
+      // 5. Country-Specific Roadside Bollards!
+      drawRoadsideBollard(118, 224, a.bollard);
+      drawRoadsideBollard(322, 224, a.bollard);
+
+      // 6. Authentic Local Street Signboard With Script & Arrows!
+      const signX = a.drive === "L" ? 18 : 274;
+      ctx.save();
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(signX + 68, 122, 6, 98);
+      ctx.fillStyle = a.id === "de" || a.id === "uk" ? "#15803d" : (a.id === "us" ? "#f8fafc" : "#1d4ed8");
+      ctx.strokeStyle = a.id === "us" ? "#0f172a" : "#ffffff";
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.roundRect(signX, 82, 148, 44, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = a.id === "us" ? "#0f172a" : "#ffffff";
+      ctx.font = "800 11.5px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(gCase.signText, signX + 74, 104);
+      ctx.restore();
+
+      // 7. Forward-Facing Vehicle Driving in Exact LEFT or RIGHT Lane!
+      const carX = a.drive === "L" ? cx - 64 : cx + 64;
+      const carY = 236;
+      ctx.save();
+      ctx.translate(carX, carY);
+      // Shadow
+      ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+      ctx.beginPath(); ctx.ellipse(0, 26, 44, 10, 0, 0, Math.PI * 2); ctx.fill();
+      // Tires
       ctx.fillStyle = "#0f172a";
-      ctx.font = "900 7px monospace";
-      ctx.textAlign = "center";
-      ctx.fillText(`${c.cafe} #${curCase.receiptId}`, 0, -22);
-      ctx.font = "700 6px monospace";
-      ctx.fillText(c.menu1.slice(0, 16), 0, -10);
-      ctx.fillText(`TOTAL: ${c.cur} ---`, 0, 2);
-      ctx.fillStyle = "#475569";
-      ctx.fillText(curCase.showWifiDomain ? `TEL: ${c.phone}-555-019` : "TEL: [SMUDGED]", 0, 16);
-      ctx.restore();
-
-      // Table Wi-Fi Card Tent (Right-Center Table)
-      ctx.save();
-      ctx.translate(274, 336);
-      ctx.rotate(0.06);
-      ctx.fillStyle = "#1e293b";
-      ctx.strokeStyle = "#38bdf8";
+      ctx.fillRect(-36, 12, 14, 14); ctx.fillRect(22, 12, 14, 14);
+      // Car Rear Body
+      ctx.fillStyle = gCase.carColor;
+      ctx.strokeStyle = "rgba(255,255,255,0.4)";
       ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.roundRect(-38, -8, 76, 26, 7); ctx.fill(); ctx.stroke();
+      // Cabin & Rear Window
       ctx.beginPath();
-      ctx.roundRect(-36, -24, 72, 48, 5);
-      ctx.fill();
-      ctx.stroke();
+      ctx.moveTo(-28, -8); ctx.lineTo(-20, -26); ctx.lineTo(20, -26); ctx.lineTo(28, -8);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#1e293b";
+      ctx.beginPath();
+      ctx.moveTo(-22, -10); ctx.lineTo(-16, -22); ctx.lineTo(16, -22); ctx.lineTo(22, -10);
+      ctx.closePath(); ctx.fill();
+      // Glowing Red Tail Lights
+      ctx.fillStyle = "#ef4444";
+      ctx.fillRect(-35, -3, 12, 7); ctx.fillRect(23, -3, 12, 7);
+      // Mini Rear Plate on Bumper
+      ctx.fillStyle = (a.plateStyle === "uk_yellow" || a.plateStyle === "nl_yellow_eu") ? "#facc15" : "#ffffff";
+      ctx.fillRect(-13, 3, 26, 8);
+      ctx.restore();
 
-      ctx.fillStyle = "#38bdf8";
-      ctx.font = "900 7px sans-serif";
+      // Clear Lane Direction Arrow Painted on Asphalt Under Car!
+      ctx.save();
+      ctx.fillStyle = "rgba(255, 255, 255, 0.52)";
+      ctx.font = "900 10px monospace";
       ctx.textAlign = "center";
-      ctx.fillText("FREE WI-FI", 0, -10);
-      ctx.fillStyle = "#f8fafc";
-      ctx.font = "700 6.5px monospace";
-      ctx.fillText(curCase.showWifiDomain ? `cafe${c.tld}` : "GUEST_NET", 0, 4);
-      ctx.fillStyle = "#94a3b8";
-      ctx.font = "700 5.5px monospace";
-      ctx.fillText(curCase.showWifiDomain ? `CODE ${c.phone}` : `PASS: ${c.cur}2026`, 0, 16);
+      ctx.fillText(a.drive === "L" ? "▲ LEFT LANE" : "▲ RIGHT LANE", carX, 294);
       ctx.restore();
 
-      // 6. Optional Hint Highlight Box
-      if (hintBox && hintBox.timer > 0) {
-        const pulse = 0.55 + 0.45 * Math.sin(now * 0.012);
-        ctx.strokeStyle = `rgba(250, 204, 21, ${pulse})`;
-        ctx.shadowColor = "#facc15";
-        ctx.shadowBlur = 14;
-        ctx.lineWidth = 2.6 / Math.sqrt(pZoom);
-        ctx.setLineDash([6, 4]);
-        ctx.strokeRect(hintBox.x, hintBox.y, hintBox.w, hintBox.h);
-        ctx.setLineDash([]);
-        ctx.shadowBlur = 0;
-      }
+      // 8. Zoomed OSINT License Plate Inset (Opposite Corner From Street Sign!)
+      const insetX = a.drive === "L" ? 364 : 76;
+      drawLicensePlateInset(insetX, 266, a);
 
-      ctx.restore();
-    }
-
-    // ==============================================
-    // INTERACTIVE VECTOR WORLD MAP RENDERER
-    // ==============================================
-    function drawWorldMap(now) {
+      // 9. Top-Left Spy HUD Compass Badge (Sun Hemisphere Indicator)
       ctx.save();
-      ctx.translate(WORLD_W / 2, WORLD_H / 2);
-      ctx.scale(mZoom, mZoom);
-      ctx.translate(-mX, -mY);
-
-      // 1. Deep Ocean Backdrop & Lat/Lon Graticule
-      const ocGrad = ctx.createLinearGradient(0, 0, 0, WORLD_H);
-      ocGrad.addColorStop(0, "#081829");
-      ocGrad.addColorStop(0.5, "#0b2239");
-      ocGrad.addColorStop(1, "#071524");
-      ctx.fillStyle = ocGrad;
-      ctx.fillRect(0, 0, WORLD_W, WORLD_H);
-
-      // Graticule Lines
-      ctx.strokeStyle = "rgba(56, 189, 248, 0.12)";
-      ctx.lineWidth = 1 / mZoom;
-      for (let lon = -150; lon <= 150; lon += 30) {
-        const p1 = latLonToMapXY(78, lon);
-        const p2 = latLonToMapXY(-58, lon);
-        ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-      }
-      for (let lat = -30; lat <= 60; lat += 30) {
-        const p1 = latLonToMapXY(lat, -175);
-        const p2 = latLonToMapXY(lat, 185);
-        ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-      }
-
-      // Equator subtle dashed line
-      ctx.strokeStyle = "rgba(250, 204, 21, 0.22)";
-      ctx.setLineDash([4 / mZoom, 4 / mZoom]);
-      const eq1 = latLonToMapXY(0, -175), eq2 = latLonToMapXY(0, 185);
-      ctx.beginPath(); ctx.moveTo(eq1.x, eq1.y); ctx.lineTo(eq2.x, eq2.y); ctx.stroke();
-      ctx.setLineDash([]);
-
-      // 2. Stylized Vector Continents
-      ctx.fillStyle = "#1e3a4c";
-      ctx.strokeStyle = "#38bdf8";
-      ctx.lineWidth = 1.2 / mZoom;
-      for (const poly of CONTINENT_POLYS) {
-        ctx.beginPath();
-        poly.forEach(([lon, lat], idx) => {
-          const p = latLonToMapXY(lat, lon);
-          if (idx === 0) ctx.moveTo(p.x, p.y);
-          else ctx.lineTo(p.x, p.y);
-        });
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-      }
-
-      // 3. Subtle City Reference Dots (Chapters 1 & 2 to assist newer analysts!)
-      if (curCase.showCityDots) {
-        ctx.fillStyle = "rgba(186, 230, 253, 0.45)";
-        for (const ct of CITIES) {
-          const p = latLonToMapXY(ct.lat, ct.lon);
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 2.3 / Math.sqrt(mZoom), 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      // 4. Revealed Target City + Great-Circle Distance Line (After Confirmation!)
-      if (revealTarget) {
-        const tp = latLonToMapXY(curCase.city.lat, curCase.city.lon);
-
-        if (userPin) {
-          const up = latLonToMapXY(userPin.lat, userPin.lon);
-          ctx.strokeStyle = roundWon ? "#4ade80" : "#facc15";
-          ctx.lineWidth = 2.2 / mZoom;
-          ctx.setLineDash([5 / mZoom, 4 / mZoom]);
-          ctx.beginPath();
-          ctx.moveTo(up.x, up.y);
-          ctx.lineTo(tp.x, tp.y);
-          ctx.stroke();
-          ctx.setLineDash([]);
-        }
-
-        // True City Target Beacon
-        ctx.fillStyle = "#22c55e";
-        ctx.strokeStyle = "#ffffff";
-        ctx.shadowColor = "#22c55e";
-        ctx.shadowBlur = 12;
-        ctx.lineWidth = 2 / mZoom;
-        ctx.beginPath();
-        ctx.arc(tp.x, tp.y, 6 / Math.sqrt(mZoom), 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        ctx.fillStyle = "#dcfce7";
-        ctx.font = `900 ${Math.round(10 / Math.sqrt(mZoom))}px sans-serif`;
-        ctx.textAlign = "center";
-        ctx.fillText(curCase.city.city, tp.x, tp.y - 10 / Math.sqrt(mZoom));
-      }
-
-      // 5. Player's Dropped Red Investigation Pin 📍
-      if (userPin) {
-        const up = latLonToMapXY(userPin.lat, userPin.lon);
-        const s = 1 / Math.sqrt(mZoom);
-        const pulse = 1 + 0.25 * Math.sin(now * 0.008);
-
-        ctx.strokeStyle = "rgba(239, 68, 68, 0.55)";
-        ctx.lineWidth = 1.8 * s;
-        ctx.beginPath();
-        ctx.arc(up.x, up.y, 10 * s * pulse, 0, Math.PI * 2);
-        ctx.stroke();
-
-        ctx.fillStyle = "#ef4444";
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 1.8 * s;
-        ctx.beginPath();
-        ctx.arc(up.x, up.y - 10 * s, 5.5 * s, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(up.x - 3.5 * s, up.y - 6 * s);
-        ctx.lineTo(up.x + 3.5 * s, up.y - 6 * s);
-        ctx.lineTo(up.x, up.y);
-        ctx.closePath();
-        ctx.fill();
-      }
+      ctx.fillStyle = "rgba(8, 15, 26, 0.85)";
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.55)";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.roundRect(12, 12, 134, 24, 6); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#fde047";
+      ctx.font = "900 9.5px monospace";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(`🧭 SUN: ${a.hemi === "N" ? "SOUTH (N.Hemi)" : "NORTH (S.Hemi)"}`, 19, 24);
+      ctx.restore();
 
       ctx.restore();
-    }
-
-    let lastTime = performance.now();
-
-    function frame(now) {
-      const dt = Math.min(0.05, (now - lastTime) / 1000);
-      lastTime = now;
-
-      // Smooth Camera Interpolation for Both Photo & Map
-      pZoom += (pTargetZoom - pZoom) * Math.min(1, dt * 11);
-      pX += (pTargetX - pX) * Math.min(1, dt * 11);
-      pY += (pTargetY - pY) * Math.min(1, dt * 11);
-
-      mZoom += (mTargetZoom - mZoom) * Math.min(1, dt * 11);
-      mX += (mTargetX - mX) * Math.min(1, dt * 11);
-      mY += (mTargetY - mY) * Math.min(1, dt * 11);
-
-      if (hintBox && hintBox.timer > 0) hintBox.timer = Math.max(0, hintBox.timer - dt);
-      updateBadgeAndPinBtn();
-
-      const vp = getViewport();
-      ctx.clearRect(0, 0, vp.w, vp.h);
-
-      ctx.save();
-      ctx.translate(vp.offsetX, vp.offsetY);
-      ctx.scale(vp.scale, vp.scale);
-
-      ctx.beginPath();
-      ctx.rect(0, 0, WORLD_W, WORLD_H);
-      ctx.clip();
-
-      if (viewMode === "photo") drawEvidencePhoto(now);
-      else drawWorldMap(now);
-
-      ctx.restore();
-      requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
     loadCase(currentLevelNum);
-    requestAnimationFrame(frame);
   </script>
 
 </body>
