@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Micro-Expression Polygraph — 500 Lie Detection Cases | ZinPlay</title>
-  <meta name="description" content="Play 500 detective interrogation cases in Micro-Expression Polygraph. Watch suspects closely for split-second eye twitches, micro-smirks, and polygraph spikes to expose lies." />
+  <title>Micro-Expression Polygraph — Free 500-Case Lie Detector Detective Game | ZinPlay</title>
+  <meta name="description" content="Play Micro-Expression Polygraph free online with no download. Interrogate suspects, replay tapes in 0.5x slow motion to spot split-second facial micro-expressions and polygraph spikes, and call Truth or Lie across 500 noir cases." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Micro-Expression Polygraph",
+    "url": "https://zinplay.io/games/micro-polygraph/",
+    "genre": ["Mystery", "Psychological Deduction", "Lie Detector Simulation"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top Interrogation HUD */
+    /* Top Interrogation Room HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0a0d14;
-      color: #f1f5f9;
-      border-bottom: 1px solid #1e2436;
+      background: #0d0c12;
+      color: #f8fafc;
+      border-bottom: 1px solid #262233;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,10 +64,10 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #f87171;
+      color: #f43f5e;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
     }
     .hud-pills {
       display: flex;
@@ -63,18 +76,13 @@
       flex-wrap: wrap;
     }
     .hud-pill {
-      background: rgba(248, 113, 113, 0.16);
-      border: 1px solid rgba(248, 113, 113, 0.38);
-      color: #fecaca;
+      background: rgba(244, 63, 94, 0.16);
+      border: 1px solid rgba(251, 113, 133, 0.4);
+      color: #fecdd3;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
       font-family: monospace;
-    }
-    .hud-pill.shield-pill {
-      background: rgba(56, 189, 248, 0.16);
-      border-color: rgba(56, 189, 248, 0.36);
-      color: #bae6fd;
     }
     .hud-pill.done-pill {
       background: rgba(34, 197, 94, 0.16);
@@ -83,70 +91,77 @@
       font-family: inherit;
     }
 
-    /* Case Dossier Strip */
-    .dossier-strip {
+    /* Suspect Baseline Profile Bar */
+    .baseline-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      padding: 9px 14px;
-      background: #121722;
-      border-bottom: 1px solid #22293b;
-      color: #cbd5e1;
-      font-size: 0.76rem;
-      font-weight: 700;
       flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #15131f;
+      border-bottom: 1px solid #2a253b;
+      color: #e2e8f0;
+      font-size: 0.75rem;
     }
-    .suspect-meta {
+    .base-info {
       display: flex;
-      align-items: center;
       gap: 8px;
       flex-wrap: wrap;
+      align-items: center;
     }
-    .suspect-name {
-      color: #fef08a;
+    .base-chip {
+      font-family: monospace;
+      font-size: 0.72rem;
       font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #0b0a10;
+      border: 1px solid #352f4a;
+      color: #fde68a;
+    }
+    .base-chip.quirk-chip {
+      color: #7dd3fc;
+      border-color: #1e3a5f;
     }
     .q-dots {
       display: flex;
-      gap: 5px;
+      gap: 6px;
       align-items: center;
     }
     .q-dot {
       width: 11px;
       height: 11px;
       border-radius: 50%;
-      background: #0a0d14;
-      border: 2px solid #3c4663;
-      transition: all 0.2s ease;
+      background: #0b0a10;
+      border: 2px solid #475569;
     }
-    .q-dot.active {
+    .q-dot.cur {
       border-color: #facc15;
-      background: rgba(250, 204, 21, 0.35);
-      box-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
+      box-shadow: 0 0 8px rgba(250, 204, 21, 0.6);
     }
-    .q-dot.pass {
+    .q-dot.ok {
       background: #22c55e;
       border-color: #86efac;
     }
-    .q-dot.miss {
+    .q-dot.bad {
       background: #ef4444;
       border-color: #fca5a5;
     }
 
-    /* Interrogation Booth Canvas Stage */
+    /* Live Interrogation Portrait & Scrolling Polygraph Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 360px;
-      background: radial-gradient(circle at 50% 24%, #252b3d 0%, #0b0e16 86%);
+      height: 310px;
+      background: #08080c;
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
     @media (min-width: 640px) {
       .canvas-container {
-        height: 400px;
+        height: 345px;
       }
     }
     #polyCanvas {
@@ -155,89 +170,96 @@
       display: block;
     }
 
-    /* Live Statement Dialogue Box */
-    .dialogue-box {
-      background: #0e121c;
-      border-top: 1px solid #222a3e;
+    /* Live Transcript & Verdict Controls Box */
+    .interro-panel {
+      background: #111018;
+      border-top: 1px solid #282438;
       padding: 12px 14px;
-      color: #f1f5f9;
-      min-height: 92px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 5px;
+      gap: 10px;
     }
-    .q-prompt-line {
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #7dd3fc;
+    .dialogue-box {
+      background: #09090e;
+      border: 1.5px solid #2f2a42;
+      border-left: 4px solid #f59e0b;
+      border-radius: 10px;
+      padding: 10px 12px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
+      flex-direction: column;
+      gap: 4px;
     }
-    .statement-text {
-      font-size: 0.94rem;
-      line-height: 1.42;
-      font-weight: 600;
-      color: #f8fafc;
-    }
-    .slowmo-tag {
-      color: #facc15;
+    .dlg-q {
       font-family: monospace;
       font-size: 0.72rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+    .dlg-a {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #f8fafc;
+      line-height: 1.45;
+      min-height: 40px;
     }
 
-    /* Verdict & Replay Controls Dock */
+    /* Replay Tape & Truth / Lie Verdict Buttons */
     .verdict-dock {
       display: grid;
-      grid-template-columns: 1fr 0.9fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
-      padding: 11px 12px 12px;
-      background: #121726;
-      border-top: 1px solid #222a3e;
     }
-    .verdict-btn {
-      min-height: 48px;
-      padding: 6px 8px;
-      border-radius: 12px;
-      border: 1.5px solid #2f3b59;
-      background: #1a2236;
-      color: #f8fafc;
-      font-size: 0.86rem;
-      font-weight: 900;
+    @media (min-width: 520px) {
+      .verdict-dock {
+        grid-template-columns: auto 1fr 1fr;
+      }
+    }
+    .replay-btn {
+      grid-column: 1 / -1;
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: 11px;
+      border: 1.5px solid #38bdf8;
+      background: rgba(56, 189, 248, 0.16);
+      color: #e0f2fe;
+      font-size: 0.82rem;
+      font-weight: 800;
       cursor: pointer;
       display: inline-flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
+      gap: 5px;
+      transition: transform 0.08s ease, background 0.14s ease;
+    }
+    @media (min-width: 520px) {
+      .replay-btn { grid-column: auto; }
+    }
+    .replay-btn:active { transform: scale(0.96); }
+    .replay-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .verdict-btn {
+      min-height: 48px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      border: 2px solid transparent;
+      color: #ffffff;
       transition: transform 0.08s ease, opacity 0.14s ease;
     }
     .verdict-btn:active { transform: scale(0.96); }
-    .verdict-btn:disabled { opacity: 0.4; cursor: default; }
-    .verdict-btn.truth-btn {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      border-color: #6ee7b7;
-      box-shadow: 0 5px 16px rgba(16, 185, 129, 0.28);
+    .verdict-btn:disabled { opacity: 0.38; cursor: default; }
+    .btn-truth {
+      background: linear-gradient(135deg, #16a34a 0%, #0d9488 100%);
+      border-color: #86efac;
+      box-shadow: 0 5px 16px rgba(22, 163, 74, 0.28);
     }
-    .verdict-btn.lie-btn {
-      background: linear-gradient(135deg, #dc2626 0%, #e11d48 100%);
+    .btn-lie {
+      background: linear-gradient(135deg, #dc2626 0%, #be123c 100%);
       border-color: #fda4af;
-      box-shadow: 0 5px 16px rgba(225, 29, 72, 0.3);
-    }
-    .verdict-btn.replay-btn {
-      background: #1e2942;
-      border-color: #60a5fa;
-      color: #dbeafe;
-      font-size: 0.78rem;
-    }
-    .v-sub {
-      font-size: 0.62rem;
-      font-weight: 700;
-      opacity: 0.88;
+      box-shadow: 0 5px 16px rgba(220, 38, 38, 0.28);
     }
 
     .legend-strip {
@@ -247,53 +269,23 @@
       gap: 12px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #0a0d15;
-      border-top: 1px solid #1b2233;
-      font-size: 0.72rem;
+      background: #09080d;
+      border-top: 1px solid #201c2d;
+      font-size: 0.73rem;
       color: #94a3b8;
-    }
-
-    /* Stamp Banner on Verdict */
-    .verdict-stamp {
-      position: absolute;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%) rotate(-3deg);
-      padding: 7px 16px;
-      border-radius: 10px;
-      font-size: 0.84rem;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.16s ease;
-      white-space: nowrap;
-      backdrop-filter: blur(4px);
-    }
-    .verdict-stamp.show { opacity: 1; }
-    .verdict-stamp.good {
-      background: rgba(22, 163, 74, 0.92);
-      border: 2px solid #86efac;
-      color: #ffffff;
-    }
-    .verdict-stamp.bad {
-      background: rgba(220, 38, 38, 0.92);
-      border: 2px solid #fca5a5;
-      color: #ffffff;
     }
 
     .status-toast {
       position: absolute;
-      bottom: 66px;
+      bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 13, 20, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.72);
+      background: rgba(10, 9, 15, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.78);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       font-weight: 700;
       white-space: nowrap;
       pointer-events: none;
@@ -302,38 +294,40 @@
       max-width: 92%;
       overflow: hidden;
       text-overflow: ellipsis;
+      z-index: 15;
     }
     .status-toast.show { opacity: 1; }
 
-    .stage-overlay {
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(8, 10, 18, 0.84);
+      background: rgba(9, 8, 14, 0.85);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
+      z-index: 25;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
-      padding: 24px 20px;
+      padding: 22px 18px;
       text-align: center;
-      max-width: 335px;
+      max-width: 340px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
-    .overlay-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
+    .win-card h2 { font-size: 1.26rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.48; }
 
     .controls-group {
       display: flex;
@@ -471,6 +465,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #0d0c12;
+      border: 1px solid rgba(244, 63, 94, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #0d0c12;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #16101c 0%, #500724 100%);
+      color: #ffe4e6;
+    }
+    .game-seo-banner.noir-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #fecdd3;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .poly-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .poly-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .poly-table th, .poly-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .poly-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .poly-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -483,7 +557,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -496,92 +570,79 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Interrogations &bull; Behavioral Mystery</span>
+      <span class="cat-tag">500 Interrogations &bull; Behavioral Polygraph</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Micro-Expression Polygraph</h1>
-      <p>Study each suspect's face under the interrogation lamp and catch split-second eye twitches, darting glances, and micro-smirks to expose lies.</p>
+      <p>Watch the suspect's face closely as they answer each question, compare live heartbeat and GSR ink needles against their baseline profile, replay in 0.5× slow motion, and call Truth or Lie.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Micro-Expression Polygraph Game">
+    <section class="game-wrapper" aria-label="Micro-Expression Polygraph Interrogation Simulator">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Petty Alibis</span>
-          <span id="levelTitle">Case #1 / 500 — The Vanished Watch</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Rookie Interrogations</span>
+          <span id="levelTitle">Case #1 / 500 — Museum Diamond Heist</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill shield-pill" id="shieldsPill">🛡️🛡️ Credibility</span>
-          <span class="hud-pill" id="bpmPill">72 BPM</span>
-          <span class="hud-pill done-pill" id="solvedCounter">Solved: 0 / 500</span>
+          <span class="hud-pill" id="strikesPill">Errors: 0 / 2</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Closed: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Suspect Dossier & Statement Dots -->
-      <div class="dossier-strip">
-        <div class="suspect-meta">
-          <span>Suspect: <strong id="suspectName" class="suspect-name">Victor Vance</strong></span>
-          <span id="suspectRole" style="color:#94a3b8;">(Museum Curator)</span>
+      <!-- Suspect Baseline Calibration & Statement Progress Dots -->
+      <div class="baseline-strip">
+        <div class="base-info">
+          <span class="base-chip" id="suspectChip">SUSPECT: Elena Vance</span>
+          <span class="base-chip" id="bpmBaseChip">BASE: 72 BPM</span>
+          <span class="base-chip quirk-chip" id="quirkChip">HABIT: Calm Baseline</span>
         </div>
-        <div id="qDots" class="q-dots" aria-label="Question Progress"></div>
+        <div id="qDots" class="q-dots" aria-label="Statement Progress"></div>
       </div>
 
-      <!-- Interrogation Booth Canvas + Live ECG Strip -->
+      <!-- Dual Split Canvas: Animated Suspect Face + Live Dual-Needle Polygraph -->
       <div class="canvas-container">
         <canvas id="polyCanvas"></canvas>
-        <div id="verdictStamp" class="verdict-stamp"></div>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Case Start / Result Overlay -->
-        <div id="stageOverlay" class="stage-overlay show">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.3rem; margin-bottom:6px;">👁️</div>
-            <h2 id="ovHeading">Case #1 Ready</h2>
-            <p id="ovText">Watch the suspect's eyes, eyebrows, and mouth as they answer each question. Expose every lie!</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Begin Interrogation ▶</button>
+        <!-- Interrogation Closed Victory / Mistrial Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div id="overlayIcon" style="font-size:2.3rem; margin-bottom:6px;">🎙️</div>
+            <h2 id="winHeading">Confession Secured!</h2>
+            <p id="winText">You spotted every deceptive micro-expression and polygraph spike without falling for baseline nerves.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Interrogation →</button>
           </div>
         </div>
       </div>
 
-      <!-- Live Statement Dialogue Box -->
-      <div class="dialogue-box">
-        <div class="q-prompt-line">
-          <span id="qPromptText">QUESTION 1 / 3 — ALIBI CHECK</span>
-          <span id="slowmoTag" class="slowmo-tag"></span>
+      <!-- Live Interrogation Dialogue & Verdict Controls -->
+      <div class="interro-panel">
+        <div class="dialogue-box">
+          <span id="dlgQuestion" class="dlg-q">Q1 / 3 — DETECTIVE: "Where were you at midnight?"</span>
+          <span id="dlgAnswer" class="dlg-a">"I was home asleep before ten..."</span>
         </div>
-        <div id="statementText" class="statement-text">"Press Begin Interrogation to bring the suspect under the lamp."</div>
-      </div>
 
-      <!-- Verdict & Slow-Mo Replay Dock -->
-      <div class="verdict-dock">
-        <button id="truthBtn" class="verdict-btn truth-btn" type="button" disabled>
-          <span>✓ TRUTH</span>
-          <span class="v-sub">Clean Face</span>
-        </button>
-        <button id="replayBtn" class="verdict-btn replay-btn" type="button" disabled>
-          <span>⏪ 0.45×</span>
-          <span id="replayCountTxt" class="v-sub">2 Replays</span>
-        </button>
-        <button id="lieBtn" class="verdict-btn lie-btn" type="button" disabled>
-          <span>🚨 LIE!</span>
-          <span class="v-sub">Spot Tell</span>
-        </button>
+        <div class="verdict-dock">
+          <button id="replayBtn" class="replay-btn" type="button">⏪ Replay 0.5× Slow-Mo</button>
+          <button id="truthBtn" class="verdict-btn btn-truth" type="button">✅ TRUTH</button>
+          <button id="lieBtn" class="verdict-btn btn-lie" type="button">🚨 LIE</button>
+        </div>
       </div>
 
       <div class="legend-strip">
-        <span>👁️ Eye Dart / Lid Twitch = LIE</span>
-        <span>😏 Asymmetric Smirk = LIE</span>
-        <span>🤨 Inner Brow Pinch = LIE</span>
-        <span>💧 Sweat Alone (Ch. 2+) = Nervous Truth!</span>
+        <span>👀 Watch Eyes, Brows &amp; Lip Corners During Mid-Answer</span>
+        <span>📈 True Lies Spike BOTH Face Tell &amp; Polygraph Needles</span>
+        <span>⏪ Use 0.5× Slow-Mo Anytime to Catch Split-Second Twitches!</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Restart Case</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Tell Scanner</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Restart Tape</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Behavioral Scan</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
@@ -596,50 +657,157 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 880+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/micro-polygraph-banner-1.jpg"
+            alt="Micro-Expression Polygraph interrogation game showing a noir suspect under a desk lamp with subtle facial tracking nodes and glowing polygraph ink needles"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Noir Interrogation Cases — Real Micro-Expression Psychology</h3>
+          <p>Spot asymmetric lip smirks, split-second eye darts, and sudden galvanic skin spikes—then review every tape in 0.5× slow motion.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Micro-Expression Polygraph (500 Cases)</h2>
-        <p>Micro-Expression Polygraph puts you behind the one-way mirror of a noir detective bureau across 500 escalating interrogations. Each suspect answers a series of sharp questions while hooked up to a live ECG polygraph strip. Genuine deception leaks out in brief involuntary facial tells lasting a fraction of a second:</p>
+        <h2>What Is Micro-Expression Polygraph? A Lie Detector Detective Game Online</h2>
+        <p><strong>Micro-Expression Polygraph</strong> is a free <strong>facial micro-expression and lie detector game online</strong> inspired by behavioral psychology classics like <em>L.A. Noire</em> and Paul Ekman's Facial Action Coding System (FACS). Seated beneath a single swinging interrogation lamp is a live animated suspect wired to a dual-channel biometric polygraph measuring both <strong>Heart Rate (BPM)</strong> and <strong>Galvanic Skin Response (GSR)</strong>. As your detective asks 3 to 5 pointed questions across each case, you must watch the suspect's face and scrolling ink needles in real time to separate genuine truth from carefully rehearsed deception.</p>
+        <p>Built as a rich, <strong>no-download psychological mystery game for smartphones, iPads, and Chromebooks</strong>, Micro-Expression Polygraph features procedural 60 FPS facial rigging—blinking eyes, shifting pupils, twitching brows, lip compression, cold sweat beads, and fleeting "duping delight" smirks—paired with live <strong>Web Audio heartbeat pulses, mechanical polygraph pen scratches, tape slow-motion clicks, and courtroom gavel chimes</strong> across all <strong>500 interrogation cases</strong>.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Forensic Behavioral Reading Guide (How to Catch Every Lie)</h2>
+        <p>Anyone can spot an obvious panic in Chapter 1—but trained liars in Chapters 4 and 5 flash micro-expressions lasting under half a second, while innocent suspects sometimes exhibit harmless nervous habits! Master these six <strong>behavioral tells</strong> and always cross-check the top <strong>Suspect Baseline Bar</strong>:</p>
+
+        <div class="poly-table-wrap">
+          <table class="poly-table">
+            <thead>
+              <tr>
+                <th>Deceptive Micro-Expression</th>
+                <th>What to Spot on the Face</th>
+                <th>Polygraph Needle Signature</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>😏 Duping Delight (Micro-Smirk)</strong></td>
+                <td>One corner of the mouth pulls sharply upward for a split second mid-answer!</td>
+                <td>Sharp crimson <strong>GSR spike</strong> + brief +18 BPM surge.</td>
+              </tr>
+              <tr>
+                <td><strong>👀 Hard Lateral Eye-Dart</strong></td>
+                <td>Both pupils snap sideways away from the detective before snapping back.</td>
+                <td>Double jagged <strong>BPM pulse</strong> + sudden cyan tension tremor.</td>
+              </tr>
+              <tr>
+                <td><strong>🤨 Asymmetric Brow Twitch</strong></td>
+                <td>Inner eyebrow lifts or pinches unevenly (micro-fear / guilt flash).</td>
+                <td>Tall sharp <strong>GSR deflection</strong> rising cleanly above baseline.</td>
+              </tr>
+              <tr>
+                <td><strong>😬 Tight Lip Compression</strong></td>
+                <td>Lips press flat into a thin rigid line while hiding withheld details.</td>
+                <td>Elevated sustained <strong>Heart Rate + GSR plateau</strong>.</td>
+              </tr>
+              <tr>
+                <td><strong>💧 Cold Sweat &amp; Pupil Dilation</strong></td>
+                <td>Tiny glistening sweat bead slips down the temple as pupils widen sharply.</td>
+                <td>Heavy unmistakable twin-needle <strong>Polygraph Spike</strong>.</td>
+              </tr>
+              <tr>
+                <td><strong>⚠️ Innocent Baseline Quirks</strong> (Ch. 3–5)</td>
+                <td>Check the blue <strong>HABIT</strong> chip above the tape! E.g. <em>Frequent Blinker</em> or <em>Naturally High 88 BPM</em>.</td>
+                <td><strong>Do NOT mistake a baseline habit for a lie!</strong> Wait for an actual micro-tell + spike ABOVE their baseline!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Interrogator Pro Tip:</strong> Never rush your verdict on a fast flash! Tap <strong>⏪ Replay 0.5× Slow-Mo</strong> (or press <code>R</code> on desktop) to rewind the current statement and watch the suspect's eyes, brows, and mouth at half speed with a live <code>SLOW-MO</code> telemetry overlay—even a 0.35-second poker-face twitch in Chapter 5 becomes crystal clear in slow motion!</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner noir-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/micro-polygraph-banner-2.jpg"
+            alt="Noir behavioral interrogation desk with polygraph needles, tape replay reels, and holographic eye dart and micro-smirk cards in Micro-Expression Polygraph"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Baseline Calibration &amp; 0.5× Slow-Motion Forensic Tape Replay</h3>
+          <p>Separate genuinely nervous innocents from ice-cold poker-faced masterminds across five escalating psychological mystery tiers.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Interrogation Chapters (500 Unique Noir Cases)</h2>
+        <p>Every case from #1 to #500 generates a unique suspect portrait, crime scenario, baseline heart rate, dialogue script, and calibrated micro-expression timing saved privately inside your browser:</p>
         <ul>
-          <li><strong>Learn the 4 True Deception Tells:</strong> Keep your eyes locked on the suspect's face as their statement plays out. A <strong>Rapid Eyelid Twitch</strong>, a sudden sideways <strong>Eye Dart</strong>, a one-sided <strong>Micro-Smirk (Duping Delight)</strong>, or an involuntary <strong>Inner Eyebrow Pinch</strong> always reveals a lie!</li>
-          <li><strong>Don't Be Fooled by Nervous Innocents (Chapter 2+):</strong> Innocent witnesses can sweat nervously or experience a mild heart-rate bump under the hot interrogation lamp—but their eyes, brows, and lips show <strong>zero deception tells</strong>. Judge them as <strong>✓ TRUTH</strong>!</li>
-          <li><strong>Counter Sunglasses &amp; Trained Spies (Chapters 3–5):</strong> High-tier suspects wear dark glasses to mask their eyes or train their breathing to hold a flat polygraph ECG line. Watch their brows and mouth carefully, and use <strong>⏪ 0.45× Slow-Mo Replay</strong> whenever a statement flashes by too fast!</li>
+          <li><strong>Chapter 1 (Cases 1–100 — Rookie Interrogations):</strong> 3 questions per suspect with clear 0.9-second facial tells and bold polygraph spikes—perfect for training your eye on eye-darts, smirks, and brow twitches.</li>
+          <li><strong>Chapter 2 (Cases 101–200 — Faster Micro-Flashes):</strong> Tightens deceptive expression windows down to ~0.65 seconds across 3–4 rapid statements, rewarding attentive watching and smart 0.5× slow-motion replays.</li>
+          <li><strong>Chapter 3 (Cases 201–300 — Nervous Innocent Baselines):</strong> Introduces realistic <strong>Baseline Quirks</strong> (like Rapid Blinkers and Nervous Fidgeters) who look jittery even while telling 100% truth—teaching disciplined baseline comparison!</li>
+          <li><strong>Chapter 4 (Cases 301–400 — Controlled Poker Faces):</strong> Tougher 4-statement interrogations featuring trained liars who suppress big heart-rate jumps, leaking only a brief 0.45-second facial micro-expression + crisp GSR blip!</li>
+          <li><strong>Chapter 5 (Cases 401–500 — Master Behavioral Profiler):</strong> 5-statement high-stakes showdowns with razor-thin 0.36-second micro-flashes, tricky nervous-truth decoys, and a strict <strong>1-Error</strong> mistrial threshold—complete with an instant 1–500 case picker.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Lie Detector Topics">
+          <span class="kw-pill">Micro Expression Game Online Free</span>
+          <span class="kw-pill">Polygraph Lie Detector Simulator</span>
+          <span class="kw-pill">LA Noire Style Interrogation Web</span>
+          <span class="kw-pill">Body Language Detective Browser Game</span>
+          <span class="kw-pill">500-Case Psychology Mystery Puzzle</span>
+          <span class="kw-pill">No-Download Chromebook Mystery Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Micro-Expression Polygraph FAQ</h2>
         <details class="faq-item">
-          <summary>What is the difference between a normal blink and a deception eyelid twitch?</summary>
-          <div class="faq-answer">A normal blink closes both eyes smoothly and symmetrically for a quick beat. A deception <strong>Eyelid Twitch</strong> causes a rapid, asymmetric flutter on a single eye (often accompanied by a subtle tension flash)!</div>
+          <summary>How do I spot a super-fast micro-expression in Chapters 4 and 5?</summary>
+          <div class="faq-answer">Tap <strong>⏪ Replay 0.5× Slow-Mo</strong> right below the interrogation transcript! The tape plays the exact statement back at half speed, stretching every 0.35-second eye dart, brow twitch, or lip smirk so you can verify it clearly before hitting <strong>✅ TRUTH</strong> or <strong>🚨 LIE</strong>.</div>
         </details>
         <details class="faq-item">
-          <summary>How does the Tell Scanner (💡) button help?</summary>
-          <div class="faq-answer">Tapping Tell Scanner replays the current answer in slow motion with a glowing golden forensic scan frame locked directly over the facial region where a micro-expression occurs—or alerts you if the baseline scan is clean.</div>
+          <summary>Why did an innocent suspect have 90 BPM or blink rapidly when telling the truth?</summary>
+          <div class="faq-answer">Check the blue <strong>HABIT</strong> badge in the Suspect Baseline Bar! Starting in Chapter 3, innocent suspects can have a naturally high resting heart rate or frequent blinking habit—look for a <em>sudden spike above baseline</em> paired with a deceptive facial micro-tell rather than resting nerves!</div>
+        </details>
+        <details class="faq-item">
+          <summary>What does the "💡 Behavioral Scan" hint button show?</summary>
+          <div class="faq-answer">Tapping <strong>💡 Behavioral Scan</strong> runs an automated forensic telemetry readout on the current statement, telling you immediately whether a deceptive facial tell / GSR anomaly was detected—or if readings stayed cleanly at baseline!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Are keyboard shortcuts supported on desktop and Chromebooks?</summary>
+          <div class="faq-answer">Yes! Press <code>T</code> (or <code>Left Arrow</code>) for <strong>TRUTH</strong>, <code>L</code> (or <code>Right Arrow</code>) for <strong>LIE</strong>, and <code>R</code> (or <code>Space</code>) to replay the current statement in <strong>0.5× Slow-Mo</strong>!</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🖥️</div><span class="cat-tag">Mystery</span></div>
+        <div class="card-top"><div class="icon-box">💻</div><span class="cat-tag">Mystery</span></div>
         <h3>OS Sleuth</h3>
-        <p>Explore a retro Windows 98 desktop, inspect emails and hidden files, and solve a mystery.</p>
+        <p>Investigate a suspect's simulated desktop, crack PIN-locked vaults, and decode ciphers.</p>
         <a href="/games/os-sleuth/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
-        <h3>Manual Bomb Defusal</h3>
-        <p>Decode the live technical manual against the ticking clock and cut the exact right wire.</p>
-        <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🌍</div><span class="cat-tag">Mystery</span></div>
+        <h3>OSINT Geo-Sleuth</h3>
+        <p>Analyze license plates, driving lanes, bollards, and alphabets to pinpoint countries worldwide.</p>
+        <a href="/games/geo-sleuth/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">🗺️</div><span class="cat-tag">Strategy</span></div>
         <h3>Heist Blueprint Planner</h3>
-        <p>Plot routes and timed waits on museum blueprints to slip past lasers and cameras.</p>
+        <p>Plot synchronized stealth waypoints past sweeping guards and laser cameras to crack the vault.</p>
         <a href="/games/heist-planner/" class="card-link">Play Game →</a>
       </article>
     </section>
@@ -647,10 +815,10 @@
   </main>
 
   <!-- Case Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Case">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Interrogation Case">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Case File (1 – 500)</h3>
+        <h3>Choose Interrogation Case (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
@@ -674,21 +842,21 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Mystery</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/fold-reveal/">Fold &amp; Reveal</a></li>
-            <li><a href="/games/un-builder/">Un-Builder</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
+            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
+            <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Top Strategy</h4>
           <ul>
-            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
+            <li><a href="/games/grocery-bagging/">Grocery Bagging</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
-            <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -721,73 +889,83 @@
     }
 
     // ==============================================
-    // CASE ARCHIVE & 500-INTERROGATION GENERATOR
+    // MICRO-EXPRESSION & POLYGRAPH INTERROGATION ENGINE (500 CASES)
     // ==============================================
     const TOTAL_LEVELS = 500;
-    const WORLD_W = 420;
-    const WORLD_H = 380;
+    const WORLD_W = 440;
+    const WORLD_H = 310;
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Petty Alibis", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Nervous Witnesses", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Shaded Poker Faces", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Trained Operatives", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Master Spies", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Rookie Interrogations", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Fast Micro-Flashes", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Nervous Innocent Baselines", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Controlled Poker Faces", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Behavioral Profiler", range: "401–500", start: 401, end: 500 }
     ];
 
-    const FIRST_NAMES = [
-      "Victor", "Clara", "Julian", "Nadia", "Marcus", "Elena", "Arthur", "Sonia",
-      "felix", "Mila", "Dorian", "Hana", "Roman", "Iris", "Soren", "Tessa"
-    ].map((n) => n[0].toUpperCase() + n.slice(1));
-
-    const LAST_NAMES = [
-      "Vance", "Moreau", "Kowalski", "Sterling", "Sato", "Mercer", "Voss", "Delgado",
-      "Thorne", "Lindqvist", "Bauer", "Castillo", "Kessler", "Reyes", "Novak", "Houghton"
+    const SUSPECT_NAMES = [
+      "Julian Mercer", "Nadia Kowalski", "Hector Alvarez", "Evelyn Shaw",
+      "Devon Alcott", "Sora Takahashi", "Amara Mensah", "Gideon Frost",
+      "Camille Laurent", "Tariq Hassan", "Maya Sterling", "Viktor Novak",
+      "Iris Delgado", "Roman Vance", "Freya Lindqvist", "Caleb O'Connor"
     ];
 
-    const ROLES = [
-      "Museum Curator", "Night Guard", "Vault Technician", "Auctioneer", "Harbor Pilot",
-      "Art Restorer", "Private Banker", "Archivist", "Hotel Concierge", "Diplomat",
-      "Jeweler", "Lab Chemist", "Gallery Dealer", "Chief Accountant"
+    const CRIME_TITLES = [
+      "Museum Diamond Heist", "Midnight Art Forgery", "Vault Keycard Leak",
+      "Casino Chip Skimming", "Corporate Patent Theft", "Harbor Smuggling Ring",
+      "Auction Reserve Leak", "Subway Signal Sabotage", "Rare Watch Disappearance"
     ];
 
-    const CASE_TITLES = [
-      "The Vanished Pocket Watch", "Midnight Vault Switch", "The Forged Manuscript",
-      "Harbor Pier Disappearance", "Emerald Necklace Heist", "Encrypted Cipher Leak",
-      "The Locked Conservatory", "Missing Auction Ledger", "Embassy Keycard Copy",
-      "Gallery Laser Sabotage", "The Switched Briefcase", "Clocktower Alibi"
+    const QA_BANK = [
+      {
+        q: "Where were you between 11 PM and midnight?",
+        truth: "I stayed late updating quarterly spreadsheets on the third floor—check my desk log.",
+        lie:   "I left right at six, grabbed takeout downtown, and went straight to bed."
+      },
+      {
+        q: "Did you ever copy the security vault access code?",
+        truth: "Never. I only hold standard daytime clearance for the main reception wing.",
+        lie:   "No idea what code you mean—I don't even know which hallway that vault is in."
+      },
+      {
+        q: "Why did your phone ping near the service entrance?",
+        truth: "My parking spot is right outside the north service alley—I walk past it daily.",
+        lie:   "Must be a cell-tower glitch; my phone was turned completely off in my backpack."
+      },
+      {
+        q: "Do you recognize this encrypted burner drive?",
+        truth: "I've seen similar silver drives in the IT supply cabinet, never touched this one.",
+        lie:   "Never seen anything like that in my life—looks like something someone planted."
+      },
+      {
+        q: "Have you spoken with the offshore buyer this week?",
+        truth: "Only during the public auction preview on Tuesday with three colleagues beside me.",
+        lie:   "Not a single word—I wouldn't even recognize their voice on the phone."
+      },
+      {
+        q: "Why were the corridor cameras looped for four minutes?",
+        truth: "Maintenance scheduled a firmware patch that night; it's in the building memo.",
+        lie:   "Wait, the cameras were looped? That's genuinely the first I'm hearing about it."
+      },
+      {
+        q: "Who gave you the spare brass maintenance key?",
+        truth: "The building super signed it out to me last month when my office lock jammed.",
+        lie:   "I don't own any spare keys—my keyring only has my apartment and car fob."
+      }
     ];
 
-    const QUESTION_BANK = [
-      { topic: "ALIBI CHECK",     stmt: "I never stepped near the East Wing after 9 PM—I was cataloging receipts alone in my office." },
-      { topic: "KEYCARD LOG",     stmt: "My security badge must have been cloned; it stayed inside my jacket pocket the entire evening." },
-      { topic: "WITNESS SIGHTING",stmt: "Whoever your witness saw by the freight elevator wasn't me—I left through the lobby at eight." },
-      { topic: "VAULT CODE",      stmt: "I don't even know the backup override sequence for the glass display case, Detective." },
-      { topic: "PHONE RECORD",    stmt: "That burner number on the call log means nothing to me; I only answered a wrong-number call." },
-      { topic: "FINANCES",        stmt: "I have zero debts and no reason whatsoever to touch a single artifact in that collection." },
-      { topic: "ACCOMPLICE",      stmt: "I met the courier strictly to sign a routine delivery manifest—we never spoke about the safe." },
-      { topic: "CCTV GAP",        stmt: "I had nothing to do with the six-minute camera blackout; the breaker trips in every storm." },
-      { topic: "LOCKED DOOR",     stmt: "The side stairwell was already propped open when I walked past on my way to the garage." },
-      { topic: "EVIDENCE",        stmt: "Those brass shavings on my cuff came from fixing my own desk lamp earlier that afternoon." }
-    ];
-
-    const TELL_META = {
-      eyetwitch: { label: "Eyelid Twitch", zone: "eyes", desc: "rapid single-eyelid flutter" },
-      eyedart:   { label: "Side Eye Dart", zone: "eyes", desc: "sudden sideways pupil dart" },
-      smirk:     { label: "Micro-Smirk",   zone: "mouth", desc: "asymmetric lip smirk" },
-      browpinch: { label: "Brow Pinch",    zone: "brows", desc: "involuntary inner brow furrow" }
+    const TELL_INFO = {
+      smirk:    { label: "Micro-Smirk (Duping Delight)", desc: "Corner of mouth curled upward briefly!" },
+      eyedart:  { label: "Hard Lateral Eye-Dart",        desc: "Pupils snapped hard sideways away from gaze!" },
+      brow:     { label: "Asymmetric Brow Twitch",       desc: "Inner eyebrow pinched unevenly mid-sentence!" },
+      lippress: { label: "Tight Lip Compression",        desc: "Lips pressed flat into a tense thin line!" },
+      sweat:    { label: "Cold Sweat & Pupil Dilation",  desc: "Temple sweat bead + sharp pupil expansion!" }
     };
+    const TELL_KEYS = Object.keys(TELL_INFO);
 
-    const SKIN_TONES = [
-      { base: "#f3cdb0", shade: "#d8a885", lip: "#b96a64" },
-      { base: "#e2b28c", shade: "#c28c66", lip: "#9f5853" },
-      { base: "#c88d65", shade: "#a36b47", lip: "#824540" },
-      { base: "#8d593b", shade: "#6b4028", lip: "#5e2f2b" },
-      { base: "#f7dcc8", shade: "#ddb89e", lip: "#c27772" }
-    ];
-
-    const HAIR_COLORS = ["#1b1a22", "#3e2723", "#6d4c41", "#b07d3c", "#64748b", "#4a1c1c"];
-    const SUIT_COLORS = ["#1e293b", "#27272a", "#1e3a5f", "#3f2e3e", "#2b3a34", "#3b2323"];
+    const SKIN_TONES = ["#f3ccb0", "#e6b38a", "#c68b5e", "#945e3c", "#6b3f27"];
+    const HAIR_COLS  = ["#1c1917", "#451a03", "#92400e", "#d97706", "#475569", "#7c2d12"];
+    const SUIT_COLS  = ["#1e293b", "#312e81", "#3f2b1e", "#14532d", "#4c1d95", "#334155"];
 
     function mulberry32(seed) {
       let a = seed >>> 0;
@@ -808,98 +986,75 @@
       return copy;
     }
 
-    function buildCase(levelNum) {
-      const rng = mulberry32(levelNum * 191911 + 44019);
+    function buildInterrogationCase(levelNum) {
+      const rng = mulberry32(levelNum * 493127 + 61093);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
 
-      const name = `${FIRST_NAMES[Math.floor(rng() * FIRST_NAMES.length)]} ${LAST_NAMES[Math.floor(rng() * LAST_NAMES.length)]}`;
-      const role = ROLES[Math.floor(rng() * ROLES.length)];
-      const title = CASE_TITLES[(levelNum - 1) % CASE_TITLES.length];
+      const suspectName = SUSPECT_NAMES[(levelNum - 1 + chapIdx * 3) % SUSPECT_NAMES.length];
+      const crimeTitle = CRIME_TITLES[(levelNum + chapIdx) % CRIME_TITLES.length];
 
-      // Chapter difficulty scaling across 500 cases
-      let qCount, tellDur, maxShields, replaysAllowed, hasShades, suppressEcg, allowNervousTruth;
-      if (levelNum <= 100) {
-        qCount = 3; tellDur = 0.65; maxShields = 2; replaysAllowed = 3;
-        hasShades = false; suppressEcg = false; allowNervousTruth = false;
-      } else if (levelNum <= 200) {
-        qCount = 4; tellDur = 0.48; maxShields = 2; replaysAllowed = 2;
-        hasShades = false; suppressEcg = false; allowNervousTruth = true;
-      } else if (levelNum <= 300) {
-        qCount = 4; tellDur = 0.38; maxShields = 2; replaysAllowed = 2;
-        hasShades = rng() < 0.55; suppressEcg = false; allowNervousTruth = true;
-      } else if (levelNum <= 400) {
-        qCount = 5; tellDur = 0.28; maxShields = 1; replaysAllowed = 2;
-        hasShades = rng() < 0.45; suppressEcg = true; allowNervousTruth = true;
-      } else {
-        qCount = 5; tellDur = 0.22; maxShields = 1; replaysAllowed = 1;
-        hasShades = rng() < 0.55; suppressEcg = true; allowNervousTruth = true;
+      // Procedural Noir Suspect Appearance!
+      const appearance = {
+        skin: SKIN_TONES[Math.floor(rng() * SKIN_TONES.length)],
+        hairCol: HAIR_COLS[Math.floor(rng() * HAIR_COLS.length)],
+        hairStyle: Math.floor(rng() * 4), // 0: swept, 1: bob, 2: short crop, 3: parted
+        suit: SUIT_COLS[Math.floor(rng() * SUIT_COLS.length)],
+        glasses: rng() < 0.36,
+        eyeCol: ["#38bdf8", "#15803d", "#78350f", "#475569"][Math.floor(rng() * 4)]
+      };
+
+      // Innocent Baseline Quirks Introduced in Chapters 3–5!
+      let quirk = { id: "calm", label: "Calm Baseline", baseBpm: 68 + Math.floor(rng() * 8) };
+      if (chapIdx >= 2) {
+        const qRoll = rng();
+        if (qRoll < 0.35) quirk = { id: "blinker", label: "Frequent Blinker (Normal)", baseBpm: 72 + Math.floor(rng() * 6) };
+        else if (qRoll < 0.70) quirk = { id: "highbpm", label: "High Resting BPM (Anxious)", baseBpm: 88 + Math.floor(rng() * 7) };
+        else quirk = { id: "calm", label: "Stoic Poker-Face", baseBpm: 64 + Math.floor(rng() * 6) };
       }
 
-      // Procedural Suspect Appearance
-      const skin = SKIN_TONES[Math.floor(rng() * SKIN_TONES.length)];
-      const hairCol = HAIR_COLORS[Math.floor(rng() * HAIR_COLORS.length)];
-      const suitCol = SUIT_COLORS[Math.floor(rng() * SUIT_COLORS.length)];
-      const hairStyle = Math.floor(rng() * 4); // 0=short swept, 1=bob, 2=curly top, 3=slicked back
-      const hasBeard = rng() < 0.35;
-      const headWidth = 54 + Math.round(rng() * 8);
-      const baseBpm = 66 + Math.floor(rng() * 12);
+      const numQ = chapIdx <= 1 ? 3 : (chapIdx <= 3 ? 4 : 5);
+      const maxErrors = chapIdx === 4 ? 1 : 2;
+      // Micro-expression flash duration (seconds) tightens across chapters (always 2x longer in 0.5x Slow-Mo!)
+      const tellDur = chapIdx === 0 ? 0.95 : (chapIdx === 1 ? 0.72 : (chapIdx === 2 ? 0.62 : (chapIdx === 3 ? 0.48 : 0.38)));
+      const pokerSuppressed = chapIdx >= 3; // Ch. 4–5 liars suppress big BPM jumps, leaking GSR + crisp facial tell!
 
-      // Build Questions (Always guarantee at least 1 Truth and at least 1 Lie!)
-      const pickedQ = shuffle(QUESTION_BANK, rng).slice(0, qCount);
-      const lieFlags = [];
-      for (let i = 0; i < qCount; i++) lieFlags.push(rng() < 0.52);
-      if (!lieFlags.includes(true)) lieFlags[Math.floor(rng() * qCount)] = true;
-      if (!lieFlags.includes(false)) lieFlags[Math.floor(rng() * qCount)] = false;
-
-      // If suspect wears dark shades, restrict tells strictly to visible brow/mouth tells!
-      const tellPool = hasShades
-        ? ["smirk", "browpinch"]
-        : ["eyetwitch", "eyedart", "smirk", "browpinch"];
-
-      const questions = pickedQ.map((q, idx) => {
-        const isLie = lieFlags[idx];
-        const tellType = isLie ? tellPool[Math.floor(rng() * tellPool.length)] : null;
-        const tellStart = 0.85 + rng() * 1.45; // occurs cleanly inside 3.2s statement window
-        const tellSide = rng() < 0.5 ? -1 : 1;
-        const nervousTruth = !isLie && allowNervousTruth && rng() < 0.45;
-
-        // ECG Spike Behavior
-        let bpmSpike = 0;
-        if (isLie && !suppressEcg) bpmSpike = 28 + Math.floor(rng() * 16);
-        else if (isLie && suppressEcg) bpmSpike = rng() < 0.35 ? 12 : 2; // trained spies suppress ECG!
-        else if (nervousTruth) bpmSpike = 14 + Math.floor(rng() * 8);
-
+      const chosenQA = shuffle(QA_BANK, rng).slice(0, numQ);
+      const statements = chosenQA.map((item, idx) => {
+        const isLie = rng() < 0.52;
+        const tell = TELL_KEYS[Math.floor(rng() * TELL_KEYS.length)];
         return {
           idx,
-          topic: q.topic,
-          statement: q.stmt,
+          question: item.q,
+          answer: isLie ? item.lie : item.truth,
           isLie,
-          tellType,
-          tellStart,
+          tell: isLie ? tell : null,
+          tellStart: 1.05 + rng() * 0.75, // Trigger cleanly mid-statement!
           tellDur,
-          tellSide,
-          nervousTruth,
-          bpmSpike,
-          result: null // null | 'pass' | 'miss'
+          verdict: null // 'ok' | 'bad'
         };
       });
 
+      // Guarantee every interrogation has at least 1 Truth and 1 Lie!
+      if (statements.every((s) => s.isLie)) {
+        statements[0].isLie = false;
+        statements[0].answer = chosenQA[0].truth;
+        statements[0].tell = null;
+      } else if (statements.every((s) => !s.isLie)) {
+        statements[0].isLie = true;
+        statements[0].answer = chosenQA[0].lie;
+        statements[0].tell = TELL_KEYS[levelNum % TELL_KEYS.length];
+      }
+
       return {
         levelNum,
-        title,
-        name,
-        role,
-        skin,
-        hairCol,
-        suitCol,
-        hairStyle,
-        hasBeard,
-        hasShades,
-        headWidth,
-        baseBpm,
-        maxShields,
-        replaysAllowed,
-        suppressEcg,
-        questions
+        chapIdx,
+        suspectName,
+        crimeTitle,
+        appearance,
+        quirk,
+        maxErrors,
+        pokerSuppressed,
+        statements
       };
     }
 
@@ -908,7 +1063,7 @@
     }
 
     // ==============================================
-    // POLYGRAPH HEARTBEAT & NOIR WEB AUDIO ENGINE
+    // HEARTBEAT, POLYGRAPH PEN & NOIR VERDICT WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
@@ -921,7 +1076,7 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.09) {
+    function playTone(freq, dur, type = "sine", vol = 0.085) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
@@ -931,7 +1086,7 @@
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
       g.gain.setValueAtTime(0.001, now);
-      g.gain.exponentialRampToValueAtTime(vol, now + 0.008);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.006);
       g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
       osc.connect(g);
       g.connect(audioCtx.destination);
@@ -939,53 +1094,52 @@
       osc.stop(now + dur + 0.02);
     }
 
-    function sfxEcgBeep(bpm) {
-      const pitch = bpm > 92 ? 980 : (bpm > 82 ? 860 : 740);
-      playTone(pitch, 0.045, "sine", 0.042);
+    function sfxHeartbeat(spiked) {
+      if (!soundOn || !audioCtx || audioCtx.state !== "running") return;
+      playTone(spiked ? 105 : 74, 0.07, "sine", spiked ? 0.1 : 0.065);
+      setTimeout(() => playTone(spiked ? 88 : 62, 0.06, "sine", spiked ? 0.07 : 0.045), 115);
     }
-    function sfxTypeTick() { playTone(320 + Math.random() * 80, 0.022, "triangle", 0.025); }
-    function sfxGoodVerdict() {
-      playTone(587.33, 0.14, "sine", 0.12);
-      setTimeout(() => playTone(880.0, 0.24, "sine", 0.12), 75);
+
+    function sfxTapeClick() { playTone(580, 0.04, "triangle", 0.08); }
+    function sfxCorrectCall() {
+      playTone(587.33, 0.11, "sine", 0.11);
+      setTimeout(() => playTone(880.0, 0.18, "sine", 0.11), 65);
     }
-    function sfxBadVerdict() {
-      playTone(210, 0.18, "sawtooth", 0.12);
-      setTimeout(() => playTone(150, 0.26, "sawtooth", 0.12), 110);
+    function sfxWrongCall() {
+      playTone(175, 0.16, "sawtooth", 0.12);
+      setTimeout(() => playTone(130, 0.2, "sawtooth", 0.11), 90);
     }
-    function sfxCaseSolved() {
-      [392.0, 493.88, 587.33, 783.99].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.42, "sine", 0.13), i * 85);
+    function sfxCaseClosedWin() {
+      [392.0, 493.88, 587.33, 783.99, 987.77].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.48, "sine", 0.11), i * 80);
       });
     }
 
     // ==============================================
-    // INTERROGATION STATE & PLAYBACK CONTROLLER
+    // GAME STATE, TAPE REPLAY & VERDICT CONTROLLER
     // ==============================================
     const canvas = document.getElementById("polyCanvas");
     const ctx = canvas.getContext("2d");
 
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const shieldsPill = document.getElementById("shieldsPill");
-    const bpmPill = document.getElementById("bpmPill");
+    const strikesPill = document.getElementById("strikesPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const suspectNameEl = document.getElementById("suspectName");
-    const suspectRoleEl = document.getElementById("suspectRole");
+    const suspectChip = document.getElementById("suspectChip");
+    const bpmBaseChip = document.getElementById("bpmBaseChip");
+    const quirkChip = document.getElementById("quirkChip");
     const qDots = document.getElementById("qDots");
-    const qPromptText = document.getElementById("qPromptText");
-    const slowmoTag = document.getElementById("slowmoTag");
-    const statementText = document.getElementById("statementText");
-    const truthBtn = document.getElementById("truthBtn");
+    const dlgQuestion = document.getElementById("dlgQuestion");
+    const dlgAnswer = document.getElementById("dlgAnswer");
     const replayBtn = document.getElementById("replayBtn");
-    const replayCountTxt = document.getElementById("replayCountTxt");
+    const truthBtn = document.getElementById("truthBtn");
     const lieBtn = document.getElementById("lieBtn");
-    const verdictStamp = document.getElementById("verdictStamp");
     const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
+    const winOverlay = document.getElementById("winOverlay");
+    const overlayIcon = document.getElementById("overlayIcon");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
     const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
@@ -997,245 +1151,198 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let curCase = null;
-    let state = "ready"; // ready | speaking | awaiting | feedback | won | lost
-    let qIdx = 0;
-    let shieldsLeft = 2;
-    let replaysLeft = 3;
+    let pCase = null;
+    let curQIdx = 0;
+    let errors = 0;
+    let caseEnded = false;
+    let caseWon = false;
 
-    // Live Question Animation Timeline
-    const STMT_DURATION = 3.2;
-    let stmtTime = 0;
-    let playRate = 1.0;
-    let hintZone = null; // null | 'eyes' | 'brows' | 'mouth'
-    let revealedChars = 0;
-
-    // Live Suspect Idle & ECG Oscilloscope State
+    // Live Tape Playback & Polygraph Trace Buffers
+    let tapeClock = 0;      // 0 .. 3.4s per statement playback
+    let tapeRate = 1.0;     // 1.0 normal, 0.5 slow-motion forensic replay!
     let liveBpm = 72;
-    let ecgPhase = 0;
-    let ecgSamples = new Array(130).fill(0);
-    let blinkTimer = 1.6;
-    let blinkAmt = 0;
-    let stampTimer = null;
+    let bpmTrace = Array(110).fill(0);
+    let gsrTrace = Array(110).fill(0);
+    let traceAccum = 0;
+    let beatAccum = 0;
+    let blinkTimer = 1.8;
+    let blinkState = 0;     // 0 open -> 1 closed
     let toastTimer = null;
 
-    function showToast(msg, ms = 2500) {
+    function showToast(msg, ms = 2600) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function showStamp(text, isGood) {
-      verdictStamp.textContent = text;
-      verdictStamp.className = "verdict-stamp show " + (isGood ? "good" : "bad");
-      clearTimeout(stampTimer);
-      stampTimer = setTimeout(() => verdictStamp.classList.remove("show"), 1350);
+    function getCurrentStatement() {
+      return pCase.statements[curQIdx];
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Case #${currentLevelNum} / ${TOTAL_LEVELS} — ${curCase.title}`;
-      suspectNameEl.textContent = curCase.name;
-      suspectRoleEl.textContent = `(${curCase.role}${curCase.hasShades ? " • Shaded Glasses" : ""})`;
-      solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
+      levelTitle.textContent = `Case #${currentLevelNum} / ${TOTAL_LEVELS} — ${pCase.crimeTitle}`;
+      strikesPill.textContent = `Errors: ${errors} / ${pCase.maxErrors}`;
+      solvedCounter.textContent = `Closed: ${solvedSet.size} / ${TOTAL_LEVELS}`;
       openPickerBtn.textContent = `Case ${currentLevelNum} / 500 ▾`;
 
-      let shTxt = "";
-      for (let i = 0; i < curCase.maxShields; i++) {
-        shTxt += i < shieldsLeft ? "🛡️" : "✖️";
-      }
-      shieldsPill.textContent = `${shTxt} Credibility`;
-      bpmPill.textContent = `${Math.round(liveBpm)} BPM`;
+      suspectChip.textContent = `SUSPECT: ${pCase.suspectName}`;
+      bpmBaseChip.textContent = `BASE: ${pCase.quirk.baseBpm} BPM`;
+      quirkChip.textContent = `HABIT: ${pCase.quirk.label}`;
 
       qDots.innerHTML = "";
-      curCase.questions.forEach((q, idx) => {
+      pCase.statements.forEach((st, idx) => {
         const d = document.createElement("span");
-        d.className = "q-dot";
-        if (q.result === "pass") d.classList.add("pass");
-        else if (q.result === "miss") d.classList.add("miss");
-        else if (idx === qIdx && (state === "speaking" || state === "awaiting")) d.classList.add("active");
+        d.className = "q-dot"
+          + (st.verdict === "ok" ? " ok" : (st.verdict === "bad" ? " bad" : ""))
+          + (idx === curQIdx && !caseEnded ? " cur" : "");
         qDots.appendChild(d);
       });
 
-      const canJudge = state === "speaking" || state === "awaiting";
-      truthBtn.disabled = !canJudge;
-      lieBtn.disabled = !canJudge;
-      replayBtn.disabled = !(state === "awaiting" && replaysLeft > 0);
-      replayCountTxt.textContent = `${replaysLeft} Replay${replaysLeft === 1 ? "" : "s"}`;
+      const st = getCurrentStatement();
+      dlgQuestion.textContent = `Q${curQIdx + 1} / ${pCase.statements.length} — DETECTIVE: "${st.question}"`;
+      replayBtn.textContent = tapeRate < 1 ? "⏪ Playing 0.5× Slow-Mo..." : "⏪ Replay 0.5× Slow-Mo";
+      replayBtn.disabled = caseEnded;
+      truthBtn.disabled = caseEnded;
+      lieBtn.disabled = caseEnded;
     }
 
-    function startQuestion(index, rate = 1.0) {
-      qIdx = index;
-      const q = curCase.questions[qIdx];
-      state = "speaking";
-      stmtTime = 0;
-      playRate = rate;
-      revealedChars = 0;
-
-      qPromptText.textContent = `STATEMENT ${qIdx + 1} / ${curCase.questions.length} — ${q.topic}`;
-      slowmoTag.textContent = rate < 1 ? "⏪ 0.45× SLOW-MO SCAN" : "";
-      statementText.textContent = '""';
+    function startStatementTape(rate = 1.0) {
+      tapeClock = 0;
+      tapeRate = rate;
+      bpmTrace = Array(110).fill(0);
+      gsrTrace = Array(110).fill(0);
+      liveBpm = pCase.quirk.baseBpm;
       updateHUD();
     }
 
-    function loadCase(num, autoStart = false) {
-      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      curCase = buildCase(currentLevelNum);
-      qIdx = 0;
-      shieldsLeft = curCase.maxShields;
-      replaysLeft = curCase.replaysAllowed;
-      liveBpm = curCase.baseBpm;
-      ecgSamples.fill(0);
-      hintZone = null;
+    function submitVerdict(calledLie) {
+      if (caseEnded) return;
+      initAudio();
 
-      verdictStamp.classList.remove("show");
+      const st = getCurrentStatement();
+      const correct = calledLie === st.isLie;
+
+      if (correct) {
+        st.verdict = "ok";
+        sfxCorrectCall();
+        const detail = st.isLie
+          ? `✅ Caught the LIE! Tell: ${TELL_INFO[st.tell].label}.`
+          : "✅ Correct — Genuine Truth (readings stayed within baseline!).";
+        showToast(detail, 2200);
+      } else {
+        st.verdict = "bad";
+        errors++;
+        sfxWrongCall();
+        const detail = st.isLie
+          ? `❌ Missed a LIE! Look for ${TELL_INFO[st.tell].label} & GSR spike.`
+          : `❌ False accusation! That was TRUTH (harmless ${pCase.quirk.label}).`;
+        showToast(detail, 2600);
+      }
+
+      if (errors >= pCase.maxErrors) {
+        caseEnded = true;
+        caseWon = false;
+        updateHUD();
+        overlayIcon.textContent = "⚖️";
+        winHeading.textContent = "Mistrial — Suspect Walked!";
+        winText.textContent = "Too many misread statements. Remember to check the Suspect Baseline Habit and use 0.5× Slow-Mo!";
+        nextLevelBtn.textContent = "↺ Retry Interrogation";
+        setTimeout(() => winOverlay.classList.add("show"), 520);
+        return;
+      }
+
+      if (curQIdx >= pCase.statements.length - 1) {
+        caseEnded = true;
+        caseWon = true;
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_polygraph_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+        sfxCaseClosedWin();
+        updateHUD();
+
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        overlayIcon.textContent = "🎙️";
+        winHeading.textContent = isLast ? "All 500 Interrogations Closed!" : `Case #${currentLevelNum} Solved!`;
+        winText.textContent = `Read ${pCase.suspectName} cleanly across all ${pCase.statements.length} statements (${errors} error${errors === 1 ? "" : "s"}).`;
+        nextLevelBtn.textContent = isLast ? "Replay Case #1" : `Next Case (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 560);
+      } else {
+        curQIdx++;
+        startStatementTape(1.0);
+      }
+    }
+
+    function loadCase(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      pCase = buildInterrogationCase(currentLevelNum);
+      curQIdx = 0;
+      errors = 0;
+      caseEnded = false;
+      caseWon = false;
+
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
       try {
         localStorage.setItem("zinplay_polygraph_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      if (autoStart) {
-        stageOverlay.classList.remove("show");
-        startQuestion(0, 1.0);
-      } else {
-        state = "ready";
-        qPromptText.textContent = `CASE #${currentLevelNum} DOSSIER`;
-        slowmoTag.textContent = "";
-        statementText.textContent = `"${curCase.name} (${curCase.role}) is seated and wired to the polygraph."`;
-
-        let note = "Watch for split-second eye twitches, darting pupils, brow pinches, or micro-smirks.";
-        if (curCase.suppressEcg) note = "Warning: Trained operative—ECG heart-rate spikes may be suppressed! Trust facial tells only.";
-        else if (curCase.hasShades) note = "Suspect wears dark shades—keep eyes locked on eyebrows and lips!";
-
-        ovIcon.textContent = "👁️";
-        ovHeading.textContent = `Case #${currentLevelNum}: ${curCase.title}`;
-        ovText.textContent = `${curCase.name} (${curCase.role}). ${note}`;
-        ovActionBtn.textContent = "Begin Interrogation ▶";
-        stageOverlay.classList.add("show");
-        updateHUD();
-      }
+      startStatementTape(1.0);
     }
 
-    function submitVerdict(calledLie) {
-      if (state !== "speaking" && state !== "awaiting") return;
+    replayBtn.addEventListener("click", () => {
+      if (caseEnded) return;
       initAudio();
+      sfxTapeClick();
+      startStatementTape(0.5);
+      showToast("⏪ Replaying statement at 0.5× Forensic Slow Motion...", 2000);
+    });
 
-      const q = curCase.questions[qIdx];
-      const correct = calledLie === q.isLie;
-      state = "feedback";
-      hintZone = null;
-
-      if (correct) {
-        q.result = "pass";
-        sfxGoodVerdict();
-        if (q.isLie) {
-          showStamp(`✓ LIE EXPOSED (${TELL_META[q.tellType].label})`, true);
-        } else {
-          showStamp(q.nervousTruth ? "✓ VERIFIED (Nervous Truth)" : "✓ TRUTH VERIFIED", true);
-        }
-      } else {
-        q.result = "miss";
-        shieldsLeft = Math.max(0, shieldsLeft - 1);
-        sfxBadVerdict();
-        if (q.isLie) {
-          showStamp(`✕ MISSED ${TELL_META[q.tellType].label.toUpperCase()}!`, false);
-        } else {
-          showStamp("✕ FALSE ACCUSATION (Was Truth!)", false);
-        }
-      }
-
-      updateHUD();
-
-      setTimeout(() => {
-        if (shieldsLeft <= 0) {
-          state = "lost";
-          ovIcon.textContent = "⚖️";
-          ovHeading.textContent = "Interrogation Compromised!";
-          ovText.textContent = "Too many wrong calls—the suspect's lawyer ended the session. Replay and watch their face closely!";
-          ovActionBtn.textContent = "↺ Re-Interrogate Suspect";
-          stageOverlay.classList.add("show");
-          updateHUD();
-          return;
-        }
-
-        if (qIdx + 1 < curCase.questions.length) {
-          startQuestion(qIdx + 1, 1.0);
-        } else {
-          // Case Cracked!
-          state = "won";
-          solvedSet.add(currentLevelNum);
-          try {
-            localStorage.setItem("zinplay_polygraph_500_solved", JSON.stringify([...solvedSet]));
-          } catch (e) {}
-          sfxCaseSolved();
-          updateHUD();
-
-          const isLast = currentLevelNum === TOTAL_LEVELS;
-          const liesCaught = curCase.questions.filter((x) => x.isLie && x.result === "pass").length;
-          ovIcon.textContent = "🕵️";
-          ovHeading.textContent = isLast ? "All 500 Cases Closed!" : `Case #${currentLevelNum} Cracked!`;
-          ovText.textContent = `${curCase.name}'s testimony has been fully analyzed (${liesCaught} lie${liesCaught === 1 ? "" : "s"} exposed).`;
-          ovActionBtn.textContent = isLast ? "Replay Case #1" : `Next Case (#${currentLevelNum + 1}) →`;
-          stageOverlay.classList.add("show");
-        }
-      }, 1350);
-    }
-
-    // Action Buttons
     truthBtn.addEventListener("click", () => submitVerdict(false));
     lieBtn.addEventListener("click", () => submitVerdict(true));
 
-    replayBtn.addEventListener("click", () => {
-      if (state !== "awaiting" || replaysLeft <= 0) return;
-      initAudio();
-      replaysLeft--;
-      startQuestion(qIdx, 0.45);
-    });
-
-    // Forensic Tell Scanner Hint
+    // Behavioral Analyzer Hint Button
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (state !== "speaking" && state !== "awaiting") return;
+      if (caseEnded) return;
       initAudio();
-      const q = curCase.questions[qIdx];
-      if (q.isLie) {
-        const meta = TELL_META[q.tellType];
-        hintZone = meta.zone;
-        startQuestion(qIdx, 0.45);
-        showToast(`💡 Scanner Alert: Watch the golden box (${meta.zone.toUpperCase()}) for a ${meta.desc}!`, 3200);
+      sfxTapeClick();
+      const st = getCurrentStatement();
+      if (st.isLie) {
+        showToast(`💡 Scan Alert: Deceptive ${TELL_INFO[st.tell].label} detected at ${st.tellStart.toFixed(1)}s!`, 3400);
       } else {
-        hintZone = null;
-        showToast("💡 Scanner Result: Clean facial baseline — zero deception micro-expressions!", 2800);
+        showToast(`💡 Scan Clear: Zero deceptive micro-expressions — readings match ${pCase.quirk.label}!`, 3400);
       }
     });
 
-    ovActionBtn.addEventListener("click", () => {
-      initAudio();
-      if (state === "ready") {
-        stageOverlay.classList.remove("show");
-        startQuestion(0, 1.0);
-      } else if (state === "won") {
-        loadCase(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1, true);
-      } else {
-        loadCase(currentLevelNum, true);
-      }
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", () => loadCase(currentLevelNum, true));
+    document.getElementById("resetBtn").addEventListener("click", () => loadCase(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
+    });
+    nextLevelBtn.addEventListener("click", () => {
+      if (!caseWon) loadCase(currentLevelNum);
+      else loadCase(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadCase(currentLevelNum - 1, false);
+      if (currentLevelNum > 1) loadCase(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadCase(currentLevelNum + 1, false);
+      if (currentLevelNum < TOTAL_LEVELS) loadCase(currentLevelNum + 1);
     });
 
-    // Case Picker Modal
+    window.addEventListener("keydown", (e) => {
+      if (pickerModal.classList.contains("open") || caseEnded) return;
+      const k = e.key.toLowerCase();
+      if (k === "t" || k === "arrowleft") { e.preventDefault(); submitVerdict(false); }
+      else if (k === "l" || k === "arrowright") { e.preventDefault(); submitVerdict(true); }
+      else if (k === "r" || k === " ") { e.preventDefault(); replayBtn.click(); }
+    });
+
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -1266,7 +1373,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadCase(n, false);
+          loadCase(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1288,13 +1395,13 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadCase(val, false);
+        loadCase(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // NOIR PORTRAIT, MICRO-EXPRESSION & ECG RENDERER
+    // NOIR SUSPECT MICRO-EXPRESSION & POLYGRAPH RENDERER
     // ==============================================
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
@@ -1312,456 +1419,321 @@
       return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    // Compute instantaneous facial micro-expression intensity (0..1 bell pulse)
-    function getTellState() {
-      if (state !== "speaking") return { active: 0, type: null, side: 1, sweat: 0 };
-      const q = curCase.questions[qIdx];
-      const sweat = q.nervousTruth ? Math.min(1, stmtTime / 1.4) : 0;
-      if (!q.isLie) return { active: 0, type: null, side: 1, sweat };
-
-      const dtFromStart = stmtTime - q.tellStart;
-      if (dtFromStart < 0 || dtFromStart > q.tellDur) {
-        return { active: 0, type: q.tellType, side: q.tellSide, sweat: 0 };
-      }
-      // Crisp raised sine bell curve peaking sharply at 1.0!
-      const u = dtFromStart / q.tellDur;
-      const env = Math.sin(u * Math.PI);
-      return { active: env, type: q.tellType, side: q.tellSide, sweat: 0 };
+    // Compute Smooth Envelope (0..1) of Active Micro-Expression During Statement Playback!
+    function getTellIntensity(st, clock) {
+      if (!st.isLie || !st.tell) return 0;
+      const t = clock - st.tellStart;
+      if (t < 0 || t > st.tellDur) return 0;
+      return Math.sin((t / st.tellDur) * Math.PI);
     }
 
-    function drawSuspectPortrait(now, tell) {
-      const cx = WORLD_W / 2;
-      const headCy = 166 + Math.sin(now * 0.0022) * 1.6;
-      const hw = curCase.headWidth;
-      const hh = 74;
-      const sk = curCase.skin;
-
+    function drawSuspectPortrait(cx, cy, app, st, tellVal, speaking, now) {
+      const tell = st.tell;
       ctx.save();
+      ctx.translate(cx, cy);
 
-      // 1. Warm Overhead Interrogation Lamp Cone & Wall Brick Vignette
-      const lampGrad = ctx.createRadialGradient(cx, 18, 10, cx, 155, 225);
-      lampGrad.addColorStop(0, "rgba(254, 243, 199, 0.22)");
-      lampGrad.addColorStop(0.55, "rgba(254, 243, 199, 0.05)");
-      lampGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.fillStyle = lampGrad;
-      ctx.fillRect(0, 0, WORLD_W, 315);
+      // Noir Interrogation Overhead Spotlight Cone
+      const cone = ctx.createRadialGradient(0, -110, 12, 0, 10, 165);
+      cone.addColorStop(0, "rgba(254, 243, 199, 0.2)");
+      cone.addColorStop(1, "rgba(8, 8, 12, 0)");
+      ctx.fillStyle = cone;
+      ctx.fillRect(-120, -140, 240, 290);
 
-      // Hanging lamp shade silhouette top center
-      ctx.fillStyle = "#181d29";
+      // Shoulders & Noir Trench/Suit Jacket
+      ctx.fillStyle = app.suit;
       ctx.beginPath();
-      ctx.moveTo(cx - 28, 22); ctx.lineTo(cx + 28, 22);
-      ctx.lineTo(cx + 12, 4); ctx.lineTo(cx - 12, 4);
-      ctx.closePath();
+      ctx.ellipse(0, 118, 82, 54, 0, Math.PI, 0);
       ctx.fill();
-      ctx.fillStyle = "#fef08a";
-      ctx.beginPath();
-      ctx.ellipse(cx, 22, 16, 4, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 2. Suspect Shoulders, Suit Jacket & Collar
-      ctx.fillStyle = curCase.suitCol;
-      ctx.beginPath();
-      ctx.ellipse(cx, 312, 120, 74, 0, Math.PI, 0);
-      ctx.fill();
-      // Shirt V-neck & tie
+      // Shirt Collar & Tie
       ctx.fillStyle = "#e2e8f0";
-      ctx.beginPath();
-      ctx.moveTo(cx - 26, 242); ctx.lineTo(cx + 26, 242); ctx.lineTo(cx, 294);
-      ctx.closePath(); ctx.fill();
-      ctx.fillStyle = "#991b1b";
-      ctx.beginPath();
-      ctx.moveTo(cx - 6, 250); ctx.lineTo(cx + 6, 250); ctx.lineTo(cx + 9, 296); ctx.lineTo(cx - 9, 296);
-      ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-22, 64); ctx.lineTo(0, 96); ctx.lineTo(22, 64); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#b91c1c";
+      ctx.beginPath(); ctx.moveTo(-5, 72); ctx.lineTo(5, 72); ctx.lineTo(7, 110); ctx.lineTo(-7, 110); ctx.closePath(); ctx.fill();
 
       // Neck
-      ctx.fillStyle = sk.shade;
-      ctx.fillRect(cx - 20, headCy + 52, 40, 42);
+      ctx.fillStyle = app.skin;
+      ctx.fillRect(-16, 42, 32, 34);
 
-      // 3. Back Hair Layer (for longer bob style)
-      if (curCase.hairStyle === 1) {
-        ctx.fillStyle = curCase.hairCol;
-        ctx.beginPath();
-        ctx.ellipse(cx, headCy + 8, hw + 14, hh + 12, 0, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      // Subtle Head Breathing / Micro-Fidget Motion
+      const headBob = Math.sin(now * 0.0025) * 1.5;
+      ctx.translate(0, headBob);
 
       // Ears
-      ctx.fillStyle = sk.shade;
+      ctx.fillStyle = app.skin;
+      ctx.beginPath(); ctx.ellipse(-54, 0, 8, 14, 0, 0, Math.PI * 2); ctx.ellipse(54, 0, 8, 14, 0, 0, Math.PI * 2); ctx.fill();
+
+      // Head Oval Contour
+      ctx.fillStyle = app.skin;
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.ellipse(cx - hw - 3, headCy + 4, 9, 16, 0, 0, Math.PI * 2);
-      ctx.ellipse(cx + hw + 3, headCy + 4, 9, 16, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, -4, 54, 66, 0, 0, Math.PI * 2);
       ctx.fill();
-
-      // 4. Head Contour with Soft Directional Noir Shading
-      const faceGrad = ctx.createLinearGradient(cx - hw, headCy - hh, cx + hw, headCy + hh);
-      faceGrad.addColorStop(0, sk.base);
-      faceGrad.addColorStop(0.7, sk.base);
-      faceGrad.addColorStop(1, sk.shade);
-      ctx.fillStyle = faceGrad;
-      ctx.beginPath();
-      ctx.ellipse(cx, headCy, hw, hh, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Optional Subtle Beard / Stubble Shadow
-      if (curCase.hasBeard) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.ellipse(cx, headCy, hw, hh, 0, 0, Math.PI * 2);
-        ctx.clip();
-        ctx.fillStyle = "rgba(15, 23, 42, 0.24)";
-        ctx.beginPath();
-        ctx.ellipse(cx, headCy + 50, hw * 0.92, 38, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // 5. Top Hair Style
-      ctx.fillStyle = curCase.hairCol;
-      ctx.beginPath();
-      if (curCase.hairStyle === 2) {
-        // Curly textured top
-        for (let i = -3; i <= 3; i++) {
-          ctx.arc(cx + i * 15, headCy - hh + 14 + Math.abs(i) * 4, 18, 0, Math.PI * 2);
-        }
-      } else if (curCase.hairStyle === 3) {
-        // Sleek swept back
-        ctx.ellipse(cx, headCy - hh + 16, hw + 3, 28, 0, Math.PI, 0);
-      } else {
-        // Classic parted hair
-        ctx.ellipse(cx, headCy - hh + 20, hw + 5, 34, 0, Math.PI * 1.02, -0.02);
-        ctx.lineTo(cx + hw + 2, headCy - 18);
-        ctx.quadraticCurveTo(cx + 8, headCy - 56, cx - hw - 2, headCy - 20);
-        ctx.closePath();
-      }
-      ctx.fill();
-
-      // 6. Nose Bridge
-      ctx.strokeStyle = sk.shade;
-      ctx.lineWidth = 2.6;
-      ctx.lineCap = "round";
-      ctx.beginPath();
-      ctx.moveTo(cx, headCy - 6);
-      ctx.lineTo(cx - 3, headCy + 17);
-      ctx.lineTo(cx + 5, headCy + 19);
       ctx.stroke();
 
-      // 7. EYES (Baseline Blink + Deception Eye Dart / Rapid Single-Eyelid Twitch!)
-      const eyeY = headCy - 10;
-      const eyeOffX = 24;
-      const isDart = tell.type === "eyedart" && tell.active > 0.05;
-      const isTwitch = tell.type === "eyetwitch" && tell.active > 0.05;
-      const pupilDx = isDart ? tell.side * 8.5 * tell.active : 0;
-      const pupilDy = isDart ? -2.5 * tell.active : 0;
+      // Stylized Hair Styles (0–3)
+      ctx.fillStyle = app.hairCol;
+      ctx.beginPath();
+      if (app.hairStyle === 0) {
+        ctx.arc(0, -24, 56, Math.PI * 0.95, Math.PI * 2.05);
+        ctx.quadraticCurveTo(22, -40, -54, -22);
+      } else if (app.hairStyle === 1) {
+        ctx.arc(0, -20, 58, Math.PI * 0.85, Math.PI * 2.15);
+        ctx.lineTo(62, 36); ctx.lineTo(48, 36); ctx.lineTo(48, -18);
+        ctx.lineTo(-48, -18); ctx.lineTo(-48, 36); ctx.lineTo(-62, 36);
+      } else if (app.hairStyle === 2) {
+        ctx.arc(0, -28, 54, Math.PI, 0);
+      } else {
+        ctx.arc(0, -22, 57, Math.PI * 0.92, Math.PI * 2.08);
+        ctx.lineTo(54, -8); ctx.quadraticCurveTo(10, -54, -54, -12);
+      }
+      ctx.closePath();
+      ctx.fill();
 
-      [-1, 1].forEach((side) => {
-        const ex = cx + side * eyeOffX;
-        let lidClose = blinkAmt;
-        if (isTwitch && side === tell.side) {
-          // Rapid involuntary eyelid flutter!
-          lidClose = Math.max(lidClose, 0.35 + 0.65 * Math.abs(Math.sin(now * 0.065)) * tell.active);
-        }
+      // === EXPRESSIVE EYES (With Lateral Eye-Dart, Pupil Dilation & Blinking!) ===
+      const eyeY = -10;
+      const eyeLX = -21, eyeRX = 21;
+      const dartX = (tell === "eyedart" && tellVal > 0.05) ? tellVal * 7.8 : 0;
+      const pupilR = (tell === "sweat" && tellVal > 0.05) ? (4.0 + tellVal * 3.1) : 4.0;
+      const lidH = blinkState > 0.5 ? 1.5 : 8.5;
 
-        // Sclera (Eye White)
-        ctx.save();
-        ctx.beginPath();
-        ctx.ellipse(ex, eyeY, 13.5, Math.max(1.5, 8.2 * (1 - lidClose * 0.88)), 0, 0, Math.PI * 2);
-        ctx.fillStyle = "#f8fafc";
-        ctx.fill();
-        ctx.clip();
-
-        // Iris & Pupil
-        ctx.fillStyle = "#334155";
-        ctx.beginPath();
-        ctx.arc(ex + pupilDx, eyeY + pupilDy, 5.8, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#090d16";
-        ctx.beginPath();
-        ctx.arc(ex + pupilDx, eyeY + pupilDy, 3.1, 0, Math.PI * 2);
-        ctx.fill();
-        // Catchlight reflection
+      [eyeLX, eyeRX].forEach((ex) => {
         ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(ex + pupilDx - 1.8, eyeY + pupilDy - 1.8, 1.4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-
-        // Crisp upper eyelid lash line
-        ctx.strokeStyle = "#1e293b";
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.ellipse(ex, eyeY, 13.5, Math.max(1.5, 8.2 * (1 - lidClose * 0.88)), 0, Math.PI, 0);
-        ctx.stroke();
-
-        // Subtle lower-lid twitch crease lines when eyelid spasms
-        if (isTwitch && side === tell.side && tell.active > 0.25) {
-          ctx.strokeStyle = "rgba(15, 23, 42, 0.45)";
-          ctx.lineWidth = 1.4;
-          ctx.beginPath();
-          ctx.arc(ex, eyeY + 4, 11, 0.2, Math.PI - 0.2);
-          ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(ex, eyeY, 12, lidH, 0, 0, Math.PI * 2); ctx.fill();
+        if (lidH > 3) {
+          ctx.fillStyle = app.eyeCol;
+          ctx.beginPath(); ctx.arc(ex + dartX, eyeY, 5.8, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = "#09090b";
+          ctx.beginPath(); ctx.arc(ex + dartX, eyeY, pupilR, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath(); ctx.arc(ex + dartX - 1.8, eyeY - 1.8, 1.5, 0, Math.PI * 2); ctx.fill();
         }
       });
 
-      // Optional Dark Tinted Sunglasses (Chapter 3-5 — hides eyes, so watch brows & mouth!)
-      if (curCase.hasShades) {
-        ctx.save();
-        ctx.fillStyle = "rgba(9, 13, 24, 0.92)";
-        ctx.strokeStyle = "#94a3b8";
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.roundRect(cx - 44, eyeY - 12, 38, 23, 6);
-        ctx.roundRect(cx + 6, eyeY - 12, 38, 23, 6);
-        ctx.fill();
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(cx - 6, eyeY - 3); ctx.lineTo(cx + 6, eyeY - 3);
-        ctx.stroke();
-        // Specular diagonal lens sheen
-        ctx.strokeStyle = "rgba(255,255,255,0.22)";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(cx - 38, eyeY + 5); ctx.lineTo(cx - 24, eyeY - 8);
-        ctx.moveTo(cx + 12, eyeY + 5); ctx.lineTo(cx + 26, eyeY - 8);
-        ctx.stroke();
-        ctx.restore();
+      // Optional Sleek Detective Glasses
+      if (app.glasses) {
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(eyeLX - 15, eyeY - 11, 30, 22);
+        ctx.strokeRect(eyeRX - 15, eyeY - 11, 30, 22);
+        ctx.beginPath(); ctx.moveTo(eyeLX + 15, eyeY); ctx.lineTo(eyeRX - 15, eyeY); ctx.stroke();
       }
 
-      // 8. EYEBROWS (Deception Inner-Brow Fear/Stress Pinch!)
-      const isBrow = tell.type === "browpinch" && tell.active > 0.05;
-      const browY = eyeY - 16;
-      ctx.strokeStyle = curCase.hairCol;
-      ctx.lineWidth = 4.4;
+      // === EYEBROWS (With Asymmetric Micro-Twitch / Pinch!) ===
+      const browLift = (tell === "brow" && tellVal > 0.05) ? tellVal * 9.5 : 0;
+      ctx.strokeStyle = app.hairCol;
+      ctx.lineWidth = 4.2;
       ctx.lineCap = "round";
+      // Left brow (normal)
+      ctx.beginPath();
+      ctx.moveTo(eyeLX - 13, eyeY - 16);
+      ctx.quadraticCurveTo(eyeLX, eyeY - 21, eyeLX + 12, eyeY - 16);
+      ctx.stroke();
+      // Right brow (sharp asymmetric upward/inner micro-twitch when lying!)
+      ctx.beginPath();
+      ctx.moveTo(eyeRX - 12, eyeY - 16 - browLift);
+      ctx.quadraticCurveTo(eyeRX, eyeY - 21 - browLift * 0.4, eyeRX + 13, eyeY - 16 + browLift * 0.25);
+      ctx.stroke();
 
-      [-1, 1].forEach((side) => {
-        const outerX = cx + side * 38;
-        const innerX = cx + side * 10;
-        const innerLift = isBrow ? -9.5 * tell.active : 0;
-        const outerDrop = isBrow ? 3.5 * tell.active : 0;
-        ctx.beginPath();
-        ctx.moveTo(outerX, browY + 2 + outerDrop);
-        ctx.quadraticCurveTo(cx + side * 24, browY - 4 + innerLift * 0.4, innerX, browY + innerLift);
-        ctx.stroke();
-      });
+      // Subtle Nose Bridge
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.28)";
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(0, -4); ctx.lineTo(-3, 14); ctx.lineTo(4, 16); ctx.stroke();
 
-      // Vertical glabella stress wrinkles between brows during pinch!
-      if (isBrow && tell.active > 0.3) {
-        ctx.strokeStyle = `rgba(15, 23, 42, ${tell.active * 0.55})`;
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.moveTo(cx - 3, browY - 6); ctx.lineTo(cx - 3, browY + 3);
-        ctx.moveTo(cx + 3, browY - 6); ctx.lineTo(cx + 3, browY + 3);
-        ctx.stroke();
-      }
-
-      // 9. MOUTH (Speaking Lip-Sync + Deception Asymmetric Micro-Smirk!)
-      const mouthY = headCy + 38;
-      const isSmirk = tell.type === "smirk" && tell.active > 0.05;
-      const talkOpen = (state === "speaking" && !isSmirk)
-        ? Math.max(0, Math.sin(now * 0.022) * 3.8 + 2.2)
-        : 0;
+      // === MOUTH (Speaking Lip Sync + Duping-Delight Micro-Smirk + Tight Lip Compression!) ===
+      const mouthY = 34;
+      const smirkUp = (tell === "smirk" && tellVal > 0.05) ? tellVal * 11 : 0;
+      const lipFlat = (tell === "lippress" && tellVal > 0.05) ? tellVal : 0;
+      const talkOpen = (speaking && lipFlat < 0.3 && smirkUp < 2) ? (2.5 + Math.abs(Math.sin(now * 0.022)) * 5.5) : 0;
 
       ctx.save();
-      ctx.strokeStyle = sk.lip;
-      ctx.fillStyle = "#3f1419";
-      ctx.lineWidth = 3.2;
-      ctx.lineCap = "round";
-
-      if (isSmirk) {
-        // Sharp unilateral contempt / duping-delight smirk!
-        const s = tell.side;
-        const pullX = s * 7 * tell.active;
-        const pullY = -11 * tell.active;
+      if (talkOpen > 1) {
+        ctx.fillStyle = "#450a0a";
         ctx.beginPath();
-        ctx.moveTo(cx - s * 17, mouthY + 1);
-        ctx.quadraticCurveTo(cx, mouthY + 2, cx + s * 19 + pullX, mouthY + pullY);
-        ctx.stroke();
-
-        // Cheek dimple crease beside raised corner
-        ctx.strokeStyle = `rgba(15, 23, 42, ${tell.active * 0.4})`;
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.arc(cx + s * 22 + pullX, mouthY + pullY + 2, 5, s > 0 ? -1.1 : 2.1, s > 0 ? 1.1 : 4.2);
-        ctx.stroke();
-      } else if (talkOpen > 1.2) {
-        ctx.beginPath();
-        ctx.ellipse(cx, mouthY, 15, talkOpen, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, mouthY, 14, talkOpen, 0, 0, Math.PI * 2);
         ctx.fill();
-        ctx.stroke();
       } else {
+        ctx.strokeStyle = lipFlat > 0.3 ? "#7f1d1d" : "#7c2d12";
+        ctx.lineWidth = lipFlat > 0.3 ? 3.8 : 3;
+        ctx.lineCap = "round";
         ctx.beginPath();
-        ctx.moveTo(cx - 17, mouthY);
-        ctx.quadraticCurveTo(cx, mouthY + 2, cx + 17, mouthY);
+        ctx.moveTo(-16 - lipFlat * 5, mouthY);
+        ctx.quadraticCurveTo(0, mouthY + (smirkUp > 1 ? 2 : 1), 16 + lipFlat * 5, mouthY - smirkUp);
         ctx.stroke();
       }
       ctx.restore();
 
-      // 10. Innocent Nervous Sweat Drop (Chapter 2+ Decoy on Nervous Truths!)
-      if (tell.sweat > 0.05) {
-        const sx = cx + hw - 14;
-        const sy = headCy - 24 + tell.sweat * 18;
+      // === COLD SWEAT DROP ON TEMPLE (Sweat Tell!) ===
+      if (tell === "sweat" && tellVal > 0.08) {
+        const sy = -28 + (1 - Math.abs(0.5 - (tapeClock - st.tellStart) / st.tellDur)) * 22;
         ctx.save();
-        ctx.globalAlpha = Math.sin(Math.min(1, tell.sweat) * Math.PI * 0.85);
-        ctx.fillStyle = "#7dd3fc";
+        ctx.globalAlpha = Math.min(1, tellVal * 1.4);
+        ctx.fillStyle = "#38bdf8";
+        ctx.strokeStyle = "#e0f2fe";
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.moveTo(sx, sy - 7);
-        ctx.bezierCurveTo(sx + 5, sy, sx + 5, sy + 6, sx, sy + 6);
-        ctx.bezierCurveTo(sx - 5, sy + 6, sx - 5, sy, sx, sy - 7);
-        ctx.closePath();
+        ctx.moveTo(39, sy - 7);
+        ctx.quadraticCurveTo(45, sy + 2, 39, sy + 5);
+        ctx.quadraticCurveTo(33, sy + 2, 39, sy - 7);
         ctx.fill();
+        ctx.stroke();
         ctx.restore();
       }
 
-      // 11. Forensic Golden Tell Scanner Box (When Hint Active!)
-      if (hintZone && (state === "speaking" || state === "awaiting")) {
-        const pulse = 0.55 + 0.45 * Math.sin(now * 0.012);
-        let bx = cx - 48, by = eyeY - 14, bw = 96, bh = 28;
-        if (hintZone === "brows") { by = browY - 12; bh = 24; }
-        else if (hintZone === "mouth") { bx = cx - 34; by = mouthY - 15; bw = 68; bh = 30; }
-
-        ctx.save();
-        ctx.strokeStyle = `rgba(250, 204, 21, ${pulse})`;
-        ctx.shadowColor = "#facc15";
-        ctx.shadowBlur = 12;
-        ctx.lineWidth = 2.4;
-        ctx.setLineDash([6, 4]);
-        ctx.strokeRect(bx, by, bw, bh);
-        ctx.restore();
+      // Subtle Facial Tracking Corner Reticles (Slow-Mo Forensic Highlight!)
+      if (tapeRate < 1) {
+        ctx.strokeStyle = "rgba(56, 189, 248, 0.5)";
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(-68, -74, 136, 136);
       }
 
       ctx.restore();
     }
 
-    function drawPolygraphMonitor() {
-      const topY = 306;
-      const h = WORLD_H - topY;
-
+    function drawPolygraphPanel(px, py, pw, ph, tellVal) {
       ctx.save();
-      // Oscilloscope Dark Panel
-      ctx.fillStyle = "#060b10";
-      ctx.fillRect(0, topY, WORLD_W, h);
-      ctx.strokeStyle = "#1e3a3a";
+      // Vintage Cream-Tint Dark Forensic Graph Paper Chamber
+      ctx.fillStyle = "#0a1118";
+      ctx.strokeStyle = "#26384f";
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(0, topY); ctx.lineTo(WORLD_W, topY);
+      ctx.roundRect(px, py, pw, ph, 10);
+      ctx.fill();
       ctx.stroke();
 
-      // Subtle medical ECG green graph grid
-      ctx.strokeStyle = "rgba(34, 197, 94, 0.12)";
+      // Graph Grid Lines
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.1)";
       ctx.lineWidth = 1;
-      for (let x = 0; x < WORLD_W; x += 20) {
-        ctx.beginPath(); ctx.moveTo(x, topY); ctx.lineTo(x, WORLD_H); ctx.stroke();
+      for (let gx = px + 18; gx < px + pw; gx += 18) {
+        ctx.beginPath(); ctx.moveTo(gx, py); ctx.lineTo(gx, py + ph); ctx.stroke();
       }
-      for (let y = topY + 18; y < WORLD_H; y += 18) {
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WORLD_W, y); ctx.stroke();
+      for (let gy = py + 22; gy < py + ph; gy += 22) {
+        ctx.beginPath(); ctx.moveTo(px, gy); ctx.lineTo(px + pw, gy); ctx.stroke();
       }
 
-      // Live Rolling Polygraph Trace
-      const midY = topY + h * 0.58;
-      const highStress = liveBpm >= 92;
-      const traceCol = highStress ? "#fb7185" : (liveBpm >= 82 ? "#facc15" : "#22c55e");
+      // Header Telemetry Strip Inside Polygraph
+      ctx.fillStyle = "#111e2b";
+      ctx.fillRect(px + 1, py + 1, pw - 2, 26);
+      ctx.font = "900 9.5px monospace";
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#34d399";
+      ctx.fillText(`♥ ${Math.round(liveBpm)} BPM`, px + 10, py + 17);
+      ctx.textAlign = "right";
+      ctx.fillStyle = tellVal > 0.25 ? "#fb7185" : "#7dd3fc";
+      ctx.fillText(tellVal > 0.25 ? "GSR: SPIKE!" : "GSR: STEADY", px + pw - 10, py + 17);
 
-      ctx.strokeStyle = traceCol;
-      ctx.shadowColor = traceCol;
-      ctx.shadowBlur = 10;
-      ctx.lineWidth = 2.4;
-      ctx.lineJoin = "round";
+      // Channel 1: Heartbeat BPM Scrolling Ink Trace (Emerald Green)
+      const ch1Y = py + ph * 0.42;
+      ctx.strokeStyle = "#34d399";
+      ctx.shadowColor = "#10b981";
+      ctx.shadowBlur = 6;
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      const stepX = (WORLD_W - 18) / (ecgSamples.length - 1);
-      ecgSamples.forEach((v, i) => {
-        const px = 9 + i * stepX;
-        const py = midY - v * 26;
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
+      bpmTrace.forEach((v, i) => {
+        const x = px + 8 + (i / (bpmTrace.length - 1)) * (pw - 22);
+        const y = ch1Y - v * 32;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
       });
       ctx.stroke();
-
-      // Bright glowing lead tip
-      ctx.shadowBlur = 12;
-      ctx.fillStyle = "#ffffff";
-      const lastV = ecgSamples[ecgSamples.length - 1];
-      ctx.beginPath();
-      ctx.arc(WORLD_W - 9, midY - lastV * 26, 3.4, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Corner Telemetry Label
       ctx.shadowBlur = 0;
+
+      // Channel 2: Galvanic Skin Response (GSR) Ink Trace (Cyan -> Crimson on Deception!)
+      const ch2Y = py + ph * 0.78;
+      ctx.strokeStyle = tellVal > 0.2 ? "#f43f5e" : "#38bdf8";
+      ctx.shadowColor = tellVal > 0.2 ? "#f43f5e" : "#38bdf8";
+      ctx.shadowBlur = 7;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      gsrTrace.forEach((v, i) => {
+        const x = px + 8 + (i / (gsrTrace.length - 1)) * (pw - 22);
+        const y = ch2Y - v * 38;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Mechanical Chrome Polygraph Needle Tips at Right Edge
+      const nx = px + pw - 14;
+      const lastBpmY = ch1Y - bpmTrace[bpmTrace.length - 1] * 32;
+      const lastGsrY = ch2Y - gsrTrace[gsrTrace.length - 1] * 38;
+      ctx.fillStyle = "#e2e8f0";
+      ctx.beginPath(); ctx.arc(nx, lastBpmY, 3.5, 0, Math.PI * 2); ctx.arc(nx, lastGsrY, 3.5, 0, Math.PI * 2); ctx.fill();
+
+      // Channel Labels
       ctx.fillStyle = "rgba(148, 163, 184, 0.72)";
-      ctx.font = "800 9px monospace";
+      ctx.font = "800 8px monospace";
       ctx.textAlign = "left";
-      ctx.fillText(`POLYGRAPH ECG • BASE ${curCase.baseBpm} BPM`, 10, topY + 13);
-      ctx.textAlign = "right";
-      ctx.fillStyle = traceCol;
-      ctx.fillText(highStress ? "▲ SPIKE" : "● LIVE", WORLD_W - 10, topY + 13);
+      ctx.fillText("CH1: CARDIO PULSE", px + 8, ch1Y + 26);
+      ctx.fillText("CH2: GALVANIC SKIN (GSR)", px + 8, ch2Y + 28);
+
       ctx.restore();
     }
 
     let lastTime = performance.now();
 
     function frame(now) {
-      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      const dt = Math.min(0.04, (now - lastTime) / 1000);
       lastTime = now;
 
-      // 1. Advance Statement Timeline & Typewriter Text
-      if (state === "speaking") {
-        stmtTime += dt * playRate;
-        const q = curCase.questions[qIdx];
-        const frac = Math.min(1, stmtTime / (STMT_DURATION * 0.78));
-        const targetChars = Math.floor(frac * q.statement.length);
-        if (targetChars > revealedChars) {
-          revealedChars = targetChars;
-          statementText.textContent = `"${q.statement.slice(0, revealedChars)}"`;
-          if (revealedChars % 4 === 0) sfxTypeTick();
+      const st = getCurrentStatement();
+      const totalTapeDur = 3.2;
+
+      if (!caseEnded) {
+        if (tapeClock < totalTapeDur) {
+          tapeClock = Math.min(totalTapeDur, tapeClock + dt * tapeRate);
+          if (tapeClock >= totalTapeDur && tapeRate < 1) {
+            tapeRate = 1.0;
+            updateHUD();
+          }
         }
-        if (stmtTime >= STMT_DURATION) {
-          statementText.textContent = `"${q.statement}"`;
-          state = "awaiting";
-          slowmoTag.textContent = "VERDICT READY — TRUTH OR LIE?";
-          updateHUD();
+
+        // Smooth Typewriter Transcript Synchronized With Suspect Speaking!
+        const fracTxt = Math.min(1, tapeClock / 2.2);
+        const shownChars = Math.max(1, Math.floor(st.answer.length * fracTxt));
+        dlgAnswer.textContent = `"${st.answer.slice(0, shownChars)}"`;
+
+        const tellVal = getTellIntensity(st, tapeClock);
+
+        // Natural Blinking (Faster for Harmless 'Frequent Blinker' Baseline Quirk!)
+        blinkTimer -= dt;
+        if (blinkTimer <= 0) {
+          blinkState = 1;
+          blinkTimer = pCase.quirk.id === "blinker" ? (0.45 + Math.random() * 0.55) : (2.2 + Math.random() * 2.0);
+        } else if (blinkState > 0) {
+          blinkState = Math.max(0, blinkState - dt * 8);
+        }
+
+        // Compute Live Heart Rate & Polygraph Ink Deflections!
+        const bpmSpike = st.isLie ? (pCase.pokerSuppressed ? tellVal * 8 : tellVal * 26) : 0;
+        const targetBpm = pCase.quirk.baseBpm + bpmSpike + Math.sin(now * 0.004) * 2;
+        liveBpm += (targetBpm - liveBpm) * Math.min(1, dt * 6);
+
+        // Heartbeat Audio Pulse
+        beatAccum += dt * (liveBpm / 60);
+        let qrsPulse = 0;
+        if (beatAccum >= 1) {
+          beatAccum -= 1;
+          qrsPulse = 1.0;
+          if (tapeClock < totalTapeDur) sfxHeartbeat(tellVal > 0.35);
+        }
+
+        // Push Scrolling Polygraph Needle Samples Every 26ms
+        traceAccum += dt;
+        if (traceAccum >= 0.026) {
+          traceAccum = 0;
+          const bpmSample = (qrsPulse > 0 ? (0.65 + (bpmSpike > 10 ? 0.35 : 0)) : (Math.random() - 0.5) * 0.14);
+          // True Lies Always Produce a Clean Sharp GSR Spike Above Baseline Noise!
+          const gsrBaseNoise = (Math.random() - 0.5) * (pCase.quirk.id === "highbpm" ? 0.16 : 0.09);
+          const gsrSample = st.isLie ? (tellVal * 0.92 + gsrBaseNoise) : gsrBaseNoise;
+
+          bpmTrace.push(bpmSample); bpmTrace.shift();
+          gsrTrace.push(gsrSample); gsrTrace.shift();
         }
       }
 
-      // 2. Natural Calm Blinking Cycle (Always Symmetrical)
-      blinkTimer -= dt;
-      if (blinkTimer <= 0) {
-        blinkAmt = Math.min(1, blinkAmt + dt * 15);
-        if (blinkAmt >= 1) {
-          blinkTimer = 2.2 + Math.random() * 2.4;
-        }
-      } else if (blinkAmt > 0) {
-        blinkAmt = Math.max(0, blinkAmt - dt * 13);
-      }
-
-      // 3. Live Polygraph Heart-Rate & ECG Waveform Synthesizer
-      const tell = getTellState();
-      let targetBpm = curCase.baseBpm;
-      if (state === "speaking") {
-        const q = curCase.questions[qIdx];
-        if (q.bpmSpike > 0 && stmtTime >= q.tellStart - 0.1 && stmtTime <= q.tellStart + 1.1) {
-          targetBpm = curCase.baseBpm + q.bpmSpike;
-        }
-      }
-      liveBpm += (targetBpm - liveBpm) * Math.min(1, dt * 4.5);
-      bpmPill.textContent = `${Math.round(liveBpm)} BPM`;
-
-      const prevPhase = ecgPhase;
-      ecgPhase = (ecgPhase + dt * (liveBpm / 60)) % 1;
-      if (ecgPhase < prevPhase && state === "speaking") {
-        sfxEcgBeep(liveBpm);
-      }
-
-      // Generate classic P-QRS-T heartbeat spike shape
-      let sample = (Math.random() - 0.5) * 0.04;
-      if (ecgPhase > 0.08 && ecgPhase < 0.14) sample = 0.2;
-      else if (ecgPhase >= 0.17 && ecgPhase < 0.20) sample = -0.28;
-      else if (ecgPhase >= 0.20 && ecgPhase < 0.24) sample = liveBpm > 90 ? 1.15 : 0.85;
-      else if (ecgPhase >= 0.24 && ecgPhase < 0.28) sample = -0.4;
-      else if (ecgPhase >= 0.34 && ecgPhase < 0.44) sample = 0.28 * Math.sin(((ecgPhase - 0.34) / 0.1) * Math.PI);
-
-      ecgSamples.push(sample);
-      if (ecgSamples.length > 130) ecgSamples.shift();
-
-      // 4. Render Full Interrogation Scene
+      // === RENDER NOIR INTERROGATION ROOM CANVAS ===
       const vp = getViewport();
       ctx.clearRect(0, 0, vp.w, vp.h);
 
@@ -1769,8 +1741,40 @@
       ctx.translate(vp.offsetX, vp.offsetY);
       ctx.scale(vp.scale, vp.scale);
 
-      drawSuspectPortrait(now, tell);
-      drawPolygraphMonitor();
+      const tellVal = getTellIntensity(st, tapeClock);
+      const speaking = !caseEnded && tapeClock < 2.25;
+
+      // Dark Interrogation Room Backdrop Wall
+      ctx.fillStyle = "#0c0b12";
+      ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+
+      // Left Half: Animated Suspect Portrait Under Hanging Lamp!
+      drawSuspectPortrait(118, 162, pCase.appearance, st, tellVal, speaking, now);
+
+      // Right Half: Live Dual-Channel Polygraph Machine!
+      drawPolygraphPanel(228, 36, 198, 240, tellVal);
+
+      // Top-Left Noir Camcorder REC / SLOW-MO Telemetry Overlay!
+      ctx.save();
+      ctx.fillStyle = "rgba(9, 8, 14, 0.84)";
+      ctx.strokeStyle = tapeRate < 1 ? "#38bdf8" : "#ef4444";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.roundRect(12, 12, 118, 22, 5); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = tapeRate < 1 ? "#38bdf8" : (Math.sin(now * 0.008) > 0 ? "#ef4444" : "#7f1d1d");
+      ctx.beginPath(); ctx.arc(23, 23, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#f8fafc";
+      ctx.font = "900 9px monospace";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(tapeRate < 1 ? "0.5× SLOW-MO" : `REC 00:0${Math.min(3, Math.floor(tapeClock))}`, 33, 23.5);
+      ctx.restore();
+
+      // Subtle Tape Playback Progress Bar Along Bottom of Portrait!
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(14, 286, 202, 6);
+      ctx.fillStyle = tapeRate < 1 ? "#38bdf8" : "#f59e0b";
+      ctx.fillRect(14, 286, 202 * Math.min(1, tapeClock / totalTapeDur), 6);
 
       ctx.restore();
       requestAnimationFrame(frame);
@@ -1778,7 +1782,7 @@
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadCase(currentLevelNum, false);
+    loadCase(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
