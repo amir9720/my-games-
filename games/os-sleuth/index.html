@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OS Sleuth — 500 Retro Desktop Mystery Cases | ZinPlay</title>
-  <meta name="description" content="Play 500 free detective cases in OS Sleuth. Explore a retro Windows 98 desktop, inspect offline emails, documents, and the recycle bin to crack encrypted zip files." />
+  <title>OS Sleuth — Free 500-Case Cyber Detective Desktop Mystery Game | ZinPlay</title>
+  <meta name="description" content="Play OS Sleuth free online with no download. Search a suspect's simulated desktop OS—inspect emails, recover deleted trash files, crack PIN-locked vaults, decode ciphers, and expose the insider across 500 forensic cases." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "OS Sleuth",
+    "url": "https://zinplay.io/games/os-sleuth/",
+    "genre": ["Mystery", "Cyber Detective", "Forensic Deduction Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top Mission HUD */
+    /* Top Cyber Forensics HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #0b1120;
-      color: #e2e8f0;
-      border-bottom: 1px solid #1e293b;
+      background: #070d17;
+      color: #f8fafc;
+      border-bottom: 1px solid #182942;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #94a3b8;
-      font-weight: 600;
+      color: #34d399;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -64,502 +77,475 @@
     }
     .hud-pill {
       background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      border: 1px solid rgba(56, 189, 248, 0.36);
       color: #bae6fd;
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 0.76rem;
+      font-family: monospace;
+    }
+    .hud-pill.att-pill {
+      background: rgba(250, 204, 21, 0.16);
+      border-color: rgba(250, 204, 21, 0.42);
+      color: #fef08a;
+    }
+    .hud-pill.done-pill {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #bbf7d0;
+      font-family: inherit;
     }
 
-    /* Case Briefing Strip */
-    .case-brief-bar {
-      background: #131c31;
-      color: #cbd5e1;
-      padding: 9px 14px;
-      font-size: 0.8rem;
-      border-bottom: 2px solid #000000;
+    /* Case Briefing Banner Inside OS */
+    .briefing-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 8px;
-    }
-    .case-brief-bar strong {
-      color: #facc15;
-    }
-
-    /* ========================================
-       RETRO WINDOWS 98 SIMULATED MONITOR
-    ======================================== */
-    .os-monitor {
-      position: relative;
-      width: 100%;
-      height: 520px;
-      background: #008080; /* Classic Win98 Teal */
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      font-family: "Tahoma", "MS Sans Serif", Arial, sans-serif;
-      color: #000000;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-    @media (min-width: 640px) {
-      .os-monitor {
-        height: 550px;
-      }
-    }
-
-    .os-desktop {
-      position: relative;
-      flex: 1;
-      padding: 14px;
-      overflow: hidden;
-    }
-
-    /* Desktop Icons Grid */
-    .desktop-icons {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(84px, 102px));
-      gap: 12px 8px;
-      align-content: start;
-    }
-    @media (min-width: 640px) {
-      .desktop-icons {
-        grid-template-columns: repeat(2, 104px);
-        gap: 16px 10px;
-      }
-    }
-    .d-icon {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      padding: 8px 4px;
-      background: transparent;
-      border: 1px dotted transparent;
-      color: #ffffff;
-      cursor: pointer;
-      text-align: center;
-      position: relative;
-    }
-    .d-icon:hover,
-    .d-icon:focus-visible {
-      background: rgba(0, 0, 128, 0.35);
-      border-color: #ffffff;
-      outline: none;
-    }
-    .d-icon-emoji {
-      font-size: 2rem;
-      line-height: 1;
-      filter: drop-shadow(1px 2px 0 rgba(0, 0, 0, 0.45));
-    }
-    .d-icon-label {
-      font-size: 0.74rem;
-      font-weight: 700;
-      text-shadow: 1px 1px 1px #000000;
-      line-height: 1.25;
-    }
-    .d-badge {
-      position: absolute;
-      top: 4px;
-      right: 12px;
-      background: #dc2626;
-      color: #ffffff;
-      font-size: 0.65rem;
-      font-weight: 900;
-      padding: 1px 5px;
-      border-radius: 999px;
-      border: 1px solid #ffffff;
-    }
-    .d-badge.unlocked {
-      background: #16a34a;
-    }
-
-    /* Sticky Note on Desktop */
-    .desktop-sticky {
-      position: absolute;
-      right: 14px;
-      bottom: 14px;
-      width: 215px;
-      max-width: calc(100% - 28px);
-      background: #fef08a;
-      border: 1px solid #ca8a04;
-      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
-      padding: 10px 12px;
-      font-size: 0.76rem;
-      color: #422006;
+      padding: 9px 14px;
+      background: #0d1829;
+      border-bottom: 1px solid #1e3554;
+      color: #e2e8f0;
+      font-size: 0.77rem;
       line-height: 1.4;
     }
-    .desktop-sticky strong {
-      display: block;
-      margin-bottom: 3px;
-      font-size: 0.78rem;
-      text-transform: uppercase;
+    .brief-txt strong {
+      color: #fde047;
+    }
+    .brief-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .mini-status {
+      font-family: monospace;
+      font-size: 0.69rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #13233a;
+      border: 1px solid #2b4970;
+      color: #93c5fd;
+    }
+    .mini-status.ok {
+      background: rgba(34, 197, 94, 0.18);
+      border-color: #22c55e;
+      color: #86efac;
     }
 
-    /* Classic Win98 Window */
-    .win98-window {
-      position: absolute;
-      inset: 8px;
-      z-index: 20;
-      background: #c0c0c0;
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
-      border-right: 2px solid #404040;
-      border-bottom: 2px solid #404040;
-      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
-      display: none;
-      flex-direction: column;
-      user-select: text;
-      -webkit-user-select: text;
-    }
-    .win98-window.open {
-      display: flex;
-    }
-    .win98-titlebar {
-      background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
-      color: #ffffff;
-      padding: 5px 7px;
+    /* Simulated ZinOS Desktop Top Window Chrome */
+    .os-menubar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
-      font-weight: 800;
-      flex-shrink: 0;
+      padding: 6px 12px;
+      background: #050a12;
+      border-bottom: 1px solid #17263d;
+      font-family: monospace;
+      font-size: 0.72rem;
+      color: #94a3b8;
     }
-    .win98-close {
-      width: 24px;
-      height: 22px;
-      background: #c0c0c0;
-      color: #000000;
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
-      border-right: 2px solid #404040;
-      border-bottom: 2px solid #404040;
-      font-weight: 900;
-      font-size: 0.78rem;
-      cursor: pointer;
-      display: inline-flex;
+    .os-dots {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .os-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+    .os-dot.r { background: #ef4444; }
+    .os-dot.y { background: #f59e0b; }
+    .os-dot.g { background: #22c55e; }
+
+    /* OS App Navigation Dock (Mobile-First Tabs) */
+    .os-dock {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+      padding: 8px 10px;
+      background: #0a1220;
+      border-bottom: 1px solid #1b2f4d;
+    }
+    .dock-app {
+      min-height: 48px;
+      padding: 5px 4px;
+      border-radius: 10px;
+      border: 1.5px solid #1e3352;
+      background: #111f33;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.14s ease;
     }
-    .win98-close:active {
-      border-top: 2px solid #404040;
-      border-left: 2px solid #404040;
-      border-right: 2px solid #ffffff;
-      border-bottom: 2px solid #ffffff;
+    .dock-app:active { transform: scale(0.95); }
+    .dock-app.active {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.2);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
     }
-    .win98-body {
-      flex: 1;
-      padding: 10px;
+    .dock-app.verdict-app.active {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.22);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+    }
+    .dock-ico { font-size: 1.05rem; line-height: 1; }
+    .dock-lbl { font-size: 0.65rem; font-weight: 800; white-space: nowrap; }
+    .dock-badge {
+      position: absolute;
+      top: 3px;
+      right: 4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f59e0b;
+      box-shadow: 0 0 6px #f59e0b;
+    }
+
+    /* Main OS Desktop Viewport */
+    .os-viewport {
+      position: relative;
+      min-height: 410px;
+      max-height: 490px;
       overflow-y: auto;
+      background: radial-gradient(circle at 50% 20%, #122136 0%, #070e1a 100%);
+      padding: 13px;
+      color: #e2e8f0;
+    }
+    .app-pane {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      font-size: 0.83rem;
+    }
+    .app-pane.hidden { display: none; }
+
+    /* Mail & Chat Cards */
+    .msg-card {
+      background: #101d30;
+      border: 1px solid #223857;
+      border-left: 3.5px solid #38bdf8;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .msg-card.chat-card { border-left-color: #34d399; }
+    .msg-card.alert-card { border-left-color: #f59e0b; background: #171e2b; }
+    .msg-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: #94a3b8;
+      font-family: monospace;
+    }
+    .msg-from {
+      color: #7dd3fc;
+      font-weight: 800;
+    }
+    .msg-subj {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .msg-body {
+      font-size: 0.8rem;
+      color: #cbd5e1;
       line-height: 1.5;
     }
-    .win98-sunken {
-      background: #ffffff;
-      border-top: 2px solid #808080;
-      border-left: 2px solid #808080;
-      border-right: 2px solid #ffffff;
-      border-bottom: 2px solid #ffffff;
-      padding: 10px;
-    }
-    .win98-btn {
-      background: #c0c0c0;
-      color: #000000;
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
-      border-right: 2px solid #404040;
-      border-bottom: 2px solid #404040;
-      padding: 6px 14px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .win98-btn:active {
-      border-top: 2px solid #404040;
-      border-left: 2px solid #404040;
-      border-right: 2px solid #ffffff;
-      border-bottom: 2px solid #ffffff;
-    }
-    .win98-btn.primary {
-      background: #000080;
-      color: #ffffff;
-    }
-
-    /* Mail & File Lists Inside Windows */
-    .item-list {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .list-row {
-      width: 100%;
-      text-align: left;
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      padding: 8px 10px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      color: #0f172a;
-    }
-    .list-row:hover {
-      background: #e0e7ff;
-    }
-    .list-row.selected {
-      background: #000080;
-      color: #ffffff;
-      border-color: #000080;
-    }
-    .list-sub {
-      font-size: 0.7rem;
-      opacity: 0.8;
-    }
-    .reader-box {
-      white-space: pre-line;
-      font-family: "Courier New", Consolas, monospace;
-      font-size: 0.82rem;
-      color: #111827;
-      line-height: 1.55;
-    }
-    .reader-meta {
-      font-family: "Tahoma", Arial, sans-serif;
-      font-size: 0.76rem;
-      background: #eef2f7;
-      padding: 7px 9px;
-      margin-bottom: 8px;
-      border-bottom: 1px solid #cbd5e1;
-      color: #334155;
-    }
-
-    /* Vault / Zip Unlocker */
-    .vault-card {
-      background: #f1f5f9;
-      border: 1px solid #94a3b8;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .vault-card.open-zip {
-      background: #f0fdf4;
-      border-color: #22c55e;
-    }
-    .vault-input-row {
-      display: flex;
-      gap: 6px;
-    }
-    .win98-input {
-      flex: 1;
-      min-height: 34px;
-      padding: 4px 8px;
-      background: #ffffff;
-      border-top: 2px solid #808080;
-      border-left: 2px solid #808080;
-      border-right: 2px solid #ffffff;
-      border-bottom: 2px solid #ffffff;
-      font-family: "Courier New", monospace;
-      font-size: 0.9rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    /* Case Report Form */
-    .report-field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 8px;
-    }
-    .report-field label {
+    .clue-hi {
+      color: #fde047;
+      font-family: monospace;
       font-weight: 800;
-      font-size: 0.78rem;
-      color: #0f172a;
-    }
-    .win98-select {
-      min-height: 38px;
-      padding: 4px 8px;
-      background: #ffffff;
-      border-top: 2px solid #808080;
-      border-left: 2px solid #808080;
-      border-right: 2px solid #ffffff;
-      border-bottom: 2px solid #ffffff;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #0f172a;
-    }
-    .report-feedback {
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 7px 10px;
-      display: none;
-    }
-    .report-feedback.err {
-      display: block;
-      background: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #ef4444;
+      background: rgba(250, 204, 21, 0.14);
+      padding: 1px 5px;
+      border-radius: 4px;
     }
 
-    /* Win98 Bottom Taskbar & Start Menu */
-    .win98-taskbar {
-      height: 38px;
-      background: #c0c0c0;
-      border-top: 2px solid #ffffff;
-      padding: 3px 6px;
+    /* Files, Vault & Trash Explorer */
+    .file-card {
+      background: #101d30;
+      border: 1px solid #233a59;
+      border-radius: 11px;
+      padding: 11px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .file-card.vault-locked {
+      border-color: #f59e0b;
+      background: #1c1914;
+    }
+    .file-card.vault-open {
+      border-color: #22c55e;
+      background: #0e221b;
+    }
+    .file-card.trash-item {
+      border-style: dashed;
+      border-color: #64748b;
+      background: #0d1522;
+    }
+    .file-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .file-name {
+      font-family: monospace;
+      font-size: 0.82rem;
+      font-weight: 900;
+      color: #ffffff;
+    }
+    .file-tag {
+      font-family: monospace;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #1b2f4a;
+      color: #93c5fd;
+    }
+    .file-content {
+      font-family: monospace;
+      font-size: 0.77rem;
+      color: #cbd5e1;
+      background: rgba(6, 12, 22, 0.65);
+      border: 1px solid #1d314d;
+      border-radius: 8px;
+      padding: 9px 10px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .vault-unlock-row {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+    .pin-input {
+      flex: 1;
+      min-height: 40px;
+      padding: 0 12px;
+      border-radius: 9px;
+      border: 1.5px solid #f59e0b;
+      background: #090e17;
+      color: #fef08a;
+      font-family: monospace;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+    }
+    .os-act-btn {
+      min-height: 40px;
+      padding: 0 13px;
+      border-radius: 9px;
+      border: 1.5px solid #38bdf8;
+      background: rgba(56, 189, 248, 0.2);
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .os-act-btn.gold-btn {
+      border-color: #f59e0b;
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
+
+    /* Terminal System Logs Table */
+    .log-box {
+      background: #050a12;
+      border: 1px solid #1e3352;
+      border-radius: 10px;
+      overflow: hidden;
+      font-family: monospace;
+      font-size: 0.74rem;
+    }
+    .log-title {
+      padding: 7px 11px;
+      background: #0f1c2e;
+      border-bottom: 1px solid #1e3352;
+      color: #34d399;
+      font-weight: 900;
+      display: flex;
+      justify-content: space-between;
+    }
+    .log-row {
+      display: grid;
+      grid-template-columns: 52px 72px 1fr;
+      gap: 8px;
+      padding: 7px 11px;
+      border-bottom: 1px solid #101e30;
+      align-items: center;
+    }
+    .log-row:last-child { border-bottom: none; }
+    .log-row.crit {
+      background: rgba(239, 68, 68, 0.14);
+      color: #fecaca;
+    }
+    .log-time { color: #7dd3fc; font-weight: 800; }
+    .log-id { color: #fde047; font-weight: 800; }
+
+    /* Interactive Forensic Cipher Decoder App */
+    .decoder-card {
+      background: #101d30;
+      border: 1.5px solid #38bdf8;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cipher-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 8px 11px;
+      border-radius: 9px;
+      border: 1px solid #2b476e;
+      background: #060d18;
+      color: #7dd3fc;
+      font-family: monospace;
+      font-size: 0.84rem;
+      font-weight: 800;
+    }
+    .decoder-controls {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
-      flex-shrink: 0;
-      z-index: 30;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .taskbar-left {
+    .shift-btn-group {
       display: flex;
-      align-items: center;
       gap: 6px;
-      overflow: hidden;
-    }
-    .start-btn {
-      display: inline-flex;
       align-items: center;
-      gap: 5px;
-      height: 28px;
-      padding: 0 10px;
-      background: #c0c0c0;
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
-      border-right: 2px solid #404040;
-      border-bottom: 2px solid #404040;
+    }
+    .decoder-out {
+      padding: 10px 12px;
+      border-radius: 9px;
+      background: #05140e;
+      border: 1px solid #22c55e;
+      color: #86efac;
+      font-family: monospace;
+      font-size: 0.86rem;
       font-weight: 900;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-    .taskbar-active-tab {
-      height: 26px;
-      padding: 0 10px;
-      background: #dfdfdf;
-      border-top: 2px solid #808080;
-      border-left: 2px solid #808080;
-      border-right: 2px solid #ffffff;
-      border-bottom: 2px solid #ffffff;
-      font-size: 0.74rem;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 170px;
-    }
-    .taskbar-clock {
-      height: 26px;
-      padding: 0 10px;
-      border-top: 1px solid #808080;
-      border-left: 1px solid #808080;
-      border-right: 1px solid #ffffff;
-      border-bottom: 1px solid #ffffff;
-      font-size: 0.74rem;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      flex-shrink: 0;
+      letter-spacing: 0.04em;
+      min-height: 42px;
+      word-break: break-word;
     }
 
-    .start-menu {
-      position: absolute;
-      left: 4px;
-      bottom: 38px;
-      z-index: 35;
-      width: 205px;
-      background: #c0c0c0;
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
-      border-right: 2px solid #404040;
-      border-bottom: 2px solid #404040;
-      box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
-      display: none;
+    /* Staff Directory & Verdict Accusation Grid */
+    .suspects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
     }
-    .start-menu.open {
-      display: flex;
+    @media (min-width: 560px) {
+      .suspects-grid { grid-template-columns: 1fr 1fr; }
     }
-    .start-sidebar {
-      width: 26px;
-      background: linear-gradient(180deg, #000080, #1084d0);
-      color: #ffffff;
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      font-size: 0.78rem;
-      font-weight: 900;
-      padding: 8px 4px;
-      letter-spacing: 0.08em;
-    }
-    .start-items {
-      flex: 1;
+    .suspect-card {
+      background: #101d30;
+      border: 1.5px solid #243c5c;
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #f8fafc;
       display: flex;
       flex-direction: column;
-      padding: 4px;
-    }
-    .start-item {
-      text-align: left;
-      background: transparent;
-      border: none;
-      padding: 8px 8px;
-      font-size: 0.8rem;
-      font-weight: 700;
+      gap: 5px;
       cursor: pointer;
-      color: #000000;
+      text-align: left;
+      transition: transform 0.08s ease, border-color 0.14s ease, background 0.14s ease;
     }
-    .start-item:hover {
-      background: #000080;
-      color: #ffffff;
+    .suspect-card:hover:not(:disabled) {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.14);
+    }
+    .suspect-card:active:not(:disabled) { transform: scale(0.97); }
+    .suspect-card.eliminated {
+      opacity: 0.36;
+      border-color: #7f1d1d;
+      background: #171014;
+      cursor: default;
+    }
+    .suspect-card.guilty {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.22);
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.35);
+    }
+    .sc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      font-size: 0.88rem;
+    }
+    .sc-badge {
+      font-family: monospace;
+      font-size: 0.72rem;
+      color: #fde047;
+      background: rgba(250, 204, 21, 0.14);
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+    .sc-meta {
+      font-size: 0.74rem;
+      color: #94a3b8;
+      font-family: monospace;
+    }
+    .sc-alibi {
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      font-style: italic;
     }
 
-    /* Toast & Win Overlay */
     .status-toast {
       position: absolute;
-      bottom: 46px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 40;
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(250, 204, 21, 0.75);
+      background: rgba(7, 13, 23, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.78);
       color: #fef08a;
-      padding: 8px 14px;
+      padding: 7px 14px;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       font-weight: 700;
-      text-align: center;
+      white-space: nowrap;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.2s ease;
       max-width: 92%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      z-index: 15;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
+
     .win-overlay {
       position: absolute;
       inset: 0;
-      z-index: 50;
-      background: rgba(9, 13, 28, 0.86);
+      background: rgba(7, 13, 23, 0.86);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.28s ease;
+      z-index: 25;
     }
     .win-overlay.show {
       opacity: 1;
@@ -569,24 +555,15 @@
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
-      padding: 24px 20px;
+      padding: 22px 18px;
       text-align: center;
-      max-width: 340px;
+      max-width: 345px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    .win-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .win-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.25rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.84rem; color: #475569; margin-bottom: 15px; line-height: 1.48; }
 
-    /* Controls & Case Picker */
     .controls-group {
       display: flex;
       gap: 6px;
@@ -613,6 +590,8 @@
       border-radius: 10px;
       cursor: pointer;
     }
+
+    /* Case Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -624,9 +603,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -723,6 +700,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #070d17;
+      border: 1px solid rgba(52, 211, 153, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #070d17;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #070d17 0%, #064e3b 100%);
+      color: #ecfdf5;
+    }
+    .game-seo-banner.navy-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #a7f3d0;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .os-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .os-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .os-table th, .os-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .os-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .os-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -735,7 +792,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -748,121 +805,95 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Cases &bull; Retro Mystery</span>
+      <span class="cat-tag">500 Cyber Cases &bull; Desktop Forensics</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>OS Sleuth</h1>
-      <p>Search a mysterious Windows 98 computer, crack encrypted ZIP vaults using scattered clues, and solve the disappearance.</p>
+      <p>Investigate a seized workstation desktop—read intercepted emails, recover shredded trash logs, crack PIN-locked vaults, decode Caesar ciphers, and expose the guilty insider.</p>
     </div>
 
-    <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="OS Sleuth Retro Desktop Game">
+    <!-- Game Stage: Simulated ZinOS Forensic Workstation -->
+    <section class="game-wrapper" aria-label="OS Sleuth Simulated Desktop Detective Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Missing Persons Desk</span>
-          <span id="levelTitle">Case #1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Alibi &amp; Log Cross-Checks</span>
+          <span id="levelTitle">Case #1 / 500 — Vault Blueprint Leak</span>
         </div>
         <div class="hud-pills">
-          <span class="hud-pill" id="vaultPill">Vaults: 0 / 1</span>
-          <span class="hud-pill" id="solvedCounter">Solved: 0 / 500</span>
+          <span class="hud-pill att-pill" id="attemptsPill">Warrants: 2</span>
+          <span class="hud-pill done-pill" id="solvedCounter">Solved: 0 / 500</span>
         </div>
       </div>
 
-      <div class="case-brief-bar">
-        <span>Missing Owner: <strong id="ownerNameBar">Loading...</strong></span>
-        <span id="caseYearBar">OS Build: Win98 SE</span>
+      <!-- Case Incident Briefing Bar -->
+      <div class="briefing-strip">
+        <div id="briefText" class="brief-txt"></div>
+        <div id="briefBadges" class="brief-badges"></div>
       </div>
 
-      <!-- Simulated Windows 98 Monitor -->
-      <div class="os-monitor">
-        <div class="os-desktop">
-          <!-- Desktop Icons -->
-          <div class="desktop-icons">
-            <button class="d-icon" data-app="mail" type="button">
-              <span class="d-icon-emoji">📧</span>
-              <span class="d-icon-label">Inbox 98</span>
-              <span id="mailBadge" class="d-badge">3</span>
-            </button>
-
-            <button class="d-icon" data-app="docs" type="button">
-              <span class="d-icon-emoji">📁</span>
-              <span class="d-icon-label">My Documents</span>
-            </button>
-
-            <button class="d-icon" data-app="trash" type="button">
-              <span class="d-icon-emoji">🗑️</span>
-              <span class="d-icon-label">Recycle Bin</span>
-            </button>
-
-            <button class="d-icon" data-app="vault" type="button">
-              <span class="d-icon-emoji">🔐</span>
-              <span class="d-icon-label">Locked ZIPs</span>
-              <span id="vaultBadge" class="d-badge">1</span>
-            </button>
-
-            <button class="d-icon" data-app="report" type="button">
-              <span class="d-icon-emoji">📋</span>
-              <span class="d-icon-label">Case Report</span>
-            </button>
-          </div>
-
-          <!-- Desktop Sticky Note -->
-          <div class="desktop-sticky">
-            <strong>📌 Investigator Note</strong>
-            <span id="stickyText">Check Inbox, My Documents, and the Recycle Bin to recover the ZIP password, then file the Case Report.</span>
-          </div>
-
-          <!-- Active Retro App Window -->
-          <div id="appWindow" class="win98-window" role="region" aria-label="Application Window">
-            <div class="win98-titlebar">
-              <span id="winTitle">Application</span>
-              <button id="winCloseBtn" class="win98-close" type="button" aria-label="Close Window">✕</button>
-            </div>
-            <div id="winBody" class="win98-body"></div>
-          </div>
+      <!-- Simulated OS Top Chrome Bar -->
+      <div class="os-menubar">
+        <div class="os-dots">
+          <span class="os-dot r"></span><span class="os-dot y"></span><span class="os-dot g"></span>
+          <span style="margin-left:6px; color:#cbd5e1; font-weight:800;">ZinOS Forensics v4.2</span>
         </div>
+        <span id="osClock">IMAGE: SEIZED_DISK_01</span>
+      </div>
 
-        <!-- Start Menu -->
-        <div id="startMenu" class="start-menu">
-          <div class="start-sidebar">SLEUTH 98</div>
-          <div class="start-items">
-            <button class="start-item" data-app="mail" type="button">📧 Inbox 98</button>
-            <button class="start-item" data-app="docs" type="button">📁 My Documents</button>
-            <button class="start-item" data-app="trash" type="button">🗑️ Recycle Bin</button>
-            <button class="start-item" data-app="vault" type="button">🔐 Locked ZIPs</button>
-            <button class="start-item" data-app="report" type="button">📋 Case Report</button>
-          </div>
-        </div>
+      <!-- 5 Interactive OS Apps Dock -->
+      <div id="osDock" class="os-dock" role="tablist" aria-label="Workstation Apps">
+        <button class="dock-app active" data-app="mail" type="button" role="tab">
+          <span class="dock-ico">📧</span>
+          <span class="dock-lbl">Mail &amp; Chat</span>
+        </button>
+        <button class="dock-app" data-app="files" type="button" role="tab">
+          <span class="dock-ico">📁</span>
+          <span class="dock-lbl">Files/Vault</span>
+          <span id="vaultDot" class="dock-badge" style="display:none;"></span>
+        </button>
+        <button class="dock-app" data-app="logs" type="button" role="tab">
+          <span class="dock-ico">🖥️</span>
+          <span class="dock-lbl">Sys Logs</span>
+        </button>
+        <button class="dock-app" data-app="decoder" type="button" role="tab">
+          <span class="dock-ico">🔐</span>
+          <span class="dock-lbl">Decoder</span>
+          <span id="cipherDot" class="dock-badge" style="display:none;"></span>
+        </button>
+        <button class="dock-app verdict-app" data-app="verdict" type="button" role="tab">
+          <span class="dock-ico">⚖️</span>
+          <span class="dock-lbl">Accuse</span>
+        </button>
+      </div>
 
-        <!-- Bottom Taskbar -->
-        <div class="win98-taskbar">
-          <div class="taskbar-left">
-            <button id="startBtn" class="start-btn" type="button">⊞ Start</button>
-            <span id="taskbarTab" class="taskbar-active-tab">Desktop</span>
-          </div>
-          <div id="retroClock" class="taskbar-clock">11:42 PM</div>
-        </div>
+      <!-- Active OS App Window Viewport -->
+      <div class="os-viewport">
+        <div id="paneMail" class="app-pane"></div>
+        <div id="paneFiles" class="app-pane hidden"></div>
+        <div id="paneLogs" class="app-pane hidden"></div>
+        <div id="paneDecoder" class="app-pane hidden"></div>
+        <div id="paneVerdict" class="app-pane hidden"></div>
 
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Case Closed Overlay -->
+        <!-- Case Closed / Failed Overlay -->
         <div id="winOverlay" class="win-overlay">
           <div class="win-card">
-            <div style="font-size:2.3rem; margin-bottom:6px;">🕵️‍♂️</div>
-            <h2 id="winHeading">Case Closed!</h2>
-            <p id="winText">You uncovered the hidden evidence and solved the disappearance.</p>
-            <button id="nextLevelBtn" class="btn-primary" type="button">Next Case →</button>
+            <div id="overlayIcon" style="font-size:2.3rem; margin-bottom:6px;">🕵️</div>
+            <h2 id="winHeading">Insider Exposed!</h2>
+            <p id="winText">The forensic trail matched the suspect's badge and hidden vault transfer cleanly.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Case File →</button>
           </div>
         </div>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="resetBtn" class="btn-outline" type="button">↺ Reset Case</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Detective Hint</button>
+          <button id="resetBtn" class="btn-outline" type="button">↺ Reload Disk</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Forensic Lead</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
@@ -877,61 +908,163 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 880+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/os-sleuth-banner-1.jpg"
+            alt="OS Sleuth cyber detective desktop mystery game showing dark-mode computer windows with emails, encrypted vaults, access logs, and a glowing magnifying glass"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Simulated Desktop Investigations — Crack Vaults &amp; Catch Moles</h3>
+          <p>Switch seamlessly between intercepted Mail, Trash recovery, PIN-protected Vaults, Server Logs, and a live Caesar Cipher Decoder.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play OS Sleuth (500 Detective Cases)</h2>
-        <p>OS Sleuth turns your browser into a seized 1998 desktop computer left behind by a missing person. Across 500 escalating forensic cases, you must comb through offline emails in <strong>Inbox 98</strong>, personal logs in <strong>My Documents</strong>, and erased drafts in the <strong>Recycle Bin</strong> to crack password-protected ZIP vaults and uncover the real story.</p>
+        <h2>What Is OS Sleuth? A Desktop Mystery &amp; Digital Forensics Game Online</h2>
+        <p><strong>OS Sleuth</strong> is a free <strong>desktop computer detective game online</strong> inspired by acclaimed investigative mysteries like <em>Cyber Manhunt</em>, <em>Her Story</em>, and <em>Emily Is Away</em>—engineered to run smoothly inside any mobile, tablet, or Chromebook browser with zero downloads. Each of the <strong>500 forensic cases</strong> drops you into a seized corporate or institutional workstation moments after a major security breach: a midnight vault blueprint leak, an unauthorized payroll transfer, a prototype chip theft, or a scrubbed server backup.</p>
+        <p>Rather than feeding you passive multiple-choice trivia, OS Sleuth hands you a live five-app desktop environment (`ZinOS Forensics`) packed with authentic digital breadcrumbs. You'll cross-check staff chat alibis against raw <strong>Badge &amp; VPN System Logs</strong>, rescue shredded audit files from the <strong>Trash Bin</strong>, deduce 4-digit PINs from sticky notes to crack <strong>Encrypted Vaults</strong>, and spin the built-in <strong>Caesar &amp; Reverse Cipher Decoder</strong> before issuing your arrest warrant in the <strong>⚖️ Accuse</strong> terminal!</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Digital Forensics Investigator's Playbook (All 5 Workstation Apps)</h2>
+        <p>Great cyber sleuths never guess—they follow the metadata! Learn how each built-in workstation app connects to expose the guilty insider cleanly across Chapters 1 through 5:</p>
+
+        <div class="os-table-wrap">
+          <table class="os-table">
+            <thead>
+              <tr>
+                <th>Workstation App</th>
+                <th>Evidence Stored Inside</th>
+                <th>Key Forensic Technique</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>📧 Mail &amp; Chat</strong></td>
+                <td>Internal emails, IT security memos, direct chat alibis, and staff phone extensions.</td>
+                <td>Look for <strong>alibi contradictions</strong> (someone claiming they left early) and subtle hints for cracking the Vault PIN (like reversed extensions or incident room numbers)!</td>
+              </tr>
+              <tr>
+                <td><strong>📁 Files &amp; Vault</strong></td>
+                <td>Sticky notes, HR staff memos, a recoverable <strong>🗑️ Trash Bin</strong> (Ch. 3+), and a <strong>🔒 PIN-Locked Vault</strong> (Ch. 2+).</td>
+                <td>Always tap <strong>♻️ Restore Deleted File</strong> when a shredded log appears in Trash, and enter the deduced 4-digit PIN to decrypt the smoking-gun vault file!</td>
+              </tr>
+              <tr>
+                <td><strong>🖥️ System Logs</strong></td>
+                <td>Timestamped Door Badge swipes, USB mount records, VPN logins, and Server Backup times.</td>
+                <td>Compare the red <strong>CRITICAL</strong> breach timestamp against every suspect's Badge ID, Workstation IP, and chat alibi—logs never lie, even when suspects do!</td>
+              </tr>
+              <tr>
+                <td><strong>🔐 Cipher Decoder</strong> (Ch. 4–5)</td>
+                <td>Interactive <strong>Caesar Shift (-25 to +25)</strong> and <strong>Reverse Text</strong> forensic decryptor.</td>
+                <td>Spot scrambled text inside a vault or chat? Tap <strong>📤 Send to Decoder</strong> and step the shift buttons until the hidden codename or badge pops into clear English!</td>
+              </tr>
+              <tr>
+                <td><strong>⚖️ Accuse Terminal</strong></td>
+                <td>Suspect roster displaying each person's Name, Role, Badge ID, Desk/Ext, and Official Alibi.</td>
+                <td>You have <strong>2 Arrest Warrants</strong> per case—verify both Badge ID and evidence trail before locking in your accusation!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Cyber Sleuth Pro Tip:</strong> Notice a glowing amber dot on the <strong>📁 Files/Vault</strong> or <strong>🔐 Decoder</strong> dock icon? That badge alerts you that an unopened encrypted vault or undecoded cipher is still waiting inside! Stuck connecting two clues on a complex Chapter 5 breach? Tap <strong>💡 Forensic Lead</strong> for a progressive step-by-step investigator nudge (first pointing to the right app, then revealing the exact vault PIN or contradiction).</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner navy-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/os-sleuth-banner-2.jpg"
+            alt="Digital forensics evidence board featuring email icons, recovered trash files, golden encrypted vault padlock, and cipher decoder wheel in OS Sleuth"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Multi-Step Cyber Deduction — Zero Guesswork, 100% Logical Proof</h3>
+          <p>Every PIN rule, deleted audit record, and shifted cipher across all 500 cases is generated from a single coherent timeline with crisp Web Audio feedback.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Forensics Chapters (500 Unique Cyber Cases)</h2>
+        <p>Rise from junior helpdesk auditor to elite black-hat incident responder across five escalating investigative tiers saved privately in your browser:</p>
         <ul>
-          <li><strong>Step 1 — Gather Password Clues:</strong> Owners rarely write down passwords in one obvious place. In Chapter 1, look for a direct hint in a deleted note or email. In Chapters 2–5, combine two scattered clues—or follow coded rules like reversing a codeword—to unlock nested ZIP archives.</li>
-          <li><strong>Step 2 — Watch for Decoys:</strong> Not every email is the truth! Cancelled flight confirmations, casual coworker chatter, and outdated drafts act as red herrings. Always verify your conclusions inside the decrypted ZIP file.</li>
-          <li><strong>Step 3 — File the Case Report:</strong> Open <strong>Case Report</strong> on the desktop (or via the Start menu), select the verified contact, destination, and critical evidence item, and click <strong>Submit Official Report</strong> to close the case.</li>
+          <li><strong>Chapter 1 (Cases 1–100 — Alibi &amp; Log Cross-Checks):</strong> 4 suspects, clean inbox chats, and timestamped badge/USB system logs—spot whose official alibi clashes directly with the midnight server log!</li>
+          <li><strong>Chapter 2 (Cases 101–200 — Encrypted Vaults &amp; PINs):</strong> Locks the decisive transfer receipt inside a <strong>🔒 PIN-Protected Vault</strong>; deduce the 4-digit passcode from sticky notes, email signatures, and backup logs!</li>
+          <li><strong>Chapter 3 (Cases 201–300 — Deleted Trash Forensics):</strong> Introduces shredded evidence hidden inside the <strong>🗑️ Trash Bin</strong>—restore deleted backup logs to uncover who spoofed a coworker's workstation!</li>
+          <li><strong>Chapter 4 (Cases 301–400 — Ciphered Insider Comms):</strong> Activates the built-in <strong>🔐 Forensic Decoder</strong> to crack Caesar-shifted and reversed codenames tucked inside decrypted vault drops.</li>
+          <li><strong>Chapter 5 (Cases 401–500 — Master Black-Hat Forensics):</strong> Full <strong>5-suspect</strong> corporate espionage mysteries combining Trash recovery, 2-clue PIN vault cracking, live Caesar decryption, and tight timestamp analysis—complete with an instant 1–500 case picker.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Cyber Detective Topics">
+          <span class="kw-pill">Desktop Detective Game Online</span>
+          <span class="kw-pill">OS Simulation Mystery Browser</span>
+          <span class="kw-pill">Digital Forensics Puzzle Free</span>
+          <span class="kw-pill">Hacker Deduction Game No Download</span>
+          <span class="kw-pill">500-Case Cyber Crime Simulator</span>
+          <span class="kw-pill">Chromebook Mystery Logic Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>OS Sleuth FAQ</h2>
         <details class="faq-item">
-          <summary>Are ZIP passwords case-sensitive?</summary>
-          <div class="faq-answer">No. You can type passwords in uppercase or lowercase—the vault automatically trims extra spaces and checks your code cleanly.</div>
+          <summary>How do I figure out the 4-digit PIN for the Encrypted Vault in Chapters 2–5?</summary>
+          <div class="faq-answer">Check the <strong>Sticky Note</strong> inside <strong>📁 Files/Vault</strong> or the IT Security memo in <strong>📧 Mail &amp; Chat</strong>! It always tells you the exact formula—such as the 4-digit midnight backup timestamp found in <strong>🖥️ Sys Logs</strong>, or an admin's phone extension typed backward!</div>
         </details>
         <details class="faq-item">
-          <summary>What happens in Chapters 4 and 5 (Cases 301–500)?</summary>
-          <div class="faq-answer">Higher chapters introduce dual-layer encryption: cracking the first ZIP file reveals a hidden memo with the rule needed to unlock the second vault containing the final truth.</div>
+          <summary>How do I use the 🔐 Cipher Decoder in Chapters 4 and 5?</summary>
+          <div class="faq-answer">Whenever you see an encrypted code snippet inside a message or unlocked vault, tap the <strong>📤 Send to Decoder</strong> button right below it! Inside the <strong>🔐 Decoder</strong> app, tap <strong>− Shift / + Shift</strong> (or <strong>⇄ Reverse</strong>) until the output box turns into crisp readable English revealing the insider's badge or codename!</div>
+        </details>
+        <details class="faq-item">
+          <summary>What happens if I accuse the wrong suspect?</summary>
+          <div class="faq-answer">You have <strong>2 Arrest Warrants</strong> per case. A false accusation crosses that innocent employee off the roster and lets you return immediately to the workstation apps to double-check the logs and vault files before issuing your final warrant!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does OS Sleuth work cleanly on narrow phone screens without tiny unreadable windows?</summary>
+          <div class="faq-answer">Yes! Instead of cramped overlapping desktop windows, ZinOS Forensics uses a clean mobile-first app dock with crisp high-contrast dark mode typography, large tap targets, and instant app switching on Android, iOS, and Chromebooks.</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🧠</div><span class="cat-tag">Mystery</span></div>
+        <h3>Micro-Expression Polygraph</h3>
+        <p>Interrogate suspects, spot split-second facial micro-expressions, and catch every lie on tape.</p>
+        <a href="/games/micro-polygraph/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
+        <div class="card-top"><div class="icon-box">🌍</div><span class="cat-tag">Mystery</span></div>
+        <h3>OSINT Geo-Sleuth</h3>
+        <p>Analyze license plates, driving lanes, bollards, and alphabets to pinpoint countries worldwide.</p>
+        <a href="/games/geo-sleuth/" class="card-link">Play Game →</a>
+      </article>
+      <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
         <h3>Manual Bomb Defusal</h3>
-        <p>Read the live technical manual against the ticking clock and cut the exact right wire.</p>
+        <p>Decode the live technical manual against the ticking clock and cut the exact right wire.</p>
         <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🪨</div><span class="cat-tag">Physics</span></div>
-        <h3>Gravity Stone Stacker</h3>
-        <p>Balance irregular geometric stones into a steady tower across 500 physics levels.</p>
-        <a href="/games/stone-stacker/" class="card-link">Play Game →</a>
-      </article>
-      <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">🎵</div><span class="cat-tag">Puzzle</span></div>
-        <h3>One-Line Symphony</h3>
-        <p>Trace glowing constellations in one continuous stroke across 500 musical levels.</p>
-        <a href="/games/one-line-symphony/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
   <!-- Case Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Case">
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Cyber Case">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Case (1 – 500)</h3>
+        <h3>Choose Forensic Case (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
@@ -955,21 +1088,21 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Mystery</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
+            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
+            <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Top Strategy</h4>
           <ul>
-            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
+            <li><a href="/games/grocery-bagging/">Grocery Bagging</a></li>
             <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
-            <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
-            <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -1002,57 +1135,61 @@
     }
 
     // ==============================================
-    // DATA POOLS & 500-CASE FORENSIC GENERATOR
+    // ZINOS FORENSIC CASE GENERATOR (500 RICH MYSTERIES)
     // ==============================================
     const TOTAL_LEVELS = 500;
+
     const CHAPTERS = [
-      { title: "Chapter 1 • Missing Persons Desk", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Split Cipher Files", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Corporate Cover-Ups", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Double-Vault Trails", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Classified Blackbox", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Alibi & Log Cross-Checks", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • PIN-Locked Vaults", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Deleted Trash Forensics", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Ciphered Insider Comms", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Master Black-Hat Forensics", range: "401–500", start: 401, end: 500 }
     ];
 
-    const OWNERS = [
-      { name: "Dr. Elena Vance", role: "Acoustic Lab Researcher" },
-      { name: "Marcus Bell", role: "Investigative Journalist" },
-      { name: "Clara Sato", role: "Museum Archivist" },
-      { name: "Victor Hale", role: "Harbor Logistics Manager" },
-      { name: "Nadia Kouri", role: "Subway Signal Engineer" },
-      { name: "Arthur Pendelton", role: "Rare Book Dealer" },
-      { name: "Sonia Reyes", role: "Satellite Technician" },
-      { name: "Julian Mercer", role: "Night Watchman" },
-      { name: "Hannah Lindqvist", role: "Marine Cartographer" },
-      { name: "Devon Cross", role: "Bank Systems Auditor" }
+    const STAFF_ROSTER = [
+      { name: "Elena Vance",    role: "Lead Architect",    dept: "R&D",       handle: "e.vance",    codename: "FALCON" },
+      { name: "Marcus Chen",    role: "Systems Admin",     dept: "Infra",     handle: "m.chen",     codename: "CIPHER" },
+      { name: "Priya Nair",     role: "Finance Auditor",   dept: "Treasury",  handle: "p.nair",     codename: "LEDGER" },
+      { name: "Darius Holt",    role: "Night Security",    dept: "Ops",       handle: "d.holt",     codename: "WARDEN" },
+      { name: "Sofia Lind",     role: "Hardware Eng.",     dept: "Lab-B",     handle: "s.lind",     codename: "PRISM" },
+      { name: "Tarek Mansour",  role: "Data Scientist",    dept: "Analytics", handle: "t.mansour",  codename: "VECTOR" },
+      { name: "Hannah Okafor",  role: "HR Director",       dept: "People",    handle: "h.okafor",   codename: "SIGNAL" },
+      { name: "Liam Gallagher", role: "DevOps Lead",       dept: "Cloud",     handle: "l.gallagher",codename: "PROXY" },
+      { name: "Keiko Sato",     role: "QA Specialist",     dept: "Testing",   handle: "k.sato",     codename: "MATRIX" },
+      { name: "Victor Romero",  role: "Legal Counsel",     dept: "Compliance",handle: "v.romero",   codename: "GAVEL" },
+      { name: "Nadia Volkov",   role: "Crypto Analyst",    dept: "SecOps",    handle: "n.volkov",   codename: "SHADOW" },
+      { name: "Owen Brooks",    role: "Facilities Mgr",    dept: "Building",  handle: "o.brooks",   codename: "KEYPAD" },
+      { name: "Clara Moreau",   role: "Product Lead",      dept: "Design",    handle: "c.moreau",   codename: "VELVET" },
+      { name: "Samir Patel",    role: "DB Engineer",       dept: "Core",      handle: "s.patel",    codename: "KERNEL" },
+      { name: "Chloe Kim",      role: "PR Strategist",     dept: "Comms",     handle: "c.kim",      codename: "BEACON" },
+      { name: "Gideon Park",    role: "Lab Technician",    dept: "Lab-A",     handle: "g.park",     codename: "COBALT" }
     ];
 
-    const SUSPECTS = [
-      "Raymond Cole", "Evelyn Frost", "Gideon Park", "Lydia Sterling",
-      "Tomas Novak", "Miriam Shaw", "Caleb Vance", "Iris Chen",
-      "Owen Gallagher", "Sloane Bennett", "Darius Webb", "Freya Holm"
+    const INCIDENTS = [
+      { title: "Vault Blueprint Leak",     asset: "blueprint_v9.cad",  room: "Server Vault 4B",  action: "USB_EXFIL" },
+      { title: "Payroll Wire Fraud",       asset: "wire_480k.csv",     room: "Treasury Hub 2A",  action: "SWIFT_AUTH" },
+      { title: "Prototype Chip Theft",     asset: "silicon_spec.bin",  room: "Cleanroom 3C",     action: "DOOR_OVERRIDE" },
+      { title: "Midnight Server Wipe",     asset: "audit_master.db",   room: "Data Core 1A",     action: "ROOT_PURGE" },
+      { title: "VIP Client DB Breach",     asset: "clients_dump.sql",  room: "Archive Bay 5D",   action: "SSH_EXPORT" },
+      { title: "Museum Laser Override",    asset: "grid_keys.cfg",     room: "Control Desk 2C",  action: "ALARM_BYPASS" },
+      { title: "Pharma Formula Espionage", asset: "compound_x.pdf",    room: "Bio-Lab 6A",       action: "ENCRYPT_SEND" },
+      { title: "Auction Bid Rigging",      asset: "sealed_bids.xlsx",  room: "Exec Suite 7B",    action: "FILE_TAMPER" }
     ];
 
-    const LOCATIONS = [
-      "Pier 19 Boathouse", "Northgate Train Depot", "Old Observatory Tower",
-      "Cedar Creek Cabin", "Harbor Hotel Room 408", "Westside Clocktower",
-      "Redwood Ferry Terminal", "Bayside Storage Unit 12", "Silverline Subway Annex",
-      "Pine Ridge Motel", "East Dock Lighthouse", "Grand Central Locker B7"
+    const ALIBIS_INNOCENT = [
+      "Left office right after my normal badge-out.",
+      "Was home streaming dinner recipes all evening.",
+      "Working remotely on routine sprint tickets.",
+      "Took the early commuter train home before dusk."
     ];
 
-    const ITEMS = [
-      "Encrypted Floppy Disk", "Master Vault Blueprint", "Unedited Audio Cassette",
-      "Stolen Museum Ledger", "Lab Prototype Chip", "Offshore Bank Microfilm",
-      "Signed Blackmail Letter", "Missing Cargo Manifest", "Brass Keycard #09",
-      "Satellite Access Codes"
+    const ALIBIS_GUILTY = [
+      "Swears they logged off early and never entered the restricted wing.",
+      "Insists their badge was locked inside their desk drawer all night.",
+      "Claims they were out of town with zero workstation access.",
+      "Blames an automated backup script and denies touching the files."
     ];
-
-    const CODEWORDS = [
-      "ECHO", "NOVA", "IRIS", "APEX", "LYNX", "ORCA", "MIST", "JADE",
-      "BOLT", "VOLT", "DUSK", "PIER", "WREN", "LARK", "PINE", "ZINC",
-      "RUBY", "OPAL", "HALO", "WAVE", "KITE", "FERN", "CRUX", "AURA"
-    ];
-
-    const MONTHS = ["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"];
 
     function mulberry32(seed) {
       let a = seed >>> 0;
@@ -1064,10 +1201,6 @@
       };
     }
 
-    function pick(arr, rng) {
-      return arr[Math.floor(rng() * arr.length)];
-    }
-
     function shuffle(arr, rng) {
       const copy = arr.slice();
       for (let i = copy.length - 1; i > 0; i--) {
@@ -1077,463 +1210,236 @@
       return copy;
     }
 
-    function buildCase(caseNum) {
-      const rng = mulberry32(caseNum * 15485863 + 19980625);
+    function caesarShift(str, shift) {
+      const s = ((shift % 26) + 26) % 26;
+      return str.replace(/[A-Z]/g, (ch) => String.fromCharCode(((ch.charCodeAt(0) - 65 + s) % 26) + 65));
+    }
 
-      const owner = pick(OWNERS, rng);
-      const ownerFirst = owner.name.split(" ")[0].replace(".", "");
-      const year = 1998 + (caseNum % 3);
-      const month = pick(MONTHS, rng);
-      const day = 10 + Math.floor(rng() * 16);
-      const dateStr = `${month} ${day}, ${year}`;
-      const prevDate = `${month} ${day - 2}, ${year}`;
-      const clockTime = `${9 + Math.floor(rng() * 3)}:${String(10 + Math.floor(rng() * 49)).padStart(2, "0")} PM`;
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
 
-      // Select 4 distinct suspects, locations, and items (index 0 = truth, 1..3 = decoys)
-      const suspects = shuffle(SUSPECTS, rng).slice(0, 4);
-      const locations = shuffle(LOCATIONS, rng).slice(0, 4);
-      const items = shuffle(ITEMS, rng).slice(0, 4);
+    // Build Complete, 100%-Consistent Forensic Workstation Case!
+    function buildCyberCase(levelNum) {
+      const rng = mulberry32(levelNum * 478123 + 81203);
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const incident = INCIDENTS[(levelNum - 1 + chapIdx) % INCIDENTS.length];
 
-      const trueSuspect = suspects[0];
-      const decoySuspect1 = suspects[1];
-      const decoySuspect2 = suspects[2];
+      const numSuspects = chapIdx === 4 ? 5 : 4;
+      const picked = shuffle(STAFF_ROSTER, rng).slice(0, numSuspects);
 
-      const trueLoc = locations[0];
-      const decoyLoc1 = locations[1];
-      const decoyLoc2 = locations[2];
+      // Assign unique Badge IDs, Workstations, and Phone Extensions to every suspect!
+      const usedBadges = new Set();
+      const suspects = picked.map((p, idx) => {
+        let bNum;
+        do { bNum = 1000 + Math.floor(rng() * 8900); } while (usedBadges.has(bNum));
+        usedBadges.add(bNum);
+        const ext = String(2100 + ((levelNum * 37 + idx * 173) % 7600));
+        return {
+          ...p,
+          id: idx,
+          badge: `ID-${bNum}`,
+          badgeDigits: String(bNum),
+          pc: `WS-0${idx + 1}`,
+          ext,
+          alibi: ""
+        };
+      });
 
-      const trueItem = items[0];
-      const decoyItem1 = items[1];
+      const culpritIdx = Math.floor(rng() * numSuspects);
+      const culprit = suspects[culpritIdx];
+      const decoy = suspects[(culpritIdx + 1) % numSuspects];
+      const innocent2 = suspects[(culpritIdx + 2) % numSuspects];
 
-      const word1 = pick(CODEWORDS, rng);
-      let word2 = pick(CODEWORDS, rng);
-      if (word2 === word1) word2 = "STAR";
-      const num1 = 12 + Math.floor(rng() * 85); // 2-digit
-      const num2 = 104 + Math.floor(rng() * 790); // 3-digit
+      // Assign Believable Alibis
+      suspects.forEach((s, idx) => {
+        if (idx === culpritIdx) s.alibi = ALIBIS_GUILTY[Math.floor(rng() * ALIBIS_GUILTY.length)];
+        else s.alibi = ALIBIS_INNOCENT[(idx + levelNum) % ALIBIS_INNOCENT.length];
+      });
 
-      // Determine tier by chapter
-      const tier = caseNum <= 100 ? 1 : (caseNum <= 200 ? 2 : (caseNum <= 300 ? 3 : (caseNum <= 400 ? 4 : 5)));
-      const askItem = tier >= 3;
-      const twoVaults = tier >= 4;
+      // Exact Incident & Backup Timestamps
+      const incHour = 22 + Math.floor(rng() * 2); // 22 or 23
+      const incMin = 10 + Math.floor(rng() * 45);
+      const incTime = `${incHour}:${String(incMin).padStart(2, "0")}`;
+      const backupMin = 5 + Math.floor(rng() * 50);
+      const backupTime = `02:${String(backupMin).padStart(2, "0")}`;
 
-      // Build Vault Passwords & Scattered Clues
-      let vaults = [];
-      let emails = [];
-      let docs = [];
-      let trash = [];
-      let hintSteps = [];
+      // Chapter Feature Flags
+      const hasVault = chapIdx >= 1;
+      const hasTrash = chapIdx >= 2;
+      const hasCipher = chapIdx >= 3;
 
-      if (tier === 1) {
-        // Chapter 1: 1 Vault, clear password in Recycle Bin
-        const pass = `${word1}${num1}`;
-        vaults = [{
-          id: "v1",
-          filename: "backup_truth.zip",
-          password: pass,
-          unlocked: false,
-          contentTitle: "FINAL_STATEMENT.TXT",
-          content:
-`DATE: ${dateStr} — 10:14 PM
-If anyone finds my PC, I did not vanish by accident.
-
-${trueSuspect} tracked me down after I discovered what they were hiding.
-I had to leave the office before midnight and head straight to:
->>> ${trueLoc} <<<
-
-Ignore my old reservation for ${decoyLoc1} — I cancelled it this afternoon.
-Please send help to ${trueLoc} and question ${trueSuspect} immediately.
-— ${owner.name}`
-        }];
-
-        emails = [
-          {
-            from: `${decoySuspect1.toLowerCase().replace(" ", ".")}@office98.net`,
-            subject: "Re: Cancelled trip?",
-            date: prevDate,
-            body: `Hey ${ownerFirst},\n\nSaw you cancelled your booking near ${decoyLoc1}. Everything alright? Let me know if you still want to grab coffee next week.\n\nBest,\n${decoySuspect1}`
-          },
-          {
-            from: "it-support@corp-local.net",
-            subject: "Reminder: Empty your Recycle Bin",
-            date: dateStr,
-            body: `Hi ${ownerFirst},\n\nOur security audit noticed you deleted a password reminder note earlier today. Please remember that files in the Recycle Bin can still be read until permanently wiped.`
-          },
-          {
-            from: `${decoySuspect2.toLowerCase().replace(" ", ".")}@mail98.org`,
-            subject: "Leaving keys at front desk",
-            date: dateStr,
-            body: `I dropped off the spare folder at reception before heading to ${decoyLoc2}. Catch you Monday!\n— ${decoySuspect2}`
-          }
-        ];
-
-        docs = [
-          {
-            filename: "README_WORK.TXT",
-            date: prevDate,
-            body: `OWNER: ${owner.name} (${owner.role})\n\nAll sensitive files have been compressed into "backup_truth.zip" inside the Locked ZIPs vault. Do not share the access code with ${decoySuspect1} or anyone from upper management.`
-          },
-          {
-            filename: "EXPENSES_98.TXT",
-            date: dateStr,
-            body: `EXPENSE LOG (${month} ${year})\n- Taxi to ${decoyLoc1}: $18.50 (CANCELLED)\n- Floppy disk pack (10x): $12.00\n- Late-night diner coffee: $4.25`
-          }
-        ];
-
-        trash = [
-          {
-            filename: "DELETED_REMINDER.TXT",
-            date: dateStr,
-            body: `[RECOVERED FROM RECYCLE BIN]\n\nQuick reminder before I wipe this PC:\nMy ZIP vault password is: ${pass}\n\n(Delete this note as soon as backup_truth.zip is saved!)`
-          }
-        ];
-
-        hintSteps = [
-          "Open the Recycle Bin — there's a deleted password reminder note inside.",
-          `The password for backup_truth.zip is: ${pass}`,
-          `Answer: Contact = ${trueSuspect} | Location = ${trueLoc}`
-        ];
-      } else if (tier === 2) {
-        // Chapter 2: 1 Vault, split 2-part password (Email + Recycle Bin)
-        const pass = `${word1}${num1}`;
-        vaults = [{
-          id: "v1",
-          filename: "private_log.zip",
-          password: pass,
-          unlocked: false,
-          contentTitle: "EMERGENCY_LOG.TXT",
-          content:
-`CONFIDENTIAL LOG — ${dateStr}
-${trueSuspect} warned me not to speak to the press.
-
-I threw off anyone watching my emails by mentioning ${decoyLoc2},
-but my real safe spot tonight is:
->>> ${trueLoc} <<<
-
-Do NOT trust ${trueSuspect}. Bring this log to the authorities.
-— ${owner.name}`
-        }];
-
-        emails = [
-          {
-            from: "security-bot@work98.net",
-            subject: "Archive Key Format (Part 1)",
-            date: prevDate,
-            body: `Account: ${owner.name}\n\nYour chosen archive codeword is: ${word1}\nPer policy, combine this codeword directly with your 2-digit locker PIN (with no spaces) to open private_log.zip.`
-          },
-          {
-            from: `${decoySuspect1.toLowerCase().replace(" ", ".")}@mail98.net`,
-            subject: "Still going to " + decoyLoc2 + "?",
-            date: dateStr,
-            body: `Hey ${ownerFirst}, saw your post-it about ${decoyLoc2}. I checked there at 8 PM and nobody showed up. Call me when you're safe.\n— ${decoySuspect1}`
-          },
-          {
-            from: `${trueSuspect.toLowerCase().replace(" ", ".")}@private98.org`,
-            subject: "We need to talk tonight",
-            date: dateStr,
-            body: `${ownerFirst},\n\nStop ignoring my calls. Hand over the files before midnight or you will regret getting involved.\n— ${trueSuspect}`
-          }
-        ];
-
-        docs = [
-          {
-            filename: "DAILY_NOTES.TXT",
-            date: dateStr,
-            body: `Work Log — ${owner.role}\n\nI locked my real coordinates inside private_log.zip.\nI accidentally tossed my locker slip into the Recycle Bin earlier — hope nobody checks it.`
-          },
-          {
-            filename: "CONTACTS.TXT",
-            date: prevDate,
-            body: `LOCAL CONTACTS:\n- ${decoySuspect1} (Accountant)\n- ${decoySuspect2} (Driver)\n- ${trueSuspect} (DO NOT ANSWER CALLS)`
-          }
-        ];
-
-        trash = [
-          {
-            filename: "LOCKER_SLIP.TXT",
-            date: dateStr,
-            body: `[RECOVERED FROM RECYCLE BIN]\n\nSTAFF GYM & ARCHIVE LOCKER RECEIPT\nHolder: ${owner.name}\nAssigned 2-Digit Locker PIN: ${num1}`
-          }
-        ];
-
-        hintSteps = [
-          "Check Inbox 98 for your codeword, then check the Recycle Bin for the 2-digit locker PIN.",
-          `Combine them with no space — the password is: ${pass}`,
-          `Answer: Contact = ${trueSuspect} | Location = ${trueLoc}`
-        ];
-      } else if (tier === 3) {
-        // Chapter 3: 1 Vault, split across My Documents & Recycle Bin + 3-field report (Suspect, Location, Item)
-        const pass = `${word1}${num2}`;
-        vaults = [{
-          id: "v1",
-          filename: "evidence_98.zip",
-          password: pass,
-          unlocked: false,
-          contentTitle: "CONFESSION_PROOF.TXT",
-          content:
-`VERIFIED EVIDENCE REPORT — ${dateStr}
-
-I finally proved who stole the ${trueItem}:
-It was ${trueSuspect} all along.
-
-They tried to frame ${decoySuspect1} using a fake memo about the ${decoyItem1},
-but I have the original proof. I am hiding out at:
->>> ${trueLoc} <<<
-with the ${trueItem} sealed in a waterproof case.
-
-— ${owner.name}`
-        }];
-
-        emails = [
-          {
-            from: `${decoySuspect1.toLowerCase().replace(" ", ".")}@corp98.net`,
-            subject: "Why did you ask about the " + decoyItem1 + "?",
-            date: prevDate,
-            body: `Hi ${ownerFirst},\n\nThe ${decoyItem1} is safely locked in storage — I double checked this morning. Why were people saying it's missing? Also, I'm out of town near ${decoyLoc1} until Friday.\n— ${decoySuspect1}`
-          },
-          {
-            from: `${decoySuspect2.toLowerCase().replace(" ", ".")}@corp98.net`,
-            subject: "Night shift check-in",
-            date: dateStr,
-            body: `Hey, I locked the front lobby and left a spare pass at ${decoyLoc2}. Did you finish backing up evidence_98.zip?\n— ${decoySuspect2}`
-          },
-          {
-            from: "audit-alert@corp98.net",
-            subject: "ZIP Password Policy",
-            date: prevDate,
-            body: `Reminder: Your ZIP archive password is your Project Codename (see My Documents) followed immediately by your 3-digit Badge ID.`
-          }
-        ];
-
-        docs = [
-          {
-            filename: "PROJECT_BRIEF.TXT",
-            date: prevDate,
-            body: `INTERNAL AUDIT FILE\nLead: ${owner.name}\nActive Project Codename: ${word1}\n\nNote: Someone tampered with our inventory. Full findings are encrypted in evidence_98.zip.`
-          },
-          {
-            filename: "DRAFT_MEMO.TXT",
-            date: dateStr,
-            body: `Incomplete Draft:\nI first suspected ${decoySuspect2} took the ${decoyItem1}, so I left a decoy note. Wait—new proof just came in! Moving real evidence into the encrypted ZIP.`
-          }
-        ];
-
-        trash = [
-          {
-            filename: "OLD_BADGE_FORM.TXT",
-            date: dateStr,
-            body: `[RECOVERED FROM RECYCLE BIN]\n\nSECURITY BADGE REPLACEMENT\nEmployee: ${owner.name}\n3-Digit Badge ID: ${num2}\nStatus: Deactivated after audit`
-          }
-        ];
-
-        hintSteps = [
-          "Find the Project Codename in My Documents and the 3-Digit Badge ID in the Recycle Bin.",
-          `The password for evidence_98.zip is: ${pass}`,
-          `Report: ${trueSuspect} | ${trueLoc} | ${trueItem}`
-        ];
-      } else if (tier === 4) {
-        // Chapter 4: 2 Nested Vaults (v1 unlocks clue for v2) + 3-field report
-        const pass1 = `${word1}${num1}`;
-        const pass2 = `${word2}${num2}`;
-        vaults = [
-          {
-            id: "v1",
-            filename: "stage1_notes.zip",
-            password: pass1,
-            unlocked: false,
-            contentTitle: "VAULT2_CLUE.TXT",
-            content:
-`STAGE 1 DECRYPTED — GOOD, YOU MADE IT THIS FAR.
-
-Someone is monitoring my regular inbox, so I split the final secret.
-To unlock "final_truth.zip", combine:
-- My secondary cipher word: ${word2}
-- Plus the 3-digit Safe Box number written in My Documents (BANK_RECEIPT.TXT).
-
-Hurry — ${trueSuspect} knows I am close.`
-          },
-          {
-            id: "v2",
-            filename: "final_truth.zip",
-            password: pass2,
-            unlocked: false,
-            contentTitle: "FINAL_DOSSIER.TXT",
-            content:
-`TOP SECRET DOSSIER — ${dateStr}
-
-1. PRIMARY CULPRIT: ${trueSuspect}
-2. STOLEN EVIDENCE: ${trueItem}
-3. MY SAFEHOUSE LOCATION: ${trueLoc}
-
-Note: Ignore the false trail pointing toward ${decoySuspect1} and ${decoyLoc1}.
-I left this machine running so an investigator could piece together both vaults.
-— ${owner.name}`
-          }
-        ];
-
-        emails = [
-          {
-            from: "admin@archive98.org",
-            subject: "Stage 1 Codeword Confirmed",
-            date: prevDate,
-            body: `${owner.name},\n\nYour Stage 1 vault codeword "${word1}" is active. Append your 2-digit extension number (deleted from inbox? check trash!) to open stage1_notes.zip.`
-          },
-          {
-            from: `${decoySuspect1.toLowerCase().replace(" ", ".")}@mail98.net`,
-            subject: "Meeting at " + decoyLoc1,
-            date: dateStr,
-            body: `Waiting near ${decoyLoc1} with the ${decoyItem1} paperwork. Did you get delayed?\n— ${decoySuspect1}`
-          },
-          {
-            from: `${decoySuspect2.toLowerCase().replace(" ", ".")}@mail98.net`,
-            subject: "Power outage log",
-            date: dateStr,
-            body: `Heads up, cameras near ${decoyLoc2} flickered around 9 PM. No sign of anyone there.\n— ${decoySuspect2}`
-          }
-        ];
-
-        docs = [
-          {
-            filename: "BANK_RECEIPT.TXT",
-            date: prevDate,
-            body: `FIRST TRUST DEPOSITORY (${year})\nClient: ${owner.name}\nSafe Box Number: ${num2}\nStatus: PAID IN FULL`
-          },
-          {
-            filename: "INVESTIGATION_LOG.TXT",
-            date: dateStr,
-            body: `Two-step vault protocol engaged.\nStep 1: Unlock stage1_notes.zip.\nStep 2: Use the clue inside to open final_truth.zip.`
-          }
-        ];
-
-        trash = [
-          {
-            filename: "PHONE_EXT.TXT",
-            date: dateStr,
-            body: `[RECOVERED FROM RECYCLE BIN]\n\nOffice Desk Phone Extension for ${owner.name}: ${num1}\n(Reminder: do not leave this lying around!)`
-          }
-        ];
-
-        hintSteps = [
-          `Vault 1 (stage1_notes.zip) combines Inbox codeword "${word1}" + Recycle Bin extension "${num1}".`,
-          `Vault 2 (final_truth.zip) combines Vault 1's word "${word2}" + Bank Receipt Safe Box "${num2}".`,
-          `Report: ${trueSuspect} | ${trueLoc} | ${trueItem}`
-        ];
-      } else {
-        // Chapter 5: 2 Vaults + Reversed Codeword Cipher + 3-field report
-        const pass1 = `${word1}${num1}`;
-        const revWord2 = word2.split("").reverse().join("");
-        const pass2 = `${revWord2}${num2}`;
-        vaults = [
-          {
-            id: "v1",
-            filename: "layer_alpha.zip",
-            password: pass1,
-            unlocked: false,
-            contentTitle: "CIPHER_RULE.TXT",
-            content:
-`ALPHA LAYER UNLOCKED — ${dateStr}
-
-If ${trueSuspect} finds this computer, I don't want them guessing the final password.
-RULE FOR "blackbox_omega.zip":
-1. Take the secret word: ${word2}
-2. Type it BACKWARDS (for example, CAT becomes TAC).
-3. Immediately add the 3-digit Gate Pass from My Documents (SECURITY_LOG.TXT).
-
-No spaces. Good luck.`
-          },
-          {
-            id: "v2",
-            filename: "blackbox_omega.zip",
-            password: pass2,
-            unlocked: false,
-            contentTitle: "OMEGA_TRUTH.TXT",
-            content:
-`BLACKBOX OMEGA — FINAL TRANSMISSION
-
-Everything in my inbox about ${decoySuspect2} and ${decoyLoc2} was planted to buy me time.
-
-THE REAL TRUTH:
-- Mastermind behind the cover-up: ${trueSuspect}
-- Critical item I smuggled out: ${trueItem}
-- Where I am waiting for extraction: ${trueLoc}
-
-Close this file and submit your Case Report immediately.
-— ${owner.name}`
-          }
-        ];
-
-        emails = [
-          {
-            from: "ops-desk@blackbox98.net",
-            subject: "Alpha Prefix",
-            date: prevDate,
-            body: `Agent ${ownerFirst},\n\nAlpha archive prefix set to: ${word1}\nCombine with your 2-digit terminal ID to access layer_alpha.zip.`
-          },
-          {
-            from: `${decoySuspect2.toLowerCase().replace(" ", ".")}@corp98.net`,
-            subject: "Urgent: " + decoyItem1,
-            date: dateStr,
-            body: `Meet me at ${decoyLoc2} with the ${decoyItem1} at once! (Note: This email looks suspiciously staged.)`
-          },
-          {
-            from: `${decoySuspect1.toLowerCase().replace(" ", ".")}@corp98.net`,
-            subject: "Wrong address?",
-            date: dateStr,
-            body: `Your courier tried delivering a blank envelope to ${decoyLoc1}. Did you change plans?\n— ${decoySuspect1}`
-          }
-        ];
-
-        docs = [
-          {
-            filename: "SECURITY_LOG.TXT",
-            date: dateStr,
-            body: `NIGHT GATE ENTRY LOG — ${dateStr}\nStaff: ${owner.name}\n3-Digit Gate Pass: ${num2}\nExit Time: 11:08 PM`
-          },
-          {
-            filename: "README_OMEGA.TXT",
-            date: prevDate,
-            body: `Protocol: Never store both halves of a key in the same folder. Crack layer_alpha.zip first, then follow the reversal rule for blackbox_omega.zip.`
-          }
-        ];
-
-        trash = [
-          {
-            filename: "TERMINAL_ID.TMP",
-            date: dateStr,
-            body: `[RECOVERED FROM RECYCLE BIN]\n\nWORKSTATION DIAGNOSTIC\nUser: ${owner.name}\n2-Digit Terminal ID: ${num1}`
-          }
-        ];
-
-        hintSteps = [
-          `Vault 1 (layer_alpha.zip) password is: ${pass1}`,
-          `Reverse "${word2}" → "${revWord2}", then add Gate Pass "${num2}" → Vault 2 password is: ${pass2}`,
-          `Report: ${trueSuspect} | ${trueLoc} | ${trueItem}`
-        ];
+      // === BUILD 4-DIGIT VAULT PIN + CRYSTAL-CLEAR DEDUCTION FORMULA (Ch. 2–5) ===
+      let vaultPin = null;
+      let pinClueNote = "";
+      let pinHintShort = "";
+      if (hasVault) {
+        const pinStyle = levelNum % 3;
+        if (pinStyle === 0) {
+          // Style A: 4-Digit Automated Backup Timestamp HHMM from System Logs!
+          vaultPin = backupTime.replace(":", "");
+          pinClueNote = `Vault Auto-Lock Reminder:\nPIN was reset to the 4-digit HHMM time of tonight's NIGHTLY_BACKUP entry in Sys Logs (omit the colon).`;
+          pinHintShort = `Check NIGHTLY_BACKUP time in 🖥️ Sys Logs (${backupTime} -> ${vaultPin}).`;
+        } else if (pinStyle === 1) {
+          // Style B: IT Admin's Phone Extension Typed Backwards!
+          vaultPin = decoy.ext.split("").reverse().join("");
+          pinClueNote = `Sticky Note (Desk #4):\n"For emergencies, the Vault PIN is ${decoy.name}'s 4-digit office extension typed BACKWARDS."`;
+          pinHintShort = `Find ${decoy.name}'s extension (${decoy.ext}) in Mail/Accuse and reverse it (${vaultPin}).`;
+        } else {
+          // Style C: Incident Time (HHMM) Directly From Breach Alert!
+          const roomCode = String(10 + ((levelNum * 13) % 85));
+          vaultPin = `${roomCode}${culprit.pc.slice(-2)}`;
+          // Make sure roomCode is clearly stated in Mail & culprit.pc is NOT spoiled! Use decoy's room + IT ticket code instead:
+          const tkt = String(40 + ((levelNum * 19) % 58));
+          const flr = String(10 + ((levelNum * 7) % 89));
+          vaultPin = `${tkt}${flr}`;
+          pinClueNote = `IT Encryption Policy:\nEncrypted evidence PIN = [Ticket #${tkt}] followed immediately by [Cabinet Code from SecOps Alert Email].`;
+          pinHintShort = `Combine Ticket #${tkt} + Cabinet Code ${flr} from Mail (${vaultPin}).`;
+          // Store flr so we place it in the SecOps email!
+          incident._cabCode = flr;
+        }
       }
 
+      // === BUILD CIPHERED PAYLOAD FOR CHAPTERS 4 & 5 ===
+      let cipherObj = null;
+      if (hasCipher) {
+        const useReverse = chapIdx === 3 && levelNum % 2 === 0;
+        const plain = `MOLE IS ${culprit.codename} ${culprit.badge}`;
+        if (useReverse) {
+          cipherObj = {
+            mode: "reverse",
+            shift: 0,
+            plain,
+            encoded: plain.split("").reverse().join(""),
+            hint: `Use ⇄ Reverse in 🔐 Decoder on the scrambled line!`
+          };
+        } else {
+          const sh = 2 + Math.floor(rng() * 7); // Caesar shift +2..+8
+          cipherObj = {
+            mode: "caesar",
+            shift: sh,
+            plain,
+            encoded: caesarShift(plain, sh),
+            hint: `Paste the scrambled text into 🔐 Decoder and shift by -${sh} (back ${sh} letters)!`
+          };
+        }
+      }
+
+      // === ASSEMBLE MAIL & CHAT INBOX MESSAGES ===
+      const mails = [
+        {
+          kind: "alert",
+          from: "SecOps Watchdog <alerts@zin-corp.internal>",
+          time: `${incTime}`,
+          subject: `🚨 BREACH ALERT: ${incident.title} (${incident.asset})`,
+          body: `Unauthorized ${incident.action} detected inside ${incident.room} at <span class="clue-hi">${incTime}</span>.${incident._cabCode ? ` Evidence archive sealed under Cabinet Code <span class="clue-hi">${incident._cabCode}</span>.` : ""} Cross-reference badge access, files, and staff alibis immediately.`
+        },
+        {
+          kind: "chat",
+          from: `💬 Team Chat — ${culprit.name} (${culprit.handle})`,
+          time: `${incHour - 2}:40`,
+          subject: "Signing off for the night",
+          body: `"Heading out early tonight! Leaving my laptop shut down—definitely won't be anywhere near ${incident.room} after 21:00. Catch everyone tomorrow."`
+        },
+        {
+          kind: "chat",
+          from: `💬 Team Chat — ${decoy.name} (Ext. ${decoy.ext})`,
+          time: `${incHour - 1}:15`,
+          subject: "Left coffee mug in breakroom",
+          body: `"Just swiped out at the main lobby. Ping my desk extension <span class="clue-hi">${decoy.ext}</span> in the morning if the night build fails!"`
+        },
+        {
+          kind: "mail",
+          from: `HR Directory <hr@zin-corp.internal>`,
+          time: "09:00",
+          subject: "Updated Department Codenames & Desk Roster",
+          body: suspects.map((s) => `${s.name}: <span class="clue-hi">${s.badge}</span> / Codename <span class="clue-hi">${s.codename}</span> / ${s.pc}`).join(" • ")
+        }
+      ];
+
+      // === ASSEMBLE SYSTEM LOGS (CLEAN INNOCENTS + SMOKING-GUN FORENSICS) ===
+      const logs = [
+        { time: `${incHour - 3}:55`, id: innocent2.badge, msg: `LOBBY_EXIT — Badge swiped out cleanly (${innocent2.pc} powered off)`, crit: false },
+        { time: `${incHour - 1}:12`, id: decoy.badge,     msg: `LOBBY_EXIT — Normal departure confirmed (${decoy.pc} idle)`, crit: false },
+        { time: backupTime,          id: "SYS-CRON",      msg: `NIGHTLY_BACKUP — Snapshot verified OK (Archive intact)`, crit: false }
+      ];
+
+      if (chapIdx === 0) {
+        // Chapter 1: Culprit's Badge ID appears directly in the CRITICAL breach log, contradicting their alibi!
+        logs.splice(2, 0, {
+          time: incTime,
+          id: culprit.badge,
+          msg: `CRITICAL ${incident.action} — ${incident.asset} copied in ${incident.room}`,
+          crit: true
+        });
+      } else if (chapIdx === 1) {
+        // Chapter 2: System log shows MASKED user; unlocking the PIN Vault exposes the true Badge ID!
+        logs.splice(2, 0, {
+          time: incTime,
+          id: "MASKED-??",
+          msg: `CRITICAL ${incident.action} — Identity sealed inside vault_audit.enc`,
+          crit: true
+        });
+      } else if (chapIdx === 2) {
+        // Chapter 3: Main log shows SPOOFED decoy badge; Deleted Trash file proves decoy's keycard was cloned on Culprit's workstation!
+        logs.splice(2, 0, {
+          time: incTime,
+          id: decoy.badge,
+          msg: `CRITICAL ${incident.action} — WARNING: Badge swipe rejected biometric check!`,
+          crit: true
+        });
+      } else {
+        // Chapters 4 & 5: Main log shows encrypted external drop; Vault + Trash + Cipher converge on Culprit!
+        logs.splice(2, 0, {
+          time: incTime,
+          id: "TOR-NODE",
+          msg: `CRITICAL ${incident.action} — Encrypted payload dropped into vault_audit.enc`,
+          crit: true
+        });
+      }
+
+      // === ASSEMBLE FILES, TRASH & ENCRYPTED VAULT CONTENT ===
+      let vaultPlainBody = "";
+      if (chapIdx === 1) {
+        vaultPlainBody = `DECRYPTED AUDIT RECEIPT (${incTime})\n----------------------------------\nAsset: ${incident.asset}\nAuthorized Workstation: ${culprit.pc}\nBiometric Badge Match: ${culprit.badge} (${culprit.dept})\nStatus: EXFILTRATION COMPLETE`;
+      } else if (chapIdx === 2) {
+        vaultPlainBody = `DECRYPTED CLONE LOG (${incTime})\n----------------------------------\nNotice: ${decoy.badge} was cloned via NFC skimmer.\nSkimmer plugged into: ${culprit.pc} (Owner: ${culprit.codename}).\nCheck restored Trash file to confirm Workstation IP!`;
+      } else if (hasCipher) {
+        vaultPlainBody = `DECRYPTED INTERCEPT (${incTime})\n----------------------------------\nAsset: ${incident.asset}\nIntercepted Dead-Drop Transmission:\n\n${cipherObj.encoded}\n\n(Use the 🔐 Decoder App to decrypt the insider's identity!)`;
+      }
+
+      const trashBody = hasTrash
+        ? `RECOVERED SHREDDED LOG (deleted_trace.bak)\n----------------------------------\nTimestamp: ${incTime}\nOriginating Terminal: ${culprit.pc}\nUSB Serial Matched Staff Badge: ${culprit.badge}\nNote: Suspect attempted permanent erase at ${incHour}:${String(Math.min(59, incMin + 2)).padStart(2, "0")}.`
+        : null;
+
+      const debrief = chapIdx === 0
+        ? `${culprit.name} (${culprit.badge}) claimed to have left early, yet System Logs recorded their badge executing ${incident.action} at ${incTime}!`
+        : (chapIdx === 1
+          ? `Unlocking the vault (PIN ${vaultPin}) revealed ${culprit.name}'s biometric badge (${culprit.badge}) on ${culprit.pc} during the ${incTime} breach.`
+          : (chapIdx === 2
+            ? `${decoy.name}'s badge was framed! Restoring the shredded Trash log & cracking PIN ${vaultPin} traced the NFC clone straight to ${culprit.name} (${culprit.pc} / ${culprit.badge}).`
+            : `Cracking Vault PIN ${vaultPin} and decoding the intercepted transmission revealed "${cipherObj.plain}" — exposing ${culprit.name}!`));
+
       return {
-        caseNum,
-        tier,
-        owner,
-        year,
-        dateStr,
-        clockTime,
-        askItem,
-        twoVaults,
-        vaults,
-        emails,
-        docs,
-        trash,
-        choices: {
-          suspects: shuffle(suspects, rng),
-          locations: shuffle(locations, rng),
-          items: shuffle(items, rng)
-        },
-        answer: {
-          suspect: trueSuspect,
-          location: trueLoc,
-          item: trueItem
-        },
-        hintSteps
+        levelNum,
+        chapIdx,
+        incident,
+        incTime,
+        suspects,
+        culprit,
+        decoy,
+        mails,
+        logs,
+        hasVault,
+        vaultPin,
+        pinClueNote,
+        pinHintShort,
+        vaultPlainBody,
+        hasTrash,
+        trashBody,
+        hasCipher,
+        cipherObj,
+        debrief
       };
     }
 
@@ -1542,7 +1448,7 @@ Close this file and submit your Case Report immediately.
     }
 
     // ==============================================
-    // RETRO AUDIO (WIN98 BLIPS & CHIMES)
+    // MECHANICAL KEYBOARD, VAULT UNLOCK & CASE WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
@@ -1555,56 +1461,65 @@ Close this file and submit your Case Report immediately.
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.1) {
+    function playTone(freq, dur, type = "sine", vol = 0.085) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      const g = audioCtx.createGain();
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(vol, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.005);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+      osc.connect(g);
+      g.connect(audioCtx.destination);
       osc.start(now);
       osc.stop(now + dur + 0.02);
     }
 
-    function sfxClick() { playTone(680, 0.035, "triangle", 0.07); }
-    function sfxError() {
-      playTone(185, 0.18, "sawtooth", 0.13);
-      setTimeout(() => playTone(145, 0.22, "sawtooth", 0.12), 110);
+    function sfxTabClick() { playTone(680, 0.032, "triangle", 0.06); }
+    function sfxVaultUnlock() {
+      [523.25, 783.99, 1046.5].forEach((f, i) => setTimeout(() => playTone(f, 0.18, "sine", 0.1), i * 55));
     }
-    function sfxUnlock() {
-      [523.25, 659.25, 783.99].forEach((f, i) => setTimeout(() => playTone(f, 0.16, "sine", 0.11), i * 75));
+    function sfxTrashRestore() {
+      playTone(420, 0.07, "triangle", 0.09);
+      setTimeout(() => playTone(680, 0.11, "sine", 0.09), 50);
     }
-    function sfxCaseClosed() {
-      [392.0, 523.25, 659.25, 783.99, 1046.5].forEach((f, i) => setTimeout(() => playTone(f, 0.26, "sine", 0.12), i * 80));
+    function sfxAccessDenied() {
+      playTone(175, 0.14, "sawtooth", 0.11);
+      setTimeout(() => playTone(135, 0.18, "sawtooth", 0.1), 80);
+    }
+    function sfxCaseSolvedWin() {
+      [440.0, 554.37, 659.25, 880.0, 1108.73].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.48, "sine", 0.11), i * 80);
+      });
     }
 
     // ==============================================
-    // UI STATE & WINDOW MANAGER
+    // GAME STATE, APP RENDERERS & INTERACTION
     // ==============================================
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
-    const vaultPill = document.getElementById("vaultPill");
+    const attemptsPill = document.getElementById("attemptsPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const ownerNameBar = document.getElementById("ownerNameBar");
-    const caseYearBar = document.getElementById("caseYearBar");
-    const mailBadge = document.getElementById("mailBadge");
-    const vaultBadge = document.getElementById("vaultBadge");
-    const stickyText = document.getElementById("stickyText");
-    const retroClock = document.getElementById("retroClock");
-    const appWindow = document.getElementById("appWindow");
-    const winTitle = document.getElementById("winTitle");
-    const winBody = document.getElementById("winBody");
-    const taskbarTab = document.getElementById("taskbarTab");
-    const startBtn = document.getElementById("startBtn");
-    const startMenu = document.getElementById("startMenu");
+    const briefText = document.getElementById("briefText");
+    const briefBadges = document.getElementById("briefBadges");
+    const osClock = document.getElementById("osClock");
+    const osDock = document.getElementById("osDock");
+    const vaultDot = document.getElementById("vaultDot");
+    const cipherDot = document.getElementById("cipherDot");
+
+    const paneMail = document.getElementById("paneMail");
+    const paneFiles = document.getElementById("paneFiles");
+    const paneLogs = document.getElementById("paneLogs");
+    const paneDecoder = document.getElementById("paneDecoder");
+    const paneVerdict = document.getElementById("paneVerdict");
+
     const statusToast = document.getElementById("statusToast");
     const winOverlay = document.getElementById("winOverlay");
+    const overlayIcon = document.getElementById("overlayIcon");
     const winHeading = document.getElementById("winHeading");
     const winText = document.getElementById("winText");
     const nextLevelBtn = document.getElementById("nextLevelBtn");
@@ -1612,428 +1527,418 @@ Close this file and submit your Case Report immediately.
     const openPickerBtn = document.getElementById("openPickerBtn");
 
     let solvedSet = new Set();
-    let currentCaseNum = 1;
+    let currentLevelNum = 1;
     try {
       solvedSet = new Set(JSON.parse(localStorage.getItem("zinplay_ossleuth_500_solved") || "[]"));
       const last = parseInt(localStorage.getItem("zinplay_ossleuth_500_last") || "1", 10);
-      if (last >= 1 && last <= TOTAL_LEVELS) currentCaseNum = last;
+      if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
     let curCase = null;
-    let activeApp = null;
-    let selectedMailIdx = 0;
-    let selectedDocIdx = 0;
-    let selectedTrashIdx = 0;
-    let hintLevel = 0;
+    let activeApp = "mail";
+    let vaultUnlocked = false;
+    let trashRestored = false;
+    let warrantsLeft = 2;
+    let eliminatedIds = new Set();
     let caseWon = false;
+    let caseLost = false;
+    let hintStage = 0;
+
+    // Live Decoder Tool State
+    let decText = "";
+    let decShift = 0;
+    let decReversed = false;
     let toastTimer = null;
 
-    function showToast(msg, ms = 3200) {
+    function showToast(msg, ms = 2700) {
       statusToast.textContent = msg;
       statusToast.classList.add("show");
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function updateHUD() {
-      const chap = getChapter(currentCaseNum);
+    function switchApp(appKey) {
+      activeApp = appKey;
+      osDock.querySelectorAll(".dock-app").forEach((b) => {
+        b.classList.toggle("active", b.dataset.app === appKey);
+      });
+      paneMail.classList.toggle("hidden", appKey !== "mail");
+      paneFiles.classList.toggle("hidden", appKey !== "files");
+      paneLogs.classList.toggle("hidden", appKey !== "logs");
+      paneDecoder.classList.toggle("hidden", appKey !== "decoder");
+      paneVerdict.classList.toggle("hidden", appKey !== "verdict");
+    }
+
+    osDock.querySelectorAll(".dock-app").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        initAudio();
+        sfxTabClick();
+        switchApp(btn.dataset.app);
+      });
+    });
+
+    function renderBriefingAndHUD() {
+      const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Case #${currentCaseNum} / ${TOTAL_LEVELS}`;
-      const unlockedCount = curCase.vaults.filter((v) => v.unlocked).length;
-      const lockedLeft = curCase.vaults.length - unlockedCount;
-
-      vaultPill.textContent = `Vaults: ${unlockedCount} / ${curCase.vaults.length}`;
+      levelTitle.textContent = `Case #${currentLevelNum} / ${TOTAL_LEVELS} — ${curCase.incident.title}`;
+      attemptsPill.textContent = `Warrants: ${warrantsLeft}`;
       solvedCounter.textContent = `Solved: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Case ${currentCaseNum} / 500 ▾`;
+      openPickerBtn.textContent = `Case ${currentLevelNum} / 500 ▾`;
+      osClock.textContent = `DISK_${String(currentLevelNum).padStart(3, "0")} • ${curCase.incTime}`;
 
-      mailBadge.textContent = curCase.emails.length;
-      vaultBadge.textContent = lockedLeft > 0 ? lockedLeft : "✓";
-      vaultBadge.classList.toggle("unlocked", lockedLeft === 0);
-    }
+      briefText.innerHTML = `<strong>INCIDENT:</strong> ${escapeHtml(curCase.incident.asset)} breached in ${escapeHtml(curCase.incident.room)} at <strong>${curCase.incTime}</strong>. Expose the insider!`;
 
-    function closeWindow() {
-      activeApp = null;
-      appWindow.classList.remove("open");
-      taskbarTab.textContent = "Desktop";
-    }
-
-    function openApp(appId) {
-      initAudio();
-      sfxClick();
-      startMenu.classList.remove("open");
-      activeApp = appId;
-      appWindow.classList.add("open");
-
-      if (appId === "mail") {
-        winTitle.textContent = "📧 Inbox 98 — Offline Mail";
-        taskbarTab.textContent = "Inbox 98";
-        renderMailApp();
-      } else if (appId === "docs") {
-        winTitle.textContent = "📁 C:\\My Documents";
-        taskbarTab.textContent = "My Documents";
-        renderDocsApp();
-      } else if (appId === "trash") {
-        winTitle.textContent = "🗑️ Recycle Bin";
-        taskbarTab.textContent = "Recycle Bin";
-        renderTrashApp();
-      } else if (appId === "vault") {
-        winTitle.textContent = "🔐 WinZip 98 — Encrypted Vaults";
-        taskbarTab.textContent = "Locked ZIPs";
-        renderVaultApp();
-      } else if (appId === "report") {
-        winTitle.textContent = "📋 Official Case Report";
-        taskbarTab.textContent = "Case Report";
-        renderReportApp();
+      briefBadges.innerHTML = "";
+      if (curCase.hasVault) {
+        const b = document.createElement("span");
+        b.className = "mini-status" + (vaultUnlocked ? " ok" : "");
+        b.textContent = vaultUnlocked ? "🔓 Vault Open" : "🔒 Vault Locked";
+        briefBadges.appendChild(b);
       }
+      if (curCase.hasTrash) {
+        const b = document.createElement("span");
+        b.className = "mini-status" + (trashRestored ? " ok" : "");
+        b.textContent = trashRestored ? "♻️ Trash Recovered" : "🗑️ 1 Deleted File";
+        briefBadges.appendChild(b);
+      }
+      if (curCase.hasCipher) {
+        const b = document.createElement("span");
+        b.className = "mini-status";
+        b.textContent = "🔐 Cipher Active";
+        briefBadges.appendChild(b);
+      }
+
+      vaultDot.style.display = ((curCase.hasVault && !vaultUnlocked) || (curCase.hasTrash && !trashRestored)) ? "block" : "none";
+      cipherDot.style.display = (curCase.hasCipher && vaultUnlocked) ? "block" : "none";
     }
 
     function renderMailApp() {
-      winBody.innerHTML = "";
-      const list = document.createElement("div");
-      list.className = "item-list";
-
-      curCase.emails.forEach((em, idx) => {
-        const row = document.createElement("button");
-        row.type = "button";
-        row.className = "list-row" + (idx === selectedMailIdx ? " selected" : "");
-        row.innerHTML = `<span><strong>${em.subject}</strong><br><span class="list-sub">From: ${em.from}</span></span><span class="list-sub">${em.date}</span>`;
-        row.addEventListener("click", () => {
-          sfxClick();
-          selectedMailIdx = idx;
-          renderMailApp();
-        });
-        list.appendChild(row);
-      });
-
-      const em = curCase.emails[selectedMailIdx] || curCase.emails[0];
-      const reader = document.createElement("div");
-      reader.className = "win98-sunken";
-      reader.innerHTML = `<div class="reader-meta"><strong>From:</strong> ${em.from}<br><strong>Date:</strong> ${em.date}<br><strong>Subject:</strong> ${em.subject}</div>`;
-      const bodyDiv = document.createElement("div");
-      bodyDiv.className = "reader-box";
-      bodyDiv.textContent = em.body;
-      reader.appendChild(bodyDiv);
-
-      winBody.appendChild(list);
-      winBody.appendChild(reader);
-    }
-
-    function renderDocsApp() {
-      winBody.innerHTML = "";
-      const list = document.createElement("div");
-      list.className = "item-list";
-
-      curCase.docs.forEach((doc, idx) => {
-        const row = document.createElement("button");
-        row.type = "button";
-        row.className = "list-row" + (idx === selectedDocIdx ? " selected" : "");
-        row.innerHTML = `<span>📄 <strong>${doc.filename}</strong></span><span class="list-sub">${doc.date}</span>`;
-        row.addEventListener("click", () => {
-          sfxClick();
-          selectedDocIdx = idx;
-          renderDocsApp();
-        });
-        list.appendChild(row);
-      });
-
-      const doc = curCase.docs[selectedDocIdx] || curCase.docs[0];
-      const reader = document.createElement("div");
-      reader.className = "win98-sunken";
-      reader.innerHTML = `<div class="reader-meta"><strong>File:</strong> C:\\My Documents\\${doc.filename}</div>`;
-      const bodyDiv = document.createElement("div");
-      bodyDiv.className = "reader-box";
-      bodyDiv.textContent = doc.body;
-      reader.appendChild(bodyDiv);
-
-      winBody.appendChild(list);
-      winBody.appendChild(reader);
-    }
-
-    function renderTrashApp() {
-      winBody.innerHTML = "";
-      const list = document.createElement("div");
-      list.className = "item-list";
-
-      curCase.trash.forEach((item, idx) => {
-        const row = document.createElement("button");
-        row.type = "button";
-        row.className = "list-row" + (idx === selectedTrashIdx ? " selected" : "");
-        row.innerHTML = `<span>🗑️ <strong>${item.filename}</strong></span><span class="list-sub">Deleted ${item.date}</span>`;
-        row.addEventListener("click", () => {
-          sfxClick();
-          selectedTrashIdx = idx;
-          renderTrashApp();
-        });
-        list.appendChild(row);
-      });
-
-      const item = curCase.trash[selectedTrashIdx] || curCase.trash[0];
-      const reader = document.createElement("div");
-      reader.className = "win98-sunken";
-      reader.innerHTML = `<div class="reader-meta"><strong>Recovered File:</strong> ${item.filename}</div>`;
-      const bodyDiv = document.createElement("div");
-      bodyDiv.className = "reader-box";
-      bodyDiv.textContent = item.body;
-      reader.appendChild(bodyDiv);
-
-      winBody.appendChild(list);
-      winBody.appendChild(reader);
-    }
-
-    function renderVaultApp() {
-      winBody.innerHTML = "";
-
-      curCase.vaults.forEach((v, idx) => {
+      paneMail.innerHTML = "";
+      for (const m of curCase.mails) {
         const card = document.createElement("div");
-        card.className = "vault-card" + (v.unlocked ? " open-zip" : "");
+        card.className = "msg-card " + (m.kind === "chat" ? "chat-card" : (m.kind === "alert" ? "alert-card" : ""));
+        card.innerHTML = `
+          <div class="msg-meta"><span class="msg-from">${escapeHtml(m.from)}</span><span>${escapeHtml(m.time)}</span></div>
+          <div class="msg-subj">${escapeHtml(m.subject)}</div>
+          <div class="msg-body">${m.body}</div>
+        `;
+        paneMail.appendChild(card);
+      }
+    }
 
-        const header = document.createElement("div");
-        header.style.display = "flex";
-        header.style.justifyContent = "space-between";
-        header.style.alignItems = "center";
-        header.innerHTML = `<strong>${v.unlocked ? "🔓" : "🔒"} ${v.filename}</strong><span style="font-size:0.74rem; font-weight:700; color:${v.unlocked ? "#15803d" : "#b91c1c"}">${v.unlocked ? "DECRYPTED" : "PASSWORD REQUIRED"}</span>`;
-        card.appendChild(header);
+    function renderFilesApp() {
+      paneFiles.innerHTML = "";
 
-        if (!v.unlocked) {
-          const row = document.createElement("div");
-          row.className = "vault-input-row";
+      // 1. Sticky Note / PIN Formula (When Vault Exists)
+      if (curCase.hasVault) {
+        const noteCard = document.createElement("div");
+        noteCard.className = "file-card";
+        noteCard.innerHTML = `
+          <div class="file-head"><span class="file-name">📝 sticky_note.txt</span><span class="file-tag">DESKTOP NOTE</span></div>
+          <div class="file-content">${escapeHtml(curCase.pinClueNote)}</div>
+        `;
+        paneFiles.appendChild(noteCard);
 
-          const inp = document.createElement("input");
-          inp.type = "text";
-          inp.className = "win98-input";
-          inp.placeholder = "Enter password...";
-          inp.autocomplete = "off";
+        // 2. PIN-Protected Encrypted Vault File!
+        const vCard = document.createElement("div");
+        vCard.className = "file-card " + (vaultUnlocked ? "vault-open" : "vault-locked");
+        if (!vaultUnlocked) {
+          vCard.innerHTML = `
+            <div class="file-head"><span class="file-name">🔒 vault_audit.enc</span><span class="file-tag" style="color:#fde68a;">4-DIGIT PIN REQUIRED</span></div>
+            <div class="vault-unlock-row">
+              <input id="vaultPinInput" class="pin-input" type="text" inputmode="numeric" maxlength="4" placeholder="Enter 4-digit PIN..." />
+              <button id="unlockVaultBtn" class="os-act-btn gold-btn" type="button">🔓 Unlock</button>
+            </div>
+          `;
+          paneFiles.appendChild(vCard);
 
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "win98-btn primary";
-          btn.textContent = "Unlock";
-
-          const errMsg = document.createElement("div");
-          errMsg.style.fontSize = "0.75rem";
-          errMsg.style.color = "#b91c1c";
-          errMsg.style.fontWeight = "700";
-
-          const tryUnlock = () => {
-            const val = inp.value.trim().toUpperCase();
-            if (val === v.password.toUpperCase()) {
-              v.unlocked = true;
-              sfxUnlock();
-              updateHUD();
-              renderVaultApp();
-              showToast(`${v.filename} unlocked! Read the decrypted file.`, 2500);
+          const pinIn = vCard.querySelector("#vaultPinInput");
+          const uBtn = vCard.querySelector("#unlockVaultBtn");
+          const attemptUnlock = () => {
+            initAudio();
+            const val = (pinIn.value || "").trim();
+            if (val === curCase.vaultPin) {
+              vaultUnlocked = true;
+              sfxVaultUnlock();
+              showToast("🔓 Vault decrypted! Inspect the recovered smoking-gun evidence!", 2500);
+              renderFilesApp();
+              renderBriefingAndHUD();
             } else {
-              sfxError();
-              errMsg.textContent = "Access Denied — Wrong password! Check Inbox, Docs & Recycle Bin.";
+              sfxAccessDenied();
+              showToast("❌ Invalid PIN! Read sticky_note.txt + Mail/Sys Logs to deduce the 4 digits.", 2600);
             }
           };
-
-          btn.addEventListener("click", tryUnlock);
-          inp.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") tryUnlock();
-          });
-
-          row.appendChild(inp);
-          row.appendChild(btn);
-          card.appendChild(row);
-          card.appendChild(errMsg);
+          uBtn.addEventListener("click", attemptUnlock);
+          pinIn.addEventListener("keydown", (e) => { if (e.key === "Enter") attemptUnlock(); });
         } else {
-          const box = document.createElement("div");
-          box.className = "win98-sunken";
-          box.innerHTML = `<div class="reader-meta"><strong>Extracted:</strong> ${v.contentTitle}</div>`;
-          const bodyDiv = document.createElement("div");
-          bodyDiv.className = "reader-box";
-          bodyDiv.textContent = v.content;
-          box.appendChild(bodyDiv);
-          card.appendChild(box);
+          vCard.innerHTML = `
+            <div class="file-head"><span class="file-name">🔓 vault_audit.enc (DECRYPTED)</span><span class="file-tag" style="color:#86efac;">OPEN</span></div>
+            <div class="file-content">${escapeHtml(curCase.vaultPlainBody)}</div>
+          `;
+          if (curCase.hasCipher) {
+            const sendBtn = document.createElement("button");
+            sendBtn.type = "button";
+            sendBtn.className = "os-act-btn";
+            sendBtn.textContent = "📤 Send Scrambled Text to 🔐 Decoder";
+            sendBtn.addEventListener("click", () => {
+              initAudio();
+              sfxTabClick();
+              decText = curCase.cipherObj.encoded;
+              decShift = 0;
+              decReversed = false;
+              renderDecoderApp();
+              switchApp("decoder");
+              showToast("Loaded into Decoder! Tap − Shift or ⇄ Reverse to reveal plaintext.", 2500);
+            });
+            vCard.appendChild(sendBtn);
+          }
+          paneFiles.appendChild(vCard);
         }
+      } else {
+        const infoCard = document.createElement("div");
+        infoCard.className = "file-card";
+        infoCard.innerHTML = `
+          <div class="file-head"><span class="file-name">📄 case_checklist.txt</span><span class="file-tag">README</span></div>
+          <div class="file-content">No encrypted vault on this workstation.\nCompare the CRITICAL breach time (${curCase.incTime}) in 🖥️ Sys Logs against staff alibis in 📧 Mail & Chat, then file your warrant in ⚖️ Accuse!</div>
+        `;
+        paneFiles.appendChild(infoCard);
+      }
 
-        winBody.appendChild(card);
-      });
-
-      const allOpen = curCase.vaults.every((v) => v.unlocked);
-      if (allOpen) {
-        const goBtn = document.createElement("button");
-        goBtn.type = "button";
-        goBtn.className = "win98-btn primary";
-        goBtn.textContent = "📋 Proceed to Case Report →";
-        goBtn.addEventListener("click", () => openApp("report"));
-        winBody.appendChild(goBtn);
+      // 3. Recoverable Trash Bin File (Chapters 3–5)
+      if (curCase.hasTrash) {
+        const tCard = document.createElement("div");
+        tCard.className = "file-card " + (trashRestored ? "vault-open" : "trash-item");
+        if (!trashRestored) {
+          tCard.innerHTML = `
+            <div class="file-head"><span class="file-name">🗑️ Trash / deleted_trace.bak</span><span class="file-tag">SHREDDED</span></div>
+            <div style="font-size:0.78rem; color:#94a3b8;">A hidden forensic backup was sent to Trash minutes after the breach.</div>
+            <button id="restoreTrashBtn" class="os-act-btn" type="button">♻️ Restore Deleted File</button>
+          `;
+          paneFiles.appendChild(tCard);
+          tCard.querySelector("#restoreTrashBtn").addEventListener("click", () => {
+            initAudio();
+            trashRestored = true;
+            sfxTrashRestore();
+            showToast("♻️ Restored deleted_trace.bak from Trash!", 2200);
+            renderFilesApp();
+            renderBriefingAndHUD();
+          });
+        } else {
+          tCard.innerHTML = `
+            <div class="file-head"><span class="file-name">♻️ deleted_trace.bak (RECOVERED)</span><span class="file-tag" style="color:#86efac;">RESTORED</span></div>
+            <div class="file-content">${escapeHtml(curCase.trashBody)}</div>
+          `;
+          paneFiles.appendChild(tCard);
+        }
       }
     }
 
-    function renderReportApp() {
-      winBody.innerHTML = "";
-      const info = document.createElement("div");
-      info.className = "win98-sunken";
-      info.innerHTML = `<strong>Case #${curCase.caseNum} — ${curCase.owner.name}</strong><br><span style="color:#475569; font-size:0.78rem;">Select your verified conclusions from the decrypted evidence to close this case.</span>`;
-      winBody.appendChild(info);
+    function renderLogsApp() {
+      paneLogs.innerHTML = "";
+      const box = document.createElement("div");
+      box.className = "log-box";
+      box.innerHTML = `<div class="log-title"><span>/var/log/security_audit.log</span><span>LIVE READOUT</span></div>`;
+      for (const lg of curCase.logs) {
+        const row = document.createElement("div");
+        row.className = "log-row" + (lg.crit ? " crit" : "");
+        row.innerHTML = `
+          <span class="log-time">${escapeHtml(lg.time)}</span>
+          <span class="log-id">${escapeHtml(lg.id)}</span>
+          <span>${escapeHtml(lg.msg)}</span>
+        `;
+        box.appendChild(row);
+      }
+      paneLogs.appendChild(box);
+    }
 
-      const formBox = document.createElement("div");
-      formBox.className = "win98-sunken";
+    function evalDecodedOutput() {
+      let s = (decText || "").toUpperCase();
+      if (decReversed) s = s.split("").reverse().join("");
+      if (decShift !== 0) s = caesarShift(s, decShift);
+      return s || "(Paste or send encrypted text from Vault here...)";
+    }
 
-      const makeSelect = (id, label, options) => {
-        const wrap = document.createElement("div");
-        wrap.className = "report-field";
-        const lbl = document.createElement("label");
-        lbl.setAttribute("for", id);
-        lbl.textContent = label;
-        const sel = document.createElement("select");
-        sel.id = id;
-        sel.className = "win98-select";
-        const def = document.createElement("option");
-        def.value = "";
-        def.textContent = "-- Select from evidence --";
-        sel.appendChild(def);
-        options.forEach((opt) => {
-          const o = document.createElement("option");
-          o.value = opt;
-          o.textContent = opt;
-          sel.appendChild(o);
-        });
-        wrap.appendChild(lbl);
-        wrap.appendChild(sel);
-        return { wrap, sel };
+    function renderDecoderApp() {
+      paneDecoder.innerHTML = "";
+      const card = document.createElement("div");
+      card.className = "decoder-card";
+      card.innerHTML = `
+        <div class="file-head"><span class="file-name">🔐 Forensic Cipher Decoder</span><span class="file-tag">CAESAR + REVERSE</span></div>
+        <input id="cipherIn" class="cipher-input" type="text" placeholder="Enter scrambled text or click Send from Vault..." value="${escapeHtml(decText)}" />
+        <div class="decoder-controls">
+          <div class="shift-btn-group">
+            <button id="decMinus" class="os-act-btn" type="button">−1 Shift</button>
+            <span id="decShiftLbl" style="font-family:monospace; font-size:0.8rem; font-weight:900; color:#fde047; min-width:74px; text-align:center;">SHIFT: ${decShift >= 0 ? "+" : ""}${decShift}</span>
+            <button id="decPlus" class="os-act-btn" type="button">+1 Shift</button>
+          </div>
+          <button id="decRevBtn" class="os-act-btn ${decReversed ? "gold-btn" : ""}" type="button">⇄ Reverse: ${decReversed ? "ON" : "OFF"}</button>
+        </div>
+        <div style="font-size:0.7rem; font-weight:800; color:#94a3b8; text-transform:uppercase;">Decoded Output:</div>
+        <div id="decOut" class="decoder-out">${escapeHtml(evalDecodedOutput())}</div>
+      `;
+      paneDecoder.appendChild(card);
+
+      const cIn = card.querySelector("#cipherIn");
+      const outEl = card.querySelector("#decOut");
+      const lblEl = card.querySelector("#decShiftLbl");
+      const revBtn = card.querySelector("#decRevBtn");
+
+      const refreshOut = () => {
+        lblEl.textContent = `SHIFT: ${decShift >= 0 ? "+" : ""}${decShift}`;
+        revBtn.textContent = `⇄ Reverse: ${decReversed ? "ON" : "OFF"}`;
+        revBtn.className = "os-act-btn" + (decReversed ? " gold-btn" : "");
+        outEl.textContent = evalDecodedOutput();
       };
 
-      const fSuspect = makeSelect("repSuspect", "1. Who is the real culprit / threat?", curCase.choices.suspects);
-      const fLoc = makeSelect("repLocation", "2. Where is the missing owner hiding?", curCase.choices.locations);
-      formBox.appendChild(fSuspect.wrap);
-      formBox.appendChild(fLoc.wrap);
+      cIn.addEventListener("input", () => { decText = cIn.value; refreshOut(); });
+      card.querySelector("#decMinus").addEventListener("click", () => {
+        initAudio(); sfxTabClick(); decShift = Math.max(-25, decShift - 1); refreshOut();
+      });
+      card.querySelector("#decPlus").addEventListener("click", () => {
+        initAudio(); sfxTabClick(); decShift = Math.min(25, decShift + 1); refreshOut();
+      });
+      revBtn.addEventListener("click", () => {
+        initAudio(); sfxTabClick(); decReversed = !decReversed; refreshOut();
+      });
+    }
 
-      let fItem = null;
-      if (curCase.askItem) {
-        fItem = makeSelect("repItem", "3. What key evidence item is involved?", curCase.choices.items);
-        formBox.appendChild(fItem.wrap);
+    function renderVerdictApp() {
+      paneVerdict.innerHTML = "";
+      const head = document.createElement("div");
+      head.style.cssText = "font-size:0.78rem; color:#fde68a; font-weight:800; margin-bottom:2px;";
+      head.textContent = `⚖️ Select the Insider Responsible for ${curCase.incident.title} (${warrantsLeft} Warrant${warrantsLeft === 1 ? "" : "s"} Left):`;
+      paneVerdict.appendChild(head);
+
+      const grid = document.createElement("div");
+      grid.className = "suspects-grid";
+
+      for (const s of curCase.suspects) {
+        const isElim = eliminatedIds.has(s.id);
+        const isGuilty = (caseWon || caseLost) && s.id === curCase.culprit.id;
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "suspect-card" + (isElim ? " eliminated" : "") + (isGuilty ? " guilty" : "");
+        card.disabled = isElim || caseWon || caseLost;
+        card.innerHTML = `
+          <div class="sc-top"><span>${escapeHtml(s.name)}</span><span class="sc-badge">${escapeHtml(s.badge)}</span></div>
+          <div class="sc-meta">${escapeHtml(s.role)} • ${escapeHtml(s.pc)} • ${escapeHtml(s.codename)}</div>
+          <div class="sc-alibi">"${escapeHtml(s.alibi)}"</div>
+        `;
+        card.addEventListener("click", () => accuseSuspect(s));
+        grid.appendChild(card);
       }
 
-      const fb = document.createElement("div");
-      fb.className = "report-feedback";
-      formBox.appendChild(fb);
+      paneVerdict.appendChild(grid);
+    }
 
-      const submitBtn = document.createElement("button");
-      submitBtn.type = "button";
-      submitBtn.className = "win98-btn primary";
-      submitBtn.style.width = "100%";
-      submitBtn.style.marginTop = "6px";
-      submitBtn.style.padding = "9px";
-      submitBtn.textContent = "Submit Official Case Report";
+    function accuseSuspect(s) {
+      if (caseWon || caseLost || eliminatedIds.has(s.id)) return;
+      initAudio();
 
-      submitBtn.addEventListener("click", () => {
-        if (caseWon) return;
-        const sVal = fSuspect.sel.value;
-        const lVal = fLoc.sel.value;
-        const iVal = fItem ? fItem.sel.value : curCase.answer.item;
+      if (s.id === curCase.culprit.id) {
+        caseWon = true;
+        solvedSet.add(currentLevelNum);
+        try {
+          localStorage.setItem("zinplay_ossleuth_500_solved", JSON.stringify([...solvedSet]));
+        } catch (e) {}
+        sfxCaseSolvedWin();
+        renderVerdictApp();
+        renderBriefingAndHUD();
 
-        if (!sVal || !lVal || (curCase.askItem && !iVal)) {
-          sfxError();
-          fb.className = "report-feedback err";
-          fb.textContent = "Please select an answer for every field before filing the report.";
-          return;
-        }
+        const isLast = currentLevelNum === TOTAL_LEVELS;
+        overlayIcon.textContent = "✅";
+        winHeading.textContent = `Case #${currentLevelNum} Closed!`;
+        winText.textContent = curCase.debrief;
+        nextLevelBtn.textContent = isLast ? "Replay Case #1" : `Next Case (#${currentLevelNum + 1}) →`;
+        setTimeout(() => winOverlay.classList.add("show"), 420);
+      } else {
+        warrantsLeft--;
+        eliminatedIds.add(s.id);
+        sfxAccessDenied();
+        renderVerdictApp();
+        renderBriefingAndHUD();
 
-        let matches = 0;
-        const total = curCase.askItem ? 3 : 2;
-        if (sVal === curCase.answer.suspect) matches++;
-        if (lVal === curCase.answer.location) matches++;
-        if (curCase.askItem && iVal === curCase.answer.item) matches++;
-
-        if (matches === total) {
-          caseWon = true;
-          solvedSet.add(currentCaseNum);
-          try {
-            localStorage.setItem("zinplay_ossleuth_500_solved", JSON.stringify([...solvedSet]));
-          } catch (e) {}
-          updateHUD();
-          sfxCaseClosed();
-
-          const isLast = currentCaseNum === TOTAL_LEVELS;
-          winHeading.textContent = isLast ? "All 500 Cases Solved!" : `Case #${currentCaseNum} Closed!`;
-          winText.textContent = `Confirmed: ${curCase.owner.name} was located at ${curCase.answer.location}, and ${curCase.answer.suspect} was exposed.`;
-          nextLevelBtn.textContent = isLast ? "Replay from Case 1" : `Open Case #${currentCaseNum + 1} →`;
-          winOverlay.classList.add("show");
+        if (warrantsLeft <= 0) {
+          caseLost = true;
+          renderVerdictApp();
+          overlayIcon.textContent = "🚨";
+          winHeading.textContent = `Warrant Denied — It Was ${curCase.culprit.name}`;
+          winText.textContent = curCase.debrief;
+          nextLevelBtn.textContent = "↺ Retry This Case";
+          setTimeout(() => winOverlay.classList.add("show"), 460);
         } else {
-          sfxError();
-          fb.className = "report-feedback err";
-          fb.textContent = `Report rejected: ${matches} of ${total} findings match the truth. Double-check the decrypted ZIP file!`;
+          showToast(`❌ ${s.name} is innocent! Double-check Files/Vault & Sys Logs (1 warrant left).`, 2800);
         }
-      });
-
-      formBox.appendChild(submitBtn);
-      winBody.appendChild(formBox);
+      }
     }
 
     function loadCase(num) {
-      currentCaseNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      curCase = buildCase(currentCaseNum);
-      selectedMailIdx = 0;
-      selectedDocIdx = 0;
-      selectedTrashIdx = 0;
-      hintLevel = 0;
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      curCase = buildCyberCase(currentLevelNum);
+      vaultUnlocked = false;
+      trashRestored = false;
+      warrantsLeft = 2;
+      eliminatedIds = new Set();
       caseWon = false;
+      caseLost = false;
+      hintStage = 0;
+      decText = "";
+      decShift = 0;
+      decReversed = false;
 
-      closeWindow();
-      startMenu.classList.remove("open");
       winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
-      ownerNameBar.textContent = `${curCase.owner.name} (${curCase.owner.role})`;
-      caseYearBar.textContent = `Date: ${curCase.dateStr}`;
-      retroClock.textContent = curCase.clockTime;
-      stickyText.textContent = curCase.twoVaults
-        ? `Dual-vault case! Crack ${curCase.vaults[0].filename} first to find the rule for ${curCase.vaults[1].filename}.`
-        : `Inspect Inbox, Docs & Recycle Bin to unlock ${curCase.vaults[0].filename}, then file the Case Report.`;
-
       try {
-        localStorage.setItem("zinplay_ossleuth_500_last", String(currentCaseNum));
+        localStorage.setItem("zinplay_ossleuth_500_last", String(currentLevelNum));
       } catch (e) {}
 
-      updateHUD();
+      renderBriefingAndHUD();
+      renderMailApp();
+      renderFilesApp();
+      renderLogsApp();
+      renderDecoderApp();
+      renderVerdictApp();
+      switchApp("mail");
     }
 
-    // Event Bindings
-    document.querySelectorAll("[data-app]").forEach((btn) => {
-      btn.addEventListener("click", () => openApp(btn.getAttribute("data-app")));
-    });
-    document.getElementById("winCloseBtn").addEventListener("click", () => {
-      sfxClick();
-      closeWindow();
-    });
-    startBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      sfxClick();
-      startMenu.classList.toggle("open");
-    });
-    document.addEventListener("click", (e) => {
-      if (!startMenu.contains(e.target) && e.target !== startBtn) {
-        startMenu.classList.remove("open");
+    // Contextual Multi-Stage Forensic Lead Hint!
+    document.getElementById("hintBtn").addEventListener("click", () => {
+      if (caseWon || caseLost) return;
+      initAudio();
+      sfxTabClick();
+
+      if (curCase.hasTrash && !trashRestored) {
+        switchApp("files");
+        showToast("💡 Lead: Open 📁 Files/Vault and click ♻️ Restore Deleted File in Trash!", 3200);
+      } else if (curCase.hasVault && !vaultUnlocked) {
+        switchApp("files");
+        showToast(`💡 Vault PIN Lead: ${curCase.pinHintShort}`, 3600);
+      } else if (curCase.hasCipher && hintStage === 0) {
+        hintStage++;
+        showToast(`💡 Cipher Lead: ${curCase.cipherObj.hint}`, 3600);
+      } else {
+        showToast(`💡 Smoking Gun: Trace Badge ${curCase.culprit.badge} (${curCase.culprit.pc}) in ⚖️ Accuse!`, 3400);
       }
     });
 
-    // Progressive Detective Hint
-    document.getElementById("hintBtn").addEventListener("click", () => {
-      if (caseWon) return;
-      const step = curCase.hintSteps[Math.min(hintLevel, curCase.hintSteps.length - 1)];
-      hintLevel = (hintLevel + 1) % curCase.hintSteps.length;
-      showToast(`💡 ${step}`, 4500);
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", () => loadCase(currentCaseNum));
+    document.getElementById("resetBtn").addEventListener("click", () => loadCase(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
     nextLevelBtn.addEventListener("click", () => {
-      loadCase(currentCaseNum === TOTAL_LEVELS ? 1 : currentCaseNum + 1);
+      if (caseLost) loadCase(currentLevelNum);
+      else loadCase(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentCaseNum > 1) loadCase(currentCaseNum - 1);
+      if (currentLevelNum > 1) loadCase(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentCaseNum < TOTAL_LEVELS) loadCase(currentCaseNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadCase(currentLevelNum + 1);
     });
 
-    // Case Picker Modal
+    // Picker Modal
     const pickerModal = document.getElementById("pickerModal");
     const chapterTabsEl = document.getElementById("chapterTabs");
     const levelsGridEl = document.getElementById("levelsGrid");
@@ -2061,7 +1966,7 @@ Close this file and submit your Case Report immediately.
         cell.type = "button";
         cell.className = "lvl-cell";
         if (solvedSet.has(n)) cell.classList.add("solved");
-        if (n === currentCaseNum) cell.classList.add("active");
+        if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
           loadCase(n);
@@ -2072,7 +1977,7 @@ Close this file and submit your Case Report immediately.
     }
 
     openPickerBtn.addEventListener("click", () => {
-      activeChapterIdx = Math.floor((currentCaseNum - 1) / 100);
+      activeChapterIdx = Math.floor((currentLevelNum - 1) / 100);
       jumpInput.value = "";
       renderPicker();
       pickerModal.classList.add("open");
@@ -2091,8 +1996,7 @@ Close this file and submit your Case Report immediately.
       }
     });
 
-    // Boot Case
-    loadCase(currentCaseNum);
+    loadCase(currentLevelNum);
   </script>
 
 </body>
