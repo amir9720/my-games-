@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Heist Blueprint Planner — 500 Stealth Strategy Levels | ZinPlay</title>
-  <meta name="description" content="Play 500 free stealth strategy levels in Heist Blueprint Planner. Plot routes and timed waits on an architectural museum blueprint to slip past lasers, CCTV cameras, and guards." />
+  <title>Heist Blueprint Planner — Free 500-Vault Stealth Strategy Game | ZinPlay</title>
+  <meta name="description" content="Play Heist Blueprint Planner free online with no download. Plot synchronized stealth routes past patrolling guards, sweeping security cameras, and rhythmic laser grids to grab vault diamonds and escape across 500 tactical blueprints." />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Heist Blueprint Planner",
+    "url": "https://zinplay.io/games/heist-planner/",
+    "genre": ["Strategy", "Stealth Tactics", "Turn-Based Puzzle"],
+    "playMode": "SinglePlayer",
+    "applicationCategory": "Game",
+    "operatingSystem": "Web Browser (Android, iOS, Chromebook, Windows, macOS)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <style>
     .game-header-bar {
       display: flex;
@@ -30,15 +43,15 @@
       color: var(--muted);
     }
 
-    /* Top Blueprint HUD */
+    /* Top Spy Blueprint HUD */
     .hud-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
-      background: #061021;
-      color: #e2e8f0;
-      border-bottom: 1px solid #162a4a;
+      background: #07131f;
+      color: #f8fafc;
+      border-bottom: 1px solid #16314a;
       font-size: 0.84rem;
       font-weight: 700;
       gap: 8px;
@@ -51,8 +64,8 @@
     }
     .chapter-sub {
       font-size: 0.72rem;
-      color: #7dd3fc;
-      font-weight: 600;
+      color: #38bdf8;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -64,7 +77,7 @@
     }
     .hud-pill {
       background: rgba(56, 189, 248, 0.16);
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      border: 1px solid rgba(56, 189, 248, 0.36);
       color: #bae6fd;
       padding: 4px 10px;
       border-radius: 999px;
@@ -83,56 +96,35 @@
       font-family: inherit;
     }
 
-    /* Timeline / Beat Status Strip */
-    .timeline-strip {
+    /* Live Synchronized Beat & Objectives Strip */
+    .beat-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      padding: 9px 14px;
-      background: #0b1b34;
-      border-bottom: 1px solid #1a335c;
-      color: #cbd5e1;
-      font-size: 0.76rem;
-      font-weight: 800;
+      gap: 8px;
       flex-wrap: wrap;
-    }
-    .mode-badge {
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-    .mode-plan {
-      background: rgba(56, 189, 248, 0.2);
-      border: 1px solid #38bdf8;
-      color: #e0f2fe;
-    }
-    .mode-run {
-      background: rgba(34, 197, 94, 0.22);
-      border: 1px solid #22c55e;
-      color: #dcfce7;
-    }
-    .mode-alert {
-      background: rgba(239, 68, 68, 0.24);
-      border: 1px solid #ef4444;
-      color: #fecaca;
-    }
-    .beat-readout {
+      padding: 9px 14px;
+      background: #0c1d2e;
+      border-bottom: 1px solid #1b3a57;
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 800;
       font-family: monospace;
-      font-size: 0.82rem;
+    }
+    .beat-badge {
+      color: #fde68a;
+    }
+    .obj-badge {
       color: #7dd3fc;
     }
 
-    /* Architectural Blueprint Canvas Stage */
+    /* Architectural Blueprint Canvas */
     .canvas-container {
       position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
       max-height: 495px;
-      background: radial-gradient(circle at 50% 45%, #0e2446 0%, #061224 100%);
+      background: radial-gradient(circle at 50% 45%, #0f253b 0%, #06101c 100%);
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -144,53 +136,50 @@
       width: 100%;
       height: 100%;
       display: block;
-      touch-action: none;
-      cursor: pointer;
+      touch-action: manipulation;
+      cursor: crosshair;
     }
 
-    /* Planning Action Dock */
-    .plan-dock {
-      display: grid;
-      grid-template-columns: 1fr 1.65fr 0.9fr;
+    /* Tactical Waypoint & Execute Control Dock */
+    .heist-dock {
+      display: flex;
+      align-items: center;
       gap: 8px;
-      padding: 12px 14px;
-      background: #08152b;
-      border-top: 1px solid #162a4a;
+      padding: 11px 12px;
+      background: #091726;
+      border-top: 1px solid #17334f;
     }
-    .dock-btn {
+    .tac-btn {
       min-height: 46px;
+      padding: 0 12px;
       border-radius: 12px;
-      border: 1.5px solid #1e3a66;
-      background: #102445;
+      border: 1.5px solid #224466;
+      background: #11263d;
       color: #e2e8f0;
-      font-size: 0.85rem;
+      font-size: 0.81rem;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      transition: transform 0.08s ease, opacity 0.15s ease;
+      gap: 4px;
+      transition: transform 0.08s ease, background 0.14s ease, border-color 0.14s ease;
     }
-    .dock-btn:active {
-      transform: scale(0.97);
-    }
-    .dock-btn:disabled {
-      opacity: 0.42;
-      cursor: default;
-    }
-    .dock-btn.exec-main {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      border-color: #6ee7b7;
+    .tac-btn:active { transform: scale(0.95); }
+    .tac-btn:disabled { opacity: 0.36; cursor: default; }
+    .tac-btn.exec-main {
+      flex: 1;
+      background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
+      border-color: #7dd3fc;
       color: #ffffff;
-      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
-      font-size: 0.92rem;
-      letter-spacing: 0.03em;
+      font-size: 0.9rem;
+      font-weight: 900;
+      box-shadow: 0 5px 16px rgba(14, 165, 233, 0.3);
     }
-    .dock-btn.exec-stop {
-      background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
-      border-color: #fca5a5;
-      color: #ffffff;
+    .tac-btn.exec-main.edit-mode {
+      background: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
+      border-color: #fde68a;
+      box-shadow: 0 5px 16px rgba(234, 88, 12, 0.3);
     }
 
     .legend-strip {
@@ -200,8 +189,8 @@
       gap: 12px;
       flex-wrap: wrap;
       padding: 8px 14px;
-      background: #060e1d;
-      border-top: 1px solid #132542;
+      background: #06101a;
+      border-top: 1px solid #132940;
       font-size: 0.73rem;
       color: #94a3b8;
     }
@@ -211,8 +200,8 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(6, 16, 33, 0.95);
-      border: 1px solid rgba(250, 204, 21, 0.68);
+      background: rgba(6, 16, 28, 0.96);
+      border: 1px solid rgba(250, 204, 21, 0.75);
       color: #fef08a;
       padding: 7px 14px;
       border-radius: 999px;
@@ -226,14 +215,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .status-toast.show {
-      opacity: 1;
-    }
+    .status-toast.show { opacity: 1; }
 
-    .stage-overlay {
+    .win-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(5, 11, 24, 0.82);
+      background: rgba(6, 15, 26, 0.82);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
@@ -241,41 +228,29 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.24s ease;
+      transition: opacity 0.28s ease;
     }
-    .stage-overlay.show {
+    .win-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
-    .overlay-card {
+    .win-card {
       background: #ffffff;
       color: #0f172a;
       border-radius: 18px;
       padding: 24px 20px;
       text-align: center;
-      max-width: 330px;
+      max-width: 325px;
       width: 100%;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
     }
-    .overlay-card h2 {
-      font-size: 1.32rem;
-      margin-bottom: 6px;
-    }
-    .overlay-card p {
-      font-size: 0.88rem;
-      color: #64748b;
-      margin-bottom: 16px;
-    }
+    .win-card h2 { font-size: 1.32rem; margin-bottom: 6px; }
+    .win-card p { font-size: 0.88rem; color: #64748b; margin-bottom: 16px; }
 
     .controls-group {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-    }
-    .btn-outline.active-toggle {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
     }
     .level-nav-bar {
       display: flex;
@@ -299,7 +274,7 @@
       cursor: pointer;
     }
 
-    /* Level Picker Modal */
+    /* Blueprint Picker Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -311,9 +286,7 @@
       justify-content: center;
       padding: 14px;
     }
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
     .modal-box {
       background: var(--surface);
       border-radius: 18px;
@@ -410,6 +383,86 @@
       border-color: var(--primary);
       color: #ffffff;
     }
+
+    /* Upgraded SEO Banners & Article Styling */
+    .game-seo-banner {
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      background: #07131f;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+    }
+    .game-seo-banner-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      min-height: 140px;
+      overflow: hidden;
+      background: #07131f;
+    }
+    .game-seo-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .game-seo-banner-cap {
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #07131f 0%, #0c4a6e 100%);
+      color: #e0f2fe;
+    }
+    .game-seo-banner.gold-cap .game-seo-banner-cap {
+      background: linear-gradient(135deg, #17152e 0%, #451a03 100%);
+    }
+    .game-seo-banner-cap h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+    .game-seo-banner-cap p {
+      font-size: 0.86rem;
+      color: #bae6fd;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .heist-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .heist-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .heist-table th, .heist-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .heist-table th {
+      background: var(--surface-soft);
+      font-weight: 800;
+    }
+    .heist-table tr:last-child td { border-bottom: none; }
+    .kw-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .kw-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -422,7 +475,7 @@
       </a>
       <button id="menuBtn" class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
       <nav id="navMenu" class="nav-links" aria-label="Main Navigation">
-        <a href="/#games" class="nav-highlight">All 28 Games</a>
+        <a href="/#games" class="nav-highlight">All 31 Games</a>
         <a href="/#about-engine">About</a>
         <a href="/#faq">FAQ</a>
         <a href="/privacy-policy/">Privacy</a>
@@ -435,78 +488,73 @@
 
     <div class="game-header-bar">
       <a href="/#games" class="back-link">← Back to All Games</a>
-      <span class="cat-tag">500 Heists &bull; Stealth Strategy</span>
+      <span class="cat-tag">500 Blueprints &bull; Synchronized Stealth Tactics</span>
     </div>
 
     <div class="game-title-wrap" style="margin-bottom: 16px;">
       <h1>Heist Blueprint Planner</h1>
-      <p>Plot your step-by-step route and timed waits on the museum blueprint, grab every artifact, and hit Execute to slip past security.</p>
+      <p>Chart synchronized stealth waypoints across museum vaults, time your pauses behind pillars while guards and lasers cycle, snatch every diamond, and slip cleanly to the exit.</p>
     </div>
 
     <!-- Game Stage -->
-    <section class="game-wrapper" aria-label="Heist Blueprint Planner Game">
+    <section class="game-wrapper" aria-label="Heist Blueprint Planner Stealth Strategy Game">
       <div class="hud-strip">
         <div class="hud-left">
-          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Gallery Entry</span>
-          <span id="levelTitle">Heist #1 / 500</span>
+          <span class="chapter-sub" id="chapterLabel">Chapter 1 &bull; Gallery Entry Vaults</span>
+          <span id="levelTitle">Blueprint #1 / 500</span>
         </div>
         <div class="hud-pills">
           <span class="hud-pill loot-pill" id="lootPill">💎 Loot: 0 / 1</span>
-          <span class="hud-pill" id="budgetPill">Moves: 0 / 24</span>
           <span class="hud-pill done-pill" id="solvedCounter">Cleared: 0 / 500</span>
         </div>
       </div>
 
-      <!-- Beat Synchronization Telemetry -->
-      <div class="timeline-strip">
-        <span id="modeBadge" class="mode-badge mode-plan">✎ BLUEPRINT PLAN</span>
-        <span id="beatReadout" class="beat-readout">Previewing Beat t = 0</span>
+      <!-- Synchronized Time-Step & Objective Telemetry -->
+      <div class="beat-strip">
+        <span id="beatBadge" class="beat-badge">⏱️ PLAN BEAT: T = 0</span>
+        <span id="objBadge" class="obj-badge">🎯 Plot Route: Grab 💎 → Exit 🚪</span>
       </div>
 
-      <!-- Blueprint Canvas -->
+      <!-- Illuminated Architectural Blueprint Canvas -->
       <div class="canvas-container">
         <canvas id="heistCanvas"></canvas>
         <div id="statusToast" class="status-toast"></div>
 
-        <!-- Success / Alarm Overlay -->
-        <div id="stageOverlay" class="stage-overlay">
-          <div class="overlay-card">
-            <div id="ovIcon" style="font-size:2.3rem; margin-bottom:6px;">💎</div>
-            <h2 id="ovHeading">Clean Getaway!</h2>
-            <p id="ovText">You ghosted past every laser and camera without a trace.</p>
-            <button id="ovActionBtn" class="btn-primary" type="button">Next Heist →</button>
+        <!-- Clean Heist Victory Overlay -->
+        <div id="winOverlay" class="win-overlay">
+          <div class="win-card">
+            <div style="font-size:2.3rem; margin-bottom:6px;">💎</div>
+            <h2 id="winHeading">Flawless Heist!</h2>
+            <p id="winText">Every diamond secured and vanished into the night without tripping a single sensor.</p>
+            <button id="nextLevelBtn" class="btn-primary" type="button">Next Blueprint →</button>
           </div>
         </div>
       </div>
 
-      <!-- Planning & Execution Dock -->
-      <div class="plan-dock">
-        <button id="waitBtn" class="dock-btn" type="button">⏱ WAIT (+1)</button>
-        <button id="execBtn" class="dock-btn exec-main" type="button">▶ EXECUTE HEIST</button>
-        <button id="undoBtn" class="dock-btn" type="button">← UNDO</button>
+      <!-- Tactical Waypoint Planning & Execution Dock -->
+      <div class="heist-dock">
+        <button id="waitBtn" class="tac-btn" type="button">⏳ Wait 1 Beat</button>
+        <button id="undoBtn" class="tac-btn" type="button">← Undo</button>
+        <button id="execBtn" class="tac-btn exec-main" type="button">▶ EXECUTE HEIST</button>
       </div>
 
       <div class="legend-strip">
-        <span>👆 Tap/Drag Adjacent Tiles</span>
-        <span>🔴 Pulsing Laser</span>
-        <span>📹 Rotating CCTV</span>
-        <span>👮 Patrol + Flashlight</span>
-        <span>🚪 Grab All Loot → Exit</span>
+        <span>👆 Tap Adjacent Tiles to Extend Route (Live Previews Beat T!)</span>
+        <span>🔦 Avoid Red Guard &amp; Camera Beams</span>
+        <span>💻 Step on Cyan Terminal to Shut Off Lasers (Ch. 3+)</span>
       </div>
 
       <div class="game-controls-bar">
         <div class="controls-group">
-          <button id="clearBtn" class="btn-outline" type="button">✕ Clear Plan</button>
-          <button id="peekBtn" class="btn-outline" type="button">👁 Peek t+1</button>
-          <button id="speedBtn" class="btn-outline" type="button">⚡ 2x</button>
-          <button id="hintBtn" class="btn-outline" type="button">💡 Next Step</button>
+          <button id="clearBtn" class="btn-outline" type="button">↺ Clear Route</button>
+          <button id="hintBtn" class="btn-outline" type="button">💡 Spy Hint</button>
         </div>
-        <button id="soundBtn" class="btn-outline" type="button">🔊 ON</button>
+        <button id="soundBtn" class="btn-outline" type="button">🔊 Audio ON</button>
       </div>
 
       <div class="level-nav-bar">
         <button id="prevLvlBtn" class="btn-outline" type="button">◀ Prev</button>
-        <button id="openPickerBtn" class="level-picker-trigger" type="button">Heist 1 / 500 ▾</button>
+        <button id="openPickerBtn" class="level-picker-trigger" type="button">Blueprint 1 / 500 ▾</button>
         <button id="nextLvlBtn" class="btn-outline" type="button">Next ▶</button>
       </div>
     </section>
@@ -516,39 +564,136 @@
       <span class="ad-label">Advertisement</span>
     </div>
 
-    <!-- Editorial Guide -->
+    <!-- Upgraded SEO Banners & 860+ Word Guide -->
     <section class="section-block">
+
+      <!-- Banner 1 -->
+      <figure class="game-seo-banner">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/heist-planner-banner-1.jpg"
+            alt="Heist Blueprint Planner online stealth strategy game showing an illuminated museum blueprint with sapphire diamond, laser tripwires, and guard cones"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>500 Verified Stealth Blueprints — Live Time-Synchronized Planning</h3>
+          <p>Watch guards, sweeping cameras, and blinking lasers advance live as you plot every tile—then press Execute to watch your spy glide through cleanly.</p>
+        </figcaption>
+      </figure>
+
       <article class="card editorial-card">
-        <h2>How to Play Heist Blueprint Planner (500 Heists)</h2>
-        <p>Heist Blueprint Planner blends architectural stealth planning with crisp turn-by-turn timing across 500 verified museum blueprints. Every single heist plays out in two thrilling phases: first plot your entire escape route beat-by-beat on the live blueprint, then press <strong>▶ EXECUTE HEIST</strong> to watch your plan unfold in real time.</p>
+        <h2>What Is Heist Blueprint Planner? A Turn-Based Stealth Tactics Game Online</h2>
+        <p><strong>Heist Blueprint Planner</strong> is a free <strong>stealth heist strategy puzzle game online</strong> inspired by tactical classics like <em>Door Kickers</em>, <em>Hitman GO</em>, and <em>Monaco</em>, crafted natively in sleek 60 FPS HTML5 Canvas with zero downloads. Before your phantom operative ever sets foot inside the museum gallery, you lay out the entire infiltration route step by step across an illuminated cyan architectural floorplan. Every tap extends your dotted golden path by one synchronized beat (<code>T = 1, 2, 3...</code>)—and the blueprint instantaneously previews the exact future positions of patrolling security guards, rotating CCTV cones, and pulsing crimson laser barriers at that exact beat!</p>
+        <p>Built as a sharp, <strong>no-download tactical brain teaser for smartphones, iPads, and Chromebooks</strong>, Heist Blueprint Planner pairs calm, timer-free planning with crisp procedural <strong>Web Audio drafting pencil ticks, subtle spy footsteps, terminal hacking beeps, diamond loot shimmers, and sleek victory chords</strong>. Every cleared heist across all <strong>500 blueprints</strong> saves automatically inside private browser local storage.</p>
+      </article>
+
+      <article class="card editorial-card">
+        <h2>Mastermind Stealth Playbook (Guards, Cameras, Lasers &amp; Pauses)</h2>
+        <p>Rushing straight toward the diamond vault almost always walks right into a flashlight beam! Study these four <strong>synchronized heist elements</strong> to ghost effortlessly through Chapters 1 through 5:</p>
+
+        <div class="heist-table-wrap">
+          <table class="heist-table">
+            <thead>
+              <tr>
+                <th>Security System</th>
+                <th>Behavior on the Blueprint</th>
+                <th>Best Stealth Counter-Tactic</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🔦 Patrol Guards</strong> (Ch. 1–5)</td>
+                <td>Walk fixed back-and-forth loops, shining a 2-tile flashlight cone ahead (blocked cleanly by walls!).</td>
+                <td>Slip behind a marble pillar and tap <strong>⏳ Wait 1 Beat</strong> (or press <code>Space</code>) until the guard turns around—never step head-on into an approaching guard!</td>
+              </tr>
+              <tr>
+                <td><strong>📹 Sweeping CCTV Cameras</strong> (Ch. 1–5)</td>
+                <td>Mounted security lenses rotating rhythmically across 2 or 4 cardinal directions every beat.</td>
+                <td>Step through the corridor on the exact beat the crimson beam rotates away—your blueprint live-preview confirms safe beats in real time!</td>
+              </tr>
+              <tr>
+                <td><strong>🔴 Pulsing Laser Grids</strong> (Ch. 2–5)</td>
+                <td>Crimson laser emitter tiles cycling cleanly: <strong>2 beats ON, 2 beats OFF</strong>!</td>
+                <td>Time your step onto a laser tile while it reads dim/OFF—or shut all lasers down permanently using the Cyan Hacking Terminal!</td>
+              </tr>
+              <tr>
+                <td><strong>💻 Security Terminal</strong> (Ch. 3–5)</td>
+                <td>Glowing cyan server pad tucked along a side alcove.</td>
+                <td>Route through the Terminal first—stepping onto it permanently disables every laser barrier on the blueprint for the rest of your run!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:12px;"><strong>Tactical Mastermind Tip:</strong> Pressing <strong>▶ EXECUTE HEIST</strong> never erases your drafted plan! If a laser catches you on Beat 9, tap <strong>↺ EDIT PLAN</strong>, hit <strong>← Undo</strong> a couple times, insert a single <strong>⏳ Wait 1 Beat</strong> behind cover, and execute again! Want an intel briefing on a tough Chapter 5 fortress? Tap <strong>💡 Spy Hint</strong>—our exact <strong>Space-Time BFS Solver</strong> appends the exact next optimal stealth move (or pause!) directly onto your route.</p>
+      </article>
+
+      <!-- Banner 2 -->
+      <figure class="game-seo-banner gold-cap">
+        <div class="game-seo-banner-img">
+          <img
+            src="/assets/img/heist-planner-banner-2.jpg"
+            alt="Cutaway luxury museum gallery blueprint with glowing red security camera cones, pulsed laser barriers, hacking terminal, and diamond artifacts in Heist Blueprint Planner"
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="game-seo-banner-cap">
+          <h3>Space-Time BFS Verified — Zero Unfair Traps Across 500 Blueprints</h3>
+          <p>Every vault layout is mathematically certified solvable across guard, camera, and laser cycles before loading onto your drafting desk.</p>
+        </figcaption>
+      </figure>
+
+      <article class="card editorial-card">
+        <h2>Explore All 5 Heist Chapters (500 Verified Vault Blueprints)</h2>
+        <p>Every blueprint from #1 to #500 is procedurally generated and verified in real time by our Space-Time BFS solver across all 12-beat security cycles:</p>
         <ul>
-          <li><strong>Live Beat Preview While Planning:</strong> As you tap or drag onto adjacent floor tiles, the blueprint advances its security preview to your exact planned beat (<code>t</code>). Toggle <strong>👁 Peek t+1</strong> anytime to see where lasers, cameras, and guards will be on the <em>next</em> beat before you step!</li>
-          <li><strong>Master the Tactical Wait (⏱ WAIT +1):</strong> Tap the thief's current tile—or press <strong>⏱ WAIT (+1)</strong>—to hold your position for one beat while a red laser blinks off, a CCTV cone rotates past, or a patrolling guard turns the corner.</li>
-          <li><strong>Fast Blueprint Iteration:</strong> If an alarm trips during execution, your plotted route stays on the board when you tap <strong>Edit Plan</strong>. Simply undo a step or two, slip in a timed wait, and execute again until you nail a ghost getaway!</li>
+          <li><strong>Chapter 1 (Blueprints 1–100 — Gallery Entry Vaults):</strong> Clean 7×7 museum rooms introducing patrolling guards and sweeping security cameras—ideal for mastering live beat previews and tactical waits.</li>
+          <li><strong>Chapter 2 (Blueprints 101–200 — Laser Corridors):</strong> Installs pulsing <strong>🔴 Crimson Laser Barriers</strong> cycling 2 beats ON and 2 beats OFF along prime vault approaches.</li>
+          <li><strong>Chapter 3 (Blueprints 201–300 — Terminal Hacking):</strong> Expands to 8×8 high-security banks equipped with a glowing <strong>💻 Cyan Hacking Terminal</strong> that permanently kills laser tripwires when stepped on!</li>
+          <li><strong>Chapter 4 (Blueprints 301–400 — Twin-Vault Museums):</strong> Demands grabbing <strong>two separate Vault Diamonds</strong> across opposite galleries before racing cleanly to the getaway exit arch.</li>
+          <li><strong>Chapter 5 (Blueprints 401–500 — Grand Mastermind Heists):</strong> Dense 8×8 fortresses combining dual patrolling guards, sweeping CCTV lenses, pulsing laser halls, hacking consoles, and twin treasures—complete with an instant 1–500 blueprint selector and private local saves.</li>
         </ul>
+        <div class="kw-strip" aria-label="Related Stealth Strategy Topics">
+          <span class="kw-pill">Heist Planning Strategy Game Online</span>
+          <span class="kw-pill">Turn-Based Stealth Puzzle Browser</span>
+          <span class="kw-pill">Door Kickers Style Web Game</span>
+          <span class="kw-pill">Museum Vault Laser Puzzle Free</span>
+          <span class="kw-pill">500-Level Tactical Spy Brain Teaser</span>
+          <span class="kw-pill">No-Download Chromebook Strategy Game</span>
+        </div>
       </article>
 
       <div class="card faq-card">
-        <h2>Game FAQ</h2>
+        <h2>Heist Blueprint Planner FAQ</h2>
         <details class="faq-item">
-          <summary>Are all 500 museum blueprints guaranteed to have a valid stealth route?</summary>
-          <div class="faq-answer">Yes! Every blueprint from Heist #1 to #500 is mathematically verified with a Space-Time Breadth-First Search solver that accounts for pulsing lasers, sweeping cameras, and moving guard flashlights.</div>
+          <summary>How do I know where guards and lasers will be when my spy reaches a tile?</summary>
+          <div class="faq-answer">Whenever you add a step (or tap <strong>⏳ Wait 1 Beat</strong>) in Plan Mode, the entire blueprint automatically previews exact guard locations, flashlight cones, camera sweeps, and laser states at your current end beat <code>T</code>—so you can plan every move with 100% precision!</div>
         </details>
         <details class="faq-item">
-          <summary>What happens if I walk directly through a patrolling guard?</summary>
-          <div class="faq-answer">Guards detect you if you step into their flashlight beam, land on their tile, or try to swap places with them head-on in a narrow hallway. Duck into an alcove or wait one beat to pass behind their back!</div>
+          <summary>Why is the "⏳ Wait 1 Beat" button so important?</summary>
+          <div class="faq-answer">Sometimes the fastest way past a patrolling guard or pulsing laser is standing quietly behind a wall for 1 or 2 beats until the beam sweeps past! You can tap <strong>⏳ Wait 1 Beat</strong>, tap directly on your spy's current endpoint tile, or press <code>Space</code> on your keyboard.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I reach the Exit Door before grabbing all the Diamonds?</summary>
+          <div class="faq-answer">The green Exit Arch unlocks only once you've routed through every <strong>💎 Diamond</strong> on the floorplan! Check the top <code>💎 Loot</code> counter—once all diamonds are collected, step onto the green Exit tile and hit <strong>▶ EXECUTE HEIST</strong>!</div>
+        </details>
+        <details class="faq-item">
+          <summary>Are keyboard controls available on laptops and Chromebooks?</summary>
+          <div class="faq-answer">Yes! Use <code>WASD</code> or <code>Arrow Keys</code> to extend your stealth blueprint one tile at a time, <code>Space</code> to Wait 1 Beat, <code>Backspace</code> to Undo, and <code>Enter</code> to Execute your heist!</div>
         </details>
       </div>
+
     </section>
 
     <!-- More Games -->
     <h2 class="section-heading">More Games to Try</h2>
     <section class="grid-3">
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
-        <h3>Blackout Grid Operator</h3>
-        <p>Balance solar, wind, batteries, and turbines to keep city grid frequency locked at 50 Hz.</p>
-        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">🌍</div><span class="cat-tag">Mystery</span></div>
+        <h3>OSINT Geo-Sleuth</h3>
+        <p>Inspect street signs, license plates, foliage, and architectural clues to pinpoint locations worldwide.</p>
+        <a href="/games/geo-sleuth/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
         <div class="card-top"><div class="icon-box">💣</div><span class="cat-tag">Strategy</span></div>
@@ -557,25 +702,25 @@
         <a href="/games/bomb-defusal/" class="card-link">Play Game →</a>
       </article>
       <article class="card card-interactive">
-        <div class="card-top"><div class="icon-box">💎</div><span class="cat-tag">Puzzle</span></div>
-        <h3>Prism &amp; Lasers</h3>
-        <p>Place mirrors and split laser beams through prisms across 500 dark-mode optical puzzles.</p>
-        <a href="/games/prism-lasers/" class="card-link">Play Game →</a>
+        <div class="card-top"><div class="icon-box">⚡</div><span class="cat-tag">Strategy</span></div>
+        <h3>Blackout Grid Operator</h3>
+        <p>Balance solar, wind, hydro, gas, and battery plants across a 24-hour cycle to hold 50 Hz.</p>
+        <a href="/games/blackout-grid/" class="card-link">Play Game →</a>
       </article>
     </section>
 
   </main>
 
-  <!-- Heist Picker Modal -->
-  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Heist">
+  <!-- Blueprint Picker Modal -->
+  <div id="pickerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Select Heist Blueprint">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Choose Museum Blueprint (1 – 500)</h3>
+        <h3>Choose Vault Blueprint (1 – 500)</h3>
         <button id="closePickerBtn" class="modal-close" type="button" aria-label="Close">✕</button>
       </div>
       <div id="chapterTabs" class="chapter-tabs"></div>
       <div class="jump-row">
-        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to heist (1-500)..." />
+        <input id="jumpInput" class="jump-input" type="number" min="1" max="500" placeholder="Jump to blueprint (1-500)..." />
         <button id="jumpBtn" class="btn-outline" type="button" style="background:var(--primary); color:#fff; border-color:var(--primary);">Go</button>
       </div>
       <div id="levelsGrid" class="levels-grid"></div>
@@ -594,21 +739,21 @@
           <p class="footer-contact">Contact: hello@zinplay.io</p>
         </div>
         <div class="footer-col">
-          <h4>Top Puzzles</h4>
+          <h4>Top Strategy</h4>
           <ul>
-            <li><a href="/games/one-line-symphony/">One-Line Symphony</a></li>
-            <li><a href="/games/prism-lasers/">Prism &amp; Lasers</a></li>
-            <li><a href="/games/tension-strings/">Tension &amp; Strings</a></li>
-            <li><a href="/games/tangle-master/">Tangle Master</a></li>
+            <li><a href="/games/grocery-bagging/">Grocery Bagging</a></li>
+            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
+            <li><a href="/games/blackout-grid/">Blackout Grid Operator</a></li>
+            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Top Strategy</h4>
+          <h4>Top Mystery</h4>
           <ul>
-            <li><a href="/games/bomb-defusal/">Manual Bomb Defusal</a></li>
-            <li><a href="/games/baggage-chaos/">Baggage Routing Chaos</a></li>
             <li><a href="/games/heist-planner/">Heist Blueprint Planner</a></li>
+            <li><a href="/games/geo-sleuth/">OSINT Geo-Sleuth</a></li>
             <li><a href="/games/os-sleuth/">OS Sleuth</a></li>
+            <li><a href="/games/micro-polygraph/">Micro-Expression Polygraph</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -641,21 +786,26 @@
     }
 
     // ==============================================
-    // SECURITY SIMULATION & SPACE-TIME BFS ENGINE
+    // SPACE-TIME BFS STEALTH HEIST ENGINE (500 BLUEPRINTS)
     // ==============================================
     const TOTAL_LEVELS = 500;
-    const CYCLE_LCM = 8; // All lasers (4), cameras (4), and guards (4 or 8) divide 8!
+    const WORLD_W = 420;
+    const WORLD_H = 420;
+    const PERIOD = 12; // Exact LCM of all guard (4/6), camera (4/6), and laser (4) cycles!
 
-    // Directions: 0=Right, 1=Down, 2=Left, 3=Up
-    const DR = [0, 1, 0, -1];
-    const DC = [1, 0, -1, 0];
+    const DIRS = [
+      { dr: -1, dc: 0 }, // 0: Up
+      { dr: 0, dc: 1 },  // 1: Right
+      { dr: 1, dc: 0 },  // 2: Down
+      { dr: 0, dc: -1 }  // 3: Left
+    ];
 
     const CHAPTERS = [
-      { title: "Chapter 1 • Gallery Entry", range: "1–100", start: 1, end: 100 },
-      { title: "Chapter 2 • Laser Vaults", range: "101–200", start: 101, end: 200 },
-      { title: "Chapter 3 • Night Patrol", range: "201–300", start: 201, end: 300 },
-      { title: "Chapter 4 • Twin Heist", range: "301–400", start: 301, end: 400 },
-      { title: "Chapter 5 • Grand Louvre Vault", range: "401–500", start: 401, end: 500 }
+      { title: "Chapter 1 • Gallery Entry Vaults", range: "1–100", start: 1, end: 100 },
+      { title: "Chapter 2 • Laser Corridors", range: "101–200", start: 101, end: 200 },
+      { title: "Chapter 3 • Terminal Hacking", range: "201–300", start: 201, end: 300 },
+      { title: "Chapter 4 • Twin-Vault Museums", range: "301–400", start: 301, end: 400 },
+      { title: "Chapter 5 • Grand Mastermind Heists", range: "401–500", start: 401, end: 500 }
     ];
 
     function mulberry32(seed) {
@@ -677,410 +827,303 @@
       return copy;
     }
 
-    function isLaserOn(laser, t) {
-      return ((t + laser.phase) % laser.period) < laser.onBeats;
+    // Evaluate Exact Guard Position & Facing Direction at Beat `t`
+    function getGuardState(g, t) {
+      const L = g.loop.length;
+      const idx = ((t % L) + L) % L;
+      const cur = g.loop[idx];
+      const nxt = g.loop[(idx + 1) % L];
+      let dir = g.defaultDir;
+      if (nxt.r < cur.r) dir = 0;
+      else if (nxt.c > cur.c) dir = 1;
+      else if (nxt.r > cur.r) dir = 2;
+      else if (nxt.c < cur.c) dir = 3;
+      return { r: cur.r, c: cur.c, dir };
     }
 
-    function getCameraDir(cam, t) {
-      return cam.dirs[(t + cam.phase) % cam.dirs.length];
-    }
-
-    function getCameraConeCells(level, cam, t) {
-      const dir = getCameraDir(cam, t);
+    // Raycast Line-of-Sight Tiles (Blocked Cleanly by Solid Museum Walls!)
+    function getVisionCells(grid, N, r0, c0, dirIdx, range) {
       const cells = [];
-      for (let step = 1; step <= cam.range; step++) {
-        const nr = cam.r + DR[dir] * step;
-        const nc = cam.c + DC[dir] * step;
-        if (nr < 0 || nr >= level.size || nc < 0 || nc >= level.size) break;
-        if (level.walls[nr][nc]) break;
+      const d = DIRS[dirIdx];
+      for (let step = 1; step <= range; step++) {
+        const nr = r0 + d.dr * step;
+        const nc = c0 + d.dc * step;
+        if (nr < 0 || nr >= N || nc < 0 || nc >= N || grid[nr][nc] === 1) break;
         cells.push({ r: nr, c: nc });
       }
       return cells;
     }
 
-    function getGuardState(level, guard, t) {
-      const L = guard.path.length;
-      const idx = t % L;
-      const nxtIdx = (t + 1) % L;
-      const pos = guard.path[idx];
-      const nxt = guard.path[nxtIdx];
-      let dir = 0;
-      if (nxt.c > pos.c) dir = 0;
-      else if (nxt.r > pos.r) dir = 1;
-      else if (nxt.c < pos.c) dir = 2;
-      else if (nxt.r < pos.r) dir = 3;
+    // Compute All Dangerous Sensor Cells at Exact Beat `t` (Given Terminal `hacked` Status)
+    function getDangerAtBeat(lvl, t, hacked) {
+      const danger = new Set();
+      const guardPositions = [];
 
-      const fr = pos.r + DR[dir];
-      const fc = pos.c + DC[dir];
-      const flash = (fr >= 0 && fr < level.size && fc >= 0 && fc < level.size && !level.walls[fr][fc])
-        ? { r: fr, c: fc }
-        : null;
-      return { r: pos.r, c: pos.c, dir, flash };
-    }
+      // 1. Patrolling Guards + 2-Tile Flashlight Cones
+      for (const g of lvl.guards) {
+        const gs = getGuardState(g, t);
+        guardPositions.push(gs);
+        danger.add(`${gs.r},${gs.c}`);
+        for (const vc of getVisionCells(lvl.grid, lvl.N, gs.r, gs.c, gs.dir, 2)) {
+          danger.add(`${vc.r},${vc.c}`);
+        }
+      }
 
-    // Unified detection check used by BOTH Space-Time BFS and Live Execution
-    function getHazardAt(level, r, c, t) {
-      // 1. Lasers
-      for (const lz of level.lasers) {
-        if (isLaserOn(lz, t)) {
-          for (const cell of lz.cells) {
-            if (cell.r === r && cell.c === c) return { type: "laser", obj: lz };
+      // 2. Sweeping CCTV Security Cameras (3-Tile Beams)
+      for (const cam of lvl.cameras) {
+        const dirIdx = cam.dirs[((t % cam.dirs.length) + cam.dirs.length) % cam.dirs.length];
+        for (const vc of getVisionCells(lvl.grid, lvl.N, cam.r, cam.c, dirIdx, 3)) {
+          danger.add(`${vc.r},${vc.c}`);
+        }
+      }
+
+      // 3. Rhythmic Blinking Laser Cells (Active on Beats 0 & 1 of every 4-Beat Cycle Unless Hacked!)
+      if (!hacked) {
+        for (const laz of lvl.lasers) {
+          const phase = ((t + laz.phase) % 4 + 4) % 4;
+          if (phase < 2) {
+            danger.add(`${laz.r},${laz.c}`);
           }
         }
       }
-      // 2. CCTV Cameras
-      for (const cam of level.cameras) {
-        const cone = getCameraConeCells(level, cam, t);
-        for (const cell of cone) {
-          if (cell.r === r && cell.c === c) return { type: "camera", obj: cam };
-        }
-      }
-      // 3. Patrolling Guards + Flashlight
-      for (const g of level.guards) {
-        const gs = getGuardState(level, g, t);
-        if (gs.r === r && gs.c === c) return { type: "guard", obj: g };
-        if (gs.flash && gs.flash.r === r && gs.flash.c === c) return { type: "guard", obj: g };
-      }
-      return null;
+
+      return { danger, guardPositions };
     }
 
-    function isGuardHeadOnSwap(level, r0, c0, r1, c1, t) {
-      if (t <= 0) return false;
-      for (const g of level.guards) {
-        const L = g.path.length;
-        const pPrev = g.path[(t - 1) % L];
-        const pCurr = g.path[t % L];
-        if (pPrev.r === r1 && pPrev.c === c1 && pCurr.r === r0 && pCurr.c === c0) {
-          return true;
+    // Exact Safety Check for Transition p0 -> p1 Arriving at Beat `nextT`
+    function isStepSafe(lvl, p0, p1, nextT, hacked) {
+      const prevT = nextT - 1;
+      const { danger, guardPositions } = getDangerAtBeat(lvl, nextT, hacked);
+      if (danger.has(`${p1.r},${p1.c}`)) return false;
+
+      // Prevent head-on guard cell swap between prevT and nextT!
+      for (let i = 0; i < lvl.guards.length; i++) {
+        const gPrev = getGuardState(lvl.guards[i], prevT);
+        const gNext = guardPositions[i];
+        if (p1.r === gPrev.r && p1.c === gPrev.c && p0.r === gNext.r && p0.c === gNext.c) {
+          return false;
         }
       }
-      return false;
+      return true;
     }
 
-    // Exact Space-Time BFS Solver (guarantees 100% solvability + optimal path for Hint)
-    function solveHeistBFS(level, maxDepth = 46) {
-      const N = level.size;
-      const targetMask = (1 << level.loots.length) - 1;
+    // Exact Space-Time BFS Solver Across (r, c, t % 12, lootMask, hacked)
+    // Guarantees 100% Solvability AND Powers Live Contextual Mastermind Hints!
+    function solveHeistSpaceTime(lvl, initR, initC, initT, initLootMask, initHacked, maxDepth = 42) {
+      const targetLootMask = (1 << lvl.loots.length) - 1;
+      const startKey = `${initR},${initC},${initT % PERIOD},${initLootMask},${initHacked ? 1 : 0}`;
+      const queue = [{
+        r: initR, c: initC, t: initT,
+        loot: initLootMask,
+        hacked: initHacked ? 1 : 0,
+        parent: null
+      }];
+      const visited = new Set([startKey]);
 
-      const collectMask = (r, c, mask) => {
-        let m = mask;
-        for (let i = 0; i < level.loots.length; i++) {
-          if (level.loots[i].r === r && level.loots[i].c === c) m |= (1 << i);
-        }
-        return m;
-      };
+      const moves = [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]];
 
-      const startMask = collectMask(level.start.r, level.start.c, 0);
-      if (getHazardAt(level, level.start.r, level.start.c, 0)) return null;
+      while (queue.length > 0) {
+        const cur = queue.shift();
 
-      // Visited key: (r, c, mask, t % CYCLE_LCM)
-      const visited = new Set();
-      const makeKey = (r, c, mask, t) => `${r},${c},${mask},${t % CYCLE_LCM}`;
-      visited.add(makeKey(level.start.r, level.start.c, startMask, 0));
-
-      const queue = [{ r: level.start.r, c: level.start.c, mask: startMask, t: 0, parent: null }];
-      let head = 0;
-      const moves5 = [[0, 1], [1, 0], [0, -1], [-1, 0], [0, 0]]; // 4 dirs + WAIT
-
-      while (head < queue.length) {
-        const cur = queue[head++];
-        if (cur.mask === targetMask && cur.r === level.exit.r && cur.c === level.exit.c) {
-          // Reconstruct optimal path
+        if (cur.r === lvl.exit.r && cur.c === lvl.exit.c && cur.loot === targetLootMask) {
+          // Reconstruct exact stealth step path!
           const path = [];
           let node = cur;
           while (node) {
-            path.push({ r: node.r, c: node.c });
+            path.unshift({ r: node.r, c: node.c });
             node = node.parent;
           }
-          return path.reverse();
+          return path;
         }
-        if (cur.t >= maxDepth) continue;
 
-        const nt = cur.t + 1;
-        for (const [dr, dc] of moves5) {
-          const nr = cur.r + dr;
-          const nc = cur.c + dc;
-          if (nr < 0 || nr >= N || nc < 0 || nc >= N) continue;
-          if (level.walls[nr][nc]) continue;
-          if (getHazardAt(level, nr, nc, nt)) continue;
-          if (isGuardHeadOnSwap(level, cur.r, cur.c, nr, nc, nt)) continue;
+        if (cur.t - initT >= maxDepth) continue;
 
-          const nMask = collectMask(nr, nc, cur.mask);
-          const k = makeKey(nr, nc, nMask, nt);
-          if (!visited.has(k)) {
-            visited.add(k);
-            queue.push({ r: nr, c: nc, mask: nMask, t: nt, parent: cur });
+        const nextT = cur.t + 1;
+        for (const [dr, dc] of moves) {
+          const nr = cur.r + dr, nc = cur.c + dc;
+          if (nr < 0 || nr >= lvl.N || nc < 0 || nc >= lvl.N || lvl.grid[nr][nc] === 1) continue;
+
+          let nextHacked = cur.hacked;
+          if (lvl.terminal && nr === lvl.terminal.r && nc === lvl.terminal.c) nextHacked = 1;
+
+          if (!isStepSafe(lvl, cur, { r: nr, c: nc }, nextT, !!nextHacked)) continue;
+
+          let nextLoot = cur.loot;
+          lvl.loots.forEach((lt, idx) => {
+            if (lt.r === nr && lt.c === nc) nextLoot |= (1 << idx);
+          });
+
+          const key = `${nr},${nc},${nextT % PERIOD},${nextLoot},${nextHacked}`;
+          if (!visited.has(key)) {
+            visited.add(key);
+            queue.push({ r: nr, c: nc, t: nextT, loot: nextLoot, hacked: nextHacked, parent: cur });
           }
         }
       }
       return null;
     }
 
-    // Simple static shortest distance (ignoring hazards) to ensure blueprint has real tactical depth
-    function staticMinSteps(level) {
-      const temp = { ...level, lasers: [], cameras: [], guards: [] };
-      const p = solveHeistBFS(temp, 40);
-      return p ? p.length - 1 : 999;
-    }
-
-    // ==============================================
-    // DETERMINISTIC 500-HEIST MUSEUM GENERATOR
-    // ==============================================
-    function buildHeistLevel(levelNum) {
-      const size = levelNum <= 100 ? 6 : (levelNum <= 300 ? 7 : (levelNum <= 420 ? 8 : 9));
-      const lootCount = levelNum >= 301 ? 2 : 1;
-
-      let laserGoal, camGoal, guardGoal, wallDensity, cushion;
-      if (levelNum <= 40) {
-        laserGoal = 2; camGoal = 0; guardGoal = 0; wallDensity = 0.20; cushion = 10;
-      } else if (levelNum <= 100) {
-        laserGoal = 2; camGoal = 1; guardGoal = 0; wallDensity = 0.22; cushion = 9;
-      } else if (levelNum <= 200) {
-        laserGoal = 3; camGoal = 2; guardGoal = 0; wallDensity = 0.22; cushion = 8;
-      } else if (levelNum <= 300) {
-        laserGoal = 2; camGoal = 2; guardGoal = 1; wallDensity = 0.21; cushion = 8;
-      } else if (levelNum <= 400) {
-        laserGoal = 3; camGoal = 2; guardGoal = levelNum > 350 ? 2 : 1; wallDensity = 0.20; cushion = 7;
-      } else {
-        laserGoal = 3; camGoal = 3; guardGoal = 2; wallDensity = 0.19; cushion = 5;
-      }
-
-      const key = (r, c) => `${r},${c}`;
+    // Constructive 500-Blueprint Verified Generator!
+    function buildBlueprintLevel(levelNum) {
+      const chapIdx = Math.min(4, Math.floor((levelNum - 1) / 100));
+      const N = chapIdx <= 1 ? 7 : 8;
+      const wantGuards = chapIdx === 0 ? 1 : (chapIdx <= 3 ? 2 : 2);
+      const wantCameras = chapIdx === 0 ? 1 : (chapIdx <= 2 ? 1 : 2);
+      const wantLasers = chapIdx === 0 ? 0 : (chapIdx === 1 ? 3 : (chapIdx <= 3 ? 4 : 5));
+      const wantTerminal = chapIdx >= 2;
+      const wantLoots = chapIdx >= 3 ? 2 : 1;
 
       for (let attempt = 0; attempt < 45; attempt++) {
-        const rng = mulberry32(levelNum * 91453 + attempt * 65537 + 13379);
-        const walls = Array.from({ length: size }, () => Array(size).fill(false));
+        const rng = mulberry32(levelNum * 449131 + attempt * 7919 + 52103);
 
-        // Pick Start & Exit on opposite museum sides
-        const corners = [
-          [{ r: size - 1, c: 0 }, { r: 0, c: size - 1 }],
-          [{ r: 0, c: 0 }, { r: size - 1, c: size - 1 }],
-          [{ r: size - 1, c: size - 1 }, { r: 0, c: 0 }],
-          [{ r: 0, c: size - 1 }, { r: size - 1, c: 0 }]
-        ];
-        const [start, exit] = corners[(levelNum + attempt) % 4];
+        // 1. Open Museum Floorplan + Architectural Pillars (Never seals off start/exit!)
+        const grid = Array.from({ length: N }, () => Array(N).fill(0));
+        const pillarCount = N === 7 ? 7 : 10;
+        const start = { r: N - 1, c: 0 };
+        const exit = { r: 0, c: N - 1 };
 
-        // Pick 1 or 2 Loot Vault pedestals spaced well away from Start & Exit
-        const loots = [];
-        const lootIcons = ["💎", "👑"];
-        const openForLoot = [];
-        for (let r = 0; r < size; r++) {
-          for (let c = 0; c < size; c++) {
-            const ds = Math.abs(r - start.r) + Math.abs(c - start.c);
-            const de = Math.abs(r - exit.r) + Math.abs(c - exit.c);
-            if (ds >= 3 && de >= 3) openForLoot.push({ r, c });
+        let placedP = 0;
+        for (let k = 0; k < 50 && placedP < pillarCount; k++) {
+          const pr = 1 + Math.floor(rng() * (N - 2));
+          const pc = 1 + Math.floor(rng() * (N - 2));
+          if (grid[pr][pc] === 0) {
+            grid[pr][pc] = 1;
+            placedP++;
           }
         }
-        const shuffledLoot = shuffle(openForLoot, rng);
-        for (const cand of shuffledLoot) {
-          if (loots.length >= lootCount) break;
-          if (loots.some((l) => Math.abs(l.r - cand.r) + Math.abs(l.c - cand.c) < 3)) continue;
-          loots.push({ r: cand.r, c: cand.c, icon: lootIcons[loots.length] });
-        }
-        if (loots.length < lootCount) continue;
 
-        const reserved = new Set([key(start.r, start.c), key(exit.r, exit.c)]);
-        loots.forEach((l) => reserved.add(key(l.r, l.c)));
-
-        // Place architectural display walls & pillars
-        const wallTarget = Math.floor(size * size * wallDensity);
-        const wallCands = [];
-        for (let r = 0; r < size; r++) {
-          for (let c = 0; c < size; c++) {
-            if (!reserved.has(key(r, c))) wallCands.push({ r, c });
-          }
-        }
-        const shuffledWalls = shuffle(wallCands, rng);
-        let wallsPlaced = 0;
-        for (const wc of shuffledWalls) {
-          if (wallsPlaced >= wallTarget) break;
-          walls[wc.r][wc.c] = true;
-          wallsPlaced++;
-        }
-
-        // Quick static connectivity check before placing hazards
-        const baseLvl = { size, walls, start, exit, loots, lasers: [], cameras: [], guards: [] };
-        const baseSteps = staticMinSteps(baseLvl);
-        if (baseSteps > 30) continue;
-
-        // Gather all wall cells (for mounting cameras) and open cells (for lasers & guards)
-        const wallCells = [];
         const openCells = [];
-        for (let r = 0; r < size; r++) {
-          for (let c = 0; c < size; c++) {
-            if (walls[r][c]) wallCells.push({ r, c });
-            else if (!reserved.has(key(r, c))) openCells.push({ r, c });
-          }
-        }
-
-        // 1. Place Pulsing Laser Beams (length 2–3 open cells, period 4: 2 ON, 2 OFF)
-        const lasers = [];
-        const usedLaserCells = new Set();
-        const shuffledOpen = shuffle(openCells, rng);
-        for (const oc of shuffledOpen) {
-          if (lasers.length >= laserGoal) break;
-          const horiz = rng() < 0.5;
-          const dr = horiz ? 0 : 1;
-          const dc = horiz ? 1 : 0;
-          const beamLen = 2 + (rng() < 0.55 ? 1 : 0);
-          const cells = [];
-          let ok = true;
-          for (let k = 0; k < beamLen; k++) {
-            const nr = oc.r + dr * k;
-            const nc = oc.c + dc * k;
-            if (nr >= size || nc >= size || walls[nr][nc] || reserved.has(key(nr, nc)) || usedLaserCells.has(key(nr, nc))) {
-              ok = false; break;
+        for (let r = 0; r < N; r++) {
+          for (let c = 0; c < N; c++) {
+            if (grid[r][c] === 0 && !(r === start.r && c === start.c) && !(r === exit.r && c === exit.c)) {
+              openCells.push({ r, c });
             }
-            cells.push({ r: nr, c: nc });
-          }
-          if (ok && cells.length >= 2) {
-            cells.forEach((c) => usedLaserCells.add(key(c.r, c.c)));
-            lasers.push({
-              cells,
-              horiz,
-              period: 4,
-              onBeats: 2,
-              phase: Math.floor(rng() * 4)
-            });
           }
         }
+        const pool = shuffle(openCells, rng);
 
-        // 2. Place Rotating CCTV Cameras mounted on interior wall pillars
-        const cameras = [];
-        const shuffledWallCells = shuffle(wallCells, rng);
-        for (const wc of shuffledWallCells) {
-          if (cameras.length >= camGoal) break;
-          // Check which directions look onto at least 2 open non-start cells
-          const validDirs = [];
-          for (let d = 0; d < 4; d++) {
-            const r1 = wc.r + DR[d], c1 = wc.c + DC[d];
-            if (r1 >= 0 && r1 < size && c1 >= 0 && c1 < size && !walls[r1][c1]) {
-              // Ensure camera never blinds the Start tile
-              let hitsStart = false;
-              for (let st = 1; st <= 2; st++) {
-                const rr = wc.r + DR[d] * st, cc = wc.c + DC[d] * st;
-                if (rr < 0 || rr >= size || cc < 0 || cc >= size || walls[rr][cc]) break;
-                if (rr === start.r && cc === start.c) hitsStart = true;
+        // 2. Place Vault Diamond Loot(s) Away From Start
+        const loots = [];
+        for (const cell of pool) {
+          if (loots.length >= wantLoots) break;
+          if (Math.hypot(cell.r - start.r, cell.c - start.c) < 3) continue;
+          if (loots.some((l) => Math.hypot(l.r - cell.r, l.c - cell.c) < 2.5)) continue;
+          loots.push({ id: loots.length, r: cell.r, c: cell.c });
+        }
+        if (loots.length < wantLoots) continue;
+
+        // 3. Place Optional Cyan Hacking Terminal (Ch. 3–5)
+        let terminal = null;
+        if (wantTerminal) {
+          const termCand = pool.find((cell) =>
+            Math.hypot(cell.r - start.r, cell.c - start.c) >= 2 &&
+            !loots.some((l) => l.r === cell.r && l.c === cell.c)
+          );
+          if (termCand) terminal = { r: termCand.r, c: termCand.c };
+        }
+
+        // 4. Create Patrolling Guards (Exact Cycle Lengths 4 or 6 Dividing PERIOD=12!)
+        const guards = [];
+        for (let gIdx = 0; gIdx < wantGuards; gIdx++) {
+          const horiz = (gIdx + levelNum) % 2 === 0;
+          const lenSpan = rng() < 0.5 ? 3 : 4; // 3 cells -> 4-beat loop; 4 cells -> 6-beat loop!
+          let foundLoop = null;
+
+          for (let tries = 0; tries < 24; tries++) {
+            const r0 = Math.floor(rng() * (horiz ? N : N - lenSpan + 1));
+            const c0 = Math.floor(rng() * (horiz ? N - lenSpan + 1 : N));
+            const seg = [];
+            let clear = true;
+            for (let s = 0; s < lenSpan; s++) {
+              const rr = horiz ? r0 : r0 + s;
+              const cc = horiz ? c0 + s : c0;
+              if (grid[rr][cc] === 1 || (rr === start.r && cc === start.c) || (rr === exit.r && cc === exit.c)) {
+                clear = false; break;
               }
-              if (!hitsStart) validDirs.push(d);
+              seg.push({ r: rr, c: cc });
             }
+            if (!clear) continue;
+            // Build ping-pong loop: [0,1,2,1] (len 4) or [0,1,2,3,2,1] (len 6)
+            const loop = [...seg, ...seg.slice(1, -1).reverse()];
+            foundLoop = { loop, defaultDir: horiz ? 1 : 2 };
+            break;
           }
-          if (validDirs.length < 2) continue;
+          if (foundLoop) guards.push(foundLoop);
+        }
 
-          // Build 4-beat sweeping cycle (either full 4-way spin or 2-way sweep)
-          let dirs;
-          if (validDirs.length === 4) {
-            dirs = rng() < 0.5 ? [0, 1, 2, 3] : [0, 3, 2, 1];
-          } else {
-            const dA = validDirs[0];
-            const dB = validDirs[1];
-            dirs = [dA, dA, dB, dB];
+        // 5. Mount Sweeping CCTV Cameras on Interior Pillars (Exact 4-Beat Rotation Cycle!)
+        const cameras = [];
+        const wallCells = [];
+        for (let r = 1; r < N - 1; r++) {
+          for (let c = 1; c < N - 1; c++) {
+            if (grid[r][c] === 1) wallCells.push({ r, c });
           }
+        }
+        for (const wc of shuffle(wallCells, rng).slice(0, wantCameras)) {
+          const offset = Math.floor(rng() * 4);
           cameras.push({
-            r: wc.r,
-            c: wc.c,
-            dirs,
-            range: size >= 8 ? 3 : 2,
-            phase: Math.floor(rng() * 4)
+            r: wc.r, c: wc.c,
+            dirs: [0, 1, 2, 3].map((d) => (d + offset) % 4)
           });
         }
 
-        // 3. Place Patrolling Guards (3-tile back-and-forth [A,B,C,B] period 4, or 2x2 loop period 4)
-        const guards = [];
-        const guardStarts = shuffle(openCells, rng);
-        for (const gs of guardStarts) {
-          if (guards.length >= guardGoal) break;
-          // Avoid overlapping start or existing guards
-          if (Math.abs(gs.r - start.r) + Math.abs(gs.c - start.c) <= 2) continue;
-          if (guards.some((g) => Math.abs(g.path[0].r - gs.r) + Math.abs(g.path[0].c - gs.c) < 3)) continue;
-
-          let patrol = null;
-          const dirOrder = shuffle([0, 1, 2, 3], rng);
-          for (const d of dirOrder) {
-            const p0 = { r: gs.r, c: gs.c };
-            const p1 = { r: gs.r + DR[d], c: gs.c + DC[d] };
-            const p2 = { r: gs.r + DR[d] * 2, c: gs.c + DC[d] * 2 };
-            if (p2.r < 0 || p2.r >= size || p2.c < 0 || p2.c >= size) continue;
-            if (walls[p1.r][p1.c] || walls[p2.r][p2.c]) continue;
-            // Ensure guard never touches Start tile
-            if ((p1.r === start.r && p1.c === start.c) || (p2.r === start.r && p2.c === start.c)) continue;
-            patrol = [p0, p1, p2, p1];
-            break;
-          }
-
-          if (patrol) {
-            // Check flashlight never hits start at any beat
-            const testGuard = { path: patrol };
-            const testLvl = { size, walls };
-            let touchesStart = false;
-            for (let bt = 0; bt < 4; bt++) {
-              const st = getGuardState(testLvl, testGuard, bt);
-              if ((st.r === start.r && st.c === start.c) || (st.flash && st.flash.r === start.r && st.flash.c === start.c)) {
-                touchesStart = true;
-              }
-            }
-            if (!touchesStart) guards.push(testGuard);
-          }
+        // 6. Place Pulsing Crimson Laser Cells (2 ON / 2 OFF)
+        const lasers = [];
+        for (const cell of shuffle(openCells, rng)) {
+          if (lasers.length >= wantLasers) break;
+          if (loots.some((l) => l.r === cell.r && l.c === cell.c)) continue;
+          if (terminal && terminal.r === cell.r && terminal.c === cell.c) continue;
+          if (guards.some((g) => g.loop.some((p) => p.r === cell.r && p.c === cell.c))) continue;
+          lasers.push({ r: cell.r, c: cell.c, phase: (lasers.length * 2) % 4 });
         }
-
-        if (lasers.length < Math.max(1, laserGoal - 1)) continue;
-        if (camGoal > 0 && cameras.length === 0) continue;
-        if (guardGoal > 0 && guards.length === 0) continue;
 
         const candidate = {
           levelNum,
-          size,
-          walls,
+          chapIdx,
+          N,
+          grid,
           start,
           exit,
           loots,
-          lasers,
+          terminal,
+          guards,
           cameras,
-          guards
+          lasers
         };
 
-        const solution = solveHeistBFS(candidate, 42);
-        if (!solution) continue;
+        // Ensure Start Tile Is Safe at Beat 0!
+        if (getDangerAtBeat(candidate, 0, false).danger.has(`${start.r},${start.c}`)) continue;
 
-        const optBeats = solution.length - 1;
-        // Require a satisfying multi-step blueprint
-        if (optBeats < size + 2) continue;
-
-        candidate.solution = solution;
-        candidate.parBeats = optBeats;
-        candidate.maxBeats = optBeats + cushion;
-        return candidate;
+        // Run Exact Space-Time BFS Certification!
+        const sol = solveHeistSpaceTime(candidate, start.r, start.c, 0, 0, false, 38);
+        if (sol && sol.length >= 8) {
+          candidate.parSteps = sol.length - 1;
+          return candidate;
+        }
       }
 
-      // Guaranteed 100% Solvable Deterministic Fallback Blueprint
-      const fSize = 6;
-      const fWalls = Array.from({ length: fSize }, () => Array(fSize).fill(false));
-      fWalls[1][2] = true; fWalls[2][2] = true; fWalls[4][3] = true; fWalls[3][3] = true;
-      const fb = {
+      // Guaranteed Solvable Clean Fallback Blueprint
+      const fbGrid = Array.from({ length: 7 }, () => Array(7).fill(0));
+      fbGrid[2][2] = 1; fbGrid[2][4] = 1; fbGrid[4][2] = 1; fbGrid[4][4] = 1;
+      return {
         levelNum,
-        size: fSize,
-        walls: fWalls,
-        start: { r: 5, c: 0 },
-        exit: { r: 0, c: 5 },
-        loots: [{ r: 1, c: 4, icon: "💎" }],
-        lasers: [
-          { cells: [{ r: 3, c: 0 }, { r: 3, c: 1 }], horiz: true, period: 4, onBeats: 2, phase: 0 },
-          { cells: [{ r: 2, c: 4 }, { r: 2, c: 5 }], horiz: true, period: 4, onBeats: 2, phase: 2 }
-        ],
-        cameras: [{ r: 1, c: 2, dirs: [0, 0, 1, 1], range: 2, phase: 1 }],
-        guards: []
+        chapIdx,
+        N: 7,
+        grid: fbGrid,
+        start: { r: 6, c: 0 },
+        exit: { r: 0, c: 6 },
+        loots: [{ id: 0, r: 1, c: 1 }],
+        terminal: null,
+        guards: [{ loop: [{ r: 3, c: 1 }, { r: 3, c: 2 }, { r: 3, c: 3 }, { r: 3, c: 4 }, { r: 3, c: 3 }, { r: 3, c: 2 }], defaultDir: 1 }],
+        cameras: [{ r: 2, c: 4, dirs: [0, 1, 2, 3] }],
+        lasers: [],
+        parSteps: 14
       };
-      fb.solution = solveHeistBFS(fb, 36);
-      fb.parBeats = fb.solution.length - 1;
-      fb.maxBeats = fb.parBeats + 10;
-      return fb;
     }
 
     const levelCache = new Map();
-    function getLevel(num) {
-      if (!levelCache.has(num)) {
-        levelCache.set(num, buildHeistLevel(num));
-      }
+    function getBlueprint(num) {
+      if (!levelCache.has(num)) levelCache.set(num, buildBlueprintLevel(num));
       return levelCache.get(num);
     }
 
@@ -1089,7 +1132,7 @@
     }
 
     // ==============================================
-    // STEALTH WEB AUDIO ENGINE (BEEPS, STEPS, ALARM)
+    // STEALTH SPY, LASER ALARM & VAULT WEB AUDIO
     // ==============================================
     let audioCtx = null;
     let soundOn = true;
@@ -1102,7 +1145,7 @@
       if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
     }
 
-    function playTone(freq, dur, type = "sine", vol = 0.1) {
+    function playTone(freq, dur, type = "sine", vol = 0.085) {
       if (!soundOn) return;
       initAudio();
       if (!audioCtx) return;
@@ -1111,57 +1154,56 @@
       const g = audioCtx.createGain();
       osc.type = type;
       osc.frequency.setValueAtTime(freq, now);
-      g.gain.setValueAtTime(vol, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
       osc.connect(g);
       g.connect(audioCtx.destination);
       osc.start(now);
       osc.stop(now + dur + 0.02);
     }
 
-    function sfxPlot() { playTone(560, 0.045, "triangle", 0.08); }
-    function sfxWait() { playTone(380, 0.06, "sine", 0.08); }
-    function sfxUndo() { playTone(300, 0.05, "triangle", 0.07); }
-    function sfxStep() { playTone(260, 0.04, "triangle", 0.07); }
-    function sfxLoot() {
-      playTone(880, 0.12, "sine", 0.13);
-      setTimeout(() => playTone(1318.5, 0.22, "sine", 0.13), 75);
+    function sfxPlotStep(step) { playTone(380 + (step % 8) * 32, 0.045, "triangle", 0.07); }
+    function sfxWaitTick() { playTone(260, 0.05, "sine", 0.07); }
+    function sfxFootstep() { playTone(165, 0.04, "triangle", 0.06); }
+    function sfxLootGrab() {
+      playTone(880, 0.12, "sine", 0.11);
+      setTimeout(() => playTone(1318.5, 0.22, "sine", 0.11), 65);
     }
-    function sfxAlarm() {
-      [780, 520, 780, 520].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.13, "sawtooth", 0.14), i * 115);
-      });
+    function sfxTerminalHack() {
+      [520, 740, 1040].forEach((f, i) => setTimeout(() => playTone(f, 0.09, "square", 0.055), i * 45));
     }
-    function sfxSuccess() {
-      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.28, "sine", 0.13), i * 80);
+    function sfxAlarmCaught() {
+      [580, 380, 580].forEach((f, i) => setTimeout(() => playTone(f, 0.14, "sawtooth", 0.11), i * 110));
+    }
+    function sfxHeistWin() {
+      // Smooth Spy-Jazz Minor-9th Victory Arpeggio!
+      [329.63, 392.00, 493.88, 587.33, 739.99].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.55, "sine", 0.11), i * 80);
       });
     }
 
     // ==============================================
-    // GAME STATE, BLUEPRINT INPUT & EXECUTION LOOP
+    // GAME STATE, PLAN/EXECUTION ENGINE & RENDERER
     // ==============================================
     const canvas = document.getElementById("heistCanvas");
     const ctx = canvas.getContext("2d");
+
     const chapterLabel = document.getElementById("chapterLabel");
     const levelTitle = document.getElementById("levelTitle");
     const lootPill = document.getElementById("lootPill");
-    const budgetPill = document.getElementById("budgetPill");
     const solvedCounter = document.getElementById("solvedCounter");
-    const modeBadge = document.getElementById("modeBadge");
-    const beatReadout = document.getElementById("beatReadout");
+    const beatBadge = document.getElementById("beatBadge");
+    const objBadge = document.getElementById("objBadge");
     const waitBtn = document.getElementById("waitBtn");
-    const execBtn = document.getElementById("execBtn");
     const undoBtn = document.getElementById("undoBtn");
-    const peekBtn = document.getElementById("peekBtn");
-    const speedBtn = document.getElementById("speedBtn");
-    const soundBtn = document.getElementById("soundBtn");
+    const execBtn = document.getElementById("execBtn");
     const statusToast = document.getElementById("statusToast");
-    const stageOverlay = document.getElementById("stageOverlay");
-    const ovIcon = document.getElementById("ovIcon");
-    const ovHeading = document.getElementById("ovHeading");
-    const ovText = document.getElementById("ovText");
-    const ovActionBtn = document.getElementById("ovActionBtn");
+    const winOverlay = document.getElementById("winOverlay");
+    const winHeading = document.getElementById("winHeading");
+    const winText = document.getElementById("winText");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
+    const soundBtn = document.getElementById("soundBtn");
     const openPickerBtn = document.getElementById("openPickerBtn");
 
     let solvedSet = new Set();
@@ -1172,20 +1214,13 @@
       if (last >= 1 && last <= TOTAL_LEVELS) currentLevelNum = last;
     } catch (e) {}
 
-    let level = null;
-    let plan = []; // [{ r, c }, ...] where plan[0] = start
-    let mode = "plan"; // plan | running | won | caught
-    let peekNext = false;
-    let speedMult = 1;
-
-    // Execution Playback State
-    let runBeat = 0;        // integer beat currently transitioning FROM
-    let runFrac = 0;        // 0..1 interpolation to runBeat + 1
-    let runCollected = new Set();
-    let caughtAt = null;    // { r, c, reason }
-    let hintStepFlash = null; // { r, c, alpha }
-    let isPointerDown = false;
-    let pointerDraggedTile = false;
+    let bp = null;
+    let planPath = [];   // [{ r, c }, ...] index = beat T!
+    let mode = "plan";   // 'plan' | 'exec' | 'caught' | 'won'
+    let execBeat = 0;    // Current integer step during execution
+    let execFrac = 0;    // 0..1 smooth interpolation between execBeat and execBeat+1
+    let caughtAt = null;
+    let sparks = [];
     let toastTimer = null;
 
     function showToast(msg, ms = 2400) {
@@ -1195,88 +1230,114 @@
       toastTimer = setTimeout(() => statusToast.classList.remove("show"), ms);
     }
 
-    function getPlannedLootSet() {
-      const s = new Set();
-      for (const step of plan) {
-        level.loots.forEach((l, idx) => {
-          if (l.r === step.r && l.c === step.c) s.add(idx);
+    // Compute Cumulative Loot Mask & Hacked Status Along `planPath[0..upToIdx]`
+    function getProgressUpTo(upToIdx) {
+      let lootMask = 0;
+      let hacked = false;
+      const limit = Math.min(upToIdx, planPath.length - 1);
+      for (let i = 0; i <= limit; i++) {
+        const p = planPath[i];
+        bp.loots.forEach((lt, idx) => {
+          if (lt.r === p.r && lt.c === p.c) lootMask |= (1 << idx);
         });
+        if (bp.terminal && p.r === bp.terminal.r && p.c === bp.terminal.c) hacked = true;
       }
-      return s;
+      return { lootMask, hacked };
     }
 
-    function getPreviewBeat() {
-      if (mode === "running") return runBeat;
-      if (mode === "caught") return runBeat;
-      return (plan.length - 1) + (peekNext ? 1 : 0);
+    function countBits(mask) {
+      let c = 0, m = mask;
+      while (m) { c += m & 1; m >>= 1; }
+      return c;
     }
 
     function updateHUD() {
       const chap = getChapter(currentLevelNum);
       chapterLabel.textContent = chap.title;
-      levelTitle.textContent = `Heist #${currentLevelNum} / ${TOTAL_LEVELS}`;
+      levelTitle.textContent = `Blueprint #${currentLevelNum} / ${TOTAL_LEVELS}`;
       solvedCounter.textContent = `Cleared: ${solvedSet.size} / ${TOTAL_LEVELS}`;
-      openPickerBtn.textContent = `Heist ${currentLevelNum} / 500 ▾`;
+      openPickerBtn.textContent = `Blueprint ${currentLevelNum} / 500 ▾`;
 
-      const movesUsed = plan.length - 1;
-      budgetPill.textContent = `Moves: ${movesUsed} / ${level.maxBeats}`;
+      const inspectIdx = mode === "plan" ? planPath.length - 1 : execBeat;
+      const { lootMask, hacked } = getProgressUpTo(inspectIdx);
+      const gotLoot = countBits(lootMask);
+      lootPill.textContent = `💎 Loot: ${gotLoot} / ${bp.loots.length}`;
 
-      const lootCountNow = mode === "running" || mode === "won" || mode === "caught"
-        ? runCollected.size
-        : getPlannedLootSet().size;
-      lootPill.textContent = `💎 Loot: ${lootCountNow} / ${level.loots.length}`;
+      beatBadge.textContent = mode === "plan"
+        ? `⏱️ PLAN BEAT: T = ${planPath.length - 1}`
+        : `⏱️ LIVE BEAT: T = ${execBeat}`;
 
-      if (mode === "plan") {
-        modeBadge.textContent = peekNext ? "👁 PEEKING NEXT BEAT" : "✎ BLUEPRINT PLAN";
-        modeBadge.className = "mode-badge mode-plan";
-        const b = getPreviewBeat();
-        beatReadout.textContent = `Security Preview: Beat t = ${b}`;
-        execBtn.textContent = "▶ EXECUTE HEIST";
-        execBtn.className = "dock-btn exec-main";
-        execBtn.disabled = plan.length < 2;
-        waitBtn.disabled = movesUsed >= level.maxBeats;
-        undoBtn.disabled = plan.length <= 1;
-      } else if (mode === "running") {
-        modeBadge.textContent = "▶ EXECUTING HEIST";
-        modeBadge.className = "mode-badge mode-run";
-        beatReadout.textContent = `Live Execution: Beat t = ${runBeat} / ${movesUsed}`;
-        execBtn.textContent = "■ ABORT & EDIT";
-        execBtn.className = "dock-btn exec-stop";
-        execBtn.disabled = false;
-        waitBtn.disabled = true;
-        undoBtn.disabled = true;
+      const tip = planPath[planPath.length - 1];
+      const allLoot = gotLoot >= bp.loots.length;
+      const reachesExit = allLoot && tip.r === bp.exit.r && tip.c === bp.exit.c;
+
+      if (mode === "won") {
+        objBadge.textContent = "✨ VAULT CLEARED!";
       } else if (mode === "caught") {
-        modeBadge.textContent = "🚨 ALARM TRIGGERED";
-        modeBadge.className = "mode-badge mode-alert";
-        beatReadout.textContent = `Detected at Beat t = ${runBeat}`;
-        execBtn.disabled = true;
-        waitBtn.disabled = true;
-        undoBtn.disabled = true;
+        objBadge.textContent = "🚨 DETECTED! Edit & Add a Wait!";
+      } else if (reachesExit && mode === "plan") {
+        objBadge.textContent = "✅ Route Complete — Hit EXECUTE!";
+      } else if (allLoot) {
+        objBadge.textContent = "🚪 Loot Planned — Route to Exit!";
+      } else if (bp.terminal && !hacked) {
+        objBadge.textContent = "💻 Hack Terminal or Dodge Lasers → 💎";
       } else {
-        modeBadge.textContent = "✓ HEIST COMPLETE";
-        modeBadge.className = "mode-badge mode-run";
-        beatReadout.textContent = `Ghost Getaway in ${movesUsed} Beats!`;
-        execBtn.disabled = true;
-        waitBtn.disabled = true;
-        undoBtn.disabled = true;
+        objBadge.textContent = "🎯 Plot Route: Grab 💎 → Exit 🚪";
       }
 
-      peekBtn.classList.toggle("active-toggle", peekNext && mode === "plan");
+      const inPlan = mode === "plan";
+      waitBtn.disabled = !inPlan;
+      undoBtn.disabled = !inPlan || planPath.length <= 1;
+
+      if (mode === "won") {
+        execBtn.disabled = true;
+        execBtn.className = "tac-btn exec-main";
+        execBtn.textContent = "💎 HEIST COMPLETE";
+      } else if (mode === "exec" || mode === "caught") {
+        execBtn.disabled = false;
+        execBtn.className = "tac-btn exec-main edit-mode";
+        execBtn.textContent = "↺ EDIT BLUEPRINT";
+      } else {
+        execBtn.disabled = planPath.length <= 1;
+        execBtn.className = "tac-btn exec-main";
+        execBtn.textContent = reachesExit ? "▶ EXECUTE HEIST!" : "▶ TEST ROUTE";
+      }
     }
 
-    function loadLevel(num) {
-      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
-      level = getLevel(currentLevelNum);
-      plan = [{ r: level.start.r, c: level.start.c }];
+    function returnToPlanMode() {
       mode = "plan";
-      peekNext = false;
-      runBeat = 0;
-      runFrac = 0;
-      runCollected = new Set();
+      execBeat = 0;
+      execFrac = 0;
       caughtAt = null;
-      hintStepFlash = null;
+      updateHUD();
+    }
 
-      stageOverlay.classList.remove("show");
+    function startHeistExecution() {
+      if (mode === "won") return;
+      if (mode !== "plan") {
+        returnToPlanMode();
+        return;
+      }
+      if (planPath.length <= 1) return;
+      initAudio();
+      mode = "exec";
+      execBeat = 0;
+      execFrac = 0;
+      caughtAt = null;
+      updateHUD();
+    }
+
+    function loadBlueprint(num) {
+      currentLevelNum = Math.max(1, Math.min(TOTAL_LEVELS, num));
+      bp = getBlueprint(currentLevelNum);
+      planPath = [{ r: bp.start.r, c: bp.start.c }];
+      mode = "plan";
+      execBeat = 0;
+      execFrac = 0;
+      caughtAt = null;
+      sparks = [];
+
+      winOverlay.classList.remove("show");
       statusToast.classList.remove("show");
 
       try {
@@ -1286,98 +1347,45 @@
       updateHUD();
     }
 
-    function appendPlanStep(r, c, isWait = false) {
-      if (mode !== "plan") return false;
-      if (plan.length - 1 >= level.maxBeats) {
-        showToast(`Move budget reached (${level.maxBeats})! Undo or Execute your plan.`, 2100);
-        return false;
-      }
-      if (level.walls[r][c]) return false;
+    function appendStep(nr, nc) {
+      if (mode !== "plan") return;
+      if (nr < 0 || nr >= bp.N || nc < 0 || nc >= bp.N || bp.grid[nr][nc] === 1) return;
+      const tip = planPath[planPath.length - 1];
+      const dist = Math.abs(nr - tip.r) + Math.abs(nc - tip.c);
 
-      const tip = plan[plan.length - 1];
-      const dist = Math.abs(r - tip.r) + Math.abs(c - tip.c);
-      if (!isWait && dist !== 1) return false;
-
-      plan.push({ r, c });
-      if (isWait) sfxWait();
-      else sfxPlot();
-
-      // Friendly cue if player completes full path to Exit with all loot
-      const lootDone = getPlannedLootSet().size === level.loots.length;
-      if (lootDone && r === level.exit.r && c === level.exit.c) {
-        showToast("Route reaches Exit with all loot! Tap ▶ EXECUTE HEIST!", 2400);
+      if (dist === 0) {
+        // Tapping current spy tile inserts a clean 1-beat Wait!
+        planPath.push({ r: tip.r, c: tip.c });
+        sfxWaitTick();
+        updateHUD();
+        return;
       }
 
-      updateHUD();
-      return true;
+      if (dist === 1) {
+        planPath.push({ r: nr, c: nc });
+        sfxPlotStep(planPath.length);
+        updateHUD();
+        return;
+      }
+
+      // Auto-extend straight unobstructed corridor tap (same row or column!) for effortless mobile plotting
+      if (nr === tip.r || nc === tip.c) {
+        const dr = Math.sign(nr - tip.r);
+        const dc = Math.sign(nc - tip.c);
+        const steps = [];
+        let cr = tip.r, cc = tip.c;
+        while (cr !== nr || cc !== nc) {
+          cr += dr; cc += dc;
+          if (bp.grid[cr][cc] === 1) return;
+          steps.push({ r: cr, c: cc });
+        }
+        steps.forEach((st) => planPath.push(st));
+        sfxPlotStep(planPath.length);
+        updateHUD();
+      }
     }
 
-    function undoPlanStep() {
-      if (mode !== "plan" || plan.length <= 1) return;
-      plan.pop();
-      sfxUndo();
-      updateHUD();
-    }
-
-    function startExecution() {
-      if (mode !== "plan" || plan.length < 2) return;
-      initAudio();
-      mode = "running";
-      peekNext = false;
-      runBeat = 0;
-      runFrac = 0;
-      runCollected = new Set();
-      caughtAt = null;
-      statusToast.classList.remove("show");
-
-      // Collect loot if starting on loot (never happens normally, defensive)
-      level.loots.forEach((l, idx) => {
-        if (l.r === plan[0].r && l.c === plan[0].c) runCollected.add(idx);
-      });
-
-      sfxStep();
-      updateHUD();
-    }
-
-    function abortToPlan() {
-      mode = "plan";
-      caughtAt = null;
-      stageOverlay.classList.remove("show");
-      updateHUD();
-    }
-
-    function triggerCaught(r, c, reason) {
-      mode = "caught";
-      caughtAt = { r, c, reason };
-      sfxAlarm();
-      updateHUD();
-
-      ovIcon.textContent = "🚨";
-      ovHeading.textContent = "Alarm Triggered!";
-      ovText.textContent = reason;
-      ovActionBtn.textContent = "✎ Edit Blueprint & Retry";
-      setTimeout(() => stageOverlay.classList.add("show"), 420);
-    }
-
-    function triggerHeistWin() {
-      mode = "won";
-      sfxSuccess();
-      solvedSet.add(currentLevelNum);
-      try {
-        localStorage.setItem("zinplay_heist_500_solved", JSON.stringify([...solvedSet]));
-      } catch (e) {}
-      updateHUD();
-
-      const movesUsed = plan.length - 1;
-      const isLast = currentLevelNum === TOTAL_LEVELS;
-      ovIcon.textContent = "💎";
-      ovHeading.textContent = isLast ? "All 500 Heists Mastered!" : `Heist #${currentLevelNum} Cleared!`;
-      ovText.textContent = `Clean getaway in ${movesUsed} beats (Optimal Par: ${level.parBeats}).`;
-      ovActionBtn.textContent = isLast ? "Replay Heist #1" : `Next Blueprint (#${currentLevelNum + 1}) →`;
-      setTimeout(() => stageOverlay.classList.add("show"), 360);
-    }
-
-    // Viewport & Grid Geometry
+    // Viewport & Blueprint Grid Clicking
     function resizeCanvas() {
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1386,181 +1394,106 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function getGridMetrics() {
+    function getViewport() {
       const rect = canvas.parentElement.getBoundingClientRect();
-      const pad = 16;
-      const boardPx = Math.min(rect.width, rect.height) - pad * 2;
-      const cellPx = boardPx / level.size;
-      const ox = (rect.width - boardPx) / 2;
-      const oy = (rect.height - boardPx) / 2;
-      return { w: rect.width, h: rect.height, cellPx, ox, oy, boardPx };
+      const scale = Math.min(rect.width / WORLD_W, rect.height / WORLD_H);
+      const offsetX = (rect.width - WORLD_W * scale) / 2;
+      const offsetY = (rect.height - WORLD_H * scale) / 2;
+      return { w: rect.width, h: rect.height, scale, offsetX, offsetY };
     }
 
-    function clientToCell(clientX, clientY) {
-      const rect = canvas.getBoundingClientRect();
-      const m = getGridMetrics();
-      const c = Math.floor((clientX - rect.left - m.ox) / m.cellPx);
-      const r = Math.floor((clientY - rect.top - m.oy) / m.cellPx);
-      if (r < 0 || r >= level.size || c < 0 || c >= level.size) return null;
-      return { r, c };
+    function getCellPx() {
+      return (WORLD_W - 24) / bp.N;
     }
 
-    // Pointer Interaction (Tap OR Drag-to-Plot Blueprint Route)
     canvas.addEventListener("pointerdown", (e) => {
       if (mode !== "plan") return;
       initAudio();
-      const cell = clientToCell(e.clientX, e.clientY);
-      if (!cell) return;
-
-      isPointerDown = true;
-      pointerDraggedTile = false;
-      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-
-      const tip = plan[plan.length - 1];
-      const prev = plan.length >= 2 ? plan[plan.length - 2] : null;
-
-      if (cell.r === tip.r && cell.c === tip.c) {
-        // Wait if player taps current tip without dragging away
-        return;
-      }
-      if (prev && cell.r === prev.r && cell.c === prev.c) {
-        undoPlanStep();
-        pointerDraggedTile = true;
-        return;
-      }
-      if (Math.abs(cell.r - tip.r) + Math.abs(cell.c - tip.c) === 1 && !level.walls[cell.r][cell.c]) {
-        appendPlanStep(cell.r, cell.c, false);
-        pointerDraggedTile = true;
-      } else if (!level.walls[cell.r][cell.c]) {
-        showToast("Tap or drag onto a tile directly next to your current position!", 1900);
-      }
+      const rect = canvas.getBoundingClientRect();
+      const vp = getViewport();
+      const wx = (e.clientX - rect.left - vp.offsetX) / vp.scale;
+      const wy = (e.clientY - rect.top - vp.offsetY) / vp.scale;
+      const cs = getCellPx();
+      const c = Math.floor((wx - 12) / cs);
+      const r = Math.floor((wy - 12) / cs);
+      if (r < 0 || r >= bp.N || c < 0 || c >= bp.N) return;
+      appendStep(r, c);
     });
 
-    canvas.addEventListener("pointermove", (e) => {
-      if (!isPointerDown || mode !== "plan") return;
-      const cell = clientToCell(e.clientX, e.clientY);
-      if (!cell) return;
-
-      const tip = plan[plan.length - 1];
-      if (cell.r === tip.r && cell.c === tip.c) return;
-
-      const prev = plan.length >= 2 ? plan[plan.length - 2] : null;
-      if (prev && cell.r === prev.r && cell.c === prev.c) {
-        undoPlanStep();
-        pointerDraggedTile = true;
-        return;
-      }
-
-      if (Math.abs(cell.r - tip.r) + Math.abs(cell.c - tip.c) === 1 && !level.walls[cell.r][cell.c]) {
-        appendPlanStep(cell.r, cell.c, false);
-        pointerDraggedTile = true;
-      }
-    });
-
-    canvas.addEventListener("pointerup", (e) => {
-      if (!isPointerDown) return;
-      isPointerDown = false;
-      if (mode === "plan" && !pointerDraggedTile) {
-        const cell = clientToCell(e.clientX, e.clientY);
-        const tip = plan[plan.length - 1];
-        if (cell && cell.r === tip.r && cell.c === tip.c) {
-          appendPlanStep(tip.r, tip.c, true);
-          showToast("Added 1-beat ⏱ WAIT at this spot!", 1400);
-        }
-      }
-    });
-    canvas.addEventListener("pointercancel", () => { isPointerDown = false; });
-
-    // Dock & Utility Buttons
     waitBtn.addEventListener("click", () => {
       if (mode !== "plan") return;
       initAudio();
-      const tip = plan[plan.length - 1];
-      appendPlanStep(tip.r, tip.c, true);
-    });
-    undoBtn.addEventListener("click", () => {
-      initAudio();
-      undoPlanStep();
-    });
-    execBtn.addEventListener("click", () => {
-      if (mode === "plan") startExecution();
-      else if (mode === "running") abortToPlan();
-    });
-
-    document.getElementById("clearBtn").addEventListener("click", () => {
-      plan = [{ r: level.start.r, c: level.start.c }];
-      abortToPlan();
-    });
-
-    peekBtn.addEventListener("click", () => {
-      if (mode !== "plan") return;
-      peekNext = !peekNext;
+      const tip = planPath[planPath.length - 1];
+      planPath.push({ r: tip.r, c: tip.c });
+      sfxWaitTick();
       updateHUD();
     });
 
-    speedBtn.addEventListener("click", () => {
-      speedMult = speedMult === 1 ? 2 : 1;
-      speedBtn.classList.toggle("active-toggle", speedMult > 1);
-      speedBtn.textContent = speedMult > 1 ? "⚡ 2x ON" : "⚡ 2x";
+    undoBtn.addEventListener("click", () => {
+      if (mode !== "plan" || planPath.length <= 1) return;
+      initAudio();
+      planPath.pop();
+      sfxWaitTick();
+      updateHUD();
     });
 
-    // Smart Next-Step Hint Button (Uses verified Space-Time BFS solution!)
+    execBtn.addEventListener("click", startHeistExecution);
+
+    // Space-Time BFS Mastermind Hint: Plots Next Verified Safe Step From Current Tip!
     document.getElementById("hintBtn").addEventListener("click", () => {
-      if (mode !== "plan") abortToPlan();
+      if (mode === "won") return;
+      if (mode !== "plan") returnToPlanMode();
       initAudio();
 
-      // Check how much of current plan matches the verified solution prefix
-      let matchLen = 0;
-      for (let i = 0; i < Math.min(plan.length, level.solution.length); i++) {
-        if (plan[i].r === level.solution[i].r && plan[i].c === level.solution[i].c) {
-          matchLen++;
-        } else {
-          break;
-        }
+      const tip = planPath[planPath.length - 1];
+      const curT = planPath.length - 1;
+      const { lootMask, hacked } = getProgressUpTo(curT);
+
+      // Try solving directly from player's current endpoint first!
+      let sol = solveHeistSpaceTime(bp, tip.r, tip.c, curT, lootMask, hacked, 36);
+      if (!sol) {
+        // Player's current tip is in a trapped state -> restart cleanly and plot step 1 from start!
+        planPath = [{ r: bp.start.r, c: bp.start.c }];
+        sol = solveHeistSpaceTime(bp, bp.start.r, bp.start.c, 0, 0, false, 38);
       }
 
-      if (matchLen < plan.length) {
-        // Trim back to last matching optimal beat so hint keeps player on a guaranteed winning track
-        plan = plan.slice(0, Math.max(1, matchLen));
-      }
-
-      if (plan.length < level.solution.length) {
-        const nextPt = level.solution[plan.length];
-        const prevPt = plan[plan.length - 1];
-        const isWait = nextPt.r === prevPt.r && nextPt.c === prevPt.c;
-        plan.push({ r: nextPt.r, c: nextPt.c });
-        hintStepFlash = { r: nextPt.r, c: nextPt.c, alpha: 1.0 };
-        if (isWait) {
-          sfxWait();
-          showToast("💡 Hint: WAIT 1 beat here to let security pass!", 2100);
-        } else {
-          sfxPlot();
-          showToast("💡 Hint: Plotted next safe stealth step!", 1700);
-        }
+      if (sol && sol.length > 1) {
+        const nxt = sol[1];
+        const isWait = nxt.r === planPath[planPath.length - 1].r && nxt.c === planPath[planPath.length - 1].c;
+        planPath.push({ r: nxt.r, c: nxt.c });
+        sfxPlotStep(planPath.length);
         updateHUD();
-      } else {
-        showToast("Your blueprint is complete — tap ▶ EXECUTE HEIST!", 2200);
+        showToast(isWait ? "💡 Spy Hint: Added ⏳ WAIT 1 BEAT to let security cycle!" : "💡 Spy Hint: Plotted next safe stealth waypoint!", 2000);
       }
     });
 
+    document.getElementById("clearBtn").addEventListener("click", () => loadBlueprint(currentLevelNum));
     soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊 ON" : "🔇 OFF";
+      soundBtn.textContent = soundOn ? "🔊 Audio ON" : "🔇 OFF";
     });
-
-    ovActionBtn.addEventListener("click", () => {
-      if (mode === "won") {
-        loadLevel(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
-      } else {
-        abortToPlan();
-      }
+    nextLevelBtn.addEventListener("click", () => {
+      loadBlueprint(currentLevelNum === TOTAL_LEVELS ? 1 : currentLevelNum + 1);
     });
-
     document.getElementById("prevLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum > 1) loadLevel(currentLevelNum - 1);
+      if (currentLevelNum > 1) loadBlueprint(currentLevelNum - 1);
     });
     document.getElementById("nextLvlBtn").addEventListener("click", () => {
-      if (currentLevelNum < TOTAL_LEVELS) loadLevel(currentLevelNum + 1);
+      if (currentLevelNum < TOTAL_LEVELS) loadBlueprint(currentLevelNum + 1);
+    });
+
+    // Keyboard Support (WASD/Arrows to plot, Space to Wait, Backspace to Undo, Enter to Execute!)
+    window.addEventListener("keydown", (e) => {
+      if (pickerModal.classList.contains("open") || mode === "won") return;
+      if (e.key === "Enter") { e.preventDefault(); startHeistExecution(); return; }
+      if (mode !== "plan") return;
+      const tip = planPath[planPath.length - 1];
+      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") { e.preventDefault(); appendStep(tip.r - 1, tip.c); }
+      else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") { e.preventDefault(); appendStep(tip.r + 1, tip.c); }
+      else if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") { e.preventDefault(); appendStep(tip.r, tip.c - 1); }
+      else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") { e.preventDefault(); appendStep(tip.r, tip.c + 1); }
+      else if (e.key === " ") { e.preventDefault(); appendStep(tip.r, tip.c); }
+      else if (e.key === "Backspace") { e.preventDefault(); undoBtn.click(); }
     });
 
     // Picker Modal
@@ -1594,7 +1527,7 @@
         if (n === currentLevelNum) cell.classList.add("active");
         cell.textContent = n;
         cell.addEventListener("click", () => {
-          loadLevel(n);
+          loadBlueprint(n);
           pickerModal.classList.remove("open");
         });
         levelsGridEl.appendChild(cell);
@@ -1616,436 +1549,352 @@
     document.getElementById("jumpBtn").addEventListener("click", () => {
       const val = parseInt(jumpInput.value, 10);
       if (val >= 1 && val <= TOTAL_LEVELS) {
-        loadLevel(val);
+        loadBlueprint(val);
         pickerModal.classList.remove("open");
       }
     });
 
     // ==============================================
-    // REAL-TIME EXECUTION STEP & BLUEPRINT RENDERER
+    // BLUEPRINT FLOORPLAN & STEALTH EXECUTION RENDERER
     // ==============================================
-    function updateExecution(dt) {
-      if (mode !== "running") return;
+    let lastTime = performance.now();
 
-      const beatDuration = 0.36 / speedMult;
-      runFrac += dt / beatDuration;
+    function frame(now) {
+      const dt = Math.min(0.04, (now - lastTime) / 1000);
+      lastTime = now;
 
-      if (runFrac >= 1) {
-        runFrac = 0;
-        const prevPt = plan[runBeat];
-        runBeat++;
-        const curPt = plan[runBeat];
+      // === ADVANCE LIVE HEIST EXECUTION BEAT-BY-BEAT ===
+      if (mode === "exec") {
+        execFrac += dt * 3.1; // Crisp rhythmic ~0.32s per beat!
+        if (execFrac >= 1) {
+          execFrac = 0;
+          const prevP = planPath[execBeat];
+          const nextBeat = execBeat + 1;
+          const nextP = planPath[nextBeat];
+          const { lootMask: prevMask, hacked: prevHacked } = getProgressUpTo(execBeat);
+          const { lootMask: nextMask, hacked: nextHacked } = getProgressUpTo(nextBeat);
 
-        // 1. Check head-on guard swap
-        if (isGuardHeadOnSwap(level, prevPt.r, prevPt.c, curPt.r, curPt.c, runBeat)) {
-          triggerCaught(curPt.r, curPt.c, `Ran straight into a patrolling guard at Beat ${runBeat}!`);
-          return;
-        }
+          // Check Exact Space-Time Safety on Arrival!
+          if (!isStepSafe(bp, prevP, nextP, nextBeat, nextHacked)) {
+            execBeat = nextBeat;
+            mode = "caught";
+            caughtAt = nextP;
+            sfxAlarmCaught();
+            showToast(`🚨 Spotted at Beat T=${nextBeat}! Tap ↺ EDIT BLUEPRINT & add a Wait.`, 3100);
+            updateHUD();
+          } else {
+            execBeat = nextBeat;
+            if (nextMask !== prevMask) {
+              sfxLootGrab();
+              const cs = getCellPx();
+              for (let k = 0; k < 10; k++) {
+                const a = Math.random() * Math.PI * 2;
+                sparks.push({ x: 12 + (nextP.c + 0.5) * cs, y: 12 + (nextP.r + 0.5) * cs, vx: Math.cos(a) * 2, vy: Math.sin(a) * 2, r: 2.4, color: "#38bdf8", alpha: 1 });
+              }
+            } else if (nextHacked && !prevHacked) {
+              sfxTerminalHack();
+              showToast("💻 Security Terminal hacked! All laser grids permanently OFF!", 2200);
+            } else {
+              sfxFootstep();
+            }
 
-        // 2. Check hazard detection at arrival beat
-        const haz = getHazardAt(level, curPt.r, curPt.c, runBeat);
-        if (haz) {
-          const msg = haz.type === "laser"
-            ? `Tripped a red laser grid at Beat ${runBeat}! Insert a ⏱ WAIT or reroute.`
-            : (haz.type === "camera"
-              ? `Spotted by a sweeping CCTV camera at Beat ${runBeat}!`
-              : `Caught by a night patrol guard at Beat ${runBeat}!`);
-          triggerCaught(curPt.r, curPt.c, msg);
-          return;
-        }
+            // Check Complete Heist Victory!
+            const targetMask = (1 << bp.loots.length) - 1;
+            if (nextMask === targetMask && nextP.r === bp.exit.r && nextP.c === bp.exit.c) {
+              mode = "won";
+              solvedSet.add(currentLevelNum);
+              try {
+                localStorage.setItem("zinplay_heist_500_solved", JSON.stringify([...solvedSet]));
+              } catch (e) {}
+              sfxHeistWin();
+              updateHUD();
 
-        // 3. Collect Loot if stepped onto artifact tile
-        let pickedNewLoot = false;
-        level.loots.forEach((l, idx) => {
-          if (l.r === curPt.r && l.c === curPt.c && !runCollected.has(idx)) {
-            runCollected.add(idx);
-            pickedNewLoot = true;
+              const isLast = currentLevelNum === TOTAL_LEVELS;
+              winHeading.textContent = isLast ? "All 500 Vaults Cracked!" : `Blueprint #${currentLevelNum} Cleared!`;
+              winText.textContent = `Ghosted past all sensors in ${execBeat} beats (Par: ${bp.parSteps}).`;
+              nextLevelBtn.textContent = isLast ? "Replay Blueprint #1" : `Next Blueprint (#${currentLevelNum + 1}) →`;
+              setTimeout(() => winOverlay.classList.add("show"), 520);
+            } else if (execBeat >= planPath.length - 1) {
+              // Plan finished safely, but didn't reach Exit with all Loot yet!
+              showToast("Route ended safely! Extend your blueprint to grab 💎 and reach Exit 🚪.", 2600);
+              returnToPlanMode();
+            } else {
+              updateHUD();
+            }
           }
-        });
-        if (pickedNewLoot) sfxLoot();
-        else sfxStep();
-
-        updateHUD();
-
-        // 4. Check immediate victory at Exit with all loot
-        if (runCollected.size === level.loots.length && curPt.r === level.exit.r && curPt.c === level.exit.c) {
-          triggerHeistWin();
-          return;
-        }
-
-        // 5. Reached end of plotted plan without escaping
-        if (runBeat >= plan.length - 1) {
-          const missing = level.loots.length - runCollected.size;
-          const msg = missing > 0
-            ? `Plan ended with ${missing} artifact${missing > 1 ? "s" : ""} still left in the vault!`
-            : "You grabbed the loot, but your route didn't reach the green Exit door!";
-          mode = "plan";
-          updateHUD();
-          showToast(msg, 3200);
-        }
-      }
-    }
-
-    function drawBlueprint(now) {
-      const m = getGridMetrics();
-      const N = level.size;
-      const cs = m.cellPx;
-      ctx.clearRect(0, 0, m.w, m.h);
-
-      const cxOf = (c) => m.ox + (c + 0.5) * cs;
-      const cyOf = (r) => m.oy + (r + 0.5) * cs;
-      const visBeat = mode === "running" ? Math.min(plan.length - 1, runBeat + (runFrac > 0.5 ? 1 : 0)) : getPreviewBeat();
-
-      // 1. Blueprint Floor Grid & Subtle Architectural Measurement Ticks
-      for (let r = 0; r < N; r++) {
-        for (let c = 0; c < N; c++) {
-          const x = m.ox + c * cs;
-          const y = m.oy + r * cs;
-          ctx.fillStyle = (r + c) % 2 === 0 ? "rgba(56, 189, 248, 0.035)" : "rgba(56, 189, 248, 0.065)";
-          ctx.fillRect(x, y, cs, cs);
-          ctx.strokeStyle = "rgba(125, 211, 252, 0.14)";
-          ctx.lineWidth = 1;
-          ctx.strokeRect(x, y, cs, cs);
         }
       }
 
-      // Outer blueprint frame
-      ctx.strokeStyle = "rgba(125, 211, 252, 0.45)";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(m.ox, m.oy, m.boardPx, m.boardPx);
+      // === RENDER ILLUMINATED BLUEPRINT STAGE ===
+      const vp = getViewport();
+      ctx.clearRect(0, 0, vp.w, vp.h);
 
-      // 2. Architectural Museum Walls & Display Cases
-      for (let r = 0; r < N; r++) {
-        for (let c = 0; c < N; c++) {
-          if (!level.walls[r][c]) continue;
-          const x = m.ox + c * cs + 2;
-          const y = m.oy + r * cs + 2;
-          const s = cs - 4;
-          ctx.fillStyle = "#162f59";
-          ctx.strokeStyle = "#60a5fa";
-          ctx.lineWidth = 1.6;
-          ctx.beginPath();
-          ctx.roundRect(x, y, s, s, 5);
-          ctx.fill();
-          ctx.stroke();
+      ctx.save();
+      ctx.translate(vp.offsetX, vp.offsetY);
+      ctx.scale(vp.scale, vp.scale);
 
-          // Architectural diagonal crosshatch lines
-          ctx.strokeStyle = "rgba(147, 197, 253, 0.2)";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(x + 4, y + s - 4); ctx.lineTo(x + s - 4, y + 4);
-          ctx.moveTo(x + 4, y + s * 0.5); ctx.lineTo(x + s * 0.5, y + 4);
-          ctx.moveTo(x + s * 0.5, y + s - 4); ctx.lineTo(x + s - 4, y + s * 0.5);
-          ctx.stroke();
+      const cs = getCellPx();
+      const dispBeat = mode === "plan" ? planPath.length - 1 : execBeat;
+      const { lootMask, hacked } = getProgressUpTo(dispBeat);
+      const { danger } = getDangerAtBeat(bp, dispBeat, hacked);
+
+      // 1. Blueprint Floor Grid & Marble Pillar Walls
+      for (let r = 0; r < bp.N; r++) {
+        for (let c = 0; c < bp.N; c++) {
+          const x = 12 + c * cs;
+          const y = 12 + r * cs;
+          if (bp.grid[r][c] === 1) {
+            ctx.fillStyle = "#163554";
+            ctx.strokeStyle = "#38bdf8";
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.roundRect(x + 2, y + 2, cs - 4, cs - 4, 5);
+            ctx.fill();
+            ctx.stroke();
+
+            // Architectural blueprint diagonal hatch inside solid pillars
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.22)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x + 6, y + cs - 6); ctx.lineTo(x + cs - 6, y + 6);
+            ctx.stroke();
+          } else {
+            ctx.fillStyle = (r + c) % 2 === 0 ? "#091b2d" : "#0b2036";
+            ctx.fillRect(x, y, cs, cs);
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.14)";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, cs, cs);
+
+            // Highlight Live Guard/Camera Vision Danger Zones at Current Beat!
+            if (danger.has(`${r},${c}`)) {
+              ctx.fillStyle = "rgba(239, 68, 68, 0.24)";
+              ctx.fillRect(x + 2, y + 2, cs - 4, cs - 4);
+              ctx.strokeStyle = "rgba(248, 113, 113, 0.55)";
+              ctx.lineWidth = 1.2;
+              ctx.strokeRect(x + 2, y + 2, cs - 4, cs - 4);
+            }
+          }
         }
       }
 
-      // 3. Start Entry Pad & Extraction Exit Pad
-      {
-        const sx = m.ox + level.start.c * cs + 4;
-        const sy = m.oy + level.start.r * cs + 4;
-        ctx.fillStyle = "rgba(56, 189, 248, 0.18)";
-        ctx.strokeStyle = "#38bdf8";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.roundRect(sx, sy, cs - 8, cs - 8, 7);
-        ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = "#bae6fd";
-        ctx.font = `900 ${Math.max(9, Math.round(cs * 0.19))}px monospace`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("IN", cxOf(level.start.c), cyOf(level.start.r));
-
-        const ex = m.ox + level.exit.c * cs + 4;
-        const ey = m.oy + level.exit.r * cs + 4;
-        const allLootReady = (mode === "plan" ? getPlannedLootSet().size : runCollected.size) === level.loots.length;
-        ctx.fillStyle = allLootReady ? "rgba(34, 197, 94, 0.28)" : "rgba(34, 197, 94, 0.12)";
-        ctx.strokeStyle = allLootReady ? "#4ade80" : "#15803d";
-        ctx.lineWidth = allLootReady ? 2.6 : 1.8;
-        ctx.beginPath();
-        ctx.roundRect(ex, ey, cs - 8, cs - 8, 7);
-        ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = allLootReady ? "#dcfce7" : "#86efac";
-        ctx.fillText("EXIT", cxOf(level.exit.c), cyOf(level.exit.r));
-      }
-
-      // 4. CCTV Camera Vision Cones (Rendered at visBeat)
-      for (const cam of level.cameras) {
-        const cone = getCameraConeCells(level, cam, visBeat);
-        for (const cell of cone) {
-          ctx.fillStyle = "rgba(250, 204, 21, 0.24)";
-          ctx.fillRect(m.ox + cell.c * cs + 2, m.oy + cell.r * cs + 2, cs - 4, cs - 4);
-          ctx.strokeStyle = "rgba(250, 204, 21, 0.55)";
-          ctx.lineWidth = 1.4;
-          ctx.strokeRect(m.ox + cell.c * cs + 3, m.oy + cell.r * cs + 3, cs - 6, cs - 6);
-        }
-
-        // Camera housing icon on its wall pillar
-        const camX = cxOf(cam.c);
-        const camY = cyOf(cam.r);
-        const dir = getCameraDir(cam, visBeat);
+      // 2. Pulsing Crimson Laser Cells
+      for (const laz of bp.lasers) {
+        const x = 12 + laz.c * cs, y = 12 + laz.r * cs;
+        const active = !hacked && (((dispBeat + laz.phase) % 4 + 4) % 4) < 2;
         ctx.save();
-        ctx.translate(camX, camY);
-        ctx.rotate(dir * (Math.PI / 2));
-        ctx.fillStyle = "#facc15";
-        ctx.beginPath();
-        ctx.arc(0, 0, cs * 0.2, 0, Math.PI * 2);
-        ctx.fill();
-        // Lens barrel pointing in look direction
-        ctx.fillStyle = "#0f172a";
-        ctx.fillRect(2, -4, cs * 0.22, 8);
-        ctx.fillStyle = "#ef4444";
-        ctx.beginPath();
-        ctx.arc(cs * 0.18, 0, 2.6, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // 5. Pulsing Laser Grids
-      for (const lz of level.lasers) {
-        const onNow = isLaserOn(lz, visBeat);
-        const onNext = isLaserOn(lz, visBeat + 1);
-        const first = lz.cells[0];
-        const last = lz.cells[lz.cells.length - 1];
-        const x1 = cxOf(first.c) - (lz.horiz ? cs * 0.42 : 0);
-        const y1 = cyOf(first.r) - (lz.horiz ? 0 : cs * 0.42);
-        const x2 = cxOf(last.c) + (lz.horiz ? cs * 0.42 : 0);
-        const y2 = cyOf(last.r) + (lz.horiz ? 0 : cs * 0.42);
-
-        if (onNow) {
-          // Danger glow across laser tiles
-          for (const c of lz.cells) {
-            ctx.fillStyle = "rgba(239, 68, 68, 0.16)";
-            ctx.fillRect(m.ox + c.c * cs + 2, m.oy + c.r * cs + 2, cs - 4, cs - 4);
-          }
-          ctx.save();
+        if (active) {
           ctx.strokeStyle = "#ef4444";
           ctx.shadowColor = "#ef4444";
-          ctx.shadowBlur = 14;
-          ctx.lineWidth = 4.5;
+          ctx.shadowBlur = 10;
+          ctx.lineWidth = 3;
           ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
+          ctx.moveTo(x + 5, y + cs * 0.32); ctx.lineTo(x + cs - 5, y + cs * 0.32);
+          ctx.moveTo(x + 5, y + cs * 0.68); ctx.lineTo(x + cs - 5, y + cs * 0.68);
           ctx.stroke();
-
-          ctx.shadowBlur = 0;
-          ctx.strokeStyle = "#fecaca";
-          ctx.lineWidth = 1.6;
-          ctx.stroke();
-          ctx.restore();
         } else {
-          // Off beam (subtle dashed line; pulses slightly amber if turning ON next beat!)
-          ctx.save();
-          ctx.strokeStyle = onNext ? "rgba(251, 146, 60, 0.55)" : "rgba(148, 163, 184, 0.25)";
-          ctx.lineWidth = 2;
-          ctx.setLineDash([4, 5]);
+          ctx.strokeStyle = hacked ? "rgba(34, 197, 94, 0.35)" : "rgba(248, 113, 113, 0.28)";
+          ctx.lineWidth = 1.6;
+          ctx.setLineDash([3, 4]);
           ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
+          ctx.moveTo(x + 6, y + cs * 0.5); ctx.lineTo(x + cs - 6, y + cs * 0.5);
           ctx.stroke();
-          ctx.restore();
+          ctx.setLineDash([]);
         }
-
-        // Laser emitter nodes on ends
-        ctx.fillStyle = onNow ? "#ef4444" : (onNext ? "#f59e0b" : "#475569");
-        ctx.beginPath();
-        ctx.arc(x1, y1, 4.2, 0, Math.PI * 2);
-        ctx.arc(x2, y2, 4.2, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.restore();
       }
 
-      // 6. Patrolling Guards & Flashlight Tiles
-      for (const g of level.guards) {
-        // Subtle patrol track dashed line
+      // 3. Cyan Security Hacking Terminal (Ch. 3–5)
+      if (bp.terminal) {
+        const tx = 12 + (bp.terminal.c + 0.5) * cs;
+        const ty = 12 + (bp.terminal.r + 0.5) * cs;
         ctx.save();
-        ctx.strokeStyle = "rgba(248, 113, 113, 0.25)";
-        ctx.lineWidth = 1.6;
-        ctx.setLineDash([3, 4]);
-        ctx.beginPath();
-        g.path.forEach((pt, idx) => {
-          const px = cxOf(pt.c), py = cyOf(pt.r);
-          if (idx === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        });
-        ctx.stroke();
-        ctx.restore();
-
-        const gs = getGuardState(level, g, visBeat);
-        let gx = cxOf(gs.c);
-        let gy = cyOf(gs.r);
-        if (mode === "running" && runBeat < plan.length - 1) {
-          const g0 = getGuardState(level, g, runBeat);
-          const g1 = getGuardState(level, g, runBeat + 1);
-          gx = cxOf(g0.c + (g1.c - g0.c) * runFrac);
-          gy = cyOf(g0.r + (g1.r - g0.r) * runFrac);
-        }
-
-        // Flashlight danger cell
-        if (gs.flash) {
-          ctx.fillStyle = "rgba(251, 146, 60, 0.25)";
-          ctx.fillRect(m.ox + gs.flash.c * cs + 2, m.oy + gs.flash.r * cs + 2, cs - 4, cs - 4);
-          ctx.strokeStyle = "rgba(251, 146, 60, 0.65)";
-          ctx.lineWidth = 1.6;
-          ctx.strokeRect(m.ox + gs.flash.c * cs + 3, m.oy + gs.flash.r * cs + 3, cs - 6, cs - 6);
-        }
-
-        // Guard body icon
-        ctx.save();
-        ctx.fillStyle = "#dc2626";
-        ctx.strokeStyle = "#fecaca";
+        ctx.fillStyle = hacked ? "rgba(34, 197, 94, 0.24)" : "rgba(34, 211, 238, 0.22)";
+        ctx.strokeStyle = hacked ? "#4ade80" : "#22d3ee";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(gx, gy, cs * 0.28, 0, Math.PI * 2);
+        ctx.roundRect(tx - cs * 0.34, ty - cs * 0.34, cs * 0.68, cs * 0.68, 7);
         ctx.fill();
         ctx.stroke();
-
-        ctx.font = `${Math.max(13, Math.round(cs * 0.38))}px sans-serif`;
+        ctx.font = `${Math.round(cs * 0.4)}px sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText("👮", gx, gy + 1);
+        ctx.fillText(hacked ? "✓" : "💻", tx, ty + 1);
         ctx.restore();
       }
 
-      // 7. Vault Loot Artifacts
-      const collectedNow = mode === "plan" ? new Set() : runCollected;
-      const plannedLoot = getPlannedLootSet();
-      level.loots.forEach((l, idx) => {
-        if (collectedNow.has(idx)) return;
-        const lx = cxOf(l.c);
-        const ly = cyOf(l.r);
-        const isPlanned = mode === "plan" && plannedLoot.has(idx);
-        const pulse = 1 + Math.sin(now * 0.006 + idx) * 0.08;
-
+      // 4. Vault Sapphire Diamonds
+      bp.loots.forEach((lt, idx) => {
+        if ((lootMask & (1 << idx)) !== 0) return;
+        const lx = 12 + (lt.c + 0.5) * cs;
+        const ly = 12 + (lt.r + 0.5) * cs;
+        const pulse = 1 + 0.08 * Math.sin(now * 0.007 + idx);
         ctx.save();
-        ctx.strokeStyle = isPlanned ? "#4ade80" : "#facc15";
-        ctx.shadowColor = isPlanned ? "#4ade80" : "#facc15";
+        ctx.translate(lx, ly);
+        ctx.scale(pulse, pulse);
+        ctx.fillStyle = "rgba(56, 189, 248, 0.2)";
+        ctx.strokeStyle = "#7dd3fc";
+        ctx.shadowColor = "#38bdf8";
         ctx.shadowBlur = 12;
         ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(lx, ly, cs * 0.3 * pulse, 0, Math.PI * 2);
-        ctx.stroke();
-
+        ctx.beginPath(); ctx.arc(0, 0, cs * 0.32, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         ctx.shadowBlur = 0;
-        ctx.font = `${Math.max(16, Math.round(cs * 0.44))}px sans-serif`;
+        ctx.font = `${Math.round(cs * 0.42)}px sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(l.icon, lx, ly + 1);
+        ctx.fillText("💎", 0, 1);
         ctx.restore();
       });
 
-      // 8. Plotted Blueprint Route Line & Wait Badges
-      if (plan.length >= 2) {
+      // 5. Getaway Exit Arch
+      const exX = 12 + (bp.exit.c + 0.5) * cs;
+      const exY = 12 + (bp.exit.r + 0.5) * cs;
+      const exitOpen = countBits(lootMask) >= bp.loots.length;
+      ctx.save();
+      ctx.fillStyle = exitOpen ? "rgba(34, 197, 94, 0.28)" : "rgba(100, 116, 139, 0.22)";
+      ctx.strokeStyle = exitOpen ? "#4ade80" : "#94a3b8";
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.roundRect(exX - cs * 0.36, exY - cs * 0.36, cs * 0.72, cs * 0.72, 8);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = exitOpen ? "#bbf7d0" : "#cbd5e1";
+      ctx.font = `900 ${Math.max(8, Math.round(cs * 0.21))}px monospace`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("EXIT", exX, exY);
+      ctx.restore();
+
+      // 6. Mounted CCTV Security Cameras (With Rotating Lens Indicator)
+      for (const cam of bp.cameras) {
+        const cx = 12 + (cam.c + 0.5) * cs;
+        const cy = 12 + (cam.r + 0.5) * cs;
+        const dirIdx = cam.dirs[((dispBeat % cam.dirs.length) + cam.dirs.length) % cam.dirs.length];
+        const ang = (dirIdx - 1) * (Math.PI / 2);
+
         ctx.save();
-        ctx.strokeStyle = mode === "caught" ? "#ef4444" : "#38bdf8";
-        ctx.shadowColor = mode === "caught" ? "#ef4444" : "#38bdf8";
-        ctx.shadowBlur = 10;
-        ctx.lineWidth = 3.5;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.setLineDash([7, 5]);
+        ctx.translate(cx, cy);
+        ctx.rotate(ang);
+        ctx.fillStyle = "#0f172a";
+        ctx.strokeStyle = "#f87171";
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(0, 0, cs * 0.22, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = "#ef4444";
+        ctx.fillRect(4, -4, cs * 0.22, 8);
+        ctx.restore();
+      }
+
+      // 7. Dotted Golden Planned Stealth Waypoint Route!
+      if (planPath.length > 1) {
+        ctx.save();
+        ctx.strokeStyle = mode === "caught" ? "#ef4444" : "#facc15";
+        ctx.shadowColor = mode === "caught" ? "#ef4444" : "#f59e0b";
+        ctx.shadowBlur = 8;
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
         ctx.beginPath();
-        plan.forEach((pt, idx) => {
-          const px = cxOf(pt.c), py = cyOf(pt.r);
-          if (idx === 0) ctx.moveTo(px, py);
+        planPath.forEach((p, i) => {
+          const px = 12 + (p.c + 0.5) * cs;
+          const py = 12 + (p.r + 0.5) * cs;
+          if (i === 0) ctx.moveTo(px, py);
           else ctx.lineTo(px, py);
         });
         ctx.stroke();
         ctx.setLineDash([]);
+        ctx.shadowBlur = 0;
 
-        // Count consecutive waits at tiles to draw crisp "⏱2" badges
-        const waitsAt = new Map();
-        for (let i = 1; i < plan.length; i++) {
-          if (plan[i].r === plan[i - 1].r && plan[i].c === plan[i - 1].c) {
-            const k = `${plan[i].r},${plan[i].c}`;
-            waitsAt.set(k, (waitsAt.get(k) || 0) + 1);
-          } else {
-            // Waypoint node dot
-            ctx.fillStyle = "#e0f2fe";
-            ctx.beginPath();
-            ctx.arc(cxOf(plan[i].c), cyOf(plan[i].r), 3.2, 0, Math.PI * 2);
-            ctx.fill();
+        // Draw Small Golden Pause Rings Wherever Player Scheduled a WAIT Beat!
+        for (let i = 1; i < planPath.length; i++) {
+          if (planPath[i].r === planPath[i - 1].r && planPath[i].c === planPath[i - 1].c) {
+            const px = 12 + (planPath[i].c + 0.5) * cs;
+            const py = 12 + (planPath[i].r + 0.5) * cs;
+            ctx.strokeStyle = "#fde047";
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(px, py, cs * 0.28, 0, Math.PI * 2); ctx.stroke();
           }
         }
-        ctx.shadowBlur = 0;
-        waitsAt.forEach((cnt, k) => {
-          const [wr, wc] = k.split(",").map(Number);
-          const wx = cxOf(wc) + cs * 0.24;
-          const wy = cyOf(wr) - cs * 0.24;
-          ctx.fillStyle = "#f59e0b";
-          ctx.beginPath();
-          ctx.arc(wx, wy, 9.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = "#0f172a";
-          ctx.font = "900 9.5px monospace";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(`W${cnt}`, wx, wy + 0.5);
-        });
         ctx.restore();
       }
 
-      // 9. Hint Flash Ring
-      if (hintStepFlash && hintStepFlash.alpha > 0.04) {
-        hintStepFlash.alpha *= 0.93;
+      // 8. Patrolling Security Guards (Smoothly Interpolated During Execution!)
+      for (const g of bp.guards) {
+        const g0 = getGuardState(g, dispBeat);
+        let gx = 12 + (g0.c + 0.5) * cs;
+        let gy = 12 + (g0.r + 0.5) * cs;
+        if (mode === "exec") {
+          const g1 = getGuardState(g, dispBeat + 1);
+          gx += (g1.c - g0.c) * cs * execFrac;
+          gy += (g1.r - g0.r) * cs * execFrac;
+        }
+        const ang = (g0.dir - 1) * (Math.PI / 2);
+
         ctx.save();
-        ctx.strokeStyle = `rgba(250, 204, 21, ${hintStepFlash.alpha})`;
-        ctx.lineWidth = 3;
+        ctx.translate(gx, gy);
+        ctx.fillStyle = "#dc2626";
+        ctx.strokeStyle = "#fecaca";
+        ctx.lineWidth = 2.2;
+        ctx.beginPath(); ctx.arc(0, 0, cs * 0.27, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+        // Guard flashlight direction nose
+        ctx.rotate(ang);
+        ctx.fillStyle = "#fef08a";
         ctx.beginPath();
-        ctx.arc(cxOf(hintStepFlash.c), cyOf(hintStepFlash.r), cs * 0.42, 0, Math.PI * 2);
-        ctx.stroke();
+        ctx.moveTo(cs * 0.34, 0);
+        ctx.lineTo(cs * 0.14, -5);
+        ctx.lineTo(cs * 0.14, 5);
+        ctx.closePath();
+        ctx.fill();
         ctx.restore();
       }
 
-      // 10. Thief Agent Marker (Tip of plan in Planning mode, animated during Execution!)
-      let thiefX, thiefY;
-      if (mode === "running" && runBeat < plan.length - 1) {
-        const p0 = plan[runBeat];
-        const p1 = plan[runBeat + 1];
-        thiefX = cxOf(p0.c + (p1.c - p0.c) * runFrac);
-        thiefY = cyOf(p0.r + (p1.r - p0.r) * runFrac);
-      } else if (mode === "caught" && caughtAt) {
-        thiefX = cxOf(caughtAt.c);
-        thiefY = cyOf(caughtAt.r);
+      // 9. Phantom Spy Operative (At Plan Tip in Plan Mode, Smoothly Gliding in Exec Mode!)
+      let spyX, spyY;
+      if (mode === "plan") {
+        const tip = planPath[planPath.length - 1];
+        spyX = 12 + (tip.c + 0.5) * cs;
+        spyY = 12 + (tip.r + 0.5) * cs;
+      } else if (mode === "exec" && execBeat < planPath.length - 1) {
+        const p0 = planPath[execBeat], p1 = planPath[execBeat + 1];
+        spyX = 12 + (p0.c + (p1.c - p0.c) * execFrac + 0.5) * cs;
+        spyY = 12 + (p0.r + (p1.r - p0.r) * execFrac + 0.5) * cs;
       } else {
-        const tip = plan[plan.length - 1];
-        thiefX = cxOf(tip.c);
-        thiefY = cyOf(tip.r);
+        const p = planPath[Math.min(execBeat, planPath.length - 1)];
+        spyX = 12 + (p.c + 0.5) * cs;
+        spyY = 12 + (p.r + 0.5) * cs;
       }
 
       ctx.save();
-      const pulseR = cs * 0.31 + (mode === "plan" ? Math.sin(now * 0.008) * 2.5 : 0);
-      ctx.fillStyle = mode === "caught" ? "#ef4444" : "#0ea5e9";
+      ctx.translate(spyX, spyY);
+      ctx.fillStyle = mode === "caught" ? "#ef4444" : "#38bdf8";
       ctx.strokeStyle = "#ffffff";
       ctx.shadowColor = mode === "caught" ? "#ef4444" : "#38bdf8";
       ctx.shadowBlur = 14;
-      ctx.lineWidth = 2.6;
-      ctx.beginPath();
-      ctx.arc(thiefX, thiefY, pulseR, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
+      ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.arc(0, 0, cs * 0.28, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
       ctx.shadowBlur = 0;
-      ctx.font = `${Math.max(14, Math.round(cs * 0.4))}px sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(mode === "caught" ? "🚨" : "🥷", thiefX, thiefY + 1);
-      ctx.restore();
-    }
 
-    let lastTime = performance.now();
-    function frame(now) {
-      const dt = Math.min(0.05, (now - lastTime) / 1000);
-      lastTime = now;
-      updateExecution(dt);
-      drawBlueprint(now);
+      // Sleek Spy Goggles Visor
+      ctx.fillStyle = "#0f172a";
+      ctx.beginPath(); ctx.roundRect(-8, -4, 16, 7, 3); ctx.fill();
+      ctx.fillStyle = "#4ade80";
+      ctx.beginPath(); ctx.arc(-3.5, -0.5, 2, 0, Math.PI * 2); ctx.arc(3.5, -0.5, 2, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+
+      // 10. Diamond Grab Sparkles
+      sparks = sparks.filter((s) => s.alpha > 0.04);
+      for (const s of sparks) {
+        s.x += s.vx; s.y += s.vy; s.alpha *= 0.91;
+        ctx.fillStyle = s.color; ctx.globalAlpha = s.alpha;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.restore();
       requestAnimationFrame(frame);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
-    loadLevel(currentLevelNum);
+    loadBlueprint(currentLevelNum);
     requestAnimationFrame(frame);
   </script>
 
